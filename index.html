@@ -187,6 +187,16 @@
         </li>
       
         
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
         <li class="menu-item menu-item-archives">
           <a href="/archives/" rel="section">
             
@@ -215,174 +225,6 @@
           <div id="content" class="content">
             
   <section id="posts" class="posts-expand">
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://zhos.me/2019/04/03/yuque/PySpark ML和XGBoost完全集成在Kaggle Titanic数据集上进行了测试/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Zhos">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="武德">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/04/03/yuque/PySpark ML和XGBoost完全集成在Kaggle Titanic数据集上进行了测试/" itemprop="url">PySpark ML和XGBoost完全集成在Kaggle Titanic数据集上进行了测试</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-03T18:03:41+08:00">
-                2019-04-03
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>在本教程中，我们将讨论使用标准机器学习管道集成PySpark和XGBoost。我们将使用来自<a href="https://www.kaggle.com/c/titanic/data" target="_blank" rel="noopener">泰坦尼克号的</a>数据<a href="https://www.kaggle.com/c/titanic/data" target="_blank" rel="noopener">：机器学习灾难</a>中的众多Kaggle比赛之一。在开始之前，请知道您应该熟悉<a href="https://spark.apache.org/" target="_blank" rel="noopener">Apache Spark</a>和<a href="http://xgboost.readthedocs.io/en/latest/get_started/" target="_blank" rel="noopener">Xgboost</a>以及Python。本教程中使用的代码可以在<a href="https://github.com/BogdanCojocar/medium-articles/blob/master/titanic_xgboost/titanic_xgboost.ipynb" target="_blank" rel="noopener">github</a>上的Jupyther笔记本中找到。<br></p>
-<p><a name="fa501ee4"></a></p>
-<h4 id="第1步：下载或构建XGBoost-jar"><a href="#第1步：下载或构建XGBoost-jar" class="headerlink" title="第1步：下载或构建XGBoost jar"></a>第1步：下载或构建XGBoost jar</h4><p>python代码需要两个scala jar依赖项才能工作。您可以直接从maven下载它们：</p>
-<ul>
-<li><a href="https://mvnrepository.com/artifact/ml.dmlc/xgboost4j/0.72" target="_blank" rel="noopener">xgboost4j</a></li>
-<li><a href="https://mvnrepository.com/artifact/ml.dmlc/xgboost4j-spark/0.72" target="_blank" rel="noopener">xgboost4j火花</a></li>
-</ul>
-<p>如果您希望自己构建它们，可以从我之前的<a href="https://medium.com/@bogdan.cojocar/how-to-make-xgboost-available-in-the-spark-notebook-de14e425c948" target="_blank" rel="noopener">教程中</a>找到如何进行构建。<br></p>
-<p><a name="059757b0"></a></p>
-<h4 id="第2步：下载XGBoost-python包装器"><a href="#第2步：下载XGBoost-python包装器" class="headerlink" title="第2步：下载XGBoost python包装器"></a>第2步：下载XGBoost python包装器</h4><p>您可以从<a href="https://github.com/dmlc/xgboost/files/2161553/sparkxgb.zip" target="_blank" rel="noopener">此处</a>下载PySpark XGBoost代码。这是我们要编写的部分和XGBoost scala实现之间的接口。我们将在本教程后面的代码中看到它如何集成。<br></p>
-<p><a name="f8c06a61"></a></p>
-<h4 id="第3步：启动一个新的Jupyter笔记本"><a href="#第3步：启动一个新的Jupyter笔记本" class="headerlink" title="第3步：启动一个新的Jupyter笔记本"></a>第3步：启动一个新的Jupyter笔记本</h4><p>我们将开始一个新的笔记本，以便能够编写我们的代码：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jupyter notebook</span><br></pre></td></tr></table></figure>
-<p><a name="cdde53ac"></a></p>
-<h4 id="第4步：将自定义XGBoost-jar添加到Spark应用程序"><a href="#第4步：将自定义XGBoost-jar添加到Spark应用程序" class="headerlink" title="第4步：将自定义XGBoost jar添加到Spark应用程序"></a>第4步：将自定义XGBoost jar添加到Spark应用程序</h4><p>在开始Spark之前，我们需要添加我们之前下载的jar。我们可以使用<code>--jars</code>标志来做到这一点：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">import os </span><br><span class="line">os.environ [&apos;PYSPARK_SUBMIT_ARGS&apos;] =&apos; -  jars xgboost4j-spark-0.72.jar，xgboost4j-0.72.jar pyspark-shell&apos;</span><br></pre></td></tr></table></figure>
-<p><a name="13d9ee40"></a></p>
-<h4 id="第5步：将PySpark集成到Jupyther笔记本中"><a href="#第5步：将PySpark集成到Jupyther笔记本中" class="headerlink" title="第5步：将PySpark集成到Jupyther笔记本中"></a>第5步：将PySpark集成到Jupyther笔记本中</h4><p>使PySpark可用的最简单方法是使用该<code>[findspark](https://github.com/minrk/findspark)</code>软件包：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">import findspark </span><br><span class="line">findspark.init（）</span><br></pre></td></tr></table></figure>
-<p><a name="dd505c79"></a></p>
-<h4 id="第6步：启动spark会话"><a href="#第6步：启动spark会话" class="headerlink" title="第6步：启动spark会话"></a>第6步：启动spark会话</h4><p>我们现在准备开始火花会议。我们正在创建一个将在本地运行的spark应用程序，并将使用与使用的核心一样多的线程<code>local[*]</code> ：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">spark = SparkSession\</span><br><span class="line">        .builder\</span><br><span class="line">        .appName(&quot;PySpark XGBOOST Titanic&quot;)\</span><br><span class="line">        .master(&quot;local[*]&quot;)\</span><br><span class="line">        .getOrCreate()</span><br></pre></td></tr></table></figure>
-<p><a name="47ff7d29"></a></p>
-<h4 id="第7步：添加PySpark-XGBoost包装器代码"><a href="#第7步：添加PySpark-XGBoost包装器代码" class="headerlink" title="第7步：添加PySpark XGBoost包装器代码"></a>第7步：添加PySpark XGBoost包装器代码</h4><p>正如我们现在有了spark会话，我们可以添加先前下载的包装器代码：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">spark.sparkContext.addPyFile(&quot;YOUR_PATH/sparkxgb.zip&quot;)</span><br></pre></td></tr></table></figure>
-<p><a name="7f1a0f62"></a></p>
-<h4 id="第8步：定义架构"><a href="#第8步：定义架构" class="headerlink" title="第8步：定义架构"></a>第8步：定义架构</h4><p>接下来，我们定义从csv读取的数据的模式。这通常比让火花推断模式更好，因为它消耗的资源更少，我们可以完全控制字段。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">schema = StructType(</span><br><span class="line">  [StructField(&quot;PassengerId&quot;, DoubleType()),</span><br><span class="line">    StructField(&quot;Survival&quot;, DoubleType()),</span><br><span class="line">    StructField(&quot;Pclass&quot;, DoubleType()),</span><br><span class="line">    StructField(&quot;Name&quot;, StringType()),</span><br><span class="line">    StructField(&quot;Sex&quot;, StringType()),</span><br><span class="line">    StructField(&quot;Age&quot;, DoubleType()),</span><br><span class="line">    StructField(&quot;SibSp&quot;, DoubleType()),</span><br><span class="line">    StructField(&quot;Parch&quot;, DoubleType()),</span><br><span class="line">    StructField(&quot;Ticket&quot;, StringType()),</span><br><span class="line">    StructField(&quot;Fare&quot;, DoubleType()),</span><br><span class="line">    StructField(&quot;Cabin&quot;, StringType()),</span><br><span class="line">    StructField(&quot;Embarked&quot;, StringType())</span><br><span class="line">  ])</span><br></pre></td></tr></table></figure>
-<p><a name="44ee9a9a"></a></p>
-<h4 id="步骤9：将csv数据读入数据帧"><a href="#步骤9：将csv数据读入数据帧" class="headerlink" title="步骤9：将csv数据读入数据帧"></a>步骤9：将csv数据读入数据帧</h4><p>我们将csv读入a <code>DataFrame</code>，确保我们提到我们有一个标题，我们也<code>null</code>用0 替换值：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">df_raw = spark\</span><br><span class="line">  .read\</span><br><span class="line">  .option(&quot;header&quot;, &quot;true&quot;)\</span><br><span class="line">  .schema(schema)\</span><br><span class="line">  .csv(&quot;YOUR_PATH/train.csv&quot;)</span><br><span class="line">df = df_raw.na.fill(0)</span><br></pre></td></tr></table></figure>
-<p><a name="f50eacdc"></a></p>
-<h4 id="步骤10：C-将标称值转换为数字"><a href="#步骤10：C-将标称值转换为数字" class="headerlink" title="步骤10：C 将标称值转换为数字"></a>步骤10：C <strong>将标称值转换为数字</strong></h4><p>在浏览此步骤的代码之前，让我们简要介绍一些Spark ML概念。他们介绍了ML管道的概念，它是一组构建在其上的高级API <code>DataFrames</code>，可以更轻松地将多个算法组合到一个流程中。管道的主要元素是<code>Transformer</code>和<code>Estimator</code>。第一个可以表示可以将a <code>DataFrame</code>转换为另一个<code>DataFrame</code>的算法，而后者是可以适合a <code>DataFrame</code>来生成a 的算法<code>Transformer</code> 。<br>为了将名义值转换为数字值，我们需要<code>Transformer</code>为每列定义一个：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">sexIndexer = StringIndexer()\</span><br><span class="line">  .setInputCol(&quot;Sex&quot;)\</span><br><span class="line">  .setOutputCol(&quot;SexIndex&quot;)\</span><br><span class="line">  .setHandleInvalid(&quot;keep&quot;)</span><br><span class="line">    </span><br><span class="line">cabinIndexer = StringIndexer()\</span><br><span class="line">  .setInputCol(&quot;Cabin&quot;)\</span><br><span class="line">  .setOutputCol(&quot;CabinIndex&quot;)\</span><br><span class="line">  .setHandleInvalid(&quot;keep&quot;)</span><br><span class="line">    </span><br><span class="line">embarkedIndexer = StringIndexer()\</span><br><span class="line">  .setInputCol(&quot;Embarked&quot;)\</span><br><span class="line">  .setOutputCol(&quot;EmbarkedIndex&quot;)\</span><br><span class="line">  .setHandleInvalid(&quot;keep&quot;)</span><br></pre></td></tr></table></figure>
-<p>我们正在使用它<code>StringIndexer</code>来转换价值观。对于每个<code>Transformer</code>我们定义的输入列和输出列将包含修改后的值。<br></p>
-<p><a name="fd3cbfb0"></a></p>
-<h4 id="步骤11：将列组合成特征向量"><a href="#步骤11：将列组合成特征向量" class="headerlink" title="步骤11：将列组合成特征向量"></a>步骤11：<strong>将列组合成特征向量</strong></h4><p>我们将使用另一个<code>Transformer</code>将XGBoost分类中使用的列组合<code>Estimator</code>成一个向量：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">vectorAssembler = VectorAssembler()\</span><br><span class="line">  .setInputCols([&quot;Pclass&quot;, &quot;SexIndex&quot;, &quot;Age&quot;, &quot;SibSp&quot;, &quot;Parch&quot;, &quot;Fare&quot;, &quot;CabinIndex&quot;, &quot;EmbarkedIndex&quot;])\</span><br><span class="line">  .setOutputCol(&quot;features&quot;)</span><br></pre></td></tr></table></figure>
-<p><a name="220de1c1"></a></p>
-<h4 id="第12步：定义XGBoostEstimator"><a href="#第12步：定义XGBoostEstimator" class="headerlink" title="第12步：定义XGBoostEstimator"></a>第12步：定义XGBoostEstimator</h4><p>在这一步中，我们定义了<code>Estimator</code>将产生模型的东西。这里使用的大多数参数都是默认的：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">xgboost = XGBoostEstimator(</span><br><span class="line">    featuresCol=&quot;features&quot;, </span><br><span class="line">    labelCol=&quot;Survival&quot;, </span><br><span class="line">    predictionCol=&quot;prediction&quot;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
-<p>我们只定义<code>feature, label</code>（必须匹配来自的列<code>DataFrame</code>）和<code>prediction</code>包含分类器输出的新列。<br></p>
-<p><a name="07d0e7ba"></a></p>
-<h4 id="步骤13：建立管道和分类器"><a href="#步骤13：建立管道和分类器" class="headerlink" title="步骤13：建立管道和分类器"></a>步骤13：<strong>建立管道和分类器</strong></h4><p>在我们创建了所有单独的步骤之后，我们可以定义实际的管道和操作的顺序：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pipeline = Pipeline().setStages([sexIndexer, cabinIndexer, embarkedIndexer, vectorAssembler, xgboost])</span><br></pre></td></tr></table></figure>
-<p>输入<code>DataFrame</code>将被多次转换，最终将生成使用我们的数据训练的模型。<br></p>
-<p><a name="4e3e3575"></a></p>
-<h4 id="步骤14：训练模型并预测新的测试数据"><a href="#步骤14：训练模型并预测新的测试数据" class="headerlink" title="步骤14：训练模型并预测新的测试数据"></a>步骤14：训练模型并预测新的测试数据</h4><p>我们首先将数据分成火车和测试，然后我们将模型与火车数据拟合，最后我们看到我们为每位乘客获得的预测：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">trainDF, testDF = df.randomSplit([0.8, 0.2], seed=24)</span><br><span class="line">model = pipeline.fit(trainDF)</span><br><span class="line">model.transform(testDF).select(col(&quot;PassengerId&quot;), col(&quot;prediction&quot;)).show()</span><br></pre></td></tr></table></figure>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
     
       
 
@@ -1574,6 +1416,206 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://zhos.me/2019/03/18/yuque/Spark上的实际Python工作负载：独立群集/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Zhos">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="武德">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/03/18/yuque/Spark上的实际Python工作负载：独立群集/" itemprop="url">Spark上的实际Python工作负载：独立群集</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-18T17:45:16+08:00">
+                2019-03-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>关于在Spark上运行Python有无数文章和论坛帖子，但大多数人认为要提交的工作包含在一个.py文件中：<code>spark-submit wordcount.py</code> - 完成！<br>如果你的Python程序不仅仅是一个脚本怎么办？也许它为Spark生成动态SQL来执行，或使用Spark的输出刷新模型。随着您的Python代码变得更像一个应用程序（具有目录结构，配置文件和库依赖项），将其提交给Spark需要更多考虑。<br>以下是我最近考虑使用Spark 2.3将一个这样的Python应用程序用于生产时的替代方案。第一篇文章重点介绍Spark独立集群。另一篇文章介绍了EMR Spark（YARN）。<br>我远不是Spark的权威，更不用说Python了。我的决定试图平衡正确性和易于部署，以及应用程序对群集的限制。让我知道你的想法。<br><a name="9dd10fb0"></a></p>
+<h3 id="趋势AI文章："><a href="#趋势AI文章：" class="headerlink" title="趋势AI文章："></a>趋势AI文章：</h3><blockquote>
+<p><a href="https://becominghuman.ai/predicting-buying-behavior-using-machine-learning-a-case-study-on-sales-prospecting-part-i-3bf455486e5d" target="_blank" rel="noopener">1.使用机器学习预测购买行为</a>&gt; <a href="https://becominghuman.ai/understanding-and-building-generative-adversarial-networks-gans-8de7c1dc0e25" target="_blank" rel="noopener">2.理解和构建生成对抗网络（GAN）</a>&gt; <a href="https://becominghuman.ai/building-a-django-post-face-detection-api-using-opencv-and-haar-cascades-dcf4e0e5f725" target="_blank" rel="noopener">3.使用OpenCV和Haar Cascades构建Django POST面部检测API</a>&gt; <a href="https://becominghuman.ai/learning-from-mistakes-with-hindsight-experience-replay-547fce2b3305" target="_blank" rel="noopener">4.通过Hindsight Experience Replay从错误中学习</a><br><a name="3cf6ae3c"></a></p>
+</blockquote>
+<h4 id="示例Python应用程序"><a href="#示例Python应用程序" class="headerlink" title="示例Python应用程序"></a>示例Python应用程序</h4><p>为了模拟完整的应用程序，下面的场景假定Python 3应用程序具有以下结构：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">project.py </span><br><span class="line">data / </span><br><span class="line">    data_source.py </span><br><span class="line">    data_source.ini</span><br></pre></td></tr></table></figure>
+<p>_data_source.ini_包含各种配置参数：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[spark] </span><br><span class="line">app_name =myPySpark App </span><br><span class="line">master_url = spark：// sparkmaster：7077</span><br></pre></td></tr></table></figure>
+<p>_data_source.py_是一个模块，负责在Spark中获取和处理数据，使用NumPy进行数学转换，并将Pandas数据帧返回给客户端。依赖关系：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">from pyspark import SparkConf, SparkContext</span><br><span class="line">from pyspark.sql import SparkSession</span><br><span class="line">from pyspark.sql.types import StructType, StructField, FloatType</span><br><span class="line">import pandas as pd</span><br><span class="line">import numpy as np</span><br><span class="line">import configparser</span><br></pre></td></tr></table></figure>
+<p>它定义了一个创建和初始化的<em>DataSource</em>类……<code>SparkContext`</code>SparkSession`</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">class DataSource:</span><br><span class="line">    def __init__(self):</span><br><span class="line">        config = configparser.ConfigParser()</span><br><span class="line">        config.read(&apos;./data/data_source.ini&apos;)</span><br><span class="line">        master_url = config[&apos;spark&apos;][&apos;master_url&apos;]</span><br><span class="line">        app_name = config[&apos;spark&apos;][&apos;app_name&apos;]</span><br><span class="line">        conf = SparkConf().setAppName(app_name) \</span><br><span class="line">                          .setMaster(master_url)</span><br><span class="line">        self.sc = SparkContext(conf=conf)</span><br><span class="line">        self.spark = SparkSession.builder \</span><br><span class="line">                                 .config(conf=conf) \</span><br><span class="line">                                 .getOrCreate()</span><br></pre></td></tr></table></figure>
+<p>…和一个_get_data（）_方法：</p>
+<ol>
+<li>从NumPy正态分布创建RDD。</li>
+<li>应用函数将每个元素的值加倍。</li>
+<li>将RDD转换为Spark数据帧并在顶部定义临时视图。</li>
+<li>应用Python UDF，使用SQL对每个dataframe元素的内容进行平方。</li>
+<li>将结果作为Pandas数据帧返回给客户端。</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">def get_data(self, num_elements=1000) -&gt; pd.DataFrame:</span><br><span class="line">    mu, sigma = 2, 0.5</span><br><span class="line">    v = np.random.normal(mu, sigma, num_elements)</span><br><span class="line">    rdd1 = self.sc.parallelize(v)</span><br><span class="line">    def mult(x): return x * np.array([2])</span><br><span class="line">    rdd2 = rdd1.map(mult).map(lambda x: (float(x),))</span><br><span class="line">    schema = StructType([StructField(&quot;value&quot;, FloatType(), True)])</span><br><span class="line">    df1 = self.spark.createDataFrame(rdd2, schema)</span><br><span class="line">    df1.registerTempTable(&quot;test&quot;)</span><br><span class="line">    def square(x): return x ** 2</span><br><span class="line">    self.spark.udf.register(&quot;squared&quot;, square)</span><br><span class="line">    df2 = self.spark.sql(&quot;SELECT squared(value) squared FROM test&quot;)</span><br><span class="line">    return df2.toPandas()</span><br></pre></td></tr></table></figure>
+<p><em>project.py</em>是我们的主程序，充当上述模块的客户端：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">from data.data_source import DataSource</span><br><span class="line">def main():</span><br><span class="line">    src = DataSource()</span><br><span class="line">    df = src.get_data(num_elements=100000)</span><br><span class="line">    print(f&quot;Got Pandas dataframe with &#123;df.size&#125; elements&quot;)</span><br><span class="line">    print(df.head(10))</span><br><span class="line">main()</span><br></pre></td></tr></table></figure>
+<p>克隆回购：<a href="https://bitbucket.org/calidoteam/pyspark.git" target="_blank" rel="noopener">https</a>：<a href="https://bitbucket.org/calidoteam/pyspark.git" target="_blank" rel="noopener">//bitbucket.org/calidoteam/pyspark.git</a><br>在开始之前，让我们回顾一下向Spark提交工作时可用的选项。<br><a name="3b2c7180"></a></p>
+<h4 id="spark-submit，客户端和集群模式"><a href="#spark-submit，客户端和集群模式" class="headerlink" title="spark-submit，客户端和集群模式"></a>spark-submit，客户端和集群模式</h4><ul>
+<li>Spark支持各种<a href="https://spark.apache.org/docs/latest/cluster-overview.html#cluster-manager-types" target="_blank" rel="noopener">集群管理器</a>：独立（即内置于Spark），Hadoop的YARN，Mesos，Kubernetes，所有这些都控制着工作负载在一组资源上的运行方式。</li>
+<li><code>spark-submit</code>是唯一与所有集群管理器一致的接口。对于Python应用程序，<code>spark-submit</code>可以在需要时上载和暂存您提供的所有依赖项，如.py，.zip或.egg文件。</li>
+<li>在<strong><em>客户端</em></strong><em>模式下</em>驱动程序_）将在运行的同一主机上<code>spark-submit</code>运行。确保此类主机靠近工作节点以减少网络延迟符合您的最佳利益。</li>
+<li>在<strong>_集群_</strong><em>模式下</em>驱动程序_某个_工作节点并从其运行。从远程主机提交作业时，这很有用。从Spark 2.4独立开始，Spark 2.4.0集群模式不是一个选项。</li>
+<li>或者，可以<code>spark-submit</code>通过<code>SparkSession</code>在Python应用程序中配置连接到群集来绕过。这需要正确的配置和匹配的PySpark二进制文件。您的Python应用程序将在<em>客户端模式下</em>有效运行：它将从您启动它的主机上运行。</li>
+</ul>
+<p>以下部分描述了几种部署方案，以及每种方案中需要的配置。</p>
+<hr>
+<p><a name="47d746c3"></a></p>
+<h3 id="＃1：直接连接到Spark（客户端模式，无spark-submit）"><a href="#＃1：直接连接到Spark（客户端模式，无spark-submit）" class="headerlink" title="＃1：直接连接到Spark（客户端模式，无spark-submit）"></a>＃1：直接连接到Spark（客户端模式，无spark-submit）</h3><p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1552902588026-b01dacd8-8d16-4298-b2d9-9237f34d8543.png#align=left&amp;display=inline&amp;height=462&amp;name=1_HcQRb-GgmYnWRF15yobCOw.png&amp;originHeight=619&amp;originWidth=1000&amp;size=293525&amp;status=done&amp;width=746" alt="1_HcQRb-GgmYnWRF15yobCOw.png"><br>针对Spark独立的客户端模式的Python应用程序</p>
+<p>这是最简单的部署方案：Python应用程序通过指向Spark主URL直接建立spark上下文，并使用它来提交工作：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">conf = SparkConf().setAppName(&quot;My PySpark App&quot;) \</span><br><span class="line">                  .setMaster(&quot;spark://192.168.1.10:7077&quot;)</span><br><span class="line">sc = SparkContext(conf=conf)</span><br><span class="line">spark = SparkSession.builder \</span><br><span class="line">                    .config(conf=conf) \</span><br><span class="line">                    .getOrCreate()</span><br></pre></td></tr></table></figure>
+<p>在<strong>独立群集中</strong>，资源在作业持续时间内分配，默认配置为客户端应用程序提供所有可用资源，因此需要对多租户环境进行微调。执行程序进程（JVM或python）由每个节点本地的_工作_进程启动。<br>这类似于传统的客户端 - 服务器应用程序，因为客户端只是“连接”到“远程”集群。建议：<br><strong>确保</strong>驱动程序和群集之间<strong>有足够的带宽</strong>。大多数网络活动发生在驱动程序和它的执行程序之间，因此这个“远程”集群实际上必须在近距离（LAN）内。<br><strong>通过启用Apache Arrow改进Java-Python序列化：</strong> Python工作负载（NumPy，Pandas和其他应用于Spark RDD，数据帧和数据集的转换）默认需要大量的Java和Python进程的序列化和反序列化，并且会迅速降低性能。从Spark 2.3开始，<a href="https://spark.apache.org/docs/latest/sql-pyspark-pandas-with-arrow.html" target="_blank" rel="noopener">启用Apache Arrow</a>（包含在下面列出的步骤中）使这些传输<a href="https://databricks.com/session/improving-python-and-spark-performance-and-interoperability-with-apache-arrow" target="_blank" rel="noopener">更加高效</a>。<br><strong>跨所有群集节点和驱动程序主机部署依赖关系。</strong>这包括<a href="https://www.anaconda.com/distribution/" target="_blank" rel="noopener">下载和安装Python 3</a>，pip安装PySpark（必须与目标集群的版本匹配），PyArrow以及其他库依赖项：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sudo yum install python36</span><br><span class="line">pip install pyspark==2.3.1 </span><br><span class="line">pip install pyspark[sql]</span><br><span class="line">pip install numpy pandas msgpack sklearn</span><br></pre></td></tr></table></figure>
+<p><strong>注意：</strong>在安装像PySpark这样的大型库（~200MB）时，可能会遇到以“ <code>MemoryError</code>” 结尾的错误。如果是这样，请尝试：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install --no-cache-dir pyspark==2.3.1</span><br></pre></td></tr></table></figure>
+<p><strong>配置和环境变量：</strong>在客户端，<code>$SPARK_HOME</code>必须指向pip安装PySpark的位置：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">$ pip show pyspark</span><br><span class="line">Name: pyspark</span><br><span class="line">Version: 2.3.1</span><br><span class="line">Summary: Apache Spark Python API</span><br><span class="line">Home-page: https://github.com/apache/spark/tree/master/python</span><br><span class="line">Author: Spark Developers</span><br><span class="line">Author-email: dev@spark.apache.org</span><br><span class="line">License: http://www.apache.org/licenses/LICENSE-2.0</span><br><span class="line">Location: /opt/anaconda/lib/python3.6/site-packages</span><br><span class="line">Requires: py4j</span><br><span class="line">$ export SPARK_HOME=/opt/anaconda/lib/python3.6/site-packages</span><br></pre></td></tr></table></figure>
+<p>在每个群集节点上，设置其他默认参数和环境变量。特别是对于Python应用程序：<br><code>$SPARK_HOME/conf/spark-defaults.sh</code></p>
+<ul>
+<li><code>spark.sql.execution.arrow.enabled true</code></li>
+</ul>
+<p><code>$SPARK_HOME/conf/spark-env.sh</code></p>
+<ul>
+<li><code>export PYSPARK_PYTHON=/usr/bin/python3</code> ：Python可执行文件，所有节点。</li>
+<li><code>export PYSPARK_DRIVER_PYTHON=/usr/bin/python3</code> ：驱动程序的Python可执行文件，如果与执行程序节点不同。</li>
+</ul>
+<p><strong>注：</strong>环境变量是从哪里读<code>spark-submit</code>的_推出_，不一定是从群集主机内。<br><a name="d5f01497"></a></p>
+<h4 id="运行它"><a href="#运行它" class="headerlink" title="运行它"></a>运行它</h4><p>将工作负载提交到集群只需运行Python应用程序（例如<code>spark-submit</code>，不需要）：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ cd my-project-dir/</span><br><span class="line">$ python3 project.py</span><br></pre></td></tr></table></figure>
+<p>在运行时，可以看到运行多个<em>python3</em>进程的从属节点在作业上运行：<br><br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1552902767067-19085e70-7bf9-4058-84d8-cc174302f2af.png#align=left&amp;display=inline&amp;height=304&amp;name=1_l-aJ47luaPs9wpj_FTlMSQ.png&amp;originHeight=408&amp;originWidth=1000&amp;size=413381&amp;status=done&amp;width=746" alt="1_l-aJ47luaPs9wpj_FTlMSQ.png"></p>
+<p><a name="93533b7d"></a></p>
+<h3 id="＃2：集装箱式应用（客户端模式，无火花提交）"><a href="#＃2：集装箱式应用（客户端模式，无火花提交）" class="headerlink" title="＃2：集装箱式应用（客户端模式，无火花提交）"></a>＃2：集装箱式应用（客户端模式，无火花提交）</h3><p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1552902810496-c3ddc7d0-c9e2-4e34-823f-54fbc0e9966f.png#align=left&amp;display=inline&amp;height=512&amp;name=1_zcpriTNz1FM6kWUpQNr_RA.png&amp;originHeight=686&amp;originWidth=1000&amp;size=282197&amp;status=done&amp;width=746" alt="1_zcpriTNz1FM6kWUpQNr_RA.png"><br>这是前一个场景的扩展，由于可移植性等原因，最好将Python应用程序作为Docker容器运行，作为CI / CD管道的一部分。<br>除了针对上一个方案推荐的配置外，还需要以下内容：<br><strong>构建容器以包含所有依赖项：</strong>从包含Python 3和/或Java 8 OpenJDK的映像开始，然后pip-install PySpark，PyArrow以及应用程序所需的所有其他库。<br><strong>配置Spark驱动程序主机和端口，在容器中打开它们：</strong>这是执行程序到达容器内驱动程序所必需的。可以通过编程方式设置驱动程序的Spark属性（<code>spark.conf.set(“property”, “value”)</code>）：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">spark.driver.host : host_ip_address (e.g. 192.168.1.10)</span><br><span class="line">spark.driver.port : static_port (e.g. 51400)</span><br><span class="line">spark.driver.bindAddress : container_internal_ip (e.g. 10.192.6.81)</span><br><span class="line">spark.driver.blockManagerPort : static_port (e.g. 51500)</span><br></pre></td></tr></table></figure>
+<p>在Docker中，端口可以使用-p选项从命令行公开到外部：<code>-p 51400:51400 -p 51500:51500</code>。其他文章建议只发布此端口范围：<code>-p 5000–5010:5000–5010</code><br><a name="d5f01497-1"></a></p>
+<h4 id="运行它-1"><a href="#运行它-1" class="headerlink" title="运行它"></a>运行它</h4><p>与前一个场景一样，运行容器将启动Python驱动程序：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -p 51400：51400 -p 51500：51500 &lt;docker_image_url&gt;</span><br></pre></td></tr></table></figure>
+<p><a name="2efdb298"></a></p>
+<h3 id="＃3：通过spark-submit提供Python应用程序（客户端模式）"><a href="#＃3：通过spark-submit提供Python应用程序（客户端模式）" class="headerlink" title="＃3：通过spark-submit提供Python应用程序（客户端模式）"></a>＃3：通过spark-submit提供Python应用程序（客户端模式）</h3><p>此方案实际上与方案＃1相同，仅为了清楚起见包含在此处。唯一的区别是Python应用程序是使用该<code>spark-submit</code>进程启动的。除了日志文件之外，还会将群集事件发送到<em>stdout</em>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ cd my-project-dir/</span><br><span class="line">$ ls -l </span><br><span class="line">rwxrwxr-x. 3 centos centos  70 Feb 25 02:11 data</span><br><span class="line">-rw-rw-r--. 1 centos centos 220 Feb 25 01:09 project.py</span><br><span class="line">$ spark-submit project.py</span><br></pre></td></tr></table></figure>
+<p><strong>笔记：</strong></p>
+<ul>
+<li>根据我的经验，<code>spark-submit</code>只要从项目根目录（<code>my-project-dir/</code>）调用它就没有必要在调用时传递依赖的子目录/文件。</li>
+<li>由于示例应用程序已指定主URL，因此无需将其传递给<code>spark-submit</code>。否则，更完整的命令将是：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ spark-submit --master spark://sparkcas1:7077 --deploy-mode client project.py</span><br></pre></td></tr></table></figure>
+<ul>
+<li>从Spark 2.3开始，无法将集群模式下的Python应用程序提交给独立的Spark集群。这样做会产生错误：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ spark-submit --master spark://sparkcas1:7077 --deploy-mode cluster project.py</span><br><span class="line">Error: Cluster deploy mode is currently not supported for python applications on standalone clusters.</span><br></pre></td></tr></table></figure>
+<p><a name="938988a1"></a></p>
+<h4 id="Takeaways-Python-on-Spark独立集群："><a href="#Takeaways-Python-on-Spark独立集群：" class="headerlink" title="Takeaways- Python on Spark独立集群："></a><strong>Takeaways- Python on Spark独立集群：</strong></h4><ul>
+<li>虽然独立群集在生产中不受欢迎（可能是因为商业支持的分发包括群集管理器），但只要不需要多租户和动态资源分配，它们的占用空间就会更小并且做得很好。</li>
+<li>对于Python应用程序，部署选项仅限于客户端模式。</li>
+<li>使用Docker来容纳Python应用程序具有所有预期的优势，非常适合客户端模式部署。</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://zhos.me/2019/03/18/yuque/如何（以及为什么）创建一个好的验证集/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1712,7 +1754,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://zhos.me/2019/01/31/yuque/我们从基于区域的物体探测器（更快的R-CNN，R-FCN，FPN）中学到了什么？/">
+    <link itemprop="mainEntityOfPage" href="http://zhos.me/2019/03/18/yuque/如何使用良好的软件工程实践设置PySpark环境以进行开发/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Zhos">
@@ -1731,7 +1773,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019/01/31/yuque/我们从基于区域的物体探测器（更快的R-CNN，R-FCN，FPN）中学到了什么？/" itemprop="url">我们从基于区域的物体探测器（更快的R-CNN，R-FCN，FPN）中学到了什么？</a></h1>
+                <a class="post-title-link" href="/2019/03/18/yuque/如何使用良好的软件工程实践设置PySpark环境以进行开发/" itemprop="url">如何使用良好的软件工程实践设置PySpark环境以进行开发</a></h1>
         
 
         <div class="post-meta">
@@ -1743,8 +1785,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-31T18:12:24+08:00">
-                2019-01-31
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-18T11:16:24+08:00">
+                2019-03-18
               </time>
             
 
@@ -1783,56 +1825,374 @@
       
         
           
-            <p><a name="b4699b6e"></a></p>
-<h1 id="我们从基于区域的物体探测器（更快的R-CNN，R-FCN，FPN）中学到了什么？"><a href="#我们从基于区域的物体探测器（更快的R-CNN，R-FCN，FPN）中学到了什么？" class="headerlink" title="我们从基于区域的物体探测器（更快的R-CNN，R-FCN，FPN）中学到了什么？"></a>我们从基于区域的物体探测器（更快的R-CNN，R-FCN，FPN）中学到了什么？</h1><p><a href="https://medium.com/@jonathan_hui" target="_blank" rel="noopener">乔纳森惠</a>以下<br>2018年3月28日<br>在本系列中，我们将全面介绍物体检测。在这里的第1部分中，我们介绍了基于区域的物体探测器，包括快速R-CNN，更快的R-CNN，R-FCN和FPN。在第2部分中，我们将研究单射击探测器。在第3部分中，我们将介绍性能和一些实现问题。通过在一个环境中研究它们，我们研究什么是有效的，什么是重要的，哪些可以改进。希望通过研究我们如何到达这里，它将为我们提供更多关于我们前进方向的见解。<br><a href="https://medium.com/@jonathan_hui/what-do-we-learn-from-region-based-object-detectors-faster-r-cnn-r-fcn-fpn-7e354377a7c9" target="_blank" rel="noopener">第1部分</a>：我们从基于区域的物体探测器（更快的R-CNN，R-FCN，FPN）中学到了什么？<br><a href="https://medium.com/@jonathan_hui/what-do-we-learn-from-single-shot-object-detectors-ssd-yolo-fpn-focal-loss-3888677c5f4d" target="_blank" rel="noopener">第2部分</a>：我们从单发物体探测器（SSD，YOLO），FPN和焦点损耗中学到了什么？<br><a href="https://medium.com/@jonathan_hui/design-choices-lessons-learned-and-trends-for-object-detections-4f48b59ec5ff" target="_blank" rel="noopener">第3部分</a>：设计选择，经验教训和对象检测趋势？<br><a name="43bb065b"></a></p>
-<h3 id="滑动窗口探测器"><a href="#滑动窗口探测器" class="headerlink" title="滑动窗口探测器"></a><strong>滑动窗口探测器</strong></h3><p>自AlexNet赢得2012年ILSVRC挑战以来，使用CNN进行分类已经占据了该领域的主导地位。用于物体检测的一种蛮力方法是从左侧和右侧以及从上到下滑动窗口以使用分类来识别物体。为了在不同的观察距离检测不同的物体类型，我们使用不同尺寸和纵横比的窗户。</p>
-<p>滑动窗（从右到左，上下）<br>我们根据滑动窗口从图片中剪切出补丁。由于许多分类器仅采用固定大小的图像，因此修补程序会发生扭曲。然而，这不应该影响分类准确性，因为分类器被训练以处理变形图像。</p>
-<p>将图像变形为固定大小的图像。<br>将扭曲的图像块馈送到CNN分类器中以提取4096个特征。然后我们应用SVM分类器来识别类和边界框的另一个线性回归量。</p>
-<p>滑动窗检测器的系统流程。<br>下面是伪代码。我们创建了许多窗口来检测不同位置的不同对象形状。为了提高性能，一个明显的解决方案是减少_窗口_数量。<br>窗口中的窗口<br>    patch = get_patch（图像，窗口）<br>    结果=检测器（补丁）<a name="68696ce0"></a></p>
-<h3 id="选择性搜索"><a href="#选择性搜索" class="headerlink" title="选择性搜索"></a>选择性搜索</h3><p>我们使用区域提议方法来创建用于对象检测的<strong>感兴趣区域（ROI）</strong>，而不是强力方法。在<strong>选择性搜索</strong>（<strong>SS</strong>）中，我们从每个单独的像素开始作为其自己的组。接下来，我们计算每个组的纹理，并组合两个最接近的组。但是为了避免单个区域吞噬其他区域，我们更喜欢先将较小的组分组。我们继续合并区域，直到所有内容组合在一起。在下面的第一行中，我们展示了如何增长区域，第二行中的蓝色矩形显示了我们在合并期间可能实现的ROI。</p>
-<p>（图片来源：van de Sande等，ICCV’11）<br><a name="R-CNN"></a></p>
-<h3 id="R-CNN"><a href="#R-CNN" class="headerlink" title="R-CNN"></a>R-CNN</h3><p>R-CNN利用区域提议方法来创建大约2000个<strong>ROI</strong>（<strong>感兴趣</strong>的区域）。区域被扭曲成固定大小的图像并单独馈送到CNN网络。然后是完全连接的层，以对对象进行分类并细化边界框。</p>
-<p>使用区域提议，CNN，仿射层来定位对象。<br>这是系统流程。</p>
-<p>R-CNN的系统流程<br>R-CNN的投资回报率低得多但质量更高，比滑动窗更快，更准确。<br>投资回报率= <br>ROI中投资回报率的区域提示（图像）<br>    补丁= get_patch（图像，投资回报率）<br>    结果=检测器（补丁）<a name="9d7dcb56"></a></p>
-<h4 id="边界框回归量"><a href="#边界框回归量" class="headerlink" title="边界框回归量"></a>边界框回归量</h4><p>区域提案方法计算密集。为了加快这一过程，我们经常选择一种较便宜的区域建议方法来创建ROI，然后使用线性回归量（使用完全连接的层）进一步细化边界框。</p>
-<p>使用回归将原始ROI从蓝色细化为红色。<br><a name="02b68898"></a></p>
-<h3 id="快速R-CNN"><a href="#快速R-CNN" class="headerlink" title="快速R-CNN"></a>快速R-CNN</h3><p>R-CNN需要许多提议准确并且许多区域彼此重叠。<strong>R-CNN的训练和推理速度很慢。</strong>如果我们有2,000个提案，则每个提案都由CNN单独处理，即我们针对不同的投资回报率重复提取2000次特征。<br>我们不是从头开始为每个图像补丁提取特征，而是使用<strong>特征提取器</strong>（CNN）首先提取整个图像的特征。我们还使用外部区域提议方法（如选择性搜索）来创建ROI，后者与相应的要素图组合以形成用于对象检测的补丁。我们使用<strong>ROI池</strong>将贴片扭曲到固定大小，并将它们馈送到完全连接的层以进行分类和<strong>定位</strong>（检测对象的位置）。通过不重复特征提取，Fast R-CNN显着缩短了处理时间。</p>
-<p>在要素图上应用区域建议，并使用ROI池形成固定大小的修补程序。<br>这是网络流程：</p>
-<p>在下面的伪代码中，昂贵的特征提取正在逐渐退出for循环，这是因为它针对所有2000个ROI执行而显着提高了速度。快速R-CNN在训练中比R-CNN快10倍，在推理中快150倍。<br>feature_maps = process（image）<br>ROI = <br>ROI中ROI的region_proposal（image）<br>    补丁= roi_pooling（feature_maps，ROI）<br>    结果= detector2（补丁）Fast R-CNN的一个主要特点是整个网络（特征提取器，分类器和边界框回归器）可以通过<strong>多任务损失</strong>（分类丢失和本地化丢失）进行端到端训练。这提高了准确性。<br><strong>投资回报率</strong><br>由于Fast R-CNN使用完全连接的层，因此我们应用<strong>ROI池</strong>来将可变大小的ROI扭曲成预定义的大小形状。<br>让我们通过将8×8特征映射转换为预定义的2×2形状来简化讨论。</p>
+            <p>在本文中，我们将讨论如何设置我们的开发环境以创建高质量的python代码以及如何自动执行一些繁琐的任务来加速部署。<br>我们将介绍以下步骤：</p>
 <ul>
-<li>左下方：我们的功能图。</li>
-<li>右上角：我们将ROI（蓝色）与要素图重叠。</li>
-<li>左下图：我们将ROI分成目标维度。例如，对于我们的2×2目标，我们将ROI分成4个具有相似或相同大小的部分。</li>
-<li>右下角：找到每个部分的最大值，结果是我们的变形特征映射。</li>
+<li>使用<a href="https://pipenv.readthedocs.io/en/latest/" target="_blank" rel="noopener"><strong>pipenv</strong></a>在隔离的虚拟环境中设置我们的依赖<a href="https://pipenv.readthedocs.io/en/latest/" target="_blank" rel="noopener"><strong>项</strong></a></li>
+<li>如何为多个作业设置项目结构</li>
+<li>如何运行pyspark工作</li>
+<li>如何使用<a href="https://opensource.com/article/18/8/what-how-makefile" target="_blank" rel="noopener"><strong>Makefile</strong></a><strong> </strong>自动执行开发步骤</li>
+<li>如何使用<a href="http://flake8.pycqa.org/en/latest/" target="_blank" rel="noopener"><strong>flake8</strong></a>测试代码的质量<a href="http://flake8.pycqa.org/en/latest/" target="_blank" rel="noopener"></a></li>
+<li>如何使用<a href="https://pypi.org/project/pytest-spark/" target="_blank" rel="noopener"><strong>pytest-spark</strong></a>为PySpark应用程序运行单元测试<a href="https://pypi.org/project/pytest-spark/" target="_blank" rel="noopener"></a></li>
+<li>运行测试覆盖率，看看我们是否使用<a href="https://pypi.org/project/pytest-cov/" target="_blank" rel="noopener"><strong>pytest-cov</strong></a>创建了足够的单元测试<a href="https://pypi.org/project/pytest-cov/" target="_blank" rel="noopener"></a><br><a name="54e5af6c"></a><h3 id="第1步：设置虚拟环境"><a href="#第1步：设置虚拟环境" class="headerlink" title="第1步：设置虚拟环境"></a>第1步：设置虚拟环境</h3>虚拟环境有助于我们将特定应用程序的依赖关系与系统的整体依赖关系隔离开来。这很好，因为我们不会涉及现有库的依赖性问题，并且在单独的系统（例如docker容器或服务器）上安装或卸载它们更容易。对于此任务，我们将使用<strong>pipenv。</strong><br>要在mac os系统上安装它，例如运行：</li>
 </ul>
-<p>输入要素图（左上），输出要素图（右下），蓝框是ROI（右上）。<br>因此，我们得到一个2×2特征补丁，我们可以将其输入分类器和盒子回归器。<br><a name="1f096ba3"></a></p>
-<h3 id="更快的R-CNN"><a href="#更快的R-CNN" class="headerlink" title="更快的R-CNN"></a>更快的R-CNN</h3><p>快速R-CNN依赖于外部区域提议方法，如选择性搜索。但是，这些算法在CPU上运行并且速度很慢。在测试中，快速R-CNN花费2.3秒进行预测，其中2秒用于生成2000个ROI。<br>feature_maps = process（image）<br>ROIs = region_proposal（image）＃贵！<br>投资回报率中的ROI <br>    补丁= roi_pooling（feature_maps，ROI）<br>    结果= detector2（补丁）更快的R-CNN采用与快速R-CNN类似的设计，除了它用内部深度网络替换区域提议方法，而ROI则来自特征映射。新区域提案网络（<strong>RPN</strong>）更高效，并且在生成ROI时每个映像运行10毫秒。</p>
-<p>网络流量与Fast R-CNN相同。<br>网络流程类似，但区域提案现在由卷积网络（RPN）取代。</p>
-<p>外部区域提议由内部深层网络取代。<br><strong>区域提案网络</strong><br>区域提议网络（<strong>RPN</strong>）将来自第一个卷积网络的输出特征映射作为输入。它在特征映射上滑动3×3过滤器，以使用像ZF网络这样的卷积网络（下面）进行类别无关区域提议。其他深度网络如VGG或ResNet可用于以速度为代价进行更全面的特征提取。ZF网络输出256个值，这些值被馈送到2个单独的完全连接的层中以预测边界框和2个对象性得分。该<strong>对象性</strong>测量框是否包含对象。我们可以使用回归量来计算单个对象度得分但是为了简单起见，更快的R-CNN使用具有2个可能类的分类器：一个用于“具有对象”类别而一个用于没有（即背景类别）。</p>
-<p>对于要素图中的每个位置，RPN进行<strong>k</strong>猜测。因此，RPN每个位置输出4×k坐标和2×k分数。下图显示了具有3×3滤波器的8×8特征图，并且它输出总共8×8×3个ROI（对于k = 3）。右侧图表显示了单个位置提出的3个提案。</p>
-<p>在这里，我们得到3个猜测，我们稍后会改进我们的猜测。由于我们只需要一个正确的，如果我们的初步猜测有不同的形状和大小，我们会更好。因此，更快的R-CNN不会提出随机边界框提议。相反，它预测像δx，δy这样的偏移相对于一些称为<strong>锚点的</strong>参考框的左上角。我们限制了那些偏移的值，所以我们的猜测仍然类似于锚点。</p>
-<p>为了对每个位置进行k个预测，我们需要以每个位置为中心的k个锚点。每个预测与特定锚相关联，但不同位置共享相同的锚形状。</p>
-<p>这些锚是经过精心预先选择的，因此它们是多样的，能够很好地覆盖不同尺度和纵横比的真实物体。这可以通过更好的猜测指导初始训练，并允许每个预测专注于某种形状。这种策略使早期训练更加稳定和轻松。<br>更快的R-CNN使用更多的锚点。它配置了9个锚箱：3种不同的比例，3种不同的宽高比。每个位置使用9个锚点，每个位置生成2×9个对象度分数和4×9个坐标。</p>
-<p><a href="https://arxiv.org/pdf/1506.01497.pdf" target="_blank" rel="noopener">资源</a></p>
-<blockquote>
-<p><strong>锚</strong>在不同的论文中也称为&gt; <strong>先验</strong>或&gt; <strong>默认边界框</strong>。<br><a name="89dc102d"></a></p>
-</blockquote>
-<h3 id="R-CNN方法的性能"><a href="#R-CNN方法的性能" class="headerlink" title="R-CNN方法的性能"></a>R-CNN方法的性能</h3><p>如下图所示，更快的R-CNN甚至更快。</p>
-<p><a name="1c4a83c6"></a></p>
-<h3 id="基于区域的完全卷积网络（R-FCN）"><a href="#基于区域的完全卷积网络（R-FCN）" class="headerlink" title="基于区域的完全卷积网络（R-FCN）"></a>基于区域的完全卷积网络（R-FCN）</h3><p>假设我们只有一个特征图检测到脸部的右眼。我们可以用它来定位一张脸吗？这应该。由于右眼应位于面部图片的左上角，我们可以使用它来定位面部。</p>
-<p>如果我们有专门检测左眼，鼻子或嘴巴的其他特征图，我们可以将结果组合在一起以更好地定位脸部。<br>那么我们为什么要经历所有麻烦呢。在更快的R-CNN中，<em>探测器</em>应用多个完全连接的层来进行预测。拥有2,000个投资回报率，价格昂贵。<br>feature_maps =处理（图像）<br>的ROI = region_proposal（feature_maps）<br>用于在感兴趣区ROI <br>    补丁= roi_pooling（feature_maps，ROI）<br>    class_scores，盒=检测器（贴片）＃昂贵！<br>    class_probabilities = softmax（class_scores）R-FCN通过减少每个ROI所需的工作量来提高速度。上面的基于区域的特征图与ROI无关，并且可以在每个ROI之外计算。剩下的工作要简单得多，因此R-FCN比快速R-CNN更快。<br>feature_maps = process（image）<br>ROIs = region_proposal（feature_maps）          <br>score_maps = compute_score_map（feature_maps）<br>ROI中的ROI <br>    V = region_roi_pool（score_maps，ROI）      <br>    class_scores，box = average（V）＃更简单！<br>    class_probabilities = softmax（class_scores）让我们考虑一个5×5的特征映射<strong>M</strong>，里面有一个蓝色方形对象。我们将方形对象平均分成3×3个区域。现在，我们从M创建一个新的特征图，仅检测正方形的左上角（TL）。新功能图看起来像右下方的那个。仅激活黄色<strong>网格单元</strong> [2,2]。</p>
-<p>从左侧创建新的要素图以检测对象的左上角。<br>由于我们将正方形划分为9个部分，我们可以创建9个特征映射，每个特征映射检测对象的相应区域。这些特征图称为<strong>位置敏感分数图，</strong>因为每个图检测（分数）对象的子区域。</p>
-<p>生成9个得分图<br>假设下面的虚线红色矩形是建议的ROI。我们将其划分为3×3个区域，并询问每个区域包含对象的相应部分的可能性。例如，左上角ROI区域包含左眼的可能性有多大。我们将结果存储在右图中的3×3投票数组中。例如，vote_array [0] [0]包含关于我们是否找到方形对象的左上角区域的分数。</p>
-<p>将ROI应用于要素图以输出3 x 3阵列。<br>将得分图和ROI映射到投票数组的过程称为<strong>位置敏感的</strong> <strong>ROI池</strong>。这个过程非常接近我们之前讨论过的ROI池。我们不会进一步介绍它，但您可以参考未来的阅读部分以获取更多信息。</p>
-<p>将ROI的一部分叠加到相应的得分图上以计算V [i] [j]<br>计算位置敏感ROI池的所有值后，类别分数是其所有元素的平均值。</p>
-<p>投资回报率池<br>假设我们有<strong>C</strong>类要检测。我们将它扩展为C + 1类，因此我们为背景（非对象）添加了一个新类。每个班级都有自己的3×3分数图，因此总共有（C + 1）×3×3分数图。使用自己的一组得分图，我们预测每个班级的班级得分。然后我们在这些分数上应用softmax来计算每个类的概率。<br>以下是数据流。对于我们的例子，我们下面有k = 3。</p>
-<p><a name="f64e8873"></a></p>
-<h3 id="我们的旅程到目前为止"><a href="#我们的旅程到目前为止" class="headerlink" title="我们的旅程到目前为止"></a>我们的旅程到目前为止</h3><p>我们从基本的滑动窗口算法开始。<br>窗口中的窗口<br>    patch = get_patch（图像，窗口）<br>    结果=检测器（补丁）然后我们尝试减少窗口的数量，并在for循环之外移动尽可能多的工作。<br>投资回报率= <br>ROI中投资回报率的区域提示（图像）<br>    补丁= get_patch（图像，投资回报率）<br>    结果=检测器（补丁）在<a href="https://medium.com/@jonathan_hui/what-do-we-learn-from-single-shot-object-detectors-ssd-yolo-fpn-focal-loss-3888677c5f4d" target="_blank" rel="noopener">第2部分中</a>，我们进一步完全删除了for循环。单发探测器可在单次射击中进行物体探测，无需单独的区域建议步骤。<br><a name="b4412bfb"></a></p>
-<h3 id="进一步阅读FPN，R-FCN和Mask-R-CNN"><a href="#进一步阅读FPN，R-FCN和Mask-R-CNN" class="headerlink" title="进一步阅读FPN，R-FCN和Mask R-CNN"></a>进一步阅读FPN，R-FCN和Mask R-CNN</h3><p>FPN和R-FCN都比我们在此描述的更复杂。如需进一步研究，请参阅：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install pipenv</span><br></pre></td></tr></table></figure>
+<p>要为应用程序声明我们的依赖项（库），我们需要在项目的路径路径中创建一个<strong>Pipfile</strong>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[[source]]</span><br><span class="line">url = &apos;https://pypi.python.org/simple&apos;</span><br><span class="line">verify_ssl = true</span><br><span class="line">name = &apos;pypi&apos;</span><br><span class="line">[requires]</span><br><span class="line">python_version = &quot;3.6&quot;</span><br><span class="line">[packages]</span><br><span class="line">flake8 = &quot;*&quot;</span><br><span class="line">pytest-spark = &quot;&gt;=0.4.4&quot;</span><br><span class="line">pyspark = &quot;&gt;=2.4.0&quot;</span><br><span class="line">pytest-cov = &quot;*&quot;</span><br></pre></td></tr></table></figure>
+<p>这里有三个组件。在<strong>[[source]]</strong>标签中，我们声明了下载所有软件包的<strong>url</strong>，在<strong>[requires]中</strong>我们定义了python版本，最后在<strong>[packages]</strong>中声明了我们需要的依赖项。我们可以将依赖项绑定到某个版本，或者使用<strong>“*”</strong>符号来获取最新版本。<br>要创建虚拟环境并激活它，我们需要在终端中运行两个命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pipenv --three install</span><br><span class="line">pipenv shell</span><br></pre></td></tr></table></figure>
+<p>一旦完成这一步，你应该看到你在一个新的venv中，让项目的名字出现在命令行的终端中（默认情况下，env采用项目的名称）：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(pyspark-project-template) host:project$</span><br></pre></td></tr></table></figure>
+<p>现在，您可以使用两个命令进出。<br>停用env并返回标准环境：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">deactivate</span><br></pre></td></tr></table></figure>
+<p>再次激活虚拟环境（您需要位于项目的根目录中）：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">source `pipenv --venv`/bin/activate</span><br></pre></td></tr></table></figure></p>
+<p><a name="bb546939"></a></p>
+<h3 id="第2步：项目结构"><a href="#第2步：项目结构" class="headerlink" title="第2步：项目结构"></a>第2步：项目结构</h3><p>该项目可以具有以下结构：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">pyspark-project-template</span><br><span class="line">    src/</span><br><span class="line">        jobs/   </span><br><span class="line">            pi/</span><br><span class="line">                __init__.py</span><br><span class="line">                resources/</span><br><span class="line">                    args.json</span><br><span class="line">            word_count/</span><br><span class="line">                __init__.py</span><br><span class="line">                resources/</span><br><span class="line">                    args.json</span><br><span class="line">                    word_count.csv</span><br><span class="line">        main.py</span><br><span class="line">    test/</span><br><span class="line">        jobs/</span><br><span class="line">            pi/</span><br><span class="line">                test_pi.py</span><br><span class="line">            word_count/</span><br><span class="line">                test_word_count.py</span><br></pre></td></tr></table></figure>
+<p>排除一些<strong>init</strong>.py文件以简化操作，但您可以在本教程末尾的github上找到完整项目的链接。我们基本上有源代码和测试。每个作业都分成一个文件夹，每个作业都有一个资源文件夹，我们在其中添加该作业所需的额外文件和配置。<br>在本教程中，我使用了两个经典示例 -  <strong>pi</strong>，生成最多小数的pi数和<strong>字数</strong>，以计算csv文件中的单词数。<br><a name="1b6fecdc"></a></p>
+<h3 id="第3步：使用spark-submit运行作业"><a href="#第3步：使用spark-submit运行作业" class="headerlink" title="第3步：使用spark-submit运行作业"></a>第3步：使用spark-submit运行作业</h3><p>我们先来看看<strong>main.py</strong>文件的样子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">if __name__ == &apos;__main__&apos;:</span><br><span class="line"></span><br><span class="line">    parser = argparse.ArgumentParser(description=&apos;My pyspark job arguments&apos;)</span><br><span class="line">    parser.add_argument(&apos;--job&apos;, type=str, required=True, dest=&apos;job_name&apos;,</span><br><span class="line">                        help=&apos;The name of the spark job you want to run&apos;)</span><br><span class="line">    parser.add_argument(&apos;--res-path&apos;, type=str, required=True, dest=&apos;res_path&apos;,</span><br><span class="line">                        help=&apos;Path to the jobs resurces&apos;)</span><br><span class="line"></span><br><span class="line">    args = parser.parse_args()</span><br><span class="line"></span><br><span class="line">    spark = SparkSession\</span><br><span class="line">        .builder\</span><br><span class="line">        .appName(args.job_name)\</span><br><span class="line">        .getOrCreate()</span><br><span class="line"></span><br><span class="line">    job_module = importlib.import_module(&apos;jobs.%s&apos; % args.job_name)</span><br><span class="line">    res = job_module.run(spark, get_config(args.res_path, args.job_name))</span><br><span class="line"></span><br><span class="line">    print(&apos;[JOB &#123;job&#125; RESULT]: &#123;result&#125;&apos;.format(job=args.job_name, result=res))</span><br></pre></td></tr></table></figure>
+<p>当我们运行我们的工作时，我们需要两个命令行参数：  <strong>- job</strong>，是我们想要运行的作业的名称（在例外pi或word_count中）和  <strong>- res-path</strong>，是作业的相对路径。我们需要第二个参数，因为spark需要知道我们资源的完整路径。在生产环境中，我们将代码部署在集群上，我们将资源转移到HDFS或S3，我们将使用该路径。<br>在进一步解释代码之前，我们需要提一下，我们必须压缩<strong>作业</strong>文件夹并将其传递给<strong>spark-submit</strong>语句<strong>。</strong>假设我们在项目的根目录中：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd src/ </span><br><span class="line">zip -r ../jobs.zip jobs/</span><br></pre></td></tr></table></figure>
+<p>这将使代码在我们的应用程序中作为模块提供。基本上在<strong>第16行的main.py中，</strong>我们以编程方式导入<strong>作业</strong>模块。<br>我们的作业<strong>pi</strong>和<strong>word_count</strong>都有一个<strong>run</strong>函数，所以我们只需要运行这个函数来启动这个作业（<strong>main.py中的第17行）。</strong>我们还在那里传递了工作的配置。<br>让我们看一下<strong>word_count</strong>作业，进一步了解这个例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">from operator import add</span><br><span class="line"></span><br><span class="line">def get_keyval(row):</span><br><span class="line">    words = filter(lambda r: r is not None, row)</span><br><span class="line">    return [[w.strip().lower(), 1] for w in words]</span><br><span class="line"></span><br><span class="line">def run(spark, config):</span><br><span class="line">    df = spark.read.csv(config[&apos;relative_path&apos;] + config[&apos;words_file_path&apos;])</span><br><span class="line">    mapped_rdd = df.rdd.flatMap(lambda row: get_keyval(row))</span><br><span class="line">    counts_rdd = mapped_rdd.reduceByKey(add)</span><br><span class="line">    return counts_rdd.collect()</span><br></pre></td></tr></table></figure>
+<p>此代码在<strong>word_count</strong>文件夹的<strong><strong>init</strong>.py</strong>文件中定义。我们在这里可以看到，我们使用两个配置参数来读取资源文件夹中的csv文件：相对路径和csv文件的位置。其余的代码只计算单词，所以我们不会在这里详细介绍。值得一提的是，每个作业在resources文件夹中都有一个<strong>args.json</strong>文件。这里我们实际定义了传递给作业的配置。这是<strong>word_count</strong>作业的配置文件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;words_file_path&quot;: &quot;/word_count/resources/word_count.csv&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>所以我们现在有了所有细节来运行我们的<strong>spark-submit</strong>命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">spark-submit --py-files jobs.zip src/main.py --job word_count --res-path /your/path/pyspark-project-template/src/jobs</span><br></pre></td></tr></table></figure>
+<p>要运行另一个作业<strong>pi，</strong>我们只需要更改<strong>- job</strong>标志的参数  。<br><a name="b336e1a0"></a></p>
+<h3 id="第4步：编写单元测试，并使用覆盖率运行它们"><a href="#第4步：编写单元测试，并使用覆盖率运行它们" class="headerlink" title="第4步：编写单元测试，并使用覆盖率运行它们"></a>第4步：编写单元测试，并使用覆盖率运行它们</h3><p>要为pyspark应用程序编写测试，我们使用<strong>pytest-spark</strong>，一个非常易于使用的模块。<br>该<strong>WORD_COUNT</strong>工作单元测试：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">from src.jobs.word_count import get_keyval, run</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def test_get_keyval():</span><br><span class="line">    words=[&apos;this&apos;, &apos;are&apos;, &apos;words&apos;, &apos;words&apos;]</span><br><span class="line">    expected_results=[[&apos;this&apos;, 1], [&apos;are&apos;, 1], [&apos;words&apos;, 1], [&apos;words&apos;, 1]]</span><br><span class="line"></span><br><span class="line">    assert expected_results == get_keyval(words)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def test_word_count_run(spark_session):</span><br><span class="line">    expected_results = [(&apos;one&apos;, 1), (&apos;two&apos;, 1), (&apos;three&apos;, 2), (&apos;four&apos;, 2), (&apos;test&apos;, 1)]</span><br><span class="line">    conf = &#123;</span><br><span class="line">        &apos;relative_path&apos;: &apos;/your/path/pyspark-project-template/src/jobs&apos;,</span><br><span class="line">        &apos;words_file_path&apos;: &apos;/word_count/resources/word_count.csv&apos;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    assert expected_results == run(spark_session, conf)</span><br></pre></td></tr></table></figure>
+<p>我们需要从<strong>src</strong>模块导入我们想要测试的函数。这里更有趣的部分是我们如何进行<strong>test_word_count_run。</strong>我们可以看到没有初始化的spark会话，我们只是在测试中将其作为参数接收。这要归功于<strong>pytest-spark</strong>模块，因此我们可以专注于编写测试，而不是编写样板代码。<br>接下来让我们讨论一下代码覆盖率。我们怎么知道我们是否编写了足够的单元测试？很简单，我们运行测试覆盖工具，告诉我们尚未测试的代码。对于python，我们可以使用<strong>pytest-cov</strong>模块。要使用代码覆盖率运行所有测试，我们必须运行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pytest --cov=src test/jobs/</span><br></pre></td></tr></table></figure>
+<p>where  <strong>- cov</strong> flag告诉pytest在哪里检查覆盖范围。<br>测试覆盖率结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">---------- coverage: platform darwin, python 3.7.2-final-0 -----------</span><br><span class="line">Name                              Stmts   Miss  Cover</span><br><span class="line">-----------------------------------------------------</span><br><span class="line">src/__init__.py                       0      0   100%</span><br><span class="line">src/jobs/__init__.py                  0      0   100%</span><br><span class="line">src/jobs/pi/__init__.py              11      0   100%</span><br><span class="line">src/jobs/word_count/__init__.py       9      0   100%</span><br><span class="line">-----------------------------------------------------</span><br><span class="line">TOTAL                                20      0   100%</span><br></pre></td></tr></table></figure>
+<p>我们的测试覆盖率是100％，但是等一下，缺少一个文件！为什么<strong>main.py</strong>没有在那里列出？<br>如果我们认为我们有不需要测试的python代码，我们可以将它从报告中排除。为此，我们需要在项目的根目录中创建一个  <strong>.coveragerc</strong>文件。对于此示例，它看起来像这样：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[run]</span><br><span class="line">omit = src/main.py</span><br></pre></td></tr></table></figure>
+<p><a name="3760f981"></a></p>
+<h3 id="第5步：运行静态代码分析"><a href="#第5步：运行静态代码分析" class="headerlink" title="第5步：运行静态代码分析"></a>第5步：运行静态代码分析</h3><p>很好，我们有一些代码，我们可以运行它，我们有良好的覆盖率的单元测试。我们做对了吗？还没！我们还需要确保按照python最佳实践编写易于阅读的代码。为此，我们必须使用名为<strong>flake8</strong>的python模块检查我们的代码<strong>。</strong><br>要运行它：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flake8 ./src</span><br></pre></td></tr></table></figure>
+<p>它将分析<strong>src</strong>文件夹。如果我们有干净的代码，我们就不应该收到任何警告。但不，我们有一些问题：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">flake8 ./src</span><br><span class="line">./src/jobs/pi/__init__.py:13:1: E302 expected 2 blank lines, found 1</span><br><span class="line">./src/jobs/pi/__init__.py:15:73: E231 missing whitespace after &apos;,&apos;</span><br><span class="line">./src/jobs/pi/__init__.py:15:80: E501 line too long (113 &gt; 79 characters)</span><br></pre></td></tr></table></figure>
+<p>我们来看看代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">from random import random</span><br><span class="line">from operator import add</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">NUMBER_OF_STEPS_FACTOR = 100000</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def f(_):</span><br><span class="line">    x = random() * 2 - 1</span><br><span class="line">    y = random() * 2 - 1</span><br><span class="line">    return 1 if x ** 2 + y ** 2 &lt;= 1 else 0</span><br><span class="line"></span><br><span class="line">def run(spark, config):</span><br><span class="line">    number_of_steps = config[&apos;partitions&apos;] * NUMBER_OF_STEPS_FACTOR</span><br><span class="line">    count = spark.sparkContext.parallelize(range(1, number_of_steps + 1),config[&apos;partitions&apos;]).map(f).reduce(add)</span><br><span class="line">    return 4.0 * count / number_of_steps</span><br></pre></td></tr></table></figure>
+<p>我们可以看到在第<strong>13</strong>行我们有一个<strong>E302</strong>警告<strong>。</strong>这意味着我们需要在两种方法之间增加一条线。然后是第<strong>15</strong>行的<strong>E231</strong>和<strong>E501</strong>。这一行的第一个警告告诉我们，我们需要在和之间留出一个额外的空间，第二个警告通知我们线路太长，而且很难读（我们可以’甚至在要点中完整地看到它！）。<code>**range(1, number_of_steps +1),**</code><strong> </strong><code>**config[**</code><strong> </strong><br>解决所有警告后，代码看起来更容易阅读：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">from random import random</span><br><span class="line">from operator import add</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">NUMBER_OF_STEPS_FACTOR = 100000</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def f(_):</span><br><span class="line">    x = random() * 2 - 1</span><br><span class="line">    y = random() * 2 - 1</span><br><span class="line">    return 1 if x ** 2 + y ** 2 &lt;= 1 else 0</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def run(spark, config):</span><br><span class="line">    number_of_steps = config[&apos;partitions&apos;] * NUMBER_OF_STEPS_FACTOR</span><br><span class="line">    count = spark.sparkContext\</span><br><span class="line">        .parallelize(range(1, number_of_steps + 1),</span><br><span class="line">                     config[&apos;partitions&apos;]).map(f).reduce(add)</span><br><span class="line">    return 4.0 * count / number_of_steps</span><br></pre></td></tr></table></figure>
+<p><a name="a448168b"></a></p>
+<h3 id="第6步：将所有内容与Makefile放在一起"><a href="#第6步：将所有内容与Makefile放在一起" class="headerlink" title="第6步：将所有内容与Makefile放在一起"></a>第6步：将所有内容与Makefile放在一起</h3><p>因为我们在终端中运行了一堆命令，所以在最后一步中我们将研究如何简化和自动执行此任务。<br>我们可以在项目的根目录中创建一个<strong>Makefile</strong>，如下所示：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">.DEFAULT_GOAL := run</span><br><span class="line">init:</span><br><span class="line"> pipenv --three install</span><br><span class="line"> pipenv shell</span><br><span class="line">analyze:</span><br><span class="line"> flake8 ./src</span><br><span class="line">run_tests:</span><br><span class="line"> pytest --cov=src test/jobs/</span><br><span class="line">run:</span><br><span class="line"> find . -name &apos;__pycache__&apos; | xargs rm -rf</span><br><span class="line"> rm -f jobs.zip</span><br><span class="line"> cd src/ &amp;&amp; zip -r ../jobs.zip jobs/</span><br><span class="line"> spark-submit --py-files jobs.zip src/main.py --job $(JOB_NAME) --res-path $(CONF_PATH)</span><br></pre></td></tr></table></figure></p>
+<p>如果我们想要使用coverage运行测试，我们只需输入：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make run_tests</span><br></pre></td></tr></table></figure>
+<p>如果我们想要运行<strong>pi</strong>工作：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make run JOB_NAME=pi CONF_PATH=/your/path/pyspark-project-template/src/jobs</span><br></pre></td></tr></table></figure>
+<p>这就是所有人！希望这个对你有帮助。<br>一如既往，代码存储在<a href="https://github.com/BogdanCojocar/medium-articles/tree/master/pyspark-project-template" target="_blank" rel="noopener">github上</a>。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://zhos.me/2019/03/18/yuque/使用Spark Structured Streaming，XGBoost和Scala进行实时预测/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Zhos">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="武德">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/03/18/yuque/使用Spark Structured Streaming，XGBoost和Scala进行实时预测/" itemprop="url">使用Spark Structured Streaming，XGBoost和Scala进行实时预测</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-18T11:06:19+08:00">
+                2019-03-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>在本文中，我们将讨论构建完整的机器学习管道。第一部分将侧重于在标准批处理模式下训练二元分类器，在第二部分中我们将进行一些实时预测。我们将使用来自<a href="https://www.kaggle.com/c/titanic/data" target="_blank" rel="noopener">泰坦尼克号的</a>数据<a href="https://www.kaggle.com/c/titanic/data" target="_blank" rel="noopener">：机器学习灾难</a>中的众多Kaggle比赛之一。在开始之前，请知道您应该熟悉<a href="https://www.tutorialspoint.com/scala/index.htm" target="_blank" rel="noopener">Scala</a>，<a href="https://spark.apache.org/" target="_blank" rel="noopener">Apache Spark</a>和<a href="http://xgboost.readthedocs.io/en/latest/get_started/" target="_blank" rel="noopener">Xgboost</a>。所有源代码也将在<a href="https://github.com/BogdanCojocar/medium-articles/tree/master/titanic_spark" target="_blank" rel="noopener">Github上提供</a>。很酷，现在让我们开始吧！<br><a name="d8b16075"></a></p>
+<h4 id="训练"><a href="#训练" class="headerlink" title="训练"></a>训练</h4><p>我们将使用Spark中的ML管道训练XGBoost分类器。分类器将保存为输出，并将在Spark Structured Streaming实时应用程序中用于预测新的测试数据。<br><strong>第1步：启动spark会话</strong><br>我们正在创建一个将在本地运行的spark应用程序，并将使用与使用的核心一样多的线程<code>local[*]</code> ：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">val spark  = SparkSession.builder()</span><br><span class="line">  .appName(&quot;Spark XGBOOST Titanic Training&quot;)</span><br><span class="line">  .master(&quot;local[*]&quot;)</span><br><span class="line">  .getOrCreate()</span><br></pre></td></tr></table></figure>
+<p><strong>第2步：定义架构</strong><br>接下来，我们定义从csv读取的数据的模式。这通常比让火花推断模式更好，因为它消耗的资源更少，我们可以完全控制字段。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> schema = <span class="type">StructType</span>(</span><br><span class="line">  <span class="type">Array</span>(<span class="type">StructField</span>(<span class="string">"PassengerId"</span>, <span class="type">DoubleType</span>),</span><br><span class="line">    <span class="type">StructField</span>(<span class="string">"Survival"</span>, <span class="type">DoubleType</span>),</span><br><span class="line">    <span class="type">StructField</span>(<span class="string">"Pclass"</span>, <span class="type">DoubleType</span>),</span><br><span class="line">    <span class="type">StructField</span>(<span class="string">"Name"</span>, <span class="type">StringType</span>),</span><br><span class="line">    <span class="type">StructField</span>(<span class="string">"Sex"</span>, <span class="type">StringType</span>),</span><br><span class="line">    <span class="type">StructField</span>(<span class="string">"Age"</span>, <span class="type">DoubleType</span>),</span><br><span class="line">    <span class="type">StructField</span>(<span class="string">"SibSp"</span>, <span class="type">DoubleType</span>),</span><br><span class="line">    <span class="type">StructField</span>(<span class="string">"Parch"</span>, <span class="type">DoubleType</span>),</span><br><span class="line">    <span class="type">StructField</span>(<span class="string">"Ticket"</span>, <span class="type">StringType</span>),</span><br><span class="line">    <span class="type">StructField</span>(<span class="string">"Fare"</span>, <span class="type">DoubleType</span>),</span><br><span class="line">    <span class="type">StructField</span>(<span class="string">"Cabin"</span>, <span class="type">StringType</span>),</span><br><span class="line">    <span class="type">StructField</span>(<span class="string">"Embarked"</span>, <span class="type">StringType</span>)</span><br><span class="line">  ))</span><br></pre></td></tr></table></figure>
+<p><strong>第3步：读取数据</strong><br>我们把csv读成a <code>DataFrame</code>，确保我们提到我们有一个标题。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">val df_raw = spark</span><br><span class="line">  .read</span><br><span class="line">  .option(&quot;header&quot;, &quot;true&quot;)</span><br><span class="line">  .schema(schema)</span><br><span class="line">  .csv(filePath)</span><br></pre></td></tr></table></figure>
+<p><strong>第4步：删除空值</strong><br>所有空值都替换为0.这不是理想的，但是对于本教程的目的，它是可以的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">val df = df_raw.na.fill(0)</span><br></pre></td></tr></table></figure>
+<p><strong>第5步：将名义值转换为数字</strong><br>在浏览此步骤的代码之前，让我们简要介绍一些Spark ML概念。他们介绍了ML管道的概念，它是一组构建在其上的高级API <code>DataFrames</code>，可以更轻松地将多个算法组合到一个流程中。管道的主要元素是<code>Transformer</code>和<code>Estimator</code>。第一个可以表示可以将a <code>DataFrame</code>转换为另一个<code>DataFrame</code>的算法，而后者是可以适合a <code>DataFrame</code>来生成a 的算法<code>Transformer</code> 。<br>为了将名义值转换为数字值，我们需要<code>Transformer</code>为每列定义一个：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> sexIndexer = <span class="keyword">new</span> <span class="type">StringIndexer</span>()</span><br><span class="line">  .setInputCol(<span class="string">"Sex"</span>)</span><br><span class="line">  .setOutputCol(<span class="string">"SexIndex"</span>)</span><br><span class="line">  .setHandleInvalid(<span class="string">"keep"</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">val</span> cabinIndexer = <span class="keyword">new</span> <span class="type">StringIndexer</span>()</span><br><span class="line">  .setInputCol(<span class="string">"Cabin"</span>)</span><br><span class="line">  .setOutputCol(<span class="string">"CabinIndex"</span>)</span><br><span class="line">  .setHandleInvalid(<span class="string">"keep"</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">val</span> embarkedIndexer = <span class="keyword">new</span> <span class="type">StringIndexer</span>()</span><br><span class="line">  .setInputCol(<span class="string">"Embarked"</span>)</span><br><span class="line">  .setOutputCol(<span class="string">"EmbarkedIndex"</span>)</span><br><span class="line">  .setHandleInvalid(<span class="string">"keep"</span>)</span><br></pre></td></tr></table></figure>
+<p>我们正在使用它<code>StringIndexer</code>来转换价值观。对于每个<code>Transformer</code>我们定义的输入列和输出列将包含修改后的值。<br><strong>步骤6：将列组合成特征向量</strong><br>我们将使用另一个<code>Transformer</code>将XGBoost分类中使用的列组合<code>Estimator</code>成一个向量：</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> vectorAssembler = <span class="keyword">new</span> <span class="type">VectorAssembler</span>()</span><br><span class="line">  .setInputCols(<span class="type">Array</span>(<span class="string">"Pclass"</span>, <span class="string">"SexIndex"</span>, <span class="string">"Age"</span>, <span class="string">"SibSp"</span>, <span class="string">"Parch"</span>, <span class="string">"Fare"</span>, <span class="string">"CabinIndex"</span>, <span class="string">"EmbarkedIndex"</span>))</span><br><span class="line">  .setOutputCol(<span class="string">"features"</span>)</span><br></pre></td></tr></table></figure>
+<p><strong>第7步：添加XGBoost估算器</strong><br>定义<code>Estimator</code>它将产生模型。可以在地图中定义估计器的设置。我们还可以设置功能和标签列：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">val xgbEstimator = new XGBoostEstimator(Map[String, Any](&quot;num_rounds&quot; -&gt; 100))</span><br><span class="line">  .setFeaturesCol(&quot;features&quot;)</span><br><span class="line">  .setLabelCol(&quot;Survival&quot;)</span><br></pre></td></tr></table></figure>
+<p><strong>第8步：构建管道和分类器</strong><br>在我们创建了所有单独的步骤之后，我们可以定义实际的管道和操作的顺序：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">val pipeline = new Pipeline().setStages(Array(sexIndexer, cabinIndexer, embarkedIndexer, vectorAssembler, xgbEstimator))</span><br></pre></td></tr></table></figure>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1552878673454-f586d9ed-0fba-4140-b77d-605cc73a652d.png#align=left&amp;display=inline&amp;height=105&amp;name=1_5GXouKuoLYmdTCgu1onrzw.png&amp;originHeight=141&amp;originWidth=1000&amp;size=44837&amp;status=done&amp;width=746" alt="1_5GXouKuoLYmdTCgu1onrzw.png"><br>输入<code>DataFrame</code>将被多次转换，最终将生成使用我们的数据训练的模型。我们将保存输出，以便在第二个实时应用程序中使用它。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> cvModel = pipeline.fit(df)</span><br><span class="line">cvModel.write.overwrite.save(modelPath)</span><br></pre></td></tr></table></figure>
+<p><a name="fbee26a1"></a></p>
+<h4 id="预测"><a href="#预测" class="headerlink" title="预测"></a>预测</h4><p>我们将使用Spark Structured Streaming来基本传输文件中的数据。在现实世界的应用程序中，我们从专用的分布式队列（例如Apache Kafka或AWS Kinesis）读取数据，但是对于此演示，我们将只使用一个简单的文件。<br>简要描述<a href="https://spark.apache.org/docs/latest/structured-streaming-programming-guide.html#input-sources" target="_blank" rel="noopener">Spark Structured Streaming</a>是一个构建在Spark SQL之上的流处理引擎。它使用相同的概念，<code>DataFrames</code>数据存储在一个无限制的表中，当数据流入时，该表随着新行的增长而增长。<br><strong>第1步：创建输入读取流</strong><br>我们再次创建一个spark会话并定义数据的架构。请注意，测试csv不包含标签<code>Survival</code> 。最后我们可以创建输入流<code>DataFrame,</code> <code>df</code>。输入路径必须是我们存储csv文件的目录。它可以包含一个或多个具有相同模式的文件。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> spark: <span class="type">SparkSession</span> = <span class="type">SparkSession</span>.builder()</span><br><span class="line">  .appName(<span class="string">"Spark Structured Streaming XGBOOST"</span>)</span><br><span class="line">  .master(<span class="string">"local[*]"</span>)</span><br><span class="line">  .getOrCreate()</span><br><span class="line"></span><br><span class="line"><span class="keyword">val</span> schema = <span class="type">StructType</span>(</span><br><span class="line">  <span class="type">Array</span>(<span class="type">StructField</span>(<span class="string">"PassengerId"</span>, <span class="type">DoubleType</span>),</span><br><span class="line">    <span class="type">StructField</span>(<span class="string">"Pclass"</span>, <span class="type">DoubleType</span>),</span><br><span class="line">    <span class="type">StructField</span>(<span class="string">"Name"</span>, <span class="type">StringType</span>),</span><br><span class="line">    <span class="type">StructField</span>(<span class="string">"Sex"</span>, <span class="type">StringType</span>),</span><br><span class="line">    <span class="type">StructField</span>(<span class="string">"Age"</span>, <span class="type">DoubleType</span>),</span><br><span class="line">    <span class="type">StructField</span>(<span class="string">"SibSp"</span>, <span class="type">DoubleType</span>),</span><br><span class="line">    <span class="type">StructField</span>(<span class="string">"Parch"</span>, <span class="type">DoubleType</span>),</span><br><span class="line">    <span class="type">StructField</span>(<span class="string">"Ticket"</span>, <span class="type">StringType</span>),</span><br><span class="line">    <span class="type">StructField</span>(<span class="string">"Fare"</span>, <span class="type">DoubleType</span>),</span><br><span class="line">    <span class="type">StructField</span>(<span class="string">"Cabin"</span>, <span class="type">StringType</span>),</span><br><span class="line">    <span class="type">StructField</span>(<span class="string">"Embarked"</span>, <span class="type">StringType</span>)</span><br><span class="line">  ))</span><br><span class="line"></span><br><span class="line">  <span class="keyword">val</span> df = spark</span><br><span class="line">    .readStream</span><br><span class="line">    .option(<span class="string">"header"</span>, <span class="string">"true"</span>)</span><br><span class="line">    .schema(schema)</span><br><span class="line">    .csv(fileDir)</span><br></pre></td></tr></table></figure>
+<p><strong>第2步：加载XGBoost模型</strong><br>在对象中，<code>XGBoostModel</code>我们加载预先训练的模型，该模型将应用于我们在流中读取的每一批新行。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">XGBoostModel</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">val</span> modelPath = <span class="string">"your_path"</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">val</span> model = <span class="type">PipelineModel</span>.read.load(modelPath)</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">transform</span></span>(df: <span class="type">DataFrame</span>) = &#123;</span><br><span class="line">    <span class="comment">// replace nan values with 0</span></span><br><span class="line">    <span class="keyword">val</span> df_clean = df.na.fill(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// run the model on new data</span></span><br><span class="line">    <span class="keyword">val</span> result = model.transform(df_clean)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// display the results</span></span><br><span class="line">    result.show()</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>第3步：定义自定义ML接收器</strong><br>为了能够将我们的分类器应用于新数据，我们需要创建一个新的接收器（流和输出之间的接口，在我们的例子中是XGBoost模型）。为此，我们需要一个自定义接收器（<code>MLSink</code>），一个抽象接收器提供器（<code>MLSinkProvider</code>）和provider（）的实现<code>XGBoostMLSinkProvider</code>。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">MLSinkProvider</span> <span class="keyword">extends</span> <span class="title">StreamSinkProvider</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">process</span></span>(df: <span class="type">DataFrame</span>): <span class="type">Unit</span></span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">createSink</span></span>(</span><br><span class="line">                  sqlContext: <span class="type">SQLContext</span>,</span><br><span class="line">                  parameters: <span class="type">Map</span>[<span class="type">String</span>, <span class="type">String</span>],</span><br><span class="line">                  partitionColumns: <span class="type">Seq</span>[<span class="type">String</span>],</span><br><span class="line">                  outputMode: <span class="type">OutputMode</span>): <span class="type">MLSink</span> = &#123;</span><br><span class="line">    <span class="keyword">new</span> <span class="type">MLSink</span>(process)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">case</span> <span class="class"><span class="keyword">class</span> <span class="title">MLSink</span>(<span class="params">process: <span class="type">DataFrame</span> =&gt; <span class="type">Unit</span></span>) <span class="keyword">extends</span> <span class="title">Sink</span> </span>&#123;</span><br><span class="line">  <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">addBatch</span></span>(batchId: <span class="type">Long</span>, data: <span class="type">DataFrame</span>): <span class="type">Unit</span> = &#123;</span><br><span class="line">    process(data)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">XGBoostMLSinkProvider</span> <span class="keyword">extends</span> <span class="title">MLSinkProvider</span> </span>&#123;</span><br><span class="line">  <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">process</span></span>(df: <span class="type">DataFrame</span>) &#123;</span><br><span class="line">    <span class="type">XGBoostModel</span>.transform(df)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>第4步：在我们的自定义接收器中写入数据</strong><br>最后一步是定义一个将数据写入自定义接收器的查询。还必须定义检查点位置，以便应用程序“记住”在发生故障时在流中读取的最新行。如果我们运行程序，每个新批次的数据将显示在控制台上，同时包含预测的标签。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">df.writeStream</span><br><span class="line">  .format(<span class="string">"titanic.XGBoostMLSinkProvider"</span>)</span><br><span class="line">  .queryName(<span class="string">"XGBoostQuery"</span>)</span><br><span class="line">  .option(<span class="string">"checkpointLocation"</span>, checkpoint_location)</span><br><span class="line">  .start()</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://zhos.me/2019/03/18/yuque/PySpark ML和XGBoost完全集成在Kaggle Titanic数据集上进行了测试/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Zhos">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="武德">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/03/18/yuque/PySpark ML和XGBoost完全集成在Kaggle Titanic数据集上进行了测试/" itemprop="url">PySpark ML和XGBoost完全集成在Kaggle Titanic数据集上进行了测试</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-18T10:32:11+08:00">
+                2019-03-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>在本教程中，我们将讨论使用标准机器学习管道集成PySpark和XGBoost。我们将使用来自<a href="https://www.kaggle.com/c/titanic/data" target="_blank" rel="noopener">泰坦尼克号的</a>数据<a href="https://www.kaggle.com/c/titanic/data" target="_blank" rel="noopener">：机器学习灾难</a>中的众多Kaggle比赛之一。在开始之前，请知道您应该熟悉<a href="https://spark.apache.org/" target="_blank" rel="noopener">Apache Spark</a>和<a href="http://xgboost.readthedocs.io/en/latest/get_started/" target="_blank" rel="noopener">Xgboost</a>以及Python。本教程中使用的代码可以在<a href="https://github.com/BogdanCojocar/medium-articles/blob/master/titanic_xgboost/titanic_xgboost.ipynb" target="_blank" rel="noopener">github</a>上的Jupyther笔记本中找到。<br><a name="fa501ee4"></a></p>
+<h4 id="第1步：下载或构建XGBoost-jar"><a href="#第1步：下载或构建XGBoost-jar" class="headerlink" title="第1步：下载或构建XGBoost jar"></a>第1步：下载或构建XGBoost jar</h4><p>python代码需要两个scala jar依赖项才能工作。您可以直接从maven下载它们：</p>
 <ul>
-<li><a href="https://medium.com/@jonathan_hui/understanding-feature-pyramid-networks-for-object-detection-fpn-45b227b9106c" target="_blank" rel="noopener">用于对象检测的特征金字塔网络（FPN）。</a></li>
-<li><a href="https://medium.com/@jonathan_hui/understanding-region-based-fully-convolutional-networks-r-fcn-for-object-detection-828316f07c99" target="_blank" rel="noopener">基于区域的完全卷积网络（R-FCN）</a>。</li>
+<li><a href="https://mvnrepository.com/artifact/ml.dmlc/xgboost4j/0.72" target="_blank" rel="noopener">xgboost4j</a></li>
+<li><a href="https://mvnrepository.com/artifact/ml.dmlc/xgboost4j-spark/0.72" target="_blank" rel="noopener">xgboost4j火花</a></li>
 </ul>
+<p>如果您希望自己构建它们，可以从我之前的<a href="https://medium.com/@bogdan.cojocar/how-to-make-xgboost-available-in-the-spark-notebook-de14e425c948" target="_blank" rel="noopener">教程中</a>找到如何进行构建。<br><a name="059757b0"></a></p>
+<h4 id="第2步：下载XGBoost-python包装器"><a href="#第2步：下载XGBoost-python包装器" class="headerlink" title="第2步：下载XGBoost python包装器"></a>第2步：下载XGBoost python包装器</h4><p>您可以从<a href="https://github.com/dmlc/xgboost/files/2161553/sparkxgb.zip" target="_blank" rel="noopener">此处</a>下载PySpark XGBoost代码。这是我们要编写的部分和XGBoost scala实现之间的接口。我们将在本教程后面的代码中看到它如何集成。<br><a name="f8c06a61"></a></p>
+<h4 id="第3步：启动一个新的Jupyter笔记本"><a href="#第3步：启动一个新的Jupyter笔记本" class="headerlink" title="第3步：启动一个新的Jupyter笔记本"></a>第3步：启动一个新的Jupyter笔记本</h4><p>我们将开始一个新的笔记本，以便能够编写我们的代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jupyter notebook</span><br></pre></td></tr></table></figure>
+<p><a name="cdde53ac"></a></p>
+<h4 id="第4步：将自定义XGBoost-jar添加到Spark应用程序"><a href="#第4步：将自定义XGBoost-jar添加到Spark应用程序" class="headerlink" title="第4步：将自定义XGBoost jar添加到Spark应用程序"></a>第4步：将自定义XGBoost jar添加到Spark应用程序</h4><p>在开始Spark之前，我们需要添加我们之前下载的jar。我们可以使用<code>--jars</code>标志来做到这一点：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">import os </span><br><span class="line">os.environ [&apos;PYSPARK_SUBMIT_ARGS&apos;] =&apos; -  jars xgboost4j-spark-0.72.jar，xgboost4j-0.72.jar pyspark-shell&apos;</span><br></pre></td></tr></table></figure>
+<p><a name="13d9ee40"></a></p>
+<h4 id="第5步：将PySpark集成到Jupyther笔记本中"><a href="#第5步：将PySpark集成到Jupyther笔记本中" class="headerlink" title="第5步：将PySpark集成到Jupyther笔记本中"></a>第5步：将PySpark集成到Jupyther笔记本中</h4><p>使PySpark可用的最简单方法是使用该<code>[findspark](https://github.com/minrk/findspark)</code>软件包：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">import findspark </span><br><span class="line">findspark.init（）</span><br></pre></td></tr></table></figure>
+<p><a name="dd505c79"></a></p>
+<h4 id="第6步：启动spark会话"><a href="#第6步：启动spark会话" class="headerlink" title="第6步：启动spark会话"></a>第6步：启动spark会话</h4><p>我们现在准备开始火花会议。我们正在创建一个将在本地运行的spark应用程序，并将使用与使用的核心一样多的线程<code>local[*]</code> ：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">spark = SparkSession\</span><br><span class="line">        .builder\</span><br><span class="line">        .appName(&quot;PySpark XGBOOST Titanic&quot;)\</span><br><span class="line">        .master(&quot;local[*]&quot;)\</span><br><span class="line">        .getOrCreate()</span><br></pre></td></tr></table></figure>
+<p><a name="47ff7d29"></a></p>
+<h4 id="第7步：添加PySpark-XGBoost包装器代码"><a href="#第7步：添加PySpark-XGBoost包装器代码" class="headerlink" title="第7步：添加PySpark XGBoost包装器代码"></a>第7步：添加PySpark XGBoost包装器代码</h4><p>正如我们现在有了spark会话，我们可以添加先前下载的包装器代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">spark.sparkContext.addPyFile(&quot;YOUR_PATH/sparkxgb.zip&quot;)</span><br></pre></td></tr></table></figure>
+<p><a name="7f1a0f62"></a></p>
+<h4 id="第8步：定义架构"><a href="#第8步：定义架构" class="headerlink" title="第8步：定义架构"></a>第8步：定义架构</h4><p>接下来，我们定义从csv读取的数据的模式。这通常比让火花推断模式更好，因为它消耗的资源更少，我们可以完全控制字段。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">schema = StructType(</span><br><span class="line">  [StructField(&quot;PassengerId&quot;, DoubleType()),</span><br><span class="line">    StructField(&quot;Survival&quot;, DoubleType()),</span><br><span class="line">    StructField(&quot;Pclass&quot;, DoubleType()),</span><br><span class="line">    StructField(&quot;Name&quot;, StringType()),</span><br><span class="line">    StructField(&quot;Sex&quot;, StringType()),</span><br><span class="line">    StructField(&quot;Age&quot;, DoubleType()),</span><br><span class="line">    StructField(&quot;SibSp&quot;, DoubleType()),</span><br><span class="line">    StructField(&quot;Parch&quot;, DoubleType()),</span><br><span class="line">    StructField(&quot;Ticket&quot;, StringType()),</span><br><span class="line">    StructField(&quot;Fare&quot;, DoubleType()),</span><br><span class="line">    StructField(&quot;Cabin&quot;, StringType()),</span><br><span class="line">    StructField(&quot;Embarked&quot;, StringType())</span><br><span class="line">  ])</span><br></pre></td></tr></table></figure>
+<p><a name="44ee9a9a"></a></p>
+<h4 id="步骤9：将csv数据读入数据帧"><a href="#步骤9：将csv数据读入数据帧" class="headerlink" title="步骤9：将csv数据读入数据帧"></a>步骤9：将csv数据读入数据帧</h4><p>我们将csv读入a <code>DataFrame</code>，确保我们提到我们有一个标题，我们也<code>null</code>用0 替换值：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">df_raw = spark\</span><br><span class="line">  .read\</span><br><span class="line">  .option(&quot;header&quot;, &quot;true&quot;)\</span><br><span class="line">  .schema(schema)\</span><br><span class="line">  .csv(&quot;YOUR_PATH/train.csv&quot;)</span><br><span class="line">df = df_raw.na.fill(0)</span><br></pre></td></tr></table></figure>
+<p><a name="f50eacdc"></a></p>
+<h4 id="步骤10：C-将标称值转换为数字"><a href="#步骤10：C-将标称值转换为数字" class="headerlink" title="步骤10：C 将标称值转换为数字"></a>步骤10：C <strong>将标称值转换为数字</strong></h4><p>在浏览此步骤的代码之前，让我们简要介绍一些Spark ML概念。他们介绍了ML管道的概念，它是一组构建在其上的高级API <code>DataFrames</code>，可以更轻松地将多个算法组合到一个流程中。管道的主要元素是<code>Transformer</code>和<code>Estimator</code>。第一个可以表示可以将a <code>DataFrame</code>转换为另一个<code>DataFrame</code>的算法，而后者是可以适合a <code>DataFrame</code>来生成a 的算法<code>Transformer</code> 。<br>为了将名义值转换为数字值，我们需要<code>Transformer</code>为每列定义一个：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">sexIndexer = StringIndexer()\</span><br><span class="line">  .setInputCol(&quot;Sex&quot;)\</span><br><span class="line">  .setOutputCol(&quot;SexIndex&quot;)\</span><br><span class="line">  .setHandleInvalid(&quot;keep&quot;)</span><br><span class="line">    </span><br><span class="line">cabinIndexer = StringIndexer()\</span><br><span class="line">  .setInputCol(&quot;Cabin&quot;)\</span><br><span class="line">  .setOutputCol(&quot;CabinIndex&quot;)\</span><br><span class="line">  .setHandleInvalid(&quot;keep&quot;)</span><br><span class="line">    </span><br><span class="line">embarkedIndexer = StringIndexer()\</span><br><span class="line">  .setInputCol(&quot;Embarked&quot;)\</span><br><span class="line">  .setOutputCol(&quot;EmbarkedIndex&quot;)\</span><br><span class="line">  .setHandleInvalid(&quot;keep&quot;)</span><br></pre></td></tr></table></figure>
+<p>我们正在使用它<code>StringIndexer</code>来转换价值观。对于每个<code>Transformer</code>我们定义的输入列和输出列将包含修改后的值。<br><a name="fd3cbfb0"></a></p>
+<h4 id="步骤11：将列组合成特征向量"><a href="#步骤11：将列组合成特征向量" class="headerlink" title="步骤11：将列组合成特征向量"></a>步骤11：<strong>将列组合成特征向量</strong></h4><p>我们将使用另一个<code>Transformer</code>将XGBoost分类中使用的列组合<code>Estimator</code>成一个向量：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">vectorAssembler = VectorAssembler()\</span><br><span class="line">  .setInputCols([&quot;Pclass&quot;, &quot;SexIndex&quot;, &quot;Age&quot;, &quot;SibSp&quot;, &quot;Parch&quot;, &quot;Fare&quot;, &quot;CabinIndex&quot;, &quot;EmbarkedIndex&quot;])\</span><br><span class="line">  .setOutputCol(&quot;features&quot;)</span><br></pre></td></tr></table></figure>
+<p><a name="220de1c1"></a></p>
+<h4 id="第12步：定义XGBoostEstimator"><a href="#第12步：定义XGBoostEstimator" class="headerlink" title="第12步：定义XGBoostEstimator"></a>第12步：定义XGBoostEstimator</h4><p>在这一步中，我们定义了<code>Estimator</code>将产生模型的东西。这里使用的大多数参数都是默认的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">xgboost = XGBoostEstimator(</span><br><span class="line">    featuresCol=&quot;features&quot;, </span><br><span class="line">    labelCol=&quot;Survival&quot;, </span><br><span class="line">    predictionCol=&quot;prediction&quot;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>我们只定义<code>feature, label</code>（必须匹配来自的列<code>DataFrame</code>）和<code>prediction</code>包含分类器输出的新列。<br><a name="07d0e7ba"></a></p>
+<h4 id="步骤13：建立管道和分类器"><a href="#步骤13：建立管道和分类器" class="headerlink" title="步骤13：建立管道和分类器"></a>步骤13：<strong>建立管道和分类器</strong></h4><p>在我们创建了所有单独的步骤之后，我们可以定义实际的管道和操作的顺序：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pipeline = Pipeline().setStages([sexIndexer, cabinIndexer, embarkedIndexer, vectorAssembler, xgboost])</span><br></pre></td></tr></table></figure>
+<p>输入<code>DataFrame</code>将被多次转换，最终将生成使用我们的数据训练的模型。<br><a name="4e3e3575"></a></p>
+<h4 id="步骤14：训练模型并预测新的测试数据"><a href="#步骤14：训练模型并预测新的测试数据" class="headerlink" title="步骤14：训练模型并预测新的测试数据"></a>步骤14：训练模型并预测新的测试数据</h4><p>我们首先将数据分成火车和测试，然后我们将模型与火车数据拟合，最后我们看到我们为每位乘客获得的预测：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">trainDF, testDF = df.randomSplit([0.8, 0.2], seed=24)</span><br><span class="line">model = pipeline.fit(trainDF)</span><br><span class="line">model.transform(testDF).select(col(&quot;PassengerId&quot;), col(&quot;prediction&quot;)).show()</span><br></pre></td></tr></table></figure>
 
           
         
@@ -1881,7 +2241,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://zhos.me/2018/12/21/yuque/Kaggle＃1获胜图像分类挑战方法/">
+    <link itemprop="mainEntityOfPage" href="http://zhos.me/2019/03/15/yuque/将ML投入生产：在Python中使用Apache Kafka/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Zhos">
@@ -1900,7 +2260,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/12/21/yuque/Kaggle＃1获胜图像分类挑战方法/" itemprop="url">Kaggle＃1获胜图像分类挑战方法</a></h1>
+                <a class="post-title-link" href="/2019/03/15/yuque/将ML投入生产：在Python中使用Apache Kafka/" itemprop="url">将ML投入生产：在Python中使用Apache Kafka</a></h1>
         
 
         <div class="post-meta">
@@ -1912,8 +2272,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-21T17:03:34+08:00">
-                2018-12-21
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-15T18:03:41+08:00">
+                2019-03-15
               </time>
             
 
@@ -1952,416 +2312,38 @@
       
         
           
-            <p><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545383030520-f6dbd874-48b5-4066-bacc-bae58fd00765.png#width=826" alt><br>这篇文章是关于我用于Kaggle竞赛的方法：<a href="https://www.kaggle.com/c/plant-seedlings-classification" target="_blank" rel="noopener">植物幼苗分类。</a>我在排名中排名第一，持续了几个月，最终在最终评估结束时以＃5结束。该方法非常通用，也可用于其他图像识别任务。</p>
+            <p>我们将说明如何使用一系列工具（即<a href="https://kafka.apache.org/" target="_blank" rel="noopener">Kafka</a>，<a href="https://mlflow.org/" target="_blank" rel="noopener">MLFlow</a>和<a href="https://aws.amazon.com/sagemaker/" target="_blank" rel="noopener">Sagemaker</a>）来帮助生产ML。为此，我们将设置一个简单的场景，我们希望它类似于一些真实用例，然后描述一个潜在的解决方案。可以在<a href="https://github.com/jrzaurin/ml_pipelines" target="_blank" rel="noopener">此处</a>找到包含所有代码的伴随仓库。<br><a name="c931653c"></a></p>
+<h3 id="场景"><a href="#场景" class="headerlink" title="场景"></a><strong>场景</strong></h3><p>公司使用一系列服务收集数据，这些服务在用户/客户与公司的网站或应用程序交互时生成事件。当这些交互发生时，算法需要<strong>实时</strong>运行<strong>，</strong>并且需要根据算法的输出（或预测）采取一些立即行动。最重要的是，经过_ñ<em>相互作用（或意见）的算法需要重新训练<strong>不停止</strong>的</em>预测_ <em>服务，</em>因为用户将保持互动。<br>对于这里的练习，我们使用了<a href="https://archive.ics.uci.edu/ml/datasets/adult" target="_blank" rel="noopener">成人</a>数据集，其目标是根据年龄，原籍国等来预测个人是否获得高于/低于50k的收入。为了使该数据集适应前面描述的情景，可以假设通过在线问卷/表格收集该年龄，本国等，我们需要预测用户是否实时获得高/低收入。如果收入高，那么我们会立即给他们打电话/给他们发电子邮件。然后，在_N个_新观察之后，我们重新训练算法，同时我们继续预测新用户。<br><strong>解决方案</strong><br>图1是潜在解决方案的图示。为了实现这个解决方案，我们使用了<a href="https://github.com/dpkp/kafka-python" target="_blank" rel="noopener">Kafka-Python</a>（可以在<a href="https://github.com/dpkp/kafka-python" target="_blank" rel="noopener">这里</a>找到一个很好的教程），以及<a href="https://lightgbm.readthedocs.io/en/latest/" target="_blank" rel="noopener">LightGBM</a>和<a href="https://github.com/hyperopt/hyperopt" target="_blank" rel="noopener">Hyperopt</a>或<a href="https://github.com/HunterMcGushion/hyperparameter_hunter" target="_blank" rel="noopener">HyperparameterHunter</a>。<br><br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1552644337722-6e53ed5f-2e63-41eb-bddd-1d1968e90f10.png#align=left&amp;display=inline&amp;height=443&amp;name=1___golwnXpxecbplKvGqlPA.png&amp;originHeight=594&amp;originWidth=1000&amp;size=180599&amp;status=done&amp;width=746" alt="1___golwnXpxecbplKvGqlPA.png"><br>图1. <strong>实时预测ML管道</strong>。以下提供完整描述<br>我们将在本练习中使用的唯一Python“局外人”是<a href="https://kafka.apache.org/" target="_blank" rel="noopener">Apache-Kafka</a>（我们将使用python API Kafka-Python，但仍然需要在您的系统中安装Kafka）。如果你在Mac上，只需使用Homebrew：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install kafka</span><br></pre></td></tr></table></figure>
+<p>这也将安装zookeeper依赖项。<br>如前所述，我们使用了Adult数据集。这是因为我们的目的是说明潜在的ML管道并提供有用的代码，同时保持相对简单。但请注意，此处描述的管道原则上与数据无关。当然，预处理将根据数据的性质而改变，但如果不相同，管道组件将保持相似。<br><strong>初始化实验</strong><br>您可以在我们的<a href="https://github.com/jrzaurin/ml_pipelines" target="_blank" rel="noopener">仓库中</a>找到用于此帖子的代码（以及更多）。在那里，有一个名为的脚本<code>initialize.py</code> 。该脚本将下载数据集，设置目录结构，预处理数据，在训练数据集上训练初始模型并优化该模型的超参数。在现实世界中，这将对应于通常的实验阶段和离线训练初始算法的过程。<br>在这篇文章中，我们希望主要关注管道和相应的组件而不是ML。尽管如此，让我们简单地提一下我们在本练习中使用的ML工具。<br>鉴于我们正在使用的数据集，数据预处理非常简单。我们编写了一个名为的自定义类<code>[FeatureTools](https://github.com/jrzaurin/ml_pipelines/blob/master/utils/feature_tools.py)</code>，可以<code>utils</code>在repo 中的模块中找到。这个类有<code>.fit</code>和  <code>.transform</code>方法将标准化/缩放数字特征，编码分类特征并生成我们称之为“交叉列”，这是两个（或更多）分类特征之间的笛卡尔积的结果。<br>处理完数据后，我们使用LightGBM将模型与Hyperopt或HyperparameterHunter相匹配，以执行超参数优化。可以在<code>train</code>模块中找到与此任务相关的代码，其中可以找到两个脚本<code>[train_hyperop](https://github.com/jrzaurin/ml_pipelines/blob/master/train/train_hyperopt.py).py</code>和<code>[train_hyperparameterhunter](https://github.com/jrzaurin/ml_pipelines/blob/master/train/train_hyperparameterhunter.py).py</code> 。<br>我们可能会在python（<a href="https://scikit-optimize.github.io/" target="_blank" rel="noopener">Skopt</a>，Hyperopt和HyperparameterHunder）中编写一个单独的帖子来比较超参数优化包，但是现在，请知道：如果你想要速度，那么使用Hyperopt。如果您不关心速度并且想要详细跟踪优化例程，请使用HyperparameterHunter。用<a href="https://www.linkedin.com/in/huntermcgushion/" target="_blank" rel="noopener">Hunter</a> McGushion 的话来说，包装的创造者：</p>
 <blockquote>
-<p><strong>Kaggle</strong>是一个&gt; <a href="https://en.wikipedia.org/wiki/Predictive_modelling" target="_blank" rel="noopener">预测建模</a>和&gt; <a href="https://en.wikipedia.org/wiki/Analytics" target="_blank" rel="noopener">分析</a>竞赛的平台，统计人员和数据挖掘者在竞争中生成预测和描述公司和用户上传的数据集的最佳模型。这种&gt; <a href="https://en.wikipedia.org/wiki/Crowdsourcing" target="_blank" rel="noopener">众包</a>方法依赖于这样一个事实：无数的策略可以应用于任何预测建模任务，并且不可能事先知道哪种技术或分析师最有效。[1]<br>另外，请查看在NLP上获得<strong>Intent Classification</strong>任务的最新<strong>成果</strong>的博客：</p>
+<p><em>“长期以来，超参数优化一直是一个耗时的过程，只是指向了进一步优化的方向，然后你基本上不得不重新开始。”</em></p>
 </blockquote>
-<p><a href="https://medium.com/@shridhar743/know-your-intent-sota-results-in-intent-classification-8e1ca47f364c" target="_blank" rel="noopener">了解您的意图：SoTA结果意图分类<br>此博客文章显示了在三个语料库上获得的最新最新结果：medium.com</a></p>
-<hr>
-<p><a name="a9de"></a></p>
-<h3 id="任务概述"><a href="#任务概述" class="headerlink" title="任务概述"></a><a href="#a9de"></a>任务概述</h3><p>你可以区分杂草和农作物幼苗吗？<br>有效地这样做的能力可以意味着更好的作物产量和更好的环境管理。</p>
-<p>所述<strong>奥尔胡斯大学信号处理</strong>组，在具有协作<strong>南丹麦大学</strong>，释放含有属于12种约960独特的植物的图像数据集在几个生长阶段。[1] [2]<br><img src="https://cdn-images-1.medium.com/max/1000/1*g_zIn9WVdJHCN2dfEV0X_A.png#width=" alt><br><em>其中一个样本植物：鹅肠菜样本[3]</em></p>
-<p>公开可获得在几个生长阶段属于12种物种的约960种独特植物的图像数据库。它包括带注释的RGB图像，物理分辨率约为每毫米10个像素。</p>
-<p>为了使用数据库获得的分类结果的评估标准化，提出了基于F1分数的基准。该<a href="https://vision.eng.au.dk/plant-seedlings-dataset/" target="_blank" rel="noopener">URL</a>提供了数据集[13]</p>
-<p>下图是描述数据集中所有12个类的示例：<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545383065394-724bbdf8-bb85-4775-8661-8df88480e85d.png#width=826" alt></p>
-<p><a name="aed6"></a></p>
-<h4 id="将图像分类为各个类的任务，任务分为5个步骤："><a href="#将图像分类为各个类的任务，任务分为5个步骤：" class="headerlink" title="将图像分类为各个类的任务，任务分为5个步骤："></a><a href="#aed6"></a>将图像分类为各个类的任务，任务分为5个步骤：</h4><p><a name="d486"></a></p>
-<h3 id="步骤1："><a href="#步骤1：" class="headerlink" title="步骤1："></a><a href="#d486"></a>步骤1：</h3><p>机器学习中的第一个也是最重要的任务是在继续任何算法之前分析数据集。这对于理解数据集的复杂性非常重要，这最终将有助于设计算法。</p>
-<p>图像和类的分布如下：<br><img src="https://cdn-images-1.medium.com/max/1000/1*axNbDRk6whrwE29zDafAJQ.png#width=" alt><br>如前所述，共有12个类，总共有4750个图像。然而，如上所述，分布不均匀，并且类别分布从最大654个图像变化到最小221个图像。这清楚地表明数据不平衡，数据需要平衡才能获得最佳结果。我们将在第<strong>3</strong>步中讨论这个问题。</p>
-<p><img src="https://cdn-images-1.medium.com/max/1000/1*V5C9piJvHcsV-dqLuVpOPQ.png#width=" alt>每班的图像分发</p>
-<p>现在，将图像可视化以便更好地理解数据非常重要。因此，显示来自每个类的一些样本图像以便查看图像彼此之间的差异。<br><img src="https://cdn-images-1.medium.com/max/1000/1*phgfJG3mycgz8BGlA9Jj9Q.png#width=" alt><br>从上面的图像中可以理解的是，所有图像看起来都非常相似。所以，我决定使用称为<a href="https://lvdmaaten.github.io/tsne/" target="_blank" rel="noopener">t-Distributed随机邻居嵌入</a>（t-SNE）的可视化技术来看图像<a href="https://lvdmaaten.github.io/tsne/" target="_blank" rel="noopener">的分布</a>。<br>t分布式随机邻域嵌入（t-SNE）是一种降维的技术，特别适用于高维数据集的可视化。该技术可以通过Barnes-Hut近似实现，允许它应用于大型真实世界的数据集。[14]<br><img src="https://cdn-images-1.medium.com/max/1000/1*HK33kGhDF43ZAKrROxoKWA.png#width=" alt>数据集的t-SNE可视化</p>
-<p>仔细观察之后，我们很难看出课程的差异。因此，重要的是要了解数据是否很难仅仅为人类区分，或者机器学习模型也很难。所以，我们将为它做一个基本的基准测试。</p>
-<p><a name="12da"></a></p>
-<h4 id="培训和验证集"><a href="#培训和验证集" class="headerlink" title="培训和验证集"></a><a href="#12da"></a>培训和验证集</h4><p>在开始使用模型基准测试之前，我们需要将数据划分为训练和验证数据集。在原始测试集上测试模型之前，验证集将扮演测试数据集的角色。因此，基本上在训练数据集上训练模型并在验证集上进行测试，然后随着时间的推移可以在验证集上改进模型。一旦我们对验证集的结果感到满意，我们就可以在真实的测试数据集上应用该模型。通过这种方式，我们可以看到模型是否过度拟合或欠拟合我们的验证集，这可以帮助我们更好地拟合模型。</p>
-<p>因此，我们通过将80％的图像保留为训练数据集并将20％的图像保持为验证集来划分4750个图像的数据集。</p>
-<p><img src="https://cdn-images-1.medium.com/max/1000/1*0h-aFSLtqVvTl4XpWWSRMQ.png#width=" alt>培训和验证数据分开<br><a name="1608"></a></p>
-<h3 id="第2步："><a href="#第2步：" class="headerlink" title="第2步："></a><a href="#1608"></a>第2步：</h3><p>一旦我们获得了培训和验证集，我们将从数据集的基准测试开始。我们可以看到这是一个分类问题，在给出测试数据集时，我们需要将其分类为12个类中的一个。所以我们将使用<strong>卷积神经网络</strong>来完成任务。<br>如果您是初学者并且需要更好地理解深度学习术语，请访问以下&gt; <a href="https://medium.com/@shridhar743/a-beginners-guide-to-deep-learning-5ee814cf7706" target="_blank" rel="noopener">博客：</a></p>
-<p>有几种方法可以创建CNN模型，但对于第一个基准测试，我们将使用<a href="https://keras.io/" target="_blank" rel="noopener">Keras深度学习库</a>。我们还将使用Keras中可用的预训练模型，通过ImageNet数据集进行训练，我们将根据我们的任务对其进行微调。</p>
-<p>从头开始训练卷积神经网络几乎实际上是低效的。因此，我们在ImageNet上使用预先训练的CNN模型的权重，使用1000个类，并通过保持一些层冻结并解冻其中一些并对其进行训练来对其进行微调。这是因为顶层学习简单的基本功能，我们不需要训练这些层，它可以直接应用于我们的任务。需要注意的一件重要事情是我们需要检查我们的数据集是否与ImageNet类似，以及我们的数据集有多大。这两个功能将决定我们如何执行微调。要了解更多详情，请阅读<a href="https://medium.com/@karpathy" target="_blank" rel="noopener">Andrej Karpathy</a>的博客：</p>
-<p><a href="http://cs231n.github.io/transfer-learning/" target="_blank" rel="noopener">用于视觉识别的CS231n卷积神经网络用于<br>斯坦福类CS231n的课程材料和注释：用于视觉识别的卷积神经网络。cs231n.github.io</a></p>
-<p>在我们的例子中，数据集很小但有点类似于ImageNet。因此，我们可以直接使用ImageNet的权重，只需添加一个包含12个类的最终输出层即可查看第一个基准测试。然后我们将解除一些底层的解冻，然后训练这些层。</p>
-<p>我们将使用Keras作为初始基准，因为Keras提供了许多预训练模型，我们将使用ResNet50和InceptionResNetV2来完成我们的任务。使用一个简单模型和一个非常高端模型对数据集进行基准测试非常重要，以了解我们是否过度拟合/不适合给定模型上的数据集。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://zhos.me/2018/12/21/yuque/Capsule Networks：一种全新且极具吸引力的AI架构/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Zhos">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="武德">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/12/21/yuque/Capsule Networks：一种全新且极具吸引力的AI架构/" itemprop="url">Capsule Networks：一种全新且极具吸引力的AI架构</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-21T15:02:37+08:00">
-                2018-12-21
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p><a href="https://heartbeat.fritz.ai/capsule-networks-a-new-and-attractive-ai-architecture-bd1198cc8ad4" target="_blank" rel="noopener">链接</a><br><a name="481b"></a></p>
-<h2 id="本文已被翻译成英文并首次发表于Deep-Learning-Turkey-。"><a href="#本文已被翻译成英文并首次发表于Deep-Learning-Turkey-。" class="headerlink" title="本文已被翻译成英文并首次发表于Deep Learning Turkey_。_"></a><a href="#481b"></a><em>本文已被翻译成英文并首次发表于</em><a href="https://medium.com/deep-learning-turkiye/yapay-zekan%C4%B1n-yeni-ve-%C3%A7ekici-mimarisi-kaps%C3%BCl-a%C4%9F%C4%B1na-uygulamal%C4%B1-bir-bak%C4%B1%C5%9F-ef7310e3d847" target="_blank" rel="noopener">Deep Learning Turkey</a>_。_</h2><p><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545375946092-dea95dae-971e-4274-a86b-98c17c3ee82a.png#width=826" alt><br><a href="https://heartbeat.fritz.ai/a-beginners-guide-to-convolutional-neural-networks-cnn-cf26c5ee17ed" target="_blank" rel="noopener">卷积神经网络</a>（CNN）在计算机视觉应用中经常是首选，因为它们在对象识别和分类任务上取得了成功。CNN由堆叠在一起的许多神经元组成。计算跨神经元的卷积需要大量计算，因此池化过程通常用于减小网络层的大小。卷积方法可以通过简单的计算学习数据的许多复杂特征。通过对我们的输入执行许多矩阵乘法和求和，我们可以得出我们问题的答案。<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545375976729-c04cb9d8-3367-460d-87bb-a85c2e57ac26.png#width=665" alt></p>
-<p><strong><em>我总是听到CNN有多棒。什么时候失败？</em></strong></p>
-<p>CNN在解决对象识别和分类问题方面取得了巨大成功。但是，它们并不完美。如果CNN显示的方向对象不熟悉，或者对象出现在不习惯的位置，则预测任务可能会失败。</p>
-<p>例如，如果您将一张脸倒置，网络将无法再识别眼睛，鼻子，嘴巴以及两者之间的空间关系。同样，如果你改变了脸部的特定区域（即切换眼睛和鼻子的位置），网络将能够识别脸部，但它不再是真实的脸部。CNN学习图像中的统计模式，但是他们没有学习关于什么使事物看起来像脸的基本概念。<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545376002462-0627f195-0f85-4cd8-a27c-fbd4ecd9ea94.png#width=826" alt><br>关于为什么CNN无法学习概念的理论，_AI_之_父_<strong>Geoffrey Hinton</strong>专注于用于缩小网络规模和计算要求的池化操作。他感叹道：</p>
-<blockquote>
-<p><em>“在卷积神经网络中使用的池化操作是一个很大的错误，它运作良好的事实是一场灾难！”</em><br>汇集层正在破坏信息，使网络无法学习更高级别的概念。所以他开始着手开发一种新的架构，这种架构并没有过多地依赖于这种操作。</p>
-</blockquote>
-<p><strong>结果：胶囊网络</strong><br><a name="9d89"></a></p>
-<h3 id="什么是胶囊网络？"><a href="#什么是胶囊网络？" class="headerlink" title="什么是胶囊网络？"></a><a href="#9d89"></a>什么是胶囊网络？</h3><p>Hinton和Sabour借鉴了神经科学的观点，认为大脑被组织成称为<strong><em>胶囊的</em></strong>模块。这些胶囊特别擅长处理物体的特征，如姿势（位置，大小，方向），变形，速度，反照率，色调，纹理等。</p>
-<p>理论上，大脑必须有一种机制，用于<strong>_将_</strong>低级视觉信息<strong>_路由_</strong>到它认为最适合处理它的胶囊。已经提出了<strong>胶囊网络</strong>和<strong>动态路由算法</strong>作为卷积神经网络模型不充分的问题的解决方案。</p>
-<p><img src="https://cdn-images-1.medium.com/max/750/1*y9RmBVmzKY63CET4LYRcUA.png#width=" alt><br><a href="https://www.wikiart.org/en/pablo-picasso/untitled-1937-8" target="_blank" rel="noopener">Portrait de femme au col d`hermine（奥尔加）</a></p>
-<p>胶囊表示图像中存在的特定实体的各种特征。一个非常特殊的特征是图像中存在实例化的实体。实例化的实体是一个参数，如位置，大小，方向，变形，速度，反照率，色调，纹理等。表示其存在的一种显而易见的方法是使用一个单独的逻辑单元，其输出是实体存在的概率[ <a href="https://arxiv.org/pdf/1710.09829.pdf" target="_blank" rel="noopener">1</a> ]。为了获得比CNN更好的结果，我们应该使用迭代<strong>路由协议</strong>机制。这些功能称为<strong>实例化参数</strong>。在经典CNN模型中，不能获得图像中对象的这种属性。平均/最大池化层减小了一组信息的大小，同时减小了大小。</p>
-<blockquote>
-<p><strong>好吧，某处有一个嘴唇，鼻子和眼睛，但卷积神经网络无法决定它应该在哪里以及它在哪里。</strong> &gt; <strong>对于传统的网络，错位的功能不会让它失望！</strong></p>
-</blockquote>
-<p><a name="65d9"></a></p>
-<h3 id="壁球功能"><a href="#壁球功能" class="headerlink" title="壁球功能"></a><a href="#65d9"></a>壁球功能</h3><p><a name="q16xns"></a></p>
-<h4 id="壁球功能-1"><a href="#壁球功能-1" class="headerlink" title="壁球功能"></a><a href="#q16xns"></a><img src="https://cdn-images-1.medium.com/max/750/1*b3unKamre_roNMTS7H_6EA.png#width=" alt>壁球功能</h4><p>在深度神经网络中，激活函数是应用于层输出的简单数学运算。它们用于近似存在于数据中的非线性关系。激活层通常作用于标量值 - 例如，对向量中的每个元素进行标准化，使其落在0和1之间。<br>在Capsule Networks中，一种称为<em>squash函数</em>的特殊类型的激活函数用于归一化向量的大小，而不是标量元素本身。<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545376097052-2994fe87-934e-4515-9a1b-7187e3ac549d.png#width=826" alt></p>
-<p><a href="https://arxiv.org/pdf/1710.09829.pdf" target="_blank" rel="noopener">协议路由算法</a><br>这些壁球功能的输出告诉我们如何通过训练学习不同概念的各种胶囊来路由数据。图像中每个对象的属性在路由它们的向量中表示。例如，脸部的激活可以将图像的不同部分路由到理解眼睛，鼻子，嘴巴和耳朵的胶囊。<br><a name="d0f9"></a></p>
-<h3 id="胶囊网络在MNIST数据集中的应用"><a href="#胶囊网络在MNIST数据集中的应用" class="headerlink" title="胶囊网络在MNIST数据集中的应用"></a><a href="#d0f9"></a>胶囊网络在MNIST数据集中的应用</h3><p><img src="https://cdn-images-1.medium.com/max/1000/0*EXnVG4QgSdxLBt0g.png#width=" alt><a href="http://www.machinelearningtutorial.net/2018/01/11/dynamic-routing-between-capsules-a-novel-architecture-for-convolutional-neural-networks/" target="_blank" rel="noopener">由胶囊网络执行的角度估计</a></p>
-<p><strong><em>现在，下一步至关重要：</em></strong></p>
-<p>就像不同层次的深层CNN中的层学习图像的不同语义属性（内容，纹理，样式等）一样，胶囊也可以组织成不同的层次。在一个级别的胶囊进行预测，了解物体的形状，并将它们传递给更高级别的胶囊，这些胶囊可以了解方向。当多个预测一致时，更高级别的预测变得活跃。<a href="https://www.ijcai.org/Proceedings/81-2/Papers/019.pdf" target="_blank" rel="noopener">此过程被描述为动态路由，我现在将更详细地讨论。</a></p>
-<p><strong><em>那么，让我们创建一个逐步的胶囊架构来分类MNIST数据集：</em></strong></p>
-<p>第一层有一个经典的卷积层。在第二层中，在称为<em>主要胶囊</em>的层中执行卷积处理，其中应用该<code>squash</code>函数。每个主要胶囊接收图像的一个小区域作为输入（称为其感受野），并且它试图检测特定图案的存在和姿势 - 例如，圆圈。</p>
-<p>更高层中的胶囊（称为路由胶囊）检测更大和更复杂的对象，例如数字8，由两个圆圈组成。然后他们使用一种新颖的挤压功能来保证这些矢量的长度在0到1之间。</p>
-<p>在主胶囊层之前施加标准卷积层，并获得9×9×256的输出。在主胶囊层中应用具有32个通道的新卷积过程，步幅为2.然而，将其与其他卷积过程分开的这个特征是压缩的功能。最后，这给出了主要胶囊的输出。</p>
-<p><img src="https://cdn-images-1.medium.com/max/1000/1*ih6faUAZq9rhpo8sOFKYSw.gif#width=" alt><a href="https://medium.freecodecamp.org/understanding-capsule-networks-ais-alluring-new-architecture-bdb228173ddc" target="_blank" rel="noopener">初级胶囊的卷积过程</a></p>
-<p>这提供了6x6输出。然而，在胶囊层中，实现动态路由算法，使得这些8长度输出DigitCaps向量的32个输出由于具有第三层动态路由的胶囊层而获得（逐协议路由算法） 。逐协议算法包括协议（检测和路由）更新的几次迭代。</p>
-<p><img src="https://cdn-images-1.medium.com/max/1000/1*k29n44uHy_rrfgKO2qLvGQ.png#width=" alt><a href="https://medium.freecodecamp.org/understanding-capsule-networks-ais-alluring-new-architecture-bdb228173ddc" target="_blank" rel="noopener">Capulel层</a><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span>  <span class="title">CapsNet</span>（<span class="title">input_shape</span>，<span class="title">n_class</span>，<span class="title">num_routing</span>）：</span></span><br><span class="line"><span class="function">    “””</span></span><br><span class="line"><span class="function">    胶囊网络的<span class="title">MNIST</span>数据集。</span></span><br><span class="line"><span class="function">       ：“<span class="title">input_shape</span>”参数：<span class="title">vdata</span>形状，3<span class="title">d</span>，[<span class="title">w</span>，<span class="title">h</span>，<span class="title">c</span>]</span></span><br><span class="line"><span class="function">       ：“<span class="title">n_class</span>”参数：类的数量</span></span><br><span class="line"><span class="function">       ：“<span class="title">num_routing</span>”参数：动态路由迭代次数</span></span><br><span class="line"><span class="function">       ：功能输出：两个<span class="title">Keras</span>模型，第一个用于训练，第二个用于<span class="title">evalaution</span>。</span></span><br><span class="line"><span class="function">            `<span class="title">eval_model</span>`用于同时进行训练。</span></span><br><span class="line"><span class="function">    “””</span></span><br><span class="line">    X = layers.Input（形状= input_shape）</span><br><span class="line"></span><br><span class="line">    ＃ <span class="number">1</span>层：卷积层（Conv2D）</span><br><span class="line">    器CONV1 = layers.Conv2D（过滤器= <span class="number">256</span>，kernel_size = <span class="number">9</span>，步幅= <span class="number">1</span>，填充= <span class="string">'有效'</span>，活化= <span class="string">' RELU '</span>，名字= <span class="string">' CONV1 '</span>）（x）的</span><br><span class="line"></span><br><span class="line">    ＃ <span class="number">2</span>层：Conv2D壁球活化，[无，num_capsule，dim_capsule]来回整形。</span><br><span class="line">    primarycaps = PrimaryCap（CONV1，dim_capsule = <span class="number">8</span>，n_channels = <span class="number">32</span>，kernel_size = <span class="number">9</span>，步幅= <span class="number">2</span>，填充= <span class="string">'有效'</span>）</span><br><span class="line"></span><br><span class="line">    ＃ <span class="number">3</span>层：胶囊层。运行：动态路由算法。</span><br><span class="line">    digitcaps = CapsuleLayer（num_capsule = n_class，dim_capsule = <span class="number">16</span>，num_routing = num_routing，</span><br><span class="line">                             name = <span class="string">' digitcaps '</span>）（primarycaps）</span><br><span class="line"></span><br><span class="line">    ＃ <span class="number">4</span>层：</span><br><span class="line">    ＃如果你使用Tensorflow，你可以跳过这个会话:)</span><br><span class="line"></span><br><span class="line">    out_caps =长度（名称= <span class="string">' capsnet '</span>）（digitcaps）</span><br></pre></td></tr></table></figure></p>
-<p>动态路由在<a href="https://github.com/deeplearningturkiye/kapsul-agi-capsule-network" target="_blank" rel="noopener">capsulelayers.py</a>类<code>CapsuleLayer (layers.Layer)</code>函数中定义。由于该计算步骤，在图像中不存在对象的区域中矢量值较小，而检测区域中的矢量尺寸根据属性而变化。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">类 CapsuleLayer（层。层）：</span><br><span class="line">    “””</span><br><span class="line">    胶囊层。它类似于密集层。密集层有`in_num`输入，每个都是标量，输出</span><br><span class="line">    来自前一层的神经元，它有<span class="string">'out_num`输出神经元。CapsuleLayer只是扩展了神经元的输出</span></span><br><span class="line"><span class="string">    从标量到矢量。所以它的输入形状= [None，input_num_capsule，input_dim_capsule]和输出形状= \</span></span><br><span class="line"><span class="string">    [None，num_capsule，dim_capsule]。对于密集层，input_dim_capsule = dim_capsule = 1。</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string">    ：param num_capsule：此图层中的胶囊数</span></span><br><span class="line"><span class="string">    ：param dim_capsule：此层中胶囊的输出向量的维度</span></span><br><span class="line"><span class="string">    ：param routings：路由算法的迭代次数</span></span><br><span class="line"><span class="string">    “””</span></span><br><span class="line"><span class="string">    DEF  __init__（自，num_capsule，dim_capsule，路线= 3，</span></span><br><span class="line"><span class="string">                 kernel_initializer = '</span> glorot_uniform <span class="string">'，</span></span><br><span class="line"><span class="string">                 ** kwargs）：</span></span><br><span class="line"><span class="string">        超级（CapsuleLayer，自我）。__init __（** kwargs）</span></span><br><span class="line"><span class="string">        self .nu​​m_capsule = num_capsule</span></span><br><span class="line"><span class="string">        self .dim_capsule = dim_capsule</span></span><br><span class="line"><span class="string">        自我 .routings =路线</span></span><br><span class="line"><span class="string">        self .kernel_initializer = initializers.get（kernel_initializer）</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    def  build（self，input_shape）：</span></span><br><span class="line"><span class="string">        assert  len（input_shape）&gt; =  3，“输入Tensor应该有shape = [None，input_num_capsule，input_dim_capsule] ”</span></span><br><span class="line"><span class="string">        self .input_num_capsule = input_shape [ 1 ]</span></span><br><span class="line"><span class="string">        self .input_dim_capsule = input_shape [ 2 ]</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        ＃变换矩阵</span></span><br><span class="line"><span class="string">        self .W =  self .add_weight（shape = [ self .nu​​m_capsule，self .input_num_capsule，</span></span><br><span class="line"><span class="string">                                        self .dim_capsule，self .input_dim_capsule]，</span></span><br><span class="line"><span class="string">                                 initializer = self .kernel_initializer，</span></span><br><span class="line"><span class="string">                                 name = '</span> W <span class="string">'）</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        self .built =  真的</span></span><br></pre></td></tr></table></figure></p>
-<p>你也可以在<a href="https://github.com/deeplearningturkiye/kapsul-agi-capsule-network" target="_blank" rel="noopener">这里</a>找到所有的工作。<br><a name="0fa8"></a></p>
-<h3 id="测试性能🏅"><a href="#测试性能🏅" class="headerlink" title="测试性能🏅"></a><a href="#0fa8"></a>测试性能🏅</h3><p>当使用10,000图像测试数据集进行测试时，我们获得了<a href="http://yann.lecun.com/exdb/mnist/" target="_blank" rel="noopener">MNIST</a>数据集的<strong>99.61％</strong>准确度，并且获得了<a href="https://www.kaggle.com/zalando-research/fashionmnist" target="_blank" rel="noopener">FASHION MNIST</a>数据集的<strong>92.22％</strong>准确度。是啊！😎<br>对于具有<strong>80％重叠</strong>手写数字的<strong>MultiMNIST</strong>数据集，当数据重叠时，胶囊网络的性能似乎非常好，特别是与CNN模型相比时。<br><img src="https://cdn-images-1.medium.com/max/1000/1*SHDKu_mb0DRp0OwTbWCPtg.jpeg#width=" alt><a href="https://arxiv.org/pdf/1710.09829.pdf" target="_blank" rel="noopener">MultiMNIST数据集的胶囊网络输出</a></p>
-<p><a name="3689"></a></p>
-<h3 id="MNIST的50纪元工作时间⏳"><a href="#MNIST的50纪元工作时间⏳" class="headerlink" title="MNIST的50纪元工作时间⏳"></a><a href="#3689"></a>MNIST的50纪元工作时间⏳</h3><p>与CNN相比，由于其计算复杂性，胶囊网络的训练时间较慢。以下是各种硬件和云服务器上的50纪元培训时间：<br><img src="https://cdn-images-1.medium.com/max/1000/1*tL-IKEmfUiKE0cOmJW-c4g.png#width=" alt><br><img src="https://cdn-images-1.medium.com/max/1000/1*3tX5wuhfLPeinWsdEemi3Q.jpeg#width=" alt><a href="https://thescinder.files.wordpress.com/2017/06/goingtoneedagpuimgflip1.jpg" target="_blank" rel="noopener">当然 ：）</a><br>要使用Google Colab支持，最吸引人的选项，请阅读&gt; <a href="https://medium.com/deep-learning-turkey/google-colab-free-gpu-tutorial-e113627b9f5d" target="_blank" rel="noopener">Google Colab免费GPU教程！</a></p>
-<p><a name="d950"></a></p>
-<h3 id="✔️Pros和❌Consof-Capsule-Networks"><a href="#✔️Pros和❌Consof-Capsule-Networks" class="headerlink" title="✔️Pros和❌Consof Capsule Networks"></a><a href="#d950"></a>✔️Pros和❌Consof Capsule Networks</h3><p>与其他最先进的技术相比，✔️Capsule网络在MNIST数据集中取得了最大的成功。</p>
-<p>✔️使用较小的数据集成功。（通过强制模型学习胶囊中的特征变体，它可以用更少的训练数据更有效地推断可能的变体。）</p>
-<p>✔️逐协议算法允许我们区分重叠图像中的对象。</p>
-<p>✔️使用激活矢量更容易解释图像。</p>
-<p>✔️Capsule网络维护对象的等效性，色调，姿势，反照率，纹理，变形，速度和位置等信息。</p>
-<hr>
-<p>与现有技术模型相比，❌CIFAR10在数据集方面没有成功。</p>
-<p>❌尚未在非常大的数据集上进行测试。</p>
-<p>❌由于协议路由算法，训练模型需要更多时间。</p>
-<p>具有不同路由算法的胶囊网络模型的应用表明它是一个需要更多实验并且仍在开发的主题。</p>
-<blockquote>
-<p><a href="https://www.cs.toronto.edu/~hinton/csc2535/notes/lec6b.pdf" target="_blank" rel="noopener">“卷积神经网络注定失败” Geoffrey Hinton</a><br><a name="cd5c"></a></p>
-</blockquote>
-<h3 id="另一个例子"><a href="#另一个例子" class="headerlink" title="另一个例子"></a><a href="#cd5c"></a>另一个例子</h3><p><img src="https://cdn-images-1.medium.com/max/750/1*KSQA6cFQK6EiZ0oerCx7BQ.png#width=" alt><br><img src="https://cdn-images-1.medium.com/max/750/1*ifzv7ASKL7TyJU-4GZblbw.png#width=" alt><a href="https://hackernoon.com/capsule-networks-are-shaking-up-ai-heres-how-to-use-them-c233a0971952" target="_blank" rel="noopener">卷积神经网络的重要安全问题举例</a></p>
-<p><strong>在上面示出的示例中，当仅改变Kim Kardashian的图像的方向时，预测准确度显着下降。</strong>在右边的图像中，我们可以很容易地判断出一只眼睛和她的嘴是不正确放置的，这不是一个人的假设。然而，我们看到了0.90的预测分数。</p>
-<p>受过良好训练的CNN在这种方法上存在一些障碍。除了容易被具有不正确位置的特征的图像欺骗之外，当以不同方向观看图像时CNN也容易混淆。</p>
-<p>毫无疑问，CNN可能受到<a href="https://heartbeat.fritz.ai/introduction-to-generative-adversarial-networks-gans-35ef44f21193" target="_blank" rel="noopener">对抗性攻击的</a>影响。这是一个可能导致安全问题的重要约束，特别是当我们将潜在模式嵌入到对象中以使其看起来像其他东西时。但是，正如我们所知，<em>我们可以通过Capsule Networks解决这个问题！</em></p>
-<p><strong>✨胶囊网络的模型是值得和有前途的！</strong></p>
-<hr>
-<p>📝 <strong>我们关于胶囊网络的学术论文：</strong><a href="https://ieeexplore.ieee.org/document/8404385/" target="_blank" rel="noopener">使用胶囊网络识别手语</a>听力和语言障碍者继续通过唇读或手和脸的运动（即手语）进行交流。胶囊网络可以帮助确保残疾人不仅可以充分参与生活，还可以通过与他人的健康和有效沟通来提高生活质量。<br><br></p>
-<p><em>在这项工作中; Capsule Networks 以</em><strong><em>94.2％的</em></strong><em>验证准确度识别手语的数字。</em></p>
-<p><img src="https://cdn-images-1.medium.com/max/1000/1*Lzr1bVSB5UXVf6RXQwVbZg.png#width=" alt><a href="https://github.com/ardamavi/Sign-Language-Digits-Dataset" target="_blank" rel="noopener">手语数字数据集，Arda Mavi ve Zeynep Dikle</a></p>
-<hr>
-<p><a name="9d62"></a></p>
-<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a><a href="#9d62"></a>参考</h3><p>[1] Sabour，S.，Frosst，N. ve Hinton，GE，“ <a href="https://arxiv.org/pdf/1710.09829.pdf" target="_blank" rel="noopener">胶囊之间的动态路由</a> ”，arXiv preprint arXiv：1710.09829,2017。<br>[2] Hinton，GE，Krizhevsky A. ve Wang，SD“ <a href="http://www.cs.toronto.edu/~fritz/absps/transauto6.pdf" target="_blank" rel="noopener">转换自动编码器</a>。”国际人工神经网络会议。斯普林格，柏林，海德堡，2011年。<br>[3] <a href="https://www.cs.toronto.edu/~hinton/csc2535/notes/lec6b.pdf" target="_blank" rel="noopener">CSC2535：2013高级机器学习认真对待逆向图形</a>，Geoffrey Hinton多伦多大学计算机科学系，2013年。<br>[4] MNIST数据集的胶囊网络实现（土耳其语解释，深度学习Türkiye，<a href="https://github.com/deeplearningturkiye/kapsul-agi-capsule-network" target="_blank" rel="noopener">kapsul-agi-capsule-network</a>。<br>[5] <a href="https://ieeexplore.ieee.org/document/8404385/" target="_blank" rel="noopener">使用胶囊网络识别手语</a>，<a href="https://www.linkedin.com/in/fuatbeser/" target="_blank" rel="noopener">FuatBeşer</a>，<a href="http://www.ayyucekizrak.com/" target="_blank" rel="noopener">MerveAyyüceKIZRAK</a>，<a href="http://www.yildiz.edu.tr/~bbolat/" target="_blank" rel="noopener">BülentBOLAT</a>，<a href="http://www.yildiz.edu.tr/~tulay/" target="_blank" rel="noopener">TülayYILDIRIM</a>，<a href="https://github.com/ayyucekizrak/Kapsul-Aglari-ile-Isaret-Dili-Tanima" target="_blank" rel="noopener">https：//github.com/ayyucekizrak/Kapsul-Aglari-ile-Isaret-Dili-Tanima</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://zhos.me/2018/12/21/yuque/F-35是1.4万亿美元的国家灾难/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Zhos">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="武德">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/12/21/yuque/F-35是1.4万亿美元的国家灾难/" itemprop="url">F-35是1.4万亿美元的国家灾难</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-21T13:34:55+08:00">
-                2018-12-21
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p><a href="https://medium.com/war-is-boring/the-f-35-is-a-terrible-fighter-bomber-and-attacker-and-unfit-for-aircraft-carriers-c6e36763574b" target="_blank" rel="noopener">链接</a></p>
-<p>JSF是一个可怕的战斗机，轰炸机和攻击者 - 并且不适合航空母舰。<br>F-35在战斗准备就绪之前还有很长的路要走。 这是现任退休运营测试与评估总监迈克尔吉尔摩在上一份年度报告中的离职信息。<br>联合攻击战斗机计划已经消耗了超过1000亿美元和近25年。 要完成基本开发阶段，至少需要10亿美元和两年多。 吉尔莫尔告诉国会，五角大楼和公众，即使有大量的时间和金钱投入，“所有变种的运作适用性仍然低于服务部门的预期。”<br>Gilmore详细介绍了该计划存在的一系列遗留问题，有时甚至是恶化问题，包括数百个关键性能缺陷和维护问题。 他还提出了一个严肃的问题，即空军的F-35A能否在空对空或空对地任务中取得成功，海军陆战队的F-35B是否可以进行基本的近距离空中支援，以及海军是否能够 F-35C适用于航空母舰。<br><br>事实上，他发现“如果在战斗中使用，F-35飞机将需要支持来定位和避开现代威胁地面雷达，获取目标，并且由于未解决的性能缺陷和有限的武器运输可用性而使敌方战斗机编队“。<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545370645879-05f3b68c-3916-4631-a30e-605fbcaa9402.png#width=60" alt><br>在一份公开声明中，F-35联合计划办公室试图驳回吉尔摩的报告，声称“所有这些问题都是日本知识产权组织，美国服务机构，我们的国际合作伙伴和我们的行业所熟知的。”<br><br>JPO对众多问题的承认是可以接受的，但没有迹象表明该办公室有任何计划 - 包括成本和进度重新估算 - 以解决目前已知问题而不偷工减料。<br><br>显然，他们还没有计划应对并为将来四年即将进行的更加严格，发展和运营测试中发现的无数未知问题提供补救。这样的计划是必不可少的，应该由实际解决问题的速度而不是不切实际的现有时间表来推动。<br><br>如何解决Gilmore发现的众多问题，以及我们如何才能最好地推进历史上最昂贵的武器计划，这个计划一直无法达到自己非常适度的承诺？<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545370694304-542d261f-be35-40fe-8a8e-ba5df980e909.png#width=826" alt><br><a name="w1qwta"></a></p>
-<h4 id="电子化用于证明成本合理-而不是提供能力"><a href="#电子化用于证明成本合理-而不是提供能力" class="headerlink" title="电子化用于证明成本合理 - 而不是提供能力"></a><a href="#w1qwta"></a>电子化用于证明成本合理 - 而不是提供能力</h4><p>F-35正在向美国人民出售，其中很大一部分就是其任务系统，喷气式飞机上的大量精密电子设备。仔细阅读有关F-35的任何关于W-35的正式文章将会发现它们几乎总是指出它能够收集大量信息。<br><br>这些信息应该通过其板载传感器和数据链接到外部网络源，然后由F-35的计算机系统合并，以便为飞行员识别和显示特定威胁，目标和伴随力图片 - 即“情境”意识。”<br><br>这个过程旨在让飞行员主宰战场。然而，基于这些系统在开发测试期间的实际测试性能，电子设备实际上会干扰飞行员的生存和普及能力。<br><br>总的来说，F-35的传感器，计算机和软件的问题，包括制造虚假目标和报告不准确的位置，已经非常严重，以至于爱德华兹空军基地的测试团队将他们评为“红色”，这意味着他们无法进行战斗。他们期待的任务。<br><br>一个系统，即光电目标系统（EOTS），被飞行员挑选出来，其分辨率和范围都低于目前在传统飞机上使用的系统。 EOTS是旨在帮助F-35从足够远的地方探测和摧毁敌方战斗机以使斗狗成为过去的系统之一。它安装在靠近飞机机头的地方，包括一台电视摄像机，一个红外搜索和跟踪系统，以及一个激光测距仪和指示器。<br><br>这些传感器在计算机控制下旋转，以在广泛的视野范围内跟踪目标，并在飞行员的头盔遮阳板显示器上显示图像。<br><br>但是EOTS的局限性，包括图像随着湿度的降低，迫使飞行员飞行的距离比使用早期系统时更接近目标只是为了获得足够清晰的图像来发射导弹或射击。<br><br>该报告说，问题非常严重，以至于F-35飞行员可能需要飞得如此接近才能获得他们必须机动的目标才能获得导弹射击所需的距离。因此，该系统的局限性可以迫使攻击性的F-35妥协意外，让敌人机动到第一次机会。<br><em>投降惊喜的元素并让对手先射击是我们想要迫使敌人做的事情，而不是我们自己。</em><br><br><br>另一个经常被吹捧的功能是分布式孔径系统（DAS），该功能应该赋予F-35卓越的态势感知能力。 DAS是将显示器供给臭名昭着的600,000美元头盔系统的主要传感器之一，它也未能实现炒作。<br><br>DAS传感器是分布在F-35机身周围的六个摄像机或“眼睛”，它们向头盔遮阳板投射到飞行员想要观察的任何方向的外部视图，包括向下或向后。同时，头盔遮阳板显示飞行仪表以及从传感器和任务系统得出的目标和威胁符号。<br><br>但由于过多的错误目标，不稳定的“抖动”图像​​和信息过载等问题，飞行员正在关闭一些传感器和计算机输入，而是依靠简化的显示器或更传统的仪表板。<br><br>在这里，系统再次比它应该取代的系统好一点。<br><br>在一些重要的武器交付准确性测试中，试飞员也对头盔有困难。一些飞行员将头盔中的显示描述为“操作上无法使用且可能不安全”，因为“符号杂乱”使地面目标模糊不清。<br>在试图对目标射击短程AIM-9X空对空导弹时，飞行员报告说，他们对目标的看法被头盔护目镜上显示的符号所阻挡。飞行员还报告说，这些符号在试图追踪目标时不稳定。<br><br>然后是由于“虚假轨道”导致飞行员实际上看到双重的问题。将各种车载仪器产生的所有信息并将其合并为飞行员的连贯图像存在问题，该过程称为传感器融合。<br><br>飞行员报告说，不同的仪器，如飞机的雷达和EOTS，正在检测相同的目标，但编制信息的计算机正在将单个目标显示为两个。<br><br>飞行员试图通过关闭一些传感器来解决这个问题，使多余的目标消失。 DOT＆E表示，这是“不可接受的战斗，违反了将多个传感器的贡献融合到一个准确的轨道和清晰的显示中以获得态势感知以及识别和接触敌方目标的基本原则。”<br><br>虽然问题出在一个平面上，但是当几架飞机试图通过网络共享数据时，情况会更糟。 F-35具有多功能高级数据链路（MADL），旨在使飞机能够与其他F-35共享信息，以便为所有飞行员提供战斗空间的共同图像。它通过获取每个平面生成的所有数据并将其组合到一个共享的世界视图中来实现这一点。</p>
-<p><em>但是，这个系统也会产生错误或分裂的目标图像。 使问题更加复杂的是，系统有时也会完全丢弃目标图像，导致驾驶舱内部存在混淆。</em><br><br><br>所有这些意味着系统意味着让飞行员更好地了解周围的世界可以完全相反。 根据该报告，这些系统“继续降低战斗空间意识并增加飞行员的工作量。 这些缺陷的解决方法对于飞行员来说是耗时的，并且会减少高效和有效的任务执行。“<br><br>F-35助推器表示这是重要的网络 - 实际上重要的是网络无法正常工作。<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545370927968-ab261e3d-8341-4999-a9c1-d24ef08dfa74.png#width=826" alt><br><a name="xp62pu"></a></p>
-<h4 id="作为战士无效"><a href="#作为战士无效" class="headerlink" title="作为战士无效"></a><a href="#xp62pu"></a>作为战士无效</h4><p>F-35从一开始就打算成为一架多用途飞机。这份最新的报告清楚地描述了迄今为止它在各种角色中如何叠加，包括与它应该取代的每架飞机相比。这个消息并不令人鼓舞。<br><br>F-35作为空对空战斗机的缺点已经有了很好的记录。<br><br>它在视觉范围（WVR）中的模拟空战中失去了名称，它的雷达隐身没有任何优势，在2015年初的F-16中，其中一架F-35应该取代作为空中战斗机。 F-35在空对空机动中反复丢失，尽管该测试被操纵，因为所使用的F-16是较重的双座版本并且进一步装载了重型拖曳外部燃料坦克阻碍其机动性。<br><br>F-35助推器认为飞机的低雷达标志将使其远离WVR情况，但空战的历史是无法完全避免WVR的攻击。导弹故障，雷达干扰的影响以及其他难以预测的因素往往会一次又一次地迫使WVR参与。<br><br>这份最新报告证实F-35并不像传统战斗机那样机动。<br><em>所有三种变型“在跨音速下都表现出令人反感或不可接受的飞行质量，其中飞机上的空气动力正在迅速变化。”</em><br><br><br>一个这样的问题被称为机翼下降，其中喷气机的翼尖在急转弯时突然下降，这可能导致飞机旋转并可能发生碰撞。<br><br>在声屏障正下方的跨音速是战斗机飞行包线的最关键点。这些是历史上大多数空战发生的速度。正是在这些速度下，F-35需要最灵活才能成为有效的战斗机。</p>
-<p>该计划试图通过改变F-35的飞行软件而不是通过重新设计导致问题的实际飞行表面来解决机动性能问题。<br><br>该软件称为控制法则，将飞行员的操纵杆命令转换为飞机的行为。人们可以预期飞行员对飞机的某些力量会导致飞机的等效响应。由于软件的变化，有时并非如此。</p>
-<p>例如，如果飞行员使用尖锐的杆移动以转动飞机，控制法软件现在可以更温和地转向以防止诸如 - 包括 - 挖掘等问题。 F-35辩护人试图通过声称F-35从未打算用于近距离空中斗狗来解雇这些问题，空军强烈要求飞机配备短距离空对空炮。</p>
-<p>作为空对空战斗机，F-35的作​​战能力非常有限，因为目前软件版本只能使用两枚导弹，而且它们必须是雷达引导的先进中程空中飞行器。空中导弹（AMRAAMs）;如果它想要保持其隐形特征，它将来不会超过四个。</p>
-<p>F-35作为空对空战斗机的能力目前进一步受到限制，因为AMRAAM并未针对近距​​离视距作战进行优化。最终，升级的软件版本将允许飞机携带除AMRAAM之外的导弹，但不会很快。这意味着F-35进入的任何战斗最好都是短暂的，因为它很快就会耗尽弹药。<br><br>它的枪也可用于近距离战斗，但它目前还没有工作，因为在战斗中有效使用它的软件还没有完成。</p>
-<p>F-35A中的大炮位于飞机侧面的一扇小门后面，在大炮发射前瞬间快速打开 - 这一特性旨在使飞机保持隐身状态。测试飞行表明，这扇门能够捕捉到飞过飞机表面的空气，将F-35的机头从瞄准点拉开，导致“超出精度规格”的误差。</p>
-<p>工程师们正在对F-35的控制法进行更多修改，以纠正门引起的误差。进行这些更改并执行随后的“回归”重新测试以确认更改的有效性会延迟实际的枪支准确度测试。在这些测试发生之前，没有人能够知道F-35A的大炮是否能够真正击中目标。</p>
-<p>F-35B和F-35C都将使用外置式枪架，而不是像空军型号那样的内部版本。由于两种型号机身形状的差异，海军陆战队和海军将使用不同型号的枪荚。两者都在地面上进行了试验，但飞行测试看看吊舱对喷气式飞机空气动力学的影响才刚刚开始。</p>
-<p>DOT＆E警告说，就像F-35A上的枪门一样，可能会发现意外的飞行控制问题。必须设计对这些的修复，然后进行测试。只有这样，程序才能开始更全面的飞行中精度测试，这对于确定枪荚是否准确是必要的。</p>
-<p>开发测试延迟以及解决测试可能发现的问题的过程非常严重，以至于该计划可能没有有效的初始操作测试和评估枪支。这不仅可以进一步延迟预定的测试，而且更重要的是，可以防止飞机很快到达战士。<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545371080991-45289738-757c-42c0-b9aa-d61c7a02c077.png#width=826" alt></p>
-<p><a name="55vqcv"></a></p>
-<h4 id="作为拦截轰炸机无效"><a href="#作为拦截轰炸机无效" class="headerlink" title="作为拦截轰炸机无效"></a><a href="#55vqcv"></a>作为拦截轰炸机无效</h4><p>F-35将具有极其有限的拦截有用性的几个主要原因 - 空军和海军陆战队的“初始作战能力”声明尽管如此。<br><br>例如，欧洲，俄罗斯，中国甚至伊朗的国防公司多年来一直在努力开发和生产打败隐形飞机的系统。他们取得了一些成功。<br><br>我们在1999年清楚地看到了这一点，当时一支塞尔维亚导弹部队击落了一架F-117隐形战斗机，该战斗机配备了过时的苏联时代SA-3地对空导弹，这是1961年首次部署的系统。塞尔维亚防空人员发现他们可以通过使用导弹电池的长波搜索雷达探测隐形飞机。<br><br>然后，利用观察员和导弹自己的制导雷达，塞尔维亚部队能够追踪，瞄准并杀死一架隐身的F-117。<br><br>为了表明这不是侥幸，塞尔维亚地空导弹击中并损坏了另一架F-117，以至于它再也没有在科索沃空战中飞行过。<br><br>这些搜索雷达不受现代隐形飞机的特殊形状和涂层的影响，可以轻松检测到今天的隐形飞机，包括F-35。自第二次世界大战以来，俄罗斯人从未停止过制造这种雷达，并且现在在公开市场上以低至1000万美元的价格销售现代化，高度移动的卡车式数字长波雷达。中国和伊朗人也开始采用类似的雷达系统。<br><br>比长波探测雷达更难对付的更简单的系统是无源探测系统（PDS），用于探测和跟踪飞机发射的射频（RF）信号 - 雷达信号，UHF和VHF无线电信号，识别-friend-or-foe（IFF）信号，Link-16等数据链路信号和TACAN等导航转发器信号。<br><br>现代PDS的一个很好的例子是VERA-NG，这是一种捷克系统，在国际上销售，使用三个或更多的间隔良好的接收天线来检测和跟踪和识别战斗机和轰炸机发出的射频信号。系统的中央分析模块计算到达接收器的信号的时间差，以识别，定位和跟踪多达200架飞机发射雷达信号。<br><br>VERA-NG只是世界上使用的众多PDS中的一种 - 俄罗斯人，中国人和其他人也生产PDS，这些PDS已经广泛使用了好几年。<br><br>从对手采用PDS的角度来看，PDS的优点在于雷达隐身与其探测和跟踪飞机的能力无关。如果飞机必须使用其雷达，无线电，数据链路或导航系统来完成其任务，PDS很有可能通过这些发射来检测，跟踪和识别它。<br><br>世界上每架飞机都容易受到PDS，隐身和非隐身的影响，而F-35也不例外。<br><br>F-35的主要空对空武器AIM-120是超视距雷达导弹 - 因此，F-35必须使用大型雷达发射高功率信号才能探测到空中目标然后引导导弹到他们身边。同样，飞机必须采用高功率地面测绘雷达信号来远距离寻找地面目标。<br><br>此外，如果飞机的系统必须与地层中的其他飞机通信或与AWACS等非机载支持飞机通信，则必须使用其无线电和数据链路。因此，F-35可能易受被动跟踪系统的检测。这些无源探测系统中的一些比搜索雷达便宜得多 - 而且它们在电子方面几乎检测不到。<br><br>DOT＆E报告还列出了限制拦截有用性的几个主要原因。<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545371153712-4fb2550d-f06c-468e-ac83-a79ccc95ec77.png#width=60" alt><br>其中一个原因是F-35的Block 2B（USMC）和Block 3i（USAF）软件阻止它检测到许多威胁和目标，同时严重限制它可携带的武器种类。<br><br>例如，F-35目前只能携带几种型号的大型制导直接攻击炸弹。这些都不能像电力导弹那样从远处发射。相反，它们落在从飞机到目标的弹道轨道上，这意味着它们只能在目标视野中以相对较短的距离释放。<br><br>目前，F-35飞行员“将被迫飞得更近，以接近地面目标，并且根据敌方防空系统的威胁程度和可接受的任务风险，它可能仅限于接触仅由短程防御的地面目标防空，或根本没有防空。“<br><br>F-35可携带的少量武器类型也限制了其在战斗中的灵活性。目前的软件一次只能支持一种炸弹，DOT＆E表示只有在攻击一个或两个类似目标时才有用。因此，例如，当一架F-35飞机装载的炸弹装载用于摧毁地面目标的炸弹时，它们将无法摧毁任何硬化或沙坑目标，因为它们不会需要更重的炸弹。<br><br>预计F-35将携带更多种类的武器，因为更多的软件，炸弹架和测试验证这些武器已经开发出来 - 但我们直到2021年才知道哪些武器实际上是适合作战的。此外，为了携带除两个大型制导炸弹之外的东西，它将不得不使用外部武器和机架，大大降低了飞机本已令人失望的射程和机动性 - 当然，或多或少地消除了隐身。<br><br>能够穿透严密防御的空域以摧毁敌方领土深处的固定目标，这是F-35经常被引用的理由。当然，F-35的有限射程 - 低于传统的F-16战斗机 - 意味着它不可能在俄罗斯和中国等大国的家乡内完成空军所谓的“深度打击”。 <br>2016年的DOT＆E报告描述了一些官方的拖延行动，推迟了F-35的穿透力测试。例如，该计划现在才开始接收模拟敌方雷达系统的关键地面雷达模拟器设备，这些设备是在高度竞争的近邻情景中对F-35的有效性进行有力测试所需的。<br><br>它只接收该设备，因为它是由DOT＆E寻求和采购的，当时很明显服务和JSF计划办公室不会寻求足以复制F-35预计能够复制近端威胁的测试基础设施反击。这种设备的交付工作已经开始，但要到2018年初才能完成。初级专业人员没有计划或预算进行发展性飞行试验。<br><br>军方在内华达州内利斯空军基地的西部测试区进行隐形飞机的开发和操作测试。测试是针对地面雷达模拟器设备和地对空导弹发射器进行的。正在测试的飞机飞过这些阵列以查看飞机的机载传感器 - 特别是其电子战系统和地面测绘雷达 - 与通过数据链路提供的机外情报相结合，可以检测到威胁并做出适当的响应，例如通过警告飞行员，干扰信号或发射防御抑制导弹。<br><br>问题是一个复杂的问题，因为雷达信号显示SAM的存在，例如，从而允许飞机瞄准SAM或避免它，不一定是独特的，并且通常非常类似雷达的信号，不立即对飞机的威胁。<br><br>F-35无法携带足够的武器轰炸一切。它的传感器和传感器融合系统必须能够区分构成真正威胁的敌方SAM雷达与可能在探测范围内的许多无害雷达之间的区别 - 通用空中监视雷达，短程，低空防空针对武器而非飞机的雷达，甚至是附近的民用空中交通管制和气象雷达系统。<br><br>同样瘫痪，直到地面雷达模拟器设备到位，F-35程序将无法正确开发，验证和更新F-35的任务关键型机载软件文件，称为任务数据负载（MDL）。 MDL是指定所有目标和威胁位置的巨大文件，以及它们各自的电子和/或红外签名以及所有相关的映射数据。</p>
-<p><em>如果没有准确，最新的MDL，F-35就无法找到目标或逃避和抵御威胁 - 它也无法实现据称是其主要优势的网络和传感器融合功能。</em><br><br><br>如果没有MDL，F-35就无法开战。 MDL还需要不断更新有关每个F-35任务收集的威胁，目标和信号等信息。 F-35飞行员只有在配备必要的地面雷达模拟器设备的测试范围内进行测试后，才能确保他们所需的MDL能够正常工作。<br><br>必须通过中央重编程实验室使用相关作战命令的海量数据输入为每个战区或冲突区创建新的和完整的MDL。例如，在英格兰境外运营的F-35将拥有与日本F-35不同的档案。今天只存在一个这样的重编程实验室，并且由于JPO管理不善，它最近才被安排接受必要的升级以产生经过验证的MDL。<br><br>实验室需要15个月才能生成完整的MDL。如果在一个新的，未曾预料到的战区中突然需要F-35战斗机，那些F-35将无法至少执行15个月的战斗任务。<br><br>由于重编程实验室尚未建立全套必要的地面雷达模拟器设备，DOT＆E表示，最早的重编程实验室将能够为IOT和E生产经过验证的MDL，将于2018年6月完成。<br><br>这是在2017年8月计划的IOT＆E开始后近一年 - 也就是海军陆战队宣布F-35B最初具备运营能力两年后。 DOT＆E进一步表示，F-35 MDL适合战斗“将不会进行测试和优化，以确保F-35能够在2020年前检测，定位和识别现代部署的威胁。”<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545371288913-2328d482-bb99-4e2b-97f9-48d44b5c6a9f.png#width=826" alt><br><a name="ekgawy"></a></p>
-<h4 id="作为近距离空中支援平台无效"><a href="#作为近距离空中支援平台无效" class="headerlink" title="作为近距离空中支援平台无效"></a><a href="#ekgawy"></a>作为近距离空中支援平台无效</h4><p>F-35有很多不足之处，在远离战场的情况下执行空对地拦截任务，但在其他预定的空对地作用中更为严重，直接支持部队，近距离空中支援（CAS）。</p>
-<p>DOT＆E得出结论认为，F-35目前的配置“还没有证明CAS能力与第四代飞机的能力相当。”鉴于空军部长最近的声明，该服务打算重新努力，这一说法特别令人不安。在2021年取消CAS战斗证明的A-10。</p>
-<p>CAS是另一项主要任务，缺乏有效的大炮将极大地限制F-35的战斗实用性。<br><br><br>对于许多CAS任务来说，有效的大炮是必不可少的，在这些任务中，任何大小的炸弹，无论是导弹还是非制导炸弹都会对地面上的友军造成危险，或者担心附带损害，例如在城市环境中。</p>
-<p>当我们的部队被距离只有几米远的敌人伏击或超支时，大炮更加重要，在“危险关闭”的情况下，只有最准确的火力才能帮助我们的方面杀死或驱散敌人。</p>
-<p>在最近的兰德研究中接受采访的地面指挥官表示，他们更倾向于使用A-10的炮火甚至是导弹弹药，因为80％的炮弹在瞄准点的20英尺半径范围内发射，提供了精确的精确度。危险关闭情况绝对需要。大炮对于击中移动目标也是最有用的，因为大炮爆发可以在预期移动时引导目标。</p>
-<p><em>目前舰队中的三架F-35型号都不能在战斗中使用大炮。 事实上，他们都没有接近完成他们的发展飞行测试 - 更不用说他们的操作适用性测试 - 对于机身安全性，准确性和目标杀伤力。</em><br><br><br>更糟糕的是，根据初步的测试经验，似乎所有三种F-35版本的头盔式瞄准具的严重不准确性使得大炮在空对空作战中无效 - 这也会使CAS无效 - 而且头盔的准确性问题可能在技术上是固有的，也是无法治愈的。</p>
-<p>请注意，CAS的炮弹精度要求比空战要严格得多：在友军部队附近射击时，即使是轻微的精确度问题也会产生悲剧性后果。如前所述，海军陆战队的F-35B和海军的F-35C的炮舱可能会增加另一个不准确的来源 - 也可能是无法治愈的 - 并且仍未经CAS测试。</p>
-<p>F-35大炮对CAS的战斗适用性直到3F区块IOT＆E结束时才会知道，这在2021年之前是不可能的。未能完全实现这些CAS测试 - 由于JPO管理不善和测试资源延迟，这种可能性很大 - 肯定会危害美军的生命。</p>
-<p>除了关键的大炮不准确性问题之外，飞行员头盔显示器中符号杂乱的引起误差的混乱在CAS角色中尤其危险。 DOT＆E表示，由于符号杂乱模糊目标，难以读取关键信息和pipper [aimpoint]稳定性，目前的系统“在操作上无法使用，并且可能无法完成计划的测试。”</p>
-<p>即使头盔显示的符号没有遮挡飞行员看到目标的能力，F-35的顶篷也可能。喷气式飞机的顶篷是一种厚的丙烯酸材料，具有低可观察的涂层，以保护隐形。这使得顶篷不太透明，并且根据DOT＆E似乎扭曲了飞行员的视野。</p>
-<p>在F-35的每个版本中进一步限制加农炮的有效性是它携带的25毫米炮弹的数量–F-35A为182，B和C为220.这对于CAS来说是非常不足的，特别是与由A-10运载的超过1,100个30毫米炮弹。虽然A-10有足够的炮弹用于10到20次攻击，但F-35的任何变种只有两次，也许四次传球。</p>
-<p>更有效地使用任何CAS武器，大炮或其他装置，更有限制的是，F-35无法飞得低而且速度慢，无法找到典型的难以看见的CAS目标并安全地将其识别为敌人或友军，即使是在提示 由地面或空中观察员。</p>
-<p>由于其小而重载的机翼，F-35无法在寻找隐藏和伪装目标所需的低速下充分操纵 - 并且完全没有装甲和高度易燃，它将遭受来自小型步枪和轻型机枪的灾难性损失在低海拔和所需的低速度下不可避免地命中。与此形成鲜明对比的是，A-10专门设计用于出色的低速和低速机动性，并且在设计上具有前所未有的生存能力，可以抵御那些枪支，甚至可以抵抗肩射式导弹。</p>
-<p>空军官员经常认为，缺乏有效的枪支或无法操纵低速和慢速在未来的战争中无关紧要，因为空军打算以不同的方式进行CAS，即在高海拔地区使用较小的精确弹药。但F-35将不会被清除至少携带这些武器五年。</p>
-<p>与此同时，F-35现在只能携带两枚制导炸弹，而这些炸弹则为500磅或更大。这些模型都不适用于友军部队附近。根据军方的风险估算表，在250米（820英尺）处，500磅重的炸弹有10％的几率使友军失去能力。这意味着在那个泡沫中，敌人可以在没有近距离空中支援的情况下进行机动。<br><br>250磅重的小直径炸弹II现在处于低速生产状态，并在F-15E上使用;然而，即便如此，在“危险关闭”的交火中，在友军部队附近使用它太大了，在F-35上使用它所需的软件和炸弹机架将无法在2021年之前完成战斗。<br><br>近距离空中支援不仅仅是对目标投掷炸弹的飞机。为了真正有效，CAS任务需要飞行员和在地面作战的部队之间进行详细的战术协调。几十年来，这已经通过无线电通信有效地完成，并且近年来，运营中的飞机已经通过称为可变消息格式和链路-16的网络系统上的语音和数据的数字通信链路进行了升级。<br><br>在飞行测试中，F-35的数字数据链路遇到了很大的困难，包括丢失的信息或以错误格式传输的信息。这迫使飞行员和地面控制器通过无线电通过语音重复信息来在系统周围工作。在近距离的交火中，当秒数计算时，这是部队无法承受的危险延误。<br><br>F-35防守队员总是迅速指出近乎对等的对手防空系统所谓的致命能力，作为在CAS中使用F-35以及禁止轰炸的必要性的理由。空军上校Mike Pietrucha介绍了一个更健全的战术和历史观点，指出在一个重防空威胁领域飞行CAS任务的情景充其量不太可能。<br><br>繁琐，缓慢，物流密集的“高威胁”导弹系统不太可能被近邻敌人进行现代机动战争拖累。正如他们在第二次世界大战期间面对的那样，韩国，越南，沙漠风暴，我们的近距离支持飞行员更有可能面对较轻的轻型和移动防空（机枪，轻型高射炮和人类携带的寻热导弹）以及过去15多年的战争。<br><br>在宣布F-35 IOC时，海军陆战队员 - 曾经将CAS作为独特海军遗产的一部分而获奖 - 而空军显然认为这些F-35 CAS限制是可以接受的。<br><br>但是，看到近距离空中支援作为F-35计划的事后补救被视为可耻是可耻的。为了提供足够的CAS，纳税人的资金将更好地用于维持经过战斗验证的A-10，直到测试和部署更加有效且更实惠的后续工作。<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545371489499-d230ab6a-88c6-49b8-9ed0-fa5750183844.png#width=826" alt><br><a name="hnuaxl"></a></p>
-<h4 id="海军的F-35不适合航母作战"><a href="#海军的F-35不适合航母作战" class="headerlink" title="海军的F-35不适合航母作战"></a><a href="#hnuaxl"></a>海军的F-35不适合航母作战</h4><p>海军F-35变型必须具备的最重要特征之一是它必须能够从航空母舰上运行。否则，设计飞机的专业海军版本有什么意义？但海军自己的飞行员说F-35C并不适用于这些船只。<br><br>发展测试显示，弹射器发射期间发生了大量的抽搐 - 称为“过度垂直振荡” - “使F-35C在操作上不适合航母作战，”在最新一套船舶试验期间在美国乔治华盛顿号航空母舰上进行训练的舰队飞行员表示“。<br><br>从承载的甲板上起飞的飞机需要大力提升以达到提升和起飞所需的速度，这是通过安装在驾驶舱内的弹射器实现的。<br><br>在喷气式飞机发射之前，飞行员增加发动机推力。为了防止喷气式飞机在发射前从船的前部滚落，它们会被挡住杆挡住。当推力被压下时，推力会压缩齿轮的支柱。根据2017年1月泄露给内部防御的海军报告，当释放后退杆并且发射喷射时，F-35C的支柱被卸下，导致机头上下弹跳，震动飞行员。<br><br>这里的严重程度可以在这里清楚地看到：<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545371535128-4beffe90-8534-40a6-aaad-ca44e7de7567.png#width=660" alt><br>这个问题对飞行员来说很危险。头盔式显示器非常重，目前重量为5.1磅，当它与弹射器发射时产生的力相结合时，额外的重量会使飞行员的头部前后晃动。在70％的F-35弹射器发射中，飞行员报告头部和颈部出现中度至重度疼痛。<br><br><br>发射也会影响头盔的对齐。飞行员报告说难以读取头盔内的重要信息，他们必须在进入空中后重新调整它。飞行员说，这是不安全的，因为它发生在任何飞行的最关键阶段之一。飞行员试图通过收紧身体安全带来抵抗振荡，但这会在紧急情况下难以触及紧急开关和弹射手柄，从而产生新的问题。</p>
-<p>F-35的项目经理克里斯托弗·波格丹中将表示，他将尝试对F-35C的前起落架支柱进行短期调整以解决问题，但实际上可能需要长期修复，例如重新设计整个前起落架组件。这种情况不太可能在2019年之前开始 - 同年海军已表示有意宣布F-35C准备战斗。</p>
-<p>到那时，海军很可能在舰队中拥有36架F-35C，其中每架都需要更换前起落架，但需要确定成本。</p>
-<p>F-35C的问题不仅限于飞行的开始。就像喷气式飞机需要从航空母舰起飞一样，它也需要在着陆期间停止帮助。这是通过横跨甲板的电缆实现的。当一架喷气式飞机降落时，飞机上的一个挂钩抓住其中一根电缆，该电缆使用船内的液压发动机吸收能量并使喷气机停止运转。</p>
-<p><em>他的测试团队发现F-35C的制动装置上的钩点磨损速度比预期快三倍。 虽然它应该至少持续15次着陆，但在测试中持续时间最长的一个钩点是5。 据报道，该计划正在考虑重新设计制动装置以使其更加坚固。</em><br><br><br>F-35C还有待解决的另一个结构性问题涉及机翼。在试飞期间，工程师发现机翼末端的强度不足以支撑AIM-9X短程空对空导弹的重量。 F-35C的机翼两端折叠，以便在飞机载体的甲板和机库的拥挤范围内节省空间。当导弹经过机翼折叠时，当飞机难以操纵和着陆时，重量超过结构限制。<br><br>根据DOT＆E的说法，在问题得到解决之前，“F-35C对于导弹运输和就业将具有有限的飞行范围，这将对机动，[和]近距离接合产生不利影响。”这甚至比F-35的其他固有机动限制。问题非常严重，波格丹将军承认F-35C将需要一个完全重新设计的外翼。<br><br>发射和恢复飞机只是海军航空挑战的一部分。维护人员还必须能够在海上保持喷气式飞机的飞行性。机组必须能够执行的关键维护功能之一是发动机拆卸和安装（R＆I）。 2016年8月，Crews在乔治华盛顿号航空母舰上进行了第一次R＆I概念验证演示。<br><br>机组人员需要55个小时来完成发动机交换，这比在传统飞机上执行相同操作所花费的时间要长得多。例如，F / A-18上的发动机可以在六到八个小时内更换。 DOT＆E指出，为了安全起见，机组人员花时间执行所有必要步骤，并指出随着机组人员获得更多经验，未来的迭代可能会更快一些。<br><br>也就是说，机组人员充分利用了整个机库海湾空间，这是他们乘坐飞机机翼时不会有的东西。这可能加快了演示期间的过程。</p>
-<p>更换F-35中的发动机比F / A-18更复杂。工作人员必须拆除几个皮肤面板和一个称为尾钩支架的大型结构件，以便拆卸发动机，从而在维护机库中需要更多空间。这些部件以及与之相关的所有管子和电线必须妥善储存，以防止损坏，同时还要占用额外的空间。</p>
-<p>维护人员必须在存在全空气翼的情况下执行此过程，以便了解系统是否在操作上合适。并且该过程必须变得非常有效，以产生战斗所需的出击率。</p>
-<p>在乔治华盛顿试验期间发现的另一个问题涉及F-35C计算机生成的大量数据文件的传输。</p>
-<p>F-35计划依赖于自动后勤信息系统（ALIS），这是庞大而复杂的计算机系统，所有F-35都用于任务规划，维护诊断，维护计划，零件订购等。为了正常工作，系统必须在船上和船外通过网络移动大量数据。</p>
-<p>在华盛顿试验期间，机组人员必须通过船舶的卫星网络传输中等大小的200 MB ALIS文件。花了两天时间。带宽限制和不稳定的连接极大地阻碍了数据的传输。许多这样的变速器 - 甚至更大的变速器 - 将需要支持整个机翼。<br><br>此外，舰队经常在“排放控制”或无线电静音期间运行，以避免将其位置泄露给敌人，进一步阻碍了保持F-35飞行所需的数据传输。</p>
-<p>乔治华盛顿的审判产生了大量令人讨厌的新闻报道。至少在公开场合，海军声称成功了。然而，有证据表明海军对该计划不太兴奋，因为上面讨论过这类问题，当然还有成本 - 服务购买F-35C的速度很慢。</p>
-<p>虽然空军准备在2017年购买44架新的F-35，但海军只会买两架。海军还在其2017年无资金优先顺序（“愿望”）名单中要求另外增加14架F / A-18，并再增加两架F-35C。此外，这是服务没有急于过早宣布战斗准备的唯一变种。<br><br>五角大楼的一些领导人表示，海军的变种是唯一一个受特朗普政府下令审查的威胁，而国防部长詹姆斯马蒂斯目前正在进行审查。这可能证明是该计划的一部分，其中寻求F-35的可行替代方案。<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545371695072-55a96b06-342b-48ae-9d76-cf8961517f70.png#width=826" alt><br><a name="w1shub"></a></p>
-<h3 id="关于F-35唯一隐形的东西-价格标签"><a href="#关于F-35唯一隐形的东西-价格标签" class="headerlink" title="关于F-35唯一隐形的东西 - 价格标签"></a><a href="#w1shub"></a>关于F-35唯一隐形的东西 - 价格标签</h3><p>自大选以来，人们对F-35的进一步采购和可负担性表示了很多看法。唐纳德·特朗普总统在就职典礼前对一系列推文中的价值提出了质疑，但当他宣布洛克希德·马丁从最新一批F-35的价格中削减6亿美元时，他希望该计划能够大幅改变。 。<br><br>洛克希德·马丁公司及其在日本特许厅内的合作伙伴已表示价格会降低，这主要是由于制造业的效率提高。<br><br>从表面上看，这对美国纳税人来说似乎是一个巨大的发展，但现在任何“节省下来”的钱最终都会花费更多，因为我们购买了一堆未经测试的原型，后来需要进行大量昂贵的改造。如果洛克希德·马丁公司和联合计划办公室能够在计划完成测试和评估过程之前批准对400架F-35进行为期三年的“大量购买”，那么这个问题就更加复杂了。<br><br>报刊上报的价格通常基于空军常规起飞变型F-35A的成本 - 这三种变型中成本最低。此外，这个成本数字只是对未来成本的估计，假设从现在开始，F-35的一切都将完美运行 - 这不太可能，因为该计划进入其技术最具挑战性的测试阶段。<br><br>正如最新的DOT＆E报告显示，在F-35准备战斗之前，该计划还有很长的路要走。<br><br>联合计划办公室最近声称F-35A的价格在2016财年合同中每个都低于1亿美元。然而，在2016财年的立法中，国会为每架F-35A拨款1.196亿美元。<br><br>即使这个数字也不能说明整个故事 - 它只包括采购成本，而不是将F-35A带到最新批准的配置所需的成本，以及用于容纳和操作F-35A的额外军事建筑成本。<br><br>当然，1.196亿美元的价格标签不包括开发和测试F-35A的任何研发费用。海军陆战队F-35B和海军F-35C的2016年仅生产成本分别为1.664亿美元和1.852亿美元。<br><br>首先，它们不包括修复最近，当前和未来测试中发现的设计缺陷所需的成本 - 这不是一笔不大的金钱。它们也不包括计划的现代化努力的成本，例如飞机的第4座，将来将被纳入所有F-35A。政府问责办公室估计，该计划将在未来六年内至少花费30亿美元用于现代化工作。<br><br>据GAO称，例如，到目前为止所解决的一些问题的修改费用为4.267亿美元。这些飞机中的每一架都已经过修改，将来需要更多。空军已经承认必须改装交付给它和运营舰队的所有108架F-35A。随着已知问题得到修复并且发现新问题，这些成本将继续增长，并且它们是每架飞机成本的组成部分。<br><br>随着程序从测试的简单部分 - 开发或实验室测试 - 转移到未来几年的关键作战（运行）测试期，将会发现更多问题。<br><br>一个很好的例子发生在2016年底，当时工程师在F-35的油箱内发现了碎片。经过仔细检查，他们发现包裹在冷却剂管线周围的绝缘材料已经解体，因为分包商未能使用适当的密封剂。并且，当GAO估计将花费4.267亿美元来修复已经在仓库中的F-35A中的一些已知问题时，尚未发现冷却剂管线绝缘问题。<br><br>必须在已经生产和购买的飞机机队中设计，测试和实施对此问题和其他问题的修复。<br>其次，JPO，洛克希德马丁公司和五角大楼所使用的不完整的单位成本估算 - 他们所谓的“飞行​​”单位成本 - 不包括购买支持设备（工具，ALIS计算机，培训模拟器，初始备件）需要使F-35A机队能够运行。从字面上看，国防部的“飞行”成本并没有购买能够进行飞行操作的系统。<br><br>五角大楼已经承诺购买346架F-35，因为该计划已进入美国国防部委婉地称之为“低速初始生产”。<br><br>798喷气式飞机服务将在2018年至2021年期间大约450架次购买的798架喷气式飞机将占总采购量的近33％……所有这些都在该计划完成初步运行测试之前，并且发现了什么按预定工作，什么没有吨。<br><br>值得注意的是，真正的问题发现过程只会在2019年按计划开始运行测试时开始，或者更有可能在2020年或2021年开始，当时运营代表性飞机实际上已准备好进行测试。空军已经开始修改的108架飞机只是冰山一角，这个数字不包括数百架海军陆战队和海军飞机的类似修改。<br><br>拟议的“大宗购买”提出了许多其他问题。也许Gilmore所提出的最相关的问题是：<br><br>Block Buy是否与政府主张的“购买前飞行”方法一致，以及“美国法典”第10篇中规定的运营测试要求的理由，还是被视为“全额” “IOT＆E之前的决定是否已经完成并向国会报告，不符合法律规定？<br><br>只要符合某些标准，联邦法律允许多年合同购买政府财产。国会通常每年批准大多数武器购买计划，以确保对计划进行适当的监督，并保持对承包商表现令人满意的激励。<br><br>根据Title 10 U.S.C.，Section 2306b，对于有资格进行多年采购的计划，合同必须促进国家安全，应该节省大量资金，减少几率，并且设计稳定。 F-35似乎在前三个标准中至少有两个失败，并且肯定是第四个失败了。<br><br>关于F-35成本问题的一个重要部分是购买大型飞机是否合理，并担心以后修复尚未发现的问题的成本。这肯定是增加成本的好方法，但在临时中隐藏它。</p>
-<p><em>实际操作F-35机队的成本仍然存在。 美国国防部估计，该计划50年的所有培训和运营运营 - 假设每架飞机的寿命为30年 - 将为1万亿美元，使购买和运营F-35的成本至少达到1.4万亿美元。</em><br><br><br>操作F-35的成本非常高，因为飞机与其他飞机相比非常复杂。根据空军自己的数据，2016财年，每架F-35飞机平均飞行163小时，每小时飞行4426美元。<br><br>为了进行比较，在同一年，机队中的每架F-16飞机平均飞行258小时，每飞行小时20,398美元。 A-10平均每小时飞行358小时，每小时17,227美元。虽然这些时间从未经过独立审核，而且无法确定它们是否完整，但现有数据表明F-35的飞行成本是飞机的两倍以上。<br><br>五角大楼隐藏F-35真正成本的一个更重要的方式是它推迟到第4区块开发和交付应该在第3区提供的许多关键能力。目前已计划但未包括根据政府问责局的数据，在F-35的官方成本估算中 - 或者甚至作为一个完整的单独收购计划 - 是一个由四部分组成的Block 4升级，至少耗资30亿美元。<br><br>此外，DOT＆E报告称“有17个记录的失败，无法满足规范要求，程序承认并打算寻求合同规范变更，以便结束SDD [系统开发和演示]。”<br><br>这意味着F-35计划无法提供17种关键作战能力，而且计划办公室正试图给洛克希德·马丁公司提供交付通行证，直到后期的高级开发过程。<br><br>虽然没有人公开声明现在不会包括哪17种战斗能力，但它们都是F-35应该拥有的所有功能，并且美国人民正在为此付出全价。因此，我们将来会支付更多的钱来升级现在购买的F-35，以便他们能够执行我们已经支付的功能。<br><br>2016年F-35A的1.196亿美元单位成本严重低估，多年来不会充分了解额外成本。那些假装2016年成本低于1亿美元的人只是在欺骗公众。</p>
-<p><a name="q9x6ix"></a></p>
-<h3 id="战斗力有效"><a href="#战斗力有效" class="headerlink" title="战斗力有效"></a><a href="#q9x6ix"></a>战斗力有效</h3><p>在每一流的空军中，出战优秀的战斗机飞行员要求他们每月至少飞行30个小时来磨练和提高他们的战斗技能。这就是F-35缺乏战斗力的最大原因：由于飞机前所未有的复杂性和相应的可靠性和维护负担，飞行员根本无法经常飞行以获得足够的实际飞行时间来发展他们需要的战斗技能。<br><br>如果飞行员无法获得足够的飞行时间，飞行员技能就会萎缩。即使拥有卓越的技术，训练有素的飞行员也不会受到训练有素的飞行员在飞行不太复杂的飞机上的影响。<br><br>飞行时间不足也会造成危险的安全状况，威胁到飞行员的训练生命。海军陆战队在过去一年中遭遇了九次严重的飞机坠毁事故，造成14人死亡。该军团的顶级飞行员最近表示，撞车事故的飙升主要是由于飞行员没有足够的飞行时间。<br><br>这种趋势将随着F-35而恶化。鉴于其固有的复杂性和相关的成本，F-35极不可能经常飞行以获得成功的飞行员。<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545371909219-5c3e7d63-0c79-41a3-a751-dc3afbf49136.png#width=826" alt><br><a name="ebawca"></a></p>
-<h3 id="F-35可以在需要的时候到达吗？"><a href="#F-35可以在需要的时候到达吗？" class="headerlink" title="F-35可以在需要的时候到达吗？"></a><a href="#ebawca"></a>F-35可以在需要的时候到达吗？</h3><p>即使这是一个很大的中频，F-35也可以像洛克希德·马丁所说的那样在战斗中表现出来 - 更不用说F-16，A-10和F-18的替代品应该如何表现 - 如果喷气式飞机不能满足他们需要的地方，那么该计划仍然毫无价值。<br><br>有几个因素导致难以及时部署F-35中队。一个是F-35的任务规划系统，它是ALIS网络的一部分。在完成战斗任务的细节 - 例如目标，预测的敌方雷达位置，要飞行的路线和武器装载 - 之后，需要将数据编程到飞机中。将该信息加载到墨盒上，然后将墨盒插入喷嘴中。<br><br>F-35飞行员在Offboard Mission Support（OMS）系统上对这些弹药筒进行编程。<br><br>DOT＆E发现的问题是，飞行员一直认为用于支持任务规划的系统“繁琐，无法使用，并且不适合操作使用。”他们报告说，构建任务计划文件所需的时间太长，以至于扰乱了超过一架飞机的任务计划周期。</p>
-<p><em>这意味着当几架F-35接收任务时，如果分配了大量的计划时间，他们就无法足够快地完成所有飞行前过程以按时启动。</em><br><br><br>2016年2月和3月，空军在加利福尼亚的爱德华兹空军基地向爱达荷州的山地空军基地进行了部署演示，对F-35计划进行了重大测试。这是该服务首次尝试使用更新ALIS的版本 - 基于地面的计算机系统，用于诊断机械问题，订购和跟踪更换零件，并指导维修人员进行维修。<br><br>无论何时中队部署，都必须在部署F-35的任何地方建立一个ALIS枢纽。 Crews建立了一个ALIS标准操作单元（SOU），它由几个计算机设备组成。技术人员将使用这些设置一个小型主机，然后必须将其插入全球范围的ALIS网络。<br><br>工作人员花了几天时间让ALIS在本地基础网络上工作。经过大量的故障排除后，IT人员发现他们必须在Internet Explorer上更改多个设置，以便ALIS用户可以登录系统。这包括降低安全设置，DOT＆E以值得称道的轻描淡写的方式指出这是“可能与所需的网络安全和网络保护标准不兼容的行为”。<br><br>ALIS数据必须在中队所在的任何地方。在飞机被允许执行飞行任务之前，机组人员必须将数据从本垒站的中队主ALIS计算机传输到部署的ALIS SOU。在Mountain Home部署期间，此过程花了三天时间。这比之前的演示要快，但洛克希德·马丁为演习提供了8位额外的ALIS管理员。<br><br>目前还不清楚承包商或空军是否会在未来的部署中包含这种级别的支持。当演习结束时中队重新部署回爱德华兹时，管理员花了四天时间将所有数据传回主ALIS计算机。这种延迟将限制F-35在危机时刻快速部署的能力。</p>
-<p><em>即使喷气机能够定位足够的时间来应对危机，长时间上传时间等问题也可能使它们在空中需要时保持在地面上。固定在地面上的飞机是目标，而不是资产。</em></p>
-<p>另一个耗时的过程涉及向每个ALIS标准操作单元添加新飞机。每次将F-35从一个基座移动到ALIS已经启动的另一个基座时，必须将其导入该系统。这需要24小时。因此，当F-35部署到新基地时，整个一天会在处理数据时丢失。并且一次只能上传一架飞机。<br><br>如果整个中队（通常是12架飞机）需要被引导，整个过程将需要将近两周时间，迫使指挥官慢慢将他的F-35飞机投入战斗。<br><br>该计划的关键任务软件也出现延误。如前所述，F-35需要广泛的任务数据负载（MDL），以便飞机的传感器和任务系统正常运行。 MDL在某种程度上包括有关敌人和友好雷达系统的信息。他们发送喷气式传感器的搜索参数，以便他们正确识别威胁。这些需要更新以包含最新信息。它们也适用于每个主要地理区域。<br><br>MDL都在佛罗里达州埃格林空军基地的美国重编程实验室进行编程，然后发送给所有相关的中队。该实验室是整个F-35计划中最重要的组成部分之一。据DOT＆E称，该实验室必须能够“快速创建，测试和优化MDL，并在代表现实情景的压力条件下验证其功能，以确保F-35任务系统的正常运行和飞机的运行效率。战斗以及F-35与Block 3F的IOT＆E。“<br><br>官员们在2012年确定了该实验室管理层的严重缺陷。纳税人在2013年至2016年期间花费了4500万美元来解决这些问题。尽管有警告和额外资金，但实验室的开发仍然受到管理不善的困扰，这种管理不能阻止在当前的基本作战配置中“有效地创建，测试和优化运营飞机的MDL”。<br><br>需要升级实验室以支持F-35上使用的每个软件版本。该实验室目前配置为支持块2B和3i软件版本。 F-35的第一个完全战斗版软件将是Block 3F。该实验室需要进行重大更改以支持此版本，这对于战斗测试是必要的，更重要的是，完全战斗准备就绪。<br><br>实验室远远落后于一些必要的设备甚至尚未购买。例如，该设施还依赖于前面提到的专用射频发生器来重新创造潜在对手可能对F-35使用的那种信号。实验室将使用它们来测试MDL，然后将它们发送到机队飞机上，以确保喷气式飞机的传感器能​​够正确识别它们。<br><br>在急于假装初始作战能力的情况下，空军和海军陆战队实际上已经制造出一架完全未准备好面对敌人的飞机。<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545372059027-ed5f34d0-f86c-471f-bcce-9c165524ebe0.png#width=826" alt></p>
-<p><a name="shztbe"></a></p>
-<h4 id="F-35可靠性问题"><a href="#F-35可靠性问题" class="headerlink" title="F-35可靠性问题"></a><a href="#shztbe"></a>F-35可靠性问题</h4><p>即使一架F-35中队能够到达需要的地方，在需要它的时候，如果它不能飞行任务会有什么好处呢？这是F-35计划中最持久的问题之一。</p>
-<p>该车队的可靠性记录非常糟糕 - 它未能实现许多临时可靠性目标，并且在2016年之前仍然如此。随着该计划进入最重要的运行测试阶段，真正担心飞机会不能经常飞行以满足测试时间表。还有人担心喷气式飞机在召唤战斗服务时能够多久飞行一次。<br><br>“可用性”衡量飞机在现场执行至少一次指定任务的频率。由于大多数飞机在1991年在波斯湾的沙漠风暴行动中取得了成功，这些服务努力维持其飞机可持续作战行动的80％可用率。这与测试机队为满足这一需求所需的速度相同。 IOT＆E时间表。<br><br>到目前为止，F-35计划甚至无法实现其60％可用性的临时目标。</p>
-<p>2016年度车队平均可用率为52％。这是近几年来的一次改善，但DOT＆E警告称“增长既不稳定也不连续。”而且增长曲线落后于进度。将用于运行测试的飞机需要配备专门的仪器来测量性能。目前有17架喷气式飞机驻扎在加州爱德华兹空军基地。 2016年前9个月，该测试车队的平均可用率为48％。</p>
-<p>有几个因素拖累了F-35机队的可用率。许多飞机不得不被送回仓库进行大修，这是该程序高并发水平的结果。例如，15 F-35A需要被送回以纠正制造缺陷，其中喷射燃料箱内的泡沫绝缘材料使铸造碎屑劣化成燃料。<br><br>其他大修是必要的，因为存在基本的设计缺陷，包括不满足寿命要求的主要结构部件，还有一些是由于飞机首次建造时已知缺乏的战斗能力设计的持续改进所驱动。 ”</p>
-<p>即使飞机没有进行大修，它们也不会飞得太多。在可用的飞机中，它们可以分为两类：任务能力和完全任务能力。使命能力的飞机是那些准备进行至少一种任务的飞机，即使它只是一项训练任务;具有完全任务能力的飞机是准备执行飞机宣布能够执行的所有任务的飞机。后者是战斗准备飞机的真正衡量标准。</p>
-<p>Mission Capable和Full Mission Capable F-35的可用率在去年有所下降。 2016财年的机队任务能力率为62％，低于2015财年的65％[DG3]。完全任务能力率仅为29％，而前一年为46％。</p>
-<p>Gilmore的报告引用了分布式孔径系统，电子战系统，电光靶向系统和雷达等主要作战系统的失效，这是导致能力下降的最高驱动因素。值得注意的是，这些系统据说为F-35提供了独特的作战能力，这就是将F-35保持在地面上的系统 - 没有任何能力。<br><br>根据最近发布的年度运营成本图表，平均而言，2016年空军的F-35飞机每周只能飞行两架次。相比之下，F-16平均每周近三架次，A-10机队平均近四架次。 F-35需要大量的维护才能实现。</p>
-<p>虽然官方发布的公开声明说维护人员在喷气式飞机上工作是多么容易，但DOT＆E报告描绘了不同的画面。</p>
-<p>供应链问题已经迫使维护者蚕食飞机;从一架飞机上取下部件安装在另一架飞机上，以确保至少有一架飞机飞行。食人化具有增加进行修复的总时间的效果，因为它增加了从供体喷射器剥离部件的额外步骤，而不仅仅是从盒子中取出新的或修复过的部件。它还需要将部件安装两次：首先是在修复的喷射器中，然后是在拆卸的喷射器中。</p>
-<p>对于2016财年，维护人员不得不拆掉几乎每10架次飞行一次的部件，这远远超过了计划中每100架次不超过8次拆分行动的不起眼的目标。</p>
-<p>随着产量的增加，供应问题可能会减少，但基本设计问题将持续存在。 一个典型的例子是F-35隐形涂层固有的独特维护要求。 对隐形飞机进行一些修理需要更长的时间，因为需要时间去除低可观察到的材料，修复破损的物体，然后修复隐形皮肤。<br><br>这些修复通常涉及使用需要时间进行化学固化的粘合剂。 其中一些材料可能需要长达168小时 - 一整周 - 才能完全干燥。</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545372168522-b9bd672b-4a02-4ff4-b2f7-1b713cb14d88.png#width=826" alt></p>
-<p><a name="rt9ngs"></a></p>
-<h3 id="官员隐瞒F-35问题和纳税人延误的真相"><a href="#官员隐瞒F-35问题和纳税人延误的真相" class="headerlink" title="官员隐瞒F-35问题和纳税人延误的真相"></a><a href="#rt9ngs"></a>官员隐瞒F-35问题和纳税人延误的真相</h3><p>当洛克希德·马丁在17年前首次赢得合同时，预计F-35将在2008年开始运行测试。一旦他们未能达到这一目标，2017年应该是战斗测试过程开始的重要一年。我们现在知道，这个过程几乎肯定会被推迟到2019年……甚至2020年。<br><br>DOT＆E报告的第一页列出了F-35的13个未解决的主要问题，这些问题将阻止该计划于2017年8月开始进行战斗测试。但你不会从负责官员的公开评论中得知这些问题。该程序。<br><br>在2月份众议院军事委员会小组委员会作证时，尽管DOT＆E报告在不到一个月前发布，但官员却没有向国会提出任何这些问题。<br><br>F-35的挑战规模在今年的DOT＆E分析中很容易量化。根据该报告，F-35仍然有276个“至关重要的”缺陷 - 这些必须在开发过程结束之前修复，因为它们可能“导致IOT＆E或战斗期间的操作任务失败”。<br><br>在276个中，有72个被列为“优先级1”，这些服务关键缺陷会阻止服务在固定之前部署喷气式飞机。<br><br>关于F-35在战斗中的缺点已经有很多，但基本机身仍然存在结构性问题。这方面的一个例子是喷气机的垂直尾翼和机身之间的连接接头失效。这是一个长期存在的问题，因为在原始设计中发现了缺点。<br><br>工程师在2010年的早期结构测试中发现用于加固接头的套管过早磨损。该接头在2014年进行了重新设计并纳入新飞机。        2016年9月，检查员发现重新设计的接头在经过250小时的飞行测试后失败了 - 远远低于JSF合同中规定的8,000个工作小时数。<br><br>2016年F-35任务系统的测试继续落后于计划。项目经理确定并预算基线测试点，或“在特定飞行测试条件下的性能离散测量”。<br><br>这些用于确定系统是否符合合同规范。测试团队还会出于各种原因添加非基线测试点，以全面评估整个系统。示例包括添加测试点以准备稍后的更复杂的测试，在软件更新后重新测试系统以确保新软件不会改变先前的结果，或“发现测试点”，这些测试点被添加以识别在其他测试期间发现问题的根本原因。<br><br>该计划为2016年F-35的任务系统预算了3,578个测试点。测试团队无法完成所有测试，完成3,041，同时还在全年增加了250个未预算的测试点。<br><br>尽管计划有所下滑，但F-35计划办公室已表示希望跳过许多所需的测试点，而是依赖测试以前飞行的数据 - 测试飞机使用早期软件版本 - 作为升级系统软件工作的证据。但DOT＆E警告说，较新的软件版本可能表现不同，使早期的结果没有实际意义。程序管理员基本上想要宣布开发测试过程并继续进行操作测试，即使他们还没有完成所有必要的步骤。<br><br>这是一个风险很大的举动。 DOT＆E警告说遵循这个计划。</p>
-<p><em>“可能会导致IOT&amp;E失败，导致需要进行额外的后续运行测试，最重要的是，将Block 3F运送到能力严重不足的现场 - 如果需要F-35，该部门必须具备的能力 与当前威胁作斗争。“</em><br><br><br>程序办公室似乎在试图测试许多可能使F-35如此不可或缺的能力方面拖延了下来。<br><br>一个例子是开发验证模拟器（VSim）需要多长时间。洛克希德·马丁公司的工程师在2001年负责创建VSim设施，该设施旨在成为一个超现实的，经过全面测试验证的“人在环，任务系统软件在环仿真，旨在满足Block 3F IOT＆E的运行测试要求。“<br><br>也就是说，它旨在在虚拟现实中测试那些复杂而严谨的场景，这些场景在现实生活中不可能或太危险，而不是真正的战争。<br><br>承包商远远落后于建设计划，JPO在2015年放弃了VSim。相反，海军航空系统司令部的任务是建立一个政府运行的联合仿真环境（JSE）来执行VSim的任务。承包商应该提供飞机和传感器模型，但到目前为止“F-35模型的谈判尚未成功。”<br><br>这阻碍了该计划设计虚拟世界，其中F-35和敌方飞机和防御装置在现实世界中相互作用，造成进一步的延误。<br><br>没有经过适当准备的JSE，F-35无法完全测试。必须根据飞行试验期间收集的真实数据设计模拟，否则模拟只会测试承包商所说的喷气机可以做什么。<br><br>例如，真正的F-35必须飞越一个测试范围，我们的敌人使用相同的雷达系统是活跃的，以便它可以收集有关喷气式飞机的机载传感器如何反应的数据。该数据用于验证仿真软件。这是一个非常复杂的过程需要时间。正如DOT＆E报道的那样，“此前的努力已经花费了数年时间，因此NAVAIR不太可能及时按计划完成项目，以支持物联网和E。”<br><br>该计划还制定计划，以便在计划最需要时减少测试人员和测试飞机的数量。这些计划将使测试飞机的数量从18个减少到9个，测试人员从1,768减少到600。<br><br>吉尔摩尔在空军国际奥委会声明后不久报道该计划将无法在必要的最终配置中生产足够的F-35以进行操作测试。<br><br>“由于在开发测试期间需要很长的程序延迟和发现，因此需要进行大量修改，以便将装配过程中连接到飞行测试仪器的OT飞机纳入所需的生产代表配置中，”报告指出。<br><br>接着说，对23架飞机进行了超过155次改装，专门用于即将进行的战斗（“作战”）测试，其中一些甚至尚未签约，这意味着IOT和E的开始将更进一步延迟。</p>
-<p><em>联合计划办公室不仅没有遵守其同意的运行测试计划，而且未能资助和测试进行测试所必需的设备。 这包括没有资金用于飞行测试数据采集记录和遥测舱，这是一种安装在F-35上的仪器，用于模拟飞机的武器。</em><br><br><br>这对于报告和分析每个模拟武器射击的结果至关重要。 在飞机在接合和武器测试期间飞行的条件下，在吊舱功能和安全性被清除之前，不能进行此类测试。<br><br>五角大楼和承包商是否会继续忽视有关F-35在测试中的表现以及看似无休止的延误的令人不快的信息，并试图在美国人民和他们的心中产生错误的印象，还有待观察。政策制定者。<br><br>在最近特朗普总统和五角大楼之间的交流中，似乎没有人在日本特别行政区引导总统注意除波格丹将军以外的任何人。 很明显，他没有和任何批评该计划的人谈过，比如Gilmore。 根据这份报告的结果，如果他有，那么很难看出任何人都可以诚实地说F-35是“太棒了”。</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545372354038-3b796934-db9d-4360-a02c-bc95e017fa8c.png#width=826" alt></p>
-<p><a name="solnez"></a></p>
-<h4 id="向前进"><a href="#向前进" class="headerlink" title="向前进"></a><a href="#solnez"></a>向前进</h4><p>DOT＆E的最新报告更加证明F-35计划将在未来几年继续大量耗费时间和资源，并将为我们的武装部队提供一台二战战斗机，其执行任务不如它本来要取代的“传统”飞机。上天捍卫国家的男男女女应该得到更好的待遇。<br><br>尽管在华盛顿有传统智慧，但服务并不一定要坚持使用F-35。其他选项确实存在。<br><br>1.为了填补空对空中的近期空洞，启动一项计划，对所有可用的F-16A和F-18进行翻新和升级，使用寿命更长的机身和更高的推力F-110-GE- 132（F-16）和F-404-GE-402（F-18）发动机。使用功能更强大的现成电子系统升级其电子系统。</p>
-<p>这将使我们的战斗机在空对空作战中比后来的F-16和F-18型号或F-35更有效。如果需要增加力量，从boneyard添加机身。最重要的是，将飞行员训练时间提高到每月30小时的最低可接受水平，部分原因是现在不购买欠发达的F-35而节省了资金。</p>
-<p>2.为了填补近距离空中支援部队中更为严重的近期空洞，完成空军拒绝重新训练的100架A-10的重绕，然后通过整修/扩大现有的仅272架A-10的力量。将boneyard中所有可用的A-10重新调整为A-10C标准。</p>
-<p>3.立即进行三个新的竞争性原型飞行计划，设计和建造一个更致命，更生存的近距离空中支援飞机，以取代A-10，并设计和建造两个不同的空对空战斗机，这些战斗机更小，更具战斗力 - 比F-16，F-22和F-18更有效。对所有配备雷达导弹和隐身对抗措施的合格敌人进行测试。<br><br>这些程序应该遵循20世纪70年代轻型战斗机和A-X计划的模式，特别是在实弹，现实情景竞争飞越测试方面。这些计划产生了F-16和A-10两架无可争议的高效飞机，每架飞机都比当时五角大楼的首选飞机便宜。他们在不到10年的时间内进行了测试，但不超过25年。</p>
-<p>4.绝对最低限度，F-35测试程序已经到位，JPO和Gilmore同意必须执行以便在进一步生产之前理解这架飞机能够胜任和不能胜任的事情。这意味着暂停进一步的F-35生产，直到这些测试完成并诚实地报告给国防部长，总统和国会。</p>
-<p><a name="9mgopz"></a></p>
-<h4 id="结论"><a href="#结论" class="headerlink" title="结论"></a><a href="#9mgopz"></a>结论</h4><p>F-35计划办公室已达到关键决策点。 现在需要采取大胆行动来挽救联合攻击战斗机这样的国家灾难。</p>
-<p>政府应继续审查F-35计划。 但官员们不应该只是与将军和高管交谈，因为他们没有动力去讲述真相，因为他们在确保程序存活方面有着既得的经济利益 - 无论能力如何。</p>
-<p>正如本报告所示，他们并没有讲述整个故事。 从其他观点来看，还有更多人在食物链中走下坡路。 他们是拥有真实故事的人。 而且，正如上述建议所示，仍有选择。</p>
-<p>对于该计划进行重大改变还为时不晚，正如其维护者所声称的那样。</p>
-<p>Dan Grazier是政府监督项目的Jack Shanahan研究员，这篇文章最初出现在那里。</p>
+<p>HyperparameterHunter就是为了解决这个问题，它做得非常好。目前，该软件包是建立在Skopt之上的，这就是为什么它比Hyperopt慢得多。但是，我知道有人努力将Hyperopt作为HyperparameterHunter的另一个后端包含在内。当发生这种情况时，不会有任何争议，HyperparameterHunter应该是您的首选工具。<br>尽管如此，如果有人感兴趣，我在回购中包含了一个<a href="https://github.com/jrzaurin/ml_pipelines/blob/master/notebooks/skopt_vs_hyperopt.ipynb" target="_blank" rel="noopener">笔记本</a>，比较了Skopt和Hyperopt的表现。<br>让我们现在转到管道流程本身。<br><strong>App Messages Producer</strong><br>这意味着生产管道的哪个部分可能看起来相对简单。因此，我们直接使用Adult数据集生成消息（JSON对象）。<br>在现实世界中，人们将拥有许多可以生成事件的服务。从那里，有一个选项。这些事件中的信息可能存储在数据库中，然后通过常规查询进行汇总。从那里，Kafka服务将消息发布到管道中。或者，这些事件中的所有信息可以直接发布到不同的主题中，“聚合服务”可以将所有信息存储在单个消息中，然后将其发布到管道中（当然，也可以组合使用他们俩）。<br>例如，可能允许用户通过Facebook或Google注册，收集他们的姓名和电子邮件地址。然后他们可能会被要求填写调查问卷，我们会继续收集他们进展的事件。在此过程中的某个时刻，所有这些事件将在单个消息中聚合，然后通过Kafka生产者发布。这篇文章中的管道将从聚合了所有相关信息的点开始。我们这里的消息是Adult数据集中的单个观察。下面我们将包含消息内容的示例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">’&#123;“age”:<span class="number">25</span>,”workclass”:”Private”,”fnlwgt”:<span class="number">226802</span>,”education”:”<span class="number">11</span>th”,”marital_status”:”Never-married”,”occupation”:”Machine-op-inspct”,”relationship”:”Own-child”,”race”:”Black”,”gender”:”Male”,”capital_gain”:<span class="number">0</span>,”capital_loss”:<span class="number">0</span>,”hours_per_week”:<span class="number">40</span>,”native_country”:”United-States”,”income_bracket”:”&lt;=<span class="number">50</span>K.”&#125;’</span><br></pre></td></tr></table></figure>
+<p><a href="https://github.com/jrzaurin/ml_pipelines/blob/master/sample_app.py" target="_blank" rel="noopener">App / Service</a>的核心（图1中最灰色，最左边的框）是下面的代码段：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">df_test = pd.read_csv(PATH/<span class="string">'adult.test'</span>)</span><br><span class="line">df_test[<span class="string">'json'</span>] = df_test.apply(<span class="keyword">lambda</span> x: x.to_json(), axis=<span class="number">1</span>)</span><br><span class="line">messages = df_test.json.tolist()</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">start_producing</span><span class="params">()</span>:</span></span><br><span class="line">	producer = KafkaProducer(bootstrap_servers=KAFKA_HOST)</span><br><span class="line">	<span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">200</span>):</span><br><span class="line">		message_id = str(uuid.uuid4())</span><br><span class="line">		message = &#123;<span class="string">'request_id'</span>: message_id, <span class="string">'data'</span>: json.loads(messages[i])&#125;</span><br><span class="line"></span><br><span class="line">		producer.send(<span class="string">'app_messages'</span>, json.dumps(message).encode(<span class="string">'utf-8'</span>))</span><br><span class="line">		producer.flush()</span><br><span class="line"></span><br><span class="line">		print(<span class="string">"\033[1;31;40m -- PRODUCER: Sent message with id &#123;&#125;"</span>.format(message_id))</span><br><span class="line">		sleep(<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">start_consuming</span><span class="params">()</span>:</span></span><br><span class="line">	consumer = KafkaConsumer(<span class="string">'app_messages'</span>, bootstrap_servers=KAFKA_HOST)</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">for</span> msg <span class="keyword">in</span> consumer:</span><br><span class="line">		message = json.loads(msg.value)</span><br><span class="line">		<span class="keyword">if</span> <span class="string">'prediction'</span> <span class="keyword">in</span> message:</span><br><span class="line">			request_id = message[<span class="string">'request_id'</span>]</span><br><span class="line">			print(<span class="string">"\033[1;32;40m ** CONSUMER: Received prediction &#123;&#125; for request id &#123;&#125;"</span>.format(message[<span class="string">'prediction'</span>], request_id))</span><br></pre></td></tr></table></figure>
+<p>请注意，我们使用测试数据集来生成消息。这是因为我们设计了一个尽可能与真实世界相似的场景（在一定限度内）。考虑到这一点，我们使用训练数据集来构建初始<code>model</code>和<code>dataprocessor</code>对象。然后，我们使用测试数据集生成消息，目的是模拟随时间接收新信息的过程。<br>关于上面的代码片段，简单地说，生产者会将消息发布到管道（<code>start_producing()</code>）中并使用带有最终预测（<code>start_consuming()</code>）的消息。与我们在此描述的管道不同的方式不包括流程的开始（事件收集和聚合），我们也跳过最后，即如何处理最终预测。尽管如此，我们还是简要讨论了一些用例，这些用例可能会在帖子结尾处有用，这将说明最后阶段。<br>实际上，除了忽略过程的开始和结束之外，我们认为这条管道在现实世界中可以使用的管道相当好。因此，我们希望我们的仓库中包含的代码对您的某些项目有用。<br><strong>预测者和训练师</strong><br>该实现的主要目标是实时运行算法并在<strong>不</strong>停止预测服务的<strong>情况下</strong>每_N次_观察重新训练它。为此，我们实现了两个组件，<strong>Predictor</strong>（在repo中）和<strong>Trainer</strong>（）。<code>[predictor](https://github.com/jrzaurin/ml_pipelines/blob/master/predictor.py).py`</code><a href="https://github.com/jrzaurin/ml_pipelines/blob/master/trainer.py" target="_blank" rel="noopener">trainer</a>.py<code>&lt;br /&gt;现在让我们逐一描述图1中显示的数字，使用代码片段作为我们的指南。请注意，下面的过程假设有一个运行</code>initialize.py<code>脚本，因此初始文件</code>model.p<code>和</code>dataprocessor.p`文件存在于相应的目录中。另外，请强调下面的代码包含Predictor和Trainer的核心。有关完整代码，请参阅<a href="https://github.com/jrzaurin/ml_pipelines" target="_blank" rel="noopener">回购</a>。<br><strong>预报器</strong><br>Predictor代码的核心如下所示</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">start</span><span class="params">(model_id, messages_count, batch_id)</span>:</span></span><br><span class="line">	<span class="keyword">for</span> msg <span class="keyword">in</span> consumer:</span><br><span class="line">		message = json.loads(msg.value)</span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span> is_retraining_message(msg):</span><br><span class="line">			model_fname = <span class="string">'model_&#123;&#125;_.p'</span>.format(model_id)</span><br><span class="line">			model = reload_model(MODELS_PATH/model_fname)</span><br><span class="line">			print(<span class="string">"NEW MODEL RELOADED &#123;&#125;"</span>.format(model_id))</span><br><span class="line"></span><br><span class="line">		<span class="keyword">elif</span> is_application_message(msg):</span><br><span class="line">			request_id = message[<span class="string">'request_id'</span>]</span><br><span class="line">			pred = predict(message[<span class="string">'data'</span>], column_order)</span><br><span class="line">			publish_prediction(pred, request_id)</span><br><span class="line"></span><br><span class="line">			append_message(message[<span class="string">'data'</span>], MESSAGES_PATH, batch_id)</span><br><span class="line">			messages_count += <span class="number">1</span></span><br><span class="line">			<span class="keyword">if</span> messages_count % RETRAIN_EVERY == <span class="number">0</span>:</span><br><span class="line">				model_id = (model_id + <span class="number">1</span>) % (EXTRA_MODELS_TO_KEEP + <span class="number">1</span>)</span><br><span class="line">				send_retrain_message(model_id, batch_id)</span><br><span class="line">				batch_id += <span class="number">1</span></span><br></pre></td></tr></table></figure>
+<p><strong>（1a）</strong><code>predictor.py</code>片段中的第12行。预测器将从应用程序/服务接收消息，它将进行数据处理并在接收消息时实时运行模型。所有这些都是使用函数中的现有对象<code>dataprocessor</code>和<code>model</code>对象发生的<code>predict</code>。<br><strong>（1b）</strong><code>predictor.py</code>片段中的第13行。一旦我们运行预测，Predictor将发布<code>publish_prediction()</code>最终将由App / Service接收的result（）。<br><strong>（2）</strong><code>predictor.py</code>片段中的第17-20行。每条<code>RETRAIN_EVERY</code>消息，Predictor都会发布一条“ <em>重新训练</em> ”消息（<code>send_retrain_message()</code>），由培训师阅读。<br><strong>训练者</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">start</span><span class="params">()</span>:</span></span><br><span class="line">	consumer = KafkaConsumer(RETRAIN_TOPIC, bootstrap_servers=KAFKA_HOST)</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> msg <span class="keyword">in</span> consumer:</span><br><span class="line">		message = json.loads(msg.value)</span><br><span class="line">		<span class="keyword">if</span> <span class="string">'retrain'</span> <span class="keyword">in</span> message <span class="keyword">and</span> message[<span class="string">'retrain'</span>]:</span><br><span class="line">			model_id = message[<span class="string">'model_id'</span>]</span><br><span class="line">			batch_id = message[<span class="string">'batch_id'</span>]</span><br><span class="line">			message_fname = <span class="string">'messages_&#123;&#125;_.txt'</span>.format(batch_id)</span><br><span class="line">			messages = MESSAGES_PATH/message_fname</span><br><span class="line"></span><br><span class="line">			train(model_id, messages)</span><br><span class="line">			publish_traininig_completed(model_id)</span><br></pre></td></tr></table></figure>
+<p><strong>（3）</strong><code>trainer.py</code>片段中的第12行。培训师将阅读该消息并使用新的累积数据集（<code>train()</code>）触发重新训练过程。<br>这是原始数据集加上<code>RETRAIN_EVERY</code>新的观察结果。列车功能将独立于<strong>1a</strong>和<strong>1b中</strong>描述的过程运行<em>“初始化实验”</em><strong> </strong>部分中描述的整个过程。换句话说，训练者将重新训练模型，而预测器在消息到达时保持预测。<br>在这个阶段值得一提的是，在这里我们发现我们的实现与将在现实世界中使用的实现之间存在进一步的差异。在我们的实现中，一旦处理了<code>RETRAIN_EVERY</code>多个观察结果，就可以重新训练算法。这是因为我们使用Adult测试数据集来生成消息，其中包括目标列（“ _income_braket_ ”）。在真实的单词中，基于算法输出所采取的动作的真实结果通常在算法运行之后不容易访问，但是一段时间之后。在那种情况下，另一个过程应该是收集真实的结果，一旦收集的真实结果的数量等于<code>RETRAIN_EVERY</code>算法将被重新训练。<br>例如，假设此管道实现了电子商务的实时推荐系统。我们已经离线训练了一个推荐算法，目标列是我们的用户喜欢我们建议的分类表示：0,1,2和3对于不喜欢或与项目交互的用户，喜欢该项目（例如点击像按钮），将项目添加到他们的篮子，并分别购买该项目。当系统提供建议时，我们仍然不知道用户最终会做什么。<br>因此，随着用户信息在网站（或应用程序）中导航时收集和存储用户信息，第二个过程应该收集我们建议的最终结果。只有当两个进程都收集了<code>RETRAIN_EVERY</code>消息和结果时，才会对算法进行重新训练。<br><strong>（4）</strong><code>trainer.py</code>片段中的第13行。重新训练完成后，将发布带有相应信息的消息（<code>published_training_completed()</code>）。<br><strong>（5）</strong><code>predictor.py</code>片段中的第5-8行。Predictor的消费者订阅了两个主题：<code>[‘app_messages’, ‘retrain_topic’]</code>。一旦它通过“retrain_topic”接收到重新训练完成的信息，它将加载新模型并像往常一样保持过程，而不会在过程中的任何时间停止。<br><a name="647586e9"></a></p>
+<h3 id="如何运行管道"><a href="#如何运行管道" class="headerlink" title="如何运行管道"></a>如何运行管道</h3><p>在配套仓库中，我们已经包含了如何运行管道（本地）的说明。其实很简单。</p>
+<ol>
+<li>启动zookeper和kafka：</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ brew services start zookeeper</span><br><span class="line">==&gt; Successfully started `zookeeper` (label: homebrew.mxcl.zookeeper)</span><br><span class="line">$ brew services start kafka</span><br><span class="line">==&gt; Successfully started `kafka` (label: homebrew.mxcl.kafka)</span><br></pre></td></tr></table></figure>
+<p>2.运行initialize.py：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python initialize.py</span><br></pre></td></tr></table></figure>
+<p>3.在终端＃1中运行预测器（或训练器）：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python predictor.py</span><br></pre></td></tr></table></figure>
+<p>4.在终端＃2中运行训练器（或预测器）：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python trainer.py</span><br></pre></td></tr></table></figure>
+<p>5.在终端＃3中运行示例应用程序</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python samplea_app.py</span><br></pre></td></tr></table></figure>
+<p>然后，一旦处理了N条消息，您应该看到如下内容：</p>
+<p><strong>右上方终端</strong>：我们重新训练了模型，Hyperopt已经进行了10次评估（在实际练习中，这些应该是几百次）。<strong>左上方终端</strong>：一旦对模型进行了重新训练和优化，我们就会看到预测器如何加载新模型（在新LightGBM版本的恼人警告消息之后）。<strong>底部终端</strong>：服务照常进行。<br><br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1552645079397-f02448b1-2084-4a1b-b5d5-0b51d8af3dc2.png#align=left&amp;display=inline&amp;height=557&amp;name=1_xIT4U_OODiPtDuiPsCbyXw.png&amp;originHeight=746&amp;originWidth=1000&amp;size=347205&amp;status=done&amp;width=746" alt="1_xIT4U_OODiPtDuiPsCbyXw.png"></p>
+<p>一些潜在的用例<br>以下是（很多）其他一些潜在用例。<br>实时调整在线旅程<br>让我们考虑出售一些商品的电子商务。当用户浏览网站时，我们会收集有关其行为信息的活动。我们之前已经培训了一种算法，我们知道在10次交互之后，我们可以很好地了解客户是否最终会购买我们的产品。此外，我们也知道他们可能购买的产品可能会很昂贵。因此，我们希望“在旅途中”定制他们的旅程，以促进他们的购物体验。这里的定制可能意味着什么，从缩短行程到改变页面布局。<br>2. 电子邮件/致电您的客户<br>与之前的用例类似，我们现在假设客户决定停止旅程（无聊，缺乏时间，可能太复杂等）。如果算法预测该客户具有很大的潜力，我们可以立即使用像本文所述的管道，或者使用受控延迟，发送电子邮件或调用它们。<br>下一步<br>记录和监控：在即将发布的帖子中，我们将通过MLFlow在管道记录和监控功能中插入。与HyperparameterHunter一起，该解决方案将自动跟踪模型性能和超参数优化，同时提供可视化监控。<br>流量管理：此处描述的解决方案以及相应的代码已经过设计，因此可以在笔记本电脑中轻松地在本地和手动运行。然而，人们会认为在现实生活中，这将需要大规模运行云，而不是手动（请）。在那个阶段，如果我们可以使用涵盖整个机器学习工作流程的完全托管服务，那将是理想的，因此我们不需要关心维护服务，版本控制等。为此目的，我们将使用Sagemaker，它是构建的正是为了这个目的。</p>
 
           
         
@@ -2401,7 +2383,7 @@
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -2447,7 +2429,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-count">32</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

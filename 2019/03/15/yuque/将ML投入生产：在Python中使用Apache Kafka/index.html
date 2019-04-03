@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="我们将说明如何使用一系列工具（即Kafka，MLFlow和Sagemaker）来帮助生产ML。为此，我们将设置一个简单的场景，我们希望它类似于一些真实用例，然后描述一个潜在的解决方案。可以在此处找到包含所有代码的伴随仓库。 场景公司使用一系列服务收集数据，这些服务在用户/客户与公司的网站或应用程序交互时生成事件。当这些交互发生时，算法需要实时运行，并且需要根据算法的输出（或预测）采取一些立即行动。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="将ML投入生产：在Python中使用Apache Kafka">
+<meta property="og:url" content="http://zhos.me/2019/03/15/yuque/将ML投入生产：在Python中使用Apache Kafka/index.html">
+<meta property="og:site_name" content="武德">
+<meta property="og:description" content="我们将说明如何使用一系列工具（即Kafka，MLFlow和Sagemaker）来帮助生产ML。为此，我们将设置一个简单的场景，我们希望它类似于一些真实用例，然后描述一个潜在的解决方案。可以在此处找到包含所有代码的伴随仓库。 场景公司使用一系列服务收集数据，这些服务在用户/客户与公司的网站或应用程序交互时生成事件。当这些交互发生时，算法需要实时运行，并且需要根据算法的输出（或预测）采取一些立即行动。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1552644337722-6e53ed5f-2e63-41eb-bddd-1d1968e90f10.png#align=left&display=inline&height=443&name=1___golwnXpxecbplKvGqlPA.png&originHeight=594&originWidth=1000&size=180599&status=done&width=746">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1552645079397-f02448b1-2084-4a1b-b5d5-0b51d8af3dc2.png#align=left&display=inline&height=557&name=1_xIT4U_OODiPtDuiPsCbyXw.png&originHeight=746&originWidth=1000&size=347205&status=done&width=746">
+<meta property="og:updated_time" content="2019-04-03T14:28:47.419Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="将ML投入生产：在Python中使用Apache Kafka">
+<meta name="twitter:description" content="我们将说明如何使用一系列工具（即Kafka，MLFlow和Sagemaker）来帮助生产ML。为此，我们将设置一个简单的场景，我们希望它类似于一些真实用例，然后描述一个潜在的解决方案。可以在此处找到包含所有代码的伴随仓库。 场景公司使用一系列服务收集数据，这些服务在用户/客户与公司的网站或应用程序交互时生成事件。当这些交互发生时，算法需要实时运行，并且需要根据算法的输出（或预测）采取一些立即行动。">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1552644337722-6e53ed5f-2e63-41eb-bddd-1d1968e90f10.png#align=left&display=inline&height=443&name=1___golwnXpxecbplKvGqlPA.png&originHeight=594&originWidth=1000&size=180599&status=done&width=746">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://zhos.me/2019/03/15/yuque/将ML投入生产：在Python中使用Apache Kafka/">
+
+
+
+
+
+  <title>将ML投入生产：在Python中使用Apache Kafka | 武德</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">武德</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://zhos.me/2019/03/15/yuque/将ML投入生产：在Python中使用Apache Kafka/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Zhos">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="武德">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">将ML投入生产：在Python中使用Apache Kafka</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-15T18:03:41+08:00">
+                2019-03-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>我们将说明如何使用一系列工具（即<a href="https://kafka.apache.org/" target="_blank" rel="noopener">Kafka</a>，<a href="https://mlflow.org/" target="_blank" rel="noopener">MLFlow</a>和<a href="https://aws.amazon.com/sagemaker/" target="_blank" rel="noopener">Sagemaker</a>）来帮助生产ML。为此，我们将设置一个简单的场景，我们希望它类似于一些真实用例，然后描述一个潜在的解决方案。可以在<a href="https://github.com/jrzaurin/ml_pipelines" target="_blank" rel="noopener">此处</a>找到包含所有代码的伴随仓库。<br><a name="c931653c"></a></p>
+<h3 id="场景"><a href="#场景" class="headerlink" title="场景"></a><strong>场景</strong></h3><p>公司使用一系列服务收集数据，这些服务在用户/客户与公司的网站或应用程序交互时生成事件。当这些交互发生时，算法需要<strong>实时</strong>运行<strong>，</strong>并且需要根据算法的输出（或预测）采取一些立即行动。最重要的是，经过_ñ<em>相互作用（或意见）的算法需要重新训练<strong>不停止</strong>的</em>预测_ <em>服务，</em>因为用户将保持互动。<br>对于这里的练习，我们使用了<a href="https://archive.ics.uci.edu/ml/datasets/adult" target="_blank" rel="noopener">成人</a>数据集，其目标是根据年龄，原籍国等来预测个人是否获得高于/低于50k的收入。为了使该数据集适应前面描述的情景，可以假设通过在线问卷/表格收集该年龄，本国等，我们需要预测用户是否实时获得高/低收入。如果收入高，那么我们会立即给他们打电话/给他们发电子邮件。然后，在_N个_新观察之后，我们重新训练算法，同时我们继续预测新用户。<br><strong>解决方案</strong><br>图1是潜在解决方案的图示。为了实现这个解决方案，我们使用了<a href="https://github.com/dpkp/kafka-python" target="_blank" rel="noopener">Kafka-Python</a>（可以在<a href="https://github.com/dpkp/kafka-python" target="_blank" rel="noopener">这里</a>找到一个很好的教程），以及<a href="https://lightgbm.readthedocs.io/en/latest/" target="_blank" rel="noopener">LightGBM</a>和<a href="https://github.com/hyperopt/hyperopt" target="_blank" rel="noopener">Hyperopt</a>或<a href="https://github.com/HunterMcGushion/hyperparameter_hunter" target="_blank" rel="noopener">HyperparameterHunter</a>。<br><br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1552644337722-6e53ed5f-2e63-41eb-bddd-1d1968e90f10.png#align=left&amp;display=inline&amp;height=443&amp;name=1___golwnXpxecbplKvGqlPA.png&amp;originHeight=594&amp;originWidth=1000&amp;size=180599&amp;status=done&amp;width=746" alt="1___golwnXpxecbplKvGqlPA.png"><br>图1. <strong>实时预测ML管道</strong>。以下提供完整描述<br>我们将在本练习中使用的唯一Python“局外人”是<a href="https://kafka.apache.org/" target="_blank" rel="noopener">Apache-Kafka</a>（我们将使用python API Kafka-Python，但仍然需要在您的系统中安装Kafka）。如果你在Mac上，只需使用Homebrew：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install kafka</span><br></pre></td></tr></table></figure>
+<p>这也将安装zookeeper依赖项。<br>如前所述，我们使用了Adult数据集。这是因为我们的目的是说明潜在的ML管道并提供有用的代码，同时保持相对简单。但请注意，此处描述的管道原则上与数据无关。当然，预处理将根据数据的性质而改变，但如果不相同，管道组件将保持相似。<br><strong>初始化实验</strong><br>您可以在我们的<a href="https://github.com/jrzaurin/ml_pipelines" target="_blank" rel="noopener">仓库中</a>找到用于此帖子的代码（以及更多）。在那里，有一个名为的脚本<code>initialize.py</code> 。该脚本将下载数据集，设置目录结构，预处理数据，在训练数据集上训练初始模型并优化该模型的超参数。在现实世界中，这将对应于通常的实验阶段和离线训练初始算法的过程。<br>在这篇文章中，我们希望主要关注管道和相应的组件而不是ML。尽管如此，让我们简单地提一下我们在本练习中使用的ML工具。<br>鉴于我们正在使用的数据集，数据预处理非常简单。我们编写了一个名为的自定义类<code>[FeatureTools](https://github.com/jrzaurin/ml_pipelines/blob/master/utils/feature_tools.py)</code>，可以<code>utils</code>在repo 中的模块中找到。这个类有<code>.fit</code>和  <code>.transform</code>方法将标准化/缩放数字特征，编码分类特征并生成我们称之为“交叉列”，这是两个（或更多）分类特征之间的笛卡尔积的结果。<br>处理完数据后，我们使用LightGBM将模型与Hyperopt或HyperparameterHunter相匹配，以执行超参数优化。可以在<code>train</code>模块中找到与此任务相关的代码，其中可以找到两个脚本<code>[train_hyperop](https://github.com/jrzaurin/ml_pipelines/blob/master/train/train_hyperopt.py).py</code>和<code>[train_hyperparameterhunter](https://github.com/jrzaurin/ml_pipelines/blob/master/train/train_hyperparameterhunter.py).py</code> 。<br>我们可能会在python（<a href="https://scikit-optimize.github.io/" target="_blank" rel="noopener">Skopt</a>，Hyperopt和HyperparameterHunder）中编写一个单独的帖子来比较超参数优化包，但是现在，请知道：如果你想要速度，那么使用Hyperopt。如果您不关心速度并且想要详细跟踪优化例程，请使用HyperparameterHunter。用<a href="https://www.linkedin.com/in/huntermcgushion/" target="_blank" rel="noopener">Hunter</a> McGushion 的话来说，包装的创造者：</p>
+<blockquote>
+<p><em>“长期以来，超参数优化一直是一个耗时的过程，只是指向了进一步优化的方向，然后你基本上不得不重新开始。”</em></p>
+</blockquote>
+<p>HyperparameterHunter就是为了解决这个问题，它做得非常好。目前，该软件包是建立在Skopt之上的，这就是为什么它比Hyperopt慢得多。但是，我知道有人努力将Hyperopt作为HyperparameterHunter的另一个后端包含在内。当发生这种情况时，不会有任何争议，HyperparameterHunter应该是您的首选工具。<br>尽管如此，如果有人感兴趣，我在回购中包含了一个<a href="https://github.com/jrzaurin/ml_pipelines/blob/master/notebooks/skopt_vs_hyperopt.ipynb" target="_blank" rel="noopener">笔记本</a>，比较了Skopt和Hyperopt的表现。<br>让我们现在转到管道流程本身。<br><strong>App Messages Producer</strong><br>这意味着生产管道的哪个部分可能看起来相对简单。因此，我们直接使用Adult数据集生成消息（JSON对象）。<br>在现实世界中，人们将拥有许多可以生成事件的服务。从那里，有一个选项。这些事件中的信息可能存储在数据库中，然后通过常规查询进行汇总。从那里，Kafka服务将消息发布到管道中。或者，这些事件中的所有信息可以直接发布到不同的主题中，“聚合服务”可以将所有信息存储在单个消息中，然后将其发布到管道中（当然，也可以组合使用他们俩）。<br>例如，可能允许用户通过Facebook或Google注册，收集他们的姓名和电子邮件地址。然后他们可能会被要求填写调查问卷，我们会继续收集他们进展的事件。在此过程中的某个时刻，所有这些事件将在单个消息中聚合，然后通过Kafka生产者发布。这篇文章中的管道将从聚合了所有相关信息的点开始。我们这里的消息是Adult数据集中的单个观察。下面我们将包含消息内容的示例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">’&#123;“age”:<span class="number">25</span>,”workclass”:”Private”,”fnlwgt”:<span class="number">226802</span>,”education”:”<span class="number">11</span>th”,”marital_status”:”Never-married”,”occupation”:”Machine-op-inspct”,”relationship”:”Own-child”,”race”:”Black”,”gender”:”Male”,”capital_gain”:<span class="number">0</span>,”capital_loss”:<span class="number">0</span>,”hours_per_week”:<span class="number">40</span>,”native_country”:”United-States”,”income_bracket”:”&lt;=<span class="number">50</span>K.”&#125;’</span><br></pre></td></tr></table></figure>
+<p><a href="https://github.com/jrzaurin/ml_pipelines/blob/master/sample_app.py" target="_blank" rel="noopener">App / Service</a>的核心（图1中最灰色，最左边的框）是下面的代码段：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">df_test = pd.read_csv(PATH/<span class="string">'adult.test'</span>)</span><br><span class="line">df_test[<span class="string">'json'</span>] = df_test.apply(<span class="keyword">lambda</span> x: x.to_json(), axis=<span class="number">1</span>)</span><br><span class="line">messages = df_test.json.tolist()</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">start_producing</span><span class="params">()</span>:</span></span><br><span class="line">	producer = KafkaProducer(bootstrap_servers=KAFKA_HOST)</span><br><span class="line">	<span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">200</span>):</span><br><span class="line">		message_id = str(uuid.uuid4())</span><br><span class="line">		message = &#123;<span class="string">'request_id'</span>: message_id, <span class="string">'data'</span>: json.loads(messages[i])&#125;</span><br><span class="line"></span><br><span class="line">		producer.send(<span class="string">'app_messages'</span>, json.dumps(message).encode(<span class="string">'utf-8'</span>))</span><br><span class="line">		producer.flush()</span><br><span class="line"></span><br><span class="line">		print(<span class="string">"\033[1;31;40m -- PRODUCER: Sent message with id &#123;&#125;"</span>.format(message_id))</span><br><span class="line">		sleep(<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">start_consuming</span><span class="params">()</span>:</span></span><br><span class="line">	consumer = KafkaConsumer(<span class="string">'app_messages'</span>, bootstrap_servers=KAFKA_HOST)</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">for</span> msg <span class="keyword">in</span> consumer:</span><br><span class="line">		message = json.loads(msg.value)</span><br><span class="line">		<span class="keyword">if</span> <span class="string">'prediction'</span> <span class="keyword">in</span> message:</span><br><span class="line">			request_id = message[<span class="string">'request_id'</span>]</span><br><span class="line">			print(<span class="string">"\033[1;32;40m ** CONSUMER: Received prediction &#123;&#125; for request id &#123;&#125;"</span>.format(message[<span class="string">'prediction'</span>], request_id))</span><br></pre></td></tr></table></figure>
+<p>请注意，我们使用测试数据集来生成消息。这是因为我们设计了一个尽可能与真实世界相似的场景（在一定限度内）。考虑到这一点，我们使用训练数据集来构建初始<code>model</code>和<code>dataprocessor</code>对象。然后，我们使用测试数据集生成消息，目的是模拟随时间接收新信息的过程。<br>关于上面的代码片段，简单地说，生产者会将消息发布到管道（<code>start_producing()</code>）中并使用带有最终预测（<code>start_consuming()</code>）的消息。与我们在此描述的管道不同的方式不包括流程的开始（事件收集和聚合），我们也跳过最后，即如何处理最终预测。尽管如此，我们还是简要讨论了一些用例，这些用例可能会在帖子结尾处有用，这将说明最后阶段。<br>实际上，除了忽略过程的开始和结束之外，我们认为这条管道在现实世界中可以使用的管道相当好。因此，我们希望我们的仓库中包含的代码对您的某些项目有用。<br><strong>预测者和训练师</strong><br>该实现的主要目标是实时运行算法并在<strong>不</strong>停止预测服务的<strong>情况下</strong>每_N次_观察重新训练它。为此，我们实现了两个组件，<strong>Predictor</strong>（在repo中）和<strong>Trainer</strong>（）。<code>[predictor](https://github.com/jrzaurin/ml_pipelines/blob/master/predictor.py).py`</code><a href="https://github.com/jrzaurin/ml_pipelines/blob/master/trainer.py" target="_blank" rel="noopener">trainer</a>.py<code>&lt;br /&gt;现在让我们逐一描述图1中显示的数字，使用代码片段作为我们的指南。请注意，下面的过程假设有一个运行</code>initialize.py<code>脚本，因此初始文件</code>model.p<code>和</code>dataprocessor.p`文件存在于相应的目录中。另外，请强调下面的代码包含Predictor和Trainer的核心。有关完整代码，请参阅<a href="https://github.com/jrzaurin/ml_pipelines" target="_blank" rel="noopener">回购</a>。<br><strong>预报器</strong><br>Predictor代码的核心如下所示</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">start</span><span class="params">(model_id, messages_count, batch_id)</span>:</span></span><br><span class="line">	<span class="keyword">for</span> msg <span class="keyword">in</span> consumer:</span><br><span class="line">		message = json.loads(msg.value)</span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span> is_retraining_message(msg):</span><br><span class="line">			model_fname = <span class="string">'model_&#123;&#125;_.p'</span>.format(model_id)</span><br><span class="line">			model = reload_model(MODELS_PATH/model_fname)</span><br><span class="line">			print(<span class="string">"NEW MODEL RELOADED &#123;&#125;"</span>.format(model_id))</span><br><span class="line"></span><br><span class="line">		<span class="keyword">elif</span> is_application_message(msg):</span><br><span class="line">			request_id = message[<span class="string">'request_id'</span>]</span><br><span class="line">			pred = predict(message[<span class="string">'data'</span>], column_order)</span><br><span class="line">			publish_prediction(pred, request_id)</span><br><span class="line"></span><br><span class="line">			append_message(message[<span class="string">'data'</span>], MESSAGES_PATH, batch_id)</span><br><span class="line">			messages_count += <span class="number">1</span></span><br><span class="line">			<span class="keyword">if</span> messages_count % RETRAIN_EVERY == <span class="number">0</span>:</span><br><span class="line">				model_id = (model_id + <span class="number">1</span>) % (EXTRA_MODELS_TO_KEEP + <span class="number">1</span>)</span><br><span class="line">				send_retrain_message(model_id, batch_id)</span><br><span class="line">				batch_id += <span class="number">1</span></span><br></pre></td></tr></table></figure>
+<p><strong>（1a）</strong><code>predictor.py</code>片段中的第12行。预测器将从应用程序/服务接收消息，它将进行数据处理并在接收消息时实时运行模型。所有这些都是使用函数中的现有对象<code>dataprocessor</code>和<code>model</code>对象发生的<code>predict</code>。<br><strong>（1b）</strong><code>predictor.py</code>片段中的第13行。一旦我们运行预测，Predictor将发布<code>publish_prediction()</code>最终将由App / Service接收的result（）。<br><strong>（2）</strong><code>predictor.py</code>片段中的第17-20行。每条<code>RETRAIN_EVERY</code>消息，Predictor都会发布一条“ <em>重新训练</em> ”消息（<code>send_retrain_message()</code>），由培训师阅读。<br><strong>训练者</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">start</span><span class="params">()</span>:</span></span><br><span class="line">	consumer = KafkaConsumer(RETRAIN_TOPIC, bootstrap_servers=KAFKA_HOST)</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> msg <span class="keyword">in</span> consumer:</span><br><span class="line">		message = json.loads(msg.value)</span><br><span class="line">		<span class="keyword">if</span> <span class="string">'retrain'</span> <span class="keyword">in</span> message <span class="keyword">and</span> message[<span class="string">'retrain'</span>]:</span><br><span class="line">			model_id = message[<span class="string">'model_id'</span>]</span><br><span class="line">			batch_id = message[<span class="string">'batch_id'</span>]</span><br><span class="line">			message_fname = <span class="string">'messages_&#123;&#125;_.txt'</span>.format(batch_id)</span><br><span class="line">			messages = MESSAGES_PATH/message_fname</span><br><span class="line"></span><br><span class="line">			train(model_id, messages)</span><br><span class="line">			publish_traininig_completed(model_id)</span><br></pre></td></tr></table></figure>
+<p><strong>（3）</strong><code>trainer.py</code>片段中的第12行。培训师将阅读该消息并使用新的累积数据集（<code>train()</code>）触发重新训练过程。<br>这是原始数据集加上<code>RETRAIN_EVERY</code>新的观察结果。列车功能将独立于<strong>1a</strong>和<strong>1b中</strong>描述的过程运行<em>“初始化实验”</em><strong> </strong>部分中描述的整个过程。换句话说，训练者将重新训练模型，而预测器在消息到达时保持预测。<br>在这个阶段值得一提的是，在这里我们发现我们的实现与将在现实世界中使用的实现之间存在进一步的差异。在我们的实现中，一旦处理了<code>RETRAIN_EVERY</code>多个观察结果，就可以重新训练算法。这是因为我们使用Adult测试数据集来生成消息，其中包括目标列（“ _income_braket_ ”）。在真实的单词中，基于算法输出所采取的动作的真实结果通常在算法运行之后不容易访问，但是一段时间之后。在那种情况下，另一个过程应该是收集真实的结果，一旦收集的真实结果的数量等于<code>RETRAIN_EVERY</code>算法将被重新训练。<br>例如，假设此管道实现了电子商务的实时推荐系统。我们已经离线训练了一个推荐算法，目标列是我们的用户喜欢我们建议的分类表示：0,1,2和3对于不喜欢或与项目交互的用户，喜欢该项目（例如点击像按钮），将项目添加到他们的篮子，并分别购买该项目。当系统提供建议时，我们仍然不知道用户最终会做什么。<br>因此，随着用户信息在网站（或应用程序）中导航时收集和存储用户信息，第二个过程应该收集我们建议的最终结果。只有当两个进程都收集了<code>RETRAIN_EVERY</code>消息和结果时，才会对算法进行重新训练。<br><strong>（4）</strong><code>trainer.py</code>片段中的第13行。重新训练完成后，将发布带有相应信息的消息（<code>published_training_completed()</code>）。<br><strong>（5）</strong><code>predictor.py</code>片段中的第5-8行。Predictor的消费者订阅了两个主题：<code>[‘app_messages’, ‘retrain_topic’]</code>。一旦它通过“retrain_topic”接收到重新训练完成的信息，它将加载新模型并像往常一样保持过程，而不会在过程中的任何时间停止。<br><a name="647586e9"></a></p>
+<h3 id="如何运行管道"><a href="#如何运行管道" class="headerlink" title="如何运行管道"></a>如何运行管道</h3><p>在配套仓库中，我们已经包含了如何运行管道（本地）的说明。其实很简单。</p>
+<ol>
+<li>启动zookeper和kafka：</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ brew services start zookeeper</span><br><span class="line">==&gt; Successfully started `zookeeper` (label: homebrew.mxcl.zookeeper)</span><br><span class="line">$ brew services start kafka</span><br><span class="line">==&gt; Successfully started `kafka` (label: homebrew.mxcl.kafka)</span><br></pre></td></tr></table></figure>
+<p>2.运行initialize.py：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python initialize.py</span><br></pre></td></tr></table></figure>
+<p>3.在终端＃1中运行预测器（或训练器）：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python predictor.py</span><br></pre></td></tr></table></figure>
+<p>4.在终端＃2中运行训练器（或预测器）：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python trainer.py</span><br></pre></td></tr></table></figure>
+<p>5.在终端＃3中运行示例应用程序</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python samplea_app.py</span><br></pre></td></tr></table></figure>
+<p>然后，一旦处理了N条消息，您应该看到如下内容：</p>
+<p><strong>右上方终端</strong>：我们重新训练了模型，Hyperopt已经进行了10次评估（在实际练习中，这些应该是几百次）。<strong>左上方终端</strong>：一旦对模型进行了重新训练和优化，我们就会看到预测器如何加载新模型（在新LightGBM版本的恼人警告消息之后）。<strong>底部终端</strong>：服务照常进行。<br><br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1552645079397-f02448b1-2084-4a1b-b5d5-0b51d8af3dc2.png#align=left&amp;display=inline&amp;height=557&amp;name=1_xIT4U_OODiPtDuiPsCbyXw.png&amp;originHeight=746&amp;originWidth=1000&amp;size=347205&amp;status=done&amp;width=746" alt="1_xIT4U_OODiPtDuiPsCbyXw.png"></p>
+<p>一些潜在的用例<br>以下是（很多）其他一些潜在用例。<br>实时调整在线旅程<br>让我们考虑出售一些商品的电子商务。当用户浏览网站时，我们会收集有关其行为信息的活动。我们之前已经培训了一种算法，我们知道在10次交互之后，我们可以很好地了解客户是否最终会购买我们的产品。此外，我们也知道他们可能购买的产品可能会很昂贵。因此，我们希望“在旅途中”定制他们的旅程，以促进他们的购物体验。这里的定制可能意味着什么，从缩短行程到改变页面布局。<br>2. 电子邮件/致电您的客户<br>与之前的用例类似，我们现在假设客户决定停止旅程（无聊，缺乏时间，可能太复杂等）。如果算法预测该客户具有很大的潜力，我们可以立即使用像本文所述的管道，或者使用受控延迟，发送电子邮件或调用它们。<br>下一步<br>记录和监控：在即将发布的帖子中，我们将通过MLFlow在管道记录和监控功能中插入。与HyperparameterHunter一起，该解决方案将自动跟踪模型性能和超参数优化，同时提供可视化监控。<br>流量管理：此处描述的解决方案以及相应的代码已经过设计，因此可以在笔记本电脑中轻松地在本地和手动运行。然而，人们会认为在现实生活中，这将需要大规模运行云，而不是手动（请）。在那个阶段，如果我们可以使用涵盖整个机器学习工作流程的完全托管服务，那将是理想的，因此我们不需要关心维护服务，版本控制等。为此目的，我们将使用Sagemaker，它是构建的正是为了这个目的。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/03/15/yuque/使用MLflow赋予Spark功能/" rel="next" title="使用MLflow赋予Spark功能">
+                <i class="fa fa-chevron-left"></i> 使用MLflow赋予Spark功能
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/03/18/yuque/PySpark ML和XGBoost完全集成在Kaggle Titanic数据集上进行了测试/" rel="prev" title="PySpark ML和XGBoost完全集成在Kaggle Titanic数据集上进行了测试">
+                PySpark ML和XGBoost完全集成在Kaggle Titanic数据集上进行了测试 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Zhos</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#场景"><span class="nav-number">1.</span> <span class="nav-text">场景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#如何运行管道"><span class="nav-number">2.</span> <span class="nav-text">如何运行管道</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Zhos</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
