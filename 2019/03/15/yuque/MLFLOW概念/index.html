@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="概念MLflow分为三个部分：跟踪，项目和 模型。您可以自己使用这些组件中的每一个 - 例如，您可能希望以MLflow的模型格式导出模型而不使用跟踪或项目 - 但它们也可以很好地协同工作。MLflow的核心理念是在您的工作流程中尽可能少地设置约束：它可以与任何机器学习库一起使用，按惯例确定代码的大部分内容，并且只需要很少的更改即可集成到现有的代码库中。与此同时，MLflow旨在采用以其格式编写的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MLFLOW概念">
+<meta property="og:url" content="http://zhos.me/2019/03/15/yuque/MLFLOW概念/index.html">
+<meta property="og:site_name" content="A+">
+<meta property="og:description" content="概念MLflow分为三个部分：跟踪，项目和 模型。您可以自己使用这些组件中的每一个 - 例如，您可能希望以MLflow的模型格式导出模型而不使用跟踪或项目 - 但它们也可以很好地协同工作。MLflow的核心理念是在您的工作流程中尽可能少地设置约束：它可以与任何机器学习库一起使用，按惯例确定代码的大部分内容，并且只需要很少的更改即可集成到现有的代码库中。与此同时，MLflow旨在采用以其格式编写的">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-04-03T14:48:31.310Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MLFLOW概念">
+<meta name="twitter:description" content="概念MLflow分为三个部分：跟踪，项目和 模型。您可以自己使用这些组件中的每一个 - 例如，您可能希望以MLflow的模型格式导出模型而不使用跟踪或项目 - 但它们也可以很好地协同工作。MLflow的核心理念是在您的工作流程中尽可能少地设置约束：它可以与任何机器学习库一起使用，按惯例确定代码的大部分内容，并且只需要很少的更改即可集成到现有的代码库中。与此同时，MLflow旨在采用以其格式编写的">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://zhos.me/2019/03/15/yuque/MLFLOW概念/">
+
+
+
+
+
+  <title>MLFLOW概念 | A+</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">A+</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">武德</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://zhos.me/2019/03/15/yuque/MLFLOW概念/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Zhos">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="A+">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">MLFLOW概念</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-15T11:36:04+08:00">
+                2019-03-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><a name="b59c9e0f"></a></p>
+<h1 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h1><p>MLflow分为三个部分：<a href="https://mlflow.org/docs/latest/tracking.html#tracking" target="_blank" rel="noopener">跟踪</a>，<a href="https://mlflow.org/docs/latest/projects.html#projects" target="_blank" rel="noopener">项目</a>和 <a href="https://mlflow.org/docs/latest/models.html#models" target="_blank" rel="noopener">模型</a>。您可以自己使用这些组件中的每一个 - 例如，您可能希望以MLflow的模型格式导出模型而不使用跟踪或项目 - 但它们也可以很好地协同工作。<br>MLflow的核心理念是在您的工作流程中尽可能少地设置约束：它可以与任何机器学习库一起使用，按惯例确定代码的大部分内容，并且只需要很少的更改即可集成到现有的代码库中。与此同时，MLflow旨在采用以其格式编写的任何代码库，并使其可由多个数据科学家重现和重用。在这个页面上，我们描述了典型的ML工作流程以及MLflow适合的位置。<br><a name="9253a4bc"></a></p>
+<h2 id="机器学习工作流程"><a href="#机器学习工作流程" class="headerlink" title="机器学习工作流程"></a>机器学习工作流程<a href="https://mlflow.org/docs/latest/concepts.html#the-machine-learning-workflow" target="_blank" rel="noopener"></a></h2><p>机器学习需要尝试各种数据集，数据准备步骤和算法，以构建最大化某些目标指标的模型。构建模型后，还需要将其部署到生产系统，监控其性能，并不断对新数据进行重新训练，并与其他模型进行比较。<br>因此，通过机器学习提高效率可能具有挑战性，原因如下：</p>
+<ul>
+<li><strong>跟踪实验很困难。</strong>当您只是处理笔记本电脑上的文件或交互式笔记本时，如何判断哪些数据，代码和参数可以获得特定结果？</li>
+<li><strong>重现代码很困难。</strong>即使您仔细跟踪代码版本和参数，也需要捕获整个环境（例如，库依赖项）以再次获得相同的结果。如果您希望其他数据科学家使用您的代码，或者您希望在另一个平台（例如，在云中）大规模运行相同的代码，则这尤其具有挑战性。</li>
+<li><strong>没有标准的方法来打包和部署模型。</strong>每个数据科学团队为其使用的每个ML库提出自己的方法，并且模型与产生它的代码和参数之间的链接经常丢失。</li>
+</ul>
+<p>此外，虽然各个ML库提供了一些问题的解决方案（例如，模型服务），但为了获得最佳结果，您通常需要尝试<em>多个ML库</em>。MLflow允许您使用任何库来训练，重用和部署模型，并将它们打包成可重复的步骤，其他数据科学家可以将其用作“黑匣子”，甚至无需知道您正在使用哪个库。<br><a name="3e771e20"></a></p>
+<h2 id="MLflow组件"><a href="#MLflow组件" class="headerlink" title="MLflow组件"></a>MLflow组件</h2><p>MLflow提供三个组件来帮助管理ML工作流程：<br><strong>MLflow Tracking</strong>是一个API和UI，用于在运行机器学习代码时记录参数，代码版本，度量和输出文件，以及以后可视化结果。您可以在任何环境（例如，独立脚本或笔记本）中使用MLflow Tracking将结果记录到本地文件或服务器，然后比较多次运行。团队还可以使用它来比较来自不同用户的结果。<br><strong>MLflow Projects</strong>是打包可重用数据科学代码的标准格式。每个项目只是一个包含代码或Git存储库的目录，并使用描述符文件或简单约定来指定其依赖关系以及如何运行代码。例如，项目可以包含<code>conda.yaml</code>用于指定Python <a href="https://conda.io/docs/" target="_blank" rel="noopener">Conda</a>环境的文件。在项目中使用MLflow Tracking API时，MLflow会自动记住执行的项目版本（例如，Git commit）和任何参数。您可以从GitHub或您自己的Git存储库轻松运行现有的MLflow项目，并将它们链接到多步骤工作流程。<br><strong>MLflow模型</strong>提供多种包装机器学习模型的约定，以及各种帮助您部署它们的工具。每个模型都保存为包含任意文件的目录和描述文件，该文件列出了可以使用模型的几种“风格”。例如，TensorFlow模型可以作为TensorFlow DAG加载，也可以作为Python函数加载到输入数据。MLflow提供了将许多常见模型类型部署到不同平台的工具：例如，任何支持“Python函数”风格的模型都可以部署到基于Docker的REST服务器，云平台（如Azure ML和AWS SageMaker），以及Apache Spark中的用户定义函数，用于批处理和流式推理。如果您使用Tracking API输出MLflow模型，MLflow还会自动记住哪个项目并运行它们。<br><a name="2bdbec15"></a></p>
+<h2 id="可扩展性和大数据"><a href="#可扩展性和大数据" class="headerlink" title="可扩展性和大数据"></a>可扩展性和大数据<a href="https://mlflow.org/docs/latest/concepts.html#scalability-and-big-data" target="_blank" rel="noopener"></a></h2><p>数据是在机器学习中获得良好结果的关键，因此MLflow旨在扩展到大型数据集，大型输出文件（例如，模型）和大量实验。具体来说，MLflow支持三维扩展：</p>
+<ul>
+<li>单个MLflow运行可以在分布式集群上执行，例如，使用 <a href="https://spark.apache.org/" target="_blank" rel="noopener">Apache Spark</a>。您可以在所选的分布式基础架构上启动运行，并将结果报告给Tracking Server以进行比较。MLflow包含一个内置API，可在<a href="https://databricks.com/" target="_blank" rel="noopener">Databricks</a>上启动运行。</li>
+<li>MLflow支持与不同参数并行启动多个运行，例如，用于超参数调整。您只需使用<a href="https://mlflow.org/docs/latest/projects.html#projects" target="_blank" rel="noopener">Projects API</a>启动多次运行，使用<a href="https://mlflow.org/docs/latest/tracking.html#tracking" target="_blank" rel="noopener">Tracking API</a>跟踪它们。</li>
+<li>MLflow Projects可以从分布式存储系统（如AWS S3和<a href="https://docs.databricks.com/user-guide/dbfs-databricks-file-system.html" target="_blank" rel="noopener">DBFS）</a>获取输入和写入输出。MLflow可以在本地自动下载此类文件，以用于只能在本地文件上运行的项目，或者如果支持，则为项目提供分布式存储URI。这意味着您可以编写构建大型数据集的项目，例如创建100 TB文件。<br><a name="9d4397cc"></a><h2 id="示例用例"><a href="#示例用例" class="headerlink" title="示例用例"></a>示例用例<a href="https://mlflow.org/docs/latest/concepts.html#example-use-cases" target="_blank" rel="noopener"></a></h2>无论您是单独工作的数据科学家还是大型组织的一员，您都可以通过多种方式使用MLflow：<br><strong>个人数据科学家</strong>可以使用MLflow跟踪在其机器上本地跟踪实验，在项目中组织代码以供将来重用，以及生产工程师随后可以使用MLflow的部署工具部署的输出模型。MLflow Tracking默认情况下只读取和写入文件到本地文件系统，因此无需部署服务器。<br><strong>数据科学团队</strong>可以部署MLflow跟踪服务器来记录和比较处理同一问题的多个用户的结果。通过设置用于命名其参数和度量的约定，他们可以尝试不同的算法来解决相同的问题，然后再次对新数据运行相同的算法以比较未来的模型。此外，任何人都可以下载并运行另一个模型。<br><strong>大型组织</strong>可以使用MLflow共享项目，模型和结果。任何团队都可以使用MLflow项目运行另一个团队的代码，因此组织可以打包其他团队可以使用的有用培训和数据准备步骤，或者比较同一任务中许多团队的结果。此外，工程团队可以轻松地将工作流程从研发转移到生产阶段。<br><strong>生产工程师</strong>可以以相同的方式部署来自不同ML库的模型，将模型作为文件存储在他们选择的管理系统中，并跟踪模型的运行来源。<br><strong>研究人员和开源开发人员</strong>可以使用MLflow项目格式向GitHub发布代码，使任何人都可以使用该命令轻松运行代码 。<code>mlflow run github.com/...</code><br><strong>ML Library Developers</strong>可以输出MLflow Model格式的模型，让它们使用MLflow的内置工具自动支持部署。此外，部署工具开发人员（例如，构建服务平台的云供应商）可以自动支持各种模型。</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/03/15/yuque/Mlflow介绍/" rel="next" title="Mlflow介绍">
+                <i class="fa fa-chevron-left"></i> Mlflow介绍
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/03/15/yuque/MLflow项目/" rel="prev" title="MLflow项目">
+                MLflow项目 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Zhos</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#概念"><span class="nav-number">1.</span> <span class="nav-text">概念</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#机器学习工作流程"><span class="nav-number">1.1.</span> <span class="nav-text">机器学习工作流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MLflow组件"><span class="nav-number">1.2.</span> <span class="nav-text">MLflow组件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#可扩展性和大数据"><span class="nav-number">1.3.</span> <span class="nav-text">可扩展性和大数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#示例用例"><span class="nav-number">1.4.</span> <span class="nav-text">示例用例</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Zhos</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

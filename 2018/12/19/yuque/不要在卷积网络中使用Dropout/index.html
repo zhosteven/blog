@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="链接 如果您想知道如何使用dropout，这里有您要的答案。 我注意到有很多资源可以用来学习深度学习的内容和原因。 不幸的是，当需要制作模型时，他们很少有资源来解释何时以及如何。我正在为试图实施深度学习的其他数据科学家撰写本文。 因此，您不必像我一样通过研究文章和Reddit讨论。在本文中，您将了解为什么dropout在卷积体系结构中不再受欢迎。  DROPOUT如果你正在读这篇文章，我认为你已经">
+<meta property="og:type" content="article">
+<meta property="og:title" content="不要在卷积网络中使用Dropout">
+<meta property="og:url" content="http://zhos.me/2018/12/19/yuque/不要在卷积网络中使用Dropout/index.html">
+<meta property="og:site_name" content="A+">
+<meta property="og:description" content="链接 如果您想知道如何使用dropout，这里有您要的答案。 我注意到有很多资源可以用来学习深度学习的内容和原因。 不幸的是，当需要制作模型时，他们很少有资源来解释何时以及如何。我正在为试图实施深度学习的其他数据科学家撰写本文。 因此，您不必像我一样通过研究文章和Reddit讨论。在本文中，您将了解为什么dropout在卷积体系结构中不再受欢迎。  DROPOUT如果你正在读这篇文章，我认为你已经">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2018/png/219582/1545228300354-eac11f1e-9363-4b7f-a68d-3b8e81fd80e0.png#width=747">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2018/png/219582/1545228517714-8daebec1-a6f7-4fcc-b4a8-8c826e025c76.png#width=747">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2018/png/219582/1545229002104-b14e8bf0-9ba5-4470-85c3-ac86fed74c75.png#width=747">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2018/png/219582/1545229692686-cc1c012c-7f9a-4865-b6eb-fe547e0f1213.png#width=470">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2018/png/219582/1545229984300-3501e371-42ce-41de-8aec-2d6962959cd3.png#width=500">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2018/png/219582/1545230018898-2895598f-bf57-42f7-ad4f-b7440add1220.png#width=724">
+<meta property="og:updated_time" content="2019-04-03T14:48:31.322Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="不要在卷积网络中使用Dropout">
+<meta name="twitter:description" content="链接 如果您想知道如何使用dropout，这里有您要的答案。 我注意到有很多资源可以用来学习深度学习的内容和原因。 不幸的是，当需要制作模型时，他们很少有资源来解释何时以及如何。我正在为试图实施深度学习的其他数据科学家撰写本文。 因此，您不必像我一样通过研究文章和Reddit讨论。在本文中，您将了解为什么dropout在卷积体系结构中不再受欢迎。  DROPOUT如果你正在读这篇文章，我认为你已经">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2018/png/219582/1545228300354-eac11f1e-9363-4b7f-a68d-3b8e81fd80e0.png#width=747">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://zhos.me/2018/12/19/yuque/不要在卷积网络中使用Dropout/">
+
+
+
+
+
+  <title>不要在卷积网络中使用Dropout | A+</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">A+</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">武德</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://zhos.me/2018/12/19/yuque/不要在卷积网络中使用Dropout/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Zhos">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="A+">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">不要在卷积网络中使用Dropout</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-19T22:04:13+08:00">
+                2018-12-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><a href="https://towardsdatascience.com/dont-use-dropout-in-convolutional-networks-81486c823c16" target="_blank" rel="noopener">链接</a></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545228300354-eac11f1e-9363-4b7f-a68d-3b8e81fd80e0.png#width=747" alt><br>如果您想知道如何使用dropout，这里有您要的答案。</p>
+<p>我注意到有很多资源可以用来学习深度学习的内容和原因。 不幸的是，当需要制作模型时，他们很少有资源来解释何时以及如何。<br>我正在为试图实施深度学习的其他数据科学家撰写本文。 因此，您不必像我一样通过研究文章和Reddit讨论。<br>在本文中，您将了解为什么dropout在卷积体系结构中不再受欢迎。</p>
+<p><a name="drs4ub"></a></p>
+<h4 id="DROPOUT"><a href="#DROPOUT" class="headerlink" title="DROPOUT"></a><a href="#drs4ub"></a>DROPOUT</h4><p>如果你正在读这篇文章，我认为你已经了解了什么是dropout，以及它在正则化神经网络方面的作用。 如果您想要复习，请阅读Amar Budhiraja的这篇文章。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545228517714-8daebec1-a6f7-4fcc-b4a8-8c826e025c76.png#width=747" alt><br>通常，当我们的网络存在过度拟合的风险时，我们只需要实现正规化。 如果网络太大，如果您训练时间过长，或者您没有足够的数据，则会发生这种情况。<br>如果在卷积网络末端有完全连接的层，则实现dropout很容易。<br><a name="qseuim"></a></p>
+<h4 id="使用Keras"><a href="#使用Keras" class="headerlink" title="使用Keras"></a><a href="#qseuim"></a>使用Keras</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">keras.layers.Dropout(rate, noise_shape=None, seed=None)</span><br></pre></td></tr></table></figure>
+<p>以0.5的dropout率开始并将其调低，直到性能最大化。 （<a href="https://www.reddit.com/r/MachineLearning/comments/3oztvk/why_50_when_using_dropout/" target="_blank" rel="noopener">资源</a>）<br><a name="dx1bhs"></a></p>
+<h4 id="例如"><a href="#例如" class="headerlink" title="例如"></a><a href="#dx1bhs"></a>例如</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">model=keras.models.Sequential()</span><br><span class="line">model.add(keras.layers.Dense(150, activation=&quot;relu&quot;))</span><br><span class="line">model.add(keras.layers.Dropout(0.5))</span><br></pre></td></tr></table></figure>
+<p>请注意，这仅适用于您的convnet的完全连接区域。 对于所有其他地区，您不应使用dropout。<br>相反，您应该在卷积之间插入批量标准化。 这将使您的模型正常化，并使您的模型在训练期间更加稳定。<br><a name="042axx"></a></p>
+<h4 id="批正则化"><a href="#批正则化" class="headerlink" title="批正则化"></a><a href="#042axx"></a>批正则化</h4><p>批标准化是规范卷积网络的另一种方法。<br>除了正则化效应之外，批量归一化还可以使您的卷积网络在训练期间抵抗消失的梯度。 这可以减少训练时间并获得更好的性能。<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545229002104-b14e8bf0-9ba5-4470-85c3-ac86fed74c75.png#width=747" alt><br>批量标准化可以消除消失的梯度<br><br><br></p>
+<p><a name="uat1zt"></a></p>
+<h4 id="Keras实施"><a href="#Keras实施" class="headerlink" title="Keras实施"></a><a href="#uat1zt"></a>Keras实施</h4><p>要在Keras中实现批量标准化，请使用以下命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">keras.layers.BatchNormalization()</span><br></pre></td></tr></table></figure></p>
+<p>构建具有批量规范化的卷积体系结构时：</p>
+<ul>
+<li><p>在卷积和激活层之间插入批量标准化层。 （<a href="http://cs231n.stanford.edu/slides/2017/cs231n_2017_lecture6.pdf" target="_blank" rel="noopener">资源</a>）</p>
+</li>
+<li><p>您可以在此功能中调整一些超参数，并使用它们。</p>
+</li>
+</ul>
+<p>您也可以在激活功能之后插入批量标准化，但根据我的<a href="https://github.com/harrisonjansma/Research-Computer-Vision/blob/master/08-12-18%20Batch%20Norm%20vs%20Dropout/08-12-18%20Batch%20Norm%20vs%20Dropout.ipynb" target="_blank" rel="noopener">经验</a>，这两种方法都具有相似的性能。<br><a name="i9denc"></a></p>
+<h4 id="例如-1"><a href="#例如-1" class="headerlink" title="例如"></a><a href="#i9denc"></a>例如</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">model.add(Conv2D(60,3, padding = &quot;same&quot;))</span><br><span class="line">model.add(BatchNormalization())</span><br><span class="line">model.add(Activation(&quot;relu&quot;))</span><br></pre></td></tr></table></figure>
+<p>批量标准化取代了dropout。<br>即使您不需要担心过度拟合，实现批量标准化也有很多好处。 正因为如此，它的正规化效应，批量归一化已经在很大程度上取代了现代卷积体系结构中的dropout。<br>“我们提出了一种使用批量规范化网络构建，训练和执行推理的算法。 由此产生的网络可以通过饱和非线性进行训练，更能容忍增加的训练率，并且通常不需要Dropout进行正规化。“ -  Ioffe and Svegedy 2015<br>至于为什么dropout在最近的应用中失宠，主要有两个原因。<br><strong>首先</strong>，在对卷积层进行正则化时，dropout通常不太有效。<br>原因？ 由于卷积层具有很少的参数，因此它们开始时需要较少的正则化。 此外，由于在特征图中编码的空间关系，激活可以变得高度相关。 这使得dropout无效。（<a href="https://www.reddit.com/r/MachineLearning/comments/5l3f1c/d_what_happened_to_dropout/" target="_blank" rel="noopener">资源</a>）<br><strong>其次</strong>，擅长正规化的dropout现在已经过时了。<br>像VGG16这样在网络末端包含完全连接的层的大型模型。 对于这样的模型，过度拟合是通过在完全连接的层之间包括dropout来解决的。<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545229692686-cc1c012c-7f9a-4865-b6eb-fe547e0f1213.png#width=470" alt><br>不幸的是，<a href="https://arxiv.org/pdf/1512.03385.pdf" target="_blank" rel="noopener">最近的架构</a>远离了这个完全连接块。<br>通过用全局平均池替换密集层，现代的网络可以减少模型大小，同时提高性能。<br>我将在未来再写一篇文章，详细说明如何在卷积网络中实现全球平均汇集。 在此之前，我建议阅读<a href="https://arxiv.org/pdf/1512.03385.pdf" target="_blank" rel="noopener">ResNet论文</a>，以了解GAP的好处。<br><a name="btyoyw"></a></p>
+<h4 id="一个实验"><a href="#一个实验" class="headerlink" title="一个实验"></a><a href="#btyoyw"></a>一个实验</h4><p>我创建了一个实验来测试批量标准化是否会减少在卷积之间插入时的泛化错误。 （<a href="https://github.com/harrisonjansma/Research-Computer-Vision/blob/master/08-12-18%20Batch%20Norm%20vs%20Dropout/08-12-18%20Batch%20Norm%20vs%20Dropout.ipynb" target="_blank" rel="noopener">链接</a>）<br>我构建了5个相同的卷积体系结构，并在卷积之间插入了dropout，批量规范或任何（控制）。<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545229984300-3501e371-42ce-41de-8aec-2d6962959cd3.png#width=500" alt><br>通过在Cifar100数据集上训练每个模型，我获得了以下结果。<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545230018898-2895598f-bf57-42f7-ad4f-b7440add1220.png#width=724" alt><br>批量标准化模型的良好表现说明应在卷积之间使用批量标准化。<br>此外，不应在卷基层之间放置dropout，因为dropout的模型往往比控制模型表现更差。<br>有关更多信息，请查看我的<a href="https://github.com/harrisonjansma/Research-Computer-Vision/blob/master/08-12-18%20Batch%20Norm%20vs%20Dropout/08-12-18%20Batch%20Norm%20vs%20Dropout.ipynb" target="_blank" rel="noopener">GitHub</a>上的完整文章。<br>小贴士<br>如果你想知道是否应该在卷积网络中实现dropout，现在你知道了。 仅在完全连接的层上使用dropout，并在卷积之间实现批量标准化。<br>如果您想了解有关批量标准化的更多信息，请阅读：<br><a href="https://towardsdatascience.com/intuit-and-implement-batch-normalization-c05480333c5b" target="_blank" rel="noopener">https://towardsdatascience.com/intuit-and-implement-batch-normalization-c05480333c5b</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/12/19/yuque/理解二进制交叉熵、对数损失函数:一种可视化解释/" rel="next" title="理解二进制交叉熵、对数损失函数:一种可视化解释">
+                <i class="fa fa-chevron-left"></i> 理解二进制交叉熵、对数损失函数:一种可视化解释
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/12/19/yuque/认识和实现：批量标准化/" rel="prev" title="认识和实现：批量标准化">
+                认识和实现：批量标准化 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Zhos</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#DROPOUT"><span class="nav-number">1.</span> <span class="nav-text">DROPOUT</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用Keras"><span class="nav-number">2.</span> <span class="nav-text">使用Keras</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#例如"><span class="nav-number">3.</span> <span class="nav-text">例如</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#批正则化"><span class="nav-number">4.</span> <span class="nav-text">批正则化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Keras实施"><span class="nav-number">5.</span> <span class="nav-text">Keras实施</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#例如-1"><span class="nav-number">6.</span> <span class="nav-text">例如</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#一个实验"><span class="nav-number">7.</span> <span class="nav-text">一个实验</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Zhos</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
