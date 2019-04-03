@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="链接  介绍如果您正在训练二进制分类器，则可能使用二进制交叉熵/对数损失作为损失函数。你有没有想过使用这种损失函数究竟是什么意思？ 问题是，考虑到今天的库和框架的易用性，很容易忽略所使用的损失函数的真正含义。动机我正在寻找一篇博文，以一种视觉上清晰简洁的方式解释二进制交叉熵/对数损失背后的概念，所以我可以在Data Science Retreat向我的学生展示它。 由于我找不到任何符合我目的的东西">
+<meta property="og:type" content="article">
+<meta property="og:title" content="理解二进制交叉熵、对数损失函数:一种可视化解释">
+<meta property="og:url" content="http://zhos.me/2018/12/19/yuque/理解二进制交叉熵、对数损失函数:一种可视化解释/index.html">
+<meta property="og:site_name" content="武德">
+<meta property="og:description" content="链接  介绍如果您正在训练二进制分类器，则可能使用二进制交叉熵/对数损失作为损失函数。你有没有想过使用这种损失函数究竟是什么意思？ 问题是，考虑到今天的库和框架的易用性，很容易忽略所使用的损失函数的真正含义。动机我正在寻找一篇博文，以一种视觉上清晰简洁的方式解释二进制交叉熵/对数损失背后的概念，所以我可以在Data Science Retreat向我的学生展示它。 由于我找不到任何符合我目的的东西">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2018/png/219582/1545208575711-9a5c4e19-f272-468f-b36e-0d7074d62586.png#align=left&display=inline&height=111&originHeight=111&originWidth=625&status=done&width=625">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2018/png/219582/1545208606509-b2a7b1cd-b1cf-4ca4-baca-88196d101a0b.png#align=left&display=inline&height=110&originHeight=110&originWidth=643&status=done&width=643">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2018/png/219582/1545208847996-2aba3677-2186-4f8c-bdab-ae8590ad7c6b.png#align=left&display=inline&height=79&originHeight=79&originWidth=548&status=done&width=548">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2018/png/219582/1545214792607-9e822a37-5f9e-46cb-bc0b-0a68f744faff.png#align=left&display=inline&height=224&originHeight=224&originWidth=620&status=done&width=620">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2018/png/219582/1545214823897-b1ef51c7-4c5f-4ca4-8543-81231a9f1918.png#align=left&display=inline&height=215&originHeight=215&originWidth=686&status=done&width=686">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2018/png/219582/1545214857312-a0a2e0e3-5317-4fe4-b9a8-64d6f07dbdf1.png#align=left&display=inline&height=209&originHeight=209&originWidth=683&status=done&width=683">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2018/png/219582/1545214885683-601d1b29-50b1-4f89-98d8-242b19e28808.png#align=left&display=inline&height=209&originHeight=209&originWidth=678&status=done&width=678">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2018/png/219582/1545214919348-98029aeb-bbdd-4969-b2bd-c5d5a5b9b83d.png#align=left&display=inline&height=210&originHeight=210&originWidth=683&status=done&width=683">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2018/png/219582/1545214956710-95a7d392-f358-48ef-bf1e-6fc94c658e98.png#align=left&display=inline&height=262&originHeight=262&originWidth=425&status=done&width=425">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2018/png/219582/1545215026705-0bd2aed9-8956-416f-9449-899f50e0ef36.png#align=left&display=inline&height=254&originHeight=254&originWidth=434&status=done&width=434">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2018/png/219582/1545215109720-0cebdd78-1004-4e66-8dba-ed416c518790.png#align=left&display=inline&height=307&originHeight=307&originWidth=418&status=done&width=418">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2018/png/219582/1545215139483-4a54d212-a279-400b-afe6-df918499a792.png#align=left&display=inline&height=257&originHeight=257&originWidth=441&status=done&width=441">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2018/png/219582/1545215306977-97044aee-62cc-46c7-b7b2-cc4e60a53c39.png#align=left&display=inline&height=284&originHeight=284&originWidth=432&status=done&width=432">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2018/png/219582/1545215372228-11ebb814-6d1e-4797-b42e-94b77db29f6d.png#align=left&display=inline&height=43&originHeight=43&originWidth=166&status=done&width=166">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2018/png/219582/1545215399649-c50c5363-f426-4527-bf68-134aee0b35a4.png#align=left&display=inline&height=80&originHeight=80&originWidth=306&status=done&width=306">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2018/png/219582/1545215448740-5ec55a28-5c13-46a0-b6d1-197063d62b05.png#align=left&display=inline&height=85&originHeight=85&originWidth=320&status=done&width=320">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2018/png/219582/1545215480123-9afd0d8f-9398-450a-b194-4ab6348a4685.png#align=left&display=inline&height=47&originHeight=47&originWidth=208&status=done&width=208">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2018/png/219582/1545215542635-c4a2d275-64a9-45c9-b68e-3f99fce5fcf5.png#align=left&display=inline&height=89&originHeight=89&originWidth=619&status=done&width=619">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2018/png/219582/1545215580283-c3d40241-87ec-4541-aaf9-971fc6cc90e7.png#align=left&display=inline&height=85&originHeight=85&originWidth=411&status=done&width=411">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2018/png/219582/1545215611182-db1eab68-632e-45e8-ac03-396234f18194.png#align=left&display=inline&height=75&originHeight=75&originWidth=230&status=done&width=230">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2018/png/219582/1545215637206-7fda25fc-c763-46c0-9eca-6e4fe9cec776.png#align=left&display=inline&height=92&originHeight=92&originWidth=592&status=done&width=592">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2018/png/219582/1545215662641-4915d2cb-3c29-4fc8-a535-c0db8b055951.png#align=left&display=inline&height=79&originHeight=79&originWidth=548&status=done&width=548">
+<meta property="og:updated_time" content="2019-04-03T10:11:50.535Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="理解二进制交叉熵、对数损失函数:一种可视化解释">
+<meta name="twitter:description" content="链接  介绍如果您正在训练二进制分类器，则可能使用二进制交叉熵/对数损失作为损失函数。你有没有想过使用这种损失函数究竟是什么意思？ 问题是，考虑到今天的库和框架的易用性，很容易忽略所使用的损失函数的真正含义。动机我正在寻找一篇博文，以一种视觉上清晰简洁的方式解释二进制交叉熵/对数损失背后的概念，所以我可以在Data Science Retreat向我的学生展示它。 由于我找不到任何符合我目的的东西">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2018/png/219582/1545208575711-9a5c4e19-f272-468f-b36e-0d7074d62586.png#align=left&display=inline&height=111&originHeight=111&originWidth=625&status=done&width=625">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://zhos.me/2018/12/19/yuque/理解二进制交叉熵、对数损失函数:一种可视化解释/">
+
+
+
+
+
+  <title>理解二进制交叉熵、对数损失函数:一种可视化解释 | 武德</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">武德</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://zhos.me/2018/12/19/yuque/理解二进制交叉熵、对数损失函数:一种可视化解释/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Zhos">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="武德">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">理解二进制交叉熵、对数损失函数:一种可视化解释</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-19T16:27:20+08:00">
+                2018-12-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><a href="https://towardsdatascience.com/understanding-binary-cross-entropy-log-loss-a-visual-explanation-a3ac6025181a" target="_blank" rel="noopener">链接</a></p>
+<p><a name="61a3ec66"></a></p>
+<h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a><a href="#ba72yr"></a>介绍</h2><p>如果您正在训练二进制分类器，则可能使用二进制交叉熵/对数损失作为损失函数。<br>你有没有想过使用这种损失函数究竟是什么意思？ 问题是，考虑到今天的库和框架的易用性，很容易忽略所使用的损失函数的真正含义。<br>动机<br>我正在寻找一篇博文，以一种视觉上清晰简洁的方式解释二进制交叉熵/对数损失背后的概念，所以我可以在Data Science Retreat向我的学生展示它。 由于我找不到任何符合我目的的东西，我自己负责编写任务:-)。<br>一个简单的分类问题<br>让我们从10个随机点开始：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">x = [-2.2, -1.4, -0.8, 0.2, 0.4, 0.8, 1.2, 2.2, 2.9, 4.6]</span><br></pre></td></tr></table></figure></p>
+<p>这是我们唯一的特征：x。<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545208575711-9a5c4e19-f272-468f-b36e-0d7074d62586.png#align=left&amp;display=inline&amp;height=111&amp;originHeight=111&amp;originWidth=625&amp;status=done&amp;width=625" alt><br>现在，让我们为我们的点分配一些颜色：红色和绿色。 这些是我们的标签。<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545208606509-b2a7b1cd-b1cf-4ca4-baca-88196d101a0b.png#align=left&amp;display=inline&amp;height=110&amp;originHeight=110&amp;originWidth=643&amp;status=done&amp;width=643" alt><br>因此，我们的分类问题非常简单：鉴于我们的特征x，我们需要预测其标签：红色或绿色。</p>
+<p>由于这是一个二元分类，我们也可以将这个问题描述为：“是点绿色”，或者更好的是，“点是绿色的概率是多少”？ 理想情况下，绿点的概率为1.0（绿色），而红点的概率为0.0（绿色）。</p>
+<p>在此设置中，绿点属于正类（YES，它们是绿色），而红点属于负类（NO，它们不是绿色）。<br>如果我们拟合模型来执行此分类，它将预测每个点的绿色概率。 根据我们对点的颜色的了解，我们如何评估预测概率的优劣（或差）？ 这是损失功能的全部目的！ 它应该为错误预测返回高值，为良好预测返回低值。</p>
+<p>对于像我们的例子那样的二进制分类，典型的损失函数是二进制交叉熵/对数损失函数。<br><a name="6dab43bd"></a></p>
+<h2 id="损失函数：二进制交叉熵-对数损失函数"><a href="#损失函数：二进制交叉熵-对数损失函数" class="headerlink" title="损失函数：二进制交叉熵/对数损失函数"></a><a href="#gh52id"></a>损失函数：二进制交叉熵/对数损失函数</h2><p>如果你观察这个损失函数，这就是你会发现的：<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545208847996-2aba3677-2186-4f8c-bdab-ae8590ad7c6b.png#align=left&amp;display=inline&amp;height=79&amp;originHeight=79&amp;originWidth=548&amp;status=done&amp;width=548" alt><br>Binary Cross-Entropy / Log Loss<br>其中y是标签（绿点为1，红点为0），p(y)是所有N点的点为绿色的预测概率。</p>
+<p>阅读这个公式，它告诉你，对于每个绿点（y = 1），它将log（p（y））添加到损失中，即它是绿色的对数概率。 相反，它为每个红点（y = 0）添加log（1-p（y）），即，它为红色的对数概率。 不一定很难，当然也不是那么直观……</p>
+<p>此外，熵与这一切有什么关系？ 为什么我们首先记录概率？ 这些是有效的问题，我希望在下面的“给我看数学”部分回答它们。</p>
+<p><a name="9acf4584"></a></p>
+<h3 id="计算损失-可视化方法"><a href="#计算损失-可视化方法" class="headerlink" title="计算损失-可视化方法"></a><a href="#sbsnmi"></a>计算损失-可视化方法</h3><p>首先，让我们根据他们的类别（正面或负面）分割点数，如下图所示：<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545214792607-9e822a37-5f9e-46cb-bc0b-0a68f744faff.png#align=left&amp;display=inline&amp;height=224&amp;originHeight=224&amp;originWidth=620&amp;status=done&amp;width=620" alt><br>现在，让我们训练一个Logistic回归来对我们的点进行分类。 拟合回归是一个S形曲线，表示任何给定x点的绿色概率。 它看起来像这样：<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545214823897-b1ef51c7-4c5f-4ca4-8543-81231a9f1918.png#align=left&amp;display=inline&amp;height=215&amp;originHeight=215&amp;originWidth=686&amp;status=done&amp;width=686" alt><br>那么，对于属于正类（绿色）的所有点，我们的分类器给出的预测概率是多少？ 这些是S形曲线下的绿色条形，在与这些点对应的x坐标处。<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545214857312-a0a2e0e3-5317-4fe4-b9a8-64d6f07dbdf1.png#align=left&amp;display=inline&amp;height=209&amp;originHeight=209&amp;originWidth=683&amp;status=done&amp;width=683" alt><br>好的，到目前为止，真好！ 负面阶级的观点怎么样？ 请记住，S形曲线下的绿色条表示给定点为绿色的概率。 那么，给定点是红色的概率是多少？ 红色条在S形曲线上方，当然:-)<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545214885683-601d1b29-50b1-4f89-98d8-242b19e28808.png#align=left&amp;display=inline&amp;height=209&amp;originHeight=209&amp;originWidth=678&amp;status=done&amp;width=678" alt><br>总而言之，我们最终会得到这样的结论：<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545214919348-98029aeb-bbdd-4969-b2bd-c5d5a5b9b83d.png#align=left&amp;display=inline&amp;height=210&amp;originHeight=210&amp;originWidth=683&amp;status=done&amp;width=683" alt><br>条形表示与每个点的相应真实类别相关联的预测概率！</p>
+<p>好的，我们有预测的概率……通过计算二进制交叉熵/对数损失来评估它们的时间！</p>
+<p>这些概率就是我们所需要的，所以，让我们摆脱x轴并将条带彼此相邻：<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545214956710-95a7d392-f358-48ef-bf1e-6fc94c658e98.png#align=left&amp;display=inline&amp;height=262&amp;originHeight=262&amp;originWidth=425&amp;status=done&amp;width=425" alt><br>好吧，吊杆不再有意义了，所以让我们重新定位它们：</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545215026705-0bd2aed9-8956-416f-9449-899f50e0ef36.png#align=left&amp;display=inline&amp;height=254&amp;originHeight=254&amp;originWidth=434&amp;status=done&amp;width=434" alt><br>既然我们正试图计算损失，我们需要惩罚不好的预测，对吧？ 如果与真实类相关的概率为1.0，我们需要将其损失为零。 相反，如果这个概率很低，比如0.01，我们需要它的损失是巨大的！<br>事实证明，对于这个目的，取概率的（负）对数就足够了（因为0.0和1.0之间的值的对数是负的，我们采用负对数来获得损失的正值）。<br>实际上，我们使用日志的原因来自交叉熵的定义，请查看下面的“给我看数学”部分了解更多详情。<br>下图给出了一个清晰的图片 - 如果真实类的预测概率接近零，则损失呈指数增长：<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545215109720-0cebdd78-1004-4e66-8dba-ed416c518790.png#align=left&amp;display=inline&amp;height=307&amp;originHeight=307&amp;originWidth=418&amp;status=done&amp;width=418" alt><br>很公平！ 让我们采用概率的（负）对数 - 这些是每个点的相应损失。<br>最后，我们计算所有这些损失的平均值。<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545215139483-4a54d212-a279-400b-afe6-df918499a792.png#align=left&amp;display=inline&amp;height=257&amp;originHeight=257&amp;originWidth=441&amp;status=done&amp;width=441" alt><br>瞧！ 我们已经成功计算了这个玩具示例的二进制交叉熵/对数损失。 它是0.3329！<br>告诉我代码<br>如果你想仔细检查我们找到的值，只需运行下面的代码并亲自看看:-)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.linear_model import LogisticRegression</span><br><span class="line">from sklearn.metrics import log_loss</span><br><span class="line">import numpy as np</span><br><span class="line"></span><br><span class="line">x = np.array([-2.2, -1.4, -.8, .2, .4, .8, 1.2, 2.2, 2.9, 4.6])</span><br><span class="line">y = np.array([0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0])</span><br><span class="line"></span><br><span class="line">logr = LogisticRegression(solver=&apos;lbfgs&apos;)</span><br><span class="line">logr.fit(x.reshape(-1, 1), y)</span><br><span class="line"></span><br><span class="line">y_pred = logr.predict_proba(x.reshape(-1, 1))[:, 1].ravel()</span><br><span class="line">loss = log_loss(y, y_pred)</span><br><span class="line"></span><br><span class="line">print(&apos;x = &#123;&#125;&apos;.format(x))</span><br><span class="line">print(&apos;y = &#123;&#125;&apos;.format(y))</span><br><span class="line">print(&apos;p(y) = &#123;&#125;&apos;.format(np.round(y_pred, 2)))</span><br><span class="line">print(&apos;Log Loss / Cross Entropy = &#123;:.4f&#125;&apos;.format(loss))</span><br></pre></td></tr></table></figure></p>
+<p>告诉我数学（真的吗？！）<br>除了笑话之外，这篇文章并不打算在数学上倾向于……但是对于你们这些人，我的读者，想要了解熵的作用，所有这些中的对数，我们在这里:-)<br>如果你想深入了解信息理论，包括所有这些概念 - 熵，交叉熵等等 - 检查Chris Olah的帖子，它非常详细！<br><a name="b2c9e438"></a></p>
+<h4 id="分布"><a href="#分布" class="headerlink" title="分布"></a><a href="#gs7ekn"></a>分布</h4><p>让我们从分配点开始吧。 由于y表示我们的点的类（我们有3个红点和7个绿点），这就是它的分布，我们称之为q（y），如下所示：<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545215306977-97044aee-62cc-46c7-b7b2-cc4e60a53c39.png#align=left&amp;display=inline&amp;height=284&amp;originHeight=284&amp;originWidth=432&amp;status=done&amp;width=432" alt></p>
+<p>熵<br>熵是与给定分布q（y）相关的不确定性的度量。<br>如果我们所有的积分都是绿色怎么办 那个分布的不确定性是什么？ ZERO，对吗？ 毕竟，对于一个点的颜色毫无疑问：它总是绿色的！ 所以，熵是零！<br>另一方面，如果我们确切地知道一半的点是绿色而另一半点是红色的呢？ 那是最糟糕的情况，对吗？ 猜测点的颜色绝对没有优势：它完全是随机的！ 对于这种情况，熵由下面的公式给出（我们有两个类别（颜色） - 红色或绿色 - 因此，2）：<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545215372228-11ebb814-6d1e-4797-b42e-94b77db29f6d.png#align=left&amp;display=inline&amp;height=43&amp;originHeight=43&amp;originWidth=166&amp;status=done&amp;width=166" alt><br>对于中间的其他情况，我们可以使用下面的公式计算分布的熵，如q（y），其中C是类的数量：<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545215399649-c50c5363-f426-4527-bf68-134aee0b35a4.png#align=left&amp;display=inline&amp;height=80&amp;originHeight=80&amp;originWidth=306&amp;status=done&amp;width=306" alt><br>因此，如果我们知道随机变量的真实分布，我们就可以计算其熵。 但是，如果是这样的话，为什么首先要费心去训练分类器呢？ 毕竟，我们知道真正的分布……<br>但是，如果我们不这样做呢？ 我们可以尝试用其他一些分布近似真实分布，比如p（y）吗？ 我们当然可以！:-)<br><a name="bf08985d"></a></p>
+<h4 id="交叉熵"><a href="#交叉熵" class="headerlink" title="交叉熵"></a><a href="#ekaaou"></a>交叉熵</h4><p>让我们假设我们的观点遵循其他分布p（y）。 但我们知道它们实际上来自真实（未知）分布q（y），对吧？<br>如果我们像这样计算熵，我们实际上是在计算两个分布之间的交叉熵：<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545215448740-5ec55a28-5c13-46a0-b6d1-197063d62b05.png#align=left&amp;display=inline&amp;height=85&amp;originHeight=85&amp;originWidth=320&amp;status=done&amp;width=320" alt><br>如果我们奇迹般地将p（y）与q（y）完美匹配，则交叉熵和熵的计算值也将匹配。<br>由于这可能永远不会发生，因此交叉熵将具有比在真实分布上计算的熵更大的BIGGER值。<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545215480123-9afd0d8f-9398-450a-b194-4ab6348a4685.png#align=left&amp;display=inline&amp;height=47&amp;originHeight=47&amp;originWidth=208&amp;status=done&amp;width=208" alt><br>事实证明，交叉熵和熵之间的这个区别有一个名字……<br><a name="bbec16ca"></a></p>
+<h4 id="Kullback-Leibler发散"><a href="#Kullback-Leibler发散" class="headerlink" title="Kullback-Leibler发散"></a><a href="#fk7aht"></a>Kullback-Leibler发散</h4><p>Kullback-Leibler Divergence，简称“KL Divergence”，衡量两种发行版之间的差异：<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545215542635-c4a2d275-64a9-45c9-b68e-3f99fce5fcf5.png#align=left&amp;display=inline&amp;height=89&amp;originHeight=89&amp;originWidth=619&amp;status=done&amp;width=619" alt><br>这意味着，p（y）越接近q（y），发散越低，因此交叉熵越低。<br>所以，我们需要找到一个好的p（y）来使用……但是，这是我们的分类器应该做的，不是吗？！ 确实如此！ 它寻找最好的p（y），这是最小化交叉熵的那个。<br><a name="7162a4e0"></a></p>
+<h4 id="损失函数"><a href="#损失函数" class="headerlink" title="损失函数"></a><a href="#xokywp"></a>损失函数</h4><p>在训练期间，分类器使用其训练集中的N个点中的每一个来计算交叉熵损失，有效地拟合分布p（y）！ 由于每个点的概率是1 / N，因此交叉熵由下式给出：<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545215580283-c3d40241-87ec-4541-aaf9-971fc6cc90e7.png#align=left&amp;display=inline&amp;height=85&amp;originHeight=85&amp;originWidth=411&amp;status=done&amp;width=411" alt><br>还记得上面的图6到10吗？ 我们需要在与每个点的真实类相关联的概率之上计算交叉熵。 这意味着使用绿色条形作为正类（y = 1）中的点，使用红色条形作为负类中的点（y = 0），或者数学上说：<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545215611182-db1eab68-632e-45e8-ac03-396234f18194.png#align=left&amp;display=inline&amp;height=75&amp;originHeight=75&amp;originWidth=230&amp;status=done&amp;width=230" alt><br>最后一步是计算两个类中所有点的平均值，正面和负面：<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545215637206-7fda25fc-c763-46c0-9eca-6e4fe9cec776.png#align=left&amp;display=inline&amp;height=92&amp;originHeight=92&amp;originWidth=592&amp;status=done&amp;width=592" alt><br>最后，通过一些操作，我们可以采用相同的公式，从正面或负面的类中获取任何一点：<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545215662641-4915d2cb-3c29-4fc8-a535-c0db8b055951.png#align=left&amp;display=inline&amp;height=79&amp;originHeight=79&amp;originWidth=548&amp;status=done&amp;width=548" alt><br>瞧！ 我们回到二进制交叉熵/日志丢失的原始公式:-)<br><a name="fef1217c"></a></p>
+<h3 id="最后的想法"><a href="#最后的想法" class="headerlink" title="最后的想法"></a><a href="#3038bg"></a>最后的想法</h3><p>我真的希望这篇文章能够对一个经常被认为理所当然的概念，即二元交叉熵作为损失函数的概念有所启发。 此外，我也希望它能够向您展示机器学习和信息理论如何联系在一起。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/12/19/yuque/关于目标检测，所有你应该知道的深度学习模型/" rel="next" title="关于目标检测，所有你应该知道的深度学习模型">
+                <i class="fa fa-chevron-left"></i> 关于目标检测，所有你应该知道的深度学习模型
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/12/19/yuque/不要在卷积网络中使用Dropout/" rel="prev" title="不要在卷积网络中使用Dropout">
+                不要在卷积网络中使用Dropout <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Zhos</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#介绍"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#损失函数：二进制交叉熵-对数损失函数"><span class="nav-number">2.</span> <span class="nav-text">损失函数：二进制交叉熵/对数损失函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#计算损失-可视化方法"><span class="nav-number">2.1.</span> <span class="nav-text">计算损失-可视化方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#分布"><span class="nav-number">2.1.1.</span> <span class="nav-text">分布</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#交叉熵"><span class="nav-number">2.1.2.</span> <span class="nav-text">交叉熵</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Kullback-Leibler发散"><span class="nav-number">2.1.3.</span> <span class="nav-text">Kullback-Leibler发散</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#损失函数"><span class="nav-number">2.1.4.</span> <span class="nav-text">损失函数</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#最后的想法"><span class="nav-number">2.2.</span> <span class="nav-text">最后的想法</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Zhos</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

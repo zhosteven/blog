@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="这篇文章是关于我用于Kaggle竞赛的方法：植物幼苗分类。我在排名中排名第一，持续了几个月，最终在最终评估结束时以＃5结束。该方法非常通用，也可用于其他图像识别任务。  Kaggle是一个&amp;gt; 预测建模和&amp;gt; 分析竞赛的平台，统计人员和数据挖掘者在竞争中生成预测和描述公司和用户上传的数据集的最佳模型。这种&amp;gt; 众包方法依赖于这样一个事实：无数的策略可以应用于任何预测建模任务，并且不可能">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Kaggle＃1获胜图像分类挑战方法">
+<meta property="og:url" content="http://zhos.me/2018/12/21/yuque/Kaggle＃1获胜图像分类挑战方法/index.html">
+<meta property="og:site_name" content="武德">
+<meta property="og:description" content="这篇文章是关于我用于Kaggle竞赛的方法：植物幼苗分类。我在排名中排名第一，持续了几个月，最终在最终评估结束时以＃5结束。该方法非常通用，也可用于其他图像识别任务。  Kaggle是一个&amp;gt; 预测建模和&amp;gt; 分析竞赛的平台，统计人员和数据挖掘者在竞争中生成预测和描述公司和用户上传的数据集的最佳模型。这种&amp;gt; 众包方法依赖于这样一个事实：无数的策略可以应用于任何预测建模任务，并且不可能">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2018/png/219582/1545383030520-f6dbd874-48b5-4066-bacc-bae58fd00765.png#width=826">
+<meta property="og:image" content="https://cdn-images-1.medium.com/max/1000/1*g_zIn9WVdJHCN2dfEV0X_A.png#width=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2018/png/219582/1545383065394-724bbdf8-bb85-4775-8661-8df88480e85d.png#width=826">
+<meta property="og:image" content="https://cdn-images-1.medium.com/max/1000/1*axNbDRk6whrwE29zDafAJQ.png#width=">
+<meta property="og:image" content="https://cdn-images-1.medium.com/max/1000/1*V5C9piJvHcsV-dqLuVpOPQ.png#width=">
+<meta property="og:image" content="https://cdn-images-1.medium.com/max/1000/1*phgfJG3mycgz8BGlA9Jj9Q.png#width=">
+<meta property="og:image" content="https://cdn-images-1.medium.com/max/1000/1*HK33kGhDF43ZAKrROxoKWA.png#width=">
+<meta property="og:image" content="https://cdn-images-1.medium.com/max/1000/1*0h-aFSLtqVvTl4XpWWSRMQ.png#width=">
+<meta property="og:updated_time" content="2019-04-03T10:11:50.523Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Kaggle＃1获胜图像分类挑战方法">
+<meta name="twitter:description" content="这篇文章是关于我用于Kaggle竞赛的方法：植物幼苗分类。我在排名中排名第一，持续了几个月，最终在最终评估结束时以＃5结束。该方法非常通用，也可用于其他图像识别任务。  Kaggle是一个&amp;gt; 预测建模和&amp;gt; 分析竞赛的平台，统计人员和数据挖掘者在竞争中生成预测和描述公司和用户上传的数据集的最佳模型。这种&amp;gt; 众包方法依赖于这样一个事实：无数的策略可以应用于任何预测建模任务，并且不可能">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2018/png/219582/1545383030520-f6dbd874-48b5-4066-bacc-bae58fd00765.png#width=826">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://zhos.me/2018/12/21/yuque/Kaggle＃1获胜图像分类挑战方法/">
+
+
+
+
+
+  <title>Kaggle＃1获胜图像分类挑战方法 | 武德</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">武德</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://zhos.me/2018/12/21/yuque/Kaggle＃1获胜图像分类挑战方法/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Zhos">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="武德">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Kaggle＃1获胜图像分类挑战方法</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-21T17:03:34+08:00">
+                2018-12-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545383030520-f6dbd874-48b5-4066-bacc-bae58fd00765.png#width=826" alt><br>这篇文章是关于我用于Kaggle竞赛的方法：<a href="https://www.kaggle.com/c/plant-seedlings-classification" target="_blank" rel="noopener">植物幼苗分类。</a>我在排名中排名第一，持续了几个月，最终在最终评估结束时以＃5结束。该方法非常通用，也可用于其他图像识别任务。</p>
+<blockquote>
+<p><strong>Kaggle</strong>是一个&gt; <a href="https://en.wikipedia.org/wiki/Predictive_modelling" target="_blank" rel="noopener">预测建模</a>和&gt; <a href="https://en.wikipedia.org/wiki/Analytics" target="_blank" rel="noopener">分析</a>竞赛的平台，统计人员和数据挖掘者在竞争中生成预测和描述公司和用户上传的数据集的最佳模型。这种&gt; <a href="https://en.wikipedia.org/wiki/Crowdsourcing" target="_blank" rel="noopener">众包</a>方法依赖于这样一个事实：无数的策略可以应用于任何预测建模任务，并且不可能事先知道哪种技术或分析师最有效。[1]<br>另外，请查看在NLP上获得<strong>Intent Classification</strong>任务的最新<strong>成果</strong>的博客：</p>
+</blockquote>
+<p><a href="https://medium.com/@shridhar743/know-your-intent-sota-results-in-intent-classification-8e1ca47f364c" target="_blank" rel="noopener">了解您的意图：SoTA结果意图分类<br>此博客文章显示了在三个语料库上获得的最新最新结果：medium.com</a></p>
+<hr>
+<p><a name="a9de"></a></p>
+<h3 id="任务概述"><a href="#任务概述" class="headerlink" title="任务概述"></a><a href="#a9de"></a>任务概述</h3><p>你可以区分杂草和农作物幼苗吗？<br>有效地这样做的能力可以意味着更好的作物产量和更好的环境管理。</p>
+<p>所述<strong>奥尔胡斯大学信号处理</strong>组，在具有协作<strong>南丹麦大学</strong>，释放含有属于12种约960独特的植物的图像数据集在几个生长阶段。[1] [2]<br><img src="https://cdn-images-1.medium.com/max/1000/1*g_zIn9WVdJHCN2dfEV0X_A.png#width=" alt><br><em>其中一个样本植物：鹅肠菜样本[3]</em></p>
+<p>公开可获得在几个生长阶段属于12种物种的约960种独特植物的图像数据库。它包括带注释的RGB图像，物理分辨率约为每毫米10个像素。</p>
+<p>为了使用数据库获得的分类结果的评估标准化，提出了基于F1分数的基准。该<a href="https://vision.eng.au.dk/plant-seedlings-dataset/" target="_blank" rel="noopener">URL</a>提供了数据集[13]</p>
+<p>下图是描述数据集中所有12个类的示例：<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545383065394-724bbdf8-bb85-4775-8661-8df88480e85d.png#width=826" alt></p>
+<p><a name="aed6"></a></p>
+<h4 id="将图像分类为各个类的任务，任务分为5个步骤："><a href="#将图像分类为各个类的任务，任务分为5个步骤：" class="headerlink" title="将图像分类为各个类的任务，任务分为5个步骤："></a><a href="#aed6"></a>将图像分类为各个类的任务，任务分为5个步骤：</h4><p><a name="d486"></a></p>
+<h3 id="步骤1："><a href="#步骤1：" class="headerlink" title="步骤1："></a><a href="#d486"></a>步骤1：</h3><p>机器学习中的第一个也是最重要的任务是在继续任何算法之前分析数据集。这对于理解数据集的复杂性非常重要，这最终将有助于设计算法。</p>
+<p>图像和类的分布如下：<br><img src="https://cdn-images-1.medium.com/max/1000/1*axNbDRk6whrwE29zDafAJQ.png#width=" alt><br>如前所述，共有12个类，总共有4750个图像。然而，如上所述，分布不均匀，并且类别分布从最大654个图像变化到最小221个图像。这清楚地表明数据不平衡，数据需要平衡才能获得最佳结果。我们将在第<strong>3</strong>步中讨论这个问题。</p>
+<p><img src="https://cdn-images-1.medium.com/max/1000/1*V5C9piJvHcsV-dqLuVpOPQ.png#width=" alt>每班的图像分发</p>
+<p>现在，将图像可视化以便更好地理解数据非常重要。因此，显示来自每个类的一些样本图像以便查看图像彼此之间的差异。<br><img src="https://cdn-images-1.medium.com/max/1000/1*phgfJG3mycgz8BGlA9Jj9Q.png#width=" alt><br>从上面的图像中可以理解的是，所有图像看起来都非常相似。所以，我决定使用称为<a href="https://lvdmaaten.github.io/tsne/" target="_blank" rel="noopener">t-Distributed随机邻居嵌入</a>（t-SNE）的可视化技术来看图像<a href="https://lvdmaaten.github.io/tsne/" target="_blank" rel="noopener">的分布</a>。<br>t分布式随机邻域嵌入（t-SNE）是一种降维的技术，特别适用于高维数据集的可视化。该技术可以通过Barnes-Hut近似实现，允许它应用于大型真实世界的数据集。[14]<br><img src="https://cdn-images-1.medium.com/max/1000/1*HK33kGhDF43ZAKrROxoKWA.png#width=" alt>数据集的t-SNE可视化</p>
+<p>仔细观察之后，我们很难看出课程的差异。因此，重要的是要了解数据是否很难仅仅为人类区分，或者机器学习模型也很难。所以，我们将为它做一个基本的基准测试。</p>
+<p><a name="12da"></a></p>
+<h4 id="培训和验证集"><a href="#培训和验证集" class="headerlink" title="培训和验证集"></a><a href="#12da"></a>培训和验证集</h4><p>在开始使用模型基准测试之前，我们需要将数据划分为训练和验证数据集。在原始测试集上测试模型之前，验证集将扮演测试数据集的角色。因此，基本上在训练数据集上训练模型并在验证集上进行测试，然后随着时间的推移可以在验证集上改进模型。一旦我们对验证集的结果感到满意，我们就可以在真实的测试数据集上应用该模型。通过这种方式，我们可以看到模型是否过度拟合或欠拟合我们的验证集，这可以帮助我们更好地拟合模型。</p>
+<p>因此，我们通过将80％的图像保留为训练数据集并将20％的图像保持为验证集来划分4750个图像的数据集。</p>
+<p><img src="https://cdn-images-1.medium.com/max/1000/1*0h-aFSLtqVvTl4XpWWSRMQ.png#width=" alt>培训和验证数据分开<br><a name="1608"></a></p>
+<h3 id="第2步："><a href="#第2步：" class="headerlink" title="第2步："></a><a href="#1608"></a>第2步：</h3><p>一旦我们获得了培训和验证集，我们将从数据集的基准测试开始。我们可以看到这是一个分类问题，在给出测试数据集时，我们需要将其分类为12个类中的一个。所以我们将使用<strong>卷积神经网络</strong>来完成任务。<br>如果您是初学者并且需要更好地理解深度学习术语，请访问以下&gt; <a href="https://medium.com/@shridhar743/a-beginners-guide-to-deep-learning-5ee814cf7706" target="_blank" rel="noopener">博客：</a></p>
+<p>有几种方法可以创建CNN模型，但对于第一个基准测试，我们将使用<a href="https://keras.io/" target="_blank" rel="noopener">Keras深度学习库</a>。我们还将使用Keras中可用的预训练模型，通过ImageNet数据集进行训练，我们将根据我们的任务对其进行微调。</p>
+<p>从头开始训练卷积神经网络几乎实际上是低效的。因此，我们在ImageNet上使用预先训练的CNN模型的权重，使用1000个类，并通过保持一些层冻结并解冻其中一些并对其进行训练来对其进行微调。这是因为顶层学习简单的基本功能，我们不需要训练这些层，它可以直接应用于我们的任务。需要注意的一件重要事情是我们需要检查我们的数据集是否与ImageNet类似，以及我们的数据集有多大。这两个功能将决定我们如何执行微调。要了解更多详情，请阅读<a href="https://medium.com/@karpathy" target="_blank" rel="noopener">Andrej Karpathy</a>的博客：</p>
+<p><a href="http://cs231n.github.io/transfer-learning/" target="_blank" rel="noopener">用于视觉识别的CS231n卷积神经网络用于<br>斯坦福类CS231n的课程材料和注释：用于视觉识别的卷积神经网络。cs231n.github.io</a></p>
+<p>在我们的例子中，数据集很小但有点类似于ImageNet。因此，我们可以直接使用ImageNet的权重，只需添加一个包含12个类的最终输出层即可查看第一个基准测试。然后我们将解除一些底层的解冻，然后训练这些层。</p>
+<p>我们将使用Keras作为初始基准，因为Keras提供了许多预训练模型，我们将使用ResNet50和InceptionResNetV2来完成我们的任务。使用一个简单模型和一个非常高端模型对数据集进行基准测试非常重要，以了解我们是否过度拟合/不适合给定模型上的数据集。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/12/21/yuque/Capsule Networks：一种全新且极具吸引力的AI架构/" rel="next" title="Capsule Networks：一种全新且极具吸引力的AI架构">
+                <i class="fa fa-chevron-left"></i> Capsule Networks：一种全新且极具吸引力的AI架构
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/01/31/yuque/我们从基于区域的物体探测器（更快的R-CNN，R-FCN，FPN）中学到了什么？/" rel="prev" title="我们从基于区域的物体探测器（更快的R-CNN，R-FCN，FPN）中学到了什么？">
+                我们从基于区域的物体探测器（更快的R-CNN，R-FCN，FPN）中学到了什么？ <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Zhos</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#任务概述"><span class="nav-number">1.</span> <span class="nav-text">任务概述</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#将图像分类为各个类的任务，任务分为5个步骤："><span class="nav-number">1.1.</span> <span class="nav-text">将图像分类为各个类的任务，任务分为5个步骤：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#步骤1："><span class="nav-number">2.</span> <span class="nav-text">步骤1：</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#培训和验证集"><span class="nav-number">2.1.</span> <span class="nav-text">培训和验证集</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第2步："><span class="nav-number">3.</span> <span class="nav-text">第2步：</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Zhos</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

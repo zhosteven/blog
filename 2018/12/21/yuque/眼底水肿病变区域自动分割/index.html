@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="链接 背景 视网膜水肿是一种眼疾，可导致视力模糊，影响正常生活。  OCT（光学相干断层扫描）可用于帮助医生判断视网膜水肿。  早期发现水肿症状可以在疾病的治疗中发挥关键作用。  我们的任务是设计算法，以自动检测视网膜水肿的类型，并根据OCT图像划分视网膜水肿区域。    数据统计信息 数据可视化  视网膜边缘弯曲  病变之间的包含关系    数据处理堆叠上部和下部切片以形成三通道输入正则化数据增">
+<meta property="og:type" content="article">
+<meta property="og:title" content="眼底水肿病变区域自动分割">
+<meta property="og:url" content="http://zhos.me/2018/12/21/yuque/眼底水肿病变区域自动分割/index.html">
+<meta property="og:site_name" content="武德">
+<meta property="og:description" content="链接 背景 视网膜水肿是一种眼疾，可导致视力模糊，影响正常生活。  OCT（光学相干断层扫描）可用于帮助医生判断视网膜水肿。  早期发现水肿症状可以在疾病的治疗中发挥关键作用。  我们的任务是设计算法，以自动检测视网膜水肿的类型，并根据OCT图像划分视网膜水肿区域。    数据统计信息 数据可视化  视网膜边缘弯曲  病变之间的包含关系    数据处理堆叠上部和下部切片以形成三通道输入正则化数据增">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2018/png/219582/1545362517258-ac147a70-c630-4ba9-9596-429ce59aaf05.png#width=323">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2018/png/219582/1545363237135-d6a8f54b-194f-41e9-8998-42c2794fd373.png#width=745">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2018/png/219582/1545363261530-b1e78b3c-8896-4cf1-b15a-3f6656d5c9b7.png#width=634">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2018/png/219582/1545363314506-c30f03d8-0647-4d55-ad77-3398e87c36a3.png#width=566">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2018/png/219582/1545363525794-cfdcff1f-fcfa-45bf-a7bd-86330b40bd22.png#width=826">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2018/png/219582/1545363568658-bfc944e3-aee5-41cb-9e36-87604ccbc425.png#width=826">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2018/png/219582/1545363778350-5ef98156-3f52-4bc4-81f7-ac1ff58bd5cb.png#width=826">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2018/png/219582/1545363824351-0b2aef87-4aa5-4d54-9da2-950238d08bc2.png#width=826">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2018/png/219582/1545363883446-cddecdd3-133c-4d7a-a48f-7ee3ce3c782e.png#width=826">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2018/png/219582/1545363984175-b5734e15-36a3-4a26-b548-247f21e500b5.png#width=826">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2018/png/219582/1545364004491-f0fd9292-3bf9-4d45-b764-712c129650ff.png#width=826">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2018/png/219582/1545364043982-9f418634-6d4e-421e-8ed9-0b5bdd78898b.png#width=593">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2018/png/219582/1545364142210-f09d6809-e1cf-428e-a8ec-e1e7a750d02a.png#width=462">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2018/png/219582/1545364180115-716d53bf-c3dd-46fb-bc90-f18e23866c24.png#width=826">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2018/png/219582/1545364198735-685fb3a5-9739-4820-9578-63357d19b78b.png#width=771">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2018/png/219582/1545364372343-71750b48-5889-4c2f-8d71-4ba7d15c8b40.png#width=504">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2018/png/219582/1545364421357-aae861a2-0977-4ad8-9b07-c0f7af8ab715.png#width=398">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2018/png/219582/1545364444046-68a08360-b0a9-4c89-b14d-85c7707c6eab.png#width=826">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2018/png/219582/1545364472055-2f2fcbe0-1c8c-4719-bcab-3d7860331235.png#width=826">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2018/png/219582/1545364500288-3ff90cf8-acdc-47e6-80d7-9df1b0f98cb0.png#width=778">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2018/png/219582/1545364586336-051b209a-18bc-4c1f-959a-656c8b1ab2e2.png#width=826">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2018/png/219582/1545364667315-bb12e09f-92b4-4d6c-9427-10ce7851f341.png#width=826">
+<meta property="og:updated_time" content="2019-04-03T10:11:50.527Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="眼底水肿病变区域自动分割">
+<meta name="twitter:description" content="链接 背景 视网膜水肿是一种眼疾，可导致视力模糊，影响正常生活。  OCT（光学相干断层扫描）可用于帮助医生判断视网膜水肿。  早期发现水肿症状可以在疾病的治疗中发挥关键作用。  我们的任务是设计算法，以自动检测视网膜水肿的类型，并根据OCT图像划分视网膜水肿区域。    数据统计信息 数据可视化  视网膜边缘弯曲  病变之间的包含关系    数据处理堆叠上部和下部切片以形成三通道输入正则化数据增">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2018/png/219582/1545362517258-ac147a70-c630-4ba9-9596-429ce59aaf05.png#width=323">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://zhos.me/2018/12/21/yuque/眼底水肿病变区域自动分割/">
+
+
+
+
+
+  <title>眼底水肿病变区域自动分割 | 武德</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">武德</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://zhos.me/2018/12/21/yuque/眼底水肿病变区域自动分割/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Zhos">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="武德">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">眼底水肿病变区域自动分割</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-21T09:28:40+08:00">
+                2018-12-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><a href="https://github.com/ShawnBIT/AI-Challenger-Retinal-Edema-Segmentation" target="_blank" rel="noopener">链接</a><br><a name="4np7ea"></a></p>
+<h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a><a href="#4np7ea"></a>背景</h3><ul>
+<li><p>视网膜水肿是一种眼疾，可导致视力模糊，影响正常生活。</p>
+</li>
+<li><p>OCT（光学相干断层扫描）可用于帮助医生判断视网膜水肿。</p>
+</li>
+<li><p>早期发现水肿症状可以在疾病的治疗中发挥关键作用。</p>
+</li>
+<li><p>我们的任务是设计算法，以自动检测视网膜水肿的类型，并根据OCT图像划分视网膜水肿区域。</p>
+</li>
+</ul>
+<p><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545362517258-ac147a70-c630-4ba9-9596-429ce59aaf05.png#width=323" alt><br><a name="tevkbe"></a></p>
+<h3 id="数据统计信息"><a href="#数据统计信息" class="headerlink" title="数据统计信息"></a><a href="#tevkbe"></a>数据统计信息</h3><p><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545363237135-d6a8f54b-194f-41e9-8998-42c2794fd373.png#width=745" alt><br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545363261530-b1e78b3c-8896-4cf1-b15a-3f6656d5c9b7.png#width=634" alt><br><a name="2obuzk"></a></p>
+<h3 id="数据可视化"><a href="#数据可视化" class="headerlink" title="数据可视化"></a><a href="#2obuzk"></a>数据可视化</h3><p><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545363314506-c30f03d8-0647-4d55-ad77-3398e87c36a3.png#width=566" alt></p>
+<ul>
+<li><p>视网膜边缘弯曲</p>
+</li>
+<li><p>病变之间的包含关系</p>
+</li>
+</ul>
+<p><a name="1xo7et"></a></p>
+<h3 id="数据处理"><a href="#数据处理" class="headerlink" title="数据处理"></a><a href="#1xo7et"></a>数据处理</h3><p>堆叠上部和下部切片以形成三通道输入<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545363525794-cfdcff1f-fcfa-45bf-a7bd-86330b40bd22.png#width=826" alt><br>正则化<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545363568658-bfc944e3-aee5-41cb-9e36-87604ccbc425.png#width=826" alt><br>数据增强（仅随机水平翻转）<br><a name="gpzgyi"></a></p>
+<h3 id="问题和挑战"><a href="#问题和挑战" class="headerlink" title="问题和挑战"></a><a href="#gpzgyi"></a>问题和挑战</h3><p>这两项任务（分割和检测）如何相互促进？ •多任务学习框架<br><br><br><br>多尺度的视网膜水肿病变<br><br>•UNet和UNet ++<br><br>三种视网膜水肿样本不平衡<br><br>•指数对数损失<br><br>如何扩大感受野以检测边缘弯曲？<br><br>•扩张模块</p>
+<p><a name="xtsmsg"></a></p>
+<h3 id="基线"><a href="#基线" class="headerlink" title="基线"></a><a href="#xtsmsg"></a>基线</h3><p>分段 -  UNet<br><br>•下采样16×<br><br>•频道：[16,32,64,128,256]•输入：原始图像<br>检测 -  ResNet18<br><br>•调整大小224 * 224<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545363778350-5ef98156-3f52-4bc4-81f7-ac1ff58bd5cb.png#width=826" alt><br><a name="12ngly"></a></p>
+<h3 id="多任务框架"><a href="#多任务框架" class="headerlink" title="多任务框架"></a><a href="#12ngly"></a>多任务框架</h3><p><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545363824351-0b2aef87-4aa5-4d54-9da2-950238d08bc2.png#width=826" alt></p>
+<ul>
+<li><p>共同学习分割和检测</p>
+</li>
+<li><p>减少时间和计算成本</p>
+</li>
+<li><p>改善两项任务的效果</p>
+</li>
+</ul>
+<p><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545363883446-cddecdd3-133c-4d7a-a48f-7ee3ce3c782e.png#width=826" alt><br><a name="45hwtb"></a></p>
+<h3 id="UNet-和DeepSupervision"><a href="#UNet-和DeepSupervision" class="headerlink" title="UNet ++和DeepSupervision"></a><a href="#45hwtb"></a>UNet ++和DeepSupervision</h3><ul>
+<li><p>密集的未来联系</p>
+</li>
+<li><p>深度监督</p>
+</li>
+<li><p>更有效地融合低级和高级功能</p>
+</li>
+</ul>
+<p><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545363984175-b5734e15-36a3-4a26-b548-247f21e500b5.png#width=826" alt><br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545364004491-f0fd9292-3bf9-4d45-b764-712c129650ff.png#width=826" alt><br><a name="mcxadi"></a></p>
+<h3 id="Exponential-Logarithmic-Loss"><a href="#Exponential-Logarithmic-Loss" class="headerlink" title="Exponential Logarithmic Loss"></a><a href="#mcxadi"></a>Exponential Logarithmic Loss</h3><p><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545364043982-9f418634-6d4e-421e-8ed9-0b5bdd78898b.png#width=593" alt><br>x : pixel position d il : Kronecker delta<br>i : label e : pseudocount for<br>l : ground truth label at x<br>p i ( x ) : Softmax probability which acts as the portion of pixel<br>x owned by label i<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545364142210-f09d6809-e1cf-428e-a8ec-e1e7a750d02a.png#width=462" alt><br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545364180115-716d53bf-c3dd-46fb-bc90-f18e23866c24.png#width=826" alt><br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545364198735-685fb3a5-9739-4820-9578-63357d19b78b.png#width=771" alt><br>小物件怎么样？<br><br>细分？（2,3级）<br><a name="ymmopw"></a></p>
+<h3 id="扩张模块"><a href="#扩张模块" class="headerlink" title="扩张模块"></a><a href="#ymmopw"></a>扩张模块</h3><p>感受野计算公式<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545364372343-71750b48-5889-4c2f-8d71-4ba7d15c8b40.png#width=504" alt><br>UNet编码器的接收域<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545364421357-aae861a2-0977-4ad8-9b07-c0f7af8ab715.png#width=398" alt><br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545364444046-68a08360-b0a9-4c89-b14d-85c7707c6eab.png#width=826" alt><br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545364472055-2f2fcbe0-1c8c-4719-bcab-3d7860331235.png#width=826" alt><br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545364500288-3ff90cf8-acdc-47e6-80d7-9df1b0f98cb0.png#width=778" alt><br>大对象怎么样？<br><br>细分？（第1类）<br><a name="hvmwoz"></a></p>
+<h3 id="实验摘要"><a href="#实验摘要" class="headerlink" title="实验摘要"></a><a href="#hvmwoz"></a>实验摘要</h3><p><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545364586336-051b209a-18bc-4c1f-959a-656c8b1ab2e2.png#width=826" alt><br>Memory : 7.3 G(batch=8), Inference time : 9.5 s/patient<br><a name="d14kdy"></a></p>
+<h3 id="可视化"><a href="#可视化" class="headerlink" title="可视化"></a><a href="#d14kdy"></a>可视化</h3><p><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545364667315-bb12e09f-92b4-4d6c-9427-10ce7851f341.png#width=826" alt><br><a name="f7g5bu"></a></p>
+<h3 id="未来工作"><a href="#未来工作" class="headerlink" title="未来工作"></a><a href="#f7g5bu"></a>未来工作</h3><ul>
+<li><p>检测框架（Mask R-CNN）</p>
+</li>
+<li><p>3D语义分割模型</p>
+</li>
+<li><p>在骨干中使用Res-block或Dense-block</p>
+</li>
+<li><p>考虑病变的关系</p>
+</li>
+</ul>
+<p><a name="db4gcg"></a></p>
+<h3 id="结论"><a href="#结论" class="headerlink" title="结论"></a><a href="#db4gcg"></a>结论</h3><p>构建端到端的多任务框架，可以同时检测和分割视网膜水肿病变。<br><br>•使用最新的UNet ++模型更好地集成高级和低级功能。<br><br>使用新的指数对数损失函数来增强两种类型的小病变的分割。<br><br>•引入扩张卷积模块，显着增加模型的感受野。<br><br>只有随机水平翻转数据增强，没有后期处理。<br><br>•测试装置上单个模型的骰子为0.736。 测试集上的融合模型的骰子为0.744，检测AUC为0.986。 另外，当我们设置批次为8时，推理阶段的记忆为7.3G，每个患者的推理时间为9.5s。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/12/20/yuque/语义分割 -  U-Net（第1部分）/" rel="next" title="语义分割 -  U-Net（第1部分）">
+                <i class="fa fa-chevron-left"></i> 语义分割 -  U-Net（第1部分）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/12/21/yuque/F-35是1.4万亿美元的国家灾难/" rel="prev" title="F-35是1.4万亿美元的国家灾难">
+                F-35是1.4万亿美元的国家灾难 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Zhos</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#背景"><span class="nav-number">1.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据统计信息"><span class="nav-number">2.</span> <span class="nav-text">数据统计信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据可视化"><span class="nav-number">3.</span> <span class="nav-text">数据可视化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据处理"><span class="nav-number">4.</span> <span class="nav-text">数据处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#问题和挑战"><span class="nav-number">5.</span> <span class="nav-text">问题和挑战</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基线"><span class="nav-number">6.</span> <span class="nav-text">基线</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多任务框架"><span class="nav-number">7.</span> <span class="nav-text">多任务框架</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#UNet-和DeepSupervision"><span class="nav-number">8.</span> <span class="nav-text">UNet ++和DeepSupervision</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Exponential-Logarithmic-Loss"><span class="nav-number">9.</span> <span class="nav-text">Exponential Logarithmic Loss</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#扩张模块"><span class="nav-number">10.</span> <span class="nav-text">扩张模块</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实验摘要"><span class="nav-number">11.</span> <span class="nav-text">实验摘要</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#可视化"><span class="nav-number">12.</span> <span class="nav-text">可视化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#未来工作"><span class="nav-number">13.</span> <span class="nav-text">未来工作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#结论"><span class="nav-number">14.</span> <span class="nav-text">结论</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Zhos</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
