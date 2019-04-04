@@ -142,6 +142,98 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-yuque/我的建立图书推荐系统之旅。。。" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/04/05/yuque/我的建立图书推荐系统之旅。。。/">我的建立图书推荐系统之旅。。。</a>
+    </h1>
+  
+
+        
+        <a href="/2019/04/05/yuque/我的建立图书推荐系统之旅。。。/" class="archive-article-date">
+  	<time datetime="2019-04-04T16:41:13.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-05</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1554396102648-d76c57c9-629d-4bfc-baf1-09826f912b2a.jpeg#align=left&amp;display=inline&amp;height=497&amp;name=1_Gql-Vlc4BQJz_x8GhJXX2A.jpeg&amp;originHeight=1280&amp;originWidth=1920&amp;size=642247&amp;status=done&amp;width=746" alt="1_Gql-Vlc4BQJz_x8GhJXX2A.jpeg"><br>推荐系统一直让我的思绪占据了一段时间，由于我倾向于阅读书籍，因此探索Book Crossing数据集非常吸引人。<br>在线推荐系统是许多电子商务网站的事情。推荐系统广泛地向最适合其口味和特征的顾客推荐产品。有关推荐系统的更多详细信息，请阅读我关于推荐系统的<a href="https://medium.com/@chhavi.saluja1401/recommendation-systems-made-simple-b5a79cac8862" target="_blank" rel="noopener">介绍性文章</a>和<a href="https://towardsdatascience.com/collaborative-filtering-based-recommendation-systems-exemplified-ecbffe1c20b1" target="_blank" rel="noopener">使用Python</a>的<a href="https://towardsdatascience.com/collaborative-filtering-based-recommendation-systems-exemplified-ecbffe1c20b1" target="_blank" rel="noopener">一些插图</a>。<br>当我遇到<a href="http://www2.informatik.uni-freiburg.de/~cziegler/BX/" target="_blank" rel="noopener">Book Crossing</a>数据集时，我开始构建图书推荐系统。该数据集由Cai-Nicolas Ziegler于2004年编制，包含三个用户，书籍和评级表。显性评级以1-10的等级表示（较高的值表示较高的评价），隐式评级表示为0。<br>在构建任何机器学习模型之前，了解数据是什么以及我们要实现的目标至关重要。数据探索揭示了隐藏的趋势和见解，数据预处理使数据可供ML算法使用。<br>那么，让我们开始吧。。。<br>首先，我们加载数据集并检查书籍，用户和评级数据集的形状，如下所示：<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1554396137040-eb978dec-6650-4a35-9738-ead4a11f8271.png#align=left&amp;display=inline&amp;height=289&amp;name=1_ZTqkKY7GFXRd1t4503dQ3w.png&amp;originHeight=310&amp;originWidth=800&amp;size=96749&amp;status=done&amp;width=746" alt="1_ZTqkKY7GFXRd1t4503dQ3w.png"><br><a name="8edb10fa"></a></p>
+<h3 id="图书"><a href="#图书" class="headerlink" title="图书"></a>图书</h3><p>逐个探索每个数据集并从书籍数据集开始，我们可以看到图像URL列似乎不需要进行分析，因此可以删除这些列。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1554396173760-23dbe311-b9e0-4bc1-a243-d4eb16c2c724.png#align=left&amp;display=inline&amp;height=264&amp;name=1_EEEj5e-6qt5fMGJrIjZCug.png&amp;originHeight=283&amp;originWidth=800&amp;size=95940&amp;status=done&amp;width=746" alt="1_EEEj5e-6qt5fMGJrIjZCug.png"><br>我们现在检查每个列的数据类型，并更正缺失和不一致的条目。我也在调整列宽以显示列的全文。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1554396199185-2c0f1356-8743-4951-9c71-8d93a9b31f58.png#align=left&amp;display=inline&amp;height=216&amp;name=1_4ad_p3FbZKUj2lnvfC5Ceg.png&amp;originHeight=216&amp;originWidth=397&amp;size=7531&amp;status=done&amp;width=397" alt="1_4ad_p3FbZKUj2lnvfC5Ceg.png"><br><a name="03a349f5"></a></p>
+<h4 id="yearofpublication介于"><a href="#yearofpublication介于" class="headerlink" title="yearofpublication介于"></a><strong>yearofpublication介于</strong></h4><p>现在我们检查此属性的唯一值。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1554396219914-b7442428-fd02-4afc-ab35-4e61928b277e.png#align=left&amp;display=inline&amp;height=548&amp;name=1_CjQEC5bTbONbsxvky3vgVA.png&amp;originHeight=588&amp;originWidth=800&amp;size=245299&amp;status=done&amp;width=746" alt="1_CjQEC5bTbONbsxvky3vgVA.png"></p>
+<p>yearOfPublication中有一些不正确的条目。由于csv文件中的一些错误，发布商名称’DK Publishing Inc’和’Gallimard’在数据集中被错误地加载为yearOfPublication。此外，某些值是字符串，并且在某些地方已将相同年份作为数字输入。我们将对这些行进行必要的更正，并将yearOfPublication的数据类型设置为int。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1554396252850-3c212c83-918d-4141-a632-f4a425b6ce72.png#align=left&amp;display=inline&amp;height=287&amp;name=1_j4J_hojQ7vMD5VL2Qyxjkw.png&amp;originHeight=308&amp;originWidth=800&amp;size=129836&amp;status=done&amp;width=746" alt="1_j4J_hojQ7vMD5VL2Qyxjkw.png"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1554396281954-90393054-c6e0-4895-b8ad-818425f9dfe2.png#align=left&amp;display=inline&amp;height=139&amp;name=1_7YhYmINE12tVKt1WksH8JA.png&amp;originHeight=149&amp;originWidth=800&amp;size=92092&amp;status=done&amp;width=746" alt="1_7YhYmINE12tVKt1WksH8JA.png"><br>现在可以看出yearOfPublication的类型为int，其值为0-2050。由于该数据集建于2004年，我假设2006年之后的所有年份都无效，保留两年的保证金，以防数据集可能已更新。对于所有无效条目（包括0），我将这些条目转换为NaN，然后用剩余年份的平均值替换它们。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1554396313170-6cc9f11a-35ba-42a7-aa05-65fc72072eff.png#align=left&amp;display=inline&amp;height=120&amp;name=1_aGwdY5dyGono0qwNYu8yXA.png&amp;originHeight=129&amp;originWidth=800&amp;size=50328&amp;status=done&amp;width=746" alt="1_aGwdY5dyGono0qwNYu8yXA.png"><br><a name="f15c9ea5"></a></p>
+<h4 id="出版者"><a href="#出版者" class="headerlink" title="出版者"></a>出版者</h4><p>来到“发布者”专栏，我已经处理了两个NaN值，将其替换为“其他”，因为在进行一些调查后无法推断出版商名称（检查jupyter notebook embed）。<br><br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1554396338493-7c29d4b5-3244-4d98-b64f-92a65e8affec.png#align=left&amp;display=inline&amp;height=200&amp;name=1_imEqkSgU-h-H-rdNgt0FTw.png&amp;originHeight=215&amp;originWidth=800&amp;size=60057&amp;status=done&amp;width=746" alt="1_imEqkSgU-h-H-rdNgt0FTw.png"><br><a name="21e82b04"></a></p>
+<h3 id="用户数据集"><a href="#用户数据集" class="headerlink" title="用户数据集"></a>用户数据集</h3><p>现在我们探索用户数据集，首先检查其形状，前几列和数据类型。<br><br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1554396368361-df33dc72-b637-44a7-adf4-49dce2eb3a09.png#align=left&amp;display=inline&amp;height=518&amp;name=1_2yeFf0w3rV9Qp0LeiIWRgw.png&amp;originHeight=518&amp;originWidth=657&amp;size=20359&amp;status=done&amp;width=657" alt="1_2yeFf0w3rV9Qp0LeiIWRgw.png"><br><a name="a01a9963"></a></p>
+<h4 id="年龄"><a href="#年龄" class="headerlink" title="年龄"></a>年龄</h4><p>检查唯一值后，userID看起来正确。但是，Age列具有NaN和一些非常高的值。在我看来，5岁以下和90岁以上的年龄没有多大意义，因此，这些正在被NaN取代。然后将所有NaN替换为Age的平均值，并将其数据类型设置为int。<br><br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1554396394899-fc2eb2ca-3aeb-4802-ac64-f2f2e8f52269.png#align=left&amp;display=inline&amp;height=328&amp;name=1_SryOBAoWEhpgP8FSQe3MhA.png&amp;originHeight=352&amp;originWidth=800&amp;size=174758&amp;status=done&amp;width=746" alt="1_SryOBAoWEhpgP8FSQe3MhA.png"></p>
+<p>我这里没有对Location列进行任何处理。但是，如果您希望可以进一步将其拆分为城市，州，国家，并使用文本处理模型进行一些处理。<br><a name="f91ed7d4"></a></p>
+<h3 id="评级数据集"><a href="#评级数据集" class="headerlink" title="评级数据集"></a>评级数据集</h3><p>我们检查评级数据集的形状和前几行。它揭示了我们的用户手册评级矩阵将非常稀疏，因为与评级矩阵的大小（用户数量×书籍数量）相比，实际评级非常低。<br><br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1554396419531-5e827619-1512-4c80-bda5-b81ceb6571ee.png#align=left&amp;display=inline&amp;height=475&amp;name=1_eo2wYWsJFl2euCq-X83q1A.png&amp;originHeight=505&amp;originWidth=793&amp;size=21878&amp;status=done&amp;width=746" alt="1_eo2wYWsJFl2euCq-X83q1A.png"><br>现在，评级数据集应该具有存在于各个表中的用户ID和ISBN，即。用户和书籍。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1554396535525-8ccbd35d-4291-47aa-a54c-fc14aff0e365.png#align=left&amp;display=inline&amp;height=187&amp;name=1.png&amp;originHeight=200&amp;originWidth=800&amp;size=43059&amp;status=done&amp;width=746" alt="1.png"><br>很明显，用户已经评价了一些书籍，这些书籍不是原始书籍数据集的一部分。数据集的稀疏度可以如下计算：</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1554396543348-87da76d2-129a-4f59-9091-9c05cb4b8c42.png#align=left&amp;display=inline&amp;height=80&amp;name=2.png&amp;originHeight=86&amp;originWidth=800&amp;size=31559&amp;status=done&amp;width=746" alt="2.png"><br>由1-10表示的显式评级和由0表示的隐含评级现在必须分开。我们将仅使用明确的评级来构建我们的图书推荐系统。同样，用户也被分为明确评级的人和记录其隐性行为的人。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1554396550904-2d0e7e20-bffc-4d62-a26e-55a0f5093b7a.png#align=left&amp;display=inline&amp;height=216&amp;name=3.png&amp;originHeight=232&amp;originWidth=800&amp;size=68442&amp;status=done&amp;width=746" alt="3.png"><br>bookRating的计数图表示更高的评级在用户中更常见，评级8被评为最高次数。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1554396562247-7f5f9f6c-e45a-4b7a-b15c-02813be3418e.png#align=left&amp;display=inline&amp;height=477&amp;name=4.png&amp;originHeight=512&amp;originWidth=800&amp;size=30571&amp;status=done&amp;width=746" alt="4.png"></p>
+<p><a name="b0440db3"></a></p>
+<h3 id="基于简单流行度的推荐系统"><a href="#基于简单流行度的推荐系统" class="headerlink" title="基于简单流行度的推荐系统"></a>基于简单流行度的推荐系统</h3><p>此时，可以基于不同书籍的用户评级的计数来构建基于简单流行度的推荐系统。很明显，JK罗琳撰写的书很受欢迎。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1554396572977-89fbd2a6-f91e-4329-be35-d558d09e0035.png#align=left&amp;display=inline&amp;height=81&amp;name=5.png&amp;originHeight=87&amp;originWidth=800&amp;size=35813&amp;status=done&amp;width=746" alt="5.png"><br><br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1554396579498-02fd55d3-2169-4d88-acca-fa7189ff1767.png#align=left&amp;display=inline&amp;height=248&amp;name=6.png&amp;originHeight=266&amp;originWidth=800&amp;size=109237&amp;status=done&amp;width=746" alt="6.png"></p>
+<p><a name="ee341588"></a></p>
+<h3 id="基于协同过滤的推荐系统"><a href="#基于协同过滤的推荐系统" class="headerlink" title="基于协同过滤的推荐系统"></a>基于协同过滤的推荐系统</h3><p>为了应对我的机器具有的计算能力并减少数据集大小，我正在考虑已经评价至少100本书籍和书籍至少有100个评级的用户。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1554396680899-4ee75287-188a-4cb0-ba89-16d11326cd48.png#align=left&amp;display=inline&amp;height=82&amp;name=1.png&amp;originHeight=88&amp;originWidth=800&amp;size=40210&amp;status=done&amp;width=746" alt="1.png"><br>构建基于CF的推荐系统的下一个关键步骤是从评级表生成用户项评级矩阵。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1554396686434-5fc4cde2-09fe-45c3-950c-9f3db233f9a0.png#align=left&amp;display=inline&amp;height=316&amp;name=2.png&amp;originHeight=339&amp;originWidth=800&amp;size=69833&amp;status=done&amp;width=746" alt="2.png"><br>请注意，评级矩阵中的大多数值都是NaN，表示没有评级，因此数据稀疏。另请注意，此处仅考虑了明确的评级。由于大多数机器学习算法无法处理NaN，我们将其替换为0，现在表示没有评级。<br><a name="2c38122b"></a></p>
+<h3 id="基于用户的CF"><a href="#基于用户的CF" class="headerlink" title="基于用户的CF."></a>基于用户的CF.</h3><p>我将重用我的<a href="https://towardsdatascience.com/collaborative-filtering-based-recommendation-systems-exemplified-ecbffe1c20b1" target="_blank" rel="noopener">基于CF的推荐系统示例的功能</a>。函数<strong>findksimilarusers</strong>输入userID和rating矩阵并返回k个类似用户的相似性和索引。（阅读我以前的故事，了解基于用户/项目的CF方法的概念和公式）</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1554396694346-cd1ba31b-d435-4e39-ab89-f81943c038db.png#align=left&amp;display=inline&amp;height=159&amp;name=3.png&amp;originHeight=170&amp;originWidth=800&amp;size=45513&amp;status=done&amp;width=746" alt="3.png"><br>函数<strong>predict_userbased</strong>基于基于用户的方法预测指定用户 - 项目组合的评级。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1554396699276-ad0fc8b5-0955-437e-b025-8d205a1d4efb.png#align=left&amp;display=inline&amp;height=369&amp;name=4.png&amp;originHeight=396&amp;originWidth=800&amp;size=124099&amp;status=done&amp;width=746" alt="4.png"><br>功能<strong>recommendedItem</strong>使用上述功能来推荐基于用户或基于项目的方法的书籍（基于所选方法和度量组合）。如果图书的预测评级大于或等于6，并且图书尚未评级，则会提出建议。您可以在调用此函数时选择相似性度量（<strong>余弦/相关</strong>）。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1554396704777-c8257772-06e3-42f6-b483-e55621e17f12.png#align=left&amp;display=inline&amp;height=487&amp;name=5.png&amp;originHeight=522&amp;originWidth=800&amp;size=181084&amp;status=done&amp;width=746" alt="5.png"><br>而且Voila !!! 根据基于用户的CF方法，检查用户4385的前10本书籍建议。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1554396711192-17da889f-611d-4178-b65c-0afb334c20aa.png#align=left&amp;display=inline&amp;height=287&amp;name=6.png&amp;originHeight=308&amp;originWidth=800&amp;size=83426&amp;status=done&amp;width=746" alt="6.png"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1554396717250-81d0c850-7bb1-4858-bd9b-0df2b986feaf.jpeg#align=left&amp;display=inline&amp;height=345&amp;name=7.jpeg&amp;originHeight=370&amp;originWidth=800&amp;size=102445&amp;status=done&amp;width=746" alt="7.jpeg"><br><a name="e0f0ea3d"></a></p>
+<h3 id="基于项目的CF"><a href="#基于项目的CF" class="headerlink" title="基于项目的CF."></a>基于项目的CF.</h3><p>已经为基于项目的CF编写了类似的函数来查找类似的书籍并预测用户对每本书的评级。相同的功能<strong>recommendedItem</strong>可用于根据基于项目的方法和选定的指标推荐书籍。如果图书的预测评级大于或等于6，并且图书尚未评级，则会提出建议。<br><br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1554396755268-57289ed4-b8a5-4776-86f8-d10b24611861.png#align=left&amp;display=inline&amp;height=157&amp;name=1.png&amp;originHeight=168&amp;originWidth=800&amp;size=49386&amp;status=done&amp;width=746" alt="1.png"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1554396760313-d9320d72-ca0b-4767-baa6-4ff738d809ba.png#align=left&amp;display=inline&amp;height=431&amp;name=2.png&amp;originHeight=462&amp;originWidth=800&amp;size=121005&amp;status=done&amp;width=746" alt="2.png"><br>哇！！！根据基于项目的CF方法检查用户4385的前10本书籍建议。这些与基于用户的方法建议的显着不同。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1554396766203-5432316f-8af5-4ab3-af1e-70468b5d2be0.png#align=left&amp;display=inline&amp;height=317&amp;name=3.png&amp;originHeight=340&amp;originWidth=800&amp;size=76417&amp;status=done&amp;width=746" alt="3.png"><br>在这篇文章中，交叉验证，测试列车拆分和推荐系统评估等领域尚未涉及，这些领域值得探讨。这段代码的Jupyter笔记本嵌入在下面。<br><a href="https://github.com/csaluja/JupyterNotebooks-Medium/blob/master/Book%20Recommendation%20System.ipynb" target="_blank" rel="noopener"><strong>csaluja / JupyterNotebooks-Medium</strong><br>_通过在GitHub上创建帐户，为JupyterNotebooks-Medium开发做出贡献。_github.com</a></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/04/05/yuque/我的建立图书推荐系统之旅。。。/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-yuque/webhook实现服务器自动部署" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -934,111 +1026,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2019/03/18/yuque/使用Spark Structured Streaming，XGBoost和Scala进行实时预测/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/PySpark ML和XGBoost完全集成在Kaggle Titanic数据集上进行了测试" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/18/yuque/PySpark ML和XGBoost完全集成在Kaggle Titanic数据集上进行了测试/">PySpark ML和XGBoost完全集成在Kaggle Titanic数据集上进行了测试</a>
-    </h1>
-  
-
-        
-        <a href="/2019/03/18/yuque/PySpark ML和XGBoost完全集成在Kaggle Titanic数据集上进行了测试/" class="archive-article-date">
-  	<time datetime="2019-03-18T02:32:11.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-18</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>在本教程中，我们将讨论使用标准机器学习管道集成PySpark和XGBoost。我们将使用来自<a href="https://www.kaggle.com/c/titanic/data" target="_blank" rel="noopener">泰坦尼克号的</a>数据<a href="https://www.kaggle.com/c/titanic/data" target="_blank" rel="noopener">：机器学习灾难</a>中的众多Kaggle比赛之一。在开始之前，请知道您应该熟悉<a href="https://spark.apache.org/" target="_blank" rel="noopener">Apache Spark</a>和<a href="http://xgboost.readthedocs.io/en/latest/get_started/" target="_blank" rel="noopener">Xgboost</a>以及Python。本教程中使用的代码可以在<a href="https://github.com/BogdanCojocar/medium-articles/blob/master/titanic_xgboost/titanic_xgboost.ipynb" target="_blank" rel="noopener">github</a>上的Jupyther笔记本中找到。<br><a name="fa501ee4"></a></p>
-<h4 id="第1步：下载或构建XGBoost-jar"><a href="#第1步：下载或构建XGBoost-jar" class="headerlink" title="第1步：下载或构建XGBoost jar"></a>第1步：下载或构建XGBoost jar</h4><p>python代码需要两个scala jar依赖项才能工作。您可以直接从maven下载它们：</p>
-<ul>
-<li><a href="https://mvnrepository.com/artifact/ml.dmlc/xgboost4j/0.72" target="_blank" rel="noopener">xgboost4j</a></li>
-<li><a href="https://mvnrepository.com/artifact/ml.dmlc/xgboost4j-spark/0.72" target="_blank" rel="noopener">xgboost4j火花</a></li>
-</ul>
-<p>如果您希望自己构建它们，可以从我之前的<a href="https://medium.com/@bogdan.cojocar/how-to-make-xgboost-available-in-the-spark-notebook-de14e425c948" target="_blank" rel="noopener">教程中</a>找到如何进行构建。<br><a name="059757b0"></a></p>
-<h4 id="第2步：下载XGBoost-python包装器"><a href="#第2步：下载XGBoost-python包装器" class="headerlink" title="第2步：下载XGBoost python包装器"></a>第2步：下载XGBoost python包装器</h4><p>您可以从<a href="https://github.com/dmlc/xgboost/files/2161553/sparkxgb.zip" target="_blank" rel="noopener">此处</a>下载PySpark XGBoost代码。这是我们要编写的部分和XGBoost scala实现之间的接口。我们将在本教程后面的代码中看到它如何集成。<br><a name="f8c06a61"></a></p>
-<h4 id="第3步：启动一个新的Jupyter笔记本"><a href="#第3步：启动一个新的Jupyter笔记本" class="headerlink" title="第3步：启动一个新的Jupyter笔记本"></a>第3步：启动一个新的Jupyter笔记本</h4><p>我们将开始一个新的笔记本，以便能够编写我们的代码：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jupyter notebook</span><br></pre></td></tr></table></figure>
-<p><a name="cdde53ac"></a></p>
-<h4 id="第4步：将自定义XGBoost-jar添加到Spark应用程序"><a href="#第4步：将自定义XGBoost-jar添加到Spark应用程序" class="headerlink" title="第4步：将自定义XGBoost jar添加到Spark应用程序"></a>第4步：将自定义XGBoost jar添加到Spark应用程序</h4><p>在开始Spark之前，我们需要添加我们之前下载的jar。我们可以使用<code>--jars</code>标志来做到这一点：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">import os </span><br><span class="line">os.environ [&apos;PYSPARK_SUBMIT_ARGS&apos;] =&apos; -  jars xgboost4j-spark-0.72.jar，xgboost4j-0.72.jar pyspark-shell&apos;</span><br></pre></td></tr></table></figure>
-<p><a name="13d9ee40"></a></p>
-<h4 id="第5步：将PySpark集成到Jupyther笔记本中"><a href="#第5步：将PySpark集成到Jupyther笔记本中" class="headerlink" title="第5步：将PySpark集成到Jupyther笔记本中"></a>第5步：将PySpark集成到Jupyther笔记本中</h4><p>使PySpark可用的最简单方法是使用该<code>[findspark](https://github.com/minrk/findspark)</code>软件包：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">import findspark </span><br><span class="line">findspark.init（）</span><br></pre></td></tr></table></figure>
-<p><a name="dd505c79"></a></p>
-<h4 id="第6步：启动spark会话"><a href="#第6步：启动spark会话" class="headerlink" title="第6步：启动spark会话"></a>第6步：启动spark会话</h4><p>我们现在准备开始火花会议。我们正在创建一个将在本地运行的spark应用程序，并将使用与使用的核心一样多的线程<code>local[*]</code> ：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">spark = SparkSession\</span><br><span class="line">        .builder\</span><br><span class="line">        .appName(&quot;PySpark XGBOOST Titanic&quot;)\</span><br><span class="line">        .master(&quot;local[*]&quot;)\</span><br><span class="line">        .getOrCreate()</span><br></pre></td></tr></table></figure>
-<p><a name="47ff7d29"></a></p>
-<h4 id="第7步：添加PySpark-XGBoost包装器代码"><a href="#第7步：添加PySpark-XGBoost包装器代码" class="headerlink" title="第7步：添加PySpark XGBoost包装器代码"></a>第7步：添加PySpark XGBoost包装器代码</h4><p>正如我们现在有了spark会话，我们可以添加先前下载的包装器代码：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">spark.sparkContext.addPyFile(&quot;YOUR_PATH/sparkxgb.zip&quot;)</span><br></pre></td></tr></table></figure>
-<p><a name="7f1a0f62"></a></p>
-<h4 id="第8步：定义架构"><a href="#第8步：定义架构" class="headerlink" title="第8步：定义架构"></a>第8步：定义架构</h4><p>接下来，我们定义从csv读取的数据的模式。这通常比让火花推断模式更好，因为它消耗的资源更少，我们可以完全控制字段。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">schema = StructType(</span><br><span class="line">  [StructField(&quot;PassengerId&quot;, DoubleType()),</span><br><span class="line">    StructField(&quot;Survival&quot;, DoubleType()),</span><br><span class="line">    StructField(&quot;Pclass&quot;, DoubleType()),</span><br><span class="line">    StructField(&quot;Name&quot;, StringType()),</span><br><span class="line">    StructField(&quot;Sex&quot;, StringType()),</span><br><span class="line">    StructField(&quot;Age&quot;, DoubleType()),</span><br><span class="line">    StructField(&quot;SibSp&quot;, DoubleType()),</span><br><span class="line">    StructField(&quot;Parch&quot;, DoubleType()),</span><br><span class="line">    StructField(&quot;Ticket&quot;, StringType()),</span><br><span class="line">    StructField(&quot;Fare&quot;, DoubleType()),</span><br><span class="line">    StructField(&quot;Cabin&quot;, StringType()),</span><br><span class="line">    StructField(&quot;Embarked&quot;, StringType())</span><br><span class="line">  ])</span><br></pre></td></tr></table></figure>
-<p><a name="44ee9a9a"></a></p>
-<h4 id="步骤9：将csv数据读入数据帧"><a href="#步骤9：将csv数据读入数据帧" class="headerlink" title="步骤9：将csv数据读入数据帧"></a>步骤9：将csv数据读入数据帧</h4><p>我们将csv读入a <code>DataFrame</code>，确保我们提到我们有一个标题，我们也<code>null</code>用0 替换值：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">df_raw = spark\</span><br><span class="line">  .read\</span><br><span class="line">  .option(&quot;header&quot;, &quot;true&quot;)\</span><br><span class="line">  .schema(schema)\</span><br><span class="line">  .csv(&quot;YOUR_PATH/train.csv&quot;)</span><br><span class="line">df = df_raw.na.fill(0)</span><br></pre></td></tr></table></figure>
-<p><a name="f50eacdc"></a></p>
-<h4 id="步骤10：C-将标称值转换为数字"><a href="#步骤10：C-将标称值转换为数字" class="headerlink" title="步骤10：C 将标称值转换为数字"></a>步骤10：C <strong>将标称值转换为数字</strong></h4><p>在浏览此步骤的代码之前，让我们简要介绍一些Spark ML概念。他们介绍了ML管道的概念，它是一组构建在其上的高级API <code>DataFrames</code>，可以更轻松地将多个算法组合到一个流程中。管道的主要元素是<code>Transformer</code>和<code>Estimator</code>。第一个可以表示可以将a <code>DataFrame</code>转换为另一个<code>DataFrame</code>的算法，而后者是可以适合a <code>DataFrame</code>来生成a 的算法<code>Transformer</code> 。<br>为了将名义值转换为数字值，我们需要<code>Transformer</code>为每列定义一个：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">sexIndexer = StringIndexer()\</span><br><span class="line">  .setInputCol(&quot;Sex&quot;)\</span><br><span class="line">  .setOutputCol(&quot;SexIndex&quot;)\</span><br><span class="line">  .setHandleInvalid(&quot;keep&quot;)</span><br><span class="line">    </span><br><span class="line">cabinIndexer = StringIndexer()\</span><br><span class="line">  .setInputCol(&quot;Cabin&quot;)\</span><br><span class="line">  .setOutputCol(&quot;CabinIndex&quot;)\</span><br><span class="line">  .setHandleInvalid(&quot;keep&quot;)</span><br><span class="line">    </span><br><span class="line">embarkedIndexer = StringIndexer()\</span><br><span class="line">  .setInputCol(&quot;Embarked&quot;)\</span><br><span class="line">  .setOutputCol(&quot;EmbarkedIndex&quot;)\</span><br><span class="line">  .setHandleInvalid(&quot;keep&quot;)</span><br></pre></td></tr></table></figure>
-<p>我们正在使用它<code>StringIndexer</code>来转换价值观。对于每个<code>Transformer</code>我们定义的输入列和输出列将包含修改后的值。<br><a name="fd3cbfb0"></a></p>
-<h4 id="步骤11：将列组合成特征向量"><a href="#步骤11：将列组合成特征向量" class="headerlink" title="步骤11：将列组合成特征向量"></a>步骤11：<strong>将列组合成特征向量</strong></h4><p>我们将使用另一个<code>Transformer</code>将XGBoost分类中使用的列组合<code>Estimator</code>成一个向量：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">vectorAssembler = VectorAssembler()\</span><br><span class="line">  .setInputCols([&quot;Pclass&quot;, &quot;SexIndex&quot;, &quot;Age&quot;, &quot;SibSp&quot;, &quot;Parch&quot;, &quot;Fare&quot;, &quot;CabinIndex&quot;, &quot;EmbarkedIndex&quot;])\</span><br><span class="line">  .setOutputCol(&quot;features&quot;)</span><br></pre></td></tr></table></figure>
-<p><a name="220de1c1"></a></p>
-<h4 id="第12步：定义XGBoostEstimator"><a href="#第12步：定义XGBoostEstimator" class="headerlink" title="第12步：定义XGBoostEstimator"></a>第12步：定义XGBoostEstimator</h4><p>在这一步中，我们定义了<code>Estimator</code>将产生模型的东西。这里使用的大多数参数都是默认的：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">xgboost = XGBoostEstimator(</span><br><span class="line">    featuresCol=&quot;features&quot;, </span><br><span class="line">    labelCol=&quot;Survival&quot;, </span><br><span class="line">    predictionCol=&quot;prediction&quot;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
-<p>我们只定义<code>feature, label</code>（必须匹配来自的列<code>DataFrame</code>）和<code>prediction</code>包含分类器输出的新列。<br><a name="07d0e7ba"></a></p>
-<h4 id="步骤13：建立管道和分类器"><a href="#步骤13：建立管道和分类器" class="headerlink" title="步骤13：建立管道和分类器"></a>步骤13：<strong>建立管道和分类器</strong></h4><p>在我们创建了所有单独的步骤之后，我们可以定义实际的管道和操作的顺序：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pipeline = Pipeline().setStages([sexIndexer, cabinIndexer, embarkedIndexer, vectorAssembler, xgboost])</span><br></pre></td></tr></table></figure>
-<p>输入<code>DataFrame</code>将被多次转换，最终将生成使用我们的数据训练的模型。<br><a name="4e3e3575"></a></p>
-<h4 id="步骤14：训练模型并预测新的测试数据"><a href="#步骤14：训练模型并预测新的测试数据" class="headerlink" title="步骤14：训练模型并预测新的测试数据"></a>步骤14：训练模型并预测新的测试数据</h4><p>我们首先将数据分成火车和测试，然后我们将模型与火车数据拟合，最后我们看到我们为每位乘客获得的预测：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">trainDF, testDF = df.randomSplit([0.8, 0.2], seed=24)</span><br><span class="line">model = pipeline.fit(trainDF)</span><br><span class="line">model.transform(testDF).select(col(&quot;PassengerId&quot;), col(&quot;prediction&quot;)).show()</span><br></pre></td></tr></table></figure>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/03/18/yuque/PySpark ML和XGBoost完全集成在Kaggle Titanic数据集上进行了测试/">展开全文 >></a>
         </p>
       
 
