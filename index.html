@@ -361,28 +361,14 @@
 <ol>
 <li>香草RNN，</li>
 <li>长期短暂记忆（LSTM），由<a href="https://www.researchgate.net/publication/13853244_Long_Short-term_Memory" target="_blank" rel="noopener">Hochreiter和Schmidhuber在1997年提出</a>，和</li>
-<li><a href="https://arxiv.org/abs/1409.1259" target="_blank" rel="noopener">Cho _等人_</a>提出的门控复发单位（GRU）<a href="https://arxiv.org/abs/1409.1259" target="_blank" rel="noopener">_。_</a><a href="https://arxiv.org/abs/1409.1259" target="_blank" rel="noopener">_人_</a><a href="https://arxiv.org/abs/1409.1259" target="_blank" rel="noopener">在2014年</a>。<br>请注意，我将使用“RNN”来统一指代固有循环的神经网络架构，并使用“vanilla RNN”来指代最简单的递归神经网络架构，如图&gt; <a href="https://towardsdatascience.com/animated-rnn-lstm-and-gru-ef124d06cf45#50f0" target="_blank" rel="noopener">1</a>所示。<br>有许多用于递归神经网络的图解图。我最喜欢的是迈克尔·阮（Michael Nguyen）在<a href="https://towardsdatascience.com/illustrated-guide-to-lstms-and-gru-s-a-step-by-step-explanation-44e9eb85bf21" target="_blank" rel="noopener">“</a>走向数据科学”（Towards Data Science）上发表的<a href="https://towardsdatascience.com/illustrated-guide-to-lstms-and-gru-s-a-step-by-step-explanation-44e9eb85bf21" target="_blank" rel="noopener">这篇文章</a>，因为他为我们提供了对这些模型的直觉，更重要的是让我们更容易理解的美丽插图。但我的帖子背后的动机是更好地可视化在这些单元格中发生的事情，以及如何共享节点以及它们如何转换以给出输出节点。我的灵感来自迈克尔的精彩动画。<br>本文探讨了香草RNN，LSTM和GRU细胞。这是一个简短的阅读，适用于那些阅读过这些主题的人。（我建议在阅读这篇文章之前阅读迈克尔的文章。）重要的是要注意以下动画是连续的，以引导人眼，但不反映矢量化机器计算期间的时间顺序。<br>这是我用于插图的传奇。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1554694591267-9709e850-0b87-45d2-a044-b150e938af07.png#align=left&amp;display=inline&amp;height=530&amp;name=2.png&amp;originHeight=710&amp;originWidth=1000&amp;size=150263&amp;status=done&amp;width=746" alt="2.png"><br>在我的动画中，我使用的输入大小为3（绿色）和2个隐藏单位（红色），批量大小为1。<br>让我们开始！</li>
-</ol>
-<hr>
-<p><a name="9ee03e2d"></a></p>
-<h4 id="香草RNN"><a href="#香草RNN" class="headerlink" title="香草RNN"></a>香草RNN</h4><p><img src="https://cdn.nlark.com/yuque/0/2019/gif/219582/1554694630260-46ed551e-1593-4ae3-b3d9-2381045a2dd0.gif#align=left&amp;display=inline&amp;height=555&amp;name=2.gif&amp;originHeight=717&amp;originWidth=964&amp;size=96255&amp;status=done&amp;width=746" alt="2.gif"></p>
-<ul>
-<li>_牛逼_  -时间步</li>
-<li>_X - _输入</li>
-<li>_h - _隐藏状态</li>
-<li>_X的_- _输入的尺寸/尺寸</li>
-<li>_h的_- _没有。隐藏单位。需要注意的是不同的库调用它们不同，但它们的意思是一样的：<br>- Keras - <code>[state_size](https://keras.io/layers/recurrent/)</code>_ ，_ - PyTorch -  - TensorFlow - <code>[units](https://keras.io/layers/recurrent/#lstm)`</code><a href="https://pytorch.org/docs/stable/nn.html#rnn" target="_blank" rel="noopener">hidden_size</a><code>&lt;br /&gt;</code><a href="https://www.tensorflow.org/api_docs/python/tf/nn/rnn_cell/BasicLSTMCell" target="_blank" rel="noopener">num_units</a>`<br><a name="LSTM"></a><h4 id="LSTM"><a href="#LSTM" class="headerlink" title="LSTM"></a>LSTM</h4><img src="https://cdn.nlark.com/yuque/0/2019/gif/219582/1554694719107-ae608d63-3a0c-4132-81ca-4b3ab2684802.gif#align=left&amp;display=inline&amp;height=494&amp;name=3.gif&amp;originHeight=662&amp;originWidth=1000&amp;size=468764&amp;status=done&amp;width=746" alt="3.gif"></li>
-<li>_C - _细胞状态</li>
-</ul>
-<p>注意，单元状态的维度与隐藏状态的维度相同。<br><a name="GRU"></a></p>
-<h4 id="GRU"><a href="#GRU" class="headerlink" title="GRU"></a>GRU</h4><p><img src="https://cdn.nlark.com/yuque/0/2019/gif/219582/1554694757747-8ba1a035-c84a-43d3-86c7-9eea37543ef5.gif#align=left&amp;display=inline&amp;height=527&amp;name=4.gif&amp;originHeight=707&amp;originWidth=1000&amp;size=359796&amp;status=done&amp;width=746" alt="4.gif"><br>希望这些动画以某种方式帮助你！以下是静态图像中单元格的摘要：<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1554694805790-03e88c08-26ab-4be9-bb3f-a1104ecab19f.png#align=left&amp;display=inline&amp;height=555&amp;name=7.png&amp;originHeight=717&amp;originWidth=964&amp;size=72617&amp;status=done&amp;width=746" alt="7.png"></p>
-<p>图4：香草RNN细胞<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1554694860682-eadcdb72-9e37-4887-adac-c8ef5a13df99.png#align=left&amp;display=inline&amp;height=494&amp;name=8.png&amp;originHeight=662&amp;originWidth=1000&amp;size=134631&amp;status=done&amp;width=746" alt="8.png">图5：LSTM细胞<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1554694874056-361ddbe5-8f3e-4bf2-b14a-bdf281d961fb.png#align=left&amp;display=inline&amp;height=527&amp;name=9.png&amp;originHeight=707&amp;originWidth=1000&amp;size=122999&amp;status=done&amp;width=746" alt="9.png"><br>图6：GRU细胞<br><a name="7cbcc2b2"></a></p>
-<h4 id="深度学习相关文章"><a href="#深度学习相关文章" class="headerlink" title="深度学习相关文章"></a>深度学习相关文章</h4><p><a href="https://towardsdatascience.com/an-implementation-guide-to-word2vec-using-numpy-and-google-sheets-13445eebd281" target="_blank" rel="noopener">逐行Word2Vec实现</a>（关于字嵌入）<br><a href="https://towardsdatascience.com/step-by-step-tutorial-on-linear-regression-with-stochastic-gradient-descent-1d35b088a843" target="_blank" rel="noopener">带随机梯度下降的线性回归分步教程</a><br><a href="https://towardsdatascience.com/10-gradient-descent-optimisation-algorithms-86989510b5e9" target="_blank" rel="noopener">10个梯度下降优化算法+备忘单</a><br><a href="https://towardsdatascience.com/counting-no-of-parameters-in-deep-learning-models-by-hand-8f1716241889" target="_blank" rel="noopener">计算深度学习模型中的参数数量</a><br><a href="https://towardsdatascience.com/attn-illustrated-attention-5ec4ad276ee3" target="_blank" rel="noopener">Attn：插图注意</a><br><br></p>
-
+<li><a href="https://arxiv.org/abs/1409.1259" target="_blank" rel="noopener">Cho _等人_</a>提出的门控复发单位（GRU）<a href="https://arxiv.org/abs/1409.1259" target="_blank" rel="noopener">_。_</a><a href="https://arxiv.org/abs/1409.1259" target="_blank" rel="noopener">_人_</a><a href="https://arxiv.org/abs/1409.1259" target="_blank" rel="noopener">在2014年</a>。<br>请注意，我将使用“RNN”来统一指代固有循环的神经网络架构，并使用“vanilla RNN”来指代最简单的递归神经网络架构，如图&gt; <a href="https://towardsdatascience.com/animated-rnn-lstm-and-gru-ef124d06cf45#50f0" target="_blank" rel="noopener">1</a>所示。<br>有许多用于递归神经网络的图解图。我最喜欢的是迈克尔·阮（Michael Nguyen）在<a href="https://towardsdatascience.com/illustrated-guide-to-lstms-and-gru-s-a-step-by-step-explanation-44e9eb85bf21" target="_blank" rel="noopener">“</a>走向数据科学”（Towards Data Science）上发表的<a href="https://towardsdatascience.com/illustrated-guide-to-lstms-and-gru-s-a-step-by-step-explanation-44e9eb85bf21" target="_blank" rel="noopener">这篇文章</a>，因为他为我们提供了对这些模型的直觉，更重要的是让我们更容易理解的美丽插图。但我的帖子背后的动机是更好地可视化在这些单元格中发生的事情，以及如何共享节点以及它们如何转换以给出输出节点。我的灵感来自迈克尔的精彩动画。<br>本文探讨了香草RNN，LSTM和GRU细胞。这是一个简短的阅读，适用于那些阅读过这些主题的人。（我建议在阅读这篇文章之前阅读迈克尔的文章。）重要的是要注意以下动画是连续的，以引导人眼，但不反映矢量化机器计算期间的时间顺序。<br>
+        
+          <a class="article-more-a" href="/2019/04/08/yuque/动画RNN，LSTM和GRU/#more">more >></a>
+        
       
 
       
-    </div>
+    </li></ol></div>
     <div class="article-info article-info-index">
       
       
@@ -440,53 +426,14 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1554692595416-69c4133a-0fb6-4ae5-b308-642403bd2216.png#align=left&amp;display=inline&amp;height=521&amp;name=1.png&amp;originHeight=699&amp;originWidth=1000&amp;size=991609&amp;status=done&amp;width=746" alt="1.png"><br>我还记得十五年前我第一份工作的第一天。我刚完成研究生课程，并以分析师的身份加入了一家全球投资银行。在我的第一天，我一直拉直领带，并试着记住我学过的一切。与此同时，在内心深处，我想知道我是否对企业界足够好。感觉到我的焦虑，我的老板微笑着说：<br><em>“别担心！你唯一需要知道的就是回归建模！“</em><br>我记得自己在想，“我得到了这个！”。我知道回归建模; 线性和逻辑回归。我的老板是对的。在我任职期间，我专门建立了基于回归的统计模型。我并不孤单。事实上，在那个时候，回归建模是无可争议的预测分析女王。快进十五年，回归建模的时代已经结束。老女王已经过去了。新女王的名字很长，名字很久; XGBoost或Extreme Gradient Boosting！</p>
-<hr>
-<p><a name="642c3585"></a></p>
-<h3 id="什么是XGBoost？"><a href="#什么是XGBoost？" class="headerlink" title="什么是XGBoost？"></a>什么是XGBoost？</h3><p><a href="https://xgboost.ai/" target="_blank" rel="noopener">XGBoost</a><strong> </strong>是一种基于决策树的集成机器学习算法，它使用<a href="https://en.wikipedia.org/wiki/Gradient_boosting" target="_blank" rel="noopener">梯度增强</a>框架。在涉及非结构化数据（图像，文本等）的预测问题中，人工神经网络倾向于优于所有其他算法或框架。但是，当涉及到中小型结构/表格数据时，基于决策树的算法现在被认为是同类最佳的。多年来，请参阅下面的图表，了解基于树的算法的演变。<br><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1554692646873-57905125-7adf-4713-81ff-c3e752d91669.jpeg#align=left&amp;display=inline&amp;height=398&amp;name=2.jpeg&amp;originHeight=493&amp;originWidth=925&amp;size=124452&amp;status=done&amp;width=746" alt="2.jpeg"><br>XGBoost算法是作为华盛顿大学的研究项目开发的。<a href="https://arxiv.org/pdf/1603.02754.pdf" target="_blank" rel="noopener">陈天琪和Carlos Guestrin</a>在2016年的SIGKDD会议上发表了他们的论文，并在火灾中抓住了机器学习世界。自推出以来，该算法不仅赢得了众多Kaggle比赛的胜利，而且还成为几个尖端行业应用的引擎驱动力。因此，有一个强大的数据科学家社区为XGBoost开源项目做出贡献，在<a href="https://github.com/dmlc/xgboost/" target="_blank" rel="noopener">GitHub上</a>有大约350个贡献者和大约3,600个提交。该算法通过以下方式区分自己：</p>
-<ol>
-<li>广泛的应用：可用于解决回归，分类，排名和用户定义的预测问题。</li>
-<li>可移植性：在Windows，Linux和OS X上运行顺畅。</li>
-<li>语言：支持所有主要的编程语言，包括C ++，Python，R，Java，Scala和Julia。</li>
-<li>云集成：支持AWS，Azure和Yarn集群，适用于Flink，Spark和其他生态系统。<br><a name="8186e153"></a><h3 id="如何为XGBoost建立直觉？"><a href="#如何为XGBoost建立直觉？" class="headerlink" title="如何为XGBoost建立直觉？"></a>如何为XGBoost建立直觉？</h3>决策树以其最简单的形式，易于可视化和可解释的算法，但为下一代基于树的算法建立直觉可能有点棘手。请参阅下面的简单类比，以更好地了解基于树的算法的演变。<br><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1554692717316-9be63bbc-6094-4bb5-9f12-b539e3e52244.jpeg#align=left&amp;display=inline&amp;height=539&amp;name=3.jpeg&amp;originHeight=722&amp;originWidth=1000&amp;size=255796&amp;status=done&amp;width=746" alt="3.jpeg"><br>想象一下，你是一名招聘经理，面试几位具有优秀资历的候选人。基于树的算法演变的每一步都可以看作是访谈过程的一个版本。</li>
-<li><strong>决策树</strong>：每个招聘经理都有一套标准，如教育水平，经验年数，面试表现。决策树类似于招聘经理根据他或她自己的标准面试候选人。</li>
-<li><strong>套袋</strong>：现在想象一下，而不是一个面试官，现在有一个面试小组，每个面试官都有一个投票。套袋或自助聚合涉及通过民主投票过程将来自所有调查员的输入结合起来以做出最终决定。</li>
-<li><strong>随机森林</strong>：它是一种基于装袋的算法，具有关键差异，其中仅随机选择特征的子集。换句话说，每个面试官只会根据某些随机选择的资格测试受访者（例如，测试编程技能的技术面试和评估非技术技能的行为面试）。</li>
-<li><strong>提升</strong>：这是一种替代方法，每位访调员根据前一位访调员的反馈改变评估标准。通过部署更加动态的评估流程，“提高”面试流程的效率。</li>
-<li><strong>梯度提升</strong>：通过梯度下降算法提高误差最小化的特殊情况，例如策略咨询公司利用案例访谈来剔除不太合格的候选人。</li>
-<li><strong>XGBoost</strong>：将XGBoost视为’类固醇’的梯度增强（因此有人称之为’极端梯度提升’）！它是软件和硬件优化技术的完美结合，可在最短的时间内使用较少的计算资源产生出色的结果。</li>
-</ol>
-<hr>
-<p><a name="e23d97e3"></a></p>
-<h3 id="为什么XGBoost表现如此之好？"><a href="#为什么XGBoost表现如此之好？" class="headerlink" title="为什么XGBoost表现如此之好？"></a>为什么XGBoost表现如此之好？</h3><p>XGBoost和Gradient Boosting Machines（GBMs）都是集合树方法，它们应用了使用梯度下降架构来提升弱学习者（通常是<a href="https://www.datasciencecentral.com/profiles/blogs/introduction-to-classification-regression-trees-cart" target="_blank" rel="noopener">CART</a>）的原理。但是，XGBoost通过系统优化和算法增强改进了基础GBM框架。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1554692803667-2230a8de-9a3a-4b1d-9fde-6930d429d55c.png#align=left&amp;display=inline&amp;height=388&amp;name=4.png&amp;originHeight=404&amp;originWidth=777&amp;size=88329&amp;status=done&amp;width=746" alt="4.png"><br><strong>系统优化：</strong></p>
-<ol>
-<li><strong>并行化</strong>：XGBoost使用<a href="http://zhanpengfang.github.io/418home.html" target="_blank" rel="noopener">并行化</a>实现来处理顺序树构建过程。由于用于构建基础学习者的循环的可互换性，这是可能的。枚举树的叶节点的外部循环，以及计算特征的第二个内部循环。这种循环嵌套限制了并行化，因为没有完成内部循环（对两者的计算要求更高），外部循环无法启动。因此，为了改善运行时间，使用初始化通过所有实例的全局扫描和使用并行线程排序来交换循环的顺序。此开关通过抵消计算中的任何并行化开销来提高算法性能。</li>
-<li><strong>树修剪：</strong> GBM框架内树分裂的停止标准本质上是贪婪的，取决于分裂点的负损失标准。XGBoost首先使用’max_depth’参数而不是标准，然后开始向后修剪树。这种“深度优先”方法显着提高了计算性能。</li>
-<li><strong>硬件优化</strong>：该算法旨在有效利用硬件资源。这是通过在每个线程中分配内部缓冲区来存储梯度统计信息来实现缓存感知来实现的。诸如“核外”计算等进一步增强功能可优化可用磁盘空间，同时处理不适合内存的大数据帧。</li>
-</ol>
-<p><strong>算法增强功能：</strong></p>
-<ol>
-<li><strong>正则化</strong>：它通过LASSO（L1）和Ridge（L2）<a href="https://towardsdatascience.com/l1-and-l2-regularization-methods-ce25e7fc831c" target="_blank" rel="noopener">正则化</a>来惩罚更复杂的模型，以防止过度拟合。</li>
-<li><strong>稀疏意识</strong>：XGBoost通过根据训练损失自动“学习”最佳缺失值并更有效地处理数据中不同类型的<a href="https://www.kdnuggets.com/2017/10/xgboost-concise-technical-overview.html" target="_blank" rel="noopener">稀疏模式</a>，自然地承认输入的稀疏特征。</li>
-<li><strong>加权分位数草图：</strong> XGBoost采用分布式<a href="https://arxiv.org/pdf/1603.02754.pdf" target="_blank" rel="noopener">加权分位数草图算法</a>有效地找到加权数据集中的最优分裂点。</li>
-<li><strong>交叉验证</strong>：该算法在每次迭代时都带有内置的<a href="https://towardsdatascience.com/cross-validation-in-machine-learning-72924a69872f" target="_blank" rel="noopener">交叉验证</a>方法，无需显式编程此搜索，并指定单次运行所需的增强迭代的确切数量。</li>
-</ol>
-<hr>
-<p><a name="65dc18a3"></a></p>
-<h3 id="证明在哪里？"><a href="#证明在哪里？" class="headerlink" title="证明在哪里？"></a>证明在哪里？</h3><p>我们使用Scikit-learn的’ <a href="https://scikit-learn.org/stable/modules/generated/sklearn.datasets.make_classification.html" target="_blank" rel="noopener">Make_Classification</a> ‘数据包创建了一个包含20个特征（2个信息和2个冗余）的100万个数据点的随机样本。我们测试了几种算法，如Logistic回归，随机森林，标准梯度提升和XGBoost。<br><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1554692844187-5bdcc8c1-b4c5-4fb7-95c6-79baf19ffc03.jpeg#align=left&amp;display=inline&amp;height=420&amp;name=5.jpeg&amp;originHeight=540&amp;originWidth=960&amp;size=70860&amp;status=done&amp;width=746" alt="5.jpeg"><br>如上图所示，与其他算法相比，XGBoost模型具有预测性能和处理时间的最佳组合。其他严格的<a href="https://github.com/szilard/benchm-ml" target="_blank" rel="noopener">基准</a>研究也产生了类似的结果。难怪XGBoost在最近的数据科学竞赛中被广泛使用。<br>“如有疑问，请使用XGBoost” - Owen Zhang，&gt; <a href="http://blog.kaggle.com/2015/08/26/avito-winners-interview-1st-place-owen-zhang/" target="_blank" rel="noopener">Avito</a>上下文广告点击预测竞赛获胜者Kaggle</p>
-<hr>
-<p><a name="a09de8f4"></a></p>
-<h3 id="那么我们应该一直只使用XGBoost吗？"><a href="#那么我们应该一直只使用XGBoost吗？" class="headerlink" title="那么我们应该一直只使用XGBoost吗？"></a>那么我们应该一直只使用XGBoost吗？</h3><p>谈到机器学习（甚至是生活），没有免费的午餐。作为数据科学家，我们必须测试所有可能的数据算法，以确定冠军算法。此外，选择正确的算法是不够的。我们还必须通过调整<a href="https://www.analyticsvidhya.com/blog/2016/03/complete-guide-parameter-tuning-xgboost-with-codes-python/" target="_blank" rel="noopener">超参数</a>为数据集选择正确的算法配置。此外，选择获胜算法还有其他几个考虑因素，例如计算复杂性，可解释性和易于实现。这正是机器学习开始从科学走向艺术的地步，但老实说，这就是魔术发生的地方！</p>
-<hr>
-<p><a name="2abde013"></a></p>
-<h3 id="未来该何去何从？"><a href="#未来该何去何从？" class="headerlink" title="未来该何去何从？"></a>未来该何去何从？</h3><p>机器学习是一个非常活跃的研究领域，已经有几种可行的XGBoost替代方案。微软研究院最近发布了<a href="https://www.microsoft.com/en-us/research/project/lightgbm/" target="_blank" rel="noopener">LightGBM</a>框架，用于梯度增强，显示出巨大的潜力。由Yandex Technology开发的<a href="https://catboost.ai/" target="_blank" rel="noopener">CatBoost</a>已经提供了令人印象深刻的基准测试结果。我们有一个更好的模型框架，在预测性能，灵活性，可解释性和实用性方面优于XGBoost，这是一个时间问题。然而，直到一个强大的挑战者出现，XGBoost将继续统治机器学习世界！</p>
-<hr>
-<p>请在下面留下您的评论。非常感谢<a href="https://medium.com/@setgeti" target="_blank" rel="noopener">Venkat Anurag Setty</a>与我共同撰写本文。</p>
-
+        <p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1554692595416-69c4133a-0fb6-4ae5-b308-642403bd2216.png#align=left&amp;display=inline&amp;height=521&amp;name=1.png&amp;originHeight=699&amp;originWidth=1000&amp;size=991609&amp;status=done&amp;width=746" alt="1.png"><br>我还记得十五年前我第一份工作的第一天。我刚完成研究生课程，并以分析师的身份加入了一家全球投资银行。在我的第一天，我一直拉直领带，并试着记住我学过的一切。与此同时，在内心深处，我想知道我是否对企业界足够好。感觉到我的焦虑，我的老板微笑着说：<br><em>“别担心！你唯一需要知道的就是回归建模！“</em><br>我记得自己在想，“我得到了这个！”。我知道回归建模; 线性和逻辑回归。我的老板是对的。在我任职期间，我专门建立了基于回归的统计模型。我并不孤单。事实上，在那个时候，回归建模是无可争议的预测分析女王。快进十五年，回归建模的时代已经结束。老女王已经过去了。新女王的名字很长，名字很久; XGBoost或Extreme Gradient Boosting！<br>
+        
+          <a class="article-more-a" href="/2019/04/08/yuque/XGBoost算法：长期可能在位！/#more">more >></a>
+        
       
 
       
-    </div>
+    </p></div>
     <div class="article-info article-info-index">
       
       
