@@ -6,28 +6,21 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://zhos.me">
-  <title>动画RNN，LSTM和GRU | A+</title>
+  <title>Careem的目的地预测服务如何加快您的驾驶速度 | A+</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="递归神经网络（RNN）是一类人工神经网络，通常与顺序数据一起使用。3种最常见的递归神经网络类型是  香草RNN， 长期短暂记忆（LSTM），由Hochreiter和Schmidhuber在1997年提出，和 Cho _等人_提出的门控复发单位（GRU）_。__人_在2014年。请注意，我将使用“RNN”来统一指代固有循环的神经网络架构，并使用“vanilla RNN”来指代最简单的递归神经网络架构">
+  <meta name="description" content="在迪拜，有大约8,000家餐厅，世界上最高的建筑，50多个商场，许多海滩，主题公园等等。目的地数量巨大 - 那你下一步去哪儿？你并不是唯一一个试图回答这个问题的人。 Careem一直在努力弄清楚用户下一步会走向何方。不仅在迪拜，而且在我们所在的所有15个国家以及该平台的所有3300万用户中。为什么乘车服务需要答案？ 想象一下，我们不是要求用户通过手动输入地址在地图上搜索目的地，而是简单地给他们一个">
 <meta property="og:type" content="article">
-<meta property="og:title" content="动画RNN，LSTM和GRU">
-<meta property="og:url" content="http://zhos.me/2019/04/08/yuque/动画RNN，LSTM和GRU/index.html">
+<meta property="og:title" content="Careem的目的地预测服务如何加快您的驾驶速度">
+<meta property="og:url" content="http://zhos.me/2019/04/08/yuque/Careem的目的地预测服务如何加快您的驾驶速度/index.html">
 <meta property="og:site_name" content="A+">
-<meta property="og:description" content="递归神经网络（RNN）是一类人工神经网络，通常与顺序数据一起使用。3种最常见的递归神经网络类型是  香草RNN， 长期短暂记忆（LSTM），由Hochreiter和Schmidhuber在1997年提出，和 Cho _等人_提出的门控复发单位（GRU）_。__人_在2014年。请注意，我将使用“RNN”来统一指代固有循环的神经网络架构，并使用“vanilla RNN”来指代最简单的递归神经网络架构">
+<meta property="og:description" content="在迪拜，有大约8,000家餐厅，世界上最高的建筑，50多个商场，许多海滩，主题公园等等。目的地数量巨大 - 那你下一步去哪儿？你并不是唯一一个试图回答这个问题的人。 Careem一直在努力弄清楚用户下一步会走向何方。不仅在迪拜，而且在我们所在的所有15个国家以及该平台的所有3300万用户中。为什么乘车服务需要答案？ 想象一下，我们不是要求用户通过手动输入地址在地图上搜索目的地，而是简单地给他们一个">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/gif/219582/1554694541119-cecb0195-0921-42bb-99c5-76b77aad66d3.gif#align=left&display=inline&height=494&name=1.gif&originHeight=662&originWidth=1000&size=468764&status=done&width=746">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1554694591267-9709e850-0b87-45d2-a044-b150e938af07.png#align=left&display=inline&height=530&name=2.png&originHeight=710&originWidth=1000&size=150263&status=done&width=746">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/gif/219582/1554694630260-46ed551e-1593-4ae3-b3d9-2381045a2dd0.gif#align=left&display=inline&height=555&name=2.gif&originHeight=717&originWidth=964&size=96255&status=done&width=746">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/gif/219582/1554694719107-ae608d63-3a0c-4132-81ca-4b3ab2684802.gif#align=left&display=inline&height=494&name=3.gif&originHeight=662&originWidth=1000&size=468764&status=done&width=746">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/gif/219582/1554694757747-8ba1a035-c84a-43d3-86c7-9eea37543ef5.gif#align=left&display=inline&height=527&name=4.gif&originHeight=707&originWidth=1000&size=359796&status=done&width=746">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1554694805790-03e88c08-26ab-4be9-bb3f-a1104ecab19f.png#align=left&display=inline&height=555&name=7.png&originHeight=717&originWidth=964&size=72617&status=done&width=746">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1554694860682-eadcdb72-9e37-4887-adac-c8ef5a13df99.png#align=left&display=inline&height=494&name=8.png&originHeight=662&originWidth=1000&size=134631&status=done&width=746">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1554694874056-361ddbe5-8f3e-4bf2-b14a-bdf281d961fb.png#align=left&display=inline&height=527&name=9.png&originHeight=707&originWidth=1000&size=122999&status=done&width=746">
-<meta property="og:updated_time" content="2019-04-08T07:43:39.160Z">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1554714525242-1c6b8fc2-0280-4910-9a0e-d9d19d733f1e.jpeg#align=left&display=inline&height=263&name=New-Appshot-Dubai-Mall.jpg&originHeight=360&originWidth=1020&size=261162&status=done&width=746">
+<meta property="og:updated_time" content="2019-04-08T09:09:12.250Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="动画RNN，LSTM和GRU">
-<meta name="twitter:description" content="递归神经网络（RNN）是一类人工神经网络，通常与顺序数据一起使用。3种最常见的递归神经网络类型是  香草RNN， 长期短暂记忆（LSTM），由Hochreiter和Schmidhuber在1997年提出，和 Cho _等人_提出的门控复发单位（GRU）_。__人_在2014年。请注意，我将使用“RNN”来统一指代固有循环的神经网络架构，并使用“vanilla RNN”来指代最简单的递归神经网络架构">
-<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2019/gif/219582/1554694541119-cecb0195-0921-42bb-99c5-76b77aad66d3.gif#align=left&display=inline&height=494&name=1.gif&originHeight=662&originWidth=1000&size=468764&status=done&width=746">
+<meta name="twitter:title" content="Careem的目的地预测服务如何加快您的驾驶速度">
+<meta name="twitter:description" content="在迪拜，有大约8,000家餐厅，世界上最高的建筑，50多个商场，许多海滩，主题公园等等。目的地数量巨大 - 那你下一步去哪儿？你并不是唯一一个试图回答这个问题的人。 Careem一直在努力弄清楚用户下一步会走向何方。不仅在迪拜，而且在我们所在的所有15个国家以及该平台的所有3300万用户中。为什么乘车服务需要答案？ 想象一下，我们不是要求用户通过手动输入地址在地图上搜索目的地，而是简单地给他们一个">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1554714525242-1c6b8fc2-0280-4910-9a0e-d9d19d733f1e.jpeg#align=left&display=inline&height=263&name=New-Appshot-Dubai-Mall.jpg&originHeight=360&originWidth=1020&size=261162&status=done&width=746">
   
     <link rel="alternative" href="/atom.xml" title="A+" type="application/atom+xml">
   
@@ -153,47 +146,27 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-yuque/动画RNN，LSTM和GRU" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-yuque/Careem的目的地预测服务如何加快您的驾驶速度" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      动画RNN，LSTM和GRU
+      Careem的目的地预测服务如何加快您的驾驶速度
     </h1>
   
 
         
-        <a href="/2019/04/08/yuque/动画RNN，LSTM和GRU/" class="archive-article-date">
-  	<time datetime="2019-04-08T03:35:15.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-08</time>
+        <a href="/2019/04/08/yuque/Careem的目的地预测服务如何加快您的驾驶速度/" class="archive-article-date">
+  	<time datetime="2019-04-08T09:08:09.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-08</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p><img src="https://cdn.nlark.com/yuque/0/2019/gif/219582/1554694541119-cecb0195-0921-42bb-99c5-76b77aad66d3.gif#align=left&amp;display=inline&amp;height=494&amp;name=1.gif&amp;originHeight=662&amp;originWidth=1000&amp;size=468764&amp;status=done&amp;width=746" alt="1.gif"><br>递归神经网络（RNN）是一类人工神经网络，通常与顺序数据一起使用。3种最常见的递归神经网络类型是</p>
-<ol>
-<li>香草RNN，</li>
-<li>长期短暂记忆（LSTM），由<a href="https://www.researchgate.net/publication/13853244_Long_Short-term_Memory" target="_blank" rel="noopener">Hochreiter和Schmidhuber在1997年提出</a>，和</li>
-<li><a href="https://arxiv.org/abs/1409.1259" target="_blank" rel="noopener">Cho _等人_</a>提出的门控复发单位（GRU）<a href="https://arxiv.org/abs/1409.1259" target="_blank" rel="noopener">_。_</a><a href="https://arxiv.org/abs/1409.1259" target="_blank" rel="noopener">_人_</a><a href="https://arxiv.org/abs/1409.1259" target="_blank" rel="noopener">在2014年</a>。<br>请注意，我将使用“RNN”来统一指代固有循环的神经网络架构，并使用“vanilla RNN”来指代最简单的递归神经网络架构，如图&gt; <a href="https://towardsdatascience.com/animated-rnn-lstm-and-gru-ef124d06cf45#50f0" target="_blank" rel="noopener">1</a>所示。<br>有许多用于递归神经网络的图解图。我最喜欢的是迈克尔·阮（Michael Nguyen）在<a href="https://towardsdatascience.com/illustrated-guide-to-lstms-and-gru-s-a-step-by-step-explanation-44e9eb85bf21" target="_blank" rel="noopener">“</a>走向数据科学”（Towards Data Science）上发表的<a href="https://towardsdatascience.com/illustrated-guide-to-lstms-and-gru-s-a-step-by-step-explanation-44e9eb85bf21" target="_blank" rel="noopener">这篇文章</a>，因为他为我们提供了对这些模型的直觉，更重要的是让我们更容易理解的美丽插图。但我的帖子背后的动机是更好地可视化在这些单元格中发生的事情，以及如何共享节点以及它们如何转换以给出输出节点。我的灵感来自迈克尔的精彩动画。<br>本文探讨了香草RNN，LSTM和GRU细胞。这是一个简短的阅读，适用于那些阅读过这些主题的人。（我建议在阅读这篇文章之前阅读迈克尔的文章。）重要的是要注意以下动画是连续的，以引导人眼，但不反映矢量化机器计算期间的时间顺序。<br>这是我用于插图的传奇。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1554694591267-9709e850-0b87-45d2-a044-b150e938af07.png#align=left&amp;display=inline&amp;height=530&amp;name=2.png&amp;originHeight=710&amp;originWidth=1000&amp;size=150263&amp;status=done&amp;width=746" alt="2.png"><br>在我的动画中，我使用的输入大小为3（绿色）和2个隐藏单位（红色），批量大小为1。<br>让我们开始！</li>
-</ol>
-<hr>
-<p><a name="9ee03e2d"></a></p>
-<h4 id="香草RNN"><a href="#香草RNN" class="headerlink" title="香草RNN"></a>香草RNN</h4><p><img src="https://cdn.nlark.com/yuque/0/2019/gif/219582/1554694630260-46ed551e-1593-4ae3-b3d9-2381045a2dd0.gif#align=left&amp;display=inline&amp;height=555&amp;name=2.gif&amp;originHeight=717&amp;originWidth=964&amp;size=96255&amp;status=done&amp;width=746" alt="2.gif"></p>
-<ul>
-<li>_牛逼_  -时间步</li>
-<li>_X - _输入</li>
-<li>_h - _隐藏状态</li>
-<li>_X的_- _输入的尺寸/尺寸</li>
-<li>_h的_- _没有。隐藏单位。需要注意的是不同的库调用它们不同，但它们的意思是一样的：<br>- Keras - <code>[state_size](https://keras.io/layers/recurrent/)</code>_ ，_ - PyTorch -  - TensorFlow - <code>[units](https://keras.io/layers/recurrent/#lstm)`</code><a href="https://pytorch.org/docs/stable/nn.html#rnn" target="_blank" rel="noopener">hidden_size</a><code>&lt;br /&gt;</code><a href="https://www.tensorflow.org/api_docs/python/tf/nn/rnn_cell/BasicLSTMCell" target="_blank" rel="noopener">num_units</a>`<br><a name="LSTM"></a><h4 id="LSTM"><a href="#LSTM" class="headerlink" title="LSTM"></a>LSTM</h4><img src="https://cdn.nlark.com/yuque/0/2019/gif/219582/1554694719107-ae608d63-3a0c-4132-81ca-4b3ab2684802.gif#align=left&amp;display=inline&amp;height=494&amp;name=3.gif&amp;originHeight=662&amp;originWidth=1000&amp;size=468764&amp;status=done&amp;width=746" alt="3.gif"></li>
-<li>_C - _细胞状态</li>
-</ul>
-<p>注意，单元状态的维度与隐藏状态的维度相同。<br><a name="GRU"></a></p>
-<h4 id="GRU"><a href="#GRU" class="headerlink" title="GRU"></a>GRU</h4><p><img src="https://cdn.nlark.com/yuque/0/2019/gif/219582/1554694757747-8ba1a035-c84a-43d3-86c7-9eea37543ef5.gif#align=left&amp;display=inline&amp;height=527&amp;name=4.gif&amp;originHeight=707&amp;originWidth=1000&amp;size=359796&amp;status=done&amp;width=746" alt="4.gif"><br>希望这些动画以某种方式帮助你！以下是静态图像中单元格的摘要：<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1554694805790-03e88c08-26ab-4be9-bb3f-a1104ecab19f.png#align=left&amp;display=inline&amp;height=555&amp;name=7.png&amp;originHeight=717&amp;originWidth=964&amp;size=72617&amp;status=done&amp;width=746" alt="7.png"></p>
-<p>图4：香草RNN细胞<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1554694860682-eadcdb72-9e37-4887-adac-c8ef5a13df99.png#align=left&amp;display=inline&amp;height=494&amp;name=8.png&amp;originHeight=662&amp;originWidth=1000&amp;size=134631&amp;status=done&amp;width=746" alt="8.png">图5：LSTM细胞<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1554694874056-361ddbe5-8f3e-4bf2-b14a-bdf281d961fb.png#align=left&amp;display=inline&amp;height=527&amp;name=9.png&amp;originHeight=707&amp;originWidth=1000&amp;size=122999&amp;status=done&amp;width=746" alt="9.png"><br>图6：GRU细胞<br><a name="7cbcc2b2"></a></p>
-<h4 id="深度学习相关文章"><a href="#深度学习相关文章" class="headerlink" title="深度学习相关文章"></a>深度学习相关文章</h4><p><a href="https://towardsdatascience.com/an-implementation-guide-to-word2vec-using-numpy-and-google-sheets-13445eebd281" target="_blank" rel="noopener">逐行Word2Vec实现</a>（关于字嵌入）<br><a href="https://towardsdatascience.com/step-by-step-tutorial-on-linear-regression-with-stochastic-gradient-descent-1d35b088a843" target="_blank" rel="noopener">带随机梯度下降的线性回归分步教程</a><br><a href="https://towardsdatascience.com/10-gradient-descent-optimisation-algorithms-86989510b5e9" target="_blank" rel="noopener">10个梯度下降优化算法+备忘单</a><br><a href="https://towardsdatascience.com/counting-no-of-parameters-in-deep-learning-models-by-hand-8f1716241889" target="_blank" rel="noopener">计算深度学习模型中的参数数量</a><br><a href="https://towardsdatascience.com/attn-illustrated-attention-5ec4ad276ee3" target="_blank" rel="noopener">Attn：插图注意</a><br><br></p>
+        <p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1554714525242-1c6b8fc2-0280-4910-9a0e-d9d19d733f1e.jpeg#align=left&amp;display=inline&amp;height=263&amp;name=New-Appshot-Dubai-Mall.jpg&amp;originHeight=360&amp;originWidth=1020&amp;size=261162&amp;status=done&amp;width=746" alt="New-Appshot-Dubai-Mall.jpg"><br>在迪拜，有大约8,000家餐厅，世界上最高的建筑，50多个商场，许多海滩，主题公园等等。目的地数量巨大 - 那你下一步去哪儿？<br>你并不是唯一一个试图回答这个问题的人。 <br>Careem一直在努力弄清楚用户下一步会走向何方。不仅在迪拜，而且在我们所在的所有15个国家以及该平台的所有3300万用户中。<br>为什么乘车服务需要答案？ <br>想象一下，我们不是要求用户通过手动输入地址在地图上搜索目的地，而是简单地给他们一个最可能的位置列表供选择。 <br>一键式预订可以让客户更快更轻松地了解客户，并且知道客户希望接下来的位置 - 甚至在他们告诉我们之前 - 使我们能够通过确保更繁忙的区域提供更多的运输选项来改善我们的服务。 <br>Careem数据科学团队提出这样一个问题：“如果我们建立一个有监督的<a href="https://en.wikipedia.org/wiki/Machine_learning" target="_blank" rel="noopener">机器学习</a>  模型来解决这个问题，那么预测用户去向何方需要哪些最重要和最丰富的功能？”<br>例如，如果历史旅行支持，“早上回家工作”听起来像是一个合理的猜测。或者，例如，“周末 - 家庭购物中心”，如果该人喜欢购物。在使用数据进行验证后，最相关的功能更清晰，即位置，时间和用户在一天中特定时间与位置的交互。<br>在这里，<a href="https://github.com/catboost" target="_blank" rel="noopener">CatBoost</a>发挥其超级强大的处理分类功能。<a href="https://github.com/catboost" target="_blank" rel="noopener">CatBoost</a>是一种先进的机器学习算法，允许用户通过排序任务，预测和提出建议，快速处理大型数据集的分类功能。<br>一周中的某一天和一天中的一小时都是明确的特征。每个位置或一小部分位置也是分类特征。一个城市包含数千个这样的位置。如果你必须手动编码它们就会成为一个巨大的问题 - 它也会大大增加数据集的大小，减慢训练速度并且仍会产生非常差的结果。<br>这就是<a href="https://en.wikipedia.org/wiki/Yandex" target="_blank" rel="noopener">Y </a><a href="https://yandex.com/company/" target="_blank" rel="noopener">andex</a>开源<a href="https://github.com/catboost" target="_blank" rel="noopener">CatBoost</a>之前的<a href="https://github.com/catboost" target="_blank" rel="noopener">情况</a>。它不仅独立地考虑了分类特征，还利用了分类特征组合，这正是我们处理“早晨 - 家庭工作”等模式所需要的。<br>使用这个，我们现在有了算法 - 可以非常精确地预测下一个用户移动的算法。Careem在其网络中拥有150多个城市，数百万次旅行，并且一直在发出大量请求。这是在任何给定时间要处理的大量数据。<br>人们普遍认为300毫秒对于机器学习系统来说是一个非常好的响应时间，但在Careem的情况下，这只是不够好并且会导致客户体验太慢。在Careem，我们需要做得更好……所以我们做到了。<br><a href="https://github.com/catboost" target="_blank" rel="noopener">CatBoost</a>与Careem应用程序和AI相结合<a href="https://github.com/catboost" target="_blank" rel="noopener">的</a>性能超出了所有期望，为我们的客户提供了<em>一位数的</em>响应时间。<br>该模型（称为目标预测服务）目前正在Careem应用程序中为用户提供服务，并确保我们的系统是最佳的。<br>所以下次你在你的Careem应用程序上点击“Yalla！”时，请记住它不仅仅是发送电子邮件，你实际上刚刚开始涉及一些严重的人工智能的过程，以及一些最快的响应时间。机器学习系统。<br>当您在我们的应用程序上预订时，从第二个按下按钮到您的乘车到达时，将发生近500个动作。<br>Careem的人工智能平台 - 称为Yoda–拥有最先进的机器学习周期。它甚至能够以令人难以置信的准确度预测某个地方在两周内的需求以及需要驾驶员的地方。这有助于我们确保等待时间尽可能低，我们的司机可以获得更多票价。<br>如果您使用Careem服务六个月，AI将更加适应您的需求，因为它不断学习如何为  _您_  提供更好的服务。<br>你下次去哪儿？是的，我们这么认为。</p>
 
       
 
@@ -273,7 +246,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://zhos.me/2019/04/08/yuque/动画RNN，LSTM和GRU/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://zhos.me/2019/04/08/yuque/Careem的目的地预测服务如何加快您的驾驶速度/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -287,18 +260,9 @@
   
 <nav id="article-nav">
   
-    <a href="/2019/04/08/yuque/CatBoost有什么特别之处？/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          CatBoost有什么特别之处？
-        
-      </div>
-    </a>
   
-  
-    <a href="/2019/04/08/yuque/XGBoost算法：长期可能在位！/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">XGBoost算法：长期可能在位！</div>
+    <a href="/2019/04/08/yuque/使用分类数据/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">使用分类数据</div>
       <i class="icon-circle-right"></i>
     </a>
   

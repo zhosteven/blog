@@ -77,7 +77,7 @@
 		<nav class="header-nav">
 			<div class="social">
 				
-					<a class="github" target="_blank" href="#" title="github"><i class="icon-github"></i></a>
+					<a class="github" target="_blank" href="https://github.com/zhosteven" title="github"><i class="icon-github"></i></a>
 		        
 					<a class="mail" target="_blank" href="mailto:ujujzhao@gmail.com" title="mail"><i class="icon-mail"></i></a>
 		        
@@ -114,7 +114,7 @@
 			<nav class="header-nav">
 				<div class="social">
 					
-						<a class="github" target="_blank" href="#" title="github"><i class="icon-github"></i></a>
+						<a class="github" target="_blank" href="https://github.com/zhosteven" title="github"><i class="icon-github"></i></a>
 			        
 						<a class="mail" target="_blank" href="mailto:ujujzhao@gmail.com" title="mail"><i class="icon-mail"></i></a>
 			        
@@ -141,6 +141,99 @@
           </div>
           <div id="js-content" class="content-ll">
             
+  
+    <article id="post-yuque/XGBoost不是黑魔法" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/12/20/yuque/XGBoost不是黑魔法/">XGBoost不是黑魔法</a>
+    </h1>
+  
+
+        
+        <a href="/2018/12/20/yuque/XGBoost不是黑魔法/" class="archive-article-date">
+  	<time datetime="2018-12-20T05:48:34.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-20</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><a href="https://towardsdatascience.com/xgboost-is-not-black-magic-56ca013144b4" target="_blank" rel="noopener">链接</a></p>
+<blockquote>
+<p>而不是对缺失值进行估算并不总是正确的选择</p>
+</blockquote>
+<p><br>现在很容易在数据科学任务中获得不错的结果：只需要对流程有一个大致的了解，Python的基本知识和10分钟的时间来实例化XGBoost并适应模型。好的，如果这是你的第一次，那么你可能会花几分钟通过pip收集所需的包，但就是这样。这种方法的唯一问题是它运作得很好🤷🏻♂️：几年前我在大学竞赛中排名前5位，只是通过一些基本的特征工程将数据集提供给XGBoost，表现优于团队非常复杂的架构和数据管道。 XGBoost最酷的特征之一就是它如何处理缺失值：决定每个样本，这是最好的方法来判断它们。对于我在过去几个月中遇到的许多项目和数据集，此功能非常有用;为了更加值得以我的名义撰写的数据科学家的头衔，我决定深入挖掘，花几个小时阅读原始论文，试图了解XGBoost究竟是什么以及它如何处理它以某种神奇的方式缺少价值。<br><a name="9864342e"></a></p>
+<h4 id="从决策树到XGBoost"><a href="#从决策树到XGBoost" class="headerlink" title="从决策树到XGBoost"></a><a href="#7vdtxk"></a>从决策树到XGBoost</h4><p>决策树可能是机器学习中最简单的算法：树的每个节点都是对特征的测试，每个分支代表测试的结果; leaves包含模型的输出，无论是离散标签还是实数。 决策树可能被描述为一个功能：<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545285357509-9eb19212-1f84-4151-925f-695f322ba1a9.png#align=left&amp;display=inline&amp;height=64&amp;originHeight=78&amp;originWidth=1000&amp;status=done&amp;width=826" alt><br>函数f根据从根到叶子的路径，根据树结构T分配m大小的样本x所遵循的权重w。<br>现在想象一下，不只有一棵决策树而且还有K; 最终产生的输出不再是与叶子相关的权重，而是与每棵树产生的叶子相关的权重之和。<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545285385079-d2797243-1542-4e33-8215-bde9adc10d39.png#align=left&amp;display=inline&amp;height=104&amp;originHeight=126&amp;originWidth=1000&amp;status=done&amp;width=826" alt></p>
+<p>这些结构不是固定的，并且与网络结构不变的经典梯度下降框架中发生的不同，并且在每个步骤更新权重时，在每次迭代时添加新函数（树）以改善模型的性能。 为了避免过度拟合和/或非常复杂的结构，误差由两部分组成：第一部分对在第k次迭代中获得的模型的优度进行评分，第二部分在相关权重的大小中惩罚复杂性。 叶子和发达的树木的深度和结构。<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545285422201-bef8962d-373e-4670-8789-f8fffb46cbc2.png#align=left&amp;display=inline&amp;height=126&amp;originHeight=152&amp;originWidth=1000&amp;status=done&amp;width=826" alt><br>然后使用二阶梯度统计简化该目标函数，并且 - 不输入太多细节 - 可以直接用于以封闭形式计算与固定树结构相关联的最佳叶子权重。 权重可以直接与错误相关联，因此与所使用的固定结构的优点相关联（3）。<br>训练XGBoost是一个迭代过程，它在每个步骤计算第k个树的最佳可能分割，该第k个树枚举路径中该点仍然可用的所有可能结构。 所有可能的分裂的详尽列举非常适合本文的范围，但在实践中是不可行的，并且它被一个近似版本所取代，该版本不会尝试所有可能的分裂，而是根据百分位数列举相关的分裂。 每个功能分布。<br><a name="3ca234a7"></a></p>
+<h3 id="XGBoost和缺失值：魔术发生的地方"><a href="#XGBoost和缺失值：魔术发生的地方" class="headerlink" title="XGBoost和缺失值：魔术发生的地方"></a><a href="#e5q4ag"></a>XGBoost和缺失值：魔术发生的地方</h3><p>一旦树结构被训练，就不难考虑测试集中是否存在缺失值：它足以将默认方向附加到每个决策节点。如果缺少样本的特征并且决策节点在该特征上分裂，则路径采用分支的默认方向并且路径继续。但是为每个分支分配默认方向更复杂，这可能是本文中最有趣的部分。<br>已经解释的拆分查找算法可以稍微调整一下，不仅返回每一步的最佳拆分，而且还返回分配给新插入的决策节点的默认方向。给定一个特征集I，枚举所有可能的分割，但是现在相应的丢失不会被计算一次而是两次，每个默认方向一次丢失该特征的缺失值。两者中最好的是根据特征m的值j进行分割时分配的最佳默认方向。最佳分割仍然是最大化计算分数的分割，但现在我们已经为其附加了默认方向。<br>这种算法被称为稀疏感知的分裂发现，它是XGBoost背后的许多魔力所在。最后不要太复杂。稀疏性感知方法仅保证在已经遍历的分裂的情况下平均采用默认方向导致最佳可能结果，并不保证已经遍历的分裂（可能通过采用默认方向来解决）是最好的考虑整个样本。如果样本中缺失值的百分比增加，则内置策略的性能可能会恶化很多。</p>
+<blockquote>
+<p><em>好的，默认方向是最佳选择，只要它到达当前位置，但考虑到当前样本的所有特征，无法保证当前位置是最佳情况。</em></p>
+</blockquote>
+<p>克服此限制意味着处理同时考虑其所有特征的样本，并直接处理同一实现中可能同时存在多个缺失值。<br><a name="14ec9de9"></a></p>
+<h3 id="改变缺失值并改善表现"><a href="#改变缺失值并改善表现" class="headerlink" title="改变缺失值并改善表现"></a><a href="#z5afml"></a>改变缺失值并改善表现</h3><p>为了击败XGBoost内置策略，我们必须同时考虑样本的所有功能，并以某种方式处理可能存在的缺失值。 这种方法的一个很好的例子是K-Nearest Neighbors（KNN），它具有ad-hoc距离度量以正确处理缺失值。 一般而言，KNN是众所周知的算法，其将K（例如，3,10,50，……）最接近的样本检索到所考虑的样本。 它可以用于对看不见的输入进行分类或者用于估算缺失值，在分配给目标值的情况下，考虑K个最近邻居的均值或中值。 这种方法需要距离度量（或相应地，相似性度量）来实际对训练集中的所有样本进行排序并检索最相似的K.<br>要超越XGBoost内置默认策略，我们需要两件事：</p>
+<ul>
+<li>考虑缺失值的距离指标（感谢AirBnb的这篇<a href="https://medium.com/airbnb-engineering/overcoming-missing-values-in-a-random-forest-classifier-7b1fc1fc03ba" target="_blank" rel="noopener">文章</a>的灵感）</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">dist_with_miss</span><span class="params">(a,b,l=<span class="number">0.0</span>)</span>:</span></span><br><span class="line">    <span class="keyword">if</span>(len(a) != len(b)):</span><br><span class="line">        <span class="keyword">return</span> np.inf</span><br><span class="line">    ls = l * np.ones(len(a))</span><br><span class="line">    msk = ~ (np.isnan(a) | np.isnan(b))</span><br><span class="line">    res = np.sum((np.abs(a-b)[msk]))+np.sum((ls[~msk]))</span><br><span class="line">    <span class="keyword">return</span> res</span><br></pre></td></tr></table></figure>
+<ul>
+<li>规范化数据集以获得有意义的距离，获得了不同域之间特征之间的差异（XGBoost并不严格要求，但KNN估算需要它！）。</li>
+</ul>
+<p>使用K个最接近样本的所述特征的中值来估算特征的缺失值，并且在非特定情况下，在K个检索的邻居中不发现至少一个非缺失值，整个列的中值 用来。<br><a name="cd474133"></a></p>
+<h3 id="实验结果"><a href="#实验结果" class="headerlink" title="实验结果"></a><a href="#kp0eey"></a>实验结果</h3><p>我使用scikit-learn中免费提供的三个众所周知的数据集（两个分类和一个回归）进行了一些测试。 通过k-fold交叉验证比较三种不同的插补策略，测量了性能：</p>
+<ul>
+<li><p>XGBoost算法中内置的默认值</p>
+</li>
+<li><p>一个简单的列中位插值</p>
+</li>
+<li><p>一个KNN，如前一段所述</p>
+</li>
+</ul>
+<p>对于KNN案例，我已经绘制了针对考虑的缺失值百分比获得的最佳性能，其中k与（要考虑的邻居的数量）和λ（当至少一个特征缺失时要添加到距离的常数） 两个样本）。<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545285831963-0ba52730-2b35-4d6a-9581-f84258cd72e8.png#align=left&amp;display=inline&amp;height=206&amp;originHeight=249&amp;originWidth=1000&amp;status=done&amp;width=826" alt><br>使用稀疏性感知KNN来估算缺失值与其他两种方法的表现一致。 差异的程度当然是数据集依赖的。 作为第一个天真的结论：数据集的质量越低，更好的插补策略的影响越大。 如图2所示，内置策略最终具有接近于平凡的列中值插值的性能。<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545285859844-3faa8e2e-ebc5-4521-adb5-28b05b251281.png#align=left&amp;display=inline&amp;height=183&amp;originHeight=222&amp;originWidth=1000&amp;status=done&amp;width=826" alt><br>看看k和λ如何影响最终结果以及如何引入惩罚因素不仅仅是纸上谈兵，这是非常有趣的。 距离度量不仅丢弃缺失值而且还为每一个增加权重对于用该方法获得的性能是至关重要的，即使其值与缺失值的增加百分比不直接相关。<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545285901042-1590c9c8-9d75-42b3-b76d-3810e74a8f62.png#align=left&amp;display=inline&amp;height=247&amp;originHeight=299&amp;originWidth=1000&amp;status=done&amp;width=826" alt><br>测试表明，根据经验，缺失值的数量越多，为更好的插补而考虑的邻居数量越多。 再次，一个非常直观的结论。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/12/20/yuque/XGBoost不是黑魔法/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
   
     <article id="post-yuque/认识和实现：批量标准化" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
@@ -1148,7 +1241,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
         <ul class="search-ul">
           
             <li class="search-li">
-              <a href="http://localhost:4000/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>友情链接1</a>
+              <a href="http://www.zhos.me/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>友情链接1</a>
             </li>
           
         </ul>
