@@ -142,6 +142,110 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-yuque/XGBoost算法：长期可能在位！" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/04/08/yuque/XGBoost算法：长期可能在位！/">XGBoost算法：长期可能在位！</a>
+    </h1>
+  
+
+        
+        <a href="/2019/04/08/yuque/XGBoost算法：长期可能在位！/" class="archive-article-date">
+  	<time datetime="2019-04-08T03:02:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-08</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1554692595416-69c4133a-0fb6-4ae5-b308-642403bd2216.png#align=left&amp;display=inline&amp;height=521&amp;name=1.png&amp;originHeight=699&amp;originWidth=1000&amp;size=991609&amp;status=done&amp;width=746" alt="1.png"><br>我还记得十五年前我第一份工作的第一天。我刚完成研究生课程，并以分析师的身份加入了一家全球投资银行。在我的第一天，我一直拉直领带，并试着记住我学过的一切。与此同时，在内心深处，我想知道我是否对企业界足够好。感觉到我的焦虑，我的老板微笑着说：<br><em>“别担心！你唯一需要知道的就是回归建模！“</em><br>我记得自己在想，“我得到了这个！”。我知道回归建模; 线性和逻辑回归。我的老板是对的。在我任职期间，我专门建立了基于回归的统计模型。我并不孤单。事实上，在那个时候，回归建模是无可争议的预测分析女王。快进十五年，回归建模的时代已经结束。老女王已经过去了。新女王的名字很长，名字很久; XGBoost或Extreme Gradient Boosting！</p>
+<hr>
+<p><a name="642c3585"></a></p>
+<h3 id="什么是XGBoost？"><a href="#什么是XGBoost？" class="headerlink" title="什么是XGBoost？"></a>什么是XGBoost？</h3><p><a href="https://xgboost.ai/" target="_blank" rel="noopener">XGBoost</a><strong> </strong>是一种基于决策树的集成机器学习算法，它使用<a href="https://en.wikipedia.org/wiki/Gradient_boosting" target="_blank" rel="noopener">梯度增强</a>框架。在涉及非结构化数据（图像，文本等）的预测问题中，人工神经网络倾向于优于所有其他算法或框架。但是，当涉及到中小型结构/表格数据时，基于决策树的算法现在被认为是同类最佳的。多年来，请参阅下面的图表，了解基于树的算法的演变。<br><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1554692646873-57905125-7adf-4713-81ff-c3e752d91669.jpeg#align=left&amp;display=inline&amp;height=398&amp;name=2.jpeg&amp;originHeight=493&amp;originWidth=925&amp;size=124452&amp;status=done&amp;width=746" alt="2.jpeg"><br>XGBoost算法是作为华盛顿大学的研究项目开发的。<a href="https://arxiv.org/pdf/1603.02754.pdf" target="_blank" rel="noopener">陈天琪和Carlos Guestrin</a>在2016年的SIGKDD会议上发表了他们的论文，并在火灾中抓住了机器学习世界。自推出以来，该算法不仅赢得了众多Kaggle比赛的胜利，而且还成为几个尖端行业应用的引擎驱动力。因此，有一个强大的数据科学家社区为XGBoost开源项目做出贡献，在<a href="https://github.com/dmlc/xgboost/" target="_blank" rel="noopener">GitHub上</a>有大约350个贡献者和大约3,600个提交。该算法通过以下方式区分自己：</p>
+<ol>
+<li>广泛的应用：可用于解决回归，分类，排名和用户定义的预测问题。</li>
+<li>可移植性：在Windows，Linux和OS X上运行顺畅。</li>
+<li>语言：支持所有主要的编程语言，包括C ++，Python，R，Java，Scala和Julia。</li>
+<li>云集成：支持AWS，Azure和Yarn集群，适用于Flink，Spark和其他生态系统。<br><a name="8186e153"></a><h3 id="如何为XGBoost建立直觉？"><a href="#如何为XGBoost建立直觉？" class="headerlink" title="如何为XGBoost建立直觉？"></a>如何为XGBoost建立直觉？</h3>决策树以其最简单的形式，易于可视化和可解释的算法，但为下一代基于树的算法建立直觉可能有点棘手。请参阅下面的简单类比，以更好地了解基于树的算法的演变。<br><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1554692717316-9be63bbc-6094-4bb5-9f12-b539e3e52244.jpeg#align=left&amp;display=inline&amp;height=539&amp;name=3.jpeg&amp;originHeight=722&amp;originWidth=1000&amp;size=255796&amp;status=done&amp;width=746" alt="3.jpeg"><br>想象一下，你是一名招聘经理，面试几位具有优秀资历的候选人。基于树的算法演变的每一步都可以看作是访谈过程的一个版本。</li>
+<li><strong>决策树</strong>：每个招聘经理都有一套标准，如教育水平，经验年数，面试表现。决策树类似于招聘经理根据他或她自己的标准面试候选人。</li>
+<li><strong>套袋</strong>：现在想象一下，而不是一个面试官，现在有一个面试小组，每个面试官都有一个投票。套袋或自助聚合涉及通过民主投票过程将来自所有调查员的输入结合起来以做出最终决定。</li>
+<li><strong>随机森林</strong>：它是一种基于装袋的算法，具有关键差异，其中仅随机选择特征的子集。换句话说，每个面试官只会根据某些随机选择的资格测试受访者（例如，测试编程技能的技术面试和评估非技术技能的行为面试）。</li>
+<li><strong>提升</strong>：这是一种替代方法，每位访调员根据前一位访调员的反馈改变评估标准。通过部署更加动态的评估流程，“提高”面试流程的效率。</li>
+<li><strong>梯度提升</strong>：通过梯度下降算法提高误差最小化的特殊情况，例如策略咨询公司利用案例访谈来剔除不太合格的候选人。</li>
+<li><strong>XGBoost</strong>：将XGBoost视为’类固醇’的梯度增强（因此有人称之为’极端梯度提升’）！它是软件和硬件优化技术的完美结合，可在最短的时间内使用较少的计算资源产生出色的结果。</li>
+</ol>
+<hr>
+<p><a name="e23d97e3"></a></p>
+<h3 id="为什么XGBoost表现如此之好？"><a href="#为什么XGBoost表现如此之好？" class="headerlink" title="为什么XGBoost表现如此之好？"></a>为什么XGBoost表现如此之好？</h3><p>XGBoost和Gradient Boosting Machines（GBMs）都是集合树方法，它们应用了使用梯度下降架构来提升弱学习者（通常是<a href="https://www.datasciencecentral.com/profiles/blogs/introduction-to-classification-regression-trees-cart" target="_blank" rel="noopener">CART</a>）的原理。但是，XGBoost通过系统优化和算法增强改进了基础GBM框架。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1554692803667-2230a8de-9a3a-4b1d-9fde-6930d429d55c.png#align=left&amp;display=inline&amp;height=388&amp;name=4.png&amp;originHeight=404&amp;originWidth=777&amp;size=88329&amp;status=done&amp;width=746" alt="4.png"><br><strong>系统优化：</strong></p>
+<ol>
+<li><strong>并行化</strong>：XGBoost使用<a href="http://zhanpengfang.github.io/418home.html" target="_blank" rel="noopener">并行化</a>实现来处理顺序树构建过程。由于用于构建基础学习者的循环的可互换性，这是可能的。枚举树的叶节点的外部循环，以及计算特征的第二个内部循环。这种循环嵌套限制了并行化，因为没有完成内部循环（对两者的计算要求更高），外部循环无法启动。因此，为了改善运行时间，使用初始化通过所有实例的全局扫描和使用并行线程排序来交换循环的顺序。此开关通过抵消计算中的任何并行化开销来提高算法性能。</li>
+<li><strong>树修剪：</strong> GBM框架内树分裂的停止标准本质上是贪婪的，取决于分裂点的负损失标准。XGBoost首先使用’max_depth’参数而不是标准，然后开始向后修剪树。这种“深度优先”方法显着提高了计算性能。</li>
+<li><strong>硬件优化</strong>：该算法旨在有效利用硬件资源。这是通过在每个线程中分配内部缓冲区来存储梯度统计信息来实现缓存感知来实现的。诸如“核外”计算等进一步增强功能可优化可用磁盘空间，同时处理不适合内存的大数据帧。</li>
+</ol>
+<p><strong>算法增强功能：</strong></p>
+<ol>
+<li><strong>正则化</strong>：它通过LASSO（L1）和Ridge（L2）<a href="https://towardsdatascience.com/l1-and-l2-regularization-methods-ce25e7fc831c" target="_blank" rel="noopener">正则化</a>来惩罚更复杂的模型，以防止过度拟合。</li>
+<li><strong>稀疏意识</strong>：XGBoost通过根据训练损失自动“学习”最佳缺失值并更有效地处理数据中不同类型的<a href="https://www.kdnuggets.com/2017/10/xgboost-concise-technical-overview.html" target="_blank" rel="noopener">稀疏模式</a>，自然地承认输入的稀疏特征。</li>
+<li><strong>加权分位数草图：</strong> XGBoost采用分布式<a href="https://arxiv.org/pdf/1603.02754.pdf" target="_blank" rel="noopener">加权分位数草图算法</a>有效地找到加权数据集中的最优分裂点。</li>
+<li><strong>交叉验证</strong>：该算法在每次迭代时都带有内置的<a href="https://towardsdatascience.com/cross-validation-in-machine-learning-72924a69872f" target="_blank" rel="noopener">交叉验证</a>方法，无需显式编程此搜索，并指定单次运行所需的增强迭代的确切数量。</li>
+</ol>
+<hr>
+<p><a name="65dc18a3"></a></p>
+<h3 id="证明在哪里？"><a href="#证明在哪里？" class="headerlink" title="证明在哪里？"></a>证明在哪里？</h3><p>我们使用Scikit-learn的’ <a href="https://scikit-learn.org/stable/modules/generated/sklearn.datasets.make_classification.html" target="_blank" rel="noopener">Make_Classification</a> ‘数据包创建了一个包含20个特征（2个信息和2个冗余）的100万个数据点的随机样本。我们测试了几种算法，如Logistic回归，随机森林，标准梯度提升和XGBoost。<br><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1554692844187-5bdcc8c1-b4c5-4fb7-95c6-79baf19ffc03.jpeg#align=left&amp;display=inline&amp;height=420&amp;name=5.jpeg&amp;originHeight=540&amp;originWidth=960&amp;size=70860&amp;status=done&amp;width=746" alt="5.jpeg"><br>如上图所示，与其他算法相比，XGBoost模型具有预测性能和处理时间的最佳组合。其他严格的<a href="https://github.com/szilard/benchm-ml" target="_blank" rel="noopener">基准</a>研究也产生了类似的结果。难怪XGBoost在最近的数据科学竞赛中被广泛使用。<br>“如有疑问，请使用XGBoost” - Owen Zhang，&gt; <a href="http://blog.kaggle.com/2015/08/26/avito-winners-interview-1st-place-owen-zhang/" target="_blank" rel="noopener">Avito</a>上下文广告点击预测竞赛获胜者Kaggle</p>
+<hr>
+<p><a name="a09de8f4"></a></p>
+<h3 id="那么我们应该一直只使用XGBoost吗？"><a href="#那么我们应该一直只使用XGBoost吗？" class="headerlink" title="那么我们应该一直只使用XGBoost吗？"></a>那么我们应该一直只使用XGBoost吗？</h3><p>谈到机器学习（甚至是生活），没有免费的午餐。作为数据科学家，我们必须测试所有可能的数据算法，以确定冠军算法。此外，选择正确的算法是不够的。我们还必须通过调整<a href="https://www.analyticsvidhya.com/blog/2016/03/complete-guide-parameter-tuning-xgboost-with-codes-python/" target="_blank" rel="noopener">超参数</a>为数据集选择正确的算法配置。此外，选择获胜算法还有其他几个考虑因素，例如计算复杂性，可解释性和易于实现。这正是机器学习开始从科学走向艺术的地步，但老实说，这就是魔术发生的地方！</p>
+<hr>
+<p><a name="2abde013"></a></p>
+<h3 id="未来该何去何从？"><a href="#未来该何去何从？" class="headerlink" title="未来该何去何从？"></a>未来该何去何从？</h3><p>机器学习是一个非常活跃的研究领域，已经有几种可行的XGBoost替代方案。微软研究院最近发布了<a href="https://www.microsoft.com/en-us/research/project/lightgbm/" target="_blank" rel="noopener">LightGBM</a>框架，用于梯度增强，显示出巨大的潜力。由Yandex Technology开发的<a href="https://catboost.ai/" target="_blank" rel="noopener">CatBoost</a>已经提供了令人印象深刻的基准测试结果。我们有一个更好的模型框架，在预测性能，灵活性，可解释性和实用性方面优于XGBoost，这是一个时间问题。然而，直到一个强大的挑战者出现，XGBoost将继续统治机器学习世界！</p>
+<hr>
+<p>请在下面留下您的评论。非常感谢<a href="https://medium.com/@setgeti" target="_blank" rel="noopener">Venkat Anurag Setty</a>与我共同撰写本文。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/04/08/yuque/XGBoost算法：长期可能在位！/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-yuque/我的建立图书推荐系统之旅。。。" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -936,96 +1040,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2019/03/18/yuque/如何使用良好的软件工程实践设置PySpark环境以进行开发/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/使用Spark Structured Streaming，XGBoost和Scala进行实时预测" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/18/yuque/使用Spark Structured Streaming，XGBoost和Scala进行实时预测/">使用Spark Structured Streaming，XGBoost和Scala进行实时预测</a>
-    </h1>
-  
-
-        
-        <a href="/2019/03/18/yuque/使用Spark Structured Streaming，XGBoost和Scala进行实时预测/" class="archive-article-date">
-  	<time datetime="2019-03-18T03:06:19.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-18</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>在本文中，我们将讨论构建完整的机器学习管道。第一部分将侧重于在标准批处理模式下训练二元分类器，在第二部分中我们将进行一些实时预测。我们将使用来自<a href="https://www.kaggle.com/c/titanic/data" target="_blank" rel="noopener">泰坦尼克号的</a>数据<a href="https://www.kaggle.com/c/titanic/data" target="_blank" rel="noopener">：机器学习灾难</a>中的众多Kaggle比赛之一。在开始之前，请知道您应该熟悉<a href="https://www.tutorialspoint.com/scala/index.htm" target="_blank" rel="noopener">Scala</a>，<a href="https://spark.apache.org/" target="_blank" rel="noopener">Apache Spark</a>和<a href="http://xgboost.readthedocs.io/en/latest/get_started/" target="_blank" rel="noopener">Xgboost</a>。所有源代码也将在<a href="https://github.com/BogdanCojocar/medium-articles/tree/master/titanic_spark" target="_blank" rel="noopener">Github上提供</a>。很酷，现在让我们开始吧！<br><a name="d8b16075"></a></p>
-<h4 id="训练"><a href="#训练" class="headerlink" title="训练"></a>训练</h4><p>我们将使用Spark中的ML管道训练XGBoost分类器。分类器将保存为输出，并将在Spark Structured Streaming实时应用程序中用于预测新的测试数据。<br><strong>第1步：启动spark会话</strong><br>我们正在创建一个将在本地运行的spark应用程序，并将使用与使用的核心一样多的线程<code>local[*]</code> ：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">val spark  = SparkSession.builder()</span><br><span class="line">  .appName(&quot;Spark XGBOOST Titanic Training&quot;)</span><br><span class="line">  .master(&quot;local[*]&quot;)</span><br><span class="line">  .getOrCreate()</span><br></pre></td></tr></table></figure>
-<p><strong>第2步：定义架构</strong><br>接下来，我们定义从csv读取的数据的模式。这通常比让火花推断模式更好，因为它消耗的资源更少，我们可以完全控制字段。</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> schema = <span class="type">StructType</span>(</span><br><span class="line">  <span class="type">Array</span>(<span class="type">StructField</span>(<span class="string">"PassengerId"</span>, <span class="type">DoubleType</span>),</span><br><span class="line">    <span class="type">StructField</span>(<span class="string">"Survival"</span>, <span class="type">DoubleType</span>),</span><br><span class="line">    <span class="type">StructField</span>(<span class="string">"Pclass"</span>, <span class="type">DoubleType</span>),</span><br><span class="line">    <span class="type">StructField</span>(<span class="string">"Name"</span>, <span class="type">StringType</span>),</span><br><span class="line">    <span class="type">StructField</span>(<span class="string">"Sex"</span>, <span class="type">StringType</span>),</span><br><span class="line">    <span class="type">StructField</span>(<span class="string">"Age"</span>, <span class="type">DoubleType</span>),</span><br><span class="line">    <span class="type">StructField</span>(<span class="string">"SibSp"</span>, <span class="type">DoubleType</span>),</span><br><span class="line">    <span class="type">StructField</span>(<span class="string">"Parch"</span>, <span class="type">DoubleType</span>),</span><br><span class="line">    <span class="type">StructField</span>(<span class="string">"Ticket"</span>, <span class="type">StringType</span>),</span><br><span class="line">    <span class="type">StructField</span>(<span class="string">"Fare"</span>, <span class="type">DoubleType</span>),</span><br><span class="line">    <span class="type">StructField</span>(<span class="string">"Cabin"</span>, <span class="type">StringType</span>),</span><br><span class="line">    <span class="type">StructField</span>(<span class="string">"Embarked"</span>, <span class="type">StringType</span>)</span><br><span class="line">  ))</span><br></pre></td></tr></table></figure>
-<p><strong>第3步：读取数据</strong><br>我们把csv读成a <code>DataFrame</code>，确保我们提到我们有一个标题。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">val df_raw = spark</span><br><span class="line">  .read</span><br><span class="line">  .option(&quot;header&quot;, &quot;true&quot;)</span><br><span class="line">  .schema(schema)</span><br><span class="line">  .csv(filePath)</span><br></pre></td></tr></table></figure>
-<p><strong>第4步：删除空值</strong><br>所有空值都替换为0.这不是理想的，但是对于本教程的目的，它是可以的。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">val df = df_raw.na.fill(0)</span><br></pre></td></tr></table></figure>
-<p><strong>第5步：将名义值转换为数字</strong><br>在浏览此步骤的代码之前，让我们简要介绍一些Spark ML概念。他们介绍了ML管道的概念，它是一组构建在其上的高级API <code>DataFrames</code>，可以更轻松地将多个算法组合到一个流程中。管道的主要元素是<code>Transformer</code>和<code>Estimator</code>。第一个可以表示可以将a <code>DataFrame</code>转换为另一个<code>DataFrame</code>的算法，而后者是可以适合a <code>DataFrame</code>来生成a 的算法<code>Transformer</code> 。<br>为了将名义值转换为数字值，我们需要<code>Transformer</code>为每列定义一个：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> sexIndexer = <span class="keyword">new</span> <span class="type">StringIndexer</span>()</span><br><span class="line">  .setInputCol(<span class="string">"Sex"</span>)</span><br><span class="line">  .setOutputCol(<span class="string">"SexIndex"</span>)</span><br><span class="line">  .setHandleInvalid(<span class="string">"keep"</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">val</span> cabinIndexer = <span class="keyword">new</span> <span class="type">StringIndexer</span>()</span><br><span class="line">  .setInputCol(<span class="string">"Cabin"</span>)</span><br><span class="line">  .setOutputCol(<span class="string">"CabinIndex"</span>)</span><br><span class="line">  .setHandleInvalid(<span class="string">"keep"</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">val</span> embarkedIndexer = <span class="keyword">new</span> <span class="type">StringIndexer</span>()</span><br><span class="line">  .setInputCol(<span class="string">"Embarked"</span>)</span><br><span class="line">  .setOutputCol(<span class="string">"EmbarkedIndex"</span>)</span><br><span class="line">  .setHandleInvalid(<span class="string">"keep"</span>)</span><br></pre></td></tr></table></figure>
-<p>我们正在使用它<code>StringIndexer</code>来转换价值观。对于每个<code>Transformer</code>我们定义的输入列和输出列将包含修改后的值。<br><strong>步骤6：将列组合成特征向量</strong><br>我们将使用另一个<code>Transformer</code>将XGBoost分类中使用的列组合<code>Estimator</code>成一个向量：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> vectorAssembler = <span class="keyword">new</span> <span class="type">VectorAssembler</span>()</span><br><span class="line">  .setInputCols(<span class="type">Array</span>(<span class="string">"Pclass"</span>, <span class="string">"SexIndex"</span>, <span class="string">"Age"</span>, <span class="string">"SibSp"</span>, <span class="string">"Parch"</span>, <span class="string">"Fare"</span>, <span class="string">"CabinIndex"</span>, <span class="string">"EmbarkedIndex"</span>))</span><br><span class="line">  .setOutputCol(<span class="string">"features"</span>)</span><br></pre></td></tr></table></figure>
-<p><strong>第7步：添加XGBoost估算器</strong><br>定义<code>Estimator</code>它将产生模型。可以在地图中定义估计器的设置。我们还可以设置功能和标签列：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">val xgbEstimator = new XGBoostEstimator(Map[String, Any](&quot;num_rounds&quot; -&gt; 100))</span><br><span class="line">  .setFeaturesCol(&quot;features&quot;)</span><br><span class="line">  .setLabelCol(&quot;Survival&quot;)</span><br></pre></td></tr></table></figure>
-<p><strong>第8步：构建管道和分类器</strong><br>在我们创建了所有单独的步骤之后，我们可以定义实际的管道和操作的顺序：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">val pipeline = new Pipeline().setStages(Array(sexIndexer, cabinIndexer, embarkedIndexer, vectorAssembler, xgbEstimator))</span><br></pre></td></tr></table></figure>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1552878673454-f586d9ed-0fba-4140-b77d-605cc73a652d.png#align=left&amp;display=inline&amp;height=105&amp;name=1_5GXouKuoLYmdTCgu1onrzw.png&amp;originHeight=141&amp;originWidth=1000&amp;size=44837&amp;status=done&amp;width=746" alt="1_5GXouKuoLYmdTCgu1onrzw.png"><br>输入<code>DataFrame</code>将被多次转换，最终将生成使用我们的数据训练的模型。我们将保存输出，以便在第二个实时应用程序中使用它。</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> cvModel = pipeline.fit(df)</span><br><span class="line">cvModel.write.overwrite.save(modelPath)</span><br></pre></td></tr></table></figure>
-<p><a name="fbee26a1"></a></p>
-<h4 id="预测"><a href="#预测" class="headerlink" title="预测"></a>预测</h4><p>我们将使用Spark Structured Streaming来基本传输文件中的数据。在现实世界的应用程序中，我们从专用的分布式队列（例如Apache Kafka或AWS Kinesis）读取数据，但是对于此演示，我们将只使用一个简单的文件。<br>简要描述<a href="https://spark.apache.org/docs/latest/structured-streaming-programming-guide.html#input-sources" target="_blank" rel="noopener">Spark Structured Streaming</a>是一个构建在Spark SQL之上的流处理引擎。它使用相同的概念，<code>DataFrames</code>数据存储在一个无限制的表中，当数据流入时，该表随着新行的增长而增长。<br><strong>第1步：创建输入读取流</strong><br>我们再次创建一个spark会话并定义数据的架构。请注意，测试csv不包含标签<code>Survival</code> 。最后我们可以创建输入流<code>DataFrame,</code> <code>df</code>。输入路径必须是我们存储csv文件的目录。它可以包含一个或多个具有相同模式的文件。</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> spark: <span class="type">SparkSession</span> = <span class="type">SparkSession</span>.builder()</span><br><span class="line">  .appName(<span class="string">"Spark Structured Streaming XGBOOST"</span>)</span><br><span class="line">  .master(<span class="string">"local[*]"</span>)</span><br><span class="line">  .getOrCreate()</span><br><span class="line"></span><br><span class="line"><span class="keyword">val</span> schema = <span class="type">StructType</span>(</span><br><span class="line">  <span class="type">Array</span>(<span class="type">StructField</span>(<span class="string">"PassengerId"</span>, <span class="type">DoubleType</span>),</span><br><span class="line">    <span class="type">StructField</span>(<span class="string">"Pclass"</span>, <span class="type">DoubleType</span>),</span><br><span class="line">    <span class="type">StructField</span>(<span class="string">"Name"</span>, <span class="type">StringType</span>),</span><br><span class="line">    <span class="type">StructField</span>(<span class="string">"Sex"</span>, <span class="type">StringType</span>),</span><br><span class="line">    <span class="type">StructField</span>(<span class="string">"Age"</span>, <span class="type">DoubleType</span>),</span><br><span class="line">    <span class="type">StructField</span>(<span class="string">"SibSp"</span>, <span class="type">DoubleType</span>),</span><br><span class="line">    <span class="type">StructField</span>(<span class="string">"Parch"</span>, <span class="type">DoubleType</span>),</span><br><span class="line">    <span class="type">StructField</span>(<span class="string">"Ticket"</span>, <span class="type">StringType</span>),</span><br><span class="line">    <span class="type">StructField</span>(<span class="string">"Fare"</span>, <span class="type">DoubleType</span>),</span><br><span class="line">    <span class="type">StructField</span>(<span class="string">"Cabin"</span>, <span class="type">StringType</span>),</span><br><span class="line">    <span class="type">StructField</span>(<span class="string">"Embarked"</span>, <span class="type">StringType</span>)</span><br><span class="line">  ))</span><br><span class="line"></span><br><span class="line">  <span class="keyword">val</span> df = spark</span><br><span class="line">    .readStream</span><br><span class="line">    .option(<span class="string">"header"</span>, <span class="string">"true"</span>)</span><br><span class="line">    .schema(schema)</span><br><span class="line">    .csv(fileDir)</span><br></pre></td></tr></table></figure>
-<p><strong>第2步：加载XGBoost模型</strong><br>在对象中，<code>XGBoostModel</code>我们加载预先训练的模型，该模型将应用于我们在流中读取的每一批新行。</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">XGBoostModel</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">val</span> modelPath = <span class="string">"your_path"</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">val</span> model = <span class="type">PipelineModel</span>.read.load(modelPath)</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">transform</span></span>(df: <span class="type">DataFrame</span>) = &#123;</span><br><span class="line">    <span class="comment">// replace nan values with 0</span></span><br><span class="line">    <span class="keyword">val</span> df_clean = df.na.fill(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// run the model on new data</span></span><br><span class="line">    <span class="keyword">val</span> result = model.transform(df_clean)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// display the results</span></span><br><span class="line">    result.show()</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><strong>第3步：定义自定义ML接收器</strong><br>为了能够将我们的分类器应用于新数据，我们需要创建一个新的接收器（流和输出之间的接口，在我们的例子中是XGBoost模型）。为此，我们需要一个自定义接收器（<code>MLSink</code>），一个抽象接收器提供器（<code>MLSinkProvider</code>）和provider（）的实现<code>XGBoostMLSinkProvider</code>。</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">MLSinkProvider</span> <span class="keyword">extends</span> <span class="title">StreamSinkProvider</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">process</span></span>(df: <span class="type">DataFrame</span>): <span class="type">Unit</span></span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">createSink</span></span>(</span><br><span class="line">                  sqlContext: <span class="type">SQLContext</span>,</span><br><span class="line">                  parameters: <span class="type">Map</span>[<span class="type">String</span>, <span class="type">String</span>],</span><br><span class="line">                  partitionColumns: <span class="type">Seq</span>[<span class="type">String</span>],</span><br><span class="line">                  outputMode: <span class="type">OutputMode</span>): <span class="type">MLSink</span> = &#123;</span><br><span class="line">    <span class="keyword">new</span> <span class="type">MLSink</span>(process)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">case</span> <span class="class"><span class="keyword">class</span> <span class="title">MLSink</span>(<span class="params">process: <span class="type">DataFrame</span> =&gt; <span class="type">Unit</span></span>) <span class="keyword">extends</span> <span class="title">Sink</span> </span>&#123;</span><br><span class="line">  <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">addBatch</span></span>(batchId: <span class="type">Long</span>, data: <span class="type">DataFrame</span>): <span class="type">Unit</span> = &#123;</span><br><span class="line">    process(data)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">XGBoostMLSinkProvider</span> <span class="keyword">extends</span> <span class="title">MLSinkProvider</span> </span>&#123;</span><br><span class="line">  <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">process</span></span>(df: <span class="type">DataFrame</span>) &#123;</span><br><span class="line">    <span class="type">XGBoostModel</span>.transform(df)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><strong>第4步：在我们的自定义接收器中写入数据</strong><br>最后一步是定义一个将数据写入自定义接收器的查询。还必须定义检查点位置，以便应用程序“记住”在发生故障时在流中读取的最新行。如果我们运行程序，每个新批次的数据将显示在控制台上，同时包含预测的标签。</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">df.writeStream</span><br><span class="line">  .format(<span class="string">"titanic.XGBoostMLSinkProvider"</span>)</span><br><span class="line">  .queryName(<span class="string">"XGBoostQuery"</span>)</span><br><span class="line">  .option(<span class="string">"checkpointLocation"</span>, checkpoint_location)</span><br><span class="line">  .start()</span><br></pre></td></tr></table></figure>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/03/18/yuque/使用Spark Structured Streaming，XGBoost和Scala进行实时预测/">展开全文 >></a>
         </p>
       
 
