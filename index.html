@@ -142,6 +142,110 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-yuque/CatBoost有什么特别之处？" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/04/08/yuque/CatBoost有什么特别之处？/">CatBoost有什么特别之处？</a>
+    </h1>
+  
+
+        
+        <a href="/2019/04/08/yuque/CatBoost有什么特别之处？/" class="archive-article-date">
+  	<time datetime="2019-04-08T07:12:11.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-08</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1554707585506-4c6f626f-1c87-4aab-9b37-132a943eb382.png#align=left&amp;display=inline&amp;height=400&amp;name=1_iEO6b3roCesXxI0vkx9IPg.png&amp;originHeight=720&amp;originWidth=1343&amp;size=104681&amp;status=done&amp;width=746" alt="1_iEO6b3roCesXxI0vkx9IPg.png"><br>CatBoost基于梯度增强。Yandex开发的一种新的机器学习技术，优于许多现有的增强算法，如XGBoost，Light GBM。<br>虽然深度学习算法需要大量数据和计算能力，但仍需要增强算法来解决<strong>大多数</strong>业务问题。然而，像XGBoost这样的提升算法需要花费数小时来训练，有时候在调整超参数时你会感到沮丧。<br>另一方面，CatBoost易于实施且<strong>功能强大</strong>。它在首次运行时提供了出色的结果。那么，让我们来看看CatBoost的特别之处。<br><a name="be15ed01"></a></p>
+<h3 id="基树结构："><a href="#基树结构：" class="headerlink" title="基树结构："></a>基树结构：</h3><ul>
+<li>CatBoost和其他增强算法的一个主要区别是CatBoost实现了<strong>对称树</strong>缩短预测时间**，这对于低延迟环境非常重要。</li>
+</ul>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1554707634979-4422433f-79a1-4285-9da8-7dc2859a10ab.png#align=left&amp;display=inline&amp;height=327&amp;name=1_HbFjRMOJbTSPCSvOL8A3Fg.png&amp;originHeight=327&amp;originWidth=502&amp;size=36638&amp;status=done&amp;width=502" alt="1_HbFjRMOJbTSPCSvOL8A3Fg.png"></p>
+<ul>
+<li>默认max_depth = 6<br><a name="84106802"></a><h3 id="其他梯度增强算法的程序（XG-boost，Light-GBM）"><a href="#其他梯度增强算法的程序（XG-boost，Light-GBM）" class="headerlink" title="其他梯度增强算法的程序（XG boost，Light GBM）"></a><strong>其他梯度增强算法的程序（XG boost，Light GBM）</strong></h3>步骤1：考虑<strong>所有</strong>（或样本）数据点以训练高度偏向的模型。<br>第2步：计算每个数据点的残差（误差）。<br>步骤3：在<strong>相同的</strong>数据点和相应的残差（错误）上训练另一个模型作为类标签。<br>步骤4：重复步骤2和步骤3（<em>对于n次迭代</em>）。<br>此过程容易过度拟合，因为我们正在计算模型已经在&gt; <strong>同一</strong>数据点上训练的数据点的残差。<br><a name="cffbb50b"></a><h3 id="CatBoost程序"><a href="#CatBoost程序" class="headerlink" title="CatBoost程序"></a>CatBoost程序</h3>CatBoost以非常优雅的方式进行渐变增强。以下是使用玩具示例对CatBoost的说明。<br>假设我们的数据集中有10个数据点，并按<strong>时间排序，</strong>如下所示。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1554707676392-4f7ce1b0-5dca-4d23-a74b-219c87e1922b.png#align=left&amp;display=inline&amp;height=234&amp;name=1_K-2XayuU9Y4OklIlDWg1AQ.png&amp;originHeight=234&amp;originWidth=303&amp;size=21768&amp;status=done&amp;width=303" alt="1_K-2XayuU9Y4OklIlDWg1AQ.png"><br>如果数据&gt; <strong>没有</strong>时间，CatBoost会随机为每个数据点创建一个人工时间。</li>
+<li><strong>步骤1</strong>其他数据点上**训练的模型计算每个数据点的残差（_例如<em>为了计算x5数据点的残差，我们使用x1，x2，x3和x4训练一个模型</em>）。因此，我们为不同的数据点训练不同的模型。最后，我们计算每个数据点的残差，它的对应模型以前从未见过该数据点。</li>
+<li><strong>步骤2</strong>：使用每个数据点的残差训练模型</li>
+<li><strong>第3步</strong>：重复步骤1和步骤2（<em>进行n次迭代</em>）</li>
+</ul>
+<p>对于上述玩具数据集，我们应该训练9种不同的模型来获得9个数据点的残差。当我们有更多数据点时，这在<strong>计算上</strong>是<strong>昂贵的</strong>。<br>因此，默认情况下，它不是为每个数据点训练不同的模型，而是仅训练<strong>log _（_</strong>_ num_of_datapoints _<strong>_）_</strong>模型。现在，如果已经在<strong>_n个_</strong>数据点上训练了模型，那么该模型用于计算下<strong>_n个_</strong>数据点的残差。</p>
+<ul>
+<li>已经在第一数据点上训练的模型用于计算第二数据点的残差。</li>
+<li>已经在前两个数据点上训练的另一个模型用于计算第三和第四数据点的残差</li>
+<li><strong>等等…</strong></li>
+</ul>
+<p><em>在上面的玩具数据集中，现在我们使用已经在x1，x2，x3和x4上训练的模型计算x5，x6，x7和x8的残差</em>。<br>我到目前为止所解释的所有这些程序都被称为<strong>有序增强。</strong><br><a name="d9e054ca"></a></p>
+<h3 id="随机排列"><a href="#随机排列" class="headerlink" title="随机排列"></a><strong>随机排列</strong></h3><p>CatBoost实际上将给定数据集划分为随机排列，并对这些随机排列应用有序增强。默认情况下，CatBoost会创建四个随机排列。有了这种随机性，我们可以进一步停止过度拟合我们的模型。我们可以通过调整参数_bagging_temperature_来进一步控制这种随机性_。_这是您在其他增强算法中已经看到的内容。<br><a name="a51b7ada"></a></p>
+<h3 id="处理分类功能。"><a href="#处理分类功能。" class="headerlink" title="处理分类功能。"></a>处理分类功能。</h3><ul>
+<li>CatBoost具有非常好的分类数据矢量表示。它采用有序增强的概念并将其应用于<strong>响应编码</strong>。</li>
+<li>在响应编码，我们表示使用平均到的目标值每个分类特征<strong>的所有</strong> <strong>它的</strong>目标泄漏。**</li>
+<li>CatBoost仅考虑<strong>该时间</strong>先前数据点**并计算具有相同分类特征的那些数据点的目标值的平均值。以下是带有示例的详细说明。</li>
+</ul>
+<p>让我们拿一个玩具数据集。<strong>（所有数据点都按时/天排序）</strong><br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1554707722141-b1173fe1-f6e2-412d-a5ad-87adec847513.png#align=left&amp;display=inline&amp;height=168&amp;name=1_zDejbm6ver9mVmHUSWY4Eg.png&amp;originHeight=168&amp;originWidth=456&amp;size=24750&amp;status=done&amp;width=456" alt="1_zDejbm6ver9mVmHUSWY4Eg.png"><br>如果数据&gt; <strong>没有</strong>时间，CatBoost会随机为每个数据点创建一个人工时间。<br>我们有功能1，一个具有3个不同类别的分类功能。<br>对于响应编码，我们表示混浊=（15 + 14 + 20 + 25）/ 4 = 18.5<br>这实际上导致了目标泄漏。因为我们使用相同数据点的目标值来矢量化数据点。<br>CatBoost矢量化所有分类功能，没有任何目标泄漏。它不会考虑所有数据点，而只会考虑<strong>数据点过去的数据点。</strong>例如，</p>
+<ul>
+<li>星期五，它代表阴天= _（15 + 14）/ 2_15.5_</li>
+<li>星期六，它代表阴天= <em>（15 + 14 + 20）/ 3 = 16.3</em></li>
+<li>但在星期二，它代表阴天= 0/0？</li>
+</ul>
+<p>为了克服这一点，我们都知道拉普拉斯平滑在朴素贝叶斯中的作用。CatBoost实现了同样的功能。<br>下面是另一个简洁的例子，<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1554707798990-c3f00b1a-ffae-44bf-97ca-37dfaab1e066.png#align=left&amp;display=inline&amp;height=189&amp;name=1_Gxfyp9-YbhiQxyy1tt3Niw.png&amp;originHeight=189&amp;originWidth=303&amp;size=19027&amp;status=done&amp;width=303" alt="1_Gxfyp9-YbhiQxyy1tt3Niw.png"><br>在此数据集中，有两个功能（国家和头发长度）。我们可以很容易地发现，只要一个人来自印度，他/她的头发颜色就是黑色。我们可以将这两个功能表示为一个功能。在现实世界中，有许多分类特征可以表示为单个特征。<br>CatBoost通过构建基本树来实现功能组合，其中根节点仅包含单个特征，对于子节点，它随机选择另一个最佳特征并沿着根节点中的特征<strong>表示</strong>它<strong> </strong>。<br>下面是CatBoost的整洁图表，它将两个特征表示为树的第2级的单个特征。<br><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1554707837617-3d6a2db0-248e-4d38-b75e-b62565ea055c.jpeg#align=left&amp;display=inline&amp;height=432&amp;name=1_lChdEleZ2XRJuqZpmLDBEA.jpeg&amp;originHeight=579&amp;originWidth=1000&amp;size=47954&amp;status=done&amp;width=746" alt="1_lChdEleZ2XRJuqZpmLDBEA.jpeg"><br>在<strong>树的</strong>第一层<strong>，我们有一个单一的特征</strong>。当树的级别增加时，分类特征组合的数量成比例地增加。<br><a name="1664f933"></a></p>
+<h4 id="CatBoost中的单热编码"><a href="#CatBoost中的单热编码" class="headerlink" title="CatBoost中的单热编码"></a>CatBoost中的单热编码</h4><p>默认情况下，当且仅当分类功能具有两个不同的类别时，CatBoost在内部表示具有单热编码的所有分类功能。</p>
+<ul>
+<li>如果你想实现一个分类的功能，有一个热码<strong>ñ</strong>_one_hot_max_size_<strong>_ = _</strong>_ñ_**_。_</li>
+<li>另外<strong>注意</strong>的是<br><a name="a4c3394a"></a><h4 id="处理数字特征"><a href="#处理数字特征" class="headerlink" title="处理数字特征"></a><strong>处理数字特征</strong></h4>CatBoost以与其他树算法相同的方式处理数字特征。我们根据信息增益选择最佳分割。<br><a name="df9c9706"></a><h4 id="限制"><a href="#限制" class="headerlink" title="限制"></a>限制</h4></li>
+<li>此时，CatBoost <strong>不</strong>。**</li>
+<li>当数据集具有许多数字特征时，CatBoost比Light GBM需要更多时间进行训练。<br><a name="7d2eb4f1"></a><h3 id="CatBoost在各种情况下："><a href="#CatBoost在各种情况下：" class="headerlink" title="CatBoost在各种情况下："></a><strong>CatBoost在各种情况下：</strong></h3>虽然<em>超参数</em>调整并不是CatBoost的重要方面。最重要的是根据我们正在解决的问题设置正确的_参数<em>。以下是</em>一些_重要的情况。<br><a name="2af279cd"></a><h4 id="1-数据随时间变化时"><a href="#1-数据随时间变化时" class="headerlink" title="1.数据随时间变化时"></a>1.数据随时间变化时</h4>我们生活在21 _日_世纪，其中数据的分布硬拼随时间的变化。特别是在大多数互联网公司中，用户偏好随时间变化。现实世界中存在许多情况，其中数据随时间而变化。通过设置参数<strong>has_time = True，CatBoost</strong>在这些情况下可以很好地执行<strong>。</strong><br><a name="7ac535c5"></a><h4 id="2-低延迟要求"><a href="#2-低延迟要求" class="headerlink" title="2.低延迟要求"></a>2.<strong>低延迟要求</strong></h4>客户满意度是每个企业最重要的方面。用户通常期望来自网站/模型的非常快速的服务。CatBoost是唯一具有非常少的预测时间的增强算法。由于其对称的树形结构。在预测时，它比XGBoost <strong>快8倍</strong>。<br><a name="f60bfec6"></a><h4 id="3-加权数据点"><a href="#3-加权数据点" class="headerlink" title="3. 加权数据点"></a><strong>3. 加权数据点</strong></h4>在某些情况下，我们需要更加重视某些数据点。特别是当您进行时间列车测试拆分时，您需要模型主要在<strong>较早的</strong> <strong>数据点</strong>上进行训练。当您为数据点提供更多权重时，它在随机排列中被选中的可能性更高。<br>我们可以通过设置参数给予某些数据点更多的权重<br>例如，您可以为所有数据点提供<strong>线性</strong>权重<br><strong>_sample_weight_</strong>_ =_ [x<strong>表示范围内的</strong> x（train.shape [0]）]<br><a name="bbee93bf"></a><h4 id="4-使用小数据集"><a href="#4-使用小数据集" class="headerlink" title="4.使用小数据集"></a>4.使用小数据集</h4>在某些情况下，如果数据点数较少，则需要的Log-loss最少。在这些情况下，您可以将参数<strong>_fold_len_multiplier_</strong>设置<strong><em>为接近</em> 1 </strong><em>（必须&gt; 1）</em>和<strong>_approx_on_full_history_</strong> = <strong>True </strong> _。_使用这些参数，CatBoost使用不同的模型计算每个数据点的残差。<br><a name="edab5198"></a><h4 id="5-使用大型数据集"><a href="#5-使用大型数据集" class="headerlink" title="5.使用大型数据集"></a>5.使用大型数据集</h4>对于大型数据集，您可以通过设置参数<strong>task_type = GPU</strong>在GPU上训练CatBoost 。它还支持多服务器分布式<strong>GPU</strong>。CatBoost还支持您可以在Google Colabs中训练的旧GPU。<br><a name="e7800e12"></a><h4 id="6-监控错误-丢失功能"><a href="#6-监控错误-丢失功能" class="headerlink" title="6.监控错误/丢失功能"></a><strong>6.监控错误/丢失功能</strong></h4>每次迭代都要监控模型，这是一种非常好的做法。您可以通过设置参数<strong>_custom_metric =_</strong>_ [‘AUC’，’Logloss’]_来监控您选择的任何指标以及优化损失函数 。<br>您可以可视化您选择监控的所有指标。确保已使用pip 安装<strong><em>ipywidgets</em></strong>以在Jupyter Notebook中可视化绘图并设置参数<strong>plot = True。</strong><br><a name="feb505fa"></a><h4 id="7-分阶段预测和缩小模型"><a href="#7-分阶段预测和缩小模型" class="headerlink" title="7.分阶段预测和缩小模型"></a><strong>7.</strong>分阶段预测和缩小模型</h4>这又是CatBoost库提供的一种强大方法。您已经训练过模型，并且想知道模型在特定迭代中如何预测。您可以调用<strong>_staged_predict（_</strong>）方法来检查模型在该阶段的执行情况。如果您确实注意到在特定阶段模型的性能优于最终训练模型，则可以使用<strong><em>shrink</em></strong>_（）_方法将模型缩小到该特定阶段。查看文档以获取更多信息。<br><a name="6195bcab"></a><h4 id="8-处理不同的情况"><a href="#8-处理不同的情况" class="headerlink" title="8.处理不同的情况"></a><strong>8.处理不同的情况</strong></h4>无论是节日季节还是弱节日或正常日，模型都应该预测每种情况下的最佳结果。<br>对于这类问题，您可以在<strong> </strong>不同的交叉验证数据集上训练不同的模型，并使用<strong>_sum_models_（）</strong>方法将所有模型与一些权重分配给每个模型。稍后<strong>根据</strong>情况，您可以更改每个模型的权重。<br><a name="d3cf8d9d"></a><h4 id="还有很多"><a href="#还有很多" class="headerlink" title="还有很多.."></a>还有很多..</h4></li>
+<li>默认情况下，CatBoost有一个过度拟合检测器，当CV错误开始增加时，它会停止训练。您可以设置参数<strong>od_type</strong>Iter，<strong>在</strong>后**停止训练模型。</li>
+<li>与其他算法一样，我们也可以使用<strong>class_weight</strong> ** </li>
+<li>CatBoost不仅提供重要功能。但它也告诉我们，对于给定的数据点，重要的特征是什么。</li>
+<li>培训代码CatBoost只是直接转发，它几乎与sklearn模块类似。我只解释了CatBoost的一些重要方面。您可以<a href="https://tech.yandex.com/catboost/doc/dg/concepts/about-docpage/" target="_blank" rel="noopener">在此处</a>进一步阅读CatBoost的完整文档，以便更好地理解。<br><a name="dd50564d"></a><h4 id="再见超级参数调整？"><a href="#再见超级参数调整？" class="headerlink" title="再见超级参数调整？"></a>再见超级参数调整？</h4>CatBoost由强大的理论实现，如有序Boosting，Random permutations。它确保我们不会过度拟合我们的模型。它还实现了对称树，它消除了像（min_child_leafs）这样的参数。我们可以进一步调整参数，例如_learning_rate_，_random_strength_，_L2_regulariser，_但<strong>结果变化不大</strong>。<br><a name="d2257fe8"></a><h3 id="结束注意："><a href="#结束注意：" class="headerlink" title="结束注意："></a>结束注意：</h3>CatBoost速度极快，它的性能优于所有梯度增强算法。如果数据集中的大多数功能都是分类的，那么它是一个很好的选择。您可以在<a href="https://catboost.ai/docs/concepts/tutorials.html" target="_blank" rel="noopener">此处</a>对CatBoost团队提供的作业进一步练习CatBoost 。一个强大的模型，过度拟合和非常强大的工具，还有你还在等什么？开始使用CatBoost !!!</li>
+</ul>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/04/08/yuque/CatBoost有什么特别之处？/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-yuque/动画RNN，LSTM和GRU" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -921,87 +1025,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2019/03/18/yuque/Spark上的实际Python工作负载：独立群集/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/如何（以及为什么）创建一个好的验证集" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/18/yuque/如何（以及为什么）创建一个好的验证集/">如何（以及为什么）创建一个好的验证集</a>
-    </h1>
-  
-
-        
-        <a href="/2019/03/18/yuque/如何（以及为什么）创建一个好的验证集/" class="archive-article-date">
-  	<time datetime="2019-03-18T04:19:06.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-18</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><a name="d41d8cd9"></a></p>
-<p>#<br>撰稿：2017年11月13日由<strong>Rachel Thomas</strong>撰写<br>一个非常常见的场景：看似令人印象深刻的机器学习模型在生产中实施时是完全失败的。这些影响包括那些现在对机器学习持怀疑态度且不愿意再次尝试的领导者。怎么会发生这种情况？<br>对于开发结果与生产结果之间的这种脱节的最可能的罪魁祸首之一是选择不当的验证集（或者更糟糕的是，根本没有验证集）。根据数据的性质，选择验证集可能是最重要的一步。尽管sklearn提供了一种<a href="http://scikit-learn.org/stable/modules/generated/sklearn.model_selection.train_test_split.html" target="_blank" rel="noopener"></a><a href="http://scikit-learn.org/stable/modules/generated/sklearn.model_selection.train_test_split.html" target="_blank" rel="noopener">train_test_split</a><a href="http://scikit-learn.org/stable/modules/generated/sklearn.model_selection.train_test_split.html" target="_blank" rel="noopener">方法</a>，但该方法采用了数据的随机子集，这对于许多现实问题来说是一个糟糕的选择。<br><strong>培训</strong>，<strong>验证</strong>和<strong>测试</strong>集的定义可能相当细微，有时不一致地使用这些术语。在深度学习社区中，“测试时间推断”通常用于指对生产中的数据进行评估，这不是测试集的技术定义。如上所述，sklearn有一种train_test_split方法，但没有train_validation_test_split。Kaggle只提供培训和测试集，但要做得好，您需要将他们的训练集分成您自己的验证和训练集。而且，事实证明Kaggle的测试集实际上被细分为两组。很多初学者可能会感到困惑，这并不奇怪！我将在下面解决这些微妙之处。<br><a name="e7a3668b"></a></p>
-<h2 id="首先，什么是“验证集”？"><a href="#首先，什么是“验证集”？" class="headerlink" title="首先，什么是“验证集”？"></a><strong>首先，什么是“验证集”？</strong></h2><p>在创建机器学习模型时，最终目标是使其准确处理新数据，而不仅仅是用于构建数据的数据。考虑下面一组数据的3种不同模型的例子：<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1552882770075-60b15664-d2d8-4359-9920-d9d56d8a789b.png#align=left&amp;display=inline&amp;height=281&amp;name=image.png&amp;originHeight=294&amp;originWidth=781&amp;size=83649&amp;status=done&amp;width=746" alt="image.png"><br>资料来源：Andrew Ng的机器学习课程<br>对于最右侧的模型，图示数据点的误差最小（蓝色曲线几乎完美地穿过红点），但它不是最佳选择。这是为什么？如果你要收集一些新的数据点，它们很可能不在右边图表中的那条曲线上，而是更接近中间图形中的曲线。<br>根本的想法是：</p>
-<ul>
-<li>训练集用于训练给定的模型<br></li>
-<li>验证集用于在模型之间进行选择（例如，随机森林或神经网络是否更适合您的问题？您想要一个有40棵树或50棵树的随机森林吗？）<br></li>
-<li>测试集告诉你你是怎么做的。如果您已经尝试了很多不同的模型，那么您可能只是偶然得到一个在验证集上表现良好的模型，并且拥有测试集有助于确保不是这种情况。<br></li>
-</ul>
-<p>验证和测试集的一个关键属性是它们必须代表<strong><strong>您将来会看到</strong></strong>的<strong><strong>新数据</strong></strong>。这可能听起来像一个不可能的命令！根据定义，您还没有看到这些数据。但是你仍然知道一些事情。<br><a name="7086b6ec"></a></p>
-<h2 id="什么时候随机子集不够好？"><a href="#什么时候随机子集不够好？" class="headerlink" title="什么时候随机子集不够好？"></a><strong>什么时候随机子集不够好？</strong></h2><p>看一些例子是有益的。虽然这些例子中有很多来自Kaggle比赛，但它们代表了您在工作场所会遇到的问题。<br><a name="cc464807"></a></p>
-<h3 id="时间序列"><a href="#时间序列" class="headerlink" title="时间序列"></a><strong>时间序列</strong></h3><p>如果您的数据是时间序列，那么选择数据的随机子集将非常简单（您可以在您尝试预测的日期之前和之后查看数据）并且不代表大多数业务用例（您在哪里）正在使用历史数据来构建将来使用的模型。如果您的数据包含日期并且您要构建将来使用的模型，则需要选择具有最新日期的连续部分作为验证集（例如，可用数据的最后两周或上个月） 。<br>假设您要将下面的时间序列数据拆分为训练和验证集：<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1552882770129-8cad81d5-fbe9-4945-baca-d69af4bf8853.png#align=left&amp;display=inline&amp;height=492&amp;name=image.png&amp;originHeight=492&amp;originWidth=617&amp;size=31169&amp;status=done&amp;width=617" alt="image.png"><br><em>时间序列数据</em><br>随机子集是一个糟糕的选择（太容易填补空白，并不表示您在生产中需要什么）：<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1552882770176-99c4e0dd-3800-454b-bf9d-b9b73bfe4f44.png#align=left&amp;display=inline&amp;height=492&amp;name=image.png&amp;originHeight=492&amp;originWidth=617&amp;size=27107&amp;status=done&amp;width=617" alt="image.png"><br><em>训练集的选择不佳</em><br>使用较早的数据作为训练集（以及验证集的后续数据）：<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1552882770243-648aea97-36ed-4e23-a69e-ec2dcbf32598.png#align=left&amp;display=inline&amp;height=492&amp;name=image.png&amp;originHeight=492&amp;originWidth=617&amp;size=26915&amp;status=done&amp;width=617" alt="image.png"><br><em>为您的训练集提供更好的选择</em><br>Kaggle目前正在竞争<a href="https://www.kaggle.com/c/favorita-grocery-sales-forecasting" target="_blank" rel="noopener"></a><a href="https://www.kaggle.com/c/favorita-grocery-sales-forecasting" target="_blank" rel="noopener">预测一系列厄瓜多尔杂货店的销售情况</a>。Kaggle的“培训数据”从2013年1月1日至2017年8月15日运行，测试数据跨越2017年8月16日至2017年8月31日。一个好方法是使用2017年8月1日至8月15日作为验证集，以及所有早期数据作为你的训练集。<br><a name="574cf8ad"></a></p>
-<h3 id="新人，新船，新…"><a href="#新人，新船，新…" class="headerlink" title="新人，新船，新…"></a><strong>新人，新船，新…</strong></h3><p>您还需要考虑在生产中进行预测的数据可能与您训练模型所需的数据<strong>有何不同</strong>。<br>在Kaggle <a href="https://www.kaggle.com/c/state-farm-distracted-driver-detection" target="_blank" rel="noopener"></a><a href="https://www.kaggle.com/c/state-farm-distracted-driver-detection" target="_blank" rel="noopener">分心驾驶员竞赛中</a>，独立数据是汽车驾驶员的照片，因变量是一个类别，如发短信，吃饭或安全向前看。如果您是从这些数据构建模型的保险公司，请注意您最感兴趣的是模型在您之前没有见过的驱动程序上的表现（因为您可能只为一小部分人提供培训数据）。对于Kaggle比赛也是如此：测试数据由未在训练集中使用的人组成。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1552882770581-4e7e5ff9-8b12-415e-8197-bc32f52b5957.png#align=left&amp;display=inline&amp;height=354&amp;name=image.png&amp;originHeight=354&amp;originWidth=469&amp;size=208442&amp;status=done&amp;width=469" alt="image.png"><br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1552882770937-9c3f6222-3e65-46e1-a25d-3a7c7241b3bf.png#align=left&amp;display=inline&amp;height=359&amp;name=image.png&amp;originHeight=359&amp;originWidth=467&amp;size=208605&amp;status=done&amp;width=467" alt="image.png"><br><em>同一个人驾驶时在电话上交谈的两个图像。</em><br>如果您将上述图像之一放入训练集中，并将其中一个放在验证集中，那么您的模型似乎表现得比新人更好。另一个观点是，如果你使用所有人来训练你的模型，你的模型可能过分适应那些特定人的特殊性，而不仅仅是学习状态（发短信，吃饭等）。<br>在<a href="https://www.kaggle.com/c/the-nature-conservancy-fisheries-monitoring" target="_blank" rel="noopener"></a><a href="https://www.kaggle.com/c/the-nature-conservancy-fisheries-monitoring" target="_blank" rel="noopener">Kaggle渔业竞赛中也</a>有类似的动态，以确定渔船捕获的鱼类种类，以减少非法捕捞濒危种群。测试集由未出现在训练数据中的船组成。这意味着您希望验证集包含不在训练集中的船只。<br>有时可能不清楚您的测试数据会有何不同。例如，对于使用卫星图像的问题，您需要收集有关训练集是否仅包含某些地理位置的更多信息，或者是否来自地理位置分散的数据。<br><a name="af629453"></a></p>
-<h2 id="交叉验证的危险"><a href="#交叉验证的危险" class="headerlink" title="交叉验证的危险"></a><strong>交叉验证的危险</strong></h2><p>sklearn没有train_validation_test拆分的原因是假设您经常使用<strong><strong>交叉验证</strong></strong>，其中训练集的不同子集用作验证集。例如，对于3倍交叉验证，数据被分为3组：A，B和C.首先训练模型A和B组合作为训练集，并在验证集C上进行评估。 ，将模型训练为A和C组合作为训练集，并在验证集B上进行评估。依此类推，最终将3倍的模型性能平均化。<br>但是，交叉验证的问题在于，由于上述各节中描述的所有原因，它很少适用于现实世界的问题。交叉验证仅适用于您可以随机调整数据以选择验证集的相同情况。<br><a name="5c6fff0d"></a></p>
-<h2 id="Kaggle的“训练集”-你的训练-验证集"><a href="#Kaggle的“训练集”-你的训练-验证集" class="headerlink" title="Kaggle的“训练集”=你的训练+验证集"></a><strong>Kaggle的“训练集”=你的训练+验证集</strong></h2><p>Kaggle比赛的一个好处是它们会迫使你更严格地考虑验证集（为了做得好）。对于那些刚接触Kaggle的人来说，它是一个举办机器学习比赛的平台。Kaggle通常会将数据分为两组，您可以下载：</p>
-<ol>
-<li>一个<strong><strong>训练集</strong></strong>，其中包括<strong>独立的变量</strong>，以及对<strong>因变量</strong>（你正在尝试预测）。对于试图预测销售的厄瓜多尔杂货店的例子，自变量包括商店ID，商品ID和日期; 因变量是销售数量。对于尝试确定驾驶员是否在车轮后面进行危险行为的示例，自变量可以是驾驶员的图片，并且因变量是类别（例如发短信，吃饭或安全地向前看）。<br></li>
-<li>一个<strong><strong>测试集</strong></strong>，它只有自变量。您将对测试集进行预测，您可以将其提交给Kaggle，并获得您的评分。<br></li>
-</ol>
-<p>这是开始机器学习所需的基本思想，但要做得好，理解起来要复杂一些。您将需要创建自己的培训和验证集（通过拆分Kaggle“培训”数据）。您将使用较小的训练集（Kaggle训练数据的子集）来构建模型，并且在提交给Kaggle之前，您可以在验证集（也是Kaggle的训练数据的子集）上对其进行评估。<br>最重要的原因是Kaggle将测试数据分为两组：公共和私人排行榜。您在公共排行榜上看到的分数仅适用于您预测的一部分（您不知道哪个子集！）。您的预测在私人排行榜上的表现将不会在比赛结束前公布。这一点很重要的原因是你最终可能会过度适应公共排行榜，直到最后你在私人排行榜上做得不好时才会意识到这一点。使用良好的验证集可以防止这种情况。您可以通过查看您的模型是否具有与Kaggle测试集相比较的相似分数来检查您的验证集是否有用。<br>创建自己的验证集很重要的另一个原因是Kaggle限制您每天提交两次，并且您可能希望尝试更多。第三，确切地看到你在验证集上出错的地方是有益的，而且Kaggle没有告诉你测试集的正确答案，甚至没有告诉你哪些数据点你的错误，只是你的整体得分。<br>理解这些区别不仅对Kaggle有用。在任何预测性机器学习项目中，您希望模型能够在新数据上表现良好。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/03/18/yuque/如何（以及为什么）创建一个好的验证集/">展开全文 >></a>
         </p>
       
 
