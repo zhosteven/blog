@@ -6,15 +6,28 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://zhos.me">
-  <title>Archives | A+</title>
+  <title>动画RNN，LSTM和GRU | A+</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="A+">
-<meta property="og:url" content="http://zhos.me/archives/page/4/index.html">
+  <meta name="description" content="递归神经网络（RNN）是一类人工神经网络，通常与顺序数据一起使用。3种最常见的递归神经网络类型是  香草RNN， 长期短暂记忆（LSTM），由Hochreiter和Schmidhuber在1997年提出，和 Cho _等人_提出的门控复发单位（GRU）_。__人_在2014年。请注意，我将使用“RNN”来统一指代固有循环的神经网络架构，并使用“vanilla RNN”来指代最简单的递归神经网络架构">
+<meta property="og:type" content="article">
+<meta property="og:title" content="动画RNN，LSTM和GRU">
+<meta property="og:url" content="http://zhos.me/2019/04/08/yuque/动画RNN，LSTM和GRU/index.html">
 <meta property="og:site_name" content="A+">
+<meta property="og:description" content="递归神经网络（RNN）是一类人工神经网络，通常与顺序数据一起使用。3种最常见的递归神经网络类型是  香草RNN， 长期短暂记忆（LSTM），由Hochreiter和Schmidhuber在1997年提出，和 Cho _等人_提出的门控复发单位（GRU）_。__人_在2014年。请注意，我将使用“RNN”来统一指代固有循环的神经网络架构，并使用“vanilla RNN”来指代最简单的递归神经网络架构">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/gif/219582/1554694541119-cecb0195-0921-42bb-99c5-76b77aad66d3.gif#align=left&display=inline&height=494&name=1.gif&originHeight=662&originWidth=1000&size=468764&status=done&width=746">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1554694591267-9709e850-0b87-45d2-a044-b150e938af07.png#align=left&display=inline&height=530&name=2.png&originHeight=710&originWidth=1000&size=150263&status=done&width=746">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/gif/219582/1554694630260-46ed551e-1593-4ae3-b3d9-2381045a2dd0.gif#align=left&display=inline&height=555&name=2.gif&originHeight=717&originWidth=964&size=96255&status=done&width=746">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/gif/219582/1554694719107-ae608d63-3a0c-4132-81ca-4b3ab2684802.gif#align=left&display=inline&height=494&name=3.gif&originHeight=662&originWidth=1000&size=468764&status=done&width=746">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/gif/219582/1554694757747-8ba1a035-c84a-43d3-86c7-9eea37543ef5.gif#align=left&display=inline&height=527&name=4.gif&originHeight=707&originWidth=1000&size=359796&status=done&width=746">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1554694805790-03e88c08-26ab-4be9-bb3f-a1104ecab19f.png#align=left&display=inline&height=555&name=7.png&originHeight=717&originWidth=964&size=72617&status=done&width=746">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1554694860682-eadcdb72-9e37-4887-adac-c8ef5a13df99.png#align=left&display=inline&height=494&name=8.png&originHeight=662&originWidth=1000&size=134631&status=done&width=746">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1554694874056-361ddbe5-8f3e-4bf2-b14a-bdf281d961fb.png#align=left&display=inline&height=527&name=9.png&originHeight=707&originWidth=1000&size=122999&status=done&width=746">
+<meta property="og:updated_time" content="2019-04-08T03:41:56.031Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="A+">
+<meta name="twitter:title" content="动画RNN，LSTM和GRU">
+<meta name="twitter:description" content="递归神经网络（RNN）是一类人工神经网络，通常与顺序数据一起使用。3种最常见的递归神经网络类型是  香草RNN， 长期短暂记忆（LSTM），由Hochreiter和Schmidhuber在1997年提出，和 Cho _等人_提出的门控复发单位（GRU）_。__人_在2014年。请注意，我将使用“RNN”来统一指代固有循环的神经网络架构，并使用“vanilla RNN”来指代最简单的递归神经网络架构">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2019/gif/219582/1554694541119-cecb0195-0921-42bb-99c5-76b77aad66d3.gif#align=left&display=inline&height=494&name=1.gif&originHeight=662&originWidth=1000&size=468764&status=done&width=746">
   
     <link rel="alternative" href="/atom.xml" title="A+" type="application/atom+xml">
   
@@ -140,187 +153,175 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-yuque/动画RNN，LSTM和GRU" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      动画RNN，LSTM和GRU
+    </h1>
+  
+
+        
+        <a href="/2019/04/08/yuque/动画RNN，LSTM和GRU/" class="archive-article-date">
+  	<time datetime="2019-04-08T03:35:15.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-08</time>
+</a>
+        
+      </header>
     
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="https://cdn.nlark.com/yuque/0/2019/gif/219582/1554694541119-cecb0195-0921-42bb-99c5-76b77aad66d3.gif#align=left&amp;display=inline&amp;height=494&amp;name=1.gif&amp;originHeight=662&amp;originWidth=1000&amp;size=468764&amp;status=done&amp;width=746" alt="1.gif"><br>递归神经网络（RNN）是一类人工神经网络，通常与顺序数据一起使用。3种最常见的递归神经网络类型是</p>
+<ol>
+<li>香草RNN，</li>
+<li>长期短暂记忆（LSTM），由<a href="https://www.researchgate.net/publication/13853244_Long_Short-term_Memory" target="_blank" rel="noopener">Hochreiter和Schmidhuber在1997年提出</a>，和</li>
+<li><a href="https://arxiv.org/abs/1409.1259" target="_blank" rel="noopener">Cho _等人_</a>提出的门控复发单位（GRU）<a href="https://arxiv.org/abs/1409.1259" target="_blank" rel="noopener">_。_</a><a href="https://arxiv.org/abs/1409.1259" target="_blank" rel="noopener">_人_</a><a href="https://arxiv.org/abs/1409.1259" target="_blank" rel="noopener">在2014年</a>。<br>请注意，我将使用“RNN”来统一指代固有循环的神经网络架构，并使用“vanilla RNN”来指代最简单的递归神经网络架构，如图&gt; <a href="https://towardsdatascience.com/animated-rnn-lstm-and-gru-ef124d06cf45#50f0" target="_blank" rel="noopener">1</a>所示。<br>有许多用于递归神经网络的图解图。我最喜欢的是迈克尔·阮（Michael Nguyen）在<a href="https://towardsdatascience.com/illustrated-guide-to-lstms-and-gru-s-a-step-by-step-explanation-44e9eb85bf21" target="_blank" rel="noopener">“</a>走向数据科学”（Towards Data Science）上发表的<a href="https://towardsdatascience.com/illustrated-guide-to-lstms-and-gru-s-a-step-by-step-explanation-44e9eb85bf21" target="_blank" rel="noopener">这篇文章</a>，因为他为我们提供了对这些模型的直觉，更重要的是让我们更容易理解的美丽插图。但我的帖子背后的动机是更好地可视化在这些单元格中发生的事情，以及如何共享节点以及它们如何转换以给出输出节点。我的灵感来自迈克尔的精彩动画。<br>本文探讨了香草RNN，LSTM和GRU细胞。这是一个简短的阅读，适用于那些阅读过这些主题的人。（我建议在阅读这篇文章之前阅读迈克尔的文章。）重要的是要注意以下动画是连续的，以引导人眼，但不反映矢量化机器计算期间的时间顺序。<br>这是我用于插图的传奇。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1554694591267-9709e850-0b87-45d2-a044-b150e938af07.png#align=left&amp;display=inline&amp;height=530&amp;name=2.png&amp;originHeight=710&amp;originWidth=1000&amp;size=150263&amp;status=done&amp;width=746" alt="2.png"><br>在我的动画中，我使用的输入大小为3（绿色）和2个隐藏单位（红色），批量大小为1。<br>让我们开始！</li>
+</ol>
+<hr>
+<p><a name="9ee03e2d"></a></p>
+<h4 id="香草RNN"><a href="#香草RNN" class="headerlink" title="香草RNN"></a>香草RNN</h4><p><img src="https://cdn.nlark.com/yuque/0/2019/gif/219582/1554694630260-46ed551e-1593-4ae3-b3d9-2381045a2dd0.gif#align=left&amp;display=inline&amp;height=555&amp;name=2.gif&amp;originHeight=717&amp;originWidth=964&amp;size=96255&amp;status=done&amp;width=746" alt="2.gif"></p>
+<ul>
+<li>_牛逼_  -时间步</li>
+<li>_X - _输入</li>
+<li>_h - _隐藏状态</li>
+<li>_X的_- _输入的尺寸/尺寸</li>
+<li>_h的_- _没有。隐藏单位。需要注意的是不同的库调用它们不同，但它们的意思是一样的：<br>- Keras - <code>[state_size](https://keras.io/layers/recurrent/)</code>_ ，_ - PyTorch -  - TensorFlow - <code>[units](https://keras.io/layers/recurrent/#lstm)`</code><a href="https://pytorch.org/docs/stable/nn.html#rnn" target="_blank" rel="noopener">hidden_size</a><code>&lt;br /&gt;</code><a href="https://www.tensorflow.org/api_docs/python/tf/nn/rnn_cell/BasicLSTMCell" target="_blank" rel="noopener">num_units</a>`<br><a name="LSTM"></a><h4 id="LSTM"><a href="#LSTM" class="headerlink" title="LSTM"></a>LSTM</h4><img src="https://cdn.nlark.com/yuque/0/2019/gif/219582/1554694719107-ae608d63-3a0c-4132-81ca-4b3ab2684802.gif#align=left&amp;display=inline&amp;height=494&amp;name=3.gif&amp;originHeight=662&amp;originWidth=1000&amp;size=468764&amp;status=done&amp;width=746" alt="3.gif"></li>
+<li>_C - _细胞状态</li>
+</ul>
+<p>注意，单元状态的维度与隐藏状态的维度相同。<br><a name="GRU"></a></p>
+<h4 id="GRU"><a href="#GRU" class="headerlink" title="GRU"></a>GRU</h4><p><img src="https://cdn.nlark.com/yuque/0/2019/gif/219582/1554694757747-8ba1a035-c84a-43d3-86c7-9eea37543ef5.gif#align=left&amp;display=inline&amp;height=527&amp;name=4.gif&amp;originHeight=707&amp;originWidth=1000&amp;size=359796&amp;status=done&amp;width=746" alt="4.gif"><br>希望这些动画以某种方式帮助你！以下是静态图像中单元格的摘要：<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1554694805790-03e88c08-26ab-4be9-bb3f-a1104ecab19f.png#align=left&amp;display=inline&amp;height=555&amp;name=7.png&amp;originHeight=717&amp;originWidth=964&amp;size=72617&amp;status=done&amp;width=746" alt="7.png"></p>
+<p>图4：香草RNN细胞<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1554694860682-eadcdb72-9e37-4887-adac-c8ef5a13df99.png#align=left&amp;display=inline&amp;height=494&amp;name=8.png&amp;originHeight=662&amp;originWidth=1000&amp;size=134631&amp;status=done&amp;width=746" alt="8.png">图5：LSTM细胞<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1554694874056-361ddbe5-8f3e-4bf2-b14a-bdf281d961fb.png#align=left&amp;display=inline&amp;height=527&amp;name=9.png&amp;originHeight=707&amp;originWidth=1000&amp;size=122999&amp;status=done&amp;width=746" alt="9.png"><br>图6：GRU细胞<br><a name="7cbcc2b2"></a></p>
+<h4 id="深度学习相关文章"><a href="#深度学习相关文章" class="headerlink" title="深度学习相关文章"></a>深度学习相关文章</h4><p><a href="https://towardsdatascience.com/an-implementation-guide-to-word2vec-using-numpy-and-google-sheets-13445eebd281" target="_blank" rel="noopener">逐行Word2Vec实现</a>（关于字嵌入）<br><a href="https://towardsdatascience.com/step-by-step-tutorial-on-linear-regression-with-stochastic-gradient-descent-1d35b088a843" target="_blank" rel="noopener">带随机梯度下降的线性回归分步教程</a><br><a href="https://towardsdatascience.com/10-gradient-descent-optimisation-algorithms-86989510b5e9" target="_blank" rel="noopener">10个梯度下降优化算法+备忘单</a><br><a href="https://towardsdatascience.com/counting-no-of-parameters-in-deep-learning-models-by-hand-8f1716241889" target="_blank" rel="noopener">计算深度学习模型中的参数数量</a><br><a href="https://towardsdatascience.com/attn-illustrated-attention-5ec4ad276ee3" target="_blank" rel="noopener">Attn：插图注意</a><br><br></p>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
       
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2018" class="archive-year">2018</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/12/19/yuque/理解二进制交叉熵、对数损失函数:一种可视化解释/" class="archive-article-date">
-  	<time datetime="2018-12-19T08:27:20.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-19</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/12/19/yuque/理解二进制交叉熵、对数损失函数:一种可视化解释/">理解二进制交叉熵、对数损失函数:一种可视化解释</a>
-    </h1>
-  
+      
 
-        <div class="article-info info-on-right">
-          
-          
+      
 
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://zhos.me/2019/04/08/yuque/动画RNN，LSTM和GRU/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/12/19/yuque/关于目标检测，所有你应该知道的深度学习模型/" class="archive-article-date">
-  	<time datetime="2018-12-19T07:22:45.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-19</time>
-</a>
+<nav id="article-nav">
+  
+  
+    <a href="/2019/04/08/yuque/XGBoost算法：长期可能在位！/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">XGBoost算法：长期可能在位！</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
+        
+        
+    </div>
+</aside>
+
+
+
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/12/19/yuque/关于目标检测，所有你应该知道的深度学习模型/">关于目标检测，所有你应该知道的深度学习模型</a>
-    </h1>
+  
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/12/19/yuque/目标检测和定位算法的演变/" class="archive-article-date">
-  	<time datetime="2018-12-19T06:21:01.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-19</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/12/19/yuque/目标检测和定位算法的演变/">目标检测和定位算法的演变</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/12/19/yuque/评论：U-Net（生物医学图像分割）/" class="archive-article-date">
-  	<time datetime="2018-12-19T05:38:12.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-19</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/12/19/yuque/评论：U-Net（生物医学图像分割）/">评论：U-Net（生物医学图像分割）</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/12/19/yuque/去除正则化会避免模型过拟合吗？/" class="archive-article-date">
-  	<time datetime="2018-12-19T04:28:16.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-19</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/12/19/yuque/去除正则化会避免模型过拟合吗？/">去除正则化会避免模型过拟合吗？</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/12/19/yuque/迁移学习：使用Fast.AI库对4种北极犬进行分类/" class="archive-article-date">
-  	<time datetime="2018-12-19T02:16:20.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-19</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/12/19/yuque/迁移学习：使用Fast.AI库对4种北极犬进行分类/">迁移学习：使用Fast.AI库对4种北极犬进行分类</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
-
-    
-    <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/archives/page/3/">&laquo; Prev</a><a class="page-number" href="/archives/">1</a><a class="page-number" href="/archives/page/2/">2</a><a class="page-number" href="/archives/page/3/">3</a><span class="page-number current">4</span>
-    </nav>
   
 
 
@@ -344,8 +345,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
