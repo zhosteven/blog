@@ -18,7 +18,7 @@
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1552902588026-b01dacd8-8d16-4298-b2d9-9237f34d8543.png#align=left&display=inline&height=462&name=1_HcQRb-GgmYnWRF15yobCOw.png&originHeight=619&originWidth=1000&size=293525&status=done&width=746">
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1552902767067-19085e70-7bf9-4058-84d8-cc174302f2af.png#align=left&display=inline&height=304&name=1_l-aJ47luaPs9wpj_FTlMSQ.png&originHeight=408&originWidth=1000&size=413381&status=done&width=746">
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1552902810496-c3ddc7d0-c9e2-4e34-823f-54fbc0e9966f.png#align=left&display=inline&height=512&name=1_zcpriTNz1FM6kWUpQNr_RA.png&originHeight=686&originWidth=1000&size=282197&status=done&width=746">
-<meta property="og:updated_time" content="2019-04-08T09:45:17.583Z">
+<meta property="og:updated_time" content="2019-04-08T09:45:39.751Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spark上的实际Python工作负载：独立群集">
 <meta name="twitter:description" content="关于在Spark上运行Python有无数文章和论坛帖子，但大多数人认为要提交的工作包含在一个.py文件中：spark-submit wordcount.py - 完成！如果你的Python程序不仅仅是一个脚本怎么办？也许它为Spark生成动态SQL来执行，或使用Spark的输出刷新模型。随着您的Python代码变得更像一个应用程序（具有目录结构，配置文件和库依赖项），将其提交给Spark需要更多考">
@@ -168,7 +168,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>关于在Spark上运行Python有无数文章和论坛帖子，但大多数人认为要提交的工作包含在一个.py文件中：<code>spark-submit wordcount.py</code> - 完成！<br>如果你的Python程序不仅仅是一个脚本怎么办？也许它为Spark生成动态SQL来执行，或使用Spark的输出刷新模型。随着您的Python代码变得更像一个应用程序（具有目录结构，配置文件和库依赖项），将其提交给Spark需要更多考虑。<br>以下是我最近考虑使用Spark 2.3将一个这样的Python应用程序用于生产时的替代方案。第一篇文章重点介绍Spark独立集群。另一篇文章介绍了EMR Spark（YARN）。<br>我远不是Spark的权威，更不用说Python了。我的决定试图平衡正确性和易于部署，以及应用程序对群集的限制。让我知道你的想法。<br><a name="9dd10fb0"></a></p>
+        <p>关于在Spark上运行Python有无数文章和论坛帖子，但大多数人认为要提交的工作包含在一个.py文件中：<code>spark-submit wordcount.py</code> - 完成！<br>如果你的Python程序不仅仅是一个脚本怎么办？也许它为Spark生成动态SQL来执行，或使用Spark的输出刷新模型。随着您的Python代码变得更像一个应用程序（具有目录结构，配置文件和库依赖项），将其提交给Spark需要更多考虑。<br>以下是我最近考虑使用Spark 2.3将一个这样的Python应用程序用于生产时的替代方案。第一篇文章重点介绍Spark独立集群。另一篇文章介绍了EMR Spark（YARN）。<br>我远不是Spark的权威，更不用说Python了。我的决定试图平衡正确性和易于部署，以及应用程序对群集的限制。让我知道你的想法。<br><a id="more"></a><br><a name="9dd10fb0"></a></p>
 <h3 id="趋势AI文章："><a href="#趋势AI文章：" class="headerlink" title="趋势AI文章："></a>趋势AI文章：</h3><blockquote>
 <p><a href="https://becominghuman.ai/predicting-buying-behavior-using-machine-learning-a-case-study-on-sales-prospecting-part-i-3bf455486e5d" target="_blank" rel="noopener">1.使用机器学习预测购买行为</a>&gt; <a href="https://becominghuman.ai/understanding-and-building-generative-adversarial-networks-gans-8de7c1dc0e25" target="_blank" rel="noopener">2.理解和构建生成对抗网络（GAN）</a>&gt; <a href="https://becominghuman.ai/building-a-django-post-face-detection-api-using-opencv-and-haar-cascades-dcf4e0e5f725" target="_blank" rel="noopener">3.使用OpenCV和Haar Cascades构建Django POST面部检测API</a>&gt; <a href="https://becominghuman.ai/learning-from-mistakes-with-hindsight-experience-replay-547fce2b3305" target="_blank" rel="noopener">4.通过Hindsight Experience Replay从错误中学习</a><br><a name="3cf6ae3c"></a></p>
 </blockquote>
