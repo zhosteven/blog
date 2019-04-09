@@ -142,6 +142,71 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-yuque/语音助理在手机上被浪费了" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/04/04/yuque/语音助理在手机上被浪费了/">语音助理在手机上被浪费了</a>
+    </h1>
+  
+
+        
+        <a href="/2019/04/04/yuque/语音助理在手机上被浪费了/" class="archive-article-date">
+  	<time datetime="2019-04-04T08:55:53.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-04</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><em>智能手机和智能扬声器在解锁语音接口的全部潜力方面受到限制。数字助理的未来是增强和虚拟现实。</em><br><strong>通过</strong><a href="https://www.pcmag.com/author-bio/ben-dickson" target="_blank" rel="noopener"><strong>本迪克森</strong></a><br>自2011年首次亮相以来，苹果公司的语音助手Siri已经激励众多公司开发竞争对手的数字助理，其中最受欢迎的是  <a href="https://www.pcmag.com/article/352136/the-best-amazon-alexa-skills" target="_blank" rel="noopener">亚马逊的Alexa</a>和Google智能助理 - 早已超越Siri的质量。<br>然而，语音助手仅用于我们使用计算设备完成的一小部分任务，因为它们目前所处的平台存在局限性。<br>
+        
+          <a class="article-more-a" href="/2019/04/04/yuque/语音助理在手机上被浪费了/#more">more >></a>
+        
+      
+
+      
+    </p></div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/04/04/yuque/语音助理在手机上被浪费了/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-yuque/转移学习：重新启动Inception V3以进行自定义图像分类" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -532,39 +597,14 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>在本文中，我们将讨论构建完整的机器学习管道。第一部分将侧重于在标准批处理模式下训练二元分类器，在第二部分中我们将进行一些实时预测。我们将使用来自<a href="https://www.kaggle.com/c/titanic/data" target="_blank" rel="noopener">泰坦尼克号的</a>数据<a href="https://www.kaggle.com/c/titanic/data" target="_blank" rel="noopener">：机器学习灾难</a>中的众多Kaggle比赛之一。在开始之前，请知道您应该熟悉<a href="https://www.tutorialspoint.com/scala/index.htm" target="_blank" rel="noopener">Scala</a>，<a href="https://spark.apache.org/" target="_blank" rel="noopener">Apache Spark</a>和<a href="http://xgboost.readthedocs.io/en/latest/get_started/" target="_blank" rel="noopener">Xgboost</a>。所有源代码也将在<a href="https://github.com/BogdanCojocar/medium-articles/tree/master/titanic_spark" target="_blank" rel="noopener">Github上提供</a>。很酷，现在让我们开始吧！<br><a name="d8b16075"></a></p>
-<h4 id="训练"><a href="#训练" class="headerlink" title="训练"></a>训练</h4><p>我们将使用Spark中的ML管道训练XGBoost分类器。分类器将保存为输出，并将在Spark Structured Streaming实时应用程序中用于预测新的测试数据。<br><strong>第1步：启动spark会话</strong><br>我们正在创建一个将在本地运行的spark应用程序，并将使用与使用的核心一样多的线程<code>local[*]</code> ：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">val spark  = SparkSession.builder()</span><br><span class="line">  .appName(&quot;Spark XGBOOST Titanic Training&quot;)</span><br><span class="line">  .master(&quot;local[*]&quot;)</span><br><span class="line">  .getOrCreate()</span><br></pre></td></tr></table></figure>
-<p><strong>第2步：定义架构</strong><br>接下来，我们定义从csv读取的数据的模式。这通常比让火花推断模式更好，因为它消耗的资源更少，我们可以完全控制字段。</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> schema = <span class="type">StructType</span>(</span><br><span class="line">  <span class="type">Array</span>(<span class="type">StructField</span>(<span class="string">"PassengerId"</span>, <span class="type">DoubleType</span>),</span><br><span class="line">    <span class="type">StructField</span>(<span class="string">"Survival"</span>, <span class="type">DoubleType</span>),</span><br><span class="line">    <span class="type">StructField</span>(<span class="string">"Pclass"</span>, <span class="type">DoubleType</span>),</span><br><span class="line">    <span class="type">StructField</span>(<span class="string">"Name"</span>, <span class="type">StringType</span>),</span><br><span class="line">    <span class="type">StructField</span>(<span class="string">"Sex"</span>, <span class="type">StringType</span>),</span><br><span class="line">    <span class="type">StructField</span>(<span class="string">"Age"</span>, <span class="type">DoubleType</span>),</span><br><span class="line">    <span class="type">StructField</span>(<span class="string">"SibSp"</span>, <span class="type">DoubleType</span>),</span><br><span class="line">    <span class="type">StructField</span>(<span class="string">"Parch"</span>, <span class="type">DoubleType</span>),</span><br><span class="line">    <span class="type">StructField</span>(<span class="string">"Ticket"</span>, <span class="type">StringType</span>),</span><br><span class="line">    <span class="type">StructField</span>(<span class="string">"Fare"</span>, <span class="type">DoubleType</span>),</span><br><span class="line">    <span class="type">StructField</span>(<span class="string">"Cabin"</span>, <span class="type">StringType</span>),</span><br><span class="line">    <span class="type">StructField</span>(<span class="string">"Embarked"</span>, <span class="type">StringType</span>)</span><br><span class="line">  ))</span><br></pre></td></tr></table></figure>
-<p><strong>第3步：读取数据</strong><br>我们把csv读成a <code>DataFrame</code>，确保我们提到我们有一个标题。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">val df_raw = spark</span><br><span class="line">  .read</span><br><span class="line">  .option(&quot;header&quot;, &quot;true&quot;)</span><br><span class="line">  .schema(schema)</span><br><span class="line">  .csv(filePath)</span><br></pre></td></tr></table></figure>
-<p><strong>第4步：删除空值</strong><br>所有空值都替换为0.这不是理想的，但是对于本教程的目的，它是可以的。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">val df = df_raw.na.fill(0)</span><br></pre></td></tr></table></figure>
-<p><strong>第5步：将名义值转换为数字</strong><br>在浏览此步骤的代码之前，让我们简要介绍一些Spark ML概念。他们介绍了ML管道的概念，它是一组构建在其上的高级API <code>DataFrames</code>，可以更轻松地将多个算法组合到一个流程中。管道的主要元素是<code>Transformer</code>和<code>Estimator</code>。第一个可以表示可以将a <code>DataFrame</code>转换为另一个<code>DataFrame</code>的算法，而后者是可以适合a <code>DataFrame</code>来生成a 的算法<code>Transformer</code> 。<br>为了将名义值转换为数字值，我们需要<code>Transformer</code>为每列定义一个：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> sexIndexer = <span class="keyword">new</span> <span class="type">StringIndexer</span>()</span><br><span class="line">  .setInputCol(<span class="string">"Sex"</span>)</span><br><span class="line">  .setOutputCol(<span class="string">"SexIndex"</span>)</span><br><span class="line">  .setHandleInvalid(<span class="string">"keep"</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">val</span> cabinIndexer = <span class="keyword">new</span> <span class="type">StringIndexer</span>()</span><br><span class="line">  .setInputCol(<span class="string">"Cabin"</span>)</span><br><span class="line">  .setOutputCol(<span class="string">"CabinIndex"</span>)</span><br><span class="line">  .setHandleInvalid(<span class="string">"keep"</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">val</span> embarkedIndexer = <span class="keyword">new</span> <span class="type">StringIndexer</span>()</span><br><span class="line">  .setInputCol(<span class="string">"Embarked"</span>)</span><br><span class="line">  .setOutputCol(<span class="string">"EmbarkedIndex"</span>)</span><br><span class="line">  .setHandleInvalid(<span class="string">"keep"</span>)</span><br></pre></td></tr></table></figure>
-<p>我们正在使用它<code>StringIndexer</code>来转换价值观。对于每个<code>Transformer</code>我们定义的输入列和输出列将包含修改后的值。<br><strong>步骤6：将列组合成特征向量</strong><br>我们将使用另一个<code>Transformer</code>将XGBoost分类中使用的列组合<code>Estimator</code>成一个向量：</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> vectorAssembler = <span class="keyword">new</span> <span class="type">VectorAssembler</span>()</span><br><span class="line">  .setInputCols(<span class="type">Array</span>(<span class="string">"Pclass"</span>, <span class="string">"SexIndex"</span>, <span class="string">"Age"</span>, <span class="string">"SibSp"</span>, <span class="string">"Parch"</span>, <span class="string">"Fare"</span>, <span class="string">"CabinIndex"</span>, <span class="string">"EmbarkedIndex"</span>))</span><br><span class="line">  .setOutputCol(<span class="string">"features"</span>)</span><br></pre></td></tr></table></figure>
-<p><strong>第7步：添加XGBoost估算器</strong><br>定义<code>Estimator</code>它将产生模型。可以在地图中定义估计器的设置。我们还可以设置功能和标签列：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">val xgbEstimator = new XGBoostEstimator(Map[String, Any](&quot;num_rounds&quot; -&gt; 100))</span><br><span class="line">  .setFeaturesCol(&quot;features&quot;)</span><br><span class="line">  .setLabelCol(&quot;Survival&quot;)</span><br></pre></td></tr></table></figure>
-<p><strong>第8步：构建管道和分类器</strong><br>在我们创建了所有单独的步骤之后，我们可以定义实际的管道和操作的顺序：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">val pipeline = new Pipeline().setStages(Array(sexIndexer, cabinIndexer, embarkedIndexer, vectorAssembler, xgbEstimator))</span><br></pre></td></tr></table></figure>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1552878673454-f586d9ed-0fba-4140-b77d-605cc73a652d.png#align=left&amp;display=inline&amp;height=105&amp;name=1_5GXouKuoLYmdTCgu1onrzw.png&amp;originHeight=141&amp;originWidth=1000&amp;size=44837&amp;status=done&amp;width=746" alt="1_5GXouKuoLYmdTCgu1onrzw.png"><br>输入<code>DataFrame</code>将被多次转换，最终将生成使用我们的数据训练的模型。我们将保存输出，以便在第二个实时应用程序中使用它。</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> cvModel = pipeline.fit(df)</span><br><span class="line">cvModel.write.overwrite.save(modelPath)</span><br></pre></td></tr></table></figure>
-<p><a name="fbee26a1"></a></p>
-<h4 id="预测"><a href="#预测" class="headerlink" title="预测"></a>预测</h4><p>我们将使用Spark Structured Streaming来基本传输文件中的数据。在现实世界的应用程序中，我们从专用的分布式队列（例如Apache Kafka或AWS Kinesis）读取数据，但是对于此演示，我们将只使用一个简单的文件。<br>简要描述<a href="https://spark.apache.org/docs/latest/structured-streaming-programming-guide.html#input-sources" target="_blank" rel="noopener">Spark Structured Streaming</a>是一个构建在Spark SQL之上的流处理引擎。它使用相同的概念，<code>DataFrames</code>数据存储在一个无限制的表中，当数据流入时，该表随着新行的增长而增长。<br><strong>第1步：创建输入读取流</strong><br>我们再次创建一个spark会话并定义数据的架构。请注意，测试csv不包含标签<code>Survival</code> 。最后我们可以创建输入流<code>DataFrame,</code> <code>df</code>。输入路径必须是我们存储csv文件的目录。它可以包含一个或多个具有相同模式的文件。</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> spark: <span class="type">SparkSession</span> = <span class="type">SparkSession</span>.builder()</span><br><span class="line">  .appName(<span class="string">"Spark Structured Streaming XGBOOST"</span>)</span><br><span class="line">  .master(<span class="string">"local[*]"</span>)</span><br><span class="line">  .getOrCreate()</span><br><span class="line"></span><br><span class="line"><span class="keyword">val</span> schema = <span class="type">StructType</span>(</span><br><span class="line">  <span class="type">Array</span>(<span class="type">StructField</span>(<span class="string">"PassengerId"</span>, <span class="type">DoubleType</span>),</span><br><span class="line">    <span class="type">StructField</span>(<span class="string">"Pclass"</span>, <span class="type">DoubleType</span>),</span><br><span class="line">    <span class="type">StructField</span>(<span class="string">"Name"</span>, <span class="type">StringType</span>),</span><br><span class="line">    <span class="type">StructField</span>(<span class="string">"Sex"</span>, <span class="type">StringType</span>),</span><br><span class="line">    <span class="type">StructField</span>(<span class="string">"Age"</span>, <span class="type">DoubleType</span>),</span><br><span class="line">    <span class="type">StructField</span>(<span class="string">"SibSp"</span>, <span class="type">DoubleType</span>),</span><br><span class="line">    <span class="type">StructField</span>(<span class="string">"Parch"</span>, <span class="type">DoubleType</span>),</span><br><span class="line">    <span class="type">StructField</span>(<span class="string">"Ticket"</span>, <span class="type">StringType</span>),</span><br><span class="line">    <span class="type">StructField</span>(<span class="string">"Fare"</span>, <span class="type">DoubleType</span>),</span><br><span class="line">    <span class="type">StructField</span>(<span class="string">"Cabin"</span>, <span class="type">StringType</span>),</span><br><span class="line">    <span class="type">StructField</span>(<span class="string">"Embarked"</span>, <span class="type">StringType</span>)</span><br><span class="line">  ))</span><br><span class="line"></span><br><span class="line">  <span class="keyword">val</span> df = spark</span><br><span class="line">    .readStream</span><br><span class="line">    .option(<span class="string">"header"</span>, <span class="string">"true"</span>)</span><br><span class="line">    .schema(schema)</span><br><span class="line">    .csv(fileDir)</span><br></pre></td></tr></table></figure>
-<p><strong>第2步：加载XGBoost模型</strong><br>在对象中，<code>XGBoostModel</code>我们加载预先训练的模型，该模型将应用于我们在流中读取的每一批新行。</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">XGBoostModel</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">val</span> modelPath = <span class="string">"your_path"</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">val</span> model = <span class="type">PipelineModel</span>.read.load(modelPath)</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">transform</span></span>(df: <span class="type">DataFrame</span>) = &#123;</span><br><span class="line">    <span class="comment">// replace nan values with 0</span></span><br><span class="line">    <span class="keyword">val</span> df_clean = df.na.fill(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// run the model on new data</span></span><br><span class="line">    <span class="keyword">val</span> result = model.transform(df_clean)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// display the results</span></span><br><span class="line">    result.show()</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><strong>第3步：定义自定义ML接收器</strong><br>为了能够将我们的分类器应用于新数据，我们需要创建一个新的接收器（流和输出之间的接口，在我们的例子中是XGBoost模型）。为此，我们需要一个自定义接收器（<code>MLSink</code>），一个抽象接收器提供器（<code>MLSinkProvider</code>）和provider（）的实现<code>XGBoostMLSinkProvider</code>。</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">MLSinkProvider</span> <span class="keyword">extends</span> <span class="title">StreamSinkProvider</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">process</span></span>(df: <span class="type">DataFrame</span>): <span class="type">Unit</span></span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">createSink</span></span>(</span><br><span class="line">                  sqlContext: <span class="type">SQLContext</span>,</span><br><span class="line">                  parameters: <span class="type">Map</span>[<span class="type">String</span>, <span class="type">String</span>],</span><br><span class="line">                  partitionColumns: <span class="type">Seq</span>[<span class="type">String</span>],</span><br><span class="line">                  outputMode: <span class="type">OutputMode</span>): <span class="type">MLSink</span> = &#123;</span><br><span class="line">    <span class="keyword">new</span> <span class="type">MLSink</span>(process)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">case</span> <span class="class"><span class="keyword">class</span> <span class="title">MLSink</span>(<span class="params">process: <span class="type">DataFrame</span> =&gt; <span class="type">Unit</span></span>) <span class="keyword">extends</span> <span class="title">Sink</span> </span>&#123;</span><br><span class="line">  <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">addBatch</span></span>(batchId: <span class="type">Long</span>, data: <span class="type">DataFrame</span>): <span class="type">Unit</span> = &#123;</span><br><span class="line">    process(data)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">XGBoostMLSinkProvider</span> <span class="keyword">extends</span> <span class="title">MLSinkProvider</span> </span>&#123;</span><br><span class="line">  <span class="keyword">override</span> <span class="function"><span class="keyword">def</span> <span class="title">process</span></span>(df: <span class="type">DataFrame</span>) &#123;</span><br><span class="line">    <span class="type">XGBoostModel</span>.transform(df)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><strong>第4步：在我们的自定义接收器中写入数据</strong><br>最后一步是定义一个将数据写入自定义接收器的查询。还必须定义检查点位置，以便应用程序“记住”在发生故障时在流中读取的最新行。如果我们运行程序，每个新批次的数据将显示在控制台上，同时包含预测的标签。</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">df.writeStream</span><br><span class="line">  .format(<span class="string">"titanic.XGBoostMLSinkProvider"</span>)</span><br><span class="line">  .queryName(<span class="string">"XGBoostQuery"</span>)</span><br><span class="line">  .option(<span class="string">"checkpointLocation"</span>, checkpoint_location)</span><br><span class="line">  .start()</span><br></pre></td></tr></table></figure>
-
+        <p>在本文中，我们将讨论构建完整的机器学习管道。第一部分将侧重于在标准批处理模式下训练二元分类器，在第二部分中我们将进行一些实时预测。我们将使用来自<a href="https://www.kaggle.com/c/titanic/data" target="_blank" rel="noopener">泰坦尼克号的</a>数据<a href="https://www.kaggle.com/c/titanic/data" target="_blank" rel="noopener">：机器学习灾难</a>中的众多Kaggle比赛之一。在开始之前，请知道您应该熟悉<a href="https://www.tutorialspoint.com/scala/index.htm" target="_blank" rel="noopener">Scala</a>，<a href="https://spark.apache.org/" target="_blank" rel="noopener">Apache Spark</a>和<a href="http://xgboost.readthedocs.io/en/latest/get_started/" target="_blank" rel="noopener">Xgboost</a>。所有源代码也将在<a href="https://github.com/BogdanCojocar/medium-articles/tree/master/titanic_spark" target="_blank" rel="noopener">Github上提供</a>。很酷，现在让我们开始吧！<br>
+        
+          <a class="article-more-a" href="/2019/03/18/yuque/使用Spark Structured Streaming，XGBoost和Scala进行实时预测/#more">more >></a>
+        
       
 
       
-    </div>
+    </p></div>
     <div class="article-info article-info-index">
       
       
@@ -1069,121 +1109,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2019/03/15/yuque/MLflow模型/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/MLflow项目" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/15/yuque/MLflow项目/">MLflow项目</a>
-    </h1>
-  
-
-        
-        <a href="/2019/03/15/yuque/MLflow项目/" class="archive-article-date">
-  	<time datetime="2019-03-15T06:49:30.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-15</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><a name="5455d259"></a></p>
-<h1 id="MLflow项目"><a href="#MLflow项目" class="headerlink" title="MLflow项目"></a>MLflow项目<a href="https://mlflow.org/docs/latest/projects.html#mlflow-projects" target="_blank" rel="noopener"></a></h1><p>MLflow项目是一种以可重用和可重复的方式打包数据科学代码的格式，主要基于约定。此外，Projects组件包括用于运行项目的API和命令行工具，可以将项目链接到工作流中。<br>目录</p>
-<ul>
-<li><a href="https://mlflow.org/docs/latest/projects.html#overview" target="_blank" rel="noopener">概观</a></li>
-<li><a href="https://mlflow.org/docs/latest/projects.html#specifying-projects" target="_blank" rel="noopener">指定项目</a></li>
-<li><a href="https://mlflow.org/docs/latest/projects.html#running-projects" target="_blank" rel="noopener">运行项目</a></li>
-<li><a href="https://mlflow.org/docs/latest/projects.html#iterating-quickly" target="_blank" rel="noopener">快速迭代</a></li>
-<li><a href="https://mlflow.org/docs/latest/projects.html#building-multistep-workflows" target="_blank" rel="noopener">构建多步骤工作流程</a><br><a name="a7dc4168"></a><h2 id="概观"><a href="#概观" class="headerlink" title="概观"></a><a href="https://mlflow.org/docs/latest/projects.html#id3" target="_blank" rel="noopener">概观</a><a href="https://mlflow.org/docs/latest/projects.html#overview" target="_blank" rel="noopener"></a></h2>MLflow Projects的核心只是组织和描述代码的惯例，让其他数据科学家（或自动化工具）运行它。每个项目都只是一个包含代码的文件目录或Git存储库。MLflow可以根据将文件放在此目录中的约定来运行某些项目（例如，<code>conda.yaml</code>文件将被视为 <a href="https://conda.io/docs" target="_blank" rel="noopener">Conda</a>环境），但您可以通过添加<code>MLproject</code>文件来更详细地描述您的项目，该文件是<a href="https://learnxinyminutes.com/docs/yaml/" target="_blank" rel="noopener">YAML</a>格式的文本文件。每个项目都可以指定几个属性：</li>
-</ul>
-<p><a name="d7ec2d3f"></a></p>
-<h4 id="名称"><a href="#名称" class="headerlink" title="名称"></a>名称</h4><p>项目的可读名称。<br><a name="6860b943"></a></p>
-<h4 id="依赖"><a href="#依赖" class="headerlink" title="依赖"></a>依赖</h4><p>运行项目所需的库。MLflow目前使用 <a href="https://conda.io/docs" target="_blank" rel="noopener">Conda</a>包管理器，它支持Python包和本机库（例如，CuDNN或Intel MKL），以指定依赖关系。<code>MLFLOW_CONDA_HOME</code>如果指定，MLflow将使用环境变量给出的Conda安装（例如，通过调用运行Conda命令<code>$MLFLOW_CONDA_HOME/bin/conda</code>），<code>conda</code>否则默认运行。<br><a name="c0cec124"></a></p>
-<h4 id="入口点"><a href="#入口点" class="headerlink" title="入口点"></a>入口点</h4><p>可以在项目中执行的命令，以及有关其参数的信息。大多数项目至少包含一个您希望其他用户调用的入口点。某些项目还可以包含多个入口点：例如，您可能拥有一个包含多个特征化算法的Git存储库。您还可以将项目中的任何文件<code>.py</code>或<code>.sh</code>文件作为入口点调用。<code>MLproject</code>但是，如果在文件中列出入口点，则还可以为它们指定_参数_，包括数据类型和默认值。<br>您可以使用 命令行工具或Python API 从Git URI或本地目录运行任何项目。这些API还允许在<a href="https://databricks.com/" target="_blank" rel="noopener">Databricks</a>上提交项目以进行远程执行。<code>mlflow run</code><a href="https://mlflow.org/docs/latest/python_api/mlflow.projects.html#mlflow.projects.run" target="_blank" rel="noopener"><code>mlflow.projects.run()</code></a></p>
-<blockquote>
-<p>警告<br>默认情况下，MLflow将为Git项目使用一个新的临时工作目录。这意味着您通常应该使用绝对路径而不是相对路径将任何文件参数传递给MLflow项目。如果您的项目声明了其参数，MLflow将自动为类型参数创建绝对路径<code>path</code>。</p>
-</blockquote>
-<p><a name="c7dfa7ad"></a></p>
-<h2 id="指定项目"><a href="#指定项目" class="headerlink" title="指定项目"></a><a href="https://mlflow.org/docs/latest/projects.html#id4" target="_blank" rel="noopener">指定项目</a><a href="https://mlflow.org/docs/latest/projects.html#specifying-projects" target="_blank" rel="noopener"></a></h2><p>默认情况下，任何Git存储库或本地目录都被视为项目，MLflow使用以下约定来确定其参数：</p>
-<ul>
-<li>项目的名称是目录的名称。</li>
-<li>该conda中指定的<code>conda.yaml</code>，如果存在的话。如果没有<code>conda.yaml</code>文件，MLflow将在运行项目时使用仅包含Python的Conda环境（特别是Conda可用的最新Python）。</li>
-<li>项目中的任何<code>.py</code>和<code>.sh</code>文件都可以是一个入口点，没有显式声明参数。当您使用一组参数执行此类命令时，MLflow将使用语法传递命令行上的每个参数。<code>--key value</code></li>
-</ul>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">name:</span> <span class="string">My</span> <span class="string">Project</span></span><br><span class="line"></span><br><span class="line"><span class="attr">conda_env:</span> <span class="string">my_env.yaml</span></span><br><span class="line"></span><br><span class="line"><span class="attr">entry_points:</span></span><br><span class="line"><span class="attr">  main:</span></span><br><span class="line"><span class="attr">    parameters:</span></span><br><span class="line"><span class="attr">      data_file:</span> <span class="string">path</span></span><br><span class="line"><span class="attr">      regularization:</span> <span class="string">&#123;type:</span> <span class="string">float,</span> <span class="attr">default:</span> <span class="number">0.1</span><span class="string">&#125;</span></span><br><span class="line"><span class="attr">    command:</span> <span class="string">"python train.py -r &#123;regularization&#125; &#123;data_file&#125;"</span></span><br><span class="line"><span class="attr">  validate:</span></span><br><span class="line"><span class="attr">    parameters:</span></span><br><span class="line"><span class="attr">      data_file:</span> <span class="string">path</span></span><br><span class="line"><span class="attr">    command:</span> <span class="string">"python validate.py &#123;data_file&#125;"</span></span><br></pre></td></tr></table></figure>
-<p>如您所见，该文件可以指定名称和不同的环境文件，以及有关每个入口点的更多详细信息。具体来说，每个入口点都有一个运行_命令_和_参数_（包括数据类型）。接下来我们将描述这两个部分。<br><a name="47d85f76"></a></p>
-<h3 id="命令语法"><a href="#命令语法" class="headerlink" title="命令语法"></a>命令语法<a href="https://mlflow.org/docs/latest/projects.html#command-syntax" target="_blank" rel="noopener"></a></h3><p>在文件中指定入口点时<code>MLproject</code>，该命令可以是Python <a href="https://docs.python.org/2/library/string.html#formatstrings" target="_blank" rel="noopener">格式字符串语法中的</a>任何字符串 。在入口点的<code>parameters</code>字段中声明的所有参数都将传递到此字符串中以进行替换。如果使用字段中_未_列出的 其他参数调用项目<code>parameters</code>，MLflow将使用语法传递它们，因此您可以使用该文件仅为参数的子集声明类型和默认值。<code>--key value`</code>MLproject`<br>在替换命令中的参数之前，MLflow使用Python的<a href="https://docs.python.org/3/library/shlex.html#shlex.quote" target="_blank" rel="noopener">shlex.quote</a>函数转义它们 ，因此您无需担心在命令字段中添加引号。<br><a name="9459a637"></a></p>
-<h3 id="指定参数"><a href="#指定参数" class="headerlink" title="指定参数"></a>指定参数<a href="https://mlflow.org/docs/latest/projects.html#specifying-parameters" target="_blank" rel="noopener"></a></h3><p>MLflow允许为每个参数指定数据类型和默认值。您可以通过编写以下内容来指定数据类型：</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">parameter_name:</span> <span class="string">data_type</span></span><br></pre></td></tr></table></figure>
-<p>在您的YAML文件中，或者使用以下语法之一（在YAML中等效）添加默认值：</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">parameter_name:</span> <span class="string">&#123;type:</span> <span class="string">data_type,</span> <span class="attr">default:</span> <span class="string">value&#125;</span>  <span class="comment"># Short syntax</span></span><br><span class="line"></span><br><span class="line"><span class="attr">parameter_name:</span>     <span class="comment"># Long syntax</span></span><br><span class="line"><span class="attr">  type:</span> <span class="string">data_type</span></span><br><span class="line"><span class="attr">  default:</span> <span class="string">value</span></span><br></pre></td></tr></table></figure>
-<p>MLflow支持四种参数类型，其中一些特殊处理（例如，将数据下载到本地文件）。任何未声明的参数都被视为<code>string</code>。参数类型是：<br><a name="string"></a></p>
-<h4 id="string"><a href="#string" class="headerlink" title="string"></a>string</h4><p>任何文字字符串。<br><a name="float"></a></p>
-<h4 id="float"><a href="#float" class="headerlink" title="float"></a>float</h4><p>一个真实的数字。MLflow验证参数是否为数字。<br><a name="path"></a></p>
-<h4 id="path"><a href="#path" class="headerlink" title="path"></a>path</h4><p>本地文件系统上的路径。MLflow会将为此类参数传递的任何相对路径转换为绝对路径，并且还会将作为分布式存储URI（<code>s3://</code>和<code>dbfs://</code>）传递的任何路径下载到本地文件。将此类型用于只能读取本地文件的程序。<br><a name="URI"></a></p>
-<h4 id="URI"><a href="#URI" class="headerlink" title="URI"></a>URI</h4><p>本地或分布式存储系统中的数据URI。MLflow会将任何相对路径转换为绝对路径，如<code>path</code>类型中所示。对于知道如何从分布式存储中读取的程序（例如使用Spark），请使用此类型。<br><a name="fa4aa1b9"></a></p>
-<h2 id="运行项目"><a href="#运行项目" class="headerlink" title="运行项目"></a><a href="https://mlflow.org/docs/latest/projects.html#id5" target="_blank" rel="noopener">运行项目</a><a href="https://mlflow.org/docs/latest/projects.html#running-projects" target="_blank" rel="noopener"></a></h2><p>MLflow提供了两种简单的方法来运行项目：<a href="https://mlflow.org/docs/latest/cli.html#cli" target="_blank" rel="noopener">命令行工具</a>或Python API。这两个工具都采用以下参数：<code>mlflow run</code> <a href="https://mlflow.org/docs/latest/cli.html#cli" target="_blank" rel="noopener"></a><a href="https://mlflow.org/docs/latest/python_api/mlflow.projects.html#mlflow.projects.run" target="_blank" rel="noopener"><code>mlflow.projects.run()</code></a><br><a name="2daece47"></a></p>
-<h4 id="项目URI"><a href="#项目URI" class="headerlink" title="项目URI"></a>项目URI</h4><p>可以是本地文件系统上的目录，也可以是Git存储库路径，指定为表单的URI <code>https://&lt;repo&gt;</code>（使用HTTPS）或<code>user@host:path</code> （通过SSH使用Git）。要针对位于项目子目录中的MLproject文件运行，请在URI参数的末尾添加“＃”，然后是从项目根目录到包含所需项目的子目录的相对路径。<br><a name="901b44b9"></a></p>
-<h4 id="项目版本"><a href="#项目版本" class="headerlink" title="项目版本"></a>项目版本</h4><p>对于基于Git的项目，要运行的Git存储库中的提交哈希或分支名称。<br><a name="c0cec124-1"></a></p>
-<h4 id="入口点-1"><a href="#入口点-1" class="headerlink" title="入口点"></a>入口点</h4><p>要使用的入口点的名称，默认为<code>main</code>。您可以使用<code>MLproject</code>文件中指定的任何入口点，或项目中的任何<code>.py</code>或<code>.sh</code>文件，作为项目根目录中的路径（例如，<code>src/test.py</code>）。<br><a name="3d0a2df9"></a></p>
-<h4 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h4><p>键值参数。如果需要，将验证并转换具有<a href="https://mlflow.org/docs/latest/projects.html#project-parameters" target="_blank" rel="noopener">声明类型的</a>任何参数 。<br><a name="569134fb"></a></p>
-<h4 id="部署模式"><a href="#部署模式" class="headerlink" title="部署模式"></a>部署模式</h4><p>如果您有Databricks帐户，命令行和API都允许您在<a href="https://databricks.com/" target="_blank" rel="noopener">Databricks</a>环境中<a href="https://mlflow.org/docs/latest/projects.html#databricks-execution" target="_blank" rel="noopener">远程启动项目</a>。这包括设置群集参数，例如VM类型。当然，您还可以使用本地版本的 命令在您选择的任何其他计算基础架构上运行项目（例如，提交对标准作业排队系统执行的脚本）。<code>mlflow run</code><br>例如，本教程创建并发布一个训练线性模型的ML项目。该项目也在GitHub上发布，<a href="https://github.com/mlflow/mlflow-example" target="_blank" rel="noopener">网址</a>为<a href="https://github.com/mlflow/mlflow-example" target="_blank" rel="noopener">https://github.com/mlflow/mlflow-example</a>。要执行此项目，请运行：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mlflow run git@github.com:mlflow/mlflow-example.git -P alpha=0.5</span><br></pre></td></tr></table></figure>
-<p>还有其他选项可用于禁用Conda环境的创建，如果您希望在现有shell环境中快速测试项目，这将非常有用。<br><a name="51b32c21"></a></p>
-<h3 id="Databricks上的远程执行"><a href="#Databricks上的远程执行" class="headerlink" title="Databricks上的远程执行"></a>Databricks上的远程执行<a href="https://mlflow.org/docs/latest/projects.html#remote-execution-on-databricks" target="_blank" rel="noopener"></a></h3><p>在Databricks上远程运行项目的支持处于beta预览阶段，需要Databricks帐户。要接收有关该功能的未来更新，请<a href="http://databricks.com/mlflow" target="_blank" rel="noopener">在此处注册</a>。<br><a name="23c8e7a9"></a></p>
-<h4 id="在Databricks上启动远程执行"><a href="#在Databricks上启动远程执行" class="headerlink" title="在Databricks上启动远程执行"></a>在Databricks上启动远程执行</h4><p>要使用此功能，您需要拥有Databricks帐户（尚不支持Community Edition），并且您必须设置<a href="https://docs.databricks.com/api/latest/jobs.html#jobsclusterspecnewcluster" target="_blank" rel="noopener">Databricks命令行实用程序</a>。在Databricks文档中找到更详细的说明（<a href="https://docs.databricks.com/applications/mlflow/index.html" target="_blank" rel="noopener">此处为Azure Databricks</a>，<a href="https://docs.databricks.com/applications/mlflow/index.html" target="_blank" rel="noopener">此处为AWS上的Databricks</a>）。有关如何使用该功能的简要概述如下：<br>首先，创建一个包含 运行的<a href="https://docs.databricks.com/api/latest/jobs.html#jobsclusterspecnewcluster" target="_blank" rel="noopener">集群规范</a>的JSON文件 。然后，通过运行您的项目</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mlflow run &lt;uri&gt; -m databricks --cluster-spec &lt;json-cluster-spec&gt;</span><br></pre></td></tr></table></figure>
-<p>必须是Git存储库URI。您还可以通过git-username和git-password参数（或通过MLFLOW_GIT_USERNAME和 MLFLOW_GIT_PASSWORD环境变量）传递Git凭据 。</p>
-<p><a name="9810fecc"></a></p>
-<h2 id="快速迭代"><a href="#快速迭代" class="headerlink" title="快速迭代"></a><a href="https://mlflow.org/docs/latest/projects.html#id6" target="_blank" rel="noopener">快速迭代</a><a href="https://mlflow.org/docs/latest/projects.html#iterating-quickly" target="_blank" rel="noopener"></a></h2><p>如果要快速开发项目，我们建议创建一个<code>MLproject</code>文件，将主程序指定为<code>main</code>入口点，并运行它。为避免重复写入，您可以在文件中添加默认参数。<code>mlflow run .</code><br><a name="7eb43295"></a></p>
-<h2 id="构建多步骤工作流程"><a href="#构建多步骤工作流程" class="headerlink" title="构建多步骤工作流程"></a><a href="https://mlflow.org/docs/latest/projects.html#id7" target="_blank" rel="noopener">构建多步骤工作流程</a><a href="https://mlflow.org/docs/latest/projects.html#building-multistep-workflows" target="_blank" rel="noopener"></a></h2><p><a href="https://mlflow.org/docs/latest/python_api/mlflow.projects.html#mlflow.projects.run" target="_blank" rel="noopener"><code>mlflow.projects.run()</code></a>API，结合<a href="https://mlflow.org/docs/latest/python_api/mlflow.tracking.html#module-mlflow.tracking" target="_blank" rel="noopener"><code>mlflow.tracking</code></a>，使得可以构建具有不同的项目（或入口点在同一个项目）作为单独的步骤的多步骤的工作流程。每次调用都会<a href="https://mlflow.org/docs/latest/python_api/mlflow.projects.html#mlflow.projects.run" target="_blank" rel="noopener"><code>mlflow.projects.run()</code></a>返回一个运行对象，您可以使用它 <a href="https://mlflow.org/docs/latest/python_api/mlflow.tracking.html#module-mlflow.tracking" target="_blank" rel="noopener"><code>mlflow.tracking</code></a>来确定运行何时结束并获取其输出工件。然后，这些伪像可以被传递到另一个步骤，该步骤需要<code>path</code>或<code>uri</code>参数。您可以在单个Python程序中协调所有工作流，该程序查看每个步骤的结果，并使用自定义代码决定接下来要提交的内容。一些示例用于多步骤工作流的案例包括：<br><a name="49e2a189"></a></p>
-<h4 id="模块化您的数据科学代码"><a href="#模块化您的数据科学代码" class="headerlink" title="模块化您的数据科学代码"></a>模块化您的数据科学代码</h4><p>不同的用户可以发布可重用的步骤，用于数据特征化，培训，验证等，其他用户或团队可以在他们的工作流程中运行。由于MLflow支持Git版本控制，因此另一个团队可以将其工作流程锁定到项目的特定版本，或者按照自己的计划升级到新版本。<br><a name="66b62bf4"></a></p>
-<h4 id="超参数调整"><a href="#超参数调整" class="headerlink" title="超参数调整"></a>超参数调整</h4><p>使用<a href="https://mlflow.org/docs/latest/python_api/mlflow.projects.html#mlflow.projects.run" target="_blank" rel="noopener"><code>mlflow.projects.run()</code></a>您可以在本地计算机上或在像Databricks这样的云平台上并行启动多个运行。然后，您的驱动程序可以实时检查每次运行的指标，以取消运行，启动新运行或选择目标指标上运行最佳的运行。<br><a name="95c01146"></a></p>
-<h4 id="交叉验证"><a href="#交叉验证" class="headerlink" title="交叉验证"></a>交叉验证</h4><p>有时您希望在培训和验证数据的不同随机分组上运行相同的培训代码。使用MLflow项目，您可以以允许此方式打包项目，例如，通过将列车/验证拆分的随机种子作为参数，或者首先调用可以拆分输入数据的另一个项目。<br>有关如何构建此类多步骤工作<a href="https://github.com/mlflow/mlflow/tree/master/examples/multistep_workflow" target="_blank" rel="noopener">流的示例</a>，请参阅MLflow Multistep <a href="https://github.com/mlflow/mlflow/tree/master/examples/multistep_workflow" target="_blank" rel="noopener">工作流示例项目</a>。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/03/15/yuque/MLflow项目/">展开全文 >></a>
         </p>
       
 
