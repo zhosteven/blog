@@ -142,6 +142,123 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-yuque/如何使您的MLflow项目易于共享和协作" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/04/17/yuque/如何使您的MLflow项目易于共享和协作/">如何使您的MLflow项目易于共享和协作</a>
+    </h1>
+  
+
+        
+        <a href="/2019/04/17/yuque/如何使您的MLflow项目易于共享和协作/" class="archive-article-date">
+  	<time datetime="2019-04-17T09:22:37.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-17</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <a id="more"></a>
+<p><a name="a0a97361"></a></p>
+<h3 id="TL-DR（适用于mlflow用户）"><a href="#TL-DR（适用于mlflow用户）" class="headerlink" title="TL; DR（适用于mlflow用户）"></a>TL; DR（适用于mlflow用户）</h3><p>在您的工作流程中更改此：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mlflow ui</span><br></pre></td></tr></table></figure>
+<p>对此：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">neptune mlflow</span><br></pre></td></tr></table></figure></p>
+<p>并进行你的mlflow实验：</p>
+<ul>
+<li>主持，</li>
+<li>备份，</li>
+<li>组织，</li>
+<li>易于与他人分享和讨论。</li>
+</ul>
+<p>分享您的工作可以和我分享此<a href="https://ui.neptune.ml/jakub-czakon/mlflow-integration/e/MLFLOW-10/output?path=artifacts%2F" target="_blank" rel="noopener"><strong>MLflow实验</strong></a>一样简单。<br><a name="f627fc45"></a></p>
+<h3 id="MLflow：伟大的，好的，所以如此"><a href="#MLflow：伟大的，好的，所以如此" class="headerlink" title="MLflow：伟大的，好的，所以如此"></a>MLflow：伟大的，好的，所以如此</h3><p><a href="https://mlflow.org/" target="_blank" rel="noopener">MLFlow</a>是一个非常棒的开源项目，最近获得了很多人的欢迎。简而言之，它可以让你：</p>
+<ul>
+<li>跟踪您的机器学习项目</li>
+<li>可以轻松重现结果</li>
+<li>允许您将模型部署到生产中</li>
+</ul>
+<p>如果你还没有听说过<a href="https://mlflow.org/" target="_blank" rel="noopener">MLFlow</a>，你一定<a href="https://mlflow.org/" target="_blank" rel="noopener">要看</a>一下。这篇<a href="https://databricks.com/blog/2018/06/05/introducing-mlflow-an-open-source-machine-learning-platform.html" target="_blank" rel="noopener">博</a>文由mlflow的作者撰写，应该会给你一个很好的图片。简而言之，在跟踪机器学习模型的跟踪，再现性和部署方面，mflow有可能成为行业标准。它已经做得很好，并且拥有如此出色的团队，我相信mlflow会留下来。<br>但是，当你想要添加组织和协作时，事情还不是很好的。您需要托管您的mlflow服务器，确保合适的人员有权访问，备份等等。另外，mlflow提供的实验比较界面边缘有点粗糙，特别是如果你想把它作为一个团队使用的话。<br>MLflow专注于跟踪，可重复性和部署，<strong>而不是</strong>组织和协作。就如此容易。<br>这里是我唱歌和跳舞的地方，并告诉您，您可以从MLflow中获取您喜欢的内容，并在海王星为您提供的美丽托管UI中享受组织和协作。</p>
+<p>我们最近创建并开源<code>[neptune-mlflow](https://github.com/neptune-ml/neptune-mlflow)</code>，让您将Neptune和MLflow与<strong>一个命令</strong>集成在一起<strong>。</strong><br>**<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">neptune mlflow</span><br></pre></td></tr></table></figure></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1555493195402-568b87e4-ff68-46ef-8c8f-7cc38456a4df.png#align=left&amp;display=inline&amp;height=275&amp;name=1_LWKuIeKBrQ_OA96k3-EYzw.png&amp;originHeight=369&amp;originWidth=1000&amp;size=79810&amp;status=done&amp;width=746" alt="1_LWKuIeKBrQ_OA96k3-EYzw.png"><br>在海王星举办了MLflow实验<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1555493236788-9a983493-422f-4e0b-adf4-91491e8f5eb7.png#align=left&amp;display=inline&amp;height=383&amp;name=1_f8X1le2rfdr2wSXfWShqNw.png&amp;originHeight=514&amp;originWidth=1000&amp;size=131824&amp;status=done&amp;width=746" alt="1_f8X1le2rfdr2wSXfWShqNw.png"><br>实验运行的比较。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1555493248061-d3d1d17f-f0b2-4fe6-b908-ccdc854af28c.png#align=left&amp;display=inline&amp;height=415&amp;name=1_0SyM2FXvjzwt28psw9TBEA.png&amp;originHeight=503&amp;originWidth=904&amp;size=51021&amp;status=done&amp;width=746" alt="1_0SyM2FXvjzwt28psw9TBEA.png"><br>如果你想了解更多关于海王星的信息，请查看 <a href="https://medium.com/neptune-ml/tracking-organization-and-collaboration-for-data-science-projects-with-neptune-ml-bc9105130741" target="_blank" rel="noopener">此博文</a>。<br>你有兴趣吗？<br>让我们深入了解细节。<br><a name="2951a073"></a></p>
+<h3 id="跟踪MLflow"><a href="#跟踪MLflow" class="headerlink" title="跟踪MLflow"></a><strong>跟踪MLflow</strong></h3><p><a name="25f1a149"></a></p>
+<h4 id="建立"><a href="#建立" class="headerlink" title="建立"></a>建立</h4><p>我们需要从为我们的实验设置mlflow跟踪开始。举个例子，我将在mnist数据集上训练一些神经网络。<br>让我们看看这个简单的训练脚本，然后添加mlflow。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"></span><br><span class="line">PARAMS = &#123;</span><br><span class="line">    <span class="string">'epoch_nr'</span>: <span class="number">5</span>,</span><br><span class="line">    <span class="string">'batch_size'</span>: <span class="number">256</span>,</span><br><span class="line">    <span class="string">'lr'</span>: <span class="number">0.1</span>,</span><br><span class="line">    <span class="string">'momentum'</span>: <span class="number">0.9</span>,</span><br><span class="line">    <span class="string">'use_nesterov'</span>: <span class="literal">True</span>,</span><br><span class="line">    <span class="string">'unit_nr'</span>: <span class="number">512</span>,</span><br><span class="line">    <span class="string">'dropout'</span>: <span class="number">0.25</span></span><br><span class="line">&#125;</span><br><span class="line">    </span><br><span class="line">mnist = tf.keras.datasets.mnist</span><br><span class="line">(x_train, y_train),(x_test, y_test) = mnist.load_data()</span><br><span class="line">x_train, x_test = x_train / <span class="number">255.0</span>, x_test / <span class="number">255.0</span></span><br><span class="line"></span><br><span class="line">model = tf.keras.models.Sequential([</span><br><span class="line">  tf.keras.layers.Flatten(),</span><br><span class="line">  tf.keras.layers.Dense(PARAMS[<span class="string">'unit_nr'</span>], activation=tf.nn.relu),</span><br><span class="line">  tf.keras.layers.Dropout(PARAMS[<span class="string">'dropout'</span>]),</span><br><span class="line">  tf.keras.layers.Dense(<span class="number">10</span>, activation=tf.nn.softmax)</span><br><span class="line">])</span><br><span class="line"></span><br><span class="line">optimizer = tf.keras.optimizers.SGD(lr=PARAMS[<span class="string">'lr'</span>],</span><br><span class="line">                                    momentum=PARAMS[<span class="string">'momentum'</span>],</span><br><span class="line">                                    nesterov=PARAMS[<span class="string">'use_nesterov'</span>],)</span><br><span class="line"></span><br><span class="line">model.compile(optimizer=optimizer,</span><br><span class="line">              loss=<span class="string">'sparse_categorical_crossentropy'</span>,</span><br><span class="line">              metrics=[<span class="string">'accuracy'</span>])</span><br><span class="line"></span><br><span class="line">model.fit(x_train, y_train, </span><br><span class="line">          epochs=PARAMS[<span class="string">'epoch_nr'</span>], </span><br><span class="line">          batch_size=PARAMS[<span class="string">'batch_size'</span>])</span><br><span class="line"></span><br><span class="line">test_loss, test_acc = model.evaluate(x_test, y_test, verbose=<span class="number">2</span>)</span><br><span class="line">print(<span class="string">'test_loss &#123;&#125;'</span>.format(test_loss))</span><br><span class="line">print(<span class="string">'test_acc &#123;&#125;'</span>.format(test_acc))</span><br><span class="line">    </span><br><span class="line">model.save(<span class="string">'my_model.h5'</span>)</span><br></pre></td></tr></table></figure>
+<p>好的，我们定义参数，加载数据，创建模型和优化器，训练和评估我们的网络并保存它。很标准。<br>现在，为了开始使用mlflow进行跟踪，我们需要创建mlflow调用的内容<code>run</code> ：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> mlflow</span><br><span class="line"><span class="keyword">with</span> mlflow.start_run():</span><br></pre></td></tr></table></figure>
+<p>在这里，我们现在可以将信息记录到mlflow。<br>我将从超参数开始：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">PARAMS = &#123;</span><br><span class="line">    'epoch_nr': 5,</span><br><span class="line">    'batch_size': 256,</span><br><span class="line">    'lr': 0.1,</span><br><span class="line">    'momentum': 0.9,</span><br><span class="line">    'use_nesterov': True,</span><br><span class="line">    'unit_nr': 512,</span><br><span class="line">    'dropout': 0.25</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">for name, value in PARAMS.items():</span><br><span class="line">   mlflow.log_param(name, value)</span><br></pre></td></tr></table></figure>
+<p>训练完成后，我想知道测试集的损失和准确性。让我们记录这些指标：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">test_loss，test_acc = model.evaluate（x_test，y_test，verbose = <span class="number">2</span>）</span><br><span class="line">mlflow.log_metric（“ test_loss ”，test_loss）</span><br><span class="line">mlflow.log_metric（“ test_accuracy ”，test_acc）</span><br></pre></td></tr></table></figure>
+<p>最后，让我们记录模型权重，以确保保存所有重要的实验信息。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">model.save（<span class="string">' my_model.h5 '</span>）</span><br><span class="line">mlflow.log_artifact（<span class="string">' my_model.h5 '</span>）</span><br></pre></td></tr></table></figure>
+<p>因此，MLflow跟踪的完整培训脚本如下所示：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">import</span> mlflow</span><br><span class="line"></span><br><span class="line">PARAMS = &#123;</span><br><span class="line">    <span class="string">'epoch_nr'</span>: <span class="number">5</span>,</span><br><span class="line">    <span class="string">'batch_size'</span>: <span class="number">256</span>,</span><br><span class="line">    <span class="string">'lr'</span>: <span class="number">0.1</span>,</span><br><span class="line">    <span class="string">'momentum'</span>: <span class="number">0.9</span>,</span><br><span class="line">    <span class="string">'use_nesterov'</span>: <span class="literal">True</span>,</span><br><span class="line">    <span class="string">'unit_nr'</span>: <span class="number">512</span>,</span><br><span class="line">    <span class="string">'dropout'</span>: <span class="number">0.25</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> mlflow.start_run():</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> name, value <span class="keyword">in</span> PARAMS.items():</span><br><span class="line">        mlflow.log_param(name, value)</span><br><span class="line">    </span><br><span class="line">    mnist = tf.keras.datasets.mnist</span><br><span class="line">    (x_train, y_train),(x_test, y_test) = mnist.load_data()</span><br><span class="line">    x_train, x_test = x_train / <span class="number">255.0</span>, x_test / <span class="number">255.0</span></span><br><span class="line"></span><br><span class="line">    model = tf.keras.models.Sequential([</span><br><span class="line">      tf.keras.layers.Flatten(),</span><br><span class="line">      tf.keras.layers.Dense(PARAMS[<span class="string">'unit_nr'</span>], activation=tf.nn.relu),</span><br><span class="line">      tf.keras.layers.Dropout(PARAMS[<span class="string">'dropout'</span>]),</span><br><span class="line">      tf.keras.layers.Dense(<span class="number">10</span>, activation=tf.nn.softmax)</span><br><span class="line">    ])</span><br><span class="line"></span><br><span class="line">    optimizer = tf.keras.optimizers.SGD(lr=PARAMS[<span class="string">'lr'</span>],</span><br><span class="line">                                        momentum=PARAMS[<span class="string">'momentum'</span>],</span><br><span class="line">                                        nesterov=PARAMS[<span class="string">'use_nesterov'</span>],)</span><br><span class="line"></span><br><span class="line">    model.compile(optimizer=optimizer,</span><br><span class="line">                  loss=<span class="string">'sparse_categorical_crossentropy'</span>,</span><br><span class="line">                  metrics=[<span class="string">'accuracy'</span>])</span><br><span class="line"></span><br><span class="line">    model.fit(x_train, y_train, </span><br><span class="line">              epochs=PARAMS[<span class="string">'epoch_nr'</span>], </span><br><span class="line">              batch_size=PARAMS[<span class="string">'batch_size'</span>])</span><br><span class="line"></span><br><span class="line">    test_loss, test_acc = model.evaluate(x_test, y_test, verbose=<span class="number">2</span>)</span><br><span class="line">    mlflow.log_metric(<span class="string">"test_loss"</span>, test_loss)</span><br><span class="line">    mlflow.log_metric(<span class="string">"test_accuracy"</span>, test_acc)</span><br><span class="line">    </span><br><span class="line">    model.save(<span class="string">'my_model.h5'</span>)</span><br><span class="line">    mlflow.log_artifact(<span class="string">'my_model.h5'</span>)</span><br></pre></td></tr></table></figure>
+<p>您可以快速体验新想法，并获得MLflow保存的超参数，指标和模型权重等元数据。这样，您就可以控制实验过程。感觉很好，不是吗？<br>用不同的参数进行一些实验并尝试改进可能是个好主意<code>test_accuracy</code>模型。<br><a name="d4e67b57"></a></p>
+<h4 id="探索实验"><a href="#探索实验" class="headerlink" title="探索实验"></a>探索实验</h4><p>现在，我们已经生成了一些实验元数据，我们可以开始探索它。MLflow带有一个实验比较界面，您可以通过运行来启动：<br><code>mlflow ui</code><br>得到这样的东西：<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1555493597817-372c06bb-4820-48a3-8dca-57e777e25859.png#align=left&amp;display=inline&amp;height=430&amp;name=1_WwWJcMM4UaKst0pTnB3ERg.png&amp;originHeight=576&amp;originWidth=1000&amp;size=73226&amp;status=done&amp;width=746" alt="1_WwWJcMM4UaKst0pTnB3ERg.png"><br>您可以搜索实验，查看超参数，按指标对其进行排序，并为实验运行添加注释。但是，在我看来，有很多事情可以改进。列举一些：</p>
+<ul>
+<li>无法根据您的需要调整实验仪表板，</li>
+<li>比较不同指标的学习曲线并不是很好。一个人需要一个接一个地做，</li>
+<li>比较不同跑步的学习曲线（TensorBoard风格）还没有，</li>
+<li>缺少项目级知识共享空间（注释，全局变更日志）。</li>
+</ul>
+<p>这些正是海王星确实做得很好的一些事情以及为什么我们认为将<a href="https://neptune.ml/?utm_source=medium&amp;utm_medium=blog&amp;utm_campaign=mlflow_integration&amp;utm_term=mlflow" target="_blank" rel="noopener">海王星</a>与<a href="https://mlflow.org/" target="_blank" rel="noopener">MLflow</a>整合在一起会给社区带来如此多的影响。<br><a name="f76acebf"></a></p>
+<h3 id="海王星的组织与合作"><a href="#海王星的组织与合作" class="headerlink" title="海王星的组织与合作"></a><strong>海王星的组织与合作</strong></h3><p><strong>设置海王星（如果你已经拥有它，请跳过）</strong></p>
+<ol>
+<li>寄存器。转到<a href="http://bit.ly/2HQsY2O" target="_blank" rel="noopener">neptune.ml</a>并注册。非组织完全免费，您可以邀请其他人加入您的团队！</li>
+<li>获取您的海王星API令牌。为此，请单击<code>Get API Token</code>左上角的按钮。</li>
+</ol>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1555493634913-d771bf6d-46ca-4432-86a8-c51f4414c7e6.png#align=left&amp;display=inline&amp;height=170&amp;name=1_oYx6L__CznZFEiGSGSWK9g.png&amp;originHeight=228&amp;originWidth=1000&amp;size=21716&amp;status=done&amp;width=746" alt="1_oYx6L__CznZFEiGSGSWK9g.png"><br>3.设置 <code>NEPTUNE_API_TOKEN</code>环境变量。转到您的控制台并运行：<br>导出NEPTUNE_API_TOKEN =’your_long_api_token’<br>4.创建您的第一个项目。点击<code>Projects</code>和<code>New project</code>。为其选择一个名称，以及是将其公开还是私有。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1555493666357-a72018b1-07e5-4e64-a2ad-1957db467fe1.png#align=left&amp;display=inline&amp;height=333&amp;name=1_eNXCw8yREOBPpItWGZSGVQ.png&amp;originHeight=446&amp;originWidth=1000&amp;size=42081&amp;status=done&amp;width=746" alt="1_eNXCw8yREOBPpItWGZSGVQ.png"><br><a name="81b75811"></a></p>
+<h4 id="安装-neptune-mlflow"><a href="#安装-neptune-mlflow" class="headerlink" title="安装 neptune-mlflow"></a>安装 <code>neptune-mlflow</code></h4><p>pip安装neptune-mlflow<br><a name="6953761a"></a></p>
+<h4 id="将MLflow与海王星同步。"><a href="#将MLflow与海王星同步。" class="headerlink" title="将MLflow与海王星同步。"></a><strong>将MLflow与海王星同步。</strong></h4><p>转到项目目录并运行：<br>neptune mlflow  - 项目USER_NAME / PROJECT_NAME<br>您可以简化命令，并删除<code>--project</code>参数。<code>USER_NAME/PROJECT_NAME</code>通过运行以下命令设置NEPTUNE_PROJECT变量：<br>导出NEPTUNE_PROJECT = USER_NAME / PROJECT_NAME<br>并且您可以<code>mlruns</code>通过执行以下命令将目录与Neptune 同步：<br>海王星mlflow<br>容易腻好吧？<br><a name="0f591dae"></a></p>
+<h4 id="组织实验"><a href="#组织实验" class="headerlink" title="组织实验"></a>组织实验</h4><p>现在，您的实验元数据可以在Neptune中安全地存储和备份。您可以根据需要自定义仪表板。您可以使用自定义过滤器添加标签和分组实验。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1555493701722-239b9834-30f2-40a3-ae4f-2c872da0ef80.png#align=left&amp;display=inline&amp;height=275&amp;name=1_LWKuIeKBrQ_OA96k3-EYzw%20%281%29.png&amp;originHeight=369&amp;originWidth=1000&amp;size=79810&amp;status=done&amp;width=746" alt="1_LWKuIeKBrQ_OA96k3-EYzw (1).png"><br>您可以添加项目Wiki并与他人共享知识<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1555493737185-0f898504-33bf-4c1d-91aa-eabbbb308e0e.png#align=left&amp;display=inline&amp;height=361&amp;name=1_5ytGcfjiS64u-W2HCaFGsg.png&amp;originHeight=484&amp;originWidth=1000&amp;size=84222&amp;status=done&amp;width=746" alt="1_5ytGcfjiS64u-W2HCaFGsg.png"><br>您甚至可以通过一次点击<a href="https://ui.neptune.ml/jakub-czakon/santander/compare?shortId=%5B%22SAN1-190%22%2C%22SAN1-142%22%2C%22SAN1-141%22%2C%22SAN1-140%22%2C%22SAN1-124%22%2C%22SAN1-84%22%2C%22SAN1-59%22%2C%22SAN1-58%22%2C%22SAN1-57%22%2C%22SAN1-56%22%5D" target="_blank" rel="noopener">比较实验运行</a> TensorBoard风格。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1555493771962-b4b58e05-82bb-4634-9e16-e98eda6c32c1.png#align=left&amp;display=inline&amp;height=383&amp;name=1_f8X1le2rfdr2wSXfWShqNw%20%281%29.png&amp;originHeight=514&amp;originWidth=1000&amp;size=131824&amp;status=done&amp;width=746" alt="1_f8X1le2rfdr2wSXfWShqNw (1).png"><br><a name="6e9805b0"></a></p>
+<h4 id="合作实验"><a href="#合作实验" class="headerlink" title="合作实验"></a>合作实验</h4><p>将您的实验存储在<a href="https://neptune.ml/?utm_source=medium&amp;utm_medium=blog&amp;utm_campaign=mlflow_integration&amp;utm_term=mlflow" target="_blank" rel="noopener">海王星中的</a>一个巨大优势是您可以与他人分享您的工作。只需将链接发送到<a href="https://ui.neptune.ml/jakub-czakon/santander/e/SAN1-179/charts" target="_blank" rel="noopener">实验图表</a>，<a href="https://ui.neptune.ml/jakub-czakon/santander/experiments?filterId=288495a5-c965-4896-815c-7474fd95234f" target="_blank" rel="noopener">选定的实验组</a>或<a href="https://ui.neptune.ml/jakub-czakon/santander/e/SAN1-182/channels" target="_blank" rel="noopener">模型诊断图</a>，即可快速有效地解释您的问题或问题。<br>简单来说，我可以使用MLflow跟踪我的实验运行，并通过向您<a href="https://ui.neptune.ml/jakub-czakon/mlflow-integration/e/MLFLOW-10/output?path=artifacts%2F" target="_blank" rel="noopener">发送实验链接</a>与您分享<a href="https://ui.neptune.ml/jakub-czakon/mlflow-integration/e/MLFLOW-10/output?path=artifacts%2F" target="_blank" rel="noopener"></a>。多么酷啊？<br>只需点击上面的一个链接，看看知识共享是多么容易。<br>此外，任何有权访问该项目的人都可以从UI下载它的每个部分。与同事共享最佳模型就像点击下载按钮一样简单。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1555493810972-c659fb79-bad7-491e-aaac-3db94a904355.png#align=left&amp;display=inline&amp;height=415&amp;name=1_0SyM2FXvjzwt28psw9TBEA%20%281%29.png&amp;originHeight=503&amp;originWidth=904&amp;size=51021&amp;status=done&amp;width=746" alt="1_0SyM2FXvjzwt28psw9TBEA (1).png"><br>“哦，但是谁可以访问我的项目？” - 你<br>你决定。保持您的工作公开或将其公之于众。只需邀请其他人并为项目的每个成员选择一个角色（admin / contributor / viewer）。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1555493841283-07884642-254a-48de-98f7-efa519e3db19.png#align=left&amp;display=inline&amp;height=187&amp;name=1_O4mPXKWsndAMVEF8GscQwQ.png&amp;originHeight=250&amp;originWidth=1000&amp;size=30096&amp;status=done&amp;width=746" alt="1_O4mPXKWsndAMVEF8GscQwQ.png"><br><a name="fef1217c"></a></p>
+<h3 id="最后的想法"><a href="#最后的想法" class="headerlink" title="最后的想法"></a>最后的想法</h3><p>如果您希望拥有一个用于跟踪，再现性和部署的通用框架，那么Neptune + MLflow是一个有趣的组合，但与此同时，您关心知识组织和协作。<br>如果你想看看Neptune + MLflow duo如何为你的项目工作，请转到<a href="http://bit.ly/2HQsY2O" target="_blank" rel="noopener">neptune.ml</a>并注册。<br>感谢您坚持到最后。让我与你分享这句话作为回报。<br>“我们可以做的很少，我们可以一起做这么多。” - 海伦凯勒</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/04/17/yuque/如何使您的MLflow项目易于共享和协作/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-yuque/强大机器学习的三大支柱：规范测试，强大的训练和形式验证" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -709,79 +826,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2019/04/05/yuque/我的建立图书推荐系统之旅。。。/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/webhook实现服务器自动部署" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/04/yuque/webhook实现服务器自动部署/">webhook实现服务器自动部署</a>
-    </h1>
-  
-
-        
-        <a href="/2019/04/04/yuque/webhook实现服务器自动部署/" class="archive-article-date">
-  	<time datetime="2019-04-04T14:50:24.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-04</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><code>Webhook</code>是一种通过自定义回调函数来增加或更改網頁表现的方法。这些回调可被可能与原始网站或应用相关的第三方用户及开发者保存、修改与管理。术语“网络钩子”由杰夫·林德塞（Jeff Lindsay）于2007年通过给计算机编程术语“钩子”（Hook）加上前缀得。<br>网络钩子是“用户定义的HTTP回调”。网络钩子通常被某些事件激活，比如将代码推送到源[3]或评论博客。.[4]当此事件发生时，原网站将向为网络钩子配置的URL发送HTTP请求。用户可配置它们引发网页上的事件以调用另一个网站的行为。此操作可为任何事件。<br>本片博客介绍一个简单的<code>github</code>中的<code>webhook</code>自动部署<code>hexo</code>博客。<br><a name="c4e6712f"></a></p>
-<h3 id="服务器安装依赖git，hexo，node，npm"><a href="#服务器安装依赖git，hexo，node，npm" class="headerlink" title="服务器安装依赖git，hexo，node，npm"></a>服务器安装依赖git，hexo，node，npm</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">apt install git</span><br><span class="line">apt install nodejs</span><br><span class="line">apt install npm</span><br><span class="line">npm i -g hexo</span><br></pre></td></tr></table></figure>
-<p><a name="712b29e8"></a></p>
-<h3 id="创建一个webhook-js"><a href="#创建一个webhook-js" class="headerlink" title="创建一个webhook.js"></a>创建一个webhook.js</h3><figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">var http = <span class="keyword">require</span>(<span class="string">'http'</span>);</span><br><span class="line">var exec = <span class="keyword">require</span>(<span class="string">'child_process'</span>).exec;</span><br><span class="line"></span><br><span class="line">http.createServer(function (req, res) &#123;</span><br><span class="line">    <span class="keyword">if</span>(req.url === <span class="string">'/webhooks/push/1'</span>) &#123; <span class="regexp">//</span>定义webhook地址</span><br><span class="line">        exec(<span class="string">'sh ./webhook.sh'</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    res.<span class="keyword">end</span>();</span><br><span class="line">&#125;).listen(<span class="number">9999</span>)</span><br><span class="line">console.log(<span class="string">'we are in 9999'</span>);</span><br></pre></td></tr></table></figure>
-<p><a name="e57a0d46"></a></p>
-<h3 id="创建webhook-sh脚本，执行pull，编译等操作"><a href="#创建webhook-sh脚本，执行pull，编译等操作" class="headerlink" title="创建webhook.sh脚本，执行pull，编译等操作"></a>创建webhook.sh脚本，执行pull，编译等操作</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">'begin'</span> &gt; ../1.txt</span><br><span class="line"><span class="built_in">cd</span> /usr/share/nginx/blog</span><br><span class="line">git pull</span><br><span class="line">npm run hook</span><br><span class="line">cp -r /usr/share/nginx/blog/public/* /usr/share/nginx/ninesix.cc/</span><br><span class="line"><span class="built_in">echo</span> <span class="string">'end'</span> &gt;&gt; ../1.txt</span><br></pre></td></tr></table></figure>
-<p><a name="a165d47a"></a></p>
-<h3 id="使用pm2启动webhook服务"><a href="#使用pm2启动webhook服务" class="headerlink" title="使用pm2启动webhook服务"></a>使用pm2启动webhook服务</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">npm i -g pm2</span><br><span class="line">pm2 start webhook.js</span><br></pre></td></tr></table></figure>
-<p><a name="dd496f4d"></a></p>
-<h3 id="把webhook地址写到github的项目设置中"><a href="#把webhook地址写到github的项目设置中" class="headerlink" title="把webhook地址写到github的项目设置中"></a>把webhook地址写到github的项目设置中</h3><p><code>http://ip:9999/webhooks/push/1</code><br>github会测试发送，成功之后会显示绿色对勾.<br><a name="912951c4"></a></p>
-<h4 id="https-www-yuque-com-yuque-developer-doc-webhook"><a href="#https-www-yuque-com-yuque-developer-doc-webhook" class="headerlink" title="https://www.yuque.com/yuque/developer/doc-webhook"></a><a href="https://www.yuque.com/yuque/developer/doc-webhook" target="_blank" rel="noopener">https://www.yuque.com/yuque/developer/doc-webhook</a></h4><p>apt install git<br>apt install nodejs<br>apt install npm<br>npm i -g hexo</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/04/04/yuque/webhook实现服务器自动部署/">展开全文 >></a>
         </p>
       
 
