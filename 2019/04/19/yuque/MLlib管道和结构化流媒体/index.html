@@ -15,7 +15,7 @@
 <meta property="og:site_name" content="A+">
 <meta property="og:description" content="此示例显示如何训练MLlib管道以生成可应用于转换流式DataFrame的PipelineModel。在创建旨在用于转换流数据的管道时，我们还将记住几点。首先，让我们考虑信用卡公司的情况，该公司希望尽快识别潜在的欺诈性交易，以便他们跟进客户以确认交易是否实际上是欺诈性的。这个假设的信用卡公司有关于交易的历史数据，以及哪些交易被客户报告为欺诈。我们想要根据这些历史数据训练分类器。一旦我们训练了分类器">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-04-19T03:40:48.906Z">
+<meta property="og:updated_time" content="2019-04-19T03:44:17.146Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MLlib管道和结构化流媒体">
 <meta name="twitter:description" content="此示例显示如何训练MLlib管道以生成可应用于转换流式DataFrame的PipelineModel。在创建旨在用于转换流数据的管道时，我们还将记住几点。首先，让我们考虑信用卡公司的情况，该公司希望尽快识别潜在的欺诈性交易，以便他们跟进客户以确认交易是否实际上是欺诈性的。这个假设的信用卡公司有关于交易的历史数据，以及哪些交易被客户报告为欺诈。我们想要根据这些历史数据训练分类器。一旦我们训练了分类器">
@@ -190,68 +190,7 @@
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.apache.spark.sql.types._</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.ml.linalg.<span class="type">SQLDataTypes</span>.<span class="type">VectorType</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">val</span> schema = <span class="keyword">new</span> <span class="type">StructType</span>()</span><br><span class="line">  .add(<span class="type">StructField</span>(<span class="string">"time"</span>, <span class="type">IntegerType</span>))</span><br><span class="line">  .add(<span class="type">StructField</span>(<span class="string">"amountRange"</span>, <span class="type">IntegerType</span>))</span><br><span class="line">  .add(<span class="type">StructField</span>(<span class="string">"label"</span>, <span class="type">IntegerType</span>))</span><br><span class="line">  .add(<span class="type">StructField</span>(<span class="string">"pcaVector"</span>, <span class="type">VectorType</span>))</span><br><span class="line"></span><br><span class="line"><span class="keyword">val</span> streamingData = sqlContext.readStream</span><br><span class="line">  .schema(schema)</span><br><span class="line">  .option(<span class="string">"maxFilesPerTrigger"</span>, <span class="number">1</span>)</span><br><span class="line">  .parquet(testDataPath)</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.spark.sql.types._</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.ml.linalg.<span class="type">SQLDataTypes</span>.<span class="type">VectorType</span></span><br><span class="line">schema: org.apache.spark.sql.types.<span class="type">StructType</span> = <span class="type">StructType</span>(<span class="type">StructField</span>(time,<span class="type">IntegerType</span>,<span class="literal">true</span>), <span class="type">StructField</span>(amountRange,<span class="type">IntegerType</span>,<span class="literal">true</span>), <span class="type">StructField</span>(label,<span class="type">IntegerType</span>,<span class="literal">true</span>), <span class="type">StructField</span>(pcaVector,org.apache.spark.ml.linalg.<span class="type">VectorUDT</span>@<span class="number">3</span>bfc3ba7,<span class="literal">true</span>))</span><br><span class="line">streamingData: org.apache.spark.sql.<span class="type">DataFrame</span> = [time: int, amountRange: int ... <span class="number">2</span> more fields]</span><br></pre></td></tr></table></figure>
 <p>为了验证我们的模型，让我们分别计算验证数据的真阳性和真阳性率，通常分别称为敏感性和特异性。因为我们将验证数据集作为流读取，所以当我们从流中读取更多事务时，这些值将更新。</p>
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.spark.sql.functions.&#123;count, sum, when&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">val</span> streamingRates = pipelineModel.transform(streamingData)</span><br><span class="line">  .groupBy(<span class="symbol">'label</span>)</span><br><span class="line">  .agg(</span><br><span class="line">    (sum(when(<span class="symbol">'prediction</span> === <span class="symbol">'label</span>, <span class="number">1</span>)) / count(<span class="symbol">'label</span>)).alias(<span class="string">"true prediction rate"</span>),</span><br><span class="line">    count(<span class="symbol">'label</span>).alias(<span class="string">"count"</span>)</span><br><span class="line">  )</span><br><span class="line"></span><br><span class="line">display(streamingRates)</span><br></pre></td></tr></table></figure>
-<p><a href></a><br>此示例显示如何训练MLlib管道以生成可应用于转换流式DataFrame的PipelineModel。在创建旨在用于转换流数据的管道时，我们还将记住几点。<br>首先，让我们考虑信用卡公司的情况，该公司希望尽快识别潜在的欺诈性交易，以便他们跟进客户以确认交易是否实际上是欺诈性的。这个假设的信用卡公司有关于交易的历史数据，以及哪些交易被客户报告为欺诈。我们想要根据这些历史数据训练分类器。一旦我们训练了分类器，我们就会将它应用于一系列交易。<br>此示例需要Databricks Runtime 4.0或更高版本。<br><a href></a><br><a href></a><br>对于此示例，我们将使用在Worldline和ULB（UniversitéLibrede Bruxelles）的机器学习小组（<a href="http://mlg.ulb.ac.be/" target="_blank" rel="noopener">http://mlg.ulb.ac.be</a>）进行大数据挖掘和研究合作期间收集和分析的数据集。欺诈检测[1]。有关相关主题的当前和过去项目的更多详细信息，请访问<a href="http://mlg.ulb.ac.be/BruFence" target="_blank" rel="noopener">http://mlg.ulb.ac.be/BruFence</a>和<a href="http://mlg.ulb.ac.be/ARTML" target="_blank" rel="noopener">http://mlg.ulb.ac.be/ARTML</a>。<br>首先阅读数据并检查模式。<br><a href></a><br><a href></a><br><strong>val </strong> data  =  spark。读。实木复合地板（“/ databricks-datasets / credit-card-fraud / data”）数据。printSchema（）<br><br>root |  -  time：integer（nullable = true）|  -  amountRange：integer（nullable = true）|  -  label：integer（nullable = true）|  -  pcaVector：vector（nullable = true）data：org.apache .spark.sql.DataFrame = [time：int，amountRange：int …另外2个字段]<br><a href></a><br><a href></a><br>我们将使用此数据集的3列：</p>
-<ul>
-<li><code>pcaVector</code>：原始交易数据的PCA转换。对于这个例子，我们假设这个PCA转换在数据到达我们之前作为某个数据管道的一部分发生。</li>
-<li><code>amountRange</code>：介于0和7之间的值。大致的交易金额。值对应于0-1,1-5,5-10,10-20,20-50,50-100,100-200和200+美元。</li>
-<li><code>label</code>：0或1.表示交易是否是欺诈性的。</li>
-</ul>
-<p>我们想要构建一个使用<code>pcaVector</code>和<code>amountRange</code>数据预测标签的模型。我们将通过使用3阶段的管道来实现这一目标。</p>
-<ol>
-<li>A <code>OneHotEncoderEstimator</code>从<code>amountRange</code>列构建向量。</li>
-<li>一个<code>Vector</code>汇编程序将我们的合并<code>pcaVector</code>和<code>amountRange</code>矢量到我们的<code>features</code>载体。</li>
-<li>A <code>GBTClassifier</code>到服务器作为我们的<code>Estimator</code>。</li>
-</ol>
-<p>让我们从创建代表这些阶段的对象开始。<br><a href></a><br><a href></a><br><strong>进口</strong> 组织。阿帕奇。火花。毫升。功能。{ OneHotEncoderEstimator，VectorAssembler } <strong>导入</strong>组织。阿帕奇。火花。毫升。分类。GBTClassifier <strong>val </strong>oneHot = <strong>new </strong>OneHotEncoderEstimator（）。setInputCols（Array（“amountRange”））。setOutputCols（Array（ <br> </p>
-<pre><code>&lt;br /&gt;  &lt;br /&gt;  “amountVect”））**val **vectorAssembler = **new **VectorAssembler（）。setInputCols（Array（“amountVect”，“pcaVector”））。setOutputCol（“features”）**val **estimator = **new **GBTClassifier（）。setLabelCol（“label”）。setFeaturesCol（“features”）
-
-&lt;br /&gt;   &lt;br /&gt;  
-
-&lt;br /&gt;  &lt;br /&gt;  &lt;br /&gt;import org.apache.spark.ml.feature。{OneHotEncoderEstimator，VectorAssembler} import org.apache.spark.ml.classification.GBTClassifier oneHot：org.apache.spark.ml.feature.OneHotEncoderEstimator = oneHotEncoder_d08ee1823dc0 vectorAssembler：org.apache.spark .ml.feature.VectorAssembler = vecAssembler_1f1b468a900e estimator：org.apache.spark.ml.classification.GBTClassifier = gbtc_5215e2e5d504&lt;br /&gt;[]()&lt;br /&gt;[]()&lt;br /&gt;到目前为止，对于使用过MLlib管道的人来说，这应该是熟悉的，但是因为我们打算在流式上下文中使用这个模型，所以我们应该注意一些事情。&lt;br /&gt;首先你可能会注意到我们使用的`OneHotEncoderEstimator`是Spark 2.3.0中新增的，而不是a `OneHotEncoder`，现在已经弃用了。这个新的估算工具修复了与之相关的几个问题，`OneHotEncoder`并且还允许您将一个热编码应用于流式DataFrame。&lt;br /&gt;使用MLlib和Structured Streaming时要注意的第二件事是`VectorAssembler`在流式上下文中有一些限制。具体来说，`VectorAssembler`只能在已知大小的Vector列上工作。这不是批处理DataFrames的问题，因为我们可以简单地检查数据帧的内容以确定向量的大小。&lt;br /&gt;如果我们打算使用我们的管道来转换流式DataFrame，我们可以通过`VectorSizeHint`在管道中包含一个阶段来明确指定pcaVector列的大小。我们`VectorAssembler`阶段的另一个输入`amountVect`也是一个向量列，但由于此列是MLlib转换器的输出，因此它已包含适当的大小信息，因此我们不需要为此列执行任何其他操作。&lt;br /&gt;[]()&lt;br /&gt;[]()&lt;br /&gt;**进口** 组织。阿帕奇。火花。毫升。功能。VectorSizeHint 
-</code></pre><p><strong>val </strong> vectorSizeHint  =  <strong>new </strong> VectorSizeHint（）<br>  。setInputCol（“pcaVector”）<br>  。setSize（28）<br>import org.apache.spark.ml.feature.VectorSizeHint vectorSizeHint：org.apache.spark.ml.feature.VectorSizeHint = vectSizeHint_1409512da3d9<br><a href></a><br><a href></a><br>在我们拟合模型之前，让我们将数据集分成两部分进行训练和验证。<br><a href></a><br><a href></a><br><strong>val </strong> 数组（训练，测试）= 数据。randomSplit（权重= 阵列（。8，。2））    <br>train：org.apache.spark.sql.Dataset [org.apache.spark.sql.Row] = [time：int，amountRange：int … 2 more fields] test：org.apache.spark.sql.Dataset [ org.apache.spark.sql.Row] = [time：int，amountRange：int …另外2个字段]<br><a href></a><br><a href></a><br>现在我们已经准备好构建一个管道并适应它。<br><a href></a><br><a href></a><br><strong>进口</strong> 组织。阿帕奇。火花。毫升。管道<br><strong>输入</strong> 组织。阿帕奇。火花。sql。功能。col </p>
-<p><strong>val </strong> pipeline  =  <strong>new </strong> Pipeline（）<br>  。setStages（Array（oneHot，vectorSizeHint，vectorAssembler，estimator））<strong>val </strong>pipelineModel = pipeline。适合（   </p>
-<p>   火车）<br>import org.apache.spark.ml.Pipeline import org.apache.spark.sql.functions.col pipeline：org.apache.spark.ml.Pipeline = pipeline_04b363362758 pipelineModel：org.apache.spark.ml.PipelineModel = pipeline_04b363362758<br><a href></a><br><a href></a><br>由于我们没有可读取的实际流，因此我们可以通过保存测试数据然后使用Spark将其作为流来读取来模拟流。我们将使用此模拟流对模型进行一些验证。为了验证模型，我们将混淆矩阵写入表中，但由于我们正在使用Spark Structured Streaming，因此当从流中读取更多数据时，该表将实时更新。<br><a href></a><br><a href></a><br><strong>val </strong> testDataPath  =  “/ tmp / credit-card-frauld-test-data” </p>
-<p>test。重新分配（20）。写<br>  。模式（“覆盖”）<br>  。实木复合地板（testDataPath）<br>testDataPath：String = / tmp / credit-card-frauld-test-data<br><a href></a><br><a href></a><br><strong>进口</strong> 组织。阿帕奇。火花。sql。类型。<strong>_ </strong><br><strong>import </strong> org。阿帕奇。火花。毫升。linalg。SQLDataTypes。VectorType </p>
-<p><strong>val </strong> schema  =  <strong>new </strong> StructType（）<br>  。添加（StructField（“时间”，IntegerType））。添加（StructField（“amountRange” ，IntegerType <br>   ））<br>  。添加（StructField（“标签”，IntegerType））。add（StructField（“pcaVector”，VectorType））<strong>val </strong>streamingData = sqlContext。readStream。架构（架构）。选项（“maxFilesPerTrigger”，1）。实木复合地板（testDataPath） <br>   </p>
-<p>   <br>  <br>   <br>  <br>import org.apache.spark.sql.types._ import org.apache.spark.ml.linalg.SQLDataTypes.VectorType schema：org.apache.spark.sql.types.StructType = StructType（StructField（time，IntegerType，true） ，StructField（amountRange，IntegerType，true），StructField（label，IntegerType，true），StructField（pcaVector，org.apache.spark.ml.linalg.VectorUDT @ 3bfc3ba7，true））streamingData：org.apache.spark.sql。 DataFrame = [time：int，amountRange：int … 2 more fields]<br><a href></a><br><a href></a><br>为了验证我们的模型，让我们分别计算验证数据的真阳性和真阳性率，通常分别称为敏感性和特异性。因为我们将验证数据集作为流读取，所以当我们从流中读取更多事务时，这些值将更新。<br><a href></a><br><a href></a><br><strong>进口</strong> 组织。阿帕奇。火花。sql。功能。{ count，sum，when } <strong>val </strong>streamingRates = pipelineModel。transform（streamingData）。groupBy（’label）。agg（（sum（when（’prediction === ‘label，1））/ count（’label）  </p>
-<p>   <br>  <br>  <br>         ）。别名（“真实预测率”），count（’标签）。别名（“count”））显示（streamingRates）<br>    <br>  </p>
-<p><br><br>display_query_1 （id：4e27eee9-2029-45db-85d0-d53497a45b39 ）<br>最后更新：149 天前</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left"></th>
-<th style="text-align:left"></th>
-<th style="text-align:left"></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">1</td>
-<td style="text-align:left">0.7640449438202247</td>
-<td style="text-align:left">89</td>
-</tr>
-<tr>
-<td style="text-align:left">0</td>
-<td style="text-align:left">0.9998547537037805</td>
-<td style="text-align:left">48194</td>
-</tr>
-</tbody>
-</table>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">标签</th>
-<th style="text-align:left">真实的预测率</th>
-<th style="text-align:left">计数</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left"></td>
-</tr>
-</tbody>
-</table>
-<p><a href></a><br><a href></a><br><a href></a><br>在此示例中，我们使用Spark Structured Streaming逐步更新我们的验证度量标准。实际的信用卡处理器可能希望使用Spark Structured Streaming来做更有用的事情。例如，他们可能会在某个窗口期间（例如30天）汇总每个帐户可能存在的欺诈性交易的数量，并在该数量大于某个阈值时向其防欺诈部门发出警报。要实现这种流式传输作业，您将使用类似于本笔记本中概述的过程。</p>
+<p><a href></a><br>此示例显示如何训练MLlib管道以生成可应用于转换流式DataFrame的PipelineModel。在创建旨在用于转换流数据的管道时，我们还将记住几点。<br>首先，让我们考虑信用卡公司的情况，该公司希望尽快识别潜在的欺诈性交易，以便他们跟进客户以确认交易是否实际上是欺诈性的。这个假设的信用卡公司有关于交易的历史数据，以及哪些交易被客户报告为欺诈。我们想要根据这些历史数据训练分类器。一旦我们训练了分类器，我们就会将它应用于一系列交易。<br>此示例需要Databricks Runtime 4.0或更高版本。<br><a href></a><br><a href></a><br>对于此示例，我们将使用在Worldline和ULB（UniversitéLibrede Bruxelles）的机器学习小组（<a href="http://mlg.ulb.ac.be/" target="_blank" rel="noopener">http://mlg.ulb.ac.be</a>）进行大数据挖掘和研究合作期间收集和分析的数据集。欺诈检测[1]。有关相关主题的当前和过去项目的更多详细信息，请访问<a href="http://mlg.ulb.ac.be/BruFence" target="_blank" rel="noopener">http://mlg.ulb.ac.be/BruFence</a>和<a href="http://mlg.ulb.ac.be/ARTML" target="_blank" rel="noopener">http://mlg.ulb.ac.be/ARTML</a>。<br>首先阅读数据并检查模式。<br><a href></a><br><a href></a></p>
 
       
 
