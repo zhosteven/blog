@@ -142,6 +142,71 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-yuque/Spark上的实际Python工作负载：独立群集" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/03/18/yuque/Spark上的实际Python工作负载：独立群集/">Spark上的实际Python工作负载：独立群集</a>
+    </h1>
+  
+
+        
+        <a href="/2019/03/18/yuque/Spark上的实际Python工作负载：独立群集/" class="archive-article-date">
+  	<time datetime="2019-03-18T09:45:16.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-18</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>关于在Spark上运行Python有无数文章和论坛帖子，但大多数人认为要提交的工作包含在一个.py文件中：<code>spark-submit wordcount.py</code> - 完成！<br>如果你的Python程序不仅仅是一个脚本怎么办？也许它为Spark生成动态SQL来执行，或使用Spark的输出刷新模型。随着您的Python代码变得更像一个应用程序（具有目录结构，配置文件和库依赖项），将其提交给Spark需要更多考虑。<br>以下是我最近考虑使用Spark 2.3将一个这样的Python应用程序用于生产时的替代方案。第一篇文章重点介绍Spark独立集群。另一篇文章介绍了EMR Spark（YARN）。<br>我远不是Spark的权威，更不用说Python了。我的决定试图平衡正确性和易于部署，以及应用程序对群集的限制。让我知道你的想法。<br>
+        
+          <a class="article-more-a" href="/2019/03/18/yuque/Spark上的实际Python工作负载：独立群集/#more">more >></a>
+        
+      
+
+      
+    </p></div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/03/18/yuque/Spark上的实际Python工作负载：独立群集/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-yuque/如何（以及为什么）创建一个好的验证集" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1069,155 +1134,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2019/03/15/yuque/MLFLOW概念/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/Mlflow介绍" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/15/yuque/Mlflow介绍/">Mlflow介绍</a>
-    </h1>
-  
-
-        
-        <a href="/2019/03/15/yuque/Mlflow介绍/" class="archive-article-date">
-  	<time datetime="2019-03-15T01:40:23.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-15</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><a name="61a3ec66"></a></p>
-<h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><p>MLflow是一个完整的机器学习生命周期的开源平台。这意味着它具有在训练和运行期间监控模型的组件，存储模型的能力，在生产代码中加载模型以及创建管道。<br>MLflow的主要目标是在ML之上提供额外的层，允许数据科学家与几乎任何机器学习库（<a href="https://github.com/h2oai" target="_blank" rel="noopener"><em>h2o，</em></a><a href="https://keras.io/" target="_blank" rel="noopener"><em>keras，</em></a><a href="http://mleap-docs.combust.ml/" target="_blank" rel="noopener"><em>mleap，</em></a><a href="https://pytorch.org/" target="_blank" rel="noopener"><em>pytorch，</em></a><a href="http://scikit-learn.org/stable/" target="_blank" rel="noopener"><em>sklearn和</em></a><a href="https://www.tensorflow.org/" target="_blank" rel="noopener"><em>tensorflow</em></a>）一起工作，同时，它将他们的工作带到另一个层次。<br>MLflow提供三个组件：</p>
-<ul>
-<li><a href="https://mlflow.org/docs/latest/tracking.html" target="_blank" rel="noopener"><strong>跟踪</strong></a>  - 记录和查询实验：代码，数据，配置和结果。跟踪建模进度非常有用。</li>
-<li><a href="https://mlflow.org/docs/latest/projects.html" target="_blank" rel="noopener"><strong>项目</strong></a>  - 在任何平台（<strong>_即_</strong> <a href="https://aws.amazon.com/sagemaker" target="_blank" rel="noopener"><em>Sagemaker</em></a>）上可重复运行的包装格式。</li>
-<li><a href="https://mlflow.org/docs/latest/models.html" target="_blank" rel="noopener"><strong>模型</strong></a>  - 将模型发送到各种部署工具的通用格式。<blockquote>
-<p><strong>MLflow</strong>是一个管理ML生命周期的开源平台，包括实验，可重复性和部署。<br><a name="e655a410"></a></p>
-</blockquote>
-<h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1>MLflow的一个特别之处是需要conda的支持，因此为保证后期可用，需要首先安装conda环境。</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wget https://repo.anaconda.com/archive/Anaconda3-2018.12-Linux-x86_64.sh</span><br><span class="line">bash Anaconda3-2018.12-Linux-x86_64.sh</span><br></pre></td></tr></table></figure>
-<p>安装完后，添加到环境变量：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/profile</span><br></pre></td></tr></table></figure>
-<p>添加git权限</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -t rsa -b 4096 -C <span class="string">"ujujzhao@gmail.com"</span></span><br></pre></td></tr></table></figure>
-<p>安装mlflow</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./pip install mlflow</span><br></pre></td></tr></table></figure>
-<p><a name="c182e73c"></a></p>
-<h1 id="快速开始"><a href="#快速开始" class="headerlink" title="快速开始"></a>快速开始</h1><p><a name="c66f9448"></a></p>
-<h2 id="使用Tracking-API"><a href="#使用Tracking-API" class="headerlink" title="使用Tracking API"></a>使用Tracking API</h2><p>该<a href="https://mlflow.org/docs/latest/tracking.html" target="_blank" rel="noopener">MLflow跟踪API</a>可以让你从你的数据的科学代码登录度量和工件（文件），看看您运行的历史。您可以通过编写如下的简单Python脚本来尝试它（此示例也包括在内<code>quickstart/mlflow_tracking.py</code>）：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">from</span> mlflow <span class="keyword">import</span> log_metric, log_param, log_artifact</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    <span class="comment"># Log a parameter (key-value pair)</span></span><br><span class="line">    log_param(<span class="string">"param1"</span>, <span class="number">5</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Log a metric; metrics can be updated throughout the run</span></span><br><span class="line">    log_metric(<span class="string">"foo"</span>, <span class="number">1</span>)</span><br><span class="line">    log_metric(<span class="string">"foo"</span>, <span class="number">2</span>)</span><br><span class="line">    log_metric(<span class="string">"foo"</span>, <span class="number">3</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Log an artifact (output file)</span></span><br><span class="line">    <span class="keyword">with</span> open(<span class="string">"output.txt"</span>, <span class="string">"w"</span>) <span class="keyword">as</span> f:</span><br><span class="line">        f.write(<span class="string">"Hello world!"</span>)</span><br><span class="line">    log_artifact(<span class="string">"output.txt"</span>)</span><br></pre></td></tr></table></figure>
-<p><a name="a1168828"></a></p>
-<h2 id="查看跟踪UI"><a href="#查看跟踪UI" class="headerlink" title="查看跟踪UI"></a>查看跟踪UI</h2><p>默认情况下，无论您在何处运行程序，跟踪API都会将数据写入文件到<code>mlruns</code>目录中。然后，您可以运行MLflow的跟踪UI：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mlflow ui</span><br></pre></td></tr></table></figure></p>
-<p>为保证外网能够访问，需添加host命令，即：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mlflow ui -h 0.0.0.0</span><br></pre></td></tr></table></figure>
-<p>其他的命令功能请直接执行：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mlflow ui --help</span><br></pre></td></tr></table></figure>
-<p><a name="1a0ff95a"></a></p>
-<h2 id="运行MLflow项目"><a href="#运行MLflow项目" class="headerlink" title="运行MLflow项目"></a>运行MLflow项目<a href="https://mlflow.org/docs/latest/quickstart.html#running-mlflow-projects" target="_blank" rel="noopener"></a></h2><p>MLflow允许您将代码及其依赖项打包为一个可以在其他数据上以可重现的方式运行的_项目_。每个项目都包含其代码和<code>MLproject</code>定义其依赖项的文件（例如，Python环境），以及可以在项目中运行的命令以及它们采用的参数。<br>您可以使用命令轻松运行现有项目，该命令从本地目录或GitHub URI运行项目：<code>mlflow run</code></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mlflow run tutorial -P alpha=0.5</span><br><span class="line"></span><br><span class="line">mlflow run git@github.com:mlflow/mlflow-example.git -P alpha=5</span><br></pre></td></tr></table></figure>
-<p>有一个示例项目<code>tutorial</code>，包括一个<code>MLproject</code>指定其依赖项的文件。如果您尚未配置<a href="https://mlflow.org/docs/latest/tracking.html#tracking-server" target="_blank" rel="noopener">跟踪服务器</a>，则项目会将其Tracking API数据记录在本地<code>mlruns</code>目录中，以便您可以使用这些运行来查看这些运行。<code>mlflow ui</code></p>
-<blockquote>
-<p>默认情况下，使用<a href="https://conda.io/" target="_blank" rel="noopener">conda</a>安装所有依赖项。要在不使用的情况下运行项目，可以提供选项 。在这种情况下，您必须确保已在Python环境中安装必要的依赖项。<code>mlflow run`</code>–no-conda`</p>
-</blockquote>
-<p><a name="b7824d5c"></a></p>
-<h1 id="教程"><a href="#教程" class="headerlink" title="教程"></a>教程</h1><p>本教程展示了如何使用MLflow端到端：</p>
-<ul>
-<li>训练线性回归模型</li>
-<li>打包以可重用且可重现的模型格式训练模型的代码</li>
-<li>将模型部署到一个简单的HTTP服务器中，使您能够对预测进行评分</li>
-</ul>
-<p>本教程使用数据集根据葡萄酒的“固定酸度”，“pH值”，“残糖”等定量特征预测葡萄酒的质量。该数据集来自UCI的<a href="http://archive.ics.uci.edu/ml/datasets/Wine+Quality" target="_blank" rel="noopener">机器学习库</a>。 <a href="https://mlflow.org/docs/latest/tutorial.html#id4" target="_blank" rel="noopener">[1]</a><br>目录</p>
-<ul>
-<li><a href="https://mlflow.org/docs/latest/tutorial.html#what-you-ll-need" target="_blank" rel="noopener">你需要什么</a></li>
-<li><a href="https://mlflow.org/docs/latest/tutorial.html#training-the-model" target="_blank" rel="noopener">培训模型</a></li>
-<li><a href="https://mlflow.org/docs/latest/tutorial.html#comparing-the-models" target="_blank" rel="noopener">比较模型</a></li>
-<li><a href="https://mlflow.org/docs/latest/tutorial.html#packaging-the-training-code" target="_blank" rel="noopener">打包培训代码</a></li>
-<li><a href="https://mlflow.org/docs/latest/tutorial.html#serving-the-model" target="_blank" rel="noopener">服务模型</a></li>
-<li><a href="https://mlflow.org/docs/latest/tutorial.html#more-resources" target="_blank" rel="noopener">更多资源</a><br><a name="60691d91"></a><h2 id="你需要什么"><a href="#你需要什么" class="headerlink" title="你需要什么"></a><a href="https://mlflow.org/docs/latest/tutorial.html#id5" target="_blank" rel="noopener">你需要什么</a><a href="https://mlflow.org/docs/latest/tutorial.html#what-you-ll-need" target="_blank" rel="noopener"></a></h2>要运行本教程，您需要：</li>
-<li>安装MLflow（通过）<code>pip install mlflow</code></li>
-<li>安装<a href="https://conda.io/docs/user-guide/install/index.html#" target="_blank" rel="noopener">conda</a></li>
-<li>克隆（下载）MLflow存储库 <code>git clone https://github.com/mlflow/mlflow</code></li>
-<li><code>cd</code>进入<code>examples</code>你的MLflow克隆目录 - 我们将使用这个工作目录来运行教程。我们避免直接从我们的MLflow克隆中运行，因为这样做会导致教程从源代码中使用MLflow，而不是使用MLflow的PyPI安装。<br><a name="a162534b"></a><h2 id="训练模型"><a href="#训练模型" class="headerlink" title="训练模型"></a>训练<a href="https://mlflow.org/docs/latest/tutorial.html#id6" target="_blank" rel="noopener">模型</a></h2>首先，训练一个带有两个超参数的线性回归模型：<code>alpha</code>和<code>l1_ratio</code>。</li>
-</ul>
-<p>代码位于以下<code>examples/sklearn_elasticnet_wine/train.py</code>并在下面复制。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># The data set used in this example is from http://archive.ics.uci.edu/ml/datasets/Wine+Quality</span></span><br><span class="line"><span class="comment"># P. Cortez, A. Cerdeira, F. Almeida, T. Matos and J. Reis.</span></span><br><span class="line"><span class="comment"># Modeling wine preferences by data mining from physicochemical properties. In Decision Support Systems, Elsevier, 47(4):547-553, 2009.</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> warnings</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> mean_squared_error, mean_absolute_error, r2_score</span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split</span><br><span class="line"><span class="keyword">from</span> sklearn.linear_model <span class="keyword">import</span> ElasticNet</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> mlflow</span><br><span class="line"><span class="keyword">import</span> mlflow.sklearn</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">eval_metrics</span><span class="params">(actual, pred)</span>:</span></span><br><span class="line">    rmse = np.sqrt(mean_squared_error(actual, pred))</span><br><span class="line">    mae = mean_absolute_error(actual, pred)</span><br><span class="line">    r2 = r2_score(actual, pred)</span><br><span class="line">    <span class="keyword">return</span> rmse, mae, r2</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    warnings.filterwarnings(<span class="string">"ignore"</span>)</span><br><span class="line">    np.random.seed(<span class="number">40</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Read the wine-quality csv file (make sure you're running this from the root of MLflow!)</span></span><br><span class="line">    wine_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), <span class="string">"wine-quality.csv"</span>)</span><br><span class="line">    data = pd.read_csv(wine_path)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Split the data into training and test sets. (0.75, 0.25) split.</span></span><br><span class="line">    train, test = train_test_split(data)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># The predicted column is "quality" which is a scalar from [3, 9]</span></span><br><span class="line">    train_x = train.drop([<span class="string">"quality"</span>], axis=<span class="number">1</span>)</span><br><span class="line">    test_x = test.drop([<span class="string">"quality"</span>], axis=<span class="number">1</span>)</span><br><span class="line">    train_y = train[[<span class="string">"quality"</span>]]</span><br><span class="line">    test_y = test[[<span class="string">"quality"</span>]]</span><br><span class="line"></span><br><span class="line">    alpha = float(sys.argv[<span class="number">1</span>]) <span class="keyword">if</span> len(sys.argv) &gt; <span class="number">1</span> <span class="keyword">else</span> <span class="number">0.5</span></span><br><span class="line">    l1_ratio = float(sys.argv[<span class="number">2</span>]) <span class="keyword">if</span> len(sys.argv) &gt; <span class="number">2</span> <span class="keyword">else</span> <span class="number">0.5</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">with</span> mlflow.start_run():</span><br><span class="line">        lr = ElasticNet(alpha=alpha, l1_ratio=l1_ratio, random_state=<span class="number">42</span>)</span><br><span class="line">        lr.fit(train_x, train_y)</span><br><span class="line"></span><br><span class="line">        predicted_qualities = lr.predict(test_x)</span><br><span class="line"></span><br><span class="line">        (rmse, mae, r2) = eval_metrics(test_y, predicted_qualities)</span><br><span class="line"></span><br><span class="line">        print(<span class="string">"Elasticnet model (alpha=%f, l1_ratio=%f):"</span> % (alpha, l1_ratio))</span><br><span class="line">        print(<span class="string">"  RMSE: %s"</span> % rmse)</span><br><span class="line">        print(<span class="string">"  MAE: %s"</span> % mae)</span><br><span class="line">        print(<span class="string">"  R2: %s"</span> % r2)</span><br><span class="line"></span><br><span class="line">        mlflow.log_param(<span class="string">"alpha"</span>, alpha)</span><br><span class="line">        mlflow.log_param(<span class="string">"l1_ratio"</span>, l1_ratio)</span><br><span class="line">        mlflow.log_metric(<span class="string">"rmse"</span>, rmse)</span><br><span class="line">        mlflow.log_metric(<span class="string">"r2"</span>, r2)</span><br><span class="line">        mlflow.log_metric(<span class="string">"mae"</span>, mae)</span><br><span class="line"></span><br><span class="line">        mlflow.sklearn.log_model(lr, <span class="string">"model"</span>)</span><br></pre></td></tr></table></figure>
-<p>此示例使用熟悉的pandas，numpy和sklearn API来创建简单的机器学习模型。该<a href="https://mlflow.org/docs/latest/tracking.html" target="_blank" rel="noopener">MLflow跟踪的API</a>记录有关每次训练运行信息，如超参数<code>alpha</code>和<code>l1_ratio</code>，用于训练模型和指标，如均方根误差，用来评估模型。该示例还以MLflow知道如何部署的格式序列化模型。<br>您可以使用默认超参数运行示例，如下所示：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python  examples/sklearn_elasticnet_wine/train.PY</span><br></pre></td></tr></table></figure>
-<p>尝试一些其他的值<code>alpha</code>，并<code>l1_ratio</code>通过将它们作为参数传入<code>train.py</code>：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python examples/sklearn_elasticnet_wine/train.py &lt;alpha&gt; &lt;l1_ratio&gt;</span><br></pre></td></tr></table></figure>
-<p>每次运行该示例时，MLflow都会在目录中记录有关实验运行的信息<code>mlruns</code>。</p>
-<blockquote>
-<p>注意<br>如果您想使用Jupyter笔记本版本<code>train.py</code>，请尝试使用教程笔记本<code>examples/sklearn_elasticnet_wine/train.ipynb</code>。</p>
-</blockquote>
-<p><a name="9fe72089"></a></p>
-<h2 id="比较模型"><a href="#比较模型" class="headerlink" title="比较模型"></a><a href="https://mlflow.org/docs/latest/tutorial.html#id7" target="_blank" rel="noopener">比较模型</a></h2><p>接下来，使用MLflow UI比较您生成的模型。在与包含<code>mlruns</code>运行的目录相同的当前工作目录中：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mlflow ui -h 0.0.0.0</span><br></pre></td></tr></table></figure>
-<p>在此页面上，您可以看到实验运行列表，其中包含可用于比较模型的指标。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1552619383275-64d84bcf-39a4-48a9-b35c-64a3282025bf.png#align=left&amp;display=inline&amp;height=367&amp;originHeight=527&amp;originWidth=1070&amp;size=0&amp;status=done&amp;width=746" alt></p>
-<p><a name="05c86809"></a></p>
-<h2 id="打包培训代码"><a href="#打包培训代码" class="headerlink" title="打包培训代码"></a><a href="https://mlflow.org/docs/latest/tutorial.html#id8" target="_blank" rel="noopener">打包培训代码</a><a href="https://mlflow.org/docs/latest/tutorial.html#packaging-the-training-code" target="_blank" rel="noopener"></a></h2><p>现在您已经拥有了培训代码，您可以对其进行打包，以便其他数据科学家可以轻松地重复使用该模型，或者您可以远程运行培训，例如在Databricks上。</p>
-<p>您可以使用<a href="https://mlflow.org/docs/latest/projects.html" target="_blank" rel="noopener">MLflow Projects</a>约定来指定代码的依赖关系和入口点。该<code>tutorial/MLproject</code>文件指定项目具有位于 被调用的<a href="https://conda.io/docs/user-guide/tasks/manage-environments.html#creating-an-environment-file-manually" target="_blank" rel="noopener">Conda环境文件中</a>的依赖<code>conda.yaml</code>项，并且具有一个带有两个参数的入口点：<code>alpha</code>和<code>l1_ratio</code>。</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># tutorial/MLproject</span></span><br><span class="line"></span><br><span class="line"><span class="attr">name:</span> <span class="string">tutorial</span></span><br><span class="line"></span><br><span class="line"><span class="attr">conda_env:</span> <span class="string">conda.yaml</span></span><br><span class="line"></span><br><span class="line"><span class="attr">entry_points:</span></span><br><span class="line"><span class="attr">  main:</span></span><br><span class="line"><span class="attr">    parameters:</span></span><br><span class="line"><span class="attr">      alpha:</span> <span class="string">float</span></span><br><span class="line"><span class="attr">      l1_ratio:</span> <span class="string">&#123;type:</span> <span class="string">float,</span> <span class="attr">default:</span> <span class="number">0.1</span><span class="string">&#125;</span></span><br><span class="line"><span class="attr">    command:</span> <span class="string">"python train.py &#123;alpha&#125; &#123;l1_ratio&#125;"</span></span><br></pre></td></tr></table></figure>
-<p>Conda文件依赖项</p>
-<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># tutorial/conda.yaml</span></span><br><span class="line"></span><br><span class="line"><span class="attr">name:</span> <span class="string">tutorial</span></span><br><span class="line"><span class="attr">channels:</span></span><br><span class="line"><span class="bullet">  -</span> <span class="string">defaults</span></span><br><span class="line"><span class="attr">dependencies:</span></span><br><span class="line"><span class="bullet">  -</span> <span class="string">numpy=1.14.3</span></span><br><span class="line"><span class="bullet">  -</span> <span class="string">pandas=0.22.0</span></span><br><span class="line"><span class="bullet">  -</span> <span class="string">scikit-learn=0.19.1</span></span><br><span class="line"><span class="attr">  - pip:</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">mlflow</span></span><br></pre></td></tr></table></figure>
-<p>要运行此项目，请调用<code>mlflow run tutorial -P alpha=0.42</code><br>如果存储库<code>MLproject</code>在根目录中有文件，您也可以直接从GitHub运行项目。本教程在您可以运行的。运行此命令后，MLflow将在具有指定依赖关系的新Conda环境中运行您的训练代码。<a href="https://github.com/mlflow/mlflow-example" target="_blank" rel="noopener">https://github.com/mlflow/mlflow-example</a>存储库中重复。<code>mlflow run git@github.com:mlflow/mlflow-example.git -P alpha=0.42</code></p>
-<p><a name="146d11ee"></a></p>
-<h2 id="服务模型"><a href="#服务模型" class="headerlink" title="服务模型"></a><a href="https://mlflow.org/docs/latest/tutorial.html#id9" target="_blank" rel="noopener">服务模型</a><a href="https://mlflow.org/docs/latest/tutorial.html#serving-the-model" target="_blank" rel="noopener"></a></h2><p>现在您已使用MLproject约定打包模型并确定了最佳模型，现在是时候使用<a href="https://mlflow.org/docs/latest/models.html" target="_blank" rel="noopener">MLflow模型</a>部署<a href="https://mlflow.org/docs/latest/models.html" target="_blank" rel="noopener">模型了</a>。MLflow模型是用于打包机器学习模型的标准格式，可用于各种下游工具 - 例如，通过REST API实时提供服务或在Apache Spark上进行批量推断。<br>在示例训练代码中，在训练线性回归模型之后，MLflow中的函数将模型保存为运行中的工件。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mlflow.sklearn.log_model(lr, <span class="string">"model"</span>)</span><br></pre></td></tr></table></figure>
-<p>要查看此工件，您可以再次使用UI。当您单击实验运行列表中的日期时，您将看到此页面。</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1552619764349-39a712fe-a675-4e68-8258-fcfec15858f3.png#align=left&amp;display=inline&amp;height=901&amp;originHeight=1333&amp;originWidth=1104&amp;size=0&amp;status=done&amp;width=746" alt>在底部，您可以看到调用<code>mlflow.sklearn.log_model</code>生成两个文件<code>/Users/mlflow/mlflow-prototype/mlruns/0/7c1a0d5c42844dcdb8f5191146925174/artifacts/model</code>。第一个文件<code>MLmodel</code>是一个元数据文件，告诉MLflow如何加载模型。第二个文件<code>model.pkl</code>是您训练的线性回归模型的序列化版本。<br>在此示例中，您可以将此MLmodel格式与MLflow一起使用，以部署可以提供预测的本地REST服务器。<br>要部署服务器，请运行：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mlflow pyfunc serve /Users/mlflow/mlflow-prototype/mlruns/0/7c1a0d5c42844dcdb8f5191146925174/artifacts/model -p 1234</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>注意<br>用于创建模型的Python版本必须与运行的版本相同。如果不是这种情况，您可能会看到错误 或。<code>mlflow sklearn`</code>UnicodeDecodeError: ‘ascii’ codec can’t decode byte 0x9f in position 1: ordinal not in range(128)<code></code>raise ValueError, “unsupported pickle protocol: %d”`</p>
-</blockquote>
-<p>部署服务器后，您可以传递一些示例数据并查看预测。以下示例用于<code>curl</code>向<code>split</code>pyfunc服务器发送带有方向的JSON序列化pandas DataFrame 。有关pyfunc模型服务器接受的输入数据格式的更多信息，请参阅 <a href="https://mlflow.org/docs/latest/models.html#pyfunc-deployment" target="_blank" rel="noopener">MLflow部署工具文档</a>。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -X POST -H &quot;Content-Type:application/json; format=pandas-split&quot; --data &apos;&#123;&quot;columns&quot;:[&quot;alcohol&quot;, &quot;chlorides&quot;, &quot;citric acid&quot;, &quot;density&quot;, &quot;fixed acidity&quot;, &quot;free sulfur dioxide&quot;, &quot;pH&quot;, &quot;residual sugar&quot;, &quot;sulphates&quot;, &quot;total sulfur dioxide&quot;, &quot;volatile acidity&quot;],&quot;data&quot;:[[12.8, 0.029, 0.48, 0.98, 6.2, 29, 3.33, 1.2, 0.39, 75, 0.66]]&#125;&apos; http://127.0.0.1:1234/invocations</span><br></pre></td></tr></table></figure>
-<p>服务器应该响应输出类似于：<br><br><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&quot;predictions&quot;: [6.379428821398614]&#125;</span><br></pre></td></tr></table></figure></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/03/15/yuque/Mlflow介绍/">展开全文 >></a>
         </p>
       
 
