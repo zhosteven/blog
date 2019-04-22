@@ -142,100 +142,6 @@
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-yuque/将ML投入生产：在Python中使用Apache Kafka" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/15/yuque/将ML投入生产：在Python中使用Apache Kafka/">将ML投入生产：在Python中使用Apache Kafka</a>
-    </h1>
-  
-
-        
-        <a href="/2019/03/15/yuque/将ML投入生产：在Python中使用Apache Kafka/" class="archive-article-date">
-  	<time datetime="2019-03-15T10:03:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-15</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>我们将说明如何使用一系列工具（即<a href="https://kafka.apache.org/" target="_blank" rel="noopener">Kafka</a>，<a href="https://mlflow.org/" target="_blank" rel="noopener">MLFlow</a>和<a href="https://aws.amazon.com/sagemaker/" target="_blank" rel="noopener">Sagemaker</a>）来帮助生产ML。为此，我们将设置一个简单的场景，我们希望它类似于一些真实用例，然后描述一个潜在的解决方案。可以在<a href="https://github.com/jrzaurin/ml_pipelines" target="_blank" rel="noopener">此处</a>找到包含所有代码的伴随仓库。<br><a name="c931653c"></a></p>
-<h3 id="场景"><a href="#场景" class="headerlink" title="场景"></a><strong>场景</strong></h3><p>公司使用一系列服务收集数据，这些服务在用户/客户与公司的网站或应用程序交互时生成事件。当这些交互发生时，算法需要<strong>实时</strong>运行<strong>，</strong>并且需要根据算法的输出（或预测）采取一些立即行动。最重要的是，经过_ñ<em>相互作用（或意见）的算法需要重新训练<strong>不停止</strong>的</em>预测_ <em>服务，</em>因为用户将保持互动。<br>对于这里的练习，我们使用了<a href="https://archive.ics.uci.edu/ml/datasets/adult" target="_blank" rel="noopener">成人</a>数据集，其目标是根据年龄，原籍国等来预测个人是否获得高于/低于50k的收入。为了使该数据集适应前面描述的情景，可以假设通过在线问卷/表格收集该年龄，本国等，我们需要预测用户是否实时获得高/低收入。如果收入高，那么我们会立即给他们打电话/给他们发电子邮件。然后，在_N个_新观察之后，我们重新训练算法，同时我们继续预测新用户。<br><strong>解决方案</strong><br>图1是潜在解决方案的图示。为了实现这个解决方案，我们使用了<a href="https://github.com/dpkp/kafka-python" target="_blank" rel="noopener">Kafka-Python</a>（可以在<a href="https://github.com/dpkp/kafka-python" target="_blank" rel="noopener">这里</a>找到一个很好的教程），以及<a href="https://lightgbm.readthedocs.io/en/latest/" target="_blank" rel="noopener">LightGBM</a>和<a href="https://github.com/hyperopt/hyperopt" target="_blank" rel="noopener">Hyperopt</a>或<a href="https://github.com/HunterMcGushion/hyperparameter_hunter" target="_blank" rel="noopener">HyperparameterHunter</a>。<br><br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1552644337722-6e53ed5f-2e63-41eb-bddd-1d1968e90f10.png#align=left&amp;display=inline&amp;height=443&amp;name=1___golwnXpxecbplKvGqlPA.png&amp;originHeight=594&amp;originWidth=1000&amp;size=180599&amp;status=done&amp;width=746" alt="1___golwnXpxecbplKvGqlPA.png"><br>图1. <strong>实时预测ML管道</strong>。以下提供完整描述<br>我们将在本练习中使用的唯一Python“局外人”是<a href="https://kafka.apache.org/" target="_blank" rel="noopener">Apache-Kafka</a>（我们将使用python API Kafka-Python，但仍然需要在您的系统中安装Kafka）。如果你在Mac上，只需使用Homebrew：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install kafka</span><br></pre></td></tr></table></figure>
-<p>这也将安装zookeeper依赖项。<br>如前所述，我们使用了Adult数据集。这是因为我们的目的是说明潜在的ML管道并提供有用的代码，同时保持相对简单。但请注意，此处描述的管道原则上与数据无关。当然，预处理将根据数据的性质而改变，但如果不相同，管道组件将保持相似。<br><strong>初始化实验</strong><br>您可以在我们的<a href="https://github.com/jrzaurin/ml_pipelines" target="_blank" rel="noopener">仓库中</a>找到用于此帖子的代码（以及更多）。在那里，有一个名为的脚本<code>initialize.py</code> 。该脚本将下载数据集，设置目录结构，预处理数据，在训练数据集上训练初始模型并优化该模型的超参数。在现实世界中，这将对应于通常的实验阶段和离线训练初始算法的过程。<br>在这篇文章中，我们希望主要关注管道和相应的组件而不是ML。尽管如此，让我们简单地提一下我们在本练习中使用的ML工具。<br>鉴于我们正在使用的数据集，数据预处理非常简单。我们编写了一个名为的自定义类<code>[FeatureTools](https://github.com/jrzaurin/ml_pipelines/blob/master/utils/feature_tools.py)</code>，可以<code>utils</code>在repo 中的模块中找到。这个类有<code>.fit</code>和  <code>.transform</code>方法将标准化/缩放数字特征，编码分类特征并生成我们称之为“交叉列”，这是两个（或更多）分类特征之间的笛卡尔积的结果。<br>处理完数据后，我们使用LightGBM将模型与Hyperopt或HyperparameterHunter相匹配，以执行超参数优化。可以在<code>train</code>模块中找到与此任务相关的代码，其中可以找到两个脚本<code>[train_hyperop](https://github.com/jrzaurin/ml_pipelines/blob/master/train/train_hyperopt.py).py</code>和<code>[train_hyperparameterhunter](https://github.com/jrzaurin/ml_pipelines/blob/master/train/train_hyperparameterhunter.py).py</code> 。<br>我们可能会在python（<a href="https://scikit-optimize.github.io/" target="_blank" rel="noopener">Skopt</a>，Hyperopt和HyperparameterHunder）中编写一个单独的帖子来比较超参数优化包，但是现在，请知道：如果你想要速度，那么使用Hyperopt。如果您不关心速度并且想要详细跟踪优化例程，请使用HyperparameterHunter。用<a href="https://www.linkedin.com/in/huntermcgushion/" target="_blank" rel="noopener">Hunter</a> McGushion 的话来说，包装的创造者：</p>
-<blockquote>
-<p><em>“长期以来，超参数优化一直是一个耗时的过程，只是指向了进一步优化的方向，然后你基本上不得不重新开始。”</em></p>
-</blockquote>
-<p>HyperparameterHunter就是为了解决这个问题，它做得非常好。目前，该软件包是建立在Skopt之上的，这就是为什么它比Hyperopt慢得多。但是，我知道有人努力将Hyperopt作为HyperparameterHunter的另一个后端包含在内。当发生这种情况时，不会有任何争议，HyperparameterHunter应该是您的首选工具。<br>尽管如此，如果有人感兴趣，我在回购中包含了一个<a href="https://github.com/jrzaurin/ml_pipelines/blob/master/notebooks/skopt_vs_hyperopt.ipynb" target="_blank" rel="noopener">笔记本</a>，比较了Skopt和Hyperopt的表现。<br>让我们现在转到管道流程本身。<br><strong>App Messages Producer</strong><br>这意味着生产管道的哪个部分可能看起来相对简单。因此，我们直接使用Adult数据集生成消息（JSON对象）。<br>在现实世界中，人们将拥有许多可以生成事件的服务。从那里，有一个选项。这些事件中的信息可能存储在数据库中，然后通过常规查询进行汇总。从那里，Kafka服务将消息发布到管道中。或者，这些事件中的所有信息可以直接发布到不同的主题中，“聚合服务”可以将所有信息存储在单个消息中，然后将其发布到管道中（当然，也可以组合使用他们俩）。<br>例如，可能允许用户通过Facebook或Google注册，收集他们的姓名和电子邮件地址。然后他们可能会被要求填写调查问卷，我们会继续收集他们进展的事件。在此过程中的某个时刻，所有这些事件将在单个消息中聚合，然后通过Kafka生产者发布。这篇文章中的管道将从聚合了所有相关信息的点开始。我们这里的消息是Adult数据集中的单个观察。下面我们将包含消息内容的示例：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">’&#123;“age”:<span class="number">25</span>,”workclass”:”Private”,”fnlwgt”:<span class="number">226802</span>,”education”:”<span class="number">11</span>th”,”marital_status”:”Never-married”,”occupation”:”Machine-op-inspct”,”relationship”:”Own-child”,”race”:”Black”,”gender”:”Male”,”capital_gain”:<span class="number">0</span>,”capital_loss”:<span class="number">0</span>,”hours_per_week”:<span class="number">40</span>,”native_country”:”United-States”,”income_bracket”:”&lt;=<span class="number">50</span>K.”&#125;’</span><br></pre></td></tr></table></figure>
-<p><a href="https://github.com/jrzaurin/ml_pipelines/blob/master/sample_app.py" target="_blank" rel="noopener">App / Service</a>的核心（图1中最灰色，最左边的框）是下面的代码段：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">df_test = pd.read_csv(PATH/<span class="string">'adult.test'</span>)</span><br><span class="line">df_test[<span class="string">'json'</span>] = df_test.apply(<span class="keyword">lambda</span> x: x.to_json(), axis=<span class="number">1</span>)</span><br><span class="line">messages = df_test.json.tolist()</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">start_producing</span><span class="params">()</span>:</span></span><br><span class="line">	producer = KafkaProducer(bootstrap_servers=KAFKA_HOST)</span><br><span class="line">	<span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">200</span>):</span><br><span class="line">		message_id = str(uuid.uuid4())</span><br><span class="line">		message = &#123;<span class="string">'request_id'</span>: message_id, <span class="string">'data'</span>: json.loads(messages[i])&#125;</span><br><span class="line"></span><br><span class="line">		producer.send(<span class="string">'app_messages'</span>, json.dumps(message).encode(<span class="string">'utf-8'</span>))</span><br><span class="line">		producer.flush()</span><br><span class="line"></span><br><span class="line">		print(<span class="string">"\033[1;31;40m -- PRODUCER: Sent message with id &#123;&#125;"</span>.format(message_id))</span><br><span class="line">		sleep(<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">start_consuming</span><span class="params">()</span>:</span></span><br><span class="line">	consumer = KafkaConsumer(<span class="string">'app_messages'</span>, bootstrap_servers=KAFKA_HOST)</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">for</span> msg <span class="keyword">in</span> consumer:</span><br><span class="line">		message = json.loads(msg.value)</span><br><span class="line">		<span class="keyword">if</span> <span class="string">'prediction'</span> <span class="keyword">in</span> message:</span><br><span class="line">			request_id = message[<span class="string">'request_id'</span>]</span><br><span class="line">			print(<span class="string">"\033[1;32;40m ** CONSUMER: Received prediction &#123;&#125; for request id &#123;&#125;"</span>.format(message[<span class="string">'prediction'</span>], request_id))</span><br></pre></td></tr></table></figure>
-<p>请注意，我们使用测试数据集来生成消息。这是因为我们设计了一个尽可能与真实世界相似的场景（在一定限度内）。考虑到这一点，我们使用训练数据集来构建初始<code>model</code>和<code>dataprocessor</code>对象。然后，我们使用测试数据集生成消息，目的是模拟随时间接收新信息的过程。<br>关于上面的代码片段，简单地说，生产者会将消息发布到管道（<code>start_producing()</code>）中并使用带有最终预测（<code>start_consuming()</code>）的消息。与我们在此描述的管道不同的方式不包括流程的开始（事件收集和聚合），我们也跳过最后，即如何处理最终预测。尽管如此，我们还是简要讨论了一些用例，这些用例可能会在帖子结尾处有用，这将说明最后阶段。<br>实际上，除了忽略过程的开始和结束之外，我们认为这条管道在现实世界中可以使用的管道相当好。因此，我们希望我们的仓库中包含的代码对您的某些项目有用。<br><strong>预测者和训练师</strong><br>该实现的主要目标是实时运行算法并在<strong>不</strong>停止预测服务的<strong>情况下</strong>每_N次_观察重新训练它。为此，我们实现了两个组件，<strong>Predictor</strong>（在repo中）和<strong>Trainer</strong>（）。<code>[predictor](https://github.com/jrzaurin/ml_pipelines/blob/master/predictor.py).py`</code><a href="https://github.com/jrzaurin/ml_pipelines/blob/master/trainer.py" target="_blank" rel="noopener">trainer</a>.py<code>&lt;br /&gt;现在让我们逐一描述图1中显示的数字，使用代码片段作为我们的指南。请注意，下面的过程假设有一个运行</code>initialize.py<code>脚本，因此初始文件</code>model.p<code>和</code>dataprocessor.p`文件存在于相应的目录中。另外，请强调下面的代码包含Predictor和Trainer的核心。有关完整代码，请参阅<a href="https://github.com/jrzaurin/ml_pipelines" target="_blank" rel="noopener">回购</a>。<br><strong>预报器</strong><br>Predictor代码的核心如下所示</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">start</span><span class="params">(model_id, messages_count, batch_id)</span>:</span></span><br><span class="line">	<span class="keyword">for</span> msg <span class="keyword">in</span> consumer:</span><br><span class="line">		message = json.loads(msg.value)</span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span> is_retraining_message(msg):</span><br><span class="line">			model_fname = <span class="string">'model_&#123;&#125;_.p'</span>.format(model_id)</span><br><span class="line">			model = reload_model(MODELS_PATH/model_fname)</span><br><span class="line">			print(<span class="string">"NEW MODEL RELOADED &#123;&#125;"</span>.format(model_id))</span><br><span class="line"></span><br><span class="line">		<span class="keyword">elif</span> is_application_message(msg):</span><br><span class="line">			request_id = message[<span class="string">'request_id'</span>]</span><br><span class="line">			pred = predict(message[<span class="string">'data'</span>], column_order)</span><br><span class="line">			publish_prediction(pred, request_id)</span><br><span class="line"></span><br><span class="line">			append_message(message[<span class="string">'data'</span>], MESSAGES_PATH, batch_id)</span><br><span class="line">			messages_count += <span class="number">1</span></span><br><span class="line">			<span class="keyword">if</span> messages_count % RETRAIN_EVERY == <span class="number">0</span>:</span><br><span class="line">				model_id = (model_id + <span class="number">1</span>) % (EXTRA_MODELS_TO_KEEP + <span class="number">1</span>)</span><br><span class="line">				send_retrain_message(model_id, batch_id)</span><br><span class="line">				batch_id += <span class="number">1</span></span><br></pre></td></tr></table></figure>
-<p><strong>（1a）</strong><code>predictor.py</code>片段中的第12行。预测器将从应用程序/服务接收消息，它将进行数据处理并在接收消息时实时运行模型。所有这些都是使用函数中的现有对象<code>dataprocessor</code>和<code>model</code>对象发生的<code>predict</code>。<br><strong>（1b）</strong><code>predictor.py</code>片段中的第13行。一旦我们运行预测，Predictor将发布<code>publish_prediction()</code>最终将由App / Service接收的result（）。<br><strong>（2）</strong><code>predictor.py</code>片段中的第17-20行。每条<code>RETRAIN_EVERY</code>消息，Predictor都会发布一条“ <em>重新训练</em> ”消息（<code>send_retrain_message()</code>），由培训师阅读。<br><strong>训练者</strong></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">start</span><span class="params">()</span>:</span></span><br><span class="line">	consumer = KafkaConsumer(RETRAIN_TOPIC, bootstrap_servers=KAFKA_HOST)</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> msg <span class="keyword">in</span> consumer:</span><br><span class="line">		message = json.loads(msg.value)</span><br><span class="line">		<span class="keyword">if</span> <span class="string">'retrain'</span> <span class="keyword">in</span> message <span class="keyword">and</span> message[<span class="string">'retrain'</span>]:</span><br><span class="line">			model_id = message[<span class="string">'model_id'</span>]</span><br><span class="line">			batch_id = message[<span class="string">'batch_id'</span>]</span><br><span class="line">			message_fname = <span class="string">'messages_&#123;&#125;_.txt'</span>.format(batch_id)</span><br><span class="line">			messages = MESSAGES_PATH/message_fname</span><br><span class="line"></span><br><span class="line">			train(model_id, messages)</span><br><span class="line">			publish_traininig_completed(model_id)</span><br></pre></td></tr></table></figure>
-<p><strong>（3）</strong><code>trainer.py</code>片段中的第12行。培训师将阅读该消息并使用新的累积数据集（<code>train()</code>）触发重新训练过程。<br>这是原始数据集加上<code>RETRAIN_EVERY</code>新的观察结果。列车功能将独立于<strong>1a</strong>和<strong>1b中</strong>描述的过程运行<em>“初始化实验”</em><strong> </strong>部分中描述的整个过程。换句话说，训练者将重新训练模型，而预测器在消息到达时保持预测。<br>在这个阶段值得一提的是，在这里我们发现我们的实现与将在现实世界中使用的实现之间存在进一步的差异。在我们的实现中，一旦处理了<code>RETRAIN_EVERY</code>多个观察结果，就可以重新训练算法。这是因为我们使用Adult测试数据集来生成消息，其中包括目标列（“ _income_braket_ ”）。在真实的单词中，基于算法输出所采取的动作的真实结果通常在算法运行之后不容易访问，但是一段时间之后。在那种情况下，另一个过程应该是收集真实的结果，一旦收集的真实结果的数量等于<code>RETRAIN_EVERY</code>算法将被重新训练。<br>例如，假设此管道实现了电子商务的实时推荐系统。我们已经离线训练了一个推荐算法，目标列是我们的用户喜欢我们建议的分类表示：0,1,2和3对于不喜欢或与项目交互的用户，喜欢该项目（例如点击像按钮），将项目添加到他们的篮子，并分别购买该项目。当系统提供建议时，我们仍然不知道用户最终会做什么。<br>因此，随着用户信息在网站（或应用程序）中导航时收集和存储用户信息，第二个过程应该收集我们建议的最终结果。只有当两个进程都收集了<code>RETRAIN_EVERY</code>消息和结果时，才会对算法进行重新训练。<br><strong>（4）</strong><code>trainer.py</code>片段中的第13行。重新训练完成后，将发布带有相应信息的消息（<code>published_training_completed()</code>）。<br><strong>（5）</strong><code>predictor.py</code>片段中的第5-8行。Predictor的消费者订阅了两个主题：<code>[‘app_messages’, ‘retrain_topic’]</code>。一旦它通过“retrain_topic”接收到重新训练完成的信息，它将加载新模型并像往常一样保持过程，而不会在过程中的任何时间停止。<br><a name="647586e9"></a></p>
-<h3 id="如何运行管道"><a href="#如何运行管道" class="headerlink" title="如何运行管道"></a>如何运行管道</h3><p>在配套仓库中，我们已经包含了如何运行管道（本地）的说明。其实很简单。</p>
-<ol>
-<li>启动zookeper和kafka：</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ brew services start zookeeper</span><br><span class="line">==&gt; Successfully started `zookeeper` (label: homebrew.mxcl.zookeeper)</span><br><span class="line">$ brew services start kafka</span><br><span class="line">==&gt; Successfully started `kafka` (label: homebrew.mxcl.kafka)</span><br></pre></td></tr></table></figure>
-<p>2.运行initialize.py：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python initialize.py</span><br></pre></td></tr></table></figure>
-<p>3.在终端＃1中运行预测器（或训练器）：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python predictor.py</span><br></pre></td></tr></table></figure>
-<p>4.在终端＃2中运行训练器（或预测器）：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python trainer.py</span><br></pre></td></tr></table></figure>
-<p>5.在终端＃3中运行示例应用程序</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python samplea_app.py</span><br></pre></td></tr></table></figure>
-<p>然后，一旦处理了N条消息，您应该看到如下内容：</p>
-<p><strong>右上方终端</strong>：我们重新训练了模型，Hyperopt已经进行了10次评估（在实际练习中，这些应该是几百次）。<strong>左上方终端</strong>：一旦对模型进行了重新训练和优化，我们就会看到预测器如何加载新模型（在新LightGBM版本的恼人警告消息之后）。<strong>底部终端</strong>：服务照常进行。<br><br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1552645079397-f02448b1-2084-4a1b-b5d5-0b51d8af3dc2.png#align=left&amp;display=inline&amp;height=557&amp;name=1_xIT4U_OODiPtDuiPsCbyXw.png&amp;originHeight=746&amp;originWidth=1000&amp;size=347205&amp;status=done&amp;width=746" alt="1_xIT4U_OODiPtDuiPsCbyXw.png"></p>
-<p>一些潜在的用例<br>以下是（很多）其他一些潜在用例。<br>实时调整在线旅程<br>让我们考虑出售一些商品的电子商务。当用户浏览网站时，我们会收集有关其行为信息的活动。我们之前已经培训了一种算法，我们知道在10次交互之后，我们可以很好地了解客户是否最终会购买我们的产品。此外，我们也知道他们可能购买的产品可能会很昂贵。因此，我们希望“在旅途中”定制他们的旅程，以促进他们的购物体验。这里的定制可能意味着什么，从缩短行程到改变页面布局。<br>2. 电子邮件/致电您的客户<br>与之前的用例类似，我们现在假设客户决定停止旅程（无聊，缺乏时间，可能太复杂等）。如果算法预测该客户具有很大的潜力，我们可以立即使用像本文所述的管道，或者使用受控延迟，发送电子邮件或调用它们。<br>下一步<br>记录和监控：在即将发布的帖子中，我们将通过MLFlow在管道记录和监控功能中插入。与HyperparameterHunter一起，该解决方案将自动跟踪模型性能和超参数优化，同时提供可视化监控。<br>流量管理：此处描述的解决方案以及相应的代码已经过设计，因此可以在笔记本电脑中轻松地在本地和手动运行。然而，人们会认为在现实生活中，这将需要大规模运行云，而不是手动（请）。在那个阶段，如果我们可以使用涵盖整个机器学习工作流程的完全托管服务，那将是理想的，因此我们不需要关心维护服务，版本控制等。为此目的，我们将使用Sagemaker，它是构建的正是为了这个目的。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/03/15/yuque/将ML投入生产：在Python中使用Apache Kafka/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
     <article id="post-yuque/使用MLflow赋予Spark功能" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1316,6 +1222,128 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2018/12/21/yuque/F-35是1.4万亿美元的国家灾难/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/眼底水肿病变区域自动分割" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/12/21/yuque/眼底水肿病变区域自动分割/">眼底水肿病变区域自动分割</a>
+    </h1>
+  
+
+        
+        <a href="/2018/12/21/yuque/眼底水肿病变区域自动分割/" class="archive-article-date">
+  	<time datetime="2018-12-21T01:28:40.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-21</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><a href="https://github.com/ShawnBIT/AI-Challenger-Retinal-Edema-Segmentation" target="_blank" rel="noopener">链接</a><br><a name="4np7ea"></a></p>
+<h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a><a href="#4np7ea"></a>背景</h3><ul>
+<li><p>视网膜水肿是一种眼疾，可导致视力模糊，影响正常生活。</p>
+</li>
+<li><p>OCT（光学相干断层扫描）可用于帮助医生判断视网膜水肿。</p>
+</li>
+<li><p>早期发现水肿症状可以在疾病的治疗中发挥关键作用。</p>
+</li>
+<li><p>我们的任务是设计算法，以自动检测视网膜水肿的类型，并根据OCT图像划分视网膜水肿区域。</p>
+</li>
+</ul>
+<p><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545362517258-ac147a70-c630-4ba9-9596-429ce59aaf05.png#width=323" alt><br><a name="tevkbe"></a></p>
+<h3 id="数据统计信息"><a href="#数据统计信息" class="headerlink" title="数据统计信息"></a><a href="#tevkbe"></a>数据统计信息</h3><p><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545363237135-d6a8f54b-194f-41e9-8998-42c2794fd373.png#width=745" alt><br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545363261530-b1e78b3c-8896-4cf1-b15a-3f6656d5c9b7.png#width=634" alt><br><a name="2obuzk"></a></p>
+<h3 id="数据可视化"><a href="#数据可视化" class="headerlink" title="数据可视化"></a><a href="#2obuzk"></a>数据可视化</h3><p><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545363314506-c30f03d8-0647-4d55-ad77-3398e87c36a3.png#width=566" alt></p>
+<ul>
+<li><p>视网膜边缘弯曲</p>
+</li>
+<li><p>病变之间的包含关系</p>
+</li>
+</ul>
+<p><a name="1xo7et"></a></p>
+<h3 id="数据处理"><a href="#数据处理" class="headerlink" title="数据处理"></a><a href="#1xo7et"></a>数据处理</h3><p>堆叠上部和下部切片以形成三通道输入<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545363525794-cfdcff1f-fcfa-45bf-a7bd-86330b40bd22.png#width=826" alt><br>正则化<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545363568658-bfc944e3-aee5-41cb-9e36-87604ccbc425.png#width=826" alt><br>数据增强（仅随机水平翻转）<br><a name="gpzgyi"></a></p>
+<h3 id="问题和挑战"><a href="#问题和挑战" class="headerlink" title="问题和挑战"></a><a href="#gpzgyi"></a>问题和挑战</h3><p>这两项任务（分割和检测）如何相互促进？ •多任务学习框架<br><br><br><br>多尺度的视网膜水肿病变<br><br>•UNet和UNet ++<br><br>三种视网膜水肿样本不平衡<br><br>•指数对数损失<br><br>如何扩大感受野以检测边缘弯曲？<br><br>•扩张模块</p>
+<p><a name="xtsmsg"></a></p>
+<h3 id="基线"><a href="#基线" class="headerlink" title="基线"></a><a href="#xtsmsg"></a>基线</h3><p>分段 -  UNet<br><br>•下采样16×<br><br>•频道：[16,32,64,128,256]•输入：原始图像<br>检测 -  ResNet18<br><br>•调整大小224 * 224<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545363778350-5ef98156-3f52-4bc4-81f7-ac1ff58bd5cb.png#width=826" alt><br><a name="12ngly"></a></p>
+<h3 id="多任务框架"><a href="#多任务框架" class="headerlink" title="多任务框架"></a><a href="#12ngly"></a>多任务框架</h3><p><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545363824351-0b2aef87-4aa5-4d54-9da2-950238d08bc2.png#width=826" alt></p>
+<ul>
+<li><p>共同学习分割和检测</p>
+</li>
+<li><p>减少时间和计算成本</p>
+</li>
+<li><p>改善两项任务的效果</p>
+</li>
+</ul>
+<p><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545363883446-cddecdd3-133c-4d7a-a48f-7ee3ce3c782e.png#width=826" alt><br><a name="45hwtb"></a></p>
+<h3 id="UNet-和DeepSupervision"><a href="#UNet-和DeepSupervision" class="headerlink" title="UNet ++和DeepSupervision"></a><a href="#45hwtb"></a>UNet ++和DeepSupervision</h3><ul>
+<li><p>密集的未来联系</p>
+</li>
+<li><p>深度监督</p>
+</li>
+<li><p>更有效地融合低级和高级功能</p>
+</li>
+</ul>
+<p><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545363984175-b5734e15-36a3-4a26-b548-247f21e500b5.png#width=826" alt><br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545364004491-f0fd9292-3bf9-4d45-b764-712c129650ff.png#width=826" alt><br><a name="mcxadi"></a></p>
+<h3 id="Exponential-Logarithmic-Loss"><a href="#Exponential-Logarithmic-Loss" class="headerlink" title="Exponential Logarithmic Loss"></a><a href="#mcxadi"></a>Exponential Logarithmic Loss</h3><p><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545364043982-9f418634-6d4e-421e-8ed9-0b5bdd78898b.png#width=593" alt><br>x : pixel position d il : Kronecker delta<br>i : label e : pseudocount for<br>l : ground truth label at x<br>p i ( x ) : Softmax probability which acts as the portion of pixel<br>x owned by label i<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545364142210-f09d6809-e1cf-428e-a8ec-e1e7a750d02a.png#width=462" alt><br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545364180115-716d53bf-c3dd-46fb-bc90-f18e23866c24.png#width=826" alt><br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545364198735-685fb3a5-9739-4820-9578-63357d19b78b.png#width=771" alt><br>小物件怎么样？<br><br>细分？（2,3级）<br><a name="ymmopw"></a></p>
+<h3 id="扩张模块"><a href="#扩张模块" class="headerlink" title="扩张模块"></a><a href="#ymmopw"></a>扩张模块</h3><p>感受野计算公式<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545364372343-71750b48-5889-4c2f-8d71-4ba7d15c8b40.png#width=504" alt><br>UNet编码器的接收域<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545364421357-aae861a2-0977-4ad8-9b07-c0f7af8ab715.png#width=398" alt><br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545364444046-68a08360-b0a9-4c89-b14d-85c7707c6eab.png#width=826" alt><br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545364472055-2f2fcbe0-1c8c-4719-bcab-3d7860331235.png#width=826" alt><br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545364500288-3ff90cf8-acdc-47e6-80d7-9df1b0f98cb0.png#width=778" alt><br>大对象怎么样？<br><br>细分？（第1类）<br><a name="hvmwoz"></a></p>
+<h3 id="实验摘要"><a href="#实验摘要" class="headerlink" title="实验摘要"></a><a href="#hvmwoz"></a>实验摘要</h3><p><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545364586336-051b209a-18bc-4c1f-959a-656c8b1ab2e2.png#width=826" alt><br>Memory : 7.3 G(batch=8), Inference time : 9.5 s/patient<br><a name="d14kdy"></a></p>
+<h3 id="可视化"><a href="#可视化" class="headerlink" title="可视化"></a><a href="#d14kdy"></a>可视化</h3><p><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545364667315-bb12e09f-92b4-4d6c-9427-10ce7851f341.png#width=826" alt><br><a name="f7g5bu"></a></p>
+<h3 id="未来工作"><a href="#未来工作" class="headerlink" title="未来工作"></a><a href="#f7g5bu"></a>未来工作</h3><ul>
+<li><p>检测框架（Mask R-CNN）</p>
+</li>
+<li><p>3D语义分割模型</p>
+</li>
+<li><p>在骨干中使用Res-block或Dense-block</p>
+</li>
+<li><p>考虑病变的关系</p>
+</li>
+</ul>
+<p><a name="db4gcg"></a></p>
+<h3 id="结论"><a href="#结论" class="headerlink" title="结论"></a><a href="#db4gcg"></a>结论</h3><p>构建端到端的多任务框架，可以同时检测和分割视网膜水肿病变。<br><br>•使用最新的UNet ++模型更好地集成高级和低级功能。<br><br>使用新的指数对数损失函数来增强两种类型的小病变的分割。<br><br>•引入扩张卷积模块，显着增加模型的感受野。<br><br>只有随机水平翻转数据增强，没有后期处理。<br><br>•测试装置上单个模型的骰子为0.736。 测试集上的融合模型的骰子为0.744，检测AUC为0.986。 另外，当我们设置批次为8时，推理阶段的记忆为7.3G，每个患者的推理时间为9.5s。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/12/21/yuque/眼底水肿病变区域自动分割/">展开全文 >></a>
         </p>
       
 
