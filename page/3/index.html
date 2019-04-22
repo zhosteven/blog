@@ -142,6 +142,127 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-yuque/如何使用良好的软件工程实践设置PySpark环境以进行开发" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/03/18/yuque/如何使用良好的软件工程实践设置PySpark环境以进行开发/">如何使用良好的软件工程实践设置PySpark环境以进行开发</a>
+    </h1>
+  
+
+        
+        <a href="/2019/03/18/yuque/如何使用良好的软件工程实践设置PySpark环境以进行开发/" class="archive-article-date">
+  	<time datetime="2019-03-18T03:16:24.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-18</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在本文中，我们将讨论如何设置我们的开发环境以创建高质量的python代码以及如何自动执行一些繁琐的任务来加速部署。<br>我们将介绍以下步骤：</p>
+<ul>
+<li>使用<a href="https://pipenv.readthedocs.io/en/latest/" target="_blank" rel="noopener"><strong>pipenv</strong></a>在隔离的虚拟环境中设置我们的依赖<a href="https://pipenv.readthedocs.io/en/latest/" target="_blank" rel="noopener"><strong>项</strong></a></li>
+<li>如何为多个作业设置项目结构</li>
+<li>如何运行pyspark工作</li>
+<li>如何使用<a href="https://opensource.com/article/18/8/what-how-makefile" target="_blank" rel="noopener"><strong>Makefile</strong></a><strong> </strong>自动执行开发步骤</li>
+<li>如何使用<a href="http://flake8.pycqa.org/en/latest/" target="_blank" rel="noopener"><strong>flake8</strong></a>测试代码的质量<a href="http://flake8.pycqa.org/en/latest/" target="_blank" rel="noopener"></a></li>
+<li>如何使用<a href="https://pypi.org/project/pytest-spark/" target="_blank" rel="noopener"><strong>pytest-spark</strong></a>为PySpark应用程序运行单元测试<a href="https://pypi.org/project/pytest-spark/" target="_blank" rel="noopener"></a></li>
+<li>运行测试覆盖率，看看我们是否使用<a href="https://pypi.org/project/pytest-cov/" target="_blank" rel="noopener"><strong>pytest-cov</strong></a>创建了足够的单元测试<a href="https://pypi.org/project/pytest-cov/" target="_blank" rel="noopener"></a><br><a name="54e5af6c"></a><h3 id="第1步：设置虚拟环境"><a href="#第1步：设置虚拟环境" class="headerlink" title="第1步：设置虚拟环境"></a>第1步：设置虚拟环境</h3>虚拟环境有助于我们将特定应用程序的依赖关系与系统的整体依赖关系隔离开来。这很好，因为我们不会涉及现有库的依赖性问题，并且在单独的系统（例如docker容器或服务器）上安装或卸载它们更容易。对于此任务，我们将使用<strong>pipenv。</strong><br>要在mac os系统上安装它，例如运行：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install pipenv</span><br></pre></td></tr></table></figure>
+<p>要为应用程序声明我们的依赖项（库），我们需要在项目的路径路径中创建一个<strong>Pipfile</strong>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[[source]]</span><br><span class="line">url = &apos;https://pypi.python.org/simple&apos;</span><br><span class="line">verify_ssl = true</span><br><span class="line">name = &apos;pypi&apos;</span><br><span class="line">[requires]</span><br><span class="line">python_version = &quot;3.6&quot;</span><br><span class="line">[packages]</span><br><span class="line">flake8 = &quot;*&quot;</span><br><span class="line">pytest-spark = &quot;&gt;=0.4.4&quot;</span><br><span class="line">pyspark = &quot;&gt;=2.4.0&quot;</span><br><span class="line">pytest-cov = &quot;*&quot;</span><br></pre></td></tr></table></figure>
+<p>这里有三个组件。在<strong>[[source]]</strong>标签中，我们声明了下载所有软件包的<strong>url</strong>，在<strong>[requires]中</strong>我们定义了python版本，最后在<strong>[packages]</strong>中声明了我们需要的依赖项。我们可以将依赖项绑定到某个版本，或者使用<strong>“*”</strong>符号来获取最新版本。<br>要创建虚拟环境并激活它，我们需要在终端中运行两个命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pipenv --three install</span><br><span class="line">pipenv shell</span><br></pre></td></tr></table></figure>
+<p>一旦完成这一步，你应该看到你在一个新的venv中，让项目的名字出现在命令行的终端中（默认情况下，env采用项目的名称）：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(pyspark-project-template) host:project$</span><br></pre></td></tr></table></figure>
+<p>现在，您可以使用两个命令进出。<br>停用env并返回标准环境：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">deactivate</span><br></pre></td></tr></table></figure>
+<p>再次激活虚拟环境（您需要位于项目的根目录中）：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">source `pipenv --venv`/bin/activate</span><br></pre></td></tr></table></figure></p>
+<p><a name="bb546939"></a></p>
+<h3 id="第2步：项目结构"><a href="#第2步：项目结构" class="headerlink" title="第2步：项目结构"></a>第2步：项目结构</h3><p>该项目可以具有以下结构：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">pyspark-project-template</span><br><span class="line">    src/</span><br><span class="line">        jobs/   </span><br><span class="line">            pi/</span><br><span class="line">                __init__.py</span><br><span class="line">                resources/</span><br><span class="line">                    args.json</span><br><span class="line">            word_count/</span><br><span class="line">                __init__.py</span><br><span class="line">                resources/</span><br><span class="line">                    args.json</span><br><span class="line">                    word_count.csv</span><br><span class="line">        main.py</span><br><span class="line">    test/</span><br><span class="line">        jobs/</span><br><span class="line">            pi/</span><br><span class="line">                test_pi.py</span><br><span class="line">            word_count/</span><br><span class="line">                test_word_count.py</span><br></pre></td></tr></table></figure>
+<p>排除一些<strong>init</strong>.py文件以简化操作，但您可以在本教程末尾的github上找到完整项目的链接。我们基本上有源代码和测试。每个作业都分成一个文件夹，每个作业都有一个资源文件夹，我们在其中添加该作业所需的额外文件和配置。<br>在本教程中，我使用了两个经典示例 -  <strong>pi</strong>，生成最多小数的pi数和<strong>字数</strong>，以计算csv文件中的单词数。<br><a name="1b6fecdc"></a></p>
+<h3 id="第3步：使用spark-submit运行作业"><a href="#第3步：使用spark-submit运行作业" class="headerlink" title="第3步：使用spark-submit运行作业"></a>第3步：使用spark-submit运行作业</h3><p>我们先来看看<strong>main.py</strong>文件的样子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">if __name__ == &apos;__main__&apos;:</span><br><span class="line"></span><br><span class="line">    parser = argparse.ArgumentParser(description=&apos;My pyspark job arguments&apos;)</span><br><span class="line">    parser.add_argument(&apos;--job&apos;, type=str, required=True, dest=&apos;job_name&apos;,</span><br><span class="line">                        help=&apos;The name of the spark job you want to run&apos;)</span><br><span class="line">    parser.add_argument(&apos;--res-path&apos;, type=str, required=True, dest=&apos;res_path&apos;,</span><br><span class="line">                        help=&apos;Path to the jobs resurces&apos;)</span><br><span class="line"></span><br><span class="line">    args = parser.parse_args()</span><br><span class="line"></span><br><span class="line">    spark = SparkSession\</span><br><span class="line">        .builder\</span><br><span class="line">        .appName(args.job_name)\</span><br><span class="line">        .getOrCreate()</span><br><span class="line"></span><br><span class="line">    job_module = importlib.import_module(&apos;jobs.%s&apos; % args.job_name)</span><br><span class="line">    res = job_module.run(spark, get_config(args.res_path, args.job_name))</span><br><span class="line"></span><br><span class="line">    print(&apos;[JOB &#123;job&#125; RESULT]: &#123;result&#125;&apos;.format(job=args.job_name, result=res))</span><br></pre></td></tr></table></figure>
+<p>当我们运行我们的工作时，我们需要两个命令行参数：  <strong>- job</strong>，是我们想要运行的作业的名称（在例外pi或word_count中）和  <strong>- res-path</strong>，是作业的相对路径。我们需要第二个参数，因为spark需要知道我们资源的完整路径。在生产环境中，我们将代码部署在集群上，我们将资源转移到HDFS或S3，我们将使用该路径。<br>在进一步解释代码之前，我们需要提一下，我们必须压缩<strong>作业</strong>文件夹并将其传递给<strong>spark-submit</strong>语句<strong>。</strong>假设我们在项目的根目录中：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd src/ </span><br><span class="line">zip -r ../jobs.zip jobs/</span><br></pre></td></tr></table></figure>
+<p>这将使代码在我们的应用程序中作为模块提供。基本上在<strong>第16行的main.py中，</strong>我们以编程方式导入<strong>作业</strong>模块。<br>我们的作业<strong>pi</strong>和<strong>word_count</strong>都有一个<strong>run</strong>函数，所以我们只需要运行这个函数来启动这个作业（<strong>main.py中的第17行）。</strong>我们还在那里传递了工作的配置。<br>让我们看一下<strong>word_count</strong>作业，进一步了解这个例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">from operator import add</span><br><span class="line"></span><br><span class="line">def get_keyval(row):</span><br><span class="line">    words = filter(lambda r: r is not None, row)</span><br><span class="line">    return [[w.strip().lower(), 1] for w in words]</span><br><span class="line"></span><br><span class="line">def run(spark, config):</span><br><span class="line">    df = spark.read.csv(config[&apos;relative_path&apos;] + config[&apos;words_file_path&apos;])</span><br><span class="line">    mapped_rdd = df.rdd.flatMap(lambda row: get_keyval(row))</span><br><span class="line">    counts_rdd = mapped_rdd.reduceByKey(add)</span><br><span class="line">    return counts_rdd.collect()</span><br></pre></td></tr></table></figure>
+<p>此代码在<strong>word_count</strong>文件夹的<strong><strong>init</strong>.py</strong>文件中定义。我们在这里可以看到，我们使用两个配置参数来读取资源文件夹中的csv文件：相对路径和csv文件的位置。其余的代码只计算单词，所以我们不会在这里详细介绍。值得一提的是，每个作业在resources文件夹中都有一个<strong>args.json</strong>文件。这里我们实际定义了传递给作业的配置。这是<strong>word_count</strong>作业的配置文件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;words_file_path&quot;: &quot;/word_count/resources/word_count.csv&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>所以我们现在有了所有细节来运行我们的<strong>spark-submit</strong>命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">spark-submit --py-files jobs.zip src/main.py --job word_count --res-path /your/path/pyspark-project-template/src/jobs</span><br></pre></td></tr></table></figure>
+<p>要运行另一个作业<strong>pi，</strong>我们只需要更改<strong>- job</strong>标志的参数  。<br><a name="b336e1a0"></a></p>
+<h3 id="第4步：编写单元测试，并使用覆盖率运行它们"><a href="#第4步：编写单元测试，并使用覆盖率运行它们" class="headerlink" title="第4步：编写单元测试，并使用覆盖率运行它们"></a>第4步：编写单元测试，并使用覆盖率运行它们</h3><p>要为pyspark应用程序编写测试，我们使用<strong>pytest-spark</strong>，一个非常易于使用的模块。<br>该<strong>WORD_COUNT</strong>工作单元测试：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">from src.jobs.word_count import get_keyval, run</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def test_get_keyval():</span><br><span class="line">    words=[&apos;this&apos;, &apos;are&apos;, &apos;words&apos;, &apos;words&apos;]</span><br><span class="line">    expected_results=[[&apos;this&apos;, 1], [&apos;are&apos;, 1], [&apos;words&apos;, 1], [&apos;words&apos;, 1]]</span><br><span class="line"></span><br><span class="line">    assert expected_results == get_keyval(words)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def test_word_count_run(spark_session):</span><br><span class="line">    expected_results = [(&apos;one&apos;, 1), (&apos;two&apos;, 1), (&apos;three&apos;, 2), (&apos;four&apos;, 2), (&apos;test&apos;, 1)]</span><br><span class="line">    conf = &#123;</span><br><span class="line">        &apos;relative_path&apos;: &apos;/your/path/pyspark-project-template/src/jobs&apos;,</span><br><span class="line">        &apos;words_file_path&apos;: &apos;/word_count/resources/word_count.csv&apos;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    assert expected_results == run(spark_session, conf)</span><br></pre></td></tr></table></figure>
+<p>我们需要从<strong>src</strong>模块导入我们想要测试的函数。这里更有趣的部分是我们如何进行<strong>test_word_count_run。</strong>我们可以看到没有初始化的spark会话，我们只是在测试中将其作为参数接收。这要归功于<strong>pytest-spark</strong>模块，因此我们可以专注于编写测试，而不是编写样板代码。<br>接下来让我们讨论一下代码覆盖率。我们怎么知道我们是否编写了足够的单元测试？很简单，我们运行测试覆盖工具，告诉我们尚未测试的代码。对于python，我们可以使用<strong>pytest-cov</strong>模块。要使用代码覆盖率运行所有测试，我们必须运行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pytest --cov=src test/jobs/</span><br></pre></td></tr></table></figure>
+<p>where  <strong>- cov</strong> flag告诉pytest在哪里检查覆盖范围。<br>测试覆盖率结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">---------- coverage: platform darwin, python 3.7.2-final-0 -----------</span><br><span class="line">Name                              Stmts   Miss  Cover</span><br><span class="line">-----------------------------------------------------</span><br><span class="line">src/__init__.py                       0      0   100%</span><br><span class="line">src/jobs/__init__.py                  0      0   100%</span><br><span class="line">src/jobs/pi/__init__.py              11      0   100%</span><br><span class="line">src/jobs/word_count/__init__.py       9      0   100%</span><br><span class="line">-----------------------------------------------------</span><br><span class="line">TOTAL                                20      0   100%</span><br></pre></td></tr></table></figure>
+<p>我们的测试覆盖率是100％，但是等一下，缺少一个文件！为什么<strong>main.py</strong>没有在那里列出？<br>如果我们认为我们有不需要测试的python代码，我们可以将它从报告中排除。为此，我们需要在项目的根目录中创建一个  <strong>.coveragerc</strong>文件。对于此示例，它看起来像这样：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[run]</span><br><span class="line">omit = src/main.py</span><br></pre></td></tr></table></figure>
+<p><a name="3760f981"></a></p>
+<h3 id="第5步：运行静态代码分析"><a href="#第5步：运行静态代码分析" class="headerlink" title="第5步：运行静态代码分析"></a>第5步：运行静态代码分析</h3><p>很好，我们有一些代码，我们可以运行它，我们有良好的覆盖率的单元测试。我们做对了吗？还没！我们还需要确保按照python最佳实践编写易于阅读的代码。为此，我们必须使用名为<strong>flake8</strong>的python模块检查我们的代码<strong>。</strong><br>要运行它：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flake8 ./src</span><br></pre></td></tr></table></figure>
+<p>它将分析<strong>src</strong>文件夹。如果我们有干净的代码，我们就不应该收到任何警告。但不，我们有一些问题：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">flake8 ./src</span><br><span class="line">./src/jobs/pi/__init__.py:13:1: E302 expected 2 blank lines, found 1</span><br><span class="line">./src/jobs/pi/__init__.py:15:73: E231 missing whitespace after &apos;,&apos;</span><br><span class="line">./src/jobs/pi/__init__.py:15:80: E501 line too long (113 &gt; 79 characters)</span><br></pre></td></tr></table></figure>
+<p>我们来看看代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">from random import random</span><br><span class="line">from operator import add</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">NUMBER_OF_STEPS_FACTOR = 100000</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def f(_):</span><br><span class="line">    x = random() * 2 - 1</span><br><span class="line">    y = random() * 2 - 1</span><br><span class="line">    return 1 if x ** 2 + y ** 2 &lt;= 1 else 0</span><br><span class="line"></span><br><span class="line">def run(spark, config):</span><br><span class="line">    number_of_steps = config[&apos;partitions&apos;] * NUMBER_OF_STEPS_FACTOR</span><br><span class="line">    count = spark.sparkContext.parallelize(range(1, number_of_steps + 1),config[&apos;partitions&apos;]).map(f).reduce(add)</span><br><span class="line">    return 4.0 * count / number_of_steps</span><br></pre></td></tr></table></figure>
+<p>我们可以看到在第<strong>13</strong>行我们有一个<strong>E302</strong>警告<strong>。</strong>这意味着我们需要在两种方法之间增加一条线。然后是第<strong>15</strong>行的<strong>E231</strong>和<strong>E501</strong>。这一行的第一个警告告诉我们，我们需要在和之间留出一个额外的空间，第二个警告通知我们线路太长，而且很难读（我们可以’甚至在要点中完整地看到它！）。<code>**range(1, number_of_steps +1),**</code><strong> </strong><code>**config[**</code><strong> </strong><br>解决所有警告后，代码看起来更容易阅读：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">from random import random</span><br><span class="line">from operator import add</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">NUMBER_OF_STEPS_FACTOR = 100000</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def f(_):</span><br><span class="line">    x = random() * 2 - 1</span><br><span class="line">    y = random() * 2 - 1</span><br><span class="line">    return 1 if x ** 2 + y ** 2 &lt;= 1 else 0</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def run(spark, config):</span><br><span class="line">    number_of_steps = config[&apos;partitions&apos;] * NUMBER_OF_STEPS_FACTOR</span><br><span class="line">    count = spark.sparkContext\</span><br><span class="line">        .parallelize(range(1, number_of_steps + 1),</span><br><span class="line">                     config[&apos;partitions&apos;]).map(f).reduce(add)</span><br><span class="line">    return 4.0 * count / number_of_steps</span><br></pre></td></tr></table></figure>
+<p><a name="a448168b"></a></p>
+<h3 id="第6步：将所有内容与Makefile放在一起"><a href="#第6步：将所有内容与Makefile放在一起" class="headerlink" title="第6步：将所有内容与Makefile放在一起"></a>第6步：将所有内容与Makefile放在一起</h3><p>因为我们在终端中运行了一堆命令，所以在最后一步中我们将研究如何简化和自动执行此任务。<br>我们可以在项目的根目录中创建一个<strong>Makefile</strong>，如下所示：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">.DEFAULT_GOAL := run</span><br><span class="line">init:</span><br><span class="line"> pipenv --three install</span><br><span class="line"> pipenv shell</span><br><span class="line">analyze:</span><br><span class="line"> flake8 ./src</span><br><span class="line">run_tests:</span><br><span class="line"> pytest --cov=src test/jobs/</span><br><span class="line">run:</span><br><span class="line"> find . -name &apos;__pycache__&apos; | xargs rm -rf</span><br><span class="line"> rm -f jobs.zip</span><br><span class="line"> cd src/ &amp;&amp; zip -r ../jobs.zip jobs/</span><br><span class="line"> spark-submit --py-files jobs.zip src/main.py --job $(JOB_NAME) --res-path $(CONF_PATH)</span><br></pre></td></tr></table></figure></p>
+<p>如果我们想要使用coverage运行测试，我们只需输入：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make run_tests</span><br></pre></td></tr></table></figure>
+<p>如果我们想要运行<strong>pi</strong>工作：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make run JOB_NAME=pi CONF_PATH=/your/path/pyspark-project-template/src/jobs</span><br></pre></td></tr></table></figure>
+<p>这就是所有人！希望这个对你有帮助。<br>一如既往，代码存储在<a href="https://github.com/BogdanCojocar/medium-articles/tree/master/pyspark-project-template" target="_blank" rel="noopener">github上</a>。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/03/18/yuque/如何使用良好的软件工程实践设置PySpark环境以进行开发/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-yuque/使用Spark Structured Streaming，XGBoost和Scala进行实时预测" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1128,97 +1249,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2019/01/31/yuque/我们从基于区域的物体探测器（更快的R-CNN，R-FCN，FPN）中学到了什么？/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/Kaggle＃1获胜图像分类挑战方法" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/12/21/yuque/Kaggle＃1获胜图像分类挑战方法/">Kaggle＃1获胜图像分类挑战方法</a>
-    </h1>
-  
-
-        
-        <a href="/2018/12/21/yuque/Kaggle＃1获胜图像分类挑战方法/" class="archive-article-date">
-  	<time datetime="2018-12-21T09:03:34.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-21</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545383030520-f6dbd874-48b5-4066-bacc-bae58fd00765.png#width=826" alt><br>这篇文章是关于我用于Kaggle竞赛的方法：<a href="https://www.kaggle.com/c/plant-seedlings-classification" target="_blank" rel="noopener">植物幼苗分类。</a>我在排名中排名第一，持续了几个月，最终在最终评估结束时以＃5结束。该方法非常通用，也可用于其他图像识别任务。</p>
-<blockquote>
-<p><strong>Kaggle</strong>是一个&gt; <a href="https://en.wikipedia.org/wiki/Predictive_modelling" target="_blank" rel="noopener">预测建模</a>和&gt; <a href="https://en.wikipedia.org/wiki/Analytics" target="_blank" rel="noopener">分析</a>竞赛的平台，统计人员和数据挖掘者在竞争中生成预测和描述公司和用户上传的数据集的最佳模型。这种&gt; <a href="https://en.wikipedia.org/wiki/Crowdsourcing" target="_blank" rel="noopener">众包</a>方法依赖于这样一个事实：无数的策略可以应用于任何预测建模任务，并且不可能事先知道哪种技术或分析师最有效。[1]<br>另外，请查看在NLP上获得<strong>Intent Classification</strong>任务的最新<strong>成果</strong>的博客：</p>
-</blockquote>
-<p><a href="https://medium.com/@shridhar743/know-your-intent-sota-results-in-intent-classification-8e1ca47f364c" target="_blank" rel="noopener">了解您的意图：SoTA结果意图分类<br>此博客文章显示了在三个语料库上获得的最新最新结果：medium.com</a></p>
-<hr>
-<p><a name="a9de"></a></p>
-<h3 id="任务概述"><a href="#任务概述" class="headerlink" title="任务概述"></a><a href="#a9de"></a>任务概述</h3><p>你可以区分杂草和农作物幼苗吗？<br>有效地这样做的能力可以意味着更好的作物产量和更好的环境管理。</p>
-<p>所述<strong>奥尔胡斯大学信号处理</strong>组，在具有协作<strong>南丹麦大学</strong>，释放含有属于12种约960独特的植物的图像数据集在几个生长阶段。[1] [2]<br><img src="https://cdn-images-1.medium.com/max/1000/1*g_zIn9WVdJHCN2dfEV0X_A.png#width=" alt><br><em>其中一个样本植物：鹅肠菜样本[3]</em></p>
-<p>公开可获得在几个生长阶段属于12种物种的约960种独特植物的图像数据库。它包括带注释的RGB图像，物理分辨率约为每毫米10个像素。</p>
-<p>为了使用数据库获得的分类结果的评估标准化，提出了基于F1分数的基准。该<a href="https://vision.eng.au.dk/plant-seedlings-dataset/" target="_blank" rel="noopener">URL</a>提供了数据集[13]</p>
-<p>下图是描述数据集中所有12个类的示例：<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545383065394-724bbdf8-bb85-4775-8661-8df88480e85d.png#width=826" alt></p>
-<p><a name="aed6"></a></p>
-<h4 id="将图像分类为各个类的任务，任务分为5个步骤："><a href="#将图像分类为各个类的任务，任务分为5个步骤：" class="headerlink" title="将图像分类为各个类的任务，任务分为5个步骤："></a><a href="#aed6"></a>将图像分类为各个类的任务，任务分为5个步骤：</h4><p><a name="d486"></a></p>
-<h3 id="步骤1："><a href="#步骤1：" class="headerlink" title="步骤1："></a><a href="#d486"></a>步骤1：</h3><p>机器学习中的第一个也是最重要的任务是在继续任何算法之前分析数据集。这对于理解数据集的复杂性非常重要，这最终将有助于设计算法。</p>
-<p>图像和类的分布如下：<br><img src="https://cdn-images-1.medium.com/max/1000/1*axNbDRk6whrwE29zDafAJQ.png#width=" alt><br>如前所述，共有12个类，总共有4750个图像。然而，如上所述，分布不均匀，并且类别分布从最大654个图像变化到最小221个图像。这清楚地表明数据不平衡，数据需要平衡才能获得最佳结果。我们将在第<strong>3</strong>步中讨论这个问题。</p>
-<p><img src="https://cdn-images-1.medium.com/max/1000/1*V5C9piJvHcsV-dqLuVpOPQ.png#width=" alt>每班的图像分发</p>
-<p>现在，将图像可视化以便更好地理解数据非常重要。因此，显示来自每个类的一些样本图像以便查看图像彼此之间的差异。<br><img src="https://cdn-images-1.medium.com/max/1000/1*phgfJG3mycgz8BGlA9Jj9Q.png#width=" alt><br>从上面的图像中可以理解的是，所有图像看起来都非常相似。所以，我决定使用称为<a href="https://lvdmaaten.github.io/tsne/" target="_blank" rel="noopener">t-Distributed随机邻居嵌入</a>（t-SNE）的可视化技术来看图像<a href="https://lvdmaaten.github.io/tsne/" target="_blank" rel="noopener">的分布</a>。<br>t分布式随机邻域嵌入（t-SNE）是一种降维的技术，特别适用于高维数据集的可视化。该技术可以通过Barnes-Hut近似实现，允许它应用于大型真实世界的数据集。[14]<br><img src="https://cdn-images-1.medium.com/max/1000/1*HK33kGhDF43ZAKrROxoKWA.png#width=" alt>数据集的t-SNE可视化</p>
-<p>仔细观察之后，我们很难看出课程的差异。因此，重要的是要了解数据是否很难仅仅为人类区分，或者机器学习模型也很难。所以，我们将为它做一个基本的基准测试。</p>
-<p><a name="12da"></a></p>
-<h4 id="培训和验证集"><a href="#培训和验证集" class="headerlink" title="培训和验证集"></a><a href="#12da"></a>培训和验证集</h4><p>在开始使用模型基准测试之前，我们需要将数据划分为训练和验证数据集。在原始测试集上测试模型之前，验证集将扮演测试数据集的角色。因此，基本上在训练数据集上训练模型并在验证集上进行测试，然后随着时间的推移可以在验证集上改进模型。一旦我们对验证集的结果感到满意，我们就可以在真实的测试数据集上应用该模型。通过这种方式，我们可以看到模型是否过度拟合或欠拟合我们的验证集，这可以帮助我们更好地拟合模型。</p>
-<p>因此，我们通过将80％的图像保留为训练数据集并将20％的图像保持为验证集来划分4750个图像的数据集。</p>
-<p><img src="https://cdn-images-1.medium.com/max/1000/1*0h-aFSLtqVvTl4XpWWSRMQ.png#width=" alt>培训和验证数据分开<br><a name="1608"></a></p>
-<h3 id="第2步："><a href="#第2步：" class="headerlink" title="第2步："></a><a href="#1608"></a>第2步：</h3><p>一旦我们获得了培训和验证集，我们将从数据集的基准测试开始。我们可以看到这是一个分类问题，在给出测试数据集时，我们需要将其分类为12个类中的一个。所以我们将使用<strong>卷积神经网络</strong>来完成任务。<br>如果您是初学者并且需要更好地理解深度学习术语，请访问以下&gt; <a href="https://medium.com/@shridhar743/a-beginners-guide-to-deep-learning-5ee814cf7706" target="_blank" rel="noopener">博客：</a></p>
-<p>有几种方法可以创建CNN模型，但对于第一个基准测试，我们将使用<a href="https://keras.io/" target="_blank" rel="noopener">Keras深度学习库</a>。我们还将使用Keras中可用的预训练模型，通过ImageNet数据集进行训练，我们将根据我们的任务对其进行微调。</p>
-<p>从头开始训练卷积神经网络几乎实际上是低效的。因此，我们在ImageNet上使用预先训练的CNN模型的权重，使用1000个类，并通过保持一些层冻结并解冻其中一些并对其进行训练来对其进行微调。这是因为顶层学习简单的基本功能，我们不需要训练这些层，它可以直接应用于我们的任务。需要注意的一件重要事情是我们需要检查我们的数据集是否与ImageNet类似，以及我们的数据集有多大。这两个功能将决定我们如何执行微调。要了解更多详情，请阅读<a href="https://medium.com/@karpathy" target="_blank" rel="noopener">Andrej Karpathy</a>的博客：</p>
-<p><a href="http://cs231n.github.io/transfer-learning/" target="_blank" rel="noopener">用于视觉识别的CS231n卷积神经网络用于<br>斯坦福类CS231n的课程材料和注释：用于视觉识别的卷积神经网络。cs231n.github.io</a></p>
-<p>在我们的例子中，数据集很小但有点类似于ImageNet。因此，我们可以直接使用ImageNet的权重，只需添加一个包含12个类的最终输出层即可查看第一个基准测试。然后我们将解除一些底层的解冻，然后训练这些层。</p>
-<p>我们将使用Keras作为初始基准，因为Keras提供了许多预训练模型，我们将使用ResNet50和InceptionResNetV2来完成我们的任务。使用一个简单模型和一个非常高端模型对数据集进行基准测试非常重要，以了解我们是否过度拟合/不适合给定模型上的数据集。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/12/21/yuque/Kaggle＃1获胜图像分类挑战方法/">展开全文 >></a>
         </p>
       
 

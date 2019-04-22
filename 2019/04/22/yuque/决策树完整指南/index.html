@@ -6,21 +6,28 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://zhos.me">
-  <title>Careem的目的地预测服务如何加快您的驾驶速度 | A+</title>
+  <title>决策树完整指南 | A+</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="在迪拜，有大约8,000家餐厅，世界上最高的建筑，50多个商场，许多海滩，主题公园等等。目的地数量巨大 - 那你下一步去哪儿？你并不是唯一一个试图回答这个问题的人。 Careem一直在努力弄清楚用户下一步会走向何方。不仅在迪拜，而且在我们所在的所有15个国家以及该平台的所有3300万用户中。为什么乘车服务需要答案？ 想象一下，我们不是要求用户通过手动输入地址在地图上搜索目的地，而是简单地给他们一个">
+  <meta name="description" content="关于机器学习中顶级算法需要了解的一切一开始，学习机器学习（ML）可能是令人生畏的。像“Gradient Descent”，“Latent Dirichlet Allocation”或“Convolutional Layer”这样的术语可能会吓到很多人。但是有一些友好的方式进入该学科，我认为从决策树开始是一个明智的决定。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Careem的目的地预测服务如何加快您的驾驶速度">
-<meta property="og:url" content="http://zhos.me/2019/04/08/yuque/Careem的目的地预测服务如何加快您的驾驶速度/index.html">
+<meta property="og:title" content="决策树完整指南">
+<meta property="og:url" content="http://zhos.me/2019/04/22/yuque/决策树完整指南/index.html">
 <meta property="og:site_name" content="A+">
-<meta property="og:description" content="在迪拜，有大约8,000家餐厅，世界上最高的建筑，50多个商场，许多海滩，主题公园等等。目的地数量巨大 - 那你下一步去哪儿？你并不是唯一一个试图回答这个问题的人。 Careem一直在努力弄清楚用户下一步会走向何方。不仅在迪拜，而且在我们所在的所有15个国家以及该平台的所有3300万用户中。为什么乘车服务需要答案？ 想象一下，我们不是要求用户通过手动输入地址在地图上搜索目的地，而是简单地给他们一个">
+<meta property="og:description" content="关于机器学习中顶级算法需要了解的一切一开始，学习机器学习（ML）可能是令人生畏的。像“Gradient Descent”，“Latent Dirichlet Allocation”或“Convolutional Layer”这样的术语可能会吓到很多人。但是有一些友好的方式进入该学科，我认为从决策树开始是一个明智的决定。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1554714525242-1c6b8fc2-0280-4910-9a0e-d9d19d733f1e.jpeg#align=left&display=inline&height=263&name=New-Appshot-Dubai-Mall.jpg&originHeight=360&originWidth=1020&size=261162&status=done&width=746">
-<meta property="og:updated_time" content="2019-04-19T06:58:07.666Z">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1555903743398-56687233-944c-47b4-b126-72614121f06b.jpeg#align=left&display=inline&height=560&name=0_8k5UmElJ_TyUwAcF.jpg&originHeight=750&originWidth=1000&size=52269&status=done&width=746">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1555903797350-8ca94bf3-08b5-4295-ba0c-7a5f4dee0e5f.png#align=left&display=inline&height=238&name=0_IS9xKHt83nuERC9P.png&originHeight=284&originWidth=889&size=12506&status=done&width=746">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1555903845955-07c3678e-790c-4ee5-8aca-fe00d17a0191.png#align=left&display=inline&height=311&name=0_EhzZNP_6Y7jdJgO9.png&originHeight=311&originWidth=701&size=11464&status=done&width=701">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/gif/219582/1555903879079-f39116fb-0768-4f60-be9d-9848953cc8fb.gif#align=left&display=inline&height=420&name=0_cant-HQdfMju-GxG.gif&originHeight=525&originWidth=933&size=279587&status=done&width=746">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1555903908835-0158daaf-27fe-43b7-9c96-ea97446e93da.png#align=left&display=inline&height=340&name=1_c3W5mjgvBRIOFA8ye1JEXg.png&originHeight=340&originWidth=372&size=24050&status=done&width=372">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1555903934276-23875c33-5c18-4f88-bb8e-09ce96a40ecd.png#align=left&display=inline&height=338&name=0_ubL8_k7w3JNEvZ18.png&originHeight=453&originWidth=1000&size=240469&status=done&width=746">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1555903976987-09a73216-6b38-4f36-bde8-309310171965.png#align=left&display=inline&height=177&name=0_8FVbz8azTkk5Titf.png&originHeight=177&originWidth=500&size=6548&status=done&width=500">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1555904005678-59a73fde-cb90-4210-b58e-bc7b08162743.png#align=left&display=inline&height=426&name=0_5lJWYOtD23uGMwn0.png&originHeight=426&originWidth=640&size=14395&status=done&width=640">
+<meta property="og:updated_time" content="2019-04-22T03:34:15.995Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Careem的目的地预测服务如何加快您的驾驶速度">
-<meta name="twitter:description" content="在迪拜，有大约8,000家餐厅，世界上最高的建筑，50多个商场，许多海滩，主题公园等等。目的地数量巨大 - 那你下一步去哪儿？你并不是唯一一个试图回答这个问题的人。 Careem一直在努力弄清楚用户下一步会走向何方。不仅在迪拜，而且在我们所在的所有15个国家以及该平台的所有3300万用户中。为什么乘车服务需要答案？ 想象一下，我们不是要求用户通过手动输入地址在地图上搜索目的地，而是简单地给他们一个">
-<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1554714525242-1c6b8fc2-0280-4910-9a0e-d9d19d733f1e.jpeg#align=left&display=inline&height=263&name=New-Appshot-Dubai-Mall.jpg&originHeight=360&originWidth=1020&size=261162&status=done&width=746">
+<meta name="twitter:title" content="决策树完整指南">
+<meta name="twitter:description" content="关于机器学习中顶级算法需要了解的一切一开始，学习机器学习（ML）可能是令人生畏的。像“Gradient Descent”，“Latent Dirichlet Allocation”或“Convolutional Layer”这样的术语可能会吓到很多人。但是有一些友好的方式进入该学科，我认为从决策树开始是一个明智的决定。">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1555903743398-56687233-944c-47b4-b126-72614121f06b.jpeg#align=left&display=inline&height=560&name=0_8k5UmElJ_TyUwAcF.jpg&originHeight=750&originWidth=1000&size=52269&status=done&width=746">
   
     <link rel="alternative" href="/atom.xml" title="A+" type="application/atom+xml">
   
@@ -146,27 +153,65 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-yuque/Careem的目的地预测服务如何加快您的驾驶速度" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-yuque/决策树完整指南" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      Careem的目的地预测服务如何加快您的驾驶速度
+      决策树完整指南
     </h1>
   
 
         
-        <a href="/2019/04/08/yuque/Careem的目的地预测服务如何加快您的驾驶速度/" class="archive-article-date">
-  	<time datetime="2019-04-08T09:08:09.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-08</time>
+        <a href="/2019/04/22/yuque/决策树完整指南/" class="archive-article-date">
+  	<time datetime="2019-04-22T03:18:02.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-22</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1554714525242-1c6b8fc2-0280-4910-9a0e-d9d19d733f1e.jpeg#align=left&amp;display=inline&amp;height=263&amp;name=New-Appshot-Dubai-Mall.jpg&amp;originHeight=360&amp;originWidth=1020&amp;size=261162&amp;status=done&amp;width=746" alt="New-Appshot-Dubai-Mall.jpg"><br>在迪拜，有大约8,000家餐厅，世界上最高的建筑，50多个商场，许多海滩，主题公园等等。目的地数量巨大 - 那你下一步去哪儿？<br>你并不是唯一一个试图回答这个问题的人。 <br>Careem一直在努力弄清楚用户下一步会走向何方。不仅在迪拜，而且在我们所在的所有15个国家以及该平台的所有3300万用户中。<br>为什么乘车服务需要答案？ <br>想象一下，我们不是要求用户通过手动输入地址在地图上搜索目的地，而是简单地给他们一个最可能的位置列表供选择。 <br><a id="more"></a><br>一键式预订可以让客户更快更轻松地了解客户，并且知道客户希望接下来的位置 - 甚至在他们告诉我们之前 - 使我们能够通过确保更繁忙的区域提供更多的运输选项来改善我们的服务。 <br>Careem数据科学团队提出这样一个问题：“如果我们建立一个有监督的<a href="https://en.wikipedia.org/wiki/Machine_learning" target="_blank" rel="noopener">机器学习</a>  模型来解决这个问题，那么预测用户去向何方需要哪些最重要和最丰富的功能？”<br>例如，如果历史旅行支持，“早上回家工作”听起来像是一个合理的猜测。或者，例如，“周末 - 家庭购物中心”，如果该人喜欢购物。在使用数据进行验证后，最相关的功能更清晰，即位置，时间和用户在一天中特定时间与位置的交互。<br>在这里，<a href="https://github.com/catboost" target="_blank" rel="noopener">CatBoost</a>发挥其超级强大的处理分类功能。<a href="https://github.com/catboost" target="_blank" rel="noopener">CatBoost</a>是一种先进的机器学习算法，允许用户通过排序任务，预测和提出建议，快速处理大型数据集的分类功能。<br>一周中的某一天和一天中的一小时都是明确的特征。每个位置或一小部分位置也是分类特征。一个城市包含数千个这样的位置。如果你必须手动编码它们就会成为一个巨大的问题 - 它也会大大增加数据集的大小，减慢训练速度并且仍会产生非常差的结果。<br>这就是<a href="https://en.wikipedia.org/wiki/Yandex" target="_blank" rel="noopener">Y </a><a href="https://yandex.com/company/" target="_blank" rel="noopener">andex</a>开源<a href="https://github.com/catboost" target="_blank" rel="noopener">CatBoost</a>之前的<a href="https://github.com/catboost" target="_blank" rel="noopener">情况</a>。它不仅独立地考虑了分类特征，还利用了分类特征组合，这正是我们处理“早晨 - 家庭工作”等模式所需要的。<br>使用这个，我们现在有了算法 - 可以非常精确地预测下一个用户移动的算法。Careem在其网络中拥有150多个城市，数百万次旅行，并且一直在发出大量请求。这是在任何给定时间要处理的大量数据。<br>人们普遍认为300毫秒对于机器学习系统来说是一个非常好的响应时间，但在Careem的情况下，这只是不够好并且会导致客户体验太慢。在Careem，我们需要做得更好……所以我们做到了。<br><a href="https://github.com/catboost" target="_blank" rel="noopener">CatBoost</a>与Careem应用程序和AI相结合<a href="https://github.com/catboost" target="_blank" rel="noopener">的</a>性能超出了所有期望，为我们的客户提供了<em>一位数的</em>响应时间。<br>该模型（称为目标预测服务）目前正在Careem应用程序中为用户提供服务，并确保我们的系统是最佳的。<br>所以下次你在你的Careem应用程序上点击“Yalla！”时，请记住它不仅仅是发送电子邮件，你实际上刚刚开始涉及一些严重的人工智能的过程，以及一些最快的响应时间。机器学习系统。<br>当您在我们的应用程序上预订时，从第二个按下按钮到您的乘车到达时，将发生近500个动作。<br>Careem的人工智能平台 - 称为Yoda–拥有最先进的机器学习周期。它甚至能够以令人难以置信的准确度预测某个地方在两周内的需求以及需要驾驶员的地方。这有助于我们确保等待时间尽可能低，我们的司机可以获得更多票价。<br>如果您使用Careem服务六个月，AI将更加适应您的需求，因为它不断学习如何为  _您_  提供更好的服务。<br>你下次去哪儿？是的，我们这么认为。</p>
+        <p><a name="277a94b0"></a></p>
+<h2 id="关于机器学习中顶级算法需要了解的一切"><a href="#关于机器学习中顶级算法需要了解的一切" class="headerlink" title="关于机器学习中顶级算法需要了解的一切"></a>关于机器学习中顶级算法需要了解的一切</h2><p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1555903743398-56687233-944c-47b4-b126-72614121f06b.jpeg#align=left&amp;display=inline&amp;height=560&amp;name=0_8k5UmElJ_TyUwAcF.jpg&amp;originHeight=750&amp;originWidth=1000&amp;size=52269&amp;status=done&amp;width=746" alt="0_8k5UmElJ_TyUwAcF.jpg"><br>一开始，学习机器学习（ML）可能是令人生畏的。像“Gradient Descent”，“Latent Dirichlet Allocation”或“Convolutional Layer”这样的术语可能会吓到很多人。但是有一些友好的方式进入该学科，我认为从决策树开始是一个明智的决定。</p>
+<p><a id="more"></a><br>决策树（DT）可能是最有用的<em>监督学习</em>算法之一。与无监督学习（没有输出变量来指导学习过程和数据通过算法探索以找到模式）相反，在<strong>监督学习中，</strong>您的现有数据已经被标记，并且您知道要在新数据中预测哪种行为你获得了。这是自动驾驶汽车用于识别行人和物体的算法类型，或组织利用这些算法来估算客户的生命周期价值及其流失率。<br>在某种程度上，监督式学习就像是与老师一起学习，然后将这些知识应用于新数据。<br>DT是ML算法，其基于描述性特征逐步将数据集划分为较小的数据组，直到它们达到足够小的集合以由某个<strong>标签</strong>描述。它们要求您拥有标记的数据（标记有一个或多个标签，如植物图片中的植物名称），因此他们会尝试根据该知识标记新数据。<br>DTs算法非常适合解决<strong>分类</strong>（机器将数据<strong>分类</strong>到_类中<em>，如电子邮件是否为垃圾邮件）和<strong>回归</strong>（机器预测</em>值_，如房地产价格）问题。当因变量是连续的或定量的时（例如，如果我们想要估计客户违约贷款的概率），则使用回归树;当因变量是分类或定性时使用分类树（例如，如果我们想要估计一个人的血型）。<br>DT的重要性依赖于它们在现实世界中具有大量应用程序的事实。作为ML中最常用的算法之一，它们适用于多个行业的不同功能：</p>
+<ul>
+<li>DT正在医疗保健行业中用于改善早期发现<strong>认知障碍</strong>的阳性病例筛查，并确定未来<a href="https://www.news-medical.net/news/20190117/Scientists-design-two-AI-algorithms-to-improve-early-detection-of-cognitive-impairment.aspx" target="_blank" rel="noopener">发展某些类型痴呆</a>的主要<a href="https://www.news-medical.net/news/20190117/Scientists-design-two-AI-algorithms-to-improve-early-detection-of-cognitive-impairment.aspx" target="_blank" rel="noopener">风险因素</a>。</li>
+<li><em>索菲亚</em>，<a href="https://www.theverge.com/2017/11/10/16617092/sophia-the-robot-citizen-ai-hanson-robotics-ben-goertzel" target="_blank" rel="noopener">这是由沙特阿拉伯公民的机器人</a>，使用DT的算法与人类交谈。实际上，使用这些算法的<strong>聊天机器人</strong>已经通过应用创新调查和友好聊天从客户收集数据，从而为<a href="https://yourstory.com/2018/11/age-alexa-siri-chatbots-next-health-assistants/" target="_blank" rel="noopener">健康保险</a>等行业带来了好处。谷歌最近收购了<em>Onward</em>，一家使用DT开发<a href="https://martechseries.com/predictive-ai/ai-platforms-machine-learning/google-purchases-customer-service-automation-firm-onward/" target="_blank" rel="noopener">聊天机器人</a>的公司，这些<a href="https://martechseries.com/predictive-ai/ai-platforms-machine-learning/google-purchases-customer-service-automation-firm-onward/" target="_blank" rel="noopener">聊天机器人在提供世界一流的客户服务方面非常实用</a>，而<a href="https://venturebeat.com/2019/01/10/why-25-of-companies-are-copying-amazons-customer-support-model-using-bots-and-ai-vb-live/" target="_blank" rel="noopener">亚马逊正朝着同一方向投资，</a>以便快速引导客户走上解决之道。</li>
+<li>通过训练DT来识别卫星图像中<strong>森林丧失的</strong>不同原因，可以<a href="https://www.europeanscientist.com/en/agriculture/new-analysis-reveals-causes-of-global-forest-loss/" target="_blank" rel="noopener">预测森林干扰的最可能原因</a>，如野火，人工林伐木，大型或小型农业，以及城市化。DT和卫星图像也用于<strong>农业，</strong>以<a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4567051/" target="_blank" rel="noopener">对不同的作物类型</a>进行<a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4567051/" target="_blank" rel="noopener">分类</a>并确定其物候阶段。<a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4567051/" target="_blank" rel="noopener"></a></li>
+<li>DT是<a href="https://www.infoq.com/articles/sentiment-analysis-whats-with-the-tone" target="_blank" rel="noopener">执行文本情感分析</a>和识别背后<a href="https://www.infoq.com/articles/sentiment-analysis-whats-with-the-tone" target="_blank" rel="noopener">情绪的</a>绝佳工具。<strong>情感分析</strong>是一种强大的技术，可以帮助组织了解客户的选择和决策驱动因素。</li>
+<li>在<strong>环境科学中</strong>，DT可以帮助确定<a href="https://phys.org/news/2018-05-ai-canada-invasive-species.html" target="_blank" rel="noopener">处理入侵物种</a>的最佳策略，从根除到遏制和减少传播。</li>
+<li>DT还用于改进<strong>财务欺诈检测</strong>。麻省理工学院表明，通过使用经过多种原始数据源培训的DT来<a href="http://news.mit.edu/2018/machine-learning-financial-credit-card-fraud-0920" target="_blank" rel="noopener">查找与欺诈案件相匹配的交易模式和信用卡</a>，它可以显着提高替代ML模型的性能。</li>
+</ul>
+<p>由于各种原因，DT非常受欢迎，因为它们的可解释性可能是它们最重要的优势。它们可以非常快速地进行训练并且易于理解，这为远远超出科学墙的边界开辟了可能性。如今，DT在商业环境中非常流行，并且它们的使用也在扩展到民用领域，在那里一些应用程序引起了很大的关注。<br>Sesame Credit公司（隶属于阿里巴巴的公司）使用<a href="https://bluenotes.anz.com/posts/2016/11/china-credit-and-seeing-unforseen-risk" target="_blank" rel="noopener">DT和其他算法来引导社会评估系统</a>，同时考虑到各种因素，例如支付账单的准时性和其他在线活动。<a href="https://aleteia.org/2018/06/28/the-chinese-social-credit-system-the-real-big-brother-of-the-future/" target="_blank" rel="noopener">中国良好的“芝麻评分”的好处包括从约会网站的较高知名度到如果你需要去看医生就跳过等候线</a>。事实上，在<a href="https://www.reuters.com/article/us-china-credit/china-to-bar-people-with-bad-social-credit-from-planes-trains-idUSKCN1GS10S" target="_blank" rel="noopener">中国政府宣布将其所谓的社会信用体系应用于航班和火车，</a>并阻止那些犯下不良行为的人将这种运输长达一年之后，人们担心该系统将最终创建一个庞大的“ML支持的老大哥”。<br><a name="0796ba76"></a></p>
+<h3 id="基础"><a href="#基础" class="headerlink" title="基础"></a><strong>基础</strong></h3><p>在电影<em>Bandersnatch</em>（来自Netflix的独立黑镜剧集）中，观众可以交互式地选择不同的叙事路径并达到不同的故事情节和结局。电影讲故事背后隐藏着一系列复杂的决策，让观众可以选择自己冒险模式，Netflix必须以一种简单的方式呈现每个场景的多个版本。 。在实践中，Netflix制作人所做的是分割电影并为观众设置不同的分支点，并提出不同的结果。换句话说，这就像构建DT一样。<br>DT由节点，分支和叶子组成。每个<strong>节点</strong>代表一个属性（或特征），每个<strong>分支</strong>代表一个规则（或决定），每个<strong>叶子</strong>代表一个结果。树的<strong>深度</strong>由级别数定义，不包括根节点。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1555903797350-8ca94bf3-08b5-4295-ba0c-7a5f4dee0e5f.png#align=left&amp;display=inline&amp;height=238&amp;name=0_IS9xKHt83nuERC9P.png&amp;originHeight=284&amp;originWidth=889&amp;size=12506&amp;status=done&amp;width=746" alt="0_IS9xKHt83nuERC9P.png"><br>DT对数据采用自上而下的方法，因此在给定数据集的情况下，他们会尝试对它们之间相似的观察进行分组和标记，并寻找最佳规则来分割它们之间不同的观察结果，直到它们达到一定程度相似性。<br>他们使用分层分割过程，在每一层他们尝试将数据分成两组或更多组，以便属于同一组的数据彼此最相似（&gt; <strong>同质性</strong>），并且组尽可能不同彼此（&gt; <strong>异质性</strong>）。<br>拆分可以是<strong>二进制</strong>（将每个节点拆分<em>为最多</em>两个子组，并尝试查找最佳分区），或多<strong>路</strong>（将每个节点拆分为多个子组，使用与现有不同值一样多的分区）。在实践中，通常会看到带有二进制分割的DT，但重要的是要知道多路分离具有一些优点。Multiway拆分耗尽名义属性中的所有信息，这意味着属性很少在从根到叶的任何路径中出现多次，这使得DT更容易理解。事实上，分割数据的最佳方法可能是找到给定特征的一组间隔，然后根据这些间隔将这些数据分成几组。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1555903845955-07c3678e-790c-4ee5-8aca-fe00d17a0191.png#align=left&amp;display=inline&amp;height=311&amp;name=0_EhzZNP_6Y7jdJgO9.png&amp;originHeight=311&amp;originWidth=701&amp;size=11464&amp;status=done&amp;width=701" alt="0_EhzZNP_6Y7jdJgO9.png"><br>在二维术语中（仅使用2个变量），DT将数据Universe划分为一组矩形，并在每个矩形中拟合模型。它们既简单又强大，是数据科学家的理想工具。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/gif/219582/1555903879079-f39116fb-0768-4f60-be9d-9848953cc8fb.gif#align=left&amp;display=inline&amp;height=420&amp;name=0_cant-HQdfMju-GxG.gif&amp;originHeight=525&amp;originWidth=933&amp;size=279587&amp;status=done&amp;width=746" alt="0_cant-HQdfMju-GxG.gif"><br>DT中的每个节点充当某些条件的测试用例，并且从该节点下降的每个分支对应于该测试用例的可能答案之一。<br><a name="d043a844"></a></p>
+<h3 id="修剪那棵树"><a href="#修剪那棵树" class="headerlink" title="修剪那棵树"></a><strong>修剪那棵树</strong></h3><p>随着DT中分裂的数量增加，它们的复杂性增加。一般来说，简单的DT比超复杂的DT更受欢迎，因为它们更容易理解，并且不太可能陷入过度拟合。</p>
+<blockquote>
+<p><strong>过度拟合</strong>是指一种模型，它可以很好地学习&gt; <strong>训练数据</strong>（它用来学习的数据），以便将其推广到新的（看不见的）数据。<br>换句话说，模型在训练数据中学习细节和噪声（数据集中的无关信息或随机性），以至于它对新数据的模型性能产生负面影响。这意味着训练数据中的噪声或随机波动被模型拾取并作为概念学习。</p>
+</blockquote>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1555903908835-0158daaf-27fe-43b7-9c96-ea97446e93da.png#align=left&amp;display=inline&amp;height=340&amp;name=1_c3W5mjgvBRIOFA8ye1JEXg.png&amp;originHeight=340&amp;originWidth=372&amp;size=24050&amp;status=done&amp;width=372" alt="1_c3W5mjgvBRIOFA8ye1JEXg.png"><br>在这种情况下，您的模型可以很好地与您提供的数据完美匹配，但是当您将相同的模型暴露给新数据时，它会崩溃。它无法重复其非常详细的表现。<br>那么，你如何避免在DT中过度拟合？您需要排除适合数据的分支。您想要一个可以在新数据上进行推广和工作的DT，即使这可能意味着在训练数据上失去精确度。最好避免使用DT模型来学习和重复像鹦鹉这样的特定细节，并尝试开发一种具有强大功能和灵活性的模型，以便为您提供的新数据提供良好的性能。</p>
+<blockquote>
+<p><strong>修剪</strong>是一种用于处理过度拟合的技术，通过移除提供很少预测或分类能力的树的部分来减小DT的大小。<br>该过程的目标是通过减少过度拟合和去除可能基于噪声或错误数据的DT部分的影响来降低复杂性并获得更好的准确性。在DT上执行修剪有两种不同的策略：</p>
+</blockquote>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1555903934276-23875c33-5c18-4f88-bb8e-09ce96a40ecd.png#align=left&amp;display=inline&amp;height=338&amp;name=0_ubL8_k7w3JNEvZ18.png&amp;originHeight=453&amp;originWidth=1000&amp;size=240469&amp;status=done&amp;width=746" alt="0_ubL8_k7w3JNEvZ18.png"><br>总之，正确分类或预测训练数据的每个示例的大DT可能不如完全不适合所有训练数据的较小DT。<br><a name="59c250ac"></a></p>
+<h3 id="主DTs算法"><a href="#主DTs算法" class="headerlink" title="主DTs算法"></a><strong>主DTs算法</strong></h3><p>现在您可能会问自己：DT如何知道要选择哪些功能以及如何拆分数据？要理解这一点，我们需要了解一些细节。<br>所有DT执行的任务基本相同：它们检查数据集的所有属性，以通过将数据拆分为子组来查找可提供最佳结果的属性。它们通过将子组拆分为越来越小的单元来递归执行此任务，直到树完成（由某些条件停止）。<br>这种做出拆分的决定会严重影响树的准确性和性能，对于该决定，DT可以使用<strong>不同的算法</strong>，<strong>这些算法</strong>在树的可能结构上有所不同（例如，每个节点的拆分数），关于如何执行拆分的标准，什么时候停止分裂。<br>那么，我们如何定义要拆分的属性，何时以及如何拆分它们？要回答这个问题，我们必须检查主要的DTs算法：<br><a name="CHAID"></a></p>
+<h4 id="CHAID"><a href="#CHAID" class="headerlink" title="CHAID"></a>CHAID</h4><p>卡方自动交互检测（CHAID）是最古老的DT算法方法之一，它生成适用于分类和回归任务的<strong>多路</strong> DT（分裂可以有两个以上的分支）。在构建<strong>分类树</strong>（其中因变量本质上是分类）时，CHAID依靠卡方独立性测试来确定每个步骤的最佳分裂。<strong>卡方检验</strong>检查两个变量之间是否存在关系，并应用于DT的每个阶段，以确保每个分支与响应变量的统计上显着的预测因子显着相关。<br>换句话说，它选择与因变量具有最强交互的自变量。<br>另外，如果每个预测变量的类别相对于因变量彼此之间没有显着差异，则它们被合并。在<strong>回归树</strong>（其中因变量是连续的）的情况下，CHAID依赖于<strong>F检验</strong>（而不是卡方检验）来计算两个总体均值之间的差异。如果F测试很重要，则会创建一个新分区（子节点）（这意味着该分区在统计上与父节点不同）。另一方面，如果目标均值之间的F检验结果不显着，则将类别合并为单个节点。<br>CHAID不会替换缺失值并将它们作为单个类处理，如果合适，它可以与另一个类合并。它还会产生更宽而不是更深的DT（多路特征），这可能是不切实际的短，很难与实际商业环境相关联。此外，它没有修剪功能。<br>虽然CHAID不是最强大的（在检测最小可能差异方面）或最快的DT算法，但它易于管理，灵活且非常有用。<br>您可以在此<a href="https://www.r-bloggers.com/chaid-and-r-when-you-need-explanation-may-15-2018/" target="_blank" rel="noopener">链接中</a>找到带有R的CHAID实现<a href="https://www.r-bloggers.com/chaid-and-r-when-you-need-explanation-may-15-2018/" target="_blank" rel="noopener"></a><br><a name="c9539877"></a></p>
+<h4 id="大车"><a href="#大车" class="headerlink" title="大车"></a>大车</h4><p>CART是一种DT算法，它根据依赖（或目标）变量是分类还是数字分别生成<strong>二进制</strong>_分类_或_回归_树。它以原始形式处理数据（不需要预处理），并且可以在同一DT的不同部分中多次使用相同的变量，这可以揭示变量集之间复杂的相互依赖性。<br>在<strong>分类树</strong>的情况下，CART算法使用称为<em>Gini杂质</em>的度量<strong> </strong>来为分类任务创建决策点。<strong>Gini Impurity</strong>通过分裂创建的两个类中的类的混合程度，可以了解分割的精细程度（节点“纯度”的度量）。当所有观察属于同一标签时，有一个完美的分类和一个基尼杂质值为0（最小值）。另一方面，当所有观察在不同标签之间平均分配时，我们面临最坏情况的分割结果和基尼杂质值1（最大值）。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1555903976987-09a73216-6b38-4f36-bde8-309310171965.png#align=left&amp;display=inline&amp;height=177&amp;name=0_8FVbz8azTkk5Titf.png&amp;originHeight=177&amp;originWidth=500&amp;size=6548&amp;status=done&amp;width=500" alt="0_8FVbz8azTkk5Titf.png"><br>在<strong>回归树</strong>的情况下，CART算法寻找最小化<em>最小二乘偏差（LSD）</em>的分裂，选择最小化所有可能选项的结果的分区。的<strong>LSD</strong>（有时称为“方差减少”）度量最小化所观察到的值与预测值之间的平方距离（或偏差）的总和。预测值和观测值之间的差异称为“残差”，这意味着LSD选择参数估计值，以便最小化残差平方和。<br>LSD非常适合度量数据，并且能够比其他算法正确捕获有关分割质量的更多信息。<br>CART算法背后的想法是产生一系列DT，每个DT都是“最佳树”的候选者。通过<strong>测试</strong>（使用DT以前从未见过的新数据）或执行<strong>交叉验证</strong>（将数据集划分为“k”倍数，并在每个折叠上执行测试）来评估每棵树的性能，从而识别该最佳树。）。<br>CART <strong>不对</strong>树选择<strong>使用内部性能度量</strong>。相反，DTs性能总是通过测试或交叉验证来测量，并且树选择仅在完成评估之后才进行。<br><a name="ID3"></a></p>
+<h4 id="ID3"><a href="#ID3" class="headerlink" title="ID3"></a>ID3</h4><p>Iterative Dichotomiser 3（ID3）是一种DT算法，主要用于生成<em>分类树</em>。由于在原始数据中没有证明构建回归树是如此有效，因此ID3主要用于分类任务（尽管某些技术，如构建数值区间可以提高其在回归树上的性能）。<br>ID3拆分数据属性（二分法）以找到最主要的特征，迭代地执行此过程以自上而下的方式选择DT节点。<br>对于拆分过程，ID3使用<em>信息增益</em>指标来选择最有用的分类属性。<strong>信息增益</strong>是从信息理论中提取的一个概念，它指的是一组数据中随机性水平的降低：基本上它衡量一个特征给我们关于一个类的“信息”。ID3将始终尝试最大化此度量标准，这意味着具有最高信息增益的属性将首先分割。<br>信息增益与<strong>熵</strong>的概念直接相关，<strong>熵</strong>是衡量数据中不确定性或随机性的量。熵值的范围从0（当所有成员属于同一类或样本完全同质时）到1（当存在完美的随机性或不可预测性，或者样本被平均分割时）。<br>你可以这样想：如果你想做一个无偏见的抛硬币，那就是<em>完全随机性</em>或熵值为1（“头”和“尾”同样如此，概率为0.5）。另一方面，如果您掷硬币，例如两边都有“尾巴”的硬币，则从事件中删除随机性，并且熵值为0（获得“尾巴”的概率将跳至1，并且“头”的概率将降至0）。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1555904005678-59a73fde-cb90-4210-b58e-bc7b08162743.png#align=left&amp;display=inline&amp;height=426&amp;name=0_5lJWYOtD23uGMwn0.png&amp;originHeight=426&amp;originWidth=640&amp;size=14395&amp;status=done&amp;width=640" alt="0_5lJWYOtD23uGMwn0.png"><br>这很重要，因为<strong>信息增益是熵的减少</strong>，并且为DT节点选择产生最大信息增益的属性。<br>但是ID3有一些缺点：它不能处理数字属性，也不能缺少值，这可能代表严重的局限性。<br><a name="C4.5"></a></p>
+<h4 id="C4-5"><a href="#C4-5" class="headerlink" title="C4.5"></a>C4.5</h4><p>C4.5是ID3的继承者，代表了几个方面的改进。C4.5可以处理连续和分类数据，使其适合生成_回归_和<em>分类树</em>。此外，它可以通过忽略包含不存在数据的实例来处理缺失值。<br>与ID3（使用信息增益作为拆分标准）不同，C4.5使用<em>增益比率</em>进行拆分。<strong>增益比率</strong>是信息增益概念的一种修改，通过在选择属性时考虑分支的数量和大小，减少了具有大量分支的DT的偏差。由于信息增益显示对具有许多结果的属性的不公平偏好，增益比率通过考虑每个分裂的内在信息来校正这种趋势（它通过使用分割信息值基本上“归一化”信息增益）。这样，<strong>选择具有最大增益比的属性作为分割属性</strong>。<br>此外，C4.5还包括一种称为_窗口_的技术，该技术最初是为了克服早期计算机的内存限制而开发的。<strong>窗</strong>表示该算法随机选择训练数据的子集（称为“窗口”）并从该选择构建DT。然后使用该DT对剩余的训练数据进行分类，并且如果它执行正确的分类，则DT结束。否则，将所有错误分类的数据点添加到窗口中，并且循环重复直到训练集中的每个实例被当前DT正确分类。由于使用随机化，该技术通常导致DT比标准过程产生的DT更准确，因为它捕获所有“罕见”实例以及足够的“普通”情况。<br>C4.5的另一个功能是它可以&gt; <strong>修剪</strong>  DT。<br>C4.5的修剪方法基于估计每个内部节点的错误率，并且如果叶子的估计误差较低，则用叶节点替换它。简单来说，如果算法估计如果删除节点的“子节点”并且该节点成为叶节点，DT将更准确，那么C4.5将删除这些子节点。<br>该算法的最新版本称为C5.0，它是在专有许可下发布的，并且对C4.5提出了一些改进，如：</p>
+<ul>
+<li><strong>提高速度：</strong> C5.0明显快于C4.5（几个数量级）。</li>
+<li><strong>内存使用情况：</strong> C5.0的内存效率高于C4.5。</li>
+<li><strong>可变错误分类成本：</strong>在C4.5中，所有错误都被视为相等，但在实际应用中，某些分类错误比其他错误更严重。C5.0允许为每个预测/实际类对定义单独的成本。</li>
+<li><strong>较小的决策树：</strong> C5.0获得与C4.5类似的结果，DT的数量要小得多。</li>
+<li><strong>其他数据类型：</strong> C5.0可以使用日期，时间，并允许将值标记为“不适用”。</li>
+<li><strong>风选：</strong> C5.0可以在构造分类器之前自动获取属性，丢弃那些可能无用或看起来无关紧要的属性。</li>
+</ul>
+<p>你可以在<a href="https://rulequest.com/see5-comparison.html" target="_blank" rel="noopener">这里</a>找到C4.5和C5.0之间的比较<a href="https://rulequest.com/see5-comparison.html" target="_blank" rel="noopener"></a><br><a name="6fa9c312"></a></p>
+<h3 id="树的黑暗面"><a href="#树的黑暗面" class="headerlink" title="树的黑暗面"></a><strong>树的黑暗面</strong></h3><p>当然DT有很多优点。由于它们的简单性以及易于理解和实施的事实，它们被广泛用于许多行业中的不同解决方案。但是你还需要意识到它的缺点。<br>DT倾向于&gt; <strong>过度</strong>训练他们的训练数据，如果先前向他们显示的数据与他们稍后显示的数据不匹配，则会使他们表现不佳。<br>它们也遭受<strong>高方差</strong>，这意味着数据的微小变化可能导致一组非常不同的分裂，使得解释有些复杂。它们具有固有的不稳定性，因为由于它们的分层性质，顶部分裂中的误差的影响传播到下面的所有分裂。<br>在分类树中，<strong>错误分类观察</strong>的结果<strong>在某些类别中</strong>比其他<strong>类别更严重</strong>。例如，预测一个人实际上不会心脏病发作可能会更糟，反之亦然。这个问题在像C5.0这样的算法中有所缓解，但在其他算法中仍然是一个严重的问题。<br>如果某些类比其他类占主导地位，DT也可以创建<strong>有偏见的</strong>树。这是不平衡数据集中的一个问题（数据集中的不同类具有不同的观测数），在这种情况下，建议在构建DT之前平衡de数据集。<br>在回归树的情况下，DT只能根据他们之前看到的数据在他们创建的值范围内进行预测，这意味着<strong>他们可以生成的值</strong>具有<strong>边界</strong>。<br>在每个级别，DT寻找最佳可能的分割，以便它们优化相应的分割标准。<br>但DTs分裂算法远远超出它们运行的当前水平（它们是&gt; <strong>“贪婪”</strong>），这意味着它们在每一步都寻找局部最优而不是全局最优。<br>DTs算法根据一些分裂标准一次增加树一个节点，并且不实现任何回溯技术。<br><a name="caffb14f"></a></p>
+<h3 id="人群的力量"><a href="#人群的力量" class="headerlink" title="人群的力量"></a><strong>人群的力量</strong></h3><p>但这里有好消息：有不同的策略来克服这些缺点。<strong>集合方法</strong>结合了几个DT来提高单个DT的性能，并且是克服已经描述的问题的一个很好的资源。我们的想法是使用相同的学习算法训练多个模型，以获得优异的结果。<br>执行整体DT的两种最常用的技术可能是&gt; <em>Bagging</em>和&gt; <em>Boosting</em>。<br>当目标是减少DT的方差时，使用<strong>Bagging</strong>（或Bootstrap Aggregation）。<strong>方差</strong>涉及DT可能非常不稳定的事实，因为数据中的小变化可能导致生成完全不同的树。因此，Bagging的想法是通过<strong>并行</strong>创建数据的随机子集（来自训练数据）来解决此问题，其中任何观察具有出现在新子集数据中的<strong>相同概率</strong>。接下来，每个子集数据集合用于训练DT，从而产生不同DT的集合。最后，使用那些不同DT的所有预测的平均值，这产生比单个DT更强大的性能。<strong>随机森林</strong> Bagging是对Bagging的扩展，需要额外增加一步：除了获取随机数据子集外，还需要随机选择一些功能，而不是使用所有功能来增长DT。<br><strong>Boosting</strong>是另一种创建预测变量集合的技术，可以减少DT的变化，但采用不同的方法。它使用<strong>顺序方法</strong>，它适合连续的DTS，并在每一步，尝试减少前一树的错误。使用Boosting技术，每个分类器都在数据上进行训练，同时考虑到之前的分类器成功。在每个训练步骤之后，基于先前的性能重新分配权重。这样，<strong>错误分类的数据会增加其权重</strong>强调最困难的案例，以便随后的DT在培训阶段关注它们并提高其准确性。与Bagging不同，在Boosting中，观察值是加权的，因此其中一些将更频繁地参与新的数据子集。作为该过程的结果，整组的组合改善了DT的性能。<br>在Boosting中，有几种方法可以确定在训练和分类步骤中使用的权重（例如Gradient Boost，XGBoost，AdaBoost等）。<br>您可以在<a href="https://quantdare.com/what-is-the-difference-between-bagging-and-boosting/" target="_blank" rel="noopener">此处</a>找到两种技术之间相似点和不同点的描述</p>
 
       
 
@@ -246,7 +291,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://zhos.me/2019/04/08/yuque/Careem的目的地预测服务如何加快您的驾驶速度/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://zhos.me/2019/04/22/yuque/决策树完整指南/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -260,18 +305,9 @@
   
 <nav id="article-nav">
   
-    <a href="/2019/04/09/yuque/机器学习算法之Catboost/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          机器学习算法之Catboost
-        
-      </div>
-    </a>
   
-  
-    <a href="/2019/04/08/yuque/使用分类数据/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">使用分类数据</div>
+    <a href="/2019/04/19/yuque/使用Apache Spark的实时机器学习管道/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">使用Apache Spark的实时机器学习管道</div>
       <i class="icon-circle-right"></i>
     </a>
   
