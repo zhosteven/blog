@@ -6,15 +6,33 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://zhos.me">
-  <title>Archives | A+</title>
+  <title>在机器学习预测中转换分类数据的可用性 | A+</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="A+">
-<meta property="og:url" content="http://zhos.me/archives/page/2/index.html">
+  <meta name="description" content="使用邮政编码，纬度和经度的快速示例作者：Kevin Velasco和Alex Shropshire鉴于2014 - 2015年King County，WA House Sales的数据集（https://www.kaggle.com/harlfoxem/housesalesprediction），我们的任务是创建一个模型来准确预测房屋销售价格。在初步数据探索和清理之后，我们发现了大量可用信息来描">
+<meta property="og:type" content="article">
+<meta property="og:title" content="在机器学习预测中转换分类数据的可用性">
+<meta property="og:url" content="http://zhos.me/2019/04/22/yuque/在机器学习预测中转换分类数据的可用性/index.html">
 <meta property="og:site_name" content="A+">
+<meta property="og:description" content="使用邮政编码，纬度和经度的快速示例作者：Kevin Velasco和Alex Shropshire鉴于2014 - 2015年King County，WA House Sales的数据集（https://www.kaggle.com/harlfoxem/housesalesprediction），我们的任务是创建一个模型来准确预测房屋销售价格。在初步数据探索和清理之后，我们发现了大量可用信息来描">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1555904704020-b85dbbe6-3aa5-4dea-b778-1e105493f214.jpeg#align=left&display=inline&height=497&name=1_SsPxICSeR9p-UK1NOOKV_g.jpeg&originHeight=666&originWidth=1000&size=180405&status=done&width=746">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1555904732604-e7f579de-792f-4c45-9ab4-4e10b93950e6.png#align=left&display=inline&height=168&name=1_MIk1jVLu4QZ0Dhdmk3Xe1w.png&originHeight=168&originWidth=664&size=19853&status=done&width=664">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1555904767277-2ad542ad-c35b-4a75-b0ed-e70961991703.png#align=left&display=inline&height=528&name=1_TT49azQZ06iTmVsWOlMc2Q.png&originHeight=528&originWidth=494&size=49389&status=done&width=494">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1555904798878-09152ba2-4c98-46eb-8d1c-39191bda9337.png#align=left&display=inline&height=214&name=0_XvYD6CcbmfT_3SdB.png&originHeight=214&originWidth=483&size=26275&status=done&width=483">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1555904843691-1ae42859-e09d-4e59-9fc2-cf36518a6d20.png#align=left&display=inline&height=64&name=1_pwtJRhdv_vhfyKkXZSUhjQ.png&originHeight=65&originWidth=752&size=4449&status=done&width=746">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1555904861429-c066de8a-8909-4fab-bc28-62c4ab149a7e.png#align=left&display=inline&height=51&name=1_IcyeXhJz8BbSxQDFcooCgQ.png&originHeight=51&originWidth=752&size=6380&status=done&width=746">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1555904884094-cf24a3d6-1038-4650-877a-77d5e8a27171.png#align=left&display=inline&height=205&name=1_svI4oxVCY7kYIjrUJXNT1g.png&originHeight=205&originWidth=716&size=33908&status=done&width=716">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1555904904820-730f47a1-088e-42b2-8cff-4bed2fc9a5c2.png#align=left&display=inline&height=36&name=1_5I-z9cN5kt127GkIXKPB2A.png&originHeight=54&originWidth=1126&size=9315&status=done&width=746">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1555904927628-b1055237-7cda-4302-a93e-3b4a78ebc7eb.png#align=left&display=inline&height=62&name=1_c7dENhxqVQXsqm8FSp30qg.png&originHeight=62&originWidth=716&size=10269&status=done&width=716">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1555904943242-ee0a50db-cbe3-4fd5-9acc-aae08449c3e7.png#align=left&display=inline&height=148&name=1_6SazfrfSRH0ci1A8BiPiGw.png&originHeight=223&originWidth=1126&size=27711&status=done&width=746">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1555904966918-630ca311-404d-4808-82b6-cd456b22ddf8.png#align=left&display=inline&height=207&name=1_4Jz9M_BIi5Q1hpPcDmi6bQ.png&originHeight=207&originWidth=664&size=32665&status=done&width=664">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1555904989653-b574d341-7aba-406a-9af1-12880656af35.png#align=left&display=inline&height=207&name=1_W7yh5a1szpJL-Bg_2UBlcA.png&originHeight=207&originWidth=664&size=32700&status=done&width=664">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1555905010901-0c526c9d-90f2-4f29-acc7-b38a13f6929d.png#align=left&display=inline&height=213&name=1_gTIrXg426a53-e4P8Ni2fg.png&originHeight=213&originWidth=664&size=34410&status=done&width=664">
+<meta property="og:updated_time" content="2019-04-22T03:50:37.171Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="A+">
+<meta name="twitter:title" content="在机器学习预测中转换分类数据的可用性">
+<meta name="twitter:description" content="使用邮政编码，纬度和经度的快速示例作者：Kevin Velasco和Alex Shropshire鉴于2014 - 2015年King County，WA House Sales的数据集（https://www.kaggle.com/harlfoxem/housesalesprediction），我们的任务是创建一个模型来准确预测房屋销售价格。在初步数据探索和清理之后，我们发现了大量可用信息来描">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1555904704020-b85dbbe6-3aa5-4dea-b778-1e105493f214.jpeg#align=left&display=inline&height=497&name=1_SsPxICSeR9p-UK1NOOKV_g.jpeg&originHeight=666&originWidth=1000&size=180405&status=done&width=746">
   
     <link rel="alternative" href="/atom.xml" title="A+" type="application/atom+xml">
   
@@ -140,295 +158,160 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-yuque/在机器学习预测中转换分类数据的可用性" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      在机器学习预测中转换分类数据的可用性
+    </h1>
+  
+
+        
+        <a href="/2019/04/22/yuque/在机器学习预测中转换分类数据的可用性/" class="archive-article-date">
+  	<time datetime="2019-04-22T03:43:14.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-22</time>
+</a>
+        
+      </header>
     
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><a name="2365d7f8"></a></p>
+<h2 id="使用邮政编码，纬度和经度的快速示例"><a href="#使用邮政编码，纬度和经度的快速示例" class="headerlink" title="使用邮政编码，纬度和经度的快速示例"></a>使用邮政编码，纬度和经度的快速示例</h2><p><em>作者：Kevin Velasco和Alex Shropshire</em><br>鉴于2014 - 2015年King County，WA House Sales的数据集（<a href="https://www.kaggle.com/harlfoxem/housesalesprediction" target="_blank" rel="noopener">https://www.kaggle.com/harlfoxem/housesalesprediction</a>），我们的任务是创建一个模型来准确预测房屋销售价格。在初步数据探索和清理之后，我们发现了大量可用信息来描述住宅的质量，但没有太多有用的信息来定位。<br><a id="more"></a><br><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1555904704020-b85dbbe6-3aa5-4dea-b778-1e105493f214.jpeg#align=left&amp;display=inline&amp;height=497&amp;name=1_SsPxICSeR9p-UK1NOOKV_g.jpeg&amp;originHeight=666&amp;originWidth=1000&amp;size=180405&amp;status=done&amp;width=746" alt="1_SsPxICSeR9p-UK1NOOKV_g.jpeg"><br><a name="4801b5e2"></a></p>
+<h4 id="为什么位置对我们的数据集很重要"><a href="#为什么位置对我们的数据集很重要" class="headerlink" title="为什么位置对我们的数据集很重要"></a>为什么位置对我们的数据集很重要</h4><p>我们都听到过度使用的短语“位置，位置，位置”作为房地产市场评估的中心主题。人们普遍认为这是决定人们应该居住的最重要因素。价格和位置经常与买家齐头并进。任何家庭的条件，价格和规模都可能发生变化。一个常数是家的位置。<br>以我们的数据集的邮政编码功能为例：<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1555904732604-e7f579de-792f-4c45-9ab4-4e10b93950e6.png#align=left&amp;display=inline&amp;height=168&amp;name=1_MIk1jVLu4QZ0Dhdmk3Xe1w.png&amp;originHeight=168&amp;originWidth=664&amp;size=19853&amp;status=done&amp;width=664" alt="1_MIk1jVLu4QZ0Dhdmk3Xe1w.png"><br>在其当前形式中，在“邮政编码”列中具有70个唯一的分类值，机器学习模型不能提取每个邮政编码中包含的任何有用信息以评估与价格的关系。在这些类别中，存在一系列独特的有意义的房地产因素，如公园，学校，咖啡馆，商店，杂货店以及通行和主要道路。所有这些都是表明西雅图沃灵福德（Wallingford）社区与亚基马谷（Yakima Valley）中间的住宅区之间隐含差异的主要因素。解开价格方面的邮政编码的内在质量对于纳入我们的价格预测模型非常重要，因此我们必须适应以保持该类别的力量。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1555904767277-2ad542ad-c35b-4a75-b0ed-e70961991703.png#align=left&amp;display=inline&amp;height=528&amp;name=1_TT49azQZ06iTmVsWOlMc2Q.png&amp;originHeight=528&amp;originWidth=494&amp;size=49389&amp;status=done&amp;width=494" alt="1_TT49azQZ06iTmVsWOlMc2Q.png"><br>快速浏览上面的信息表明，我们需要设计新功能来理解邮政编码以及纬度和经度！<br><a name="77659e51"></a></p>
+<h4 id="转换和理解分类数据"><a href="#转换和理解分类数据" class="headerlink" title="转换和理解分类数据"></a>转换和理解分类数据</h4><p>我们以独特的方式正确应用纬度和经度信息的方法涉及创建一个特征来衡量与贝尔维尤和西雅图主要经济中心的距离，以便改进我们的价格预测。我们决定通过如下所示的Haversine公式计算距离，而不是通过创建数学函数重新发明轮子：<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1555904798878-09152ba2-4c98-46eb-8d1c-39191bda9337.png#align=left&amp;display=inline&amp;height=214&amp;name=0_XvYD6CcbmfT_3SdB.png&amp;originHeight=214&amp;originWidth=483&amp;size=26275&amp;status=done&amp;width=483" alt="0_XvYD6CcbmfT_3SdB.png"><br>hasrsine模块（<a href="https://pypi.org/project/haversine/" target="_blank" rel="noopener">https://pypi.org/project/haversine/</a>）为我们节省了大量时间。Haversine接收两个纬度和经度元组，并计算特定单位中两个地理点之间的地理距离。我们假设房价与西雅图市中心和贝尔维尤市区之间存在显着的关系，因为它们是该地区最大的就业和经济活动中心。我们认为较小的通勤时间和良好的主要城市资源的获取通常会增加需求，并且随之而来的是价格。<br>对于公式，我们需要转换每个房子的坐标。给定单独列中的纬度和经度，我们应用zip函数来创<br>建一个新的坐标元组列：<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1555904843691-1ae42859-e09d-4e59-9fc2-cf36518a6d20.png#align=left&amp;display=inline&amp;height=64&amp;name=1_pwtJRhdv_vhfyKkXZSUhjQ.png&amp;originHeight=65&amp;originWidth=752&amp;size=4449&amp;status=done&amp;width=746" alt="1_pwtJRhdv_vhfyKkXZSUhjQ.png"><br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1555904861429-c066de8a-8909-4fab-bc28-62c4ab149a7e.png#align=left&amp;display=inline&amp;height=51&amp;name=1_IcyeXhJz8BbSxQDFcooCgQ.png&amp;originHeight=51&amp;originWidth=752&amp;size=6380&amp;status=done&amp;width=746" alt="1_IcyeXhJz8BbSxQDFcooCgQ.png"><br>对于数据集中每个家庭的单点，以及两个参考点，创建了半胱氨酸公式的所有变量。将函数直接应用到现有Dataframe的新列中证明是棘手的。为了创建一个指示距离的新列，我们必须从列表数据类型创建一个Pandas系列，然后将其添加到现有的Dataframe中。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1555904884094-cf24a3d6-1038-4650-877a-77d5e8a27171.png#align=left&amp;display=inline&amp;height=205&amp;name=1_svI4oxVCY7kYIjrUJXNT1g.png&amp;originHeight=205&amp;originWidth=716&amp;size=33908&amp;status=done&amp;width=716" alt="1_svI4oxVCY7kYIjrUJXNT1g.png"><br>最后，我们创建了另一个列，该列选择了“distance_from_epicenter”列的两个点之间的最小距离。这一步对于获取两个城市附近的信息非常重要，以确保我们对经济中心的最短距离的解释已准备好供我们的模型解释。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1555904904820-730f47a1-088e-42b2-8cff-4bed2fc9a5c2.png#align=left&amp;display=inline&amp;height=36&amp;name=1_5I-z9cN5kt127GkIXKPB2A.png&amp;originHeight=54&amp;originWidth=1126&amp;size=9315&amp;status=done&amp;width=746" alt="1_5I-z9cN5kt127GkIXKPB2A.png"><br>对于邮政编码，我们实施了一个热编码pd.get_dummies（）方法，通过该方法将分类变量转换为可以提供给ML算法的表格，以更准确地预测价格。就我们的数据而言，我们想要取一个类别的邮政编码，并将其转换为二进制是[1]，此行是此邮政编码的成员，或者不是[0]，它不是。绝对数量的邮政编码似乎令人震惊，在我们的数据框中添加了许多列：<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1555904927628-b1055237-7cda-4302-a93e-3b4a78ebc7eb.png#align=left&amp;display=inline&amp;height=62&amp;name=1_c7dENhxqVQXsqm8FSp30qg.png&amp;originHeight=62&amp;originWidth=716&amp;size=10269&amp;status=done&amp;width=716" alt="1_c7dENhxqVQXsqm8FSp30qg.png"><br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1555904943242-ee0a50db-cbe3-4fd5-9acc-aae08449c3e7.png#align=left&amp;display=inline&amp;height=148&amp;name=1_6SazfrfSRH0ci1A8BiPiGw.png&amp;originHeight=223&amp;originWidth=1126&amp;size=27711&amp;status=done&amp;width=746" alt="1_6SazfrfSRH0ci1A8BiPiGw.png"><br>但是，通过将zipcode功能转换为包含二进制信息的多个列，我们可以将其作为一个功能来包含训练模型。为了正确解释我们的模型将为所有列生成的系数，我们首先必须在pd.get_dummies（）方法之后选择要删除的各种邮政编码之一，以编辑冗余信息。换句话说，我们删除一个邮政编码列，因为每个其他邮政编码列中都存在零，表示该行是我们删除的邮政编码的成员。该信息是剩余的n-1列二进制形式中固有的。我们选择删除98103的邮政编码，其中包括Wallingford，Greenlake，Phinney Ridge，Greenwood和Fremont等地区。我们之所以选择这个邮政编码，是因为它代表了一个位于西雅图市中心的中心区，我们希望可以很容易地将其解释为更具西雅图意识的观众的价格基准。我们想选择一个拉链，既不是比尔盖茨的邮政编码也不是更接近相反的极端，所以很多其他邮政编码的意思是房价高于和低于98103。最重要的是，整个过程确保我们得到的系数可以解释为98103邻域。<br><a name="88516905"></a></p>
+<h4 id="我们的模型改进工作的结果"><a href="#我们的模型改进工作的结果" class="headerlink" title="我们的模型改进工作的结果"></a>我们的模型改进工作的结果</h4><p>经过仔细的数据清理和特征工程，我们的模型包含10个预测变量，包括一个初始的“distance_from_seattle”预测器。在通过statsmodels的普通最小二乘线性回归模型运行数据集之后，我们的总结输出得到了不错的R平方（一种快速，方便的方式来初步评估模型质量）：<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1555904966918-630ca311-404d-4808-82b6-cd456b22ddf8.png#align=left&amp;display=inline&amp;height=207&amp;name=1_4Jz9M_BIi5Q1hpPcDmi6bQ.png&amp;originHeight=207&amp;originWidth=664&amp;size=32665&amp;status=done&amp;width=664" alt="1_4Jz9M_BIi5Q1hpPcDmi6bQ.png"><br>在0.735，我们的情况并不好，但还有改进的余地。意识到R平方作为模型质量的度量的局限性，为了说明基本模型迭代的场景之前和之后，它可以有勇士地服务。也就是说，在结合我们的’distance_from_epicenter’功能后，整合了西雅图市中心和贝尔维尤市中心的经济距离：<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1555904989653-b574d341-7aba-406a-9af1-12880656af35.png#align=left&amp;display=inline&amp;height=207&amp;name=1_W7yh5a1szpJL-Bg_2UBlcA.png&amp;originHeight=207&amp;originWidth=664&amp;size=32700&amp;status=done&amp;width=664" alt="1_W7yh5a1szpJL-Bg_2UBlcA.png"><br>一个可观的改进！最后，通过使用单热编码将难以格式化的邮政编码类别转换为有用的数字格式：<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1555905010901-0c526c9d-90f2-4f29-acc7-b38a13f6929d.png#align=left&amp;display=inline&amp;height=213&amp;name=1_gTIrXg426a53-e4P8Ni2fg.png&amp;originHeight=213&amp;originWidth=664&amp;size=34410&amp;status=done&amp;width=664" alt="1_gTIrXg426a53-e4P8Ni2fg.png"><br>通过如此显着的提升，并且根据业务案例的潜在背景，我们可能已准备好部署我们的预测器或引入新数据，设计新功能，或者只是继续在现有数据集内迭代。我们的模型现在导致调整后的R平方为0.876。换句话说，86.7％的响应变量变化可以用我们的线性模型来解释。<br><a name="fef1217c"></a></p>
+<h4 id="最后的想法"><a href="#最后的想法" class="headerlink" title="最后的想法"></a>最后的想法</h4><p>回顾原始数据集和提供的信息，最初看起来很少有关于位置的可操作信息实际上包含强大的分类邮政编码数据和可转换的纬度和经度数据，这些数据在我们的机器学习算法中产生了巨大的改进。每个都解锁了。在理解房屋市场价格方面，“位置，位置，位置”的古老格言毕竟是真正的力量。为了从这里升级，可以考虑诸如时间，更大的地理界限和来自其他需求影响模式的数据之类的变量，特别是当房地产/房地产技术领域的高增长公司进入分析军备竞赛时才是最有见识的。我相信你们是个好人，但是我们会来找你Zillow。<br><strong>有关项目详细信息，最准确的价格预测代码以及相关幻灯片，请查看我们的GitHub回购：</strong><br>Alex Shropshire：<br><a href="https://github.com/as6140/kingcountyWA_home_price_predictor" target="_blank" rel="noopener"><strong>as6140 / kingcountyWA_home_price_predictor</strong><br>_通过在GitHub上创建一个帐户，为as6140 / kingcountyWA_home_price_predictor开发做出贡献。_github.com</a><a href="https://github.com/as6140/kingcountyWA_home_price_predictor" target="_blank" rel="noopener"></a><br>凯文韦拉斯科：<br><a href="https://github.com/kevintheduu/dsc-1-final-project-seattle-ds-career-040119" target="_blank" rel="noopener"><strong>kevintheduu / dsc-1-final-project-seattle-ds-career-040119</strong><br>_通过在GitHub上创建一个帐户，为kevintheduu / dsc-1-final-project-seattle-ds-career-040119开发做出贡献。_github.com</a></p>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
       
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2019" class="archive-year">2019</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/04/08/yuque/CatBoost有什么特别之处？/" class="archive-article-date">
-  	<time datetime="2019-04-08T07:12:11.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-08</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/04/08/yuque/CatBoost有什么特别之处？/">CatBoost有什么特别之处？</a>
-    </h1>
-  
+      
 
-        <div class="article-info info-on-right">
-          
-          
+      
 
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://zhos.me/2019/04/22/yuque/在机器学习预测中转换分类数据的可用性/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/04/08/yuque/动画RNN，LSTM和GRU/" class="archive-article-date">
-  	<time datetime="2019-04-08T03:35:15.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-08</time>
-</a>
+<nav id="article-nav">
+  
+  
+    <a href="/2019/04/22/yuque/决策树完整指南/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">决策树完整指南</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
+        
+        
+    </div>
+</aside>
+
+
+
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/04/08/yuque/动画RNN，LSTM和GRU/">动画RNN，LSTM和GRU</a>
-    </h1>
+  
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/04/08/yuque/XGBoost算法：长期可能在位！/" class="archive-article-date">
-  	<time datetime="2019-04-08T03:02:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-08</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/04/08/yuque/XGBoost算法：长期可能在位！/">XGBoost算法：长期可能在位！</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/04/05/yuque/我的建立图书推荐系统之旅。。。/" class="archive-article-date">
-  	<time datetime="2019-04-04T16:41:13.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-05</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/04/05/yuque/我的建立图书推荐系统之旅。。。/">我的建立图书推荐系统之旅。。。</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/04/04/yuque/webhook实现服务器自动部署/" class="archive-article-date">
-  	<time datetime="2019-04-04T14:50:24.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-04</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/04/04/yuque/webhook实现服务器自动部署/">webhook实现服务器自动部署</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/04/04/yuque/12产品管理的行为数据类型/" class="archive-article-date">
-  	<time datetime="2019-04-04T10:09:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-04</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/04/04/yuque/12产品管理的行为数据类型/">12产品管理的行为数据类型</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/04/04/yuque/从Alexa的错误中学习/" class="archive-article-date">
-  	<time datetime="2019-04-04T09:08:29.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-04</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/04/04/yuque/从Alexa的错误中学习/">从Alexa的错误中学习</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/04/04/yuque/语音助理在手机上被浪费了/" class="archive-article-date">
-  	<time datetime="2019-04-04T08:55:53.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-04</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/04/04/yuque/语音助理在手机上被浪费了/">语音助理在手机上被浪费了</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/03/18/yuque/转移学习：重新启动Inception V3以进行自定义图像分类/" class="archive-article-date">
-  	<time datetime="2019-03-18T10:00:40.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-18</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/03/18/yuque/转移学习：重新启动Inception V3以进行自定义图像分类/">转移学习：重新启动Inception V3以进行自定义图像分类</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/03/18/yuque/Spark上的实际Python工作负载：独立群集/" class="archive-article-date">
-  	<time datetime="2019-03-18T09:45:16.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-18</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/03/18/yuque/Spark上的实际Python工作负载：独立群集/">Spark上的实际Python工作负载：独立群集</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
-
-    
-    <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/archives/">&laquo; Prev</a><a class="page-number" href="/archives/">1</a><span class="page-number current">2</span><a class="page-number" href="/archives/page/3/">3</a><a class="page-number" href="/archives/page/4/">4</a><a class="page-number" href="/archives/page/5/">5</a><a class="extend next" rel="next" href="/archives/page/3/">Next &raquo;</a>
-    </nav>
   
 
 
@@ -452,8 +335,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
