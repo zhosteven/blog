@@ -142,6 +142,86 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-yuque/使用新的fastai库实现世界一流的结果" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/12/20/yuque/使用新的fastai库实现世界一流的结果/">使用新的fastai库实现世界一流的结果</a>
+    </h1>
+  
+
+        
+        <a href="/2018/12/20/yuque/使用新的fastai库实现世界一流的结果/" class="archive-article-date">
+  	<time datetime="2018-12-20T06:20:52.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-20</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><a href="https://towardsdatascience.com/transfer-learning-using-the-fastai-library-d686b238213e" target="_blank" rel="noopener">链接</a></p>
+<p><a name="hmoufh"></a></p>
+<h3 id="动机"><a href="#动机" class="headerlink" title="动机"></a><a href="#hmoufh"></a>动机</h3><p>我目前正在做一个fast.ai Live MOOC，名为《Practical Deep learning for Coders》，将于2019年1月在fast.ai网站上公开发布。 以下代码基于该课程的第1课。 我将使用位于Pytorch 1.0顶部的fastai V1库。 fastai库提供了许多有用的功能，使我们能够快速，轻松地构建神经网络并训练我们的模型。 我正在撰写此博客，作为在数据集上试验课程示例的一部分，该数据集在结构和复杂性上有所不同，并表明使用fastai库是多么容易。<br>在下面的例子中，您将看到在<a href="https://plantvillage.psu.edu/" target="_blank" rel="noopener">PlantVintage</a>数据集上进行转移学习并获得世界级结果是多么荒谬。 PlantVintage数据包含植物叶片的图像，其中包括通常在作物上发现的38种疾病类别，是来自斯坦福大学背景图像开放数据集的一个背景类别–DAGS。 我从这个<a href="https://github.com/MarkoArsenovic/DeepLearning_PlantDiseases" target="_blank" rel="noopener">Github Repo</a>上给出的链接下载了数据。 我对这个例子特别感兴趣，因为在我写这篇博客的时候，我为一个帮助农民发展业务的组织工作，提供产品和技术解决方案，以便更好地管理农场。 让我们开始吧！<br>PS：这个博客也在我的<a href="https://github.com/aayushmnit" target="_blank" rel="noopener">GitHub</a>个人资料中作为jupyter笔记本发布。<br><a name="5dzgih"></a></p>
+<h3 id="导入快速AI库"><a href="#导入快速AI库" class="headerlink" title="导入快速AI库"></a><a href="#5dzgih"></a>导入快速AI库</h3><p>让我们导入fastai库并将我们的batch_size参数定义为64.通常，图像数据库很大，所以我们需要使用批量将这些图像提供给GPU，批量大小64意味着我们将一次提供64个图像来更新深度参数 学习模式。 如果由于GPU RAM较小而导致内存不足，则可以将批量大小减小到32或16。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> fastai <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> fastai.vision <span class="keyword">import</span> *</span><br><span class="line">bs =<span class="number">64</span></span><br></pre></td></tr></table></figure></p>
+<p><a name="vr3dmp"></a></p>
+<h3 id="看数据"><a href="#看数据" class="headerlink" title="看数据"></a><a href="#vr3dmp"></a>看数据</h3><p>我们处理问题时首先要做的是查看数据。 在我们弄清楚如何解决问题之前，我们总是需要很好地理解问题是什么以及数据是什么样的。 查看数据意味着了解数据目录的结构，标签是什么以及一些示例图像是什么样的。 我们的数据已经在train和validation文件夹中分割，在每个子目录中，我们的文件夹名称代表该子文件夹中存在的所有图像的类名。 幸运的是，fastai库有一个方便的功能，<a href="https://docs.fast.ai/vision.data#ImageDataBunch.from_folder" target="_blank" rel="noopener">ImageDataBunch.from_folder</a>自动从文件夹名称中获取标签名称。 fastai库提供了很棒的文档来浏览它们的库函数，并提供有关如何使用它们的实例。 加载数据后，我们还可以使用.normalize到ImageNet参数来规范化数据。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">## Declaring path of dataset</span></span><br><span class="line">path_img = Path(<span class="string">'/home/jupyter/fastai_v3_experimentation/data/PlantVillage/'</span>)</span><br><span class="line"><span class="comment">## Loading data </span></span><br><span class="line">data = ImageDataBunch.from_folder(path=path_img, train=<span class="string">'train'</span>, valid=<span class="string">'valid'</span>, ds_tfms=get_transforms(),size=<span class="number">224</span>, bs=bs, check_ext=<span class="literal">False</span>)</span><br><span class="line"><span class="comment">## Normalizing data based on Image net parameters</span></span><br><span class="line">data.normalize(imagenet_stats)</span><br></pre></td></tr></table></figure></p>
+<p>要查看随机的图像样本，我们可以使用.show_batch（）函数ImageDataBunch类。 正如我们在下面所看到的，我们有一些不同作物上的疾病病例加上来自DAGS数据集的一些背景噪声图像，这些图像将作为噪声。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">data.show_batch(rows=<span class="number">3</span>, figsize=(<span class="number">10</span>,<span class="number">8</span>))</span><br></pre></td></tr></table></figure></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545287666783-17e163b9-fba6-4ab9-9952-1168913169b0.png#width=826" alt><br>让我们打印数据库中存在的所有数据类。 总的来说，我们在动机部分中提到了39个课程中的图像。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">print(data.classes)</span><br><span class="line">len(data.classes),data.c</span><br></pre></td></tr></table></figure></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545287718206-c67e4447-9a83-4032-86c8-5d298c775b72.png#width=826" alt><br><a name="hzustc"></a></p>
+<h3 id="使用预先训练的模型转移学习：ResNet-50"><a href="#使用预先训练的模型转移学习：ResNet-50" class="headerlink" title="使用预先训练的模型转移学习：ResNet 50"></a><a href="#hzustc"></a>使用预先训练的模型转移学习：ResNet 50</h3><p>现在我们将开始训练我们的模型。 我们将使用卷积神经网络骨干ResNet 50和具有单个隐藏层的完全连接头作为分类器。 如果您想了解所有架构细节，也可以阅读ResNet论文。 要创建转移学习模型，我们需要使用Learner类中的函数create_cnn，并从模型类中提供预先训练的模型。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">## To create a ResNET 50 with pretrained weights</span></span><br><span class="line">learn = create_cnn(data, models.resnet50, metrics=error_rate)</span><br></pre></td></tr></table></figure></p>
+<p>由create_cnn函数创建的ResNet50模型具有冻结的初始层，我们将学习最后完全连接的层的权重。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">learn.fit_one_cycle(<span class="number">5</span>)</span><br></pre></td></tr></table></figure></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545287818426-ef1da8b8-26e2-4bee-835a-abfa2386fa31.png#width=584" alt><br>正如我们在上面看到的那样，只使用默认设置运行五个周期，我们对这个细粒度分类任务的准确度在验证数据集上约为99.64％。 让我们保存模型，因为我们稍后会对其进行微调。 如果你想知道这个结果有多好，它已经超过了这个<a href="https://github.com/MarkoArsenovic/DeepLearning_PlantDiseases" target="_blank" rel="noopener">Github Page</a>的96.53％的浅层学习（仅培训最后一层）基准。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">learn.save(<span class="string">'plant_vintage_stage1'</span>)</span><br></pre></td></tr></table></figure></p>
+<p>FastAI库还提供了更快地探索结果的功能，并查找我们的模型是否正在学习应该学习的内容。 我们将首先看到模型最混淆的类别。 我们将尝试使用ClassificationInterpretation类来查看模型预测的是否合理。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">interp = ClassificationInterpretation.from_learner(learn)</span><br><span class="line">interp.plot_top_losses(<span class="number">4</span>, figsize=(<span class="number">20</span>,<span class="number">25</span>))</span><br></pre></td></tr></table></figure></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545287958131-9082d640-9b93-482c-8ed4-7becd11c97b9.png#width=826" alt><br>在这种情况下，该模型在从玉米植株上的灰色叶斑病和番茄叶片中的早/晚疫病检测北叶枯病方面变得混乱，其在视觉上看起来非常相似。 这是我们的分类器正常工作的指示器。 此外，当我们绘制混淆矩阵时，我们可以看到大多数事物都被正确分类，并且它几乎是一个接近完美的模型。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">interp.plot_confusion_matrix(figsize=(<span class="number">20</span>,<span class="number">20</span>), dpi=<span class="number">60</span>)</span><br></pre></td></tr></table></figure></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545288034116-dbb5f685-7a96-4031-8b2b-e54abae02d81.png#width=826" alt><br>所以到目前为止，我们只训练了最后的分类层，但是如果我们想要优化早期的层也会如此。 在迁移学习中，应谨慎调整初始图层，学习率应保持在较低水平。 FastAI库提供了一个功能，可以查看要训练的理想学习速率，让我们绘制它。 lr_find函数以多学习速率运行数据子集的模型，以确定哪种学习速率最佳。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">learn.lr_find()</span><br><span class="line">learn.recorder.plot()</span><br></pre></td></tr></table></figure></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545288100487-9ddefc18-b8fb-4fe1-8232-8cc43139a730.png#width=447" alt><br>看起来我们应该保持低于10e-4的学习率。 对于网络中的不同层，我们可以使用切片函数来对数分布10e-6到10e-4之间的学习速率。 保持初始层的最低学习速率，并为后续层增加它。 让我们解冻所有层，以便我们可以使用unfreeze()函数训练整个模型。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">learn.unfreeze()</span><br><span class="line">learn.fit_one_cycle(<span class="number">2</span>, max_lr=slice(<span class="number">1e-7</span>,<span class="number">1e-5</span>))</span><br></pre></td></tr></table></figure></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545288161256-736a1108-3167-4d5f-be85-2ab6317a60c3.png#width=528" alt><br>正如我们通过训练所有层次所看到的，我们将准确度提高到99.7％，这与使用Inception-v3模型的Github基准测试中的99.76％相当。<br><a name="zv6xnx"></a></p>
+<h3 id="结论"><a href="#结论" class="headerlink" title="结论"></a><a href="#zv6xnx"></a>结论</h3><p>Fast.ai是Jeremy Howard和他的团队的一项出色的倡议，我相信fastai库可以通过使构建深度学习模型变得非常简单，真正实现将深度学习民主化的动机。<br><br>我希望你喜欢阅读，并随意使用我的代码为你的目的尝试。 此外，如果对代码或博客文章有任何反馈，请随时联系LinkedIn或发送电子邮件至<a href="mailto:aayushmnit@gmail.com" target="_blank" rel="noopener">aayushmnit@gmail.com</a>。<br><br>PS：如果你喜欢这些内容，请留下评论或鼓掌，并希望我更频繁地写这样的博客。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/12/20/yuque/使用新的fastai库实现世界一流的结果/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-yuque/XGBoost不是黑魔法" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     

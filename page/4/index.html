@@ -142,6 +142,121 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-yuque/MLflow项目" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/03/15/yuque/MLflow项目/">MLflow项目</a>
+    </h1>
+  
+
+        
+        <a href="/2019/03/15/yuque/MLflow项目/" class="archive-article-date">
+  	<time datetime="2019-03-15T06:49:30.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-15</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><a name="5455d259"></a></p>
+<h1 id="MLflow项目"><a href="#MLflow项目" class="headerlink" title="MLflow项目"></a>MLflow项目<a href="https://mlflow.org/docs/latest/projects.html#mlflow-projects" target="_blank" rel="noopener"></a></h1><p>MLflow项目是一种以可重用和可重复的方式打包数据科学代码的格式，主要基于约定。此外，Projects组件包括用于运行项目的API和命令行工具，可以将项目链接到工作流中。<br>目录</p>
+<ul>
+<li><a href="https://mlflow.org/docs/latest/projects.html#overview" target="_blank" rel="noopener">概观</a></li>
+<li><a href="https://mlflow.org/docs/latest/projects.html#specifying-projects" target="_blank" rel="noopener">指定项目</a></li>
+<li><a href="https://mlflow.org/docs/latest/projects.html#running-projects" target="_blank" rel="noopener">运行项目</a></li>
+<li><a href="https://mlflow.org/docs/latest/projects.html#iterating-quickly" target="_blank" rel="noopener">快速迭代</a></li>
+<li><a href="https://mlflow.org/docs/latest/projects.html#building-multistep-workflows" target="_blank" rel="noopener">构建多步骤工作流程</a><br><a name="a7dc4168"></a><h2 id="概观"><a href="#概观" class="headerlink" title="概观"></a><a href="https://mlflow.org/docs/latest/projects.html#id3" target="_blank" rel="noopener">概观</a><a href="https://mlflow.org/docs/latest/projects.html#overview" target="_blank" rel="noopener"></a></h2>MLflow Projects的核心只是组织和描述代码的惯例，让其他数据科学家（或自动化工具）运行它。每个项目都只是一个包含代码的文件目录或Git存储库。MLflow可以根据将文件放在此目录中的约定来运行某些项目（例如，<code>conda.yaml</code>文件将被视为 <a href="https://conda.io/docs" target="_blank" rel="noopener">Conda</a>环境），但您可以通过添加<code>MLproject</code>文件来更详细地描述您的项目，该文件是<a href="https://learnxinyminutes.com/docs/yaml/" target="_blank" rel="noopener">YAML</a>格式的文本文件。每个项目都可以指定几个属性：</li>
+</ul>
+<p><a name="d7ec2d3f"></a></p>
+<h4 id="名称"><a href="#名称" class="headerlink" title="名称"></a>名称</h4><p>项目的可读名称。<br><a name="6860b943"></a></p>
+<h4 id="依赖"><a href="#依赖" class="headerlink" title="依赖"></a>依赖</h4><p>运行项目所需的库。MLflow目前使用 <a href="https://conda.io/docs" target="_blank" rel="noopener">Conda</a>包管理器，它支持Python包和本机库（例如，CuDNN或Intel MKL），以指定依赖关系。<code>MLFLOW_CONDA_HOME</code>如果指定，MLflow将使用环境变量给出的Conda安装（例如，通过调用运行Conda命令<code>$MLFLOW_CONDA_HOME/bin/conda</code>），<code>conda</code>否则默认运行。<br><a name="c0cec124"></a></p>
+<h4 id="入口点"><a href="#入口点" class="headerlink" title="入口点"></a>入口点</h4><p>可以在项目中执行的命令，以及有关其参数的信息。大多数项目至少包含一个您希望其他用户调用的入口点。某些项目还可以包含多个入口点：例如，您可能拥有一个包含多个特征化算法的Git存储库。您还可以将项目中的任何文件<code>.py</code>或<code>.sh</code>文件作为入口点调用。<code>MLproject</code>但是，如果在文件中列出入口点，则还可以为它们指定_参数_，包括数据类型和默认值。<br>您可以使用 命令行工具或Python API 从Git URI或本地目录运行任何项目。这些API还允许在<a href="https://databricks.com/" target="_blank" rel="noopener">Databricks</a>上提交项目以进行远程执行。<code>mlflow run</code><a href="https://mlflow.org/docs/latest/python_api/mlflow.projects.html#mlflow.projects.run" target="_blank" rel="noopener"><code>mlflow.projects.run()</code></a></p>
+<blockquote>
+<p>警告<br>默认情况下，MLflow将为Git项目使用一个新的临时工作目录。这意味着您通常应该使用绝对路径而不是相对路径将任何文件参数传递给MLflow项目。如果您的项目声明了其参数，MLflow将自动为类型参数创建绝对路径<code>path</code>。</p>
+</blockquote>
+<p><a name="c7dfa7ad"></a></p>
+<h2 id="指定项目"><a href="#指定项目" class="headerlink" title="指定项目"></a><a href="https://mlflow.org/docs/latest/projects.html#id4" target="_blank" rel="noopener">指定项目</a><a href="https://mlflow.org/docs/latest/projects.html#specifying-projects" target="_blank" rel="noopener"></a></h2><p>默认情况下，任何Git存储库或本地目录都被视为项目，MLflow使用以下约定来确定其参数：</p>
+<ul>
+<li>项目的名称是目录的名称。</li>
+<li>该conda中指定的<code>conda.yaml</code>，如果存在的话。如果没有<code>conda.yaml</code>文件，MLflow将在运行项目时使用仅包含Python的Conda环境（特别是Conda可用的最新Python）。</li>
+<li>项目中的任何<code>.py</code>和<code>.sh</code>文件都可以是一个入口点，没有显式声明参数。当您使用一组参数执行此类命令时，MLflow将使用语法传递命令行上的每个参数。<code>--key value</code></li>
+</ul>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">name:</span> <span class="string">My</span> <span class="string">Project</span></span><br><span class="line"></span><br><span class="line"><span class="attr">conda_env:</span> <span class="string">my_env.yaml</span></span><br><span class="line"></span><br><span class="line"><span class="attr">entry_points:</span></span><br><span class="line"><span class="attr">  main:</span></span><br><span class="line"><span class="attr">    parameters:</span></span><br><span class="line"><span class="attr">      data_file:</span> <span class="string">path</span></span><br><span class="line"><span class="attr">      regularization:</span> <span class="string">&#123;type:</span> <span class="string">float,</span> <span class="attr">default:</span> <span class="number">0.1</span><span class="string">&#125;</span></span><br><span class="line"><span class="attr">    command:</span> <span class="string">"python train.py -r &#123;regularization&#125; &#123;data_file&#125;"</span></span><br><span class="line"><span class="attr">  validate:</span></span><br><span class="line"><span class="attr">    parameters:</span></span><br><span class="line"><span class="attr">      data_file:</span> <span class="string">path</span></span><br><span class="line"><span class="attr">    command:</span> <span class="string">"python validate.py &#123;data_file&#125;"</span></span><br></pre></td></tr></table></figure>
+<p>如您所见，该文件可以指定名称和不同的环境文件，以及有关每个入口点的更多详细信息。具体来说，每个入口点都有一个运行_命令_和_参数_（包括数据类型）。接下来我们将描述这两个部分。<br><a name="47d85f76"></a></p>
+<h3 id="命令语法"><a href="#命令语法" class="headerlink" title="命令语法"></a>命令语法<a href="https://mlflow.org/docs/latest/projects.html#command-syntax" target="_blank" rel="noopener"></a></h3><p>在文件中指定入口点时<code>MLproject</code>，该命令可以是Python <a href="https://docs.python.org/2/library/string.html#formatstrings" target="_blank" rel="noopener">格式字符串语法中的</a>任何字符串 。在入口点的<code>parameters</code>字段中声明的所有参数都将传递到此字符串中以进行替换。如果使用字段中_未_列出的 其他参数调用项目<code>parameters</code>，MLflow将使用语法传递它们，因此您可以使用该文件仅为参数的子集声明类型和默认值。<code>--key value`</code>MLproject`<br>在替换命令中的参数之前，MLflow使用Python的<a href="https://docs.python.org/3/library/shlex.html#shlex.quote" target="_blank" rel="noopener">shlex.quote</a>函数转义它们 ，因此您无需担心在命令字段中添加引号。<br><a name="9459a637"></a></p>
+<h3 id="指定参数"><a href="#指定参数" class="headerlink" title="指定参数"></a>指定参数<a href="https://mlflow.org/docs/latest/projects.html#specifying-parameters" target="_blank" rel="noopener"></a></h3><p>MLflow允许为每个参数指定数据类型和默认值。您可以通过编写以下内容来指定数据类型：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">parameter_name:</span> <span class="string">data_type</span></span><br></pre></td></tr></table></figure>
+<p>在您的YAML文件中，或者使用以下语法之一（在YAML中等效）添加默认值：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">parameter_name:</span> <span class="string">&#123;type:</span> <span class="string">data_type,</span> <span class="attr">default:</span> <span class="string">value&#125;</span>  <span class="comment"># Short syntax</span></span><br><span class="line"></span><br><span class="line"><span class="attr">parameter_name:</span>     <span class="comment"># Long syntax</span></span><br><span class="line"><span class="attr">  type:</span> <span class="string">data_type</span></span><br><span class="line"><span class="attr">  default:</span> <span class="string">value</span></span><br></pre></td></tr></table></figure>
+<p>MLflow支持四种参数类型，其中一些特殊处理（例如，将数据下载到本地文件）。任何未声明的参数都被视为<code>string</code>。参数类型是：<br><a name="string"></a></p>
+<h4 id="string"><a href="#string" class="headerlink" title="string"></a>string</h4><p>任何文字字符串。<br><a name="float"></a></p>
+<h4 id="float"><a href="#float" class="headerlink" title="float"></a>float</h4><p>一个真实的数字。MLflow验证参数是否为数字。<br><a name="path"></a></p>
+<h4 id="path"><a href="#path" class="headerlink" title="path"></a>path</h4><p>本地文件系统上的路径。MLflow会将为此类参数传递的任何相对路径转换为绝对路径，并且还会将作为分布式存储URI（<code>s3://</code>和<code>dbfs://</code>）传递的任何路径下载到本地文件。将此类型用于只能读取本地文件的程序。<br><a name="URI"></a></p>
+<h4 id="URI"><a href="#URI" class="headerlink" title="URI"></a>URI</h4><p>本地或分布式存储系统中的数据URI。MLflow会将任何相对路径转换为绝对路径，如<code>path</code>类型中所示。对于知道如何从分布式存储中读取的程序（例如使用Spark），请使用此类型。<br><a name="fa4aa1b9"></a></p>
+<h2 id="运行项目"><a href="#运行项目" class="headerlink" title="运行项目"></a><a href="https://mlflow.org/docs/latest/projects.html#id5" target="_blank" rel="noopener">运行项目</a><a href="https://mlflow.org/docs/latest/projects.html#running-projects" target="_blank" rel="noopener"></a></h2><p>MLflow提供了两种简单的方法来运行项目：<a href="https://mlflow.org/docs/latest/cli.html#cli" target="_blank" rel="noopener">命令行工具</a>或Python API。这两个工具都采用以下参数：<code>mlflow run</code> <a href="https://mlflow.org/docs/latest/cli.html#cli" target="_blank" rel="noopener"></a><a href="https://mlflow.org/docs/latest/python_api/mlflow.projects.html#mlflow.projects.run" target="_blank" rel="noopener"><code>mlflow.projects.run()</code></a><br><a name="2daece47"></a></p>
+<h4 id="项目URI"><a href="#项目URI" class="headerlink" title="项目URI"></a>项目URI</h4><p>可以是本地文件系统上的目录，也可以是Git存储库路径，指定为表单的URI <code>https://&lt;repo&gt;</code>（使用HTTPS）或<code>user@host:path</code> （通过SSH使用Git）。要针对位于项目子目录中的MLproject文件运行，请在URI参数的末尾添加“＃”，然后是从项目根目录到包含所需项目的子目录的相对路径。<br><a name="901b44b9"></a></p>
+<h4 id="项目版本"><a href="#项目版本" class="headerlink" title="项目版本"></a>项目版本</h4><p>对于基于Git的项目，要运行的Git存储库中的提交哈希或分支名称。<br><a name="c0cec124-1"></a></p>
+<h4 id="入口点-1"><a href="#入口点-1" class="headerlink" title="入口点"></a>入口点</h4><p>要使用的入口点的名称，默认为<code>main</code>。您可以使用<code>MLproject</code>文件中指定的任何入口点，或项目中的任何<code>.py</code>或<code>.sh</code>文件，作为项目根目录中的路径（例如，<code>src/test.py</code>）。<br><a name="3d0a2df9"></a></p>
+<h4 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h4><p>键值参数。如果需要，将验证并转换具有<a href="https://mlflow.org/docs/latest/projects.html#project-parameters" target="_blank" rel="noopener">声明类型的</a>任何参数 。<br><a name="569134fb"></a></p>
+<h4 id="部署模式"><a href="#部署模式" class="headerlink" title="部署模式"></a>部署模式</h4><p>如果您有Databricks帐户，命令行和API都允许您在<a href="https://databricks.com/" target="_blank" rel="noopener">Databricks</a>环境中<a href="https://mlflow.org/docs/latest/projects.html#databricks-execution" target="_blank" rel="noopener">远程启动项目</a>。这包括设置群集参数，例如VM类型。当然，您还可以使用本地版本的 命令在您选择的任何其他计算基础架构上运行项目（例如，提交对标准作业排队系统执行的脚本）。<code>mlflow run</code><br>例如，本教程创建并发布一个训练线性模型的ML项目。该项目也在GitHub上发布，<a href="https://github.com/mlflow/mlflow-example" target="_blank" rel="noopener">网址</a>为<a href="https://github.com/mlflow/mlflow-example" target="_blank" rel="noopener">https://github.com/mlflow/mlflow-example</a>。要执行此项目，请运行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mlflow run git@github.com:mlflow/mlflow-example.git -P alpha=0.5</span><br></pre></td></tr></table></figure>
+<p>还有其他选项可用于禁用Conda环境的创建，如果您希望在现有shell环境中快速测试项目，这将非常有用。<br><a name="51b32c21"></a></p>
+<h3 id="Databricks上的远程执行"><a href="#Databricks上的远程执行" class="headerlink" title="Databricks上的远程执行"></a>Databricks上的远程执行<a href="https://mlflow.org/docs/latest/projects.html#remote-execution-on-databricks" target="_blank" rel="noopener"></a></h3><p>在Databricks上远程运行项目的支持处于beta预览阶段，需要Databricks帐户。要接收有关该功能的未来更新，请<a href="http://databricks.com/mlflow" target="_blank" rel="noopener">在此处注册</a>。<br><a name="23c8e7a9"></a></p>
+<h4 id="在Databricks上启动远程执行"><a href="#在Databricks上启动远程执行" class="headerlink" title="在Databricks上启动远程执行"></a>在Databricks上启动远程执行</h4><p>要使用此功能，您需要拥有Databricks帐户（尚不支持Community Edition），并且您必须设置<a href="https://docs.databricks.com/api/latest/jobs.html#jobsclusterspecnewcluster" target="_blank" rel="noopener">Databricks命令行实用程序</a>。在Databricks文档中找到更详细的说明（<a href="https://docs.databricks.com/applications/mlflow/index.html" target="_blank" rel="noopener">此处为Azure Databricks</a>，<a href="https://docs.databricks.com/applications/mlflow/index.html" target="_blank" rel="noopener">此处为AWS上的Databricks</a>）。有关如何使用该功能的简要概述如下：<br>首先，创建一个包含 运行的<a href="https://docs.databricks.com/api/latest/jobs.html#jobsclusterspecnewcluster" target="_blank" rel="noopener">集群规范</a>的JSON文件 。然后，通过运行您的项目</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mlflow run &lt;uri&gt; -m databricks --cluster-spec &lt;json-cluster-spec&gt;</span><br></pre></td></tr></table></figure>
+<p>必须是Git存储库URI。您还可以通过git-username和git-password参数（或通过MLFLOW_GIT_USERNAME和 MLFLOW_GIT_PASSWORD环境变量）传递Git凭据 。</p>
+<p><a name="9810fecc"></a></p>
+<h2 id="快速迭代"><a href="#快速迭代" class="headerlink" title="快速迭代"></a><a href="https://mlflow.org/docs/latest/projects.html#id6" target="_blank" rel="noopener">快速迭代</a><a href="https://mlflow.org/docs/latest/projects.html#iterating-quickly" target="_blank" rel="noopener"></a></h2><p>如果要快速开发项目，我们建议创建一个<code>MLproject</code>文件，将主程序指定为<code>main</code>入口点，并运行它。为避免重复写入，您可以在文件中添加默认参数。<code>mlflow run .</code><br><a name="7eb43295"></a></p>
+<h2 id="构建多步骤工作流程"><a href="#构建多步骤工作流程" class="headerlink" title="构建多步骤工作流程"></a><a href="https://mlflow.org/docs/latest/projects.html#id7" target="_blank" rel="noopener">构建多步骤工作流程</a><a href="https://mlflow.org/docs/latest/projects.html#building-multistep-workflows" target="_blank" rel="noopener"></a></h2><p><a href="https://mlflow.org/docs/latest/python_api/mlflow.projects.html#mlflow.projects.run" target="_blank" rel="noopener"><code>mlflow.projects.run()</code></a>API，结合<a href="https://mlflow.org/docs/latest/python_api/mlflow.tracking.html#module-mlflow.tracking" target="_blank" rel="noopener"><code>mlflow.tracking</code></a>，使得可以构建具有不同的项目（或入口点在同一个项目）作为单独的步骤的多步骤的工作流程。每次调用都会<a href="https://mlflow.org/docs/latest/python_api/mlflow.projects.html#mlflow.projects.run" target="_blank" rel="noopener"><code>mlflow.projects.run()</code></a>返回一个运行对象，您可以使用它 <a href="https://mlflow.org/docs/latest/python_api/mlflow.tracking.html#module-mlflow.tracking" target="_blank" rel="noopener"><code>mlflow.tracking</code></a>来确定运行何时结束并获取其输出工件。然后，这些伪像可以被传递到另一个步骤，该步骤需要<code>path</code>或<code>uri</code>参数。您可以在单个Python程序中协调所有工作流，该程序查看每个步骤的结果，并使用自定义代码决定接下来要提交的内容。一些示例用于多步骤工作流的案例包括：<br><a name="49e2a189"></a></p>
+<h4 id="模块化您的数据科学代码"><a href="#模块化您的数据科学代码" class="headerlink" title="模块化您的数据科学代码"></a>模块化您的数据科学代码</h4><p>不同的用户可以发布可重用的步骤，用于数据特征化，培训，验证等，其他用户或团队可以在他们的工作流程中运行。由于MLflow支持Git版本控制，因此另一个团队可以将其工作流程锁定到项目的特定版本，或者按照自己的计划升级到新版本。<br><a name="66b62bf4"></a></p>
+<h4 id="超参数调整"><a href="#超参数调整" class="headerlink" title="超参数调整"></a>超参数调整</h4><p>使用<a href="https://mlflow.org/docs/latest/python_api/mlflow.projects.html#mlflow.projects.run" target="_blank" rel="noopener"><code>mlflow.projects.run()</code></a>您可以在本地计算机上或在像Databricks这样的云平台上并行启动多个运行。然后，您的驱动程序可以实时检查每次运行的指标，以取消运行，启动新运行或选择目标指标上运行最佳的运行。<br><a name="95c01146"></a></p>
+<h4 id="交叉验证"><a href="#交叉验证" class="headerlink" title="交叉验证"></a>交叉验证</h4><p>有时您希望在培训和验证数据的不同随机分组上运行相同的培训代码。使用MLflow项目，您可以以允许此方式打包项目，例如，通过将列车/验证拆分的随机种子作为参数，或者首先调用可以拆分输入数据的另一个项目。<br>有关如何构建此类多步骤工作<a href="https://github.com/mlflow/mlflow/tree/master/examples/multistep_workflow" target="_blank" rel="noopener">流的示例</a>，请参阅MLflow Multistep <a href="https://github.com/mlflow/mlflow/tree/master/examples/multistep_workflow" target="_blank" rel="noopener">工作流示例项目</a>。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/03/15/yuque/MLflow项目/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-yuque/MLFLOW概念" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1163,86 +1278,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2018/12/20/yuque/Pytorch：如何以及何时使用Module，Sequential，ModuleList和ModuleDict/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/使用新的fastai库实现世界一流的结果" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/12/20/yuque/使用新的fastai库实现世界一流的结果/">使用新的fastai库实现世界一流的结果</a>
-    </h1>
-  
-
-        
-        <a href="/2018/12/20/yuque/使用新的fastai库实现世界一流的结果/" class="archive-article-date">
-  	<time datetime="2018-12-20T06:20:52.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-20</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><a href="https://towardsdatascience.com/transfer-learning-using-the-fastai-library-d686b238213e" target="_blank" rel="noopener">链接</a></p>
-<p><a name="hmoufh"></a></p>
-<h3 id="动机"><a href="#动机" class="headerlink" title="动机"></a><a href="#hmoufh"></a>动机</h3><p>我目前正在做一个fast.ai Live MOOC，名为《Practical Deep learning for Coders》，将于2019年1月在fast.ai网站上公开发布。 以下代码基于该课程的第1课。 我将使用位于Pytorch 1.0顶部的fastai V1库。 fastai库提供了许多有用的功能，使我们能够快速，轻松地构建神经网络并训练我们的模型。 我正在撰写此博客，作为在数据集上试验课程示例的一部分，该数据集在结构和复杂性上有所不同，并表明使用fastai库是多么容易。<br>在下面的例子中，您将看到在<a href="https://plantvillage.psu.edu/" target="_blank" rel="noopener">PlantVintage</a>数据集上进行转移学习并获得世界级结果是多么荒谬。 PlantVintage数据包含植物叶片的图像，其中包括通常在作物上发现的38种疾病类别，是来自斯坦福大学背景图像开放数据集的一个背景类别–DAGS。 我从这个<a href="https://github.com/MarkoArsenovic/DeepLearning_PlantDiseases" target="_blank" rel="noopener">Github Repo</a>上给出的链接下载了数据。 我对这个例子特别感兴趣，因为在我写这篇博客的时候，我为一个帮助农民发展业务的组织工作，提供产品和技术解决方案，以便更好地管理农场。 让我们开始吧！<br>PS：这个博客也在我的<a href="https://github.com/aayushmnit" target="_blank" rel="noopener">GitHub</a>个人资料中作为jupyter笔记本发布。<br><a name="5dzgih"></a></p>
-<h3 id="导入快速AI库"><a href="#导入快速AI库" class="headerlink" title="导入快速AI库"></a><a href="#5dzgih"></a>导入快速AI库</h3><p>让我们导入fastai库并将我们的batch_size参数定义为64.通常，图像数据库很大，所以我们需要使用批量将这些图像提供给GPU，批量大小64意味着我们将一次提供64个图像来更新深度参数 学习模式。 如果由于GPU RAM较小而导致内存不足，则可以将批量大小减小到32或16。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> fastai <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> fastai.vision <span class="keyword">import</span> *</span><br><span class="line">bs =<span class="number">64</span></span><br></pre></td></tr></table></figure></p>
-<p><a name="vr3dmp"></a></p>
-<h3 id="看数据"><a href="#看数据" class="headerlink" title="看数据"></a><a href="#vr3dmp"></a>看数据</h3><p>我们处理问题时首先要做的是查看数据。 在我们弄清楚如何解决问题之前，我们总是需要很好地理解问题是什么以及数据是什么样的。 查看数据意味着了解数据目录的结构，标签是什么以及一些示例图像是什么样的。 我们的数据已经在train和validation文件夹中分割，在每个子目录中，我们的文件夹名称代表该子文件夹中存在的所有图像的类名。 幸运的是，fastai库有一个方便的功能，<a href="https://docs.fast.ai/vision.data#ImageDataBunch.from_folder" target="_blank" rel="noopener">ImageDataBunch.from_folder</a>自动从文件夹名称中获取标签名称。 fastai库提供了很棒的文档来浏览它们的库函数，并提供有关如何使用它们的实例。 加载数据后，我们还可以使用.normalize到ImageNet参数来规范化数据。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">## Declaring path of dataset</span></span><br><span class="line">path_img = Path(<span class="string">'/home/jupyter/fastai_v3_experimentation/data/PlantVillage/'</span>)</span><br><span class="line"><span class="comment">## Loading data </span></span><br><span class="line">data = ImageDataBunch.from_folder(path=path_img, train=<span class="string">'train'</span>, valid=<span class="string">'valid'</span>, ds_tfms=get_transforms(),size=<span class="number">224</span>, bs=bs, check_ext=<span class="literal">False</span>)</span><br><span class="line"><span class="comment">## Normalizing data based on Image net parameters</span></span><br><span class="line">data.normalize(imagenet_stats)</span><br></pre></td></tr></table></figure></p>
-<p>要查看随机的图像样本，我们可以使用.show_batch（）函数ImageDataBunch类。 正如我们在下面所看到的，我们有一些不同作物上的疾病病例加上来自DAGS数据集的一些背景噪声图像，这些图像将作为噪声。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">data.show_batch(rows=<span class="number">3</span>, figsize=(<span class="number">10</span>,<span class="number">8</span>))</span><br></pre></td></tr></table></figure></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545287666783-17e163b9-fba6-4ab9-9952-1168913169b0.png#width=826" alt><br>让我们打印数据库中存在的所有数据类。 总的来说，我们在动机部分中提到了39个课程中的图像。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">print(data.classes)</span><br><span class="line">len(data.classes),data.c</span><br></pre></td></tr></table></figure></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545287718206-c67e4447-9a83-4032-86c8-5d298c775b72.png#width=826" alt><br><a name="hzustc"></a></p>
-<h3 id="使用预先训练的模型转移学习：ResNet-50"><a href="#使用预先训练的模型转移学习：ResNet-50" class="headerlink" title="使用预先训练的模型转移学习：ResNet 50"></a><a href="#hzustc"></a>使用预先训练的模型转移学习：ResNet 50</h3><p>现在我们将开始训练我们的模型。 我们将使用卷积神经网络骨干ResNet 50和具有单个隐藏层的完全连接头作为分类器。 如果您想了解所有架构细节，也可以阅读ResNet论文。 要创建转移学习模型，我们需要使用Learner类中的函数create_cnn，并从模型类中提供预先训练的模型。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">## To create a ResNET 50 with pretrained weights</span></span><br><span class="line">learn = create_cnn(data, models.resnet50, metrics=error_rate)</span><br></pre></td></tr></table></figure></p>
-<p>由create_cnn函数创建的ResNet50模型具有冻结的初始层，我们将学习最后完全连接的层的权重。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">learn.fit_one_cycle(<span class="number">5</span>)</span><br></pre></td></tr></table></figure></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545287818426-ef1da8b8-26e2-4bee-835a-abfa2386fa31.png#width=584" alt><br>正如我们在上面看到的那样，只使用默认设置运行五个周期，我们对这个细粒度分类任务的准确度在验证数据集上约为99.64％。 让我们保存模型，因为我们稍后会对其进行微调。 如果你想知道这个结果有多好，它已经超过了这个<a href="https://github.com/MarkoArsenovic/DeepLearning_PlantDiseases" target="_blank" rel="noopener">Github Page</a>的96.53％的浅层学习（仅培训最后一层）基准。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">learn.save(<span class="string">'plant_vintage_stage1'</span>)</span><br></pre></td></tr></table></figure></p>
-<p>FastAI库还提供了更快地探索结果的功能，并查找我们的模型是否正在学习应该学习的内容。 我们将首先看到模型最混淆的类别。 我们将尝试使用ClassificationInterpretation类来查看模型预测的是否合理。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">interp = ClassificationInterpretation.from_learner(learn)</span><br><span class="line">interp.plot_top_losses(<span class="number">4</span>, figsize=(<span class="number">20</span>,<span class="number">25</span>))</span><br></pre></td></tr></table></figure></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545287958131-9082d640-9b93-482c-8ed4-7becd11c97b9.png#width=826" alt><br>在这种情况下，该模型在从玉米植株上的灰色叶斑病和番茄叶片中的早/晚疫病检测北叶枯病方面变得混乱，其在视觉上看起来非常相似。 这是我们的分类器正常工作的指示器。 此外，当我们绘制混淆矩阵时，我们可以看到大多数事物都被正确分类，并且它几乎是一个接近完美的模型。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">interp.plot_confusion_matrix(figsize=(<span class="number">20</span>,<span class="number">20</span>), dpi=<span class="number">60</span>)</span><br></pre></td></tr></table></figure></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545288034116-dbb5f685-7a96-4031-8b2b-e54abae02d81.png#width=826" alt><br>所以到目前为止，我们只训练了最后的分类层，但是如果我们想要优化早期的层也会如此。 在迁移学习中，应谨慎调整初始图层，学习率应保持在较低水平。 FastAI库提供了一个功能，可以查看要训练的理想学习速率，让我们绘制它。 lr_find函数以多学习速率运行数据子集的模型，以确定哪种学习速率最佳。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">learn.lr_find()</span><br><span class="line">learn.recorder.plot()</span><br></pre></td></tr></table></figure></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545288100487-9ddefc18-b8fb-4fe1-8232-8cc43139a730.png#width=447" alt><br>看起来我们应该保持低于10e-4的学习率。 对于网络中的不同层，我们可以使用切片函数来对数分布10e-6到10e-4之间的学习速率。 保持初始层的最低学习速率，并为后续层增加它。 让我们解冻所有层，以便我们可以使用unfreeze()函数训练整个模型。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">learn.unfreeze()</span><br><span class="line">learn.fit_one_cycle(<span class="number">2</span>, max_lr=slice(<span class="number">1e-7</span>,<span class="number">1e-5</span>))</span><br></pre></td></tr></table></figure></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545288161256-736a1108-3167-4d5f-be85-2ab6317a60c3.png#width=528" alt><br>正如我们通过训练所有层次所看到的，我们将准确度提高到99.7％，这与使用Inception-v3模型的Github基准测试中的99.76％相当。<br><a name="zv6xnx"></a></p>
-<h3 id="结论"><a href="#结论" class="headerlink" title="结论"></a><a href="#zv6xnx"></a>结论</h3><p>Fast.ai是Jeremy Howard和他的团队的一项出色的倡议，我相信fastai库可以通过使构建深度学习模型变得非常简单，真正实现将深度学习民主化的动机。<br><br>我希望你喜欢阅读，并随意使用我的代码为你的目的尝试。 此外，如果对代码或博客文章有任何反馈，请随时联系LinkedIn或发送电子邮件至<a href="mailto:aayushmnit@gmail.com" target="_blank" rel="noopener">aayushmnit@gmail.com</a>。<br><br>PS：如果你喜欢这些内容，请留下评论或鼓掌，并希望我更频繁地写这样的博客。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/12/20/yuque/使用新的fastai库实现世界一流的结果/">展开全文 >></a>
         </p>
       
 
