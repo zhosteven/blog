@@ -142,6 +142,151 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-yuque/Boosted Trees简介" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/04/22/yuque/Boosted Trees简介/">Boosted Trees简介</a>
+    </h1>
+  
+
+        
+        <a href="/2019/04/22/yuque/Boosted Trees简介/" class="archive-article-date">
+  	<time datetime="2019-04-22T07:34:28.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-22</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>#############################<br>Introduction to Boosted Trees<br>#############################<br>XGBoost stands for “Extreme Gradient Boosting”, where the term “Gradient Boosting” originates from the paper <em>Greedy Function Approximation: A Gradient Boosting Machine</em>, by Friedman.<br>This is a tutorial on gradient boosted trees, and most of the content is based on <code>these slides &lt;http://homes.cs.washington.edu/~tqchen/pdf/BoostedTree.pdf&gt;</code>_ by Tianqi Chen, the original author of XGBoost.</p>
+<p>The <strong>gradient boosted trees</strong> has been around for a while, and there are a lot of materials on the topic.<br>This tutorial will explain boosted trees in a self-contained and principled way using the elements of supervised learning.<br>We think this explanation is cleaner, more formal, and motivates the model formulation used in XGBoost.</p>
+<p><strong><strong><strong><strong><strong><strong><strong>***</strong></strong></strong></strong></strong></strong></strong><br>Elements of Supervised Learning<br><strong><strong><strong><strong><strong><strong><strong>***</strong></strong></strong></strong></strong></strong></strong><br>XGBoost is used for supervised learning problems, where we use the training data (with multiple features) :math:<code>x_i</code> to predict a target variable :math:<code>y_i</code>.<br>Before we learn about trees specifically, let us start by reviewing the basic elements in supervised learning.</p>
+<p>Model and Parameters<br>====================<br>The <strong>model</strong> in supervised learning usually refers to the mathematical structure of by which the prediction :math:<code>y_i</code> is made from the input :math:<code>x_i</code>.<br>A common example is a <em>linear model</em>, where the prediction is given as :math:<code>\hat{y}_i = \sum_j \theta_j x_{ij}</code>, a linear combination of weighted input features.<br>The prediction value can have different interpretations, depending on the task, i.e., regression or classification.<br>For example, it can be logistic transformed to get the probability of positive class in logistic regression, and it can also be used as a ranking score when we want to rank the outputs.</p>
+<p>The <strong>parameters</strong> are the undetermined part that we need to learn from data. In linear regression problems, the parameters are the coefficients :math:<code>\theta</code>.<br>Usually we will use :math:<code>\theta</code> to denote the parameters (there are many parameters in a model, our definition here is sloppy).</p>
+<p>Objective Function: Training Loss + Regularization<br>==================================================<br>With judicious choices for :math:<code>y_i</code>, we may express a variety of tasks, such as regression, classification, and ranking.<br>The task of <strong>training</strong> the model amounts to finding the best parameters :math:<code>\theta</code> that best fit the training data :math:<code>x_i</code> and labels :math:<code>y_i</code>. In order to train the model, we need to define the <strong>objective function</strong><br>to measure how well the model fit the training data.</p>
+<p>A salient characteristic of objective functions is that they consist two parts: <strong>training loss</strong> and <strong>regularization term</strong>:</p>
+<p>.. math::</p>
+<p>  \text{obj}(\theta) = L(\theta) + \Omega(\theta)</p>
+<p>where :math:<code>L</code> is the training loss function, and :math:<code>\Omega</code> is the regularization term. The training loss measures how <em>predictive</em> our model is with respect to the training data.<br>A common choice of :math:<code>L</code> is the <em>mean squared error</em>, which is given by</p>
+<p>.. math::</p>
+<p>  L(\theta) = \sum_i (y_i-\hat{y}_i)^2</p>
+<p>Another commonly used loss function is logistic loss, to be used for logistic regression:</p>
+<p>.. math::</p>
+<p>  L(\theta) = \sum_i[ y_i\ln (1+e^{-\hat{y}_i}) + (1-y_i)\ln (1+e^{\hat{y}_i})]</p>
+<p>The <strong>regularization term</strong> is what people usually forget to add. The regularization term controls the complexity of the model, which helps us to avoid overfitting.<br>This sounds a bit abstract, so let us consider the following problem in the following picture. You are asked to <em>fit</em> visually a step function given the input data points<br>on the upper left corner of the image.<br>Which solution among the three do you think is the best fit?</p>
+<p>.. image:: <a href="https://raw.githubusercontent.com/dmlc/web-data/master/xgboost/model/step_fit.png" target="_blank" rel="noopener">https://raw.githubusercontent.com/dmlc/web-data/master/xgboost/model/step_fit.png</a><br>  :alt: step functions to fit data points, illustrating bias-variance tradeoff</p>
+<p>The correct answer is marked in red. Please consider if this visually seems a reasonable fit to you. The general principle is we want both a <em>simple</em> and <em>predictive</em> model.<br>The tradeoff between the two is also referred as <strong>bias-variance tradeoff</strong> in machine learning.</p>
+<p>Why introduce the general principle?<br>====================================<br>The elements introduced above form the basic elements of supervised learning, and they are natural building blocks of machine learning toolkits.<br>For example, you should be able to describe the differences and commonalities between gradient boosted trees and random forests.<br>Understanding the process in a formalized way also helps us to understand the objective that we are learning and the reason behind the heuristics such as<br>pruning and smoothing.</p>
+<p><strong><strong><strong><strong><strong>***</strong></strong></strong></strong></strong><br>Decision Tree Ensembles<br><strong><strong><strong><strong><strong>***</strong></strong></strong></strong></strong><br>Now that we have introduced the elements of supervised learning, let us get started with real trees.<br>To begin with, let us first learn about the model choice of XGBoost: <strong>decision tree ensembles</strong>.<br>The tree ensemble model consists of a set of classification and regression trees (CART). Here’s a simple example of a CART<br>that classifies whether someone will like computer games.</p>
+<p>.. image:: <a href="https://raw.githubusercontent.com/dmlc/web-data/master/xgboost/model/cart.png" target="_blank" rel="noopener">https://raw.githubusercontent.com/dmlc/web-data/master/xgboost/model/cart.png</a><br>  :width: 100%<br>  :alt: a toy example for CART</p>
+<p>We classify the members of a family into different leaves, and assign them the score on the corresponding leaf.<br>A CART is a bit different from decision trees, in which the leaf only contains decision values. In CART, a real score<br>is associated with each of the leaves, which gives us richer interpretations that go beyond classification.<br>This also allows for a pricipled, unified approach to optimization, as we will see in a later part of this tutorial.</p>
+<p>Usually, a single tree is not strong enough to be used in practice. What is actually used is the ensemble model,<br>which sums the prediction of multiple trees together.</p>
+<p>.. image:: <a href="https://raw.githubusercontent.com/dmlc/web-data/master/xgboost/model/twocart.png" target="_blank" rel="noopener">https://raw.githubusercontent.com/dmlc/web-data/master/xgboost/model/twocart.png</a><br>  :width: 100%<br>  :alt: a toy example for tree ensemble, consisting of two CARTs</p>
+<p>Here is an example of a tree ensemble of two trees. The prediction scores of each individual tree are summed up to get the final score.<br>If you look at the example, an important fact is that the two trees try to <em>complement</em> each other.<br>Mathematically, we can write our model in the form</p>
+<p>.. math::</p>
+<p>  \hat{y}<em>i = \sum</em>{k=1}^K f_k(x_i), f_k \in \mathcal{F}</p>
+<p>where :math:<code>K</code> is the number of trees, :math:<code>f</code> is a function in the functional space :math:<code>\mathcal{F}</code>, and :math:<code>\mathcal{F}</code> is the set of all possible CARTs. The objective function to be optimized is given by</p>
+<p>.. math::</p>
+<p>  \text{obj}(\theta) = \sum_i^n l(y_i, \hat{y}<em>i) + \sum</em>{k=1}^K \Omega(f_k)</p>
+<p>Now here comes a trick question: what is the <em>model</em> used in random forests? Tree ensembles! So random forests and boosted trees are really the same models; the<br>difference arises from how we train them. This means that, if you write a predictive service for tree ensembles, you only need to write one and it should work<br>for both random forests and gradient boosted trees. (See <code>Treelite &lt;http://treelite.io&gt;</code>_ for an actual example.) One example of why elements of supervised learning rock.</p>
+<p><strong><strong><strong>*</strong></strong></strong><br>Tree Boosting<br><strong><strong><strong>*</strong></strong></strong><br>Now that we introduced the model, let us turn to training: How should we learn the trees?<br>The answer is, as is always for all supervised learning models: <em>define an objective function and optimize it</em>!</p>
+<p>Let the following be the objective function (remember it always needs to contain training loss and regularization):</p>
+<p>.. math::</p>
+<p>  \text{obj} = \sum_{i=1}^n l(y_i, \hat{y}<em>i^{(t)}) + \sum</em>{i=1}^t\Omega(f_i)</p>
+<p>Additive Training<br>=================</p>
+<p>The first question we want to ask: what are the <strong>parameters</strong> of trees?<br>You can find that what we need to learn are those functions :math:<code>f_i</code>, each containing the structure<br>of the tree and the leaf scores. Learning tree structure is much harder than traditional optimization problem where you can simply take the gradient.<br>It is intractable to learn all the trees at once.<br>Instead, we use an additive strategy: fix what we have learned, and add one new tree at a time.<br>We write the prediction value at step :math:<code>t</code> as :math:<code>\hat{y}_i^{(t)}</code>. Then we have</p>
+<p>.. math::</p>
+<p>  \hat{y}_i^{(0)} &amp;= 0\<br>  \hat{y}_i^{(1)} &amp;= f_1(x_i) = \hat{y}_i^{(0)} + f_1(x_i)\<br>  \hat{y}_i^{(2)} &amp;= f_1(x_i) + f_2(x_i)= \hat{y}_i^{(1)} + f_2(x_i)\<br>  &amp;\dots\<br>  \hat{y}<em>i^{(t)} &amp;= \sum</em>{k=1}^t f_k(x_i)= \hat{y}_i^{(t-1)} + f_t(x_i)</p>
+<p>It remains to ask: which tree do we want at each step?  A natural thing is to add the one that optimizes our objective.</p>
+<p>.. math::</p>
+<p>  \text{obj}^{(t)} &amp; = \sum_{i=1}^n l(y_i, \hat{y}<em>i^{(t)}) + \sum</em>{i=1}^t\Omega(f_i) \<br>            &amp; = \sum_{i=1}^n l(y_i, \hat{y}_i^{(t-1)} + f_t(x_i)) + \Omega(f_t) + \mathrm{constant}</p>
+<p>If we consider using mean squared error (MSE) as our loss function, the objective becomes</p>
+<p>.. math::</p>
+<p>  \text{obj}^{(t)} &amp; = \sum_{i=1}^n (y_i - (\hat{y}_i^{(t-1)} + f_t(x_i)))^2 + \sum_{i=1}^t\Omega(f_i) \<br>            &amp; = \sum_{i=1}^n [2(\hat{y}_i^{(t-1)} - y_i)f_t(x_i) + f_t(x_i)^2] + \Omega(f_t) + \mathrm{constant}</p>
+<p>The form of MSE is friendly, with a first order term (usually called the residual) and a quadratic term.<br>For other losses of interest (for example, logistic loss), it is not so easy to get such a nice form.<br>So in the general case, we take the <em>Taylor expansion of the loss function up to the second order</em>:</p>
+<p>.. math::</p>
+<p>  \text{obj}^{(t)} = \sum_{i=1}^n [l(y_i, \hat{y}_i^{(t-1)}) + g_i f_t(x_i) + \frac{1}{2} h_i f_t^2(x_i)] + \Omega(f_t) + \mathrm{constant}</p>
+<p>where the :math:<code>g_i</code> and :math:<code>h_i</code> are defined as</p>
+<p>.. math::</p>
+<p>  g_i &amp;= \partial_{\hat{y}_i^{(t-1)}} l(y_i, \hat{y}_i^{(t-1)})\<br>  h_i &amp;= \partial_{\hat{y}_i^{(t-1)}}^2 l(y_i, \hat{y}_i^{(t-1)})</p>
+<p>After we remove all the constants, the specific objective at step :math:<code>t</code> becomes</p>
+<p>.. math::</p>
+<p>  \sum_{i=1}^n [g_i f_t(x_i) + \frac{1}{2} h_i f_t^2(x_i)] + \Omega(f_t)</p>
+<p>This becomes our optimization goal for the new tree. One important advantage of this definition is that<br>the value of the objective function only depends on :math:<code>g_i</code> and :math:<code>h_i</code>. This is how XGBoost supports custom loss functions.<br>We can optimize every loss function, including logistic regression and pairwise ranking, using exactly<br>the same solver that takes :math:<code>g_i</code> and :math:<code>h_i</code> as input!</p>
+<p>Model Complexity<br>================<br>We have introduced the training step, but wait, there is one important thing, the <strong>regularization term</strong>!<br>We need to define the complexity of the tree :math:<code>\Omega(f)</code>. In order to do so, let us first refine the definition of the tree :math:<code>f(x)</code> as</p>
+<p>.. math::</p>
+<p>  f_t(x) = w_{q(x)}, w \in R^T, q:R^d\rightarrow {1,2,\cdots,T} .</p>
+<p>Here :math:<code>w</code> is the vector of scores on leaves, :math:<code>q</code> is a function assigning each data point to the corresponding leaf, and :math:<code>T</code> is the number of leaves.<br>In XGBoost, we define the complexity as</p>
+<p>.. math::</p>
+<p>  \Omega(f) = \gamma T + \frac{1}{2}\lambda \sum_{j=1}^T w_j^2</p>
+<p>Of course, there is more than one way to define the complexity, but this one works well in practice. The regularization is one part most tree packages treat<br>less carefully, or simply ignore. This was because the traditional treatment of tree learning only emphasized improving impurity, while the complexity control was left to heuristics.<br>By defining it formally, we can get a better idea of what we are learning and obtain models that perform well in the wild.</p>
+<p>The Structure Score<br>===================<br>Here is the magical part of the derivation. After re-formulating the tree model, we can write the objective value with the :math:<code>t</code>-th tree as:</p>
+<p>.. math::</p>
+<p>  \text{obj}^{(t)} &amp;\approx \sum_{i=1}^n [g_i w_{q(x_i)} + \frac{1}{2} h_i w_{q(x_i)}^2] + \gamma T + \frac{1}{2}\lambda \sum_{j=1}^T w_j^2\<br>  &amp;= \sum^T_{j=1} [(\sum_{i\in I_j} g_i) w_j + \frac{1}{2} (\sum_{i\in I_j} h_i + \lambda) w_j^2 ] + \gamma T</p>
+<p>where :math:<code>I_j = \{i|q(x_i)=j\}</code> is the set of indices of data points assigned to the :math:<code>j</code>-th leaf.<br>Notice that in the second line we have changed the index of the summation because all the data points on the same leaf get the same score.<br>We could further compress the expression by defining :math:<code>G_j = \sum_{i\in I_j} g_i</code> and :math:<code>H_j = \sum_{i\in I_j} h_i</code>:</p>
+<p>.. math::</p>
+<p>  \text{obj}^{(t)} = \sum^T_{j=1} [G_jw_j + \frac{1}{2} (H_j+\lambda) w_j^2] +\gamma T</p>
+<p>In this equation, :math:<code>w_j</code> are independent with respect to each other, the form :math:<code>G_jw_j+\frac{1}{2}(H_j+\lambda)w_j^2</code> is quadratic and the best :math:<code>w_j</code> for a given structure :math:<code>q(x)</code> and the best objective reduction we can get is:</p>
+<p>.. math::</p>
+<p>  w_j^\ast &amp;= -\frac{G_j}{H_j+\lambda}\<br>  \text{obj}^\ast &amp;= -\frac{1}{2} \sum_{j=1}^T \frac{G_j^2}{H_j+\lambda} + \gamma T</p>
+<p>The last equation measures <em>how good</em> a tree structure :math:<code>q(x)</code> is.</p>
+<p>.. image:: <a href="https://raw.githubusercontent.com/dmlc/web-data/master/xgboost/model/struct_score.png" target="_blank" rel="noopener">https://raw.githubusercontent.com/dmlc/web-data/master/xgboost/model/struct_score.png</a><br>  :width: 100%<br>  :alt: illustration of structure score (fitness)</p>
+<p>If all this sounds a bit complicated, let’s take a look at the picture, and see how the scores can be calculated.<br>Basically, for a given tree structure, we push the statistics :math:<code>g_i</code> and :math:<code>h_i</code> to the leaves they belong to,<br>sum the statistics together, and use the formula to calculate how good the tree is.<br>This score is like the impurity measure in a decision tree, except that it also takes the model complexity into account.</p>
+<p>Learn the tree structure<br>========================<br>Now that we have a way to measure how good a tree is, ideally we would enumerate all possible trees and pick the best one.<br>In practice this is intractable, so we will try to optimize one level of the tree at a time.<br>Specifically we try to split a leaf into two leaves, and the score it gains is</p>
+<p>.. math::<br>  Gain = \frac{1}{2} \left[\frac{G_L^2}{H_L+\lambda}+\frac{G_R^2}{H_R+\lambda}-\frac{(G_L+G_R)^2}{H_L+H_R+\lambda}\right] - \gamma</p>
+<p>This formula can be decomposed as 1) the score on the new left leaf 2) the score on the new right leaf 3) The score on the original leaf 4) regularization on the additional leaf.<br>We can see an important fact here: if the gain is smaller than :math:<code>\gamma</code>, we would do better not to add that branch. This is exactly the <strong>pruning</strong> techniques in tree based<br>models! By using the principles of supervised learning, we can naturally come up with the reason these techniques work :)</p>
+<p>For real valued data, we usually want to search for an optimal split. To efficiently do so, we place all the instances in sorted order, like the following picture.</p>
+<p>.. image:: <a href="https://raw.githubusercontent.com/dmlc/web-data/master/xgboost/model/split_find.png" target="_blank" rel="noopener">https://raw.githubusercontent.com/dmlc/web-data/master/xgboost/model/split_find.png</a><br>  :width: 100%<br>  :alt: Schematic of choosing the best split</p>
+<p>A left to right scan is sufficient to calculate the structure score of all possible split solutions, and we can find the best split efficiently.</p>
+<p>.. note:: Limitation of additive tree learning</p>
+<p>  Since it is intractable to enumerate all possible tree structures, we add one split at a time. This approach works well most of the time, but there are some edge cases that fail due to this approach. For those edge cases, training results in a degenerate model because we consider only one feature dimension at a time. See <code>Can Gradient Boosting Learn Simple Arithmetic? &lt;http://mariofilho.com/can-gradient-boosting-learn-simple-arithmetic/&gt;</code>_ for an example. </p>
+<p><strong><strong><strong><strong><strong>**</strong></strong></strong></strong></strong><br>Final words on XGBoost<br><strong><strong><strong><strong><strong>**</strong></strong></strong></strong></strong><br>Now that you understand what boosted trees are, you may ask, where is the introduction for XGBoost?<br>XGBoost is exactly a tool motivated by the formal principle introduced in this tutorial!<br>More importantly, it is developed with both deep consideration in terms of <strong>systems optimization</strong> and <strong>principles in machine learning</strong>.<br>The goal of this library is to push the extreme of the computation limits of machines to provide a <strong>scalable</strong>, <strong>portable</strong> and <strong>accurate</strong> library.<br>Make sure you try it out, and most importantly, contribute your piece of wisdom (code, examples, tutorials) to the community!</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/04/22/yuque/Boosted Trees简介/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-yuque/梯度下降优化算法概述" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -744,81 +889,9 @@
 
 
   
-    <article id="post-yuque/建立你的第一个语音助手" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/10/yuque/建立你的第一个语音助手/">建立你的第一个语音助手</a>
-    </h1>
-  
-
-        
-        <a href="/2019/04/10/yuque/建立你的第一个语音助手/" class="archive-article-date">
-  	<time datetime="2019-04-10T05:38:55.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-10</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>如今，听到某人与不在场的人交谈并不奇怪。我们向Alexa询问天气情况并将恒温器的温度降低。然后，我们问Siri我们当天的日程安排是什么，并打电话给人们。我们现在比以往任何时候都使用语音和语音接口技术。我无法想象再做手动了！这真的是未来。</p>
-<ul>
-<li>福布斯</li>
-</ul>
-</blockquote>
-<p><a name="61a3ec66"></a></p>
-<h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>谁不想拥有一个总是倾听你的电话，预测你的每一个需要，并在必要时采取行动的助手？基于人工智能的语音助手，现在可以享受这种奢侈品。<br>语音助手有一些小包装，可以在听到您的命令后执行各种操作。他们可以打开灯，回答问题，播放音乐，下订单和做各种基于AI的东西。<br>语音助理不要与虚拟助手混淆，虚拟助手是远程工作的人，因此可以处理各种任务。相反，语音助理是基于技术的。随着语音助理变得更加强大，它们在个人和商业领域的实用性也将增长。<br>
-        
-          <a class="article-more-a" href="/2019/04/10/yuque/建立你的第一个语音助手/#more">more >></a>
-        
-      
-
-      
-    </p></div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/04/10/yuque/建立你的第一个语音助手/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
     </nav>
   
 
