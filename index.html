@@ -149,6 +149,71 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-yuque/使用Spark和MLlib进行机器学习简介（DataFrame API）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/04/23/yuque/使用Spark和MLlib进行机器学习简介（DataFrame API）/">使用Spark和MLlib进行机器学习简介（DataFrame API）</a>
+    </h1>
+  
+
+        
+        <a href="/2019/04/23/yuque/使用Spark和MLlib进行机器学习简介（DataFrame API）/" class="archive-article-date">
+  	<time datetime="2019-04-23T03:42:56.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-23</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>最近一个相当热门的话题是机器学习 - 与计算统计密切相关的跨部门学科，让计算机在没有明确编程的情况下学习。<br>它已被发现在数据分析领域具有重要意义 - 从估算贷款和保险风险到试图在现实条件下自主驾驶汽车。<br>在下面的文章中，我想向读者介绍一下  <code>MLlib</code> - 作为Spark Framework一部分的机器学习库。<br>关于以下文本的一个重要事项 - 目的是介绍图书馆，而不是机器学习或统计学背后的概念和理论，因此读者可以期待这些主题的至少基本理解。此外，还需要至少基本的Spark知识。<br>这将基于Apache Spark 2.x API，它采用新的DataFrame API作为旧版本的替代品  <code>RDD</code> 。该<code>DataFrame</code> 方法的主要优点之一  是它比<code>RDD</code> 一个更容易使用和更友好  。尽管如此，  <code>RDD</code> API仍然存在但已进入维护模式（它将不再被扩展，并且当<code>DataFrame</code> API与其达到特征奇偶校验时将被弃用  ）。<br>
+        
+          <a class="article-more-a" href="/2019/04/23/yuque/使用Spark和MLlib进行机器学习简介（DataFrame API）/#more">more >></a>
+        
+      
+
+      
+    </p></div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/04/23/yuque/使用Spark和MLlib进行机器学习简介（DataFrame API）/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-yuque/2019-04-23" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -709,71 +774,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2019/04/19/yuque/使用Apache Spark的实时机器学习管道/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/MLlib管道和结构化流媒体" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/19/yuque/MLlib管道和结构化流媒体/">MLlib管道和结构化流媒体</a>
-    </h1>
-  
-
-        
-        <a href="/2019/04/19/yuque/MLlib管道和结构化流媒体/" class="archive-article-date">
-  	<time datetime="2019-04-19T03:31:44.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-19</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>此示例显示如何训练MLlib管道以生成可应用于转换流式DataFrame的PipelineModel。在创建旨在用于转换流数据的管道时，我们还将记住几点。<br>首先，让我们考虑信用卡公司的情况，该公司希望尽快识别潜在的欺诈性交易，以便他们跟进客户以确认交易是否实际上是欺诈性的。这个假设的信用卡公司有关于交易的历史数据，以及哪些交易被客户报告为欺诈。我们想要根据这些历史数据训练分类器。一旦我们训练了分类器，我们就会将它应用于一系列交易。<br>此示例需要Databricks Runtime 4.0或更高版本。<br>
-        
-          <a class="article-more-a" href="/2019/04/19/yuque/MLlib管道和结构化流媒体/#more">more >></a>
-        
-      
-
-      
-    </p></div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/04/19/yuque/MLlib管道和结构化流媒体/">展开全文 >></a>
         </p>
       
 

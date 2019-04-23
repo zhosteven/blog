@@ -6,18 +6,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://zhos.me">
-  <title>Archives | A+</title>
+  <title>使用Spark和MLlib进行机器学习简介（DataFrame API） | A+</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="研究性材料(算法)">
-<meta property="og:type" content="website">
-<meta property="og:title" content="A+">
-<meta property="og:url" content="http://zhos.me/archives/index.html">
+  <meta name="description" content="最近一个相当热门的话题是机器学习 - 与计算统计密切相关的跨部门学科，让计算机在没有明确编程的情况下学习。它已被发现在数据分析领域具有重要意义 - 从估算贷款和保险风险到试图在现实条件下自主驾驶汽车。在下面的文章中，我想向读者介绍一下  MLlib - 作为Spark Framework一部分的机器学习库。关于以下文本的一个重要事项 - 目的是介绍图书馆，而不是机器学习或统计学背后的概念和理论，因">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用Spark和MLlib进行机器学习简介（DataFrame API）">
+<meta property="og:url" content="http://zhos.me/2019/04/23/yuque/使用Spark和MLlib进行机器学习简介（DataFrame API）/index.html">
 <meta property="og:site_name" content="A+">
-<meta property="og:description" content="研究性材料(算法)">
+<meta property="og:description" content="最近一个相当热门的话题是机器学习 - 与计算统计密切相关的跨部门学科，让计算机在没有明确编程的情况下学习。它已被发现在数据分析领域具有重要意义 - 从估算贷款和保险风险到试图在现实条件下自主驾驶汽车。在下面的文章中，我想向读者介绍一下  MLlib - 作为Spark Framework一部分的机器学习库。关于以下文本的一个重要事项 - 目的是介绍图书馆，而不是机器学习或统计学背后的概念和理论，因">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-04-23T03:57:39.373Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="A+">
-<meta name="twitter:description" content="研究性材料(算法)">
+<meta name="twitter:title" content="使用Spark和MLlib进行机器学习简介（DataFrame API）">
+<meta name="twitter:description" content="最近一个相当热门的话题是机器学习 - 与计算统计密切相关的跨部门学科，让计算机在没有明确编程的情况下学习。它已被发现在数据分析领域具有重要意义 - 从估算贷款和保险风险到试图在现实条件下自主驾驶汽车。在下面的文章中，我想向读者介绍一下  MLlib - 作为Spark Framework一部分的机器学习库。关于以下文本的一个重要事项 - 目的是介绍图书馆，而不是机器学习或统计学背后的概念和理论，因">
   
     <link rel="alternative" href="/atom.xml" title="A+" type="application/atom+xml">
   
@@ -147,295 +148,427 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
+            <article id="post-yuque/使用Spark和MLlib进行机器学习简介（DataFrame API）" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
   
+    <h1 class="article-title" itemprop="name">
+      使用Spark和MLlib进行机器学习简介（DataFrame API）
+    </h1>
   
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2019" class="archive-year">2019</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/04/23/yuque/使用Spark和MLlib进行机器学习简介（DataFrame API）/" class="archive-article-date">
+
+        
+        <a href="/2019/04/23/yuque/使用Spark和MLlib进行机器学习简介（DataFrame API）/" class="archive-article-date">
   	<time datetime="2019-04-23T03:42:56.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-23</time>
 </a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/04/23/yuque/使用Spark和MLlib进行机器学习简介（DataFrame API）/">使用Spark和MLlib进行机器学习简介（DataFrame API）</a>
-    </h1>
-  
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>最近一个相当热门的话题是机器学习 - 与计算统计密切相关的跨部门学科，让计算机在没有明确编程的情况下学习。<br>它已被发现在数据分析领域具有重要意义 - 从估算贷款和保险风险到试图在现实条件下自主驾驶汽车。<br>在下面的文章中，我想向读者介绍一下  <code>MLlib</code> - 作为Spark Framework一部分的机器学习库。<br>关于以下文本的一个重要事项 - 目的是介绍图书馆，而不是机器学习或统计学背后的概念和理论，因此读者可以期待这些主题的至少基本理解。此外，还需要至少基本的Spark知识。<br>这将基于Apache Spark 2.x API，它采用新的DataFrame API作为旧版本的替代品  <code>RDD</code> 。该<code>DataFrame</code> 方法的主要优点之一  是它比<code>RDD</code> 一个更容易使用和更友好  。尽管如此，  <code>RDD</code> API仍然存在但已进入维护模式（它将不再被扩展，并且当<code>DataFrame</code> API与其达到特征奇偶校验时将被弃用  ）。<br><a id="more"></a><br><!--more--><br><a name="a4a661c1"></a></p>
+<h2 id="MLlib简介"><a href="#MLlib简介" class="headerlink" title="MLlib简介"></a>MLlib简介</h2><p>MLlib（机器学习库的缩写）是Apache Spark的机器学习库，在尝试解决机器学习问题时为我们提供了Spark的卓越可扩展性和易用性。在引擎盖下，MLlib使用  <a href="http://www.scalanlp.org/" target="_blank" rel="noopener">Breeze</a>来满足它的线性代数需求。<br>该库包含一系列非常广泛的功能，现在我将简要介绍。每个功能集的更深入描述将在后面的部分中介绍。<br><a name="997c7a5d"></a></p>
+<h3 id="功能"><a href="#功能" class="headerlink" title="功能"></a>功能</h3><p><a name="046a899e"></a></p>
+<h4 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h4><ul>
+<li>回归<ul>
+<li>线性</li>
+<li>广义线性</li>
+<li>决策树</li>
+<li>随机森林</li>
+<li>梯度提升树</li>
+<li>生存</li>
+<li>等渗</li>
+</ul>
+</li>
+<li>分类<ul>
+<li>物流（二项式和多项式）</li>
+<li>决策树</li>
+<li>随机森林</li>
+<li>梯度提升树</li>
+<li>多层感知器</li>
+<li>线性支持向量机</li>
+<li>一VS-所有</li>
+<li>朴素贝叶斯</li>
+</ul>
+</li>
+<li>聚类<ul>
+<li>K-手段</li>
+<li>潜在的Dirichlet分配</li>
+<li>平分k均值</li>
+<li>高斯混合模型</li>
+</ul>
+</li>
+<li>协同过滤<br><a name="Featurization"></a><h4 id="Featurization"><a href="#Featurization" class="headerlink" title="Featurization"></a>Featurization</h4></li>
+<li>特征提取</li>
+<li>转型</li>
+<li>维度降低</li>
+<li>选择<br><a name="3326ad94"></a><h4 id="管道"><a href="#管道" class="headerlink" title="管道"></a>管道</h4></li>
+<li>撰写管道</li>
+<li>构建，评估和调整机器学习管道<br><a name="5207208b"></a><h4 id="坚持"><a href="#坚持" class="headerlink" title="坚持"></a>坚持</h4></li>
+<li>将算法，模型和管道保存到持久数据存储中以供以后使用</li>
+<li>从持久数据存储加载算法，模型和管道<br><a name="442bc484"></a><h4 id="公用事业"><a href="#公用事业" class="headerlink" title="公用事业"></a>公用事业</h4></li>
+<li>线性代数</li>
+<li>统计</li>
+<li>数据处理</li>
+<li>其他<br><a name="DataFrame"></a><h2 id="DataFrame"><a href="#DataFrame" class="headerlink" title="DataFrame"></a>DataFrame</h2>如前所述，这  <code>DataFrame</code> 是Spark版本2.x中使用的新API，它应该是旧<code>RDD</code> API 的替代品  。A  <code>DataFrame</code> 是一个Spark  <code>Dataset</code> （简而言之 - 一个分布式，强类型的数据集合，该接口在Spark 1.6中引入）组织成命名列（代表变量）。<br>该概念实际上与关系数据库中的表或R / Python中的数据框相同，但具有一组隐式优化。<br><a name="b4d3c72e"></a><h3 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h3>使用<code>DataFrame</code> API比使用旧API有  哪些主要卖点和好处  <code>RDD</code> ？这里有几个：</li>
+<li>熟悉 - 如前所述，该概念类似于更广泛的已知和使用的处理数据的方法，如关系数据库中的表或例如R中的数据框构造。</li>
+<li>统一API - API在语言中是一致的，因此我们不会浪费时间来适应差异，并且可以专注于重要的事情。</li>
+<li>Spark SQL - 它使我们能够通过SQL查询和类似SQL的特定语言访问和操作数据。</li>
+<li>优化 - 在一系列优化下实现  <code>Dataset</code> ，在处理数据时为我们提供更多性能。</li>
+<li>众多可能的来源 - 我们可以构建一个  <code>DataSet</code> 来自外部数据库，现有的  <code>RDD</code>s，CSV文件，JSON和许多其他结构化数据源。<br><a name="7a417cc7"></a><h3 id="创建DataFrame"><a href="#创建DataFrame" class="headerlink" title="创建DataFrame"></a>创建DataFrame</h3>如上所述 - 我们有多个可能的来源，我们可以从中创建一个  <code>DataFrame</code>。要从<code>Dataset</code> 外部源加载流  ，我们将使用该  <code>DataStreamReader</code> 接口。<br>在下面的例子中，我们假设一个名为的变量  <code>spark</code> 存在于  <code>SparkSession</code>。在  <code>DataStreamReader</code> 该届会议可以通过调用来获得  <code>read</code> 在该实例方法。<br>我们可以通过<code>option</code>在reader实例上调用方法来为底层数据源添加输入选项  。它需要a  <code>key</code> 和a  <code>value</code> 作为参数（或整体  <code>Map</code>）。<br>有两种方法来加载数据：<em>特定格式的方法，如  <code>csv</code>，  <code>jdbc</code>等</em>与指定的格式明确的  <code>format</code> 方法，然后调用通用的  <code>load</code> 方法。如果未指定格式，则为<code>Parquet</code>默认格式  。<br>以下是创建a <code>DataFrame</code>和使用的方法时最常见的用例  ：<br><a name="68c2d314"></a><h4 id="实木复合地板"><a href="#实木复合地板" class="headerlink" title="实木复合地板"></a>实木复合地板</h4><code>Parquet</code> 是由Apache开发的<code>Hadoop</code>/ <code>Spark</code> 生态系统项目的柱状存储格式  。<br>我们通过调用 带有 文件路径的<code>load</code> 或  <code>parquet</code>方法<code>Parquet</code>作为参数来  加载它  ，例如：<br>spark.read.load（ “一些/路径/到/ file.parquet”）<br><a name="CSV"></a><h4 id="CSV"><a href="#CSV" class="headerlink" title="CSV"></a>CSV</h4>众所周知的逗号分隔值文件。Spark可以自动推断<code>CSV</code> 加载文件的架构  。<br>我们通过调用<code>csv</code> 带有<code>CSV</code> 文件路径的方法作为参数来  加载它  ，例如：</li>
+</ul>
+<ol>
+<li>spark.read.load(“some/path/to/file.parquet”)<br><a name="CSV-1"></a><h4 id="CSV-1"><a href="#CSV-1" class="headerlink" title="CSV"></a>CSV</h4>众所周知的逗号分隔值文件。Spark可以自动推断<code>CSV</code> 加载文件的架构  。<br>我们通过调用<code>csv</code> 带有<code>CSV</code> 文件路径的方法作为参数来  加载它  ，例如：</li>
+<li>spark.read.<strong>csv</strong>(“some/path/to/file.csv”)<br><a name="JSON"></a><h4 id="JSON"><a href="#JSON" class="headerlink" title="JSON"></a>JSON</h4>Web应用程序最广泛使用的JavaScript Object Notation格式，用于异步前端/后端通信。Spark可以自动推断<code>JSON</code> 加载文件的架构  。<br>我们通过调用<code>json</code> 带有<code>JSON</code> 文件路径的方法作为参数来  加载它  ，例如：</li>
+<li>spark.read.<strong>json</strong>(“some/path/to/file.json”)<br><a name="1fecf515"></a><h4 id="蜂巢"><a href="#蜂巢" class="headerlink" title="蜂巢"></a>蜂巢</h4>Apache  <code>Hive</code> 是一个数据仓库软件包。对于接口  <code>DataFrame</code>，  <code>Hive</code> 我们需要一个  <code>SparkSession</code> 启用  <code>Hive</code>支持和类路径中所有需要的依赖项，以便Spark自动加载它们。<br>我们不会介绍与<code>Hive</code> 数据存储的接口，  因为这需要  <code>Hive</code> 更深入地了解它的工作原理和工作方式。有关该主题的更多信息，请参阅有关该主题的官方  <a href="https://spark.apache.org/docs/latest/sql-programming-guide.html#hive-tables" target="_blank" rel="noopener">文档</a>  。<br><a name="68051bf4"></a><h4 id="数据库"><a href="#数据库" class="headerlink" title="数据库"></a>数据库</h4>我们可以轻松地与任何类型的数据库接口使用  <code>JDBC</code>。为了使它成为可能您需要为<code>JDBC</code> 您的类路径中包含的要连接的数据库提供所需的  驱动程序。<br>我们将使用<code>load</code> 前面提到的  方法，但我们需要将格式从默认的one（<code>Parquet</code>）更改<code>jdbc</code> 为<code>format</code> 在阅读器上  使用该  方法。我们也可以使用该  <code>jdbc</code> 方法并向其传递一个<code>Properties</code> 将保存连接属性的  类实例。<br>我们<code>JDBC</code> 通过<code>option</code> 前面提到的方法指定  连接属性  。<a href="https://spark.apache.org/docs/latest/sql-programming-guide.html#jdbc-to-other-databases" target="_blank" rel="noopener">此处</a>提供<a href="https://spark.apache.org/docs/latest/sql-programming-guide.html#jdbc-to-other-databases" target="_blank" rel="noopener">了</a>可以传递的可能选项的完整列表及其说明  。<br>下面是一个快速示例，说明如何<code>DataFrame</code> 从  <code>JDBC</code> 源代码创建  （例如来自官方文档）：</li>
+<li>val jdbcDF = spark.read</li>
+<li>.<strong>format</strong>(“jdbc”)</li>
+<li>.<strong>option</strong>(“url”, “jdbc:postgresql:dbserver”)</li>
+<li>.<strong>option</strong>(“dbtable”, “schema.tablename”)</li>
+<li>.<strong>option</strong>(“user”, “username”)</li>
+<li>.<strong>option</strong>(“password”, “password”)</li>
+<li>.<strong>load</strong>()</li>
+</ol>
+<p>或者使用  <code>jdbc</code> 方法：</p>
+<ol>
+<li>val connectionProperties = new <strong>Properties</strong>()</li>
+<li>connectionProperties.<strong>put</strong>(“user”, “username”)</li>
+<li>connectionProperties.<strong>put</strong>(“password”, “password”)</li>
+<li>val jdbcDF2 = spark.read</li>
+<li>.<strong>jdbc</strong>(“jdbc:postgresql:dbserver”, “schema.tablename”, connectionProperties)<br><a name="RDD"></a><h4 id="RDD"><a href="#RDD" class="headerlink" title="RDD"></a>RDD</h4>我们可以自动将a转换  <code>RDD</code> 为a  <code>DataFrame</code>。案例类的参数名称将成为列名。它支持嵌套复杂类型，如  <code>Seq</code> 或  <code>Array</code>。<br>我们需要做的就是简单地调用  <code>toDF</code> 方法  <code>RDD</code>，即：</li>
+<li>val dataFrame = someRDD.<strong>toDF </strong>（）<br><a name="a8d2bf0a"></a><h3 id="定义架构"><a href="#定义架构" class="headerlink" title="定义架构"></a>定义架构</h3>数据的模式通常可以自动推断，但如果我们的数据没有选项，或者我们只想手动定义它，我们有三种主要方法：<br><a name="36774b1d"></a><h4 id="铸件"><a href="#铸件" class="headerlink" title="铸件"></a>铸件</h4>将列从一种类型显式转换为另一种类型。例如：</li>
+<li>val dataFrame = otherDataFrame</li>
+<li>.<strong>withColumn</strong>(“numericalColumn”, <strong>dataFrame</strong>(“numericalColumn”).<strong>cast</strong>(DoubleType))<br><a name="StructType"></a><h4 id="StructType"><a href="#StructType" class="headerlink" title="StructType"></a>StructType</h4>使用  <code>StructType</code> 和  <code>StructField</code> 类型显式定义  <code>DataType</code> 每列的内容。例如：</li>
+<li>val schemaStruct =</li>
+<li><strong>StructType</strong>(</li>
+<li><strong>StructField</strong>(“intColumn”, IntegerType, true) ::</li>
+<li><strong>StructField</strong>(“longColumn”, LongType, true) ::</li>
+<li><strong>StructField</strong>(“booleanColumn”, BooleanType, true) :: Nil)</li>
+<li></li>
+<li>val df = spark.read</li>
+<li>.<strong>schema</strong>(schemaStruct)</li>
+<li>.<strong>option</strong>(“header”, true)</li>
+<li>.<strong>csv</strong>(dataPath)<br><a name="b1dfa093"></a><h4 id="编码器"><a href="#编码器" class="headerlink" title="编码器"></a>编码器</h4>这是Spark SQL的序列化和反序列化框架的概念。我们可以通过使用  <code>Encoders</code> 提供架构  <code>case object</code>。</li>
+<li>case class <strong>SchemaClass</strong>(intColumn: Int, longColumn: Long, booleanColumn: Boolean)</li>
+<li></li>
+<li>val schemaEncoded = Encoders.product[SchemaClass].schema</li>
+<li></li>
+<li>val df = spark.read</li>
+<li>.<strong>schema</strong>(schemaEncoded)</li>
+<li>.<strong>option</strong>(“header”, true)</li>
+<li>.<strong>csv</strong>(dataPath)<br><a name="a52b63ce"></a><h3 id="保存DataFrame"><a href="#保存DataFrame" class="headerlink" title="保存DataFrame"></a>保存DataFrame</h3>我们可以<code>DataFrame</code> 通过使用<code>DataFrameWriter</code> 我们可以<code>DataFrame</code> 通过简单地调用  <code>write</code> 方法从a获得的接口  来保存  到持久存储  。<br><code>DataFrame</code> 在大多数情况下，写入  几乎完全相同，我们只是调用前面提到的方法  <code>write</code> 而不是  <code>read</code>。例如，写  <code>DataFrame</code> 一个  <code>JSON</code> 文件：</li>
+<li>val dataFrame = spark.read.<strong>csv</strong>(“someFile.csv”)</li>
+<li></li>
+<li>dataFrame.write.<strong>json</strong>(“newFile”)<br><a name="eae6add1"></a><h3 id="探索DataFrame"><a href="#探索DataFrame" class="headerlink" title="探索DataFrame"></a>探索DataFrame</h3>我们有两种主要方法来检查<code>DataFrame</code> （或任何其他  <code>Dataset</code>）的内容和结构  -  <code>show</code> 和  <code>printSchema</code>。<br>该  <code>show</code> 方法有五个版本：</li>
+</ol>
+<ul>
+<li><code>show()</code> - 以表格形式显示前20行。</li>
+<li><code>show(numRows: Int)</code> - <code>numRows</code> 以表格形式显示顶部  。</li>
+<li><code>show(truncate: Boolean)</code> - 以表格形式显示前20行。如果  <code>truncate</code> 是，  <code>true</code> 则将截断超过20个字符的字符串，并将所有单元格对齐。</li>
+<li><code>show(numRows: Int, truncate: Boolean)</code> - <code>numRows</code>以表格形式显示顶  行。如果  <code>truncate</code> 是，  <code>true</code> 则将截断超过20个字符的字符串，并将所有单元格对齐。</li>
+<li><code>show(numRows: Int, truncate: Int)</code> - <code>numRows</code> 以表格形式显示顶  行。如果  <code>truncate</code> 大于0，则将<code>truncate</code> 截断长于字符的字符串，  并将所有单元格对齐。</li>
+</ul>
+<p>在  <code>printSchema()</code> 将打印出树的形式架构到控制台。<br><a name="e3435f2b"></a></p>
+<h3 id="DataFrame操作"><a href="#DataFrame操作" class="headerlink" title="DataFrame操作"></a>DataFrame操作</h3><p>该  <code>Dataset</code> 接口允许我们通过基于SQL的DSL或仅通过编程方式运行SQL查询来对数据执行操作。正如前面提到的  <code>DataFrame</code> 仅仅是一个  <code>Dataset</code> 的  <code>Rows</code> 因此不是强类型。这就是操作无类型的原因。<br>在  <code>import spark.implicits._</code> 包含了我们在表上操作时使用更丰富的符号implicits。<br><a name="e6b88f89"></a></p>
+<h4 id="无类型操作"><a href="#无类型操作" class="headerlink" title="无类型操作"></a>无类型操作</h4><p>一个简单的例子，按值过滤  <code>someColumn</code> ，然后选择  <code>anotherColumn</code> 显示的结果：</p>
+<ol>
+<li>val result = dataFrame.<strong>filter</strong>($”someColumn” &gt; 0).<strong>select</strong>(“anotherColumn”)</li>
+<li></li>
+<li>result.<strong>show</strong>()</li>
+</ol>
+<p>该  <code>$</code> 运营商是金  <code>spark.implicits</code> 包，让我们创建一个  <code>Column</code> 从参考  <code>String</code>。<br>可在<a href="https://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.sql.Dataset" target="_blank" rel="noopener">此处</a>的<code>Dataset</code> API文档中  找到可用操作的完整列表  。<a href="https://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.sql.Dataset" target="_blank" rel="noopener"></a><br>还有一套非常全面的字符串操作和数学函数。它们的列表可以在<a href="https://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.sql.functions$" target="_blank" rel="noopener">这里</a>找到  。<br><a name="a9940950"></a></p>
+<h4 id="运行SQL查询"><a href="#运行SQL查询" class="headerlink" title="运行SQL查询"></a>运行SQL查询</h4><p>我们还可以选择以编程方式运行SQL查询，该  <code>sql</code>方法采用带有查询字符串作为参数的字符串。<br>但要做到这一点，我们需要先将其注册  <code>DataFrame</code> 为SQL  <code>Temporary View</code>。这将使  <code>DataFrame</code> 表从SQL查询中可见。这可以通过该<code>createOrReplaceTempView</code> 方法完成  ，例如：</p>
+<ol>
+<li>dataFrame.<strong>createOrReplaceTempView</strong>(“dataFrameTable”)</li>
+</ol>
+<p>现在使用以下<code>sql</code> 方法运行SQL查询  ：</p>
+<ol>
+<li>val result = spark.<strong>sql</strong>(“SELECT * FROM dataFrameTable”)</li>
+<li></li>
+<li>result.<strong>show</strong>()</li>
+</ol>
+<p>临时视图是会话范围的，因此会话终止时将消失。我们可以创建一个  <code>Global Temporary View</code> 将在所有会话之间共享并保持活动状态直到应用程序终止。全局临时视图与<code>global_temp</code> 数据库绑定，  因此要访问它们，我们必须使用限定名称通过使用<code>global_temp.</code> 前缀来引用它  。创建和访问此类视图的示例：</p>
+<ol>
+<li>dataFrame.<strong>createGlobalTempView</strong>(“globalDataFrameTable”)</li>
+<li></li>
+<li>val result = spark.<strong>sql</strong>(“SELECT * FROM global_temp.globalDataFrameTable”)</li>
+<li></li>
+<li>result.<strong>show</strong>()<br><a name="3326ad94-1"></a><h2 id="管道-1"><a href="#管道-1" class="headerlink" title="管道"></a>管道</h2>该  <code>Pipeline</code> 概念围绕提供统一API以创建和组合机器学习数据转换管道以创建单一，简洁的工作流的想法。它还为我们提供了保留它们并使用我们之前创建和保存的已存在的选项。该概念类似于例如流处理  <code>Akka Streams</code>。<br>A  <code>Pipeline</code> 可以包含以下元素：</li>
+</ol>
+<ul>
+<li>变形金刚 - 变形金刚的抽象  <code>DataFrame</code> 。由一个<code>transform</code> 函数组成，该函数<code>DataFrame</code> 通过例如添加列，更改特定列的行，根据特征向量预测标签来映射到新的  函数  。</li>
+<li>Estimator - 适合或训练或数据的算法的抽象（例如回归算法）。由的  <code>fit</code> 映射函数  <code>DataFrame</code> 成  <code>Model</code>。</li>
+</ul>
+<p>此外  <code>Transformer</code> ，  <code>Estimator</code> 共享一个用于指定其参数的通用API -  <code>Parameter</code> 作为使用setter的替代方法。有关该<code>Parameter</code> 概念的  更多信息，请  <a href="https://spark.apache.org/docs/latest/ml-pipeline.html#parameters" target="_blank" rel="noopener">点击此处</a><br><a name="3326ad94-2"></a></p>
+<h3 id="管道-2"><a href="#管道-2" class="headerlink" title="管道"></a>管道</h3><p>A  <code>Pipeline</code> 本质上是一个有序的阶段阵列。如前所述，舞台是a  <code>Transformer</code> 或a  <code>Estimator</code>。当然，我们可以很容易地从两个领域和共同领域看出一个  <code>Pipeline</code> 可以由许多<code>Transform</code> 阶段组成，  但只有一个  <code>Estimator</code> 阶段必须在最后阶段  <code>Pipeline</code>。<br><code>Pipeline</code> 一些简单回归任务的示例  ：1。将分类特征转换为索引。2.规范化帧中的向量。3.线性回归。<br><a name="3de05cb0"></a></p>
+<h3 id="保存-载入"><a href="#保存-载入" class="headerlink" title="保存/载入"></a>保存/载入</h3><p>我们可以轻松保存创建  <code>Pipeline</code> 或  <code>Model</code> 以后使用。并非所有  <code>Transform</code> 和  <code>Estimator</code> 类型的支持，以便检查他们的文档的具体信息它是一个好主意。大多数基本变压器和型号都受到支持。方法：</p>
+<ul>
+<li><code>save(path: String)</code> - 将<code>Model</code>/ 保存  <code>Pipeline</code> 到指向的位置 <code>path</code></li>
+<li><code>load(path: String)</code> -  从指向的位置  加载a  <code>Model</code>/<code>Pipeline`</code>path`<br><a name="eb24e721"></a><h3 id="例"><a href="#例" class="headerlink" title="例"></a>例</h3>这是一个如何创建的简短示例  <code>Pipeline</code> （请注意该  <code>setStages</code> 方法将  <code>Array</code> 参数作为参数）：</li>
+</ul>
+<ol>
+<li>val indexer = new <strong>VectorIndexer</strong>()</li>
+<li>.<strong>setInputCol</strong>(“features”)</li>
+<li>.<strong>setOutputCol</strong>(“indexedFeatures”)</li>
+<li>.<strong>setMaxCategories</strong>(5)</li>
+<li></li>
+<li>val normalizer = new <strong>Normalizer</strong>()</li>
+<li>.<strong>setInputCol</strong>(“features”)</li>
+<li>.<strong>setOutputCol</strong>(“normalizedFeatures”)</li>
+<li>.<strong>setP</strong>(1.0)</li>
+<li></li>
+<li>val lr = new <strong>LinearRegression</strong>()</li>
+<li>.<strong>setMaxIter</strong>(100)</li>
+<li>.<strong>setRegParam</strong>(0.5)</li>
+<li>.<strong>setElasticNetParam</strong>(0.5)</li>
+<li></li>
+<li>val pipeline = new <strong>Pipeline</strong>()</li>
+<li>.<strong>setStages</strong>(<strong>Array</strong>(indexer, normalizer, lr))<br><a name="d916960a"></a><h3 id="Spark中的变形金刚和估算师"><a href="#Spark中的变形金刚和估算师" class="headerlink" title="Spark中的变形金刚和估算师"></a>Spark中的变形金刚和估算师</h3>MLlib附带了一系列广泛的  <code>Transformer</code> 算法  <code>Estimator</code>元素，我们可以在机器学习工作流程中使用它们。为每个文档提供的文档非常好，我建议检查一下。您可以在以下链接中找到它：</li>
+</ol>
+<ul>
+<li><a href="https://spark.apache.org/docs/latest/ml-features.html#tf-idf" target="_blank" rel="noopener">提取，转换和选择功能</a></li>
+<li><a href="https://spark.apache.org/docs/latest/ml-classification-regression.html" target="_blank" rel="noopener">分类和回归</a></li>
+</ul>
+<p>库中的回归/分类算法对两<code>Double</code>值向量进行操作  - 特征向量和标签向量。因此，对于分类值，我们需要使用索引器转换列，并且需要将多个特征列值收集到单个向量中（例如，通过使用  <a href="https://spark.apache.org/docs/2.1.1/ml-features.html#vectorassembler" target="_blank" rel="noopener">VectorAssembler</a>）。<br>如果提供的内容不够，Spark还为我们提供了定义自己  <code>Transformer</code> 和  <code>Estimator</code>组件的方法。有关详细信息，我建议阅读   TomaszSosiński撰写的“ <a href="https://scalac.io/2016/12/01/extending-the-pipeline.html" target="_blank" rel="noopener">扩展管道”</a>。<br><a name="eb24e721-1"></a></p>
+<h2 id="例-1"><a href="#例-1" class="headerlink" title="例"></a>例</h2><p>最后，我想提供一个完整的代码示例，用于对现实世界的数据集进行回归（尽管我们只会查看其中的一小部分）。<br>我们将尝试根据两个变量来解决预测葡萄酒价格的回归问题 - 这是WineEnthusiast评级和制作葡萄酒的国家。我们将使用  <a href="https://www.kaggle.com/zynicide/wine-reviews" target="_blank" rel="noopener">此</a>  数据集来执行此操作。解压缩的文件被重命名  <code>wine-data.csv</code> 并移动到应用程序的工作目录。<br>的  <code>WineEnthusiast</code> ，如果你看它的价值观和变量描述，但我们会把它当作一个“双”的示范起见变量是定义更接近序变量。Country是一个分类（名义）值，因此需要为特征向量编制索引。然后我们将新列收集到<code>features</code> 使用前面提到的名称的单个向量  中  <code>VectorAssembler</code>。</p>
+<ol>
+<li>import org.apache.spark.ml.Pipeline</li>
+<li>import org.apache.spark.ml.evaluation.RegressionEvaluator</li>
+<li>import org.apache.spark.ml.feature.{StringIndexer, VectorAssembler}</li>
+<li>import org.apache.spark.ml.regression.GBTRegressor</li>
+<li>import org.apache.spark.sql.types.{DoubleType, StringType, StructField, StructType}</li>
+<li>import org.apache.spark.sql.{Encoders, SparkSession}</li>
+<li></li>
+<li>object Main {</li>
+<li></li>
+<li>def <strong>main</strong>(args: Array[String]) = {</li>
+<li></li>
+<li>val spark = SparkSession.builder</li>
+<li>.<strong>appName</strong>(“Wine Price Regression”)</li>
+<li>.<strong>master</strong>(“local”)</li>
+<li>.<strong>getOrCreate</strong>()</li>
+<li></li>
+<li>//We’ll define a partial schema with the values we are interested in. For the sake of the example points is a Double</li>
+<li>val schemaStruct = <strong>StructType</strong>(</li>
+<li><strong>StructField</strong>(“points”, DoubleType) ::</li>
+<li><strong>StructField</strong>(“country”, StringType) ::</li>
+<li><strong>StructField</strong>(“price”, DoubleType) :: Nil</li>
+<li>)</li>
+<li></li>
+<li>//We read the data from the file taking into account there’s a header.</li>
+<li>//na.drop() will return rows where all values are non-null.</li>
+<li>val df = spark.read</li>
+<li>.<strong>option</strong>(“header”, true)</li>
+<li>.<strong>schema</strong>(schemaStruct)</li>
+<li>.<strong>csv</strong>(“wine-data.csv”)</li>
+<li>.na.<strong>drop</strong>()</li>
+<li></li>
+<li>//We’ll split the set into training and test data</li>
+<li>val <strong>Array</strong>(trainingData, testData) = df.<strong>randomSplit</strong>(<strong>Array</strong>(0.8, 0.2))</li>
+<li></li>
+<li>val labelColumn = “price”</li>
+<li></li>
+<li>//We define two StringIndexers for the categorical variables</li>
+<li></li>
+<li>val countryIndexer = new <strong>StringIndexer</strong>()</li>
+<li>.<strong>setInputCol</strong>(“country”)</li>
+<li>.<strong>setOutputCol</strong>(“countryIndex”)</li>
+<li></li>
+<li>//We define the assembler to collect the columns into a new column with a single vector - “features”</li>
+<li>val assembler = new <strong>VectorAssembler</strong>()</li>
+<li>.<strong>setInputCols</strong>(<strong>Array</strong>(“points”, “countryIndex”))</li>
+<li>.<strong>setOutputCol</strong>(“features”)</li>
+<li></li>
+<li>//For the regression we’ll use the Gradient-boosted tree estimator</li>
+<li>val gbt = new <strong>GBTRegressor</strong>()</li>
+<li>.<strong>setLabelCol</strong>(labelColumn)</li>
+<li>.<strong>setFeaturesCol</strong>(“features”)</li>
+<li>.<strong>setPredictionCol</strong>(“Predicted “ + labelColumn)</li>
+<li>.<strong>setMaxIter</strong>(50)</li>
+<li></li>
+<li>//We define the Array with the stages of the pipeline</li>
+<li>val stages = <strong>Array</strong>(</li>
+<li>countryIndexer,</li>
+<li>assembler,</li>
+<li>gbt</li>
+<li>)</li>
+<li></li>
+<li>//Construct the pipeline</li>
+<li>val pipeline = new <strong>Pipeline</strong>().<strong>setStages</strong>(stages)</li>
+<li></li>
+<li>//We fit our DataFrame into the pipeline to generate a model</li>
+<li>val model = pipeline.<strong>fit</strong>(trainingData)</li>
+<li></li>
+<li>//We’ll make predictions using the model and the test data</li>
+<li>val predictions = model.<strong>transform</strong>(testData)</li>
+<li></li>
+<li>//This will evaluate the error/deviation of the regression using the Root Mean Squared deviation</li>
+<li>val evaluator = new <strong>RegressionEvaluator</strong>()</li>
+<li>.<strong>setLabelCol</strong>(labelColumn)</li>
+<li>.<strong>setPredictionCol</strong>(“Predicted “ + labelColumn)</li>
+<li>.<strong>setMetricName</strong>(“rmse”)</li>
+<li></li>
+<li>//We compute the error using the evaluator</li>
+<li>val error = evaluator.<strong>evaluate</strong>(predictions)</li>
+<li></li>
+<li><strong>println</strong>(error)</li>
+<li></li>
+<li>spark.<strong>stop</strong>()</li>
+<li>}</li>
+<li>}<br><a name="7a0a21d5"></a><h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2>我希望这篇文章有助于理解MLlib背后的基础知识以及如何在您的机器学习努力中使用它。正如我们所看到的那样，库（以及一般的Spark）为我们提供了一个精心设计的API和用于进行机器学习的工作流程。当然，这个文本是作为一个介绍，因此不会耗尽主题。但是，如前所述，Spark为我们提供了很好的文档，让我们可以更深入地追求它。<br>在上一节中，我提供了一些我认为应该证明对于进一步扩展我们的知识非常有用的链接。快乐的编码;）<br>干杯，马辛<br><a name="9534a298"></a><h2 id="有用的链接"><a href="#有用的链接" class="headerlink" title="有用的链接"></a>有用的链接</h2></li>
+</ol>
+<ul>
+<li><a href="https://spark.apache.org/docs/latest/ml-guide.html" target="_blank" rel="noopener">官方MLlib指南</a></li>
+<li><a href="https://spark.apache.org/docs/latest/sql-programming-guide.html" target="_blank" rel="noopener">Spark SQL，DataFrames和Datasets Guide</a></li>
+<li><a href="https://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.sql.Dataset" target="_blank" rel="noopener">数据集API</a></li>
+<li><a href="https://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.sql.functions$" target="_blank" rel="noopener">SQL函数可用</a></li>
+<li><a href="https://spark.apache.org/docs/latest/ml-features.html" target="_blank" rel="noopener">特征变换器文档</a></li>
+<li><a href="https://spark.apache.org/docs/latest/ml-classification-regression.html" target="_blank" rel="noopener">分类和回归算法文档</a></li>
+<li><a href="https://scalac.io/2016/12/01/extending-the-pipeline.html" target="_blank" rel="noopener">扩展管道</a><br><a name="d41d8cd9"></a><br>#### </li>
+</ul>
 
-        <div class="article-info info-on-right">
-          
-          
+      
 
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
+        </div>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://zhos.me/2019/04/23/yuque/使用Spark和MLlib进行机器学习简介（DataFrame API）/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/04/23/yuque/2019-04-23/" class="archive-article-date">
-  	<time datetime="2019-04-23T01:46:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-23</time>
-</a>
+<nav id="article-nav">
+  
+  
+    <a href="/2019/04/23/yuque/2019-04-23/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Tue Apr 23 2019 00:00:00 GMT+0800 (China Standard Time)</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/04/23/yuque/2019-04-23/">Tue Apr 23 2019 00:00:00 GMT+0800 (China Standard Time)</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
+        
+        
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#MLlib简介"><span class="toc-number">1.</span> <span class="toc-text">MLlib简介</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#功能"><span class="toc-number">1.1.</span> <span class="toc-text">功能</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#算法"><span class="toc-number">1.1.1.</span> <span class="toc-text">算法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Featurization"><span class="toc-number">1.1.2.</span> <span class="toc-text">Featurization</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#管道"><span class="toc-number">1.1.3.</span> <span class="toc-text">管道</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#坚持"><span class="toc-number">1.1.4.</span> <span class="toc-text">坚持</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#公用事业"><span class="toc-number">1.1.5.</span> <span class="toc-text">公用事业</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DataFrame"><span class="toc-number">2.</span> <span class="toc-text">DataFrame</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#特点"><span class="toc-number">2.1.</span> <span class="toc-text">特点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建DataFrame"><span class="toc-number">2.2.</span> <span class="toc-text">创建DataFrame</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#实木复合地板"><span class="toc-number">2.2.1.</span> <span class="toc-text">实木复合地板</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CSV"><span class="toc-number">2.2.2.</span> <span class="toc-text">CSV</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CSV-1"><span class="toc-number">2.2.3.</span> <span class="toc-text">CSV</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#JSON"><span class="toc-number">2.2.4.</span> <span class="toc-text">JSON</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#蜂巢"><span class="toc-number">2.2.5.</span> <span class="toc-text">蜂巢</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#数据库"><span class="toc-number">2.2.6.</span> <span class="toc-text">数据库</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#RDD"><span class="toc-number">2.2.7.</span> <span class="toc-text">RDD</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#定义架构"><span class="toc-number">2.3.</span> <span class="toc-text">定义架构</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#铸件"><span class="toc-number">2.3.1.</span> <span class="toc-text">铸件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#StructType"><span class="toc-number">2.3.2.</span> <span class="toc-text">StructType</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#编码器"><span class="toc-number">2.3.3.</span> <span class="toc-text">编码器</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#保存DataFrame"><span class="toc-number">2.4.</span> <span class="toc-text">保存DataFrame</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#探索DataFrame"><span class="toc-number">2.5.</span> <span class="toc-text">探索DataFrame</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DataFrame操作"><span class="toc-number">2.6.</span> <span class="toc-text">DataFrame操作</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#无类型操作"><span class="toc-number">2.6.1.</span> <span class="toc-text">无类型操作</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#运行SQL查询"><span class="toc-number">2.6.2.</span> <span class="toc-text">运行SQL查询</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#管道-1"><span class="toc-number">3.</span> <span class="toc-text">管道</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#管道-2"><span class="toc-number">3.1.</span> <span class="toc-text">管道</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#保存-载入"><span class="toc-number">3.2.</span> <span class="toc-text">保存/载入</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#例"><span class="toc-number">3.3.</span> <span class="toc-text">例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Spark中的变形金刚和估算师"><span class="toc-number">3.4.</span> <span class="toc-text">Spark中的变形金刚和估算师</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#例-1"><span class="toc-number">4.</span> <span class="toc-text">例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#后记"><span class="toc-number">5.</span> <span class="toc-text">后记</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#有用的链接"><span class="toc-number">6.</span> <span class="toc-text">有用的链接</span></a></li></ol>
+                    </div>
+                </span>
+            </div>
         </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
+        
+    </div>
+</aside>
+
+
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/04/22/yuque/PyTorch中用卷积神经网络进行传递学习/" class="archive-article-date">
-  	<time datetime="2019-04-22T08:14:06.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-22</time>
-</a>
-        </div>
-    	 
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/04/22/yuque/PyTorch中用卷积神经网络进行传递学习/">PyTorch中用卷积神经网络进行传递学习</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/04/22/yuque/PyTorch：了解自动微分的工作原理/" class="archive-article-date">
-  	<time datetime="2019-04-22T07:58:48.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-22</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/04/22/yuque/PyTorch：了解自动微分的工作原理/">PyTorch：了解自动微分的工作原理</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/04/22/yuque/梯度下降优化算法概述/" class="archive-article-date">
-  	<time datetime="2019-04-22T05:48:09.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-22</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/04/22/yuque/梯度下降优化算法概述/">梯度下降优化算法概述</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/04/22/yuque/爱最近邻算法的10个理由/" class="archive-article-date">
-  	<time datetime="2019-04-22T05:31:38.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-22</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/04/22/yuque/爱最近邻算法的10个理由/">爱最近邻算法的10个理由</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/04/22/yuque/了解XGBoost背后的数学的端到端指南/" class="archive-article-date">
-  	<time datetime="2019-04-22T03:54:55.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-22</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/04/22/yuque/了解XGBoost背后的数学的端到端指南/">了解XGBoost背后的数学的端到端指南</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/04/22/yuque/在机器学习预测中转换分类数据的可用性/" class="archive-article-date">
-  	<time datetime="2019-04-22T03:43:14.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-22</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/04/22/yuque/在机器学习预测中转换分类数据的可用性/">在机器学习预测中转换分类数据的可用性</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/04/22/yuque/决策树完整指南/" class="archive-article-date">
-  	<time datetime="2019-04-22T03:18:02.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-22</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/04/22/yuque/决策树完整指南/">决策树完整指南</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/04/19/yuque/使用Apache Spark的实时机器学习管道/" class="archive-article-date">
-  	<time datetime="2019-04-19T05:42:50.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-19</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/04/19/yuque/使用Apache Spark的实时机器学习管道/">使用Apache Spark的实时机器学习管道</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
-
-    
-    <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/archives/page/2/">2</a><a class="page-number" href="/archives/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/archives/page/6/">6</a><a class="extend next" rel="next" href="/archives/page/2/">Next &raquo;</a>
-    </nav>
   
 
 
@@ -459,8 +592,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
