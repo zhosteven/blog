@@ -15,7 +15,7 @@
 <meta property="og:site_name" content="A+">
 <meta property="og:description" content="分享，重用和分解模型复杂性的有效方法 更新到 Pytorch 4.1版本 你可以找到代码 here Pytorch是一个开源的深度学习框架，提供了创建ML模型的智能方法。 即使文档制作完好，我仍然发现大多数人仍然能够编写错误的而不是有组织的PyTorch代码。 今天，我们将看到如何使用PyTorch的三个主要构建块：Module，Sequential和ModuleList。 我们将从一个例子开始，">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-04-22T09:36:41.768Z">
+<meta property="og:updated_time" content="2019-04-23T01:55:28.396Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Pytorch：如何以及何时使用Module，Sequential，ModuleList和ModuleDict">
 <meta name="twitter:description" content="分享，重用和分解模型复杂性的有效方法 更新到 Pytorch 4.1版本 你可以找到代码 here Pytorch是一个开源的深度学习框架，提供了创建ML模型的智能方法。 即使文档制作完好，我仍然发现大多数人仍然能够编写错误的而不是有组织的PyTorch代码。 今天，我们将看到如何使用PyTorch的三个主要构建块：Module，Sequential和ModuleList。 我们将从一个例子开始，">
@@ -53,7 +53,7 @@
 		  <h1 class="header-author"><a href="/">Zhos</a></h1>
 		</hgroup>
 		
-		<p class="header-subtitle">武德</p>
+		<p class="header-subtitle">ai &amp; bigdata &amp; ml</p>
 		
 
 		<nav class="header-menu">
@@ -83,6 +83,8 @@
 				
 					<a class="github" target="_blank" href="https://github.com/zhosteven" title="github"><i class="icon-github"></i></a>
 		        
+					<a class="qq" target="_blank" href="/187063598" title="qq"><i class="icon-qq"></i></a>
+		        
 					<a class="mail" target="_blank" href="mailto:ujujzhao@gmail.com" title="mail"><i class="icon-mail"></i></a>
 		        
 			</div>
@@ -107,7 +109,7 @@
 			  <h1 class="header-author js-header-author">Zhos</h1>
 			</hgroup>
 			
-			<p class="header-subtitle"><i class="icon icon-quo-left"></i>武德<i class="icon icon-quo-right"></i></p>
+			<p class="header-subtitle"><i class="icon icon-quo-left"></i>ai &amp; bigdata &amp; ml<i class="icon icon-quo-right"></i></p>
 			
 			
 			
@@ -119,6 +121,8 @@
 				<div class="social">
 					
 						<a class="github" target="_blank" href="https://github.com/zhosteven" title="github"><i class="icon-github"></i></a>
+			        
+						<a class="qq" target="_blank" href="/187063598" title="qq"><i class="icon-qq"></i></a>
 			        
 						<a class="mail" target="_blank" href="mailto:ujujzhao@gmail.com" title="mail"><i class="icon-mail"></i></a>
 			        
@@ -373,6 +377,19 @@
             </div>
         </div>
         
+        
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#模块：主要构建块"><span class="toc-number">1.</span> <span class="toc-text">模块：主要构建块</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Sequential：堆叠和合并图层"><span class="toc-number">2.</span> <span class="toc-text">Sequential：堆叠和合并图层</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#"><span class="toc-number">3.</span> <span class="toc-text"></span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Dynamic-Sequential-create-multiple-layers-at-once"><span class="toc-number">4.</span> <span class="toc-text">Dynamic Sequential: create multiple layers at once</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ModuleList-when-we-need-to-iterate"><span class="toc-number">5.</span> <span class="toc-text">ModuleList : when we need to iterate</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ModuleDict-when-we-need-to-choose"><span class="toc-number">6.</span> <span class="toc-text">ModuleDict: when we need to choose</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Final-implementation"><span class="toc-number">7.</span> <span class="toc-text">Final implementation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Conclusion"><span class="toc-number">8.</span> <span class="toc-text">Conclusion</span></a></li></ol>
+                    </div>
+                </span>
+            </div>
+        </div>
         
     </div>
 </aside>

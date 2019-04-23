@@ -15,7 +15,7 @@
 <meta property="og:site_name" content="A+">
 <meta property="og:description" content="在本教程中，我们将讨论使用标准机器学习管道集成PySpark和XGBoost。我们将使用来自泰坦尼克号的数据：机器学习灾难中的众多Kaggle比赛之一。在开始之前，请知道您应该熟悉Apache Spark和Xgboost以及Python。本教程中使用的代码可以在github上的Jupyther笔记本中找到。 第1步：下载或构建XGBoost jarpython代码需要两个scala jar依赖项才">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-04-22T09:36:41.756Z">
+<meta property="og:updated_time" content="2019-04-23T02:05:34.771Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="PySpark ML和XGBoost完全集成在Kaggle Titanic数据集上进行了测试">
 <meta name="twitter:description" content="在本教程中，我们将讨论使用标准机器学习管道集成PySpark和XGBoost。我们将使用来自泰坦尼克号的数据：机器学习灾难中的众多Kaggle比赛之一。在开始之前，请知道您应该熟悉Apache Spark和Xgboost以及Python。本教程中使用的代码可以在github上的Jupyther笔记本中找到。 第1步：下载或构建XGBoost jarpython代码需要两个scala jar依赖项才">
@@ -53,7 +53,7 @@
 		  <h1 class="header-author"><a href="/">Zhos</a></h1>
 		</hgroup>
 		
-		<p class="header-subtitle">武德</p>
+		<p class="header-subtitle">ai &amp; bigdata &amp; ml</p>
 		
 
 		<nav class="header-menu">
@@ -83,6 +83,8 @@
 				
 					<a class="github" target="_blank" href="https://github.com/zhosteven" title="github"><i class="icon-github"></i></a>
 		        
+					<a class="qq" target="_blank" href="/187063598" title="qq"><i class="icon-qq"></i></a>
+		        
 					<a class="mail" target="_blank" href="mailto:ujujzhao@gmail.com" title="mail"><i class="icon-mail"></i></a>
 		        
 			</div>
@@ -107,7 +109,7 @@
 			  <h1 class="header-author js-header-author">Zhos</h1>
 			</hgroup>
 			
-			<p class="header-subtitle"><i class="icon icon-quo-left"></i>武德<i class="icon icon-quo-right"></i></p>
+			<p class="header-subtitle"><i class="icon icon-quo-left"></i>ai &amp; bigdata &amp; ml<i class="icon icon-quo-right"></i></p>
 			
 			
 			
@@ -119,6 +121,8 @@
 				<div class="social">
 					
 						<a class="github" target="_blank" href="https://github.com/zhosteven" title="github"><i class="icon-github"></i></a>
+			        
+						<a class="qq" target="_blank" href="/187063598" title="qq"><i class="icon-qq"></i></a>
 			        
 						<a class="mail" target="_blank" href="mailto:ujujzhao@gmail.com" title="mail"><i class="icon-mail"></i></a>
 			        
@@ -330,6 +334,19 @@
             </div>
         </div>
         
+        
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#第1步：下载或构建XGBoost-jar"><span class="toc-number">1.</span> <span class="toc-text">第1步：下载或构建XGBoost jar</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#第2步：下载XGBoost-python包装器"><span class="toc-number">2.</span> <span class="toc-text">第2步：下载XGBoost python包装器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#第3步：启动一个新的Jupyter笔记本"><span class="toc-number">3.</span> <span class="toc-text">第3步：启动一个新的Jupyter笔记本</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#第4步：将自定义XGBoost-jar添加到Spark应用程序"><span class="toc-number">4.</span> <span class="toc-text">第4步：将自定义XGBoost jar添加到Spark应用程序</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#第5步：将PySpark集成到Jupyther笔记本中"><span class="toc-number">5.</span> <span class="toc-text">第5步：将PySpark集成到Jupyther笔记本中</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#第6步：启动spark会话"><span class="toc-number">6.</span> <span class="toc-text">第6步：启动spark会话</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#第7步：添加PySpark-XGBoost包装器代码"><span class="toc-number">7.</span> <span class="toc-text">第7步：添加PySpark XGBoost包装器代码</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#第8步：定义架构"><span class="toc-number">8.</span> <span class="toc-text">第8步：定义架构</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#步骤9：将csv数据读入数据帧"><span class="toc-number">9.</span> <span class="toc-text">步骤9：将csv数据读入数据帧</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#步骤10：C-将标称值转换为数字"><span class="toc-number">10.</span> <span class="toc-text">步骤10：C 将标称值转换为数字</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#步骤11：将列组合成特征向量"><span class="toc-number">11.</span> <span class="toc-text">步骤11：将列组合成特征向量</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#第12步：定义XGBoostEstimator"><span class="toc-number">12.</span> <span class="toc-text">第12步：定义XGBoostEstimator</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#步骤13：建立管道和分类器"><span class="toc-number">13.</span> <span class="toc-text">步骤13：建立管道和分类器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#步骤14：训练模型并预测新的测试数据"><span class="toc-number">14.</span> <span class="toc-text">步骤14：训练模型并预测新的测试数据</span></a></li></ol>
+                    </div>
+                </span>
+            </div>
+        </div>
         
     </div>
 </aside>

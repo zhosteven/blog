@@ -15,7 +15,7 @@
 <meta property="og:site_name" content="A+">
 <meta property="og:description" content="在本文中，我们将讨论如何设置我们的开发环境以创建高质量的python代码以及如何自动执行一些繁琐的任务来加速部署。我们将介绍以下步骤：  使用pipenv在隔离的虚拟环境中设置我们的依赖项 如何为多个作业设置项目结构 如何运行pyspark工作 如何使用Makefile 自动执行开发步骤 如何使用flake8测试代码的质量 如何使用pytest-spark为PySpark应用程序运行单元测试 运行">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-04-22T09:36:41.756Z">
+<meta property="og:updated_time" content="2019-04-23T02:05:34.771Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="如何使用良好的软件工程实践设置PySpark环境以进行开发">
 <meta name="twitter:description" content="在本文中，我们将讨论如何设置我们的开发环境以创建高质量的python代码以及如何自动执行一些繁琐的任务来加速部署。我们将介绍以下步骤：  使用pipenv在隔离的虚拟环境中设置我们的依赖项 如何为多个作业设置项目结构 如何运行pyspark工作 如何使用Makefile 自动执行开发步骤 如何使用flake8测试代码的质量 如何使用pytest-spark为PySpark应用程序运行单元测试 运行">
@@ -53,7 +53,7 @@
 		  <h1 class="header-author"><a href="/">Zhos</a></h1>
 		</hgroup>
 		
-		<p class="header-subtitle">武德</p>
+		<p class="header-subtitle">ai &amp; bigdata &amp; ml</p>
 		
 
 		<nav class="header-menu">
@@ -83,6 +83,8 @@
 				
 					<a class="github" target="_blank" href="https://github.com/zhosteven" title="github"><i class="icon-github"></i></a>
 		        
+					<a class="qq" target="_blank" href="/187063598" title="qq"><i class="icon-qq"></i></a>
+		        
 					<a class="mail" target="_blank" href="mailto:ujujzhao@gmail.com" title="mail"><i class="icon-mail"></i></a>
 		        
 			</div>
@@ -107,7 +109,7 @@
 			  <h1 class="header-author js-header-author">Zhos</h1>
 			</hgroup>
 			
-			<p class="header-subtitle"><i class="icon icon-quo-left"></i>武德<i class="icon icon-quo-right"></i></p>
+			<p class="header-subtitle"><i class="icon icon-quo-left"></i>ai &amp; bigdata &amp; ml<i class="icon icon-quo-right"></i></p>
 			
 			
 			
@@ -119,6 +121,8 @@
 				<div class="social">
 					
 						<a class="github" target="_blank" href="https://github.com/zhosteven" title="github"><i class="icon-github"></i></a>
+			        
+						<a class="qq" target="_blank" href="/187063598" title="qq"><i class="icon-qq"></i></a>
 			        
 						<a class="mail" target="_blank" href="mailto:ujujzhao@gmail.com" title="mail"><i class="icon-mail"></i></a>
 			        
@@ -346,6 +350,19 @@
             </div>
         </div>
         
+        
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#第1步：设置虚拟环境"><span class="toc-number">1.</span> <span class="toc-text">第1步：设置虚拟环境</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#第2步：项目结构"><span class="toc-number">2.</span> <span class="toc-text">第2步：项目结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#第3步：使用spark-submit运行作业"><span class="toc-number">3.</span> <span class="toc-text">第3步：使用spark-submit运行作业</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#第4步：编写单元测试，并使用覆盖率运行它们"><span class="toc-number">4.</span> <span class="toc-text">第4步：编写单元测试，并使用覆盖率运行它们</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#第5步：运行静态代码分析"><span class="toc-number">5.</span> <span class="toc-text">第5步：运行静态代码分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#第6步：将所有内容与Makefile放在一起"><span class="toc-number">6.</span> <span class="toc-text">第6步：将所有内容与Makefile放在一起</span></a></li></ol>
+                    </div>
+                </span>
+            </div>
+        </div>
         
     </div>
 </aside>

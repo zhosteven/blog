@@ -15,7 +15,7 @@
 <meta property="og:site_name" content="A+">
 <meta property="og:description" content="MLflow模型MLflow模型是用于打包机器学习模型的标准格式，可用于各种下游工具 - 例如，通过REST API实时提供服务或在Apache Spark上进行批量推理。该格式定义了一种约定，允许您以不同的“风格”保存模型，这些“风味”可以被不同的下游工具理解。 目录  存储格式 模型API 内置型号口味 自定义口味 内置部署工具存储格式每个MLflow模型都是一个包含任意文件MLmodel">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-04-22T09:36:41.756Z">
+<meta property="og:updated_time" content="2019-04-23T02:05:34.775Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MLflow模型">
 <meta name="twitter:description" content="MLflow模型MLflow模型是用于打包机器学习模型的标准格式，可用于各种下游工具 - 例如，通过REST API实时提供服务或在Apache Spark上进行批量推理。该格式定义了一种约定，允许您以不同的“风格”保存模型，这些“风味”可以被不同的下游工具理解。 目录  存储格式 模型API 内置型号口味 自定义口味 内置部署工具存储格式每个MLflow模型都是一个包含任意文件MLmodel">
@@ -53,7 +53,7 @@
 		  <h1 class="header-author"><a href="/">Zhos</a></h1>
 		</hgroup>
 		
-		<p class="header-subtitle">武德</p>
+		<p class="header-subtitle">ai &amp; bigdata &amp; ml</p>
 		
 
 		<nav class="header-menu">
@@ -83,6 +83,8 @@
 				
 					<a class="github" target="_blank" href="https://github.com/zhosteven" title="github"><i class="icon-github"></i></a>
 		        
+					<a class="qq" target="_blank" href="/187063598" title="qq"><i class="icon-qq"></i></a>
+		        
 					<a class="mail" target="_blank" href="mailto:ujujzhao@gmail.com" title="mail"><i class="icon-mail"></i></a>
 		        
 			</div>
@@ -107,7 +109,7 @@
 			  <h1 class="header-author js-header-author">Zhos</h1>
 			</hgroup>
 			
-			<p class="header-subtitle"><i class="icon icon-quo-left"></i>武德<i class="icon icon-quo-right"></i></p>
+			<p class="header-subtitle"><i class="icon icon-quo-left"></i>ai &amp; bigdata &amp; ml<i class="icon icon-quo-right"></i></p>
 			
 			
 			
@@ -119,6 +121,8 @@
 				<div class="social">
 					
 						<a class="github" target="_blank" href="https://github.com/zhosteven" title="github"><i class="icon-github"></i></a>
+			        
+						<a class="qq" target="_blank" href="/187063598" title="qq"><i class="icon-qq"></i></a>
 			        
 						<a class="mail" target="_blank" href="mailto:ujujzhao@gmail.com" title="mail"><i class="icon-mail"></i></a>
 			        
@@ -407,6 +411,19 @@
             </div>
         </div>
         
+        
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#MLflow模型"><span class="toc-number">1.</span> <span class="toc-text">MLflow模型</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#存储格式"><span class="toc-number">1.1.</span> <span class="toc-text">存储格式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#MLmodel格式的字段"><span class="toc-number">1.1.1.</span> <span class="toc-text">MLmodel格式的字段</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#TIME-CREATED"><span class="toc-number">1.1.1.1.</span> <span class="toc-text">TIME_CREATED</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#run-id"><span class="toc-number">1.1.1.2.</span> <span class="toc-text">run_id</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#模型API"><span class="toc-number">1.2.</span> <span class="toc-text">模型API</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#内置型号口味"><span class="toc-number">1.3.</span> <span class="toc-text">内置型号口味</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Python函数（python-function）"><span class="toc-number">1.3.1.</span> <span class="toc-text">Python函数（python_function）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#loader-module-required"><span class="toc-number">1.3.1.1.</span> <span class="toc-text">loader_module [required]:</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#code-optional"><span class="toc-number">1.3.1.2.</span> <span class="toc-text">code [optional]:</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#data-optional"><span class="toc-number">1.3.1.3.</span> <span class="toc-text">data [optional]:</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#env-可选-："><span class="toc-number">1.3.1.4.</span> <span class="toc-text">env [可选]：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#案例"><span class="toc-number">1.3.1.5.</span> <span class="toc-text">案例</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#H-O（h2o）"><span class="toc-number">1.3.2.</span> <span class="toc-text">H  O（h2o）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Keras（keras）"><span class="toc-number">1.3.3.</span> <span class="toc-text">Keras（keras）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MLeap（mleap）"><span class="toc-number">1.3.4.</span> <span class="toc-text">MLeap（mleap）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#PyTorch（pytorch）"><span class="toc-number">1.3.5.</span> <span class="toc-text">PyTorch（pytorch）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Scikit-learn（sklearn）"><span class="toc-number">1.3.6.</span> <span class="toc-text">Scikit-learn（sklearn）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Spark-MLlib（spark）"><span class="toc-number">1.3.7.</span> <span class="toc-text">Spark MLlib（spark）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#TensorFlow（tensorflow）"><span class="toc-number">1.3.8.</span> <span class="toc-text">TensorFlow（tensorflow）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#自定义口味"><span class="toc-number">1.4.</span> <span class="toc-text">自定义口味</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#内置部署工具"><span class="toc-number">1.5.</span> <span class="toc-text">内置部署工具</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#将python-function模型部署为本地REST-API端点"><span class="toc-number">1.5.1.</span> <span class="toc-text">将python_function模型部署为本地REST API端点</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#命令"><span class="toc-number">1.5.1.1.</span> <span class="toc-text">命令</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#python-function在Microsoft-Azure-ML上部署模型"><span class="toc-number">1.5.2.</span> <span class="toc-text">python_function在Microsoft Azure ML上部署模型</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#使用Python-API的示例工作流程"><span class="toc-number">1.5.2.1.</span> <span class="toc-text">使用Python API的示例工作流程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Example-workflow-using-the-MLflow-CLI"><span class="toc-number">1.5.2.2.</span> <span class="toc-text">Example workflow using the MLflow CLI</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#python-function在Amazon-SageMaker上部署模型"><span class="toc-number">1.5.3.</span> <span class="toc-text">python_function在Amazon SageMaker上部署模型</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#命令-1"><span class="toc-number">1.5.3.1.</span> <span class="toc-text">命令</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#将python-function模型导出为Apache-Spark-UDF"><span class="toc-number">1.5.4.</span> <span class="toc-text">将python_function模型导出为Apache Spark UDF</span></a></li></ol></li></ol></li></ol>
+                    </div>
+                </span>
+            </div>
+        </div>
         
     </div>
 </aside>

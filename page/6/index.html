@@ -8,13 +8,16 @@
   <link rel="dns-prefetch" href="http://zhos.me">
   <title>A+</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
+  <meta name="description" content="研究性材料(算法)">
+<meta property="og:type" content="website">
 <meta property="og:title" content="A+">
 <meta property="og:url" content="http://zhos.me/page/6/index.html">
 <meta property="og:site_name" content="A+">
+<meta property="og:description" content="研究性材料(算法)">
 <meta property="og:locale" content="zh-Hans">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="A+">
+<meta name="twitter:description" content="研究性材料(算法)">
   
     <link rel="alternative" href="/atom.xml" title="A+" type="application/atom+xml">
   
@@ -49,7 +52,7 @@
 		  <h1 class="header-author"><a href="/">Zhos</a></h1>
 		</hgroup>
 		
-		<p class="header-subtitle">武德</p>
+		<p class="header-subtitle">ai &amp; bigdata &amp; ml</p>
 		
 
 		<nav class="header-menu">
@@ -79,6 +82,8 @@
 				
 					<a class="github" target="_blank" href="https://github.com/zhosteven" title="github"><i class="icon-github"></i></a>
 		        
+					<a class="qq" target="_blank" href="/187063598" title="qq"><i class="icon-qq"></i></a>
+		        
 					<a class="mail" target="_blank" href="mailto:ujujzhao@gmail.com" title="mail"><i class="icon-mail"></i></a>
 		        
 			</div>
@@ -103,7 +108,7 @@
 			  <h1 class="header-author js-header-author">Zhos</h1>
 			</hgroup>
 			
-			<p class="header-subtitle"><i class="icon icon-quo-left"></i>武德<i class="icon icon-quo-right"></i></p>
+			<p class="header-subtitle"><i class="icon icon-quo-left"></i>ai &amp; bigdata &amp; ml<i class="icon icon-quo-right"></i></p>
 			
 			
 			
@@ -115,6 +120,8 @@
 				<div class="social">
 					
 						<a class="github" target="_blank" href="https://github.com/zhosteven" title="github"><i class="icon-github"></i></a>
+			        
+						<a class="qq" target="_blank" href="/187063598" title="qq"><i class="icon-qq"></i></a>
 			        
 						<a class="mail" target="_blank" href="mailto:ujujzhao@gmail.com" title="mail"><i class="icon-mail"></i></a>
 			        
@@ -141,6 +148,99 @@
           </div>
           <div id="js-content" class="content-ll">
             
+  
+    <article id="post-yuque/评论：U-Net（生物医学图像分割）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/12/19/yuque/评论：U-Net（生物医学图像分割）/">评论：U-Net（生物医学图像分割）</a>
+    </h1>
+  
+
+        
+        <a href="/2018/12/19/yuque/评论：U-Net（生物医学图像分割）/" class="archive-article-date">
+  	<time datetime="2018-12-19T05:38:12.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-19</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><a href="https://towardsdatascience.com/review-u-net-biomedical-image-segmentation-d02bf06ca760" target="_blank" rel="noopener">链接</a><br>在这个U-Net评论中。 U-Net是生物医学图像分割领域着名的全卷积网络（FCN）之一，它在2015年MICCAI上发表，在我写这篇故事时引用了3000多篇。 （SH Tsang @ Medium）<br>在生物医学图像标注领域，我们总是需要获得相关知识的专家来标注每个图像。 而且他们也会花费大量时间来标注。 如果标注过程变为自动，则可以实现较少的人力和较低的成本。 或者它可以作为减少人为错误的辅助角色。</p>
+<blockquote>
+<p>您可能会问：“阅读有关生物医学图像分割的内容是否过于狭窄？”<br>但是，我们可能会学习它的技术，并将其应用于不同的行业。 比如说，在施工/制造/制造过程中的质量控制/自动检查/自动机器人，或者我们可能想到的任何其他东西。 这些活动涉及定量诊断。 如果我们可以自动化，则可以以更高的精度节省成本。</p>
+</blockquote>
+<p>在本文中，他们分割/标注电子显微镜（EM）图像。 他们还对网络进行了一些修改，以便在2015 ISBI中一下子对X射线图像进行分段/标注。<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545198583802-f9cc7158-6135-46a5-b544-1978e1871a3f.png#align=left&amp;display=inline&amp;height=354&amp;originHeight=256&amp;originWidth=512&amp;status=done&amp;width=708" alt><br><a name="6f31bc1f"></a></p>
+<h2 id="什么是涵盖的"><a href="#什么是涵盖的" class="headerlink" title="什么是涵盖的"></a><a href="#w9n2hv"></a>什么是涵盖的</h2><ol>
+<li>A. EM图像分割</li>
+<li>U-Net网络架构</li>
+<li>重叠平铺策略</li>
+<li>数据增强的弹性变形</li>
+<li>触摸物体的分离</li>
+<li>结果<br><a name="583d02e2"></a><h2 id="B-牙科X射线图像分割"><a href="#B-牙科X射线图像分割" class="headerlink" title="B.牙科X射线图像分割"></a><a href="#vs2glw"></a>B.牙科X射线图像分割</h2></li>
+<li>U-Net的一些修改</li>
+<li>结果<br><a name="1f5abe88"></a><h2 id="A-1-U-net网络架构"><a href="#A-1-U-net网络架构" class="headerlink" title="A.1 U-net网络架构"></a><a href="#iuwfgw"></a>A.1 U-net网络架构</h2><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545199231926-18020858-3aa4-47c6-b68c-3b9f477175f6.png#align=left&amp;display=inline&amp;height=574&amp;originHeight=627&amp;originWidth=902&amp;status=done&amp;width=826" alt><br>U-net架构如上所示。 它由收缩路径和扩展路径组成。<br><a name="464297ce"></a><h4 id="收缩路径"><a href="#收缩路径" class="headerlink" title="收缩路径"></a><a href="#8nvimi"></a>收缩路径</h4>连续两次3×3转换和2×2最大合并完成。 这有助于提取更多高级功能，但也会减少功能图的大小。<br><a name="e0ad13ea"></a><h4 id="扩张路径"><a href="#扩张路径" class="headerlink" title="扩张路径"></a><a href="#9scaye"></a>扩张路径</h4></li>
+<li>连续执行2×2 Up-conv和2×3×3 Conv以恢复分割图的大小。 但是，上述过程虽然增加了“什么”，但减少了“哪里”。 这意味着，我们可以获得高级功能，但我们也会丢失本地化信息。</li>
+<li>因此，在每个up-conv之后，我们还具有相同级别的特征映射（灰色箭头）的串联。 这有助于将收缩路径的本地化信息提供给扩展路径。</li>
+<li>最后，1×1转换将特征映射大小从64映射到2，因为输出特征映射只有2个类，单元格和膜。<br><a name="b359c062"></a><h2 id="A-2-重叠平铺策略"><a href="#A-2-重叠平铺策略" class="headerlink" title="A.2 重叠平铺策略"></a><a href="#uqa0mk"></a>A.2 重叠平铺策略</h2><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545199376322-d00ca454-7b16-4c02-bb99-ebef49b086d1.png#align=left&amp;display=inline&amp;height=267&amp;originHeight=267&amp;originWidth=557&amp;status=done&amp;width=557" alt><br>由于使用了无填充卷积，因此输出大小小于输入大小。 不是在网络之前缩小尺寸而是在网络之后进行上采样，而是使用重叠切片策略。 由此，如上图所示，逐个部分地预测整个图像。 使用蓝色区域预测图像中的黄色区域。 在图像边界处，通过镜像外推图像。<br><a name="ff8a9392"></a><h2 id="A-3数据增强的弹性变形"><a href="#A-3数据增强的弹性变形" class="headerlink" title="A.3数据增强的弹性变形"></a><a href="#t1qdkv"></a>A.3数据增强的弹性变形</h2><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545199438382-5e3f4be0-d382-4924-a7d8-19a220a66152.png#align=left&amp;display=inline&amp;height=473&amp;originHeight=473&amp;originWidth=488&amp;status=done&amp;width=488" alt><br>由于训练集只能由专家标注，因此训练集很小。 为了增加训练集的大小，通过随机变形输入图像和输出分割图来完成数据增加。<br><a name="ad98132d"></a><h2 id="A-4接触目标的分离"><a href="#A-4接触目标的分离" class="headerlink" title="A.4接触目标的分离"></a><a href="#6xmasa"></a>A.4接触目标的分离</h2><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545199528214-e934fe93-dcae-42bf-81db-1289452fbe16.png#align=left&amp;display=inline&amp;height=278&amp;originHeight=278&amp;originWidth=503&amp;status=done&amp;width=503" alt><br>由于触摸物体彼此紧密放置，它们很容易被网络合并，将它们分开，重量图被应用于网络的输出。<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545199557533-ba5e366c-233e-468f-89a7-ca7cbe75af22.png#align=left&amp;display=inline&amp;height=78&amp;originHeight=77&amp;originWidth=439&amp;status=done&amp;width=444" alt><br>为了如上计算权重图，d1(x)是到位置x处最近的单元边界的距离，d2(x)是到第二个最近的单元边界的距离。 因此，在边界处，重量如图中高得多。<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545199618197-57bfbffa-b257-4989-a971-882147af45b5.png#align=left&amp;display=inline&amp;height=118&amp;originHeight=118&amp;originWidth=423&amp;status=done&amp;width=423" alt><br>因此，交叉熵函数在权重图处在每个位置处罚。 它有助于迫使网络学习触摸细胞之间的小分离边界。<br><a name="d5f7fde3"></a><h3 id="A-5-结果"><a href="#A-5-结果" class="headerlink" title="A.5. 结果"></a><a href="#7761"></a>A.5. 结果</h3><a name="3e377a66"></a><h4 id="A-5-1-ISBI-2012-Challenge"><a href="#A-5-1-ISBI-2012-Challenge" class="headerlink" title="A.5.1. ISBI 2012 Challenge"></a><a href="#b2c8"></a>A.5.1. ISBI 2012 Challenge</h4><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545199702716-70057810-8bc6-46ca-8dc2-70a1e6e63c40.png#align=left&amp;display=inline&amp;height=267&amp;originHeight=267&amp;originWidth=774&amp;status=done&amp;width=774" alt><br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545199710221-c1e90900-ada5-4943-966f-35894c3de37a.png#align=left&amp;display=inline&amp;height=222&amp;originHeight=222&amp;originWidth=567&amp;status=done&amp;width=567" alt></li>
+<li>变形误差：一种惩罚拓扑分歧的分段指标。</li>
+<li>Rand Error：两个聚类或分段之间相似性的度量。</li>
+<li>像素错误：标准像素错误。</li>
+<li>训练时间：10小时</li>
+<li>测试速度：每张图像约1秒<br><a name="52ed776c"></a><h4 id="A-5-2-PhC-U373-and-DIC-HeLa-数据集"><a href="#A-5-2-PhC-U373-and-DIC-HeLa-数据集" class="headerlink" title="A.5.2. PhC-U373 and DIC-HeLa 数据集"></a><a href="#89a2"></a><strong>A.5.2. PhC-U373 and DIC-HeLa 数据集</strong></h4><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545199768149-5b434356-9e41-4638-a066-09b9d8a5df2e.png#align=left&amp;display=inline&amp;height=317&amp;originHeight=340&amp;originWidth=886&amp;status=done&amp;width=826" alt><br><a name="530d6eee"></a><h3 id="B-1-U-Net的一些修改"><a href="#B-1-U-Net的一些修改" class="headerlink" title="B.1. U-Net的一些修改"></a><a href="#7dbc"></a>B.1. U-Net的一些修改</h3><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545199805742-7dc888f5-e4f3-4d3f-83db-dbec0df55e50.png#align=left&amp;display=inline&amp;height=193&amp;originHeight=234&amp;originWidth=1000&amp;status=done&amp;width=826" alt><br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545199816881-16840727-0a97-47a5-9e45-4a30f0e54fa7.png#align=left&amp;display=inline&amp;height=535&amp;originHeight=535&amp;originWidth=770&amp;status=done&amp;width=770" alt><br>这次，使用4×4 Up-conv，并使用1×1 Conv将特征映射从64映射到7，因为每个位置的输出有7个类。<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545199843951-b3dd1726-e02f-46fb-9016-0951ea0be26e.png#align=left&amp;display=inline&amp;height=276&amp;originHeight=276&amp;originWidth=728&amp;status=done&amp;width=728" alt><br>在重叠平铺策略中，使用零填充而不是在图像边界处镜像。 因为镜像对牙齿没有任何意义。<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545199870989-cf53104b-0645-4518-9319-f0726d67e413.png#align=left&amp;display=inline&amp;height=371&amp;originHeight=371&amp;originWidth=733&amp;status=done&amp;width=733" alt><br>使用softmax损失的低分辨率特征图还有额外的损耗层，以指导深层直接学习分段类。<br><a name="7785671a"></a><h3 id="B-2-结果"><a href="#B-2-结果" class="headerlink" title="B.2. 结果"></a><a href="#d538"></a>B.2. 结果</h3><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545199907301-15f83213-8564-4f2b-964b-2eb02f92eafe.png#align=left&amp;display=inline&amp;height=561&amp;originHeight=561&amp;originWidth=633&amp;status=done&amp;width=633" alt><br>I have also reviewed <a href="https://medium.com/datadriveninvestor/review-cumedvision1-fully-convolutional-network-biomedical-image-segmentation-5434280d6e6" target="_blank" rel="noopener">CUMedVision1</a> and <a href="https://medium.com/datadriveninvestor/review-cumedvision2-dcan-winner-of-2015-miccai-gland-segmentation-challenge-contest-biomedical-878b5a443560" target="_blank" rel="noopener">CUMedVision2</a>. Please feel free to visit if interested.<br><a name="References"></a><h3 id="References"><a href="#References" class="headerlink" title="References"></a><a href="#76be"></a>References</h3></li>
+</ol>
+<ul>
+<li><p>[2015] [MICCAI]<br><a href="https://arxiv.org/abs/1505.04597" target="_blank" rel="noopener">U-Net: Convolutional Networks for Biomedical Image Segmentation</a></p>
+</li>
+<li><p>[2015] [ISBI]<br><a href="http://www-o.ntust.edu.tw/~cweiwang/ISBI2015/challenge2/isbi2015_Ronneberger.pdf" target="_blank" rel="noopener">Dental X-ray Image Segmentation using a U-shaped Deep Convolutional Network</a></p>
+</li>
+</ul>
+<p><a name="3416b5da"></a></p>
+<h3 id="My-Related-Reviews"><a href="#My-Related-Reviews" class="headerlink" title="My Related Reviews"></a><a href="#2785"></a>My Related Reviews</h3><p>[<a href="https://medium.com/datadriveninvestor/review-cumedvision1-fully-convolutional-network-biomedical-image-segmentation-5434280d6e6" target="_blank" rel="noopener">CUMedVision1</a>] [<a href="https://medium.com/datadriveninvestor/review-cumedvision2-dcan-winner-of-2015-miccai-gland-segmentation-challenge-contest-biomedical-878b5a443560" target="_blank" rel="noopener">CUMedVision2</a>] [<a href="https://towardsdatascience.com/review-fcn-semantic-segmentation-eb8c9b50d2d1" target="_blank" rel="noopener">FCN</a>] [<a href="https://towardsdatascience.com/review-deconvnet-unpooling-layer-semantic-segmentation-55cf8a6e380e" target="_blank" rel="noopener">DeconvNet</a>]</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/12/19/yuque/评论：U-Net（生物医学图像分割）/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
   
     <article id="post-yuque/去除正则化会避免模型过拟合吗？" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">

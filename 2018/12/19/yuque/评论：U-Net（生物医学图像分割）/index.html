@@ -30,7 +30,7 @@
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2018/png/219582/1545199843951-b3dd1726-e02f-46fb-9016-0951ea0be26e.png#align=left&display=inline&height=276&originHeight=276&originWidth=728&status=done&width=728">
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2018/png/219582/1545199870989-cf53104b-0645-4518-9319-f0726d67e413.png#align=left&display=inline&height=371&originHeight=371&originWidth=733&status=done&width=733">
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2018/png/219582/1545199907301-15f83213-8564-4f2b-964b-2eb02f92eafe.png#align=left&display=inline&height=561&originHeight=561&originWidth=633&status=done&width=633">
-<meta property="og:updated_time" content="2019-04-22T09:35:50.208Z">
+<meta property="og:updated_time" content="2019-04-23T02:05:34.791Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="评论：U-Net（生物医学图像分割）">
 <meta name="twitter:description" content="链接在这个U-Net评论中。 U-Net是生物医学图像分割领域着名的全卷积网络（FCN）之一，它在2015年MICCAI上发表，在我写这篇故事时引用了3000多篇。 （SH Tsang @ Medium）在生物医学图像标注领域，我们总是需要获得相关知识的专家来标注每个图像。 而且他们也会花费大量时间来标注。 如果标注过程变为自动，则可以实现较少的人力和较低的成本。 或者它可以作为减少人为错误的辅助">
@@ -69,7 +69,7 @@
 		  <h1 class="header-author"><a href="/">Zhos</a></h1>
 		</hgroup>
 		
-		<p class="header-subtitle">武德</p>
+		<p class="header-subtitle">ai &amp; bigdata &amp; ml</p>
 		
 
 		<nav class="header-menu">
@@ -99,6 +99,8 @@
 				
 					<a class="github" target="_blank" href="https://github.com/zhosteven" title="github"><i class="icon-github"></i></a>
 		        
+					<a class="qq" target="_blank" href="/187063598" title="qq"><i class="icon-qq"></i></a>
+		        
 					<a class="mail" target="_blank" href="mailto:ujujzhao@gmail.com" title="mail"><i class="icon-mail"></i></a>
 		        
 			</div>
@@ -123,7 +125,7 @@
 			  <h1 class="header-author js-header-author">Zhos</h1>
 			</hgroup>
 			
-			<p class="header-subtitle"><i class="icon icon-quo-left"></i>武德<i class="icon icon-quo-right"></i></p>
+			<p class="header-subtitle"><i class="icon icon-quo-left"></i>ai &amp; bigdata &amp; ml<i class="icon icon-quo-right"></i></p>
 			
 			
 			
@@ -135,6 +137,8 @@
 				<div class="social">
 					
 						<a class="github" target="_blank" href="https://github.com/zhosteven" title="github"><i class="icon-github"></i></a>
+			        
+						<a class="qq" target="_blank" href="/187063598" title="qq"><i class="icon-qq"></i></a>
 			        
 						<a class="mail" target="_blank" href="mailto:ujujzhao@gmail.com" title="mail"><i class="icon-mail"></i></a>
 			        
@@ -334,6 +338,19 @@
             </div>
         </div>
         
+        
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是涵盖的"><span class="toc-number">1.</span> <span class="toc-text">什么是涵盖的</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#B-牙科X射线图像分割"><span class="toc-number">2.</span> <span class="toc-text">B.牙科X射线图像分割</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#A-1-U-net网络架构"><span class="toc-number">3.</span> <span class="toc-text">A.1 U-net网络架构</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#收缩路径"><span class="toc-number">3.0.1.</span> <span class="toc-text">收缩路径</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#扩张路径"><span class="toc-number">3.0.2.</span> <span class="toc-text">扩张路径</span></a></li></ol></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#A-2-重叠平铺策略"><span class="toc-number">4.</span> <span class="toc-text">A.2 重叠平铺策略</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#A-3数据增强的弹性变形"><span class="toc-number">5.</span> <span class="toc-text">A.3数据增强的弹性变形</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#A-4接触目标的分离"><span class="toc-number">6.</span> <span class="toc-text">A.4接触目标的分离</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#A-5-结果"><span class="toc-number">6.1.</span> <span class="toc-text">A.5. 结果</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#A-5-1-ISBI-2012-Challenge"><span class="toc-number">6.1.1.</span> <span class="toc-text">A.5.1. ISBI 2012 Challenge</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#A-5-2-PhC-U373-and-DIC-HeLa-数据集"><span class="toc-number">6.1.2.</span> <span class="toc-text">A.5.2. PhC-U373 and DIC-HeLa 数据集</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#B-1-U-Net的一些修改"><span class="toc-number">6.2.</span> <span class="toc-text">B.1. U-Net的一些修改</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#B-2-结果"><span class="toc-number">6.3.</span> <span class="toc-text">B.2. 结果</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#References"><span class="toc-number">6.4.</span> <span class="toc-text">References</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#My-Related-Reviews"><span class="toc-number">6.5.</span> <span class="toc-text">My Related Reviews</span></a></li></ol></li>
+                    </div>
+                </span>
+            </div>
+        </div>
         
     </div>
 </aside>

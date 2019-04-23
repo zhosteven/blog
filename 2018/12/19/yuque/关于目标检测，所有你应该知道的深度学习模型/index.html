@@ -38,7 +38,7 @@
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2018/png/219582/1545205410945-959e3ef1-9aac-408a-bde4-e16a2f47fb24.png#width=826">
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2018/png/219582/1545205442472-9616bcc1-7bd3-4ecf-a655-b4ec3dde4948.png#width=826">
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2018/png/219582/1545205466794-6c46e6e8-6b5c-4375-ab82-46fb5c460706.png#width=826">
-<meta property="og:updated_time" content="2019-04-22T09:35:50.208Z">
+<meta property="og:updated_time" content="2019-04-23T02:05:34.791Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="关于目标检测，所有你应该知道的深度学习模型">
 <meta name="twitter:description" content="链接  Computer vision object detection models: R-CNN, Fast R-CNN, Faster R-CNN, Mask R-CNN, YOLO这篇是简介一些用来辨识影像中物体的AI 模型。 在前面有提到，透过CNN模型，你可以输入一张图片，得到该图片属于哪种类别的结果，这过程我们把他称作分类(Classification)。 但在真实世界的应用情境通常">
@@ -77,7 +77,7 @@
 		  <h1 class="header-author"><a href="/">Zhos</a></h1>
 		</hgroup>
 		
-		<p class="header-subtitle">武德</p>
+		<p class="header-subtitle">ai &amp; bigdata &amp; ml</p>
 		
 
 		<nav class="header-menu">
@@ -107,6 +107,8 @@
 				
 					<a class="github" target="_blank" href="https://github.com/zhosteven" title="github"><i class="icon-github"></i></a>
 		        
+					<a class="qq" target="_blank" href="/187063598" title="qq"><i class="icon-qq"></i></a>
+		        
 					<a class="mail" target="_blank" href="mailto:ujujzhao@gmail.com" title="mail"><i class="icon-mail"></i></a>
 		        
 			</div>
@@ -131,7 +133,7 @@
 			  <h1 class="header-author js-header-author">Zhos</h1>
 			</hgroup>
 			
-			<p class="header-subtitle"><i class="icon icon-quo-left"></i>武德<i class="icon icon-quo-right"></i></p>
+			<p class="header-subtitle"><i class="icon icon-quo-left"></i>ai &amp; bigdata &amp; ml<i class="icon icon-quo-right"></i></p>
 			
 			
 			
@@ -143,6 +145,8 @@
 				<div class="social">
 					
 						<a class="github" target="_blank" href="https://github.com/zhosteven" title="github"><i class="icon-github"></i></a>
+			        
+						<a class="qq" target="_blank" href="/187063598" title="qq"><i class="icon-qq"></i></a>
 			        
 						<a class="mail" target="_blank" href="mailto:ujujzhao@gmail.com" title="mail"><i class="icon-mail"></i></a>
 			        
@@ -382,6 +386,19 @@
             </div>
         </div>
         
+        
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Computer-vision-object-detection-models-R-CNN-Fast-R-CNN-Faster-R-CNN-Mask-R-CNN-YOLO"><span class="toc-number">1.</span> <span class="toc-text">Computer vision object detection models: R-CNN, Fast R-CNN, Faster R-CNN, Mask R-CNN, YOLO</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#R-CNN"><span class="toc-number">2.</span> <span class="toc-text">R-CNN</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Selective-Search"><span class="toc-number">2.1.</span> <span class="toc-text">Selective Search</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Fast-R-CNN"><span class="toc-number">3.</span> <span class="toc-text">Fast R-CNN</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Faster-R-CNN"><span class="toc-number">4.</span> <span class="toc-text">Faster R-CNN</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Region-Proposal-Network"><span class="toc-number">4.1.</span> <span class="toc-text">Region Proposal Network</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Mask-R-CNN"><span class="toc-number">5.</span> <span class="toc-text">Mask R-CNN</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#FCN-Fully-Convolutional-Network-for-Image-Segmentation"><span class="toc-number">5.1.</span> <span class="toc-text">FCN (Fully Convolutional Network) for Image Segmentation</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#YOLO-You-Only-Look-Once"><span class="toc-number">6.</span> <span class="toc-text">YOLO: You Only Look Once</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#YOLO-的缺点"><span class="toc-number">6.1.</span> <span class="toc-text">YOLO 的缺点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#YOLO-与其他模型的比较"><span class="toc-number">6.2.</span> <span class="toc-text">YOLO 与其他模型的比较</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#YOLO2"><span class="toc-number">7.</span> <span class="toc-text">YOLO2</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#结语"><span class="toc-number">8.</span> <span class="toc-text">结语</span></a></li></ol>
+                    </div>
+                </span>
+            </div>
+        </div>
         
     </div>
 </aside>

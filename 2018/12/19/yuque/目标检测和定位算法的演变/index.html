@@ -23,7 +23,7 @@
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2018/png/219582/1545202101543-96dbf0cd-cf32-463f-bc52-ce24e9fa7c51.png#width=478">
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2018/png/219582/1545202200059-aac2dc95-09af-4e82-9b90-0ff6da1c6b8e.png#width=826">
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2018/png/219582/1545202412058-e7d724af-065d-48e1-b4cb-f0b6183a5eac.png#width=826">
-<meta property="og:updated_time" content="2019-04-22T09:36:41.776Z">
+<meta property="og:updated_time" content="2019-04-23T02:05:34.791Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="目标检测和定位算法的演变">
 <meta name="twitter:description" content="链接通过对基本概念的直观解释，了解对象检测和本地化的最新进展。目标检测是计算机视觉领域中非常迅速成熟的领域之一。 感谢深度学习！ 每年，新的算法/模型都会比以前更好。 事实上，Facebook AI团队上周刚刚发布了最先进的物体检测软件系统之一。 该软件称为Detectron，它包含许多用于物体检测的研究项目，并由Caffe2深度学习框架提供支持。今天，有大量用于目标检测的预训练模型（YOLO，R">
@@ -62,7 +62,7 @@
 		  <h1 class="header-author"><a href="/">Zhos</a></h1>
 		</hgroup>
 		
-		<p class="header-subtitle">武德</p>
+		<p class="header-subtitle">ai &amp; bigdata &amp; ml</p>
 		
 
 		<nav class="header-menu">
@@ -92,6 +92,8 @@
 				
 					<a class="github" target="_blank" href="https://github.com/zhosteven" title="github"><i class="icon-github"></i></a>
 		        
+					<a class="qq" target="_blank" href="/187063598" title="qq"><i class="icon-qq"></i></a>
+		        
 					<a class="mail" target="_blank" href="mailto:ujujzhao@gmail.com" title="mail"><i class="icon-mail"></i></a>
 		        
 			</div>
@@ -116,7 +118,7 @@
 			  <h1 class="header-author js-header-author">Zhos</h1>
 			</hgroup>
 			
-			<p class="header-subtitle"><i class="icon icon-quo-left"></i>武德<i class="icon icon-quo-right"></i></p>
+			<p class="header-subtitle"><i class="icon icon-quo-left"></i>ai &amp; bigdata &amp; ml<i class="icon icon-quo-right"></i></p>
 			
 			
 			
@@ -128,6 +130,8 @@
 				<div class="social">
 					
 						<a class="github" target="_blank" href="https://github.com/zhosteven" title="github"><i class="icon-github"></i></a>
+			        
+						<a class="qq" target="_blank" href="/187063598" title="qq"><i class="icon-qq"></i></a>
 			        
 						<a class="mail" target="_blank" href="mailto:ujujzhao@gmail.com" title="mail"><i class="icon-mail"></i></a>
 			        
@@ -221,17 +225,17 @@
 </ol>
 </blockquote>
 <blockquote>
-<ol>
+<ol start="2">
 <li>标记训练数据，如上图所示。 如果C是我们数据中唯一对象的数量，S <em> S是我们分割图像的网格数，那么我们的输出向量将是长度S </em> S <em>（C + 5）。 对于例如 在上面的例子中，我们的目标向量是4 </em> 4 <em>（3 + 5），因为我们将图像划分为4 </em> 4网格，并训练3个独特的对象：汽车，光和行人。</li>
 </ol>
 </blockquote>
 <blockquote>
-<ol>
+<ol start="3">
 <li>制作一个具有损失函数的深度卷积神经网络作为输出激活和标签矢量之间的误差。 基本上，该模型通过ConvNet仅在输入图像的一个前向通道中预测所有网格的输出。</li>
 </ol>
 </blockquote>
 <blockquote>
-<ol>
+<ol start="4">
 <li>请记住，对象存在于网格单元格（P.Object）中的标签由该网格中对象的质心的存在决定。 重要的是不允许在不同的网格中多次对一个对象进行计数。</li>
 </ol>
 </blockquote>
@@ -346,15 +350,20 @@
   
 <nav id="article-nav">
   
-    <a href="/2018/12/19/yuque/理解二进制交叉熵、对数损失函数:一种可视化解释/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2018/12/19/yuque/关于目标检测，所有你应该知道的深度学习模型/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          理解二进制交叉熵、对数损失函数:一种可视化解释
+          关于目标检测，所有你应该知道的深度学习模型
         
       </div>
     </a>
   
+  
+    <a href="/2018/12/19/yuque/评论：U-Net（生物医学图像分割）/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">评论：U-Net（生物医学图像分割）</div>
+      <i class="icon-circle-right"></i>
+    </a>
   
 </nav>
 
@@ -371,6 +380,19 @@
             </div>
         </div>
         
+        
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#关于CNN的简介"><span class="toc-number">1.</span> <span class="toc-text">关于CNN的简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#计算机视觉任务的分类"><span class="toc-number">2.</span> <span class="toc-text">计算机视觉任务的分类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-图像分类"><span class="toc-number">3.</span> <span class="toc-text">1 图像分类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-物体分类和定位"><span class="toc-number">4.</span> <span class="toc-text">2.物体分类和定位</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-目标检测和定位"><span class="toc-number">5.</span> <span class="toc-text">3.目标检测和定位</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#YOLO简单的步骤："><span class="toc-number">5.0.1.</span> <span class="toc-text">YOLO简单的步骤：</span></a></li></ol></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#结论："><span class="toc-number">6.</span> <span class="toc-text">结论：</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#参考文献"><span class="toc-number">6.0.1.</span> <span class="toc-text">参考文献:</span></a></li></ol></li>
+                    </div>
+                </span>
+            </div>
+        </div>
         
     </div>
 </aside>

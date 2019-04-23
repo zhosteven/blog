@@ -21,7 +21,7 @@
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1554707722141-b1173fe1-f6e2-412d-a5ad-87adec847513.png#align=left&display=inline&height=168&name=1_zDejbm6ver9mVmHUSWY4Eg.png&originHeight=168&originWidth=456&size=24750&status=done&width=456">
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1554707798990-c3f00b1a-ffae-44bf-97ca-37dfaab1e066.png#align=left&display=inline&height=189&name=1_Gxfyp9-YbhiQxyy1tt3Niw.png&originHeight=189&originWidth=303&size=19027&status=done&width=303">
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1554707837617-3d6a2db0-248e-4d38-b75e-b62565ea055c.jpeg#align=left&display=inline&height=432&name=1_lChdEleZ2XRJuqZpmLDBEA.jpeg&originHeight=579&originWidth=1000&size=47954&status=done&width=746">
-<meta property="og:updated_time" content="2019-04-22T09:36:41.744Z">
+<meta property="og:updated_time" content="2019-04-23T02:05:34.763Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CatBoost有什么特别之处？">
 <meta name="twitter:description" content="CatBoost基于梯度增强。Yandex开发的一种新的机器学习技术，优于许多现有的增强算法，如XGBoost，Light GBM。虽然深度学习算法需要大量数据和计算能力，但仍需要增强算法来解决大多数业务问题。然而，像XGBoost这样的提升算法需要花费数小时来训练，有时候在调整超参数时你会感到沮丧。另一方面，CatBoost易于实施且功能强大。它在首次运行时提供了出色的结果。那么，让我们来看看C">
@@ -60,7 +60,7 @@
 		  <h1 class="header-author"><a href="/">Zhos</a></h1>
 		</hgroup>
 		
-		<p class="header-subtitle">武德</p>
+		<p class="header-subtitle">ai &amp; bigdata &amp; ml</p>
 		
 
 		<nav class="header-menu">
@@ -90,6 +90,8 @@
 				
 					<a class="github" target="_blank" href="https://github.com/zhosteven" title="github"><i class="icon-github"></i></a>
 		        
+					<a class="qq" target="_blank" href="/187063598" title="qq"><i class="icon-qq"></i></a>
+		        
 					<a class="mail" target="_blank" href="mailto:ujujzhao@gmail.com" title="mail"><i class="icon-mail"></i></a>
 		        
 			</div>
@@ -114,7 +116,7 @@
 			  <h1 class="header-author js-header-author">Zhos</h1>
 			</hgroup>
 			
-			<p class="header-subtitle"><i class="icon icon-quo-left"></i>武德<i class="icon icon-quo-right"></i></p>
+			<p class="header-subtitle"><i class="icon icon-quo-left"></i>ai &amp; bigdata &amp; ml<i class="icon icon-quo-right"></i></p>
 			
 			
 			
@@ -126,6 +128,8 @@
 				<div class="social">
 					
 						<a class="github" target="_blank" href="https://github.com/zhosteven" title="github"><i class="icon-github"></i></a>
+			        
+						<a class="qq" target="_blank" href="/187063598" title="qq"><i class="icon-qq"></i></a>
 			        
 						<a class="mail" target="_blank" href="mailto:ujujzhao@gmail.com" title="mail"><i class="icon-mail"></i></a>
 			        
@@ -336,6 +340,19 @@
             </div>
         </div>
         
+        
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#基树结构："><span class="toc-number">1.</span> <span class="toc-text">基树结构：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#其他梯度增强算法的程序（XG-boost，Light-GBM）"><span class="toc-number">2.</span> <span class="toc-text">其他梯度增强算法的程序（XG boost，Light GBM）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CatBoost程序"><span class="toc-number">3.</span> <span class="toc-text">CatBoost程序</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#随机排列"><span class="toc-number">4.</span> <span class="toc-text">随机排列</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#处理分类功能。"><span class="toc-number">5.</span> <span class="toc-text">处理分类功能。</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#CatBoost中的单热编码"><span class="toc-number">5.1.</span> <span class="toc-text">CatBoost中的单热编码</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#处理数字特征"><span class="toc-number">5.2.</span> <span class="toc-text">处理数字特征</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#限制"><span class="toc-number">5.3.</span> <span class="toc-text">限制</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CatBoost在各种情况下："><span class="toc-number">6.</span> <span class="toc-text">CatBoost在各种情况下：</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-数据随时间变化时"><span class="toc-number">6.1.</span> <span class="toc-text">1.数据随时间变化时</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-低延迟要求"><span class="toc-number">6.2.</span> <span class="toc-text">2.低延迟要求</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-加权数据点"><span class="toc-number">6.3.</span> <span class="toc-text">3. 加权数据点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-使用小数据集"><span class="toc-number">6.4.</span> <span class="toc-text">4.使用小数据集</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-使用大型数据集"><span class="toc-number">6.5.</span> <span class="toc-text">5.使用大型数据集</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-监控错误-丢失功能"><span class="toc-number">6.6.</span> <span class="toc-text">6.监控错误/丢失功能</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#7-分阶段预测和缩小模型"><span class="toc-number">6.7.</span> <span class="toc-text">7.分阶段预测和缩小模型</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#8-处理不同的情况"><span class="toc-number">6.8.</span> <span class="toc-text">8.处理不同的情况</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#还有很多"><span class="toc-number">6.9.</span> <span class="toc-text">还有很多..</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#再见超级参数调整？"><span class="toc-number">6.10.</span> <span class="toc-text">再见超级参数调整？</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#结束注意："><span class="toc-number">7.</span> <span class="toc-text">结束注意：</span></a></li></ol>
+                    </div>
+                </span>
+            </div>
+        </div>
         
     </div>
 </aside>

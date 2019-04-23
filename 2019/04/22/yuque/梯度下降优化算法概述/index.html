@@ -22,7 +22,7 @@
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1555912309113-4b5d5c9d-7f6a-4ea9-8a74-e3aad3fd3cbf.png#align=left&display=inline&height=121&originHeight=287&originWidth=996&size=0&status=done&width=420">
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/gif/219582/1555912309251-2d20a355-5617-4861-9a52-ff6dfb3efb90.gif#align=left&display=inline&percent=0&size=0&status=done&width=374">
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/gif/219582/1555912309028-63601ab7-a1bd-4d03-89e3-5e9dfafa34f4.gif#align=left&display=inline&percent=0&size=0&status=done&width=375">
-<meta property="og:updated_time" content="2019-04-22T09:36:41.732Z">
+<meta property="og:updated_time" content="2019-04-23T02:05:34.751Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="梯度下降优化算法概述">
 <meta name="twitter:description" content="梯度下降优化算法综述  这篇文章探讨了许多最流行的基于梯度的优化算法实际上是有效的。注意: 如果你正在寻找一篇评论论文，这篇博客文章也是关于 arXiv 的文章。更新 09.02.2018: 添加 AMSGrad。更新 24.11.2017: 本文中的大部分内容现在也可以作为幻灯片提供。更新 15.06.2017: 添加了 AdaMax 和 Nadam 的衍生产品。更新 21.0 6.16: 此帖">
@@ -61,7 +61,7 @@
 		  <h1 class="header-author"><a href="/">Zhos</a></h1>
 		</hgroup>
 		
-		<p class="header-subtitle">武德</p>
+		<p class="header-subtitle">ai &amp; bigdata &amp; ml</p>
 		
 
 		<nav class="header-menu">
@@ -91,6 +91,8 @@
 				
 					<a class="github" target="_blank" href="https://github.com/zhosteven" title="github"><i class="icon-github"></i></a>
 		        
+					<a class="qq" target="_blank" href="/187063598" title="qq"><i class="icon-qq"></i></a>
+		        
 					<a class="mail" target="_blank" href="mailto:ujujzhao@gmail.com" title="mail"><i class="icon-mail"></i></a>
 		        
 			</div>
@@ -115,7 +117,7 @@
 			  <h1 class="header-author js-header-author">Zhos</h1>
 			</hgroup>
 			
-			<p class="header-subtitle"><i class="icon icon-quo-left"></i>武德<i class="icon icon-quo-right"></i></p>
+			<p class="header-subtitle"><i class="icon icon-quo-left"></i>ai &amp; bigdata &amp; ml<i class="icon icon-quo-right"></i></p>
 			
 			
 			
@@ -127,6 +129,8 @@
 				<div class="social">
 					
 						<a class="github" target="_blank" href="https://github.com/zhosteven" title="github"><i class="icon-github"></i></a>
+			        
+						<a class="qq" target="_blank" href="/187063598" title="qq"><i class="icon-qq"></i></a>
 			        
 						<a class="mail" target="_blank" href="mailto:ujujzhao@gmail.com" title="mail"><i class="icon-mail"></i></a>
 			        
@@ -417,6 +421,19 @@
             </div>
         </div>
         
+        
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#随机梯度下降"><span class="toc-number">1.</span> <span class="toc-text">随机梯度下降</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#小批量梯度下降"><span class="toc-number">2.</span> <span class="toc-text">小批量梯度下降</span></a></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#挑战"><span class="toc-number"></span> <span class="toc-text">挑战</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#梯度下降优化算法"><span class="toc-number"></span> <span class="toc-text">梯度下降优化算法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#动量"><span class="toc-number">1.</span> <span class="toc-text">动量</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#加速梯度"><span class="toc-number"></span> <span class="toc-text">加速梯度</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Adagrad"><span class="toc-number">1.</span> <span class="toc-text">Adagrad</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#阿德达塔"><span class="toc-number">2.</span> <span class="toc-text">阿德达塔</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#RMSprop"><span class="toc-number">3.</span> <span class="toc-text">RMSprop</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Adam"><span class="toc-number">4.</span> <span class="toc-text">Adam</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#AdaMax"><span class="toc-number">5.</span> <span class="toc-text">AdaMax</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Nadam"><span class="toc-number">6.</span> <span class="toc-text">Nadam</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#AMSGrad"><span class="toc-number">7.</span> <span class="toc-text">AMSGrad</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#算法可视化"><span class="toc-number">8.</span> <span class="toc-text">算法可视化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用哪个优化器？"><span class="toc-number">9.</span> <span class="toc-text">使用哪个优化器？</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#SGD-的并行化和分发"><span class="toc-number"></span> <span class="toc-text">SGD 的并行化和分发</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Hogwild"><span class="toc-number">1.</span> <span class="toc-text">Hogwild!</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Downpour-SGD"><span class="toc-number">2.</span> <span class="toc-text">Downpour SGD</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Delay-tolerant-Algorithms-for-SGD"><span class="toc-number">3.</span> <span class="toc-text">Delay-tolerant Algorithms for SGD</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TensorFlow"><span class="toc-number">4.</span> <span class="toc-text">TensorFlow</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Elastic-Averaging-SGD"><span class="toc-number">5.</span> <span class="toc-text">Elastic Averaging SGD</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Additional-strategies-for-optimizing-SGD"><span class="toc-number"></span> <span class="toc-text">Additional strategies for optimizing SGD</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Shuffling-and-Curriculum-Learning"><span class="toc-number">1.</span> <span class="toc-text">Shuffling and Curriculum Learning</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Batch-normalization"><span class="toc-number">2.</span> <span class="toc-text">Batch normalization</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Early-stopping"><span class="toc-number">3.</span> <span class="toc-text">Early stopping</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Gradient-noise"><span class="toc-number">4.</span> <span class="toc-text">Gradient noise</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Conclusion"><span class="toc-number"></span> <span class="toc-text">Conclusion</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Acknowledgements"><span class="toc-number"></span> <span class="toc-text">Acknowledgements</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Printable-version-and-citation"><span class="toc-number"></span> <span class="toc-text">Printable version and citation</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Translations"><span class="toc-number"></span> <span class="toc-text">Translations</span></a>
+                    </li></div>
+                </span>
+            </div>
+        </div>
         
     </div>
 </aside>

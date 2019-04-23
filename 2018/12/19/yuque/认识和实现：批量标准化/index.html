@@ -26,7 +26,7 @@
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2018/png/219582/1545231864866-451c1cd9-d6ae-4f7e-9aa2-1da0b34f889b.png#width=737">
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2018/png/219582/1545231931611-3c026d90-61b0-41df-b4dc-7a538bf01ce6.png#width=730">
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2018/png/219582/1545231970491-afc0113d-a1fb-4218-90d5-7104d35cb98b.png#width=724">
-<meta property="og:updated_time" content="2019-04-22T09:36:41.772Z">
+<meta property="og:updated_time" content="2019-04-23T02:05:34.787Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="认识和实现：批量标准化">
 <meta name="twitter:description" content="链接在本文中，我将回顾Ioffe和Svegedy的批量规范化的有用性。 我还将在Keras中实现批量标准化，并在训练性能方面取得实质性进展。 批量归一化的直观解释 训练中的问题问题1：随着网络训练，早期层的权重发生变化，因此后期层的输入变化很大。 每层必须根据每批输入的不同分布重新调整其权重。 这减缓了模型训练。 如果我们可以在分布中使层输入更相似，那么网络可以专注于学习类之间的差异。不同批次分布">
@@ -65,7 +65,7 @@
 		  <h1 class="header-author"><a href="/">Zhos</a></h1>
 		</hgroup>
 		
-		<p class="header-subtitle">武德</p>
+		<p class="header-subtitle">ai &amp; bigdata &amp; ml</p>
 		
 
 		<nav class="header-menu">
@@ -95,6 +95,8 @@
 				
 					<a class="github" target="_blank" href="https://github.com/zhosteven" title="github"><i class="icon-github"></i></a>
 		        
+					<a class="qq" target="_blank" href="/187063598" title="qq"><i class="icon-qq"></i></a>
+		        
 					<a class="mail" target="_blank" href="mailto:ujujzhao@gmail.com" title="mail"><i class="icon-mail"></i></a>
 		        
 			</div>
@@ -119,7 +121,7 @@
 			  <h1 class="header-author js-header-author">Zhos</h1>
 			</hgroup>
 			
-			<p class="header-subtitle"><i class="icon icon-quo-left"></i>武德<i class="icon icon-quo-right"></i></p>
+			<p class="header-subtitle"><i class="icon icon-quo-left"></i>ai &amp; bigdata &amp; ml<i class="icon icon-quo-right"></i></p>
 			
 			
 			
@@ -131,6 +133,8 @@
 				<div class="social">
 					
 						<a class="github" target="_blank" href="https://github.com/zhosteven" title="github"><i class="icon-github"></i></a>
+			        
+						<a class="qq" target="_blank" href="/187063598" title="qq"><i class="icon-qq"></i></a>
 			        
 						<a class="mail" target="_blank" href="mailto:ujujzhao@gmail.com" title="mail"><i class="icon-mail"></i></a>
 			        
@@ -332,6 +336,19 @@
             </div>
         </div>
         
+        
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#批量归一化的直观解释"><span class="toc-number">1.</span> <span class="toc-text">批量归一化的直观解释</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#训练中的问题"><span class="toc-number">2.</span> <span class="toc-text">训练中的问题</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#批量标准作为解决方案。"><span class="toc-number">2.1.</span> <span class="toc-text">批量标准作为解决方案。</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#数学解释"><span class="toc-number">3.</span> <span class="toc-text">数学解释</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#批量标准化的好处"><span class="toc-number">4.</span> <span class="toc-text">批量标准化的好处</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#在Keras实施"><span class="toc-number">5.</span> <span class="toc-text">在Keras实施</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#在Keras中构建模型"><span class="toc-number">6.</span> <span class="toc-text">在Keras中构建模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#模特训练"><span class="toc-number">7.</span> <span class="toc-text">模特训练</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#具有批量标准化的Sigmoid"><span class="toc-number">8.</span> <span class="toc-text">具有批量标准化的Sigmoid</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#没有批量标准化的ReLU"><span class="toc-number">9.</span> <span class="toc-text">没有批量标准化的ReLU</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#比较架构"><span class="toc-number">10.</span> <span class="toc-text">比较架构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Conclusion"><span class="toc-number">11.</span> <span class="toc-text">Conclusion</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Resources"><span class="toc-number">12.</span> <span class="toc-text">Resources</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Further-reading"><span class="toc-number">13.</span> <span class="toc-text">Further reading</span></a></li></ol>
+                    </div>
+                </span>
+            </div>
+        </div>
         
     </div>
 </aside>
