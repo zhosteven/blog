@@ -149,29 +149,182 @@
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-yuque/使用Spark和MLlib进行机器学习简介（DataFrame API）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-yuque/Apache Kafka 和Spark的实时数据管道" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/23/yuque/使用Spark和MLlib进行机器学习简介（DataFrame API）/">使用Spark和MLlib进行机器学习简介（DataFrame API）</a>
+      <a class="article-title" href="/2019/04/23/yuque/Apache Kafka 和Spark的实时数据管道/">Apache Kafka 和Spark的实时数据管道</a>
     </h1>
   
 
         
-        <a href="/2019/04/23/yuque/使用Spark和MLlib进行机器学习简介（DataFrame API）/" class="archive-article-date">
-  	<time datetime="2019-04-23T03:42:56.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-23</time>
+        <a href="/2019/04/23/yuque/Apache Kafka 和Spark的实时数据管道/" class="archive-article-date">
+  	<time datetime="2019-04-23T09:41:58.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-23</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>最近一个相当热门的话题是机器学习 - 与计算统计密切相关的跨部门学科，让计算机在没有明确编程的情况下学习。<br>它已被发现在数据分析领域具有重要意义 - 从估算贷款和保险风险到试图在现实条件下自主驾驶汽车。<br>在下面的文章中，我想向读者介绍一下  <code>MLlib</code> - 作为Spark Framework一部分的机器学习库。<br>关于以下文本的一个重要事项 - 目的是介绍图书馆，而不是机器学习或统计学背后的概念和理论，因此读者可以期待这些主题的至少基本理解。此外，还需要至少基本的Spark知识。<br>这将基于Apache Spark 2.x API，它采用新的DataFrame API作为旧版本的替代品  <code>RDD</code> 。该<code>DataFrame</code> 方法的主要优点之一  是它比<code>RDD</code> 一个更容易使用和更友好  。尽管如此，  <code>RDD</code> API仍然存在但已进入维护模式（它将不再被扩展，并且当<code>DataFrame</code> API与其达到特征奇偶校验时将被弃用  ）。<br>
+        <p><a href="https://www.keisan.io/en/knowledgebase/real-time-data-pipeline-flume-kafka-spark" target="_blank" rel="noopener">Apache Kafka和Spark的实时数据管道</a>* <a href="https://www.keisan.io/en/knowledgebase/category:platform-engineering" target="_blank" rel="noopener">平台工程</a></p>
+<ul>
+<li><a href="https://www.keisan.io/en/knowledgebase/author.username:jillur.quddus" target="_blank" rel="noopener">Jillur Quddus</a></li>
+<li>2017年6月7日</li>
+</ul>
+<p>如何构建数据管道以实时处理基于事件的数据<br><img src="https://www.keisan.io/user/pages/02.knowledgebase/real-time-data-pipeline-flume-kafka-spark/1-main-image.jpg#alt=Apache%20Kafka%E5%92%8CSpark%E7%9A%84%E5%AE%9E%E6%97%B6%E6%95%B0%E6%8D%AE%E7%AE%A1%E9%81%93" alt></p>
+<p>2012年，我第一次听到“Hadoop”和“大数据”这两个词。当时，这两个词几乎是彼此的同义词 - 我经常参加会议，客户想要一个’大数据’解决方案只是因为它已经成为最新的流行词，很少或根本不考虑他们的要求和数据实际上保证一个。“大数据”当然不仅仅是Hadoop，随着批量和实时的可扩展技术变得更加成熟，我们对它们的了解也越来越多。但是，对于那些现在迈出第一步的人来说，就像我在2012年回到“大数据”技术的世界一样，你可能会问自己一个类似于我所问的问题 - 即，<br>仅举几个你可能听说过的文章，然后磕磕绊绊地看到这篇文章（没有特别的顺序，就像我记得的那样）：<a href="http://hadoop.apache.org/" target="_blank" rel="noopener">Apache Hadoop</a>，<a href="https://hive.apache.org/" target="_blank" rel="noopener">Apache Hive</a>，<a href="https://pig.apache.org/" target="_blank" rel="noopener">Apache Pig</a>，<a href="https://hbase.apache.org/" target="_blank" rel="noopener">Apache HBase</a>，<a href="https://spark.apache.org/" target="_blank" rel="noopener">Apache Spark</a>，<a href="http://storm.apache.org/" target="_blank" rel="noopener">Apache Storm</a>，<a href="https://kafka.apache.org/" target="_blank" rel="noopener">Apache Kafka</a>，<a href="https://flume.apache.org/" target="_blank" rel="noopener">Apache Flume</a>，<a href="http://cassandra.apache.org/" target="_blank" rel="noopener">Apache Cassandra</a>，<a href="https://www.mongodb.com/" target="_blank" rel="noopener">MongoDB</a>，<a href="https://redis.io/" target="_blank" rel="noopener">Redis</a>，<a href="http://www.oracle.com/technetwork/database/database-technologies/berkeleydb/overview/index.html" target="_blank" rel="noopener">Oracle Berkeley</a>，<a href="http://akka.io/" target="_blank" rel="noopener">Akka</a>，<a href="http://spray.io/" target="_blank" rel="noopener">Spray</a>（由<a href="http://doc.akka.io/docs/akka-http/current/scala/http/index.html" target="_blank" rel="noopener">Akka HTTP</a>取代），<a href="http://tinkerpop.apache.org/" target="_blank" rel="noopener">Apache TinkerPop</a>，<a href="http://giraph.apache.org/" target="_blank" rel="noopener">Apache Giraph</a>，<a href="http://mahout.apache.org/" target="_blank" rel="noopener">Apache Mahout</a>，<a href="https://zookeeper.apache.org/" target="_blank" rel="noopener">阿帕奇的ZooKeeper</a>，<a href="https://www.couchbase.com/" target="_blank" rel="noopener">Couchbase</a>，<a href="https://flink.apache.org/" target="_blank" rel="noopener">阿帕奇弗林克</a>，<a href="https://www.elastic.co/products/elasticsearch" target="_blank" rel="noopener">弹性搜索</a>，<a href="http://www.elassandra.io/" target="_blank" rel="noopener">Elassandra</a>，<a href="http://lucene.apache.org/solr/" target="_blank" rel="noopener">SOLR</a>，<a href="http://www.project-voldemort.com/voldemort/" target="_blank" rel="noopener">Voldermort</a>（是的，你没看错），<a href="https://memcached.org/" target="_blank" rel="noopener">MemcacheDB</a>，<a href="https://aws.amazon.com/dynamodb/" target="_blank" rel="noopener">DynamoDB</a> …..等等。<br>在接下来的几周和几个月中，我希望在一系列知识库文章中写下这些技术中的每一种，重点关注您可能决定使用它们的实际情况，最重要的是使用动手实例。作为本系列的第一篇文章，我想通过介绍一些典型的实时数据处理场景，同时介绍一些非常重要的流技术，即<a href="https://flume.apache.org/" target="_blank" rel="noopener">Apache</a>，将其献给那些迈向大数据技术世界的人。<a href="https://flume.apache.org/" target="_blank" rel="noopener">Flume</a>，<a href="https://kafka.apache.org/" target="_blank" rel="noopener">Apache Kafka</a>和<a href="https://spark.apache.org/" target="_blank" rel="noopener">Apache Spark</a>。<br><strong>目标</strong><br>我们在本文中的目标是创建一个高吞吐量，可扩展，可靠且容错的数据管道，用于获取基于事件的数据并将这些事件流式传输到Apache Spark，后者将解析其内容，所有这些都将在接近实时。（在我的下一篇文章中，我将讨论如何使用我们的实时数据管道来执行分析并在Apache Spark中使用此数据流构建预测模型！）<br><br><strong>实时流数据流的“Hello World”</strong><br>我在下面描述的示例将使用推文作为其实时数据源。<a href="https://twitter.com/" target="_blank" rel="noopener">Twitter</a>是一个很好的例子，因为它是免费的，它可以实时生成大量数据，Twitter用户可以设置自己的应用程序来访问Twitter提供的推文流。因此，在继续阅读本文之前，请确保您拥有<a href="https://twitter.com/" target="_blank" rel="noopener">Twitter</a>帐户。设置完Twitter帐户后，请转到Twitter的“ <a href="https://apps.twitter.com/" target="_blank" rel="noopener">应用程序管理”</a>页面，创建并注册您的应用程序。假设您已正确完成此操作，您将获得以后需要的以下身份验证信息：</p>
+<ul>
+<li><strong>消费者密钥/ API密钥</strong>（例如A1b2C3DEfGH4IjkL5mnopq678）</li>
+<li><strong>消费者秘密/ API秘密</strong>（例如Zy1XW2vUtS3R4QPON5mLK6JiHG7FeD8CBaAbC9876DEf543Ghi）</li>
+<li><strong>访问令牌</strong>（例如1234567890-5mLK6JiHG7FeD8CBaAbC9876DEf543GA77888dH）</li>
+<li><strong>访问令牌秘密</strong>（例如aAbC9876DEf543GA77888dHD8CBaAbC9876D5mLK6JiHG7）</li>
+</ul>
+<p><strong>Apache Flume</strong><br>因此，让我们从相对较老的技术之一<a href="https://flume.apache.org/" target="_blank" rel="noopener">Apache Flume开始</a>。正如其网站上所述，“ <em>Flume是一种分布式，可靠且可用的服务，用于有效地收集，聚合和移动大量日志数据。它具有基于流数据流的简单灵活的架构。它具有强大的容错性和容错性具有可调的可靠性机制和许多故障转移和恢复机制。它使用简单的可扩展数据模型，允许在线分析应用程序</em>“那么这一切意味着什么呢？实际上，Flume允许我们有效地收集（摄取），聚合并将来自多个来源（例如Twitter的推文流或日志数据）的大量流数据移动到Hadoop中（ Flume紧密集成在哪里我们可以使用Hadoop的分布式文件系统（HDFS）来存储它。我们可以从中分析它.Tlume的一个常见用例是充当数据管道，将简单的基于事件的数据摄入Hadoop和HBase一样，但它也支持开箱即用的其他技术和集中式数据存储。让我们通过研究其核心组件来进一步分解：</p>
+<p><img src="https://www.keisan.io/knowledgebase/real-time-data-pipeline-flume-kafka-spark/flume-component-overview.png#" alt></p>
+<ul>
+<li><strong>事件</strong> - 由Flume处理的数据事件本身，例如推文或日志文件中的条目。</li>
+<li><strong>来源</strong> - 数据进入Flume的事件数据的消费者。对于推文，这可能是将您的应用程序链接到Twitter流的API或连接器，例如<a href="https://flume.apache.org/releases/content/1.5.0/apidocs/org/apache/flume/source/twitter/TwitterSource.html" target="_blank" rel="noopener">org.apache.flume.source.twitter.TwitterSource</a>。对于日志条目，这可能是日志框架，例如<a href="https://logging.apache.org/log4j/2.x/" target="_blank" rel="noopener">log4j</a>。</li>
+<li><strong>通道</strong> - 一个被动存储器，充当源与其事件数据的消费者之间的管道（即，接收器 - “下沉通道”）。保持事件直到被Flume Sink消耗的公共通道包括本地文件系统（文件通道）或存储器（存储器通道）。事件数据可以在Flume Sink“排空”之前存储在一个或多个通道中。</li>
+<li><strong>接收器</strong> - 从通道中使用/移除事件数据并将其传送到目标的机制。常见的接收器是HDFS接收器，它将事件数据保存到HDFS。</li>
+<li><strong>代理</strong> - Flume实例，即在JVM中运行的源，通道和接收器的集合。</li>
+</ul>
+<p>Flume的一大优点是Sinks可以将事件数据转发到另一个Flume Agent的Flume Source，即代理可以链接在一起形成复杂的数据流。同一代理程序中的源和接收器与存储在通道中的事件异步运行。此外，Flume通过分别在发送和接收代理上启动单独的事务，保证从一个Flume代理向下一个发送消息。最后，Flume可以轻松水平缩放，因为没有中央协调器节点，Flume Agent彼此独立运行，没有单点故障。所有这一切使Apache Flume成为高吞吐量实时事件数据流的强大服务，为大数据系统提供支持。</p>
+<p><img src="https://www.keisan.io/knowledgebase/real-time-data-pipeline-flume-kafka-spark/flume-architecture-overview.png#" alt><br>我们现在准备配置和部署我们的第一个Flume Agent！我们的第一个Flume Agent将通过您在上面创建的Twitter应用程序从Twitter Stream获取推文，使用与Flume开箱即用捆绑的演示<a href="https://flume.apache.org/releases/content/1.7.0/apidocs/org/apache/flume/source/twitter/TwitterSource.html" target="_blank" rel="noopener">Flume Twitter Source</a>类。这个演示Twitter Source连接到Twitter Stream并不断下载推文样本，将它们转换为<a href="https://avro.apache.org/docs/current/" target="_blank" rel="noopener">Avro</a>格式并将这些Avro事件发送到我们的Flume Sink。我们将使用一个内存通道，记录器接收器将使用它来输出推文并将它们输出到控制台。请注意，我使用的是<strong>CentOS 7 Minimal Installation</strong> Server来执行以下命令，但Flume应该与其他Linux发行版同样有效。</p>
+<h1 id="Unpack-the-Flume-Binary-to-a-directory-of-choicetar-Create-a-new-Flume-Configuration-File-to-configure-our-Flume-Twitter-Agentvi-The-configuration-file-needs-to-define-the-sources-the-channels-and-the-sinks-Sources-channels-and-sinks-are-defined-per-agent-in-this-case-called-‘TwitterAgent’-Flume-Instance-Twitter-Agent-Source-Configuration-Inbuilt-TwitterSource-lt-gt-lt-gt-lt-gt-lt-gt-lt-gt-Channel-Configuration-Memory-Channel-Sink-Configuration-Logger-Sink-Launch-the-Flume-Agent-to-sink-to-the-Console"><a href="#Unpack-the-Flume-Binary-to-a-directory-of-choicetar-Create-a-new-Flume-Configuration-File-to-configure-our-Flume-Twitter-Agentvi-The-configuration-file-needs-to-define-the-sources-the-channels-and-the-sinks-Sources-channels-and-sinks-are-defined-per-agent-in-this-case-called-‘TwitterAgent’-Flume-Instance-Twitter-Agent-Source-Configuration-Inbuilt-TwitterSource-lt-gt-lt-gt-lt-gt-lt-gt-lt-gt-Channel-Configuration-Memory-Channel-Sink-Configuration-Logger-Sink-Launch-the-Flume-Agent-to-sink-to-the-Console" class="headerlink" title="Unpack the Flume Binary to a directory of choicetar# Create a new Flume Configuration File to configure our Flume Twitter Agentvi# The configuration file needs to define the sources,# the channels and the sinks.# Sources, channels and sinks are defined per agent,# in this case called ‘TwitterAgent’# Flume Instance - Twitter Agent===# Source Configuration - Inbuilt TwitterSource===&lt;&gt;=&lt;&gt;=&lt;&gt;=&lt;&gt;=&lt;&gt;# Channel Configuration - Memory Channel===# Sink Configuration - Logger Sink==# Launch the Flume Agent to sink to the Console="></a>Unpack the Flume Binary to a directory of choicetar# Create a new Flume Configuration File to configure our Flume Twitter Agentvi# The configuration file needs to define the sources,# the channels and the sinks.# Sources, channels and sinks are defined per agent,# in this case called ‘TwitterAgent’# Flume Instance - Twitter Agent===# Source Configuration - Inbuilt TwitterSource===&lt;&gt;=&lt;&gt;=&lt;&gt;=&lt;&gt;=&lt;&gt;# Channel Configuration - Memory Channel===# Sink Configuration - Logger Sink==# Launch the Flume Agent to sink to the Console=<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">-xzf apache-flume-1.7.0-bin.tar.gz</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"> conf/flume-twitter.conf</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">    TwitterAgent.sources  Twitter</span><br><span class="line">    TwitterAgent.channels  MemChannel</span><br><span class="line">    TwitterAgent.sinks  Logger</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">    TwitterAgent.sources.Twitter.type  org.apache.flume.source.twitter.TwitterSource</span><br><span class="line">    TwitterAgent.sources.Twitter.channels  MemChannel</span><br><span class="line">    TwitterAgent.sources.Twitter.consumerKey  Your Twitter App Consumer Key</span><br><span class="line">    TwitterAgent.sources.Twitter.consumerSecret  Your Twitter App Consumer Secret</span><br><span class="line">    TwitterAgent.sources.Twitter.accessToken  Your Twitter App Access Token</span><br><span class="line">    TwitterAgent.sources.Twitter.accessTokenSecret  Your Twitter App Access Token Secret</span><br><span class="line">    TwitterAgent.sources.Twitter.keywords  Comma Delimited List of Keywords to filter the Tweets</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">    TwitterAgent.channels.MemChannel.type  memory</span><br><span class="line">    TwitterAgent.channels.MemChannel.capacity  10000</span><br><span class="line">    TwitterAgent.channels.MemChannel.transactionCapacity  100</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">    TwitterAgent.sinks.Logger.type  logger</span><br><span class="line">    TwitterAgent.sinks.Logger.channel  MemChannel</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">bin/flume-ng agent --name TwitterAgent --conf conf --conf-file conf/flume-twitter.conf -Dflume.root.loggerDEBUG,console</span><br></pre></td></tr></table></figure></h1><p>巴什<a href>复制</a><br>假设一切顺利，记录器接收器应该以接近实时的方式将推文以JSON格式输出到控制台，如下所示（因为这是英国的选举时间，我使用了选举主题关键字，如ge2017，选举等等） ）：</p>
+<p><img src="https://www.keisan.io/knowledgebase/real-time-data-pipeline-flume-kafka-spark/flume-console.jpg#" alt><br>目前我们已经设置了Logger Sink，并使用-Dflume.root.logger = DEBUG，console在我们的启动命令中指示记录器输出到控制台。在conf文件夹中，您将找到log4j.properties以根据需要更新记录器属性。默认情况下，它将记录到Flume主目录内的logs目录和名为flume.log的文件。要写入HDFS，我们需要做的就是按照以下方式修改我们的接收器：</p>
+<h1 id="Update-the-Sink-to-write-to-your-HDFSvi-The-configuration-file-needs-to-define-the-sources-the-channels-and-the-sinks-Sources-channels-and-sinks-are-defined-per-agent-in-this-case-called-‘TwitterAgent’-Flume-Instance-Twitter-Agent-Sink-Configuration-HDFS-Sink-Ensure-that-the-owner-of-the-Flume-Agent-has-permission-to-write-to-this-HDFS-Directory-Because-we-have-used-Y-m-d-H-formatting-in-our-HDFS-Path-we-must-specify-how-Flume-should-get-the-timestamp-of-the-tweet-To-use-the-timestamp-of-the-destination-i-e-the-HDFS-Sink-we-can-use-TwitterAgent-sinks-HDFS-hdfs-useLocalTimeStamp-true-Alternatively-to-use-the-timestamp-of-the-actual-event-tweet-we-can-use-Source-interceptors-Ensure-that-the-Hadoop-Libraries-are-on-the-Flume-Classpath-so-that-Flume-knows-how-to-access-and-write-to-your-HDFScpvi-Update-the-Flume-Classpath-to-point-to-the-correct-directories-on-your-system-Alternatively-copy-the-Hadoop-Common-and-HDFS-libraries-to-the-the-Flume-lib-folder-”-HADOOP-HOME-share-hadoop-common-HADOOP-HOME-share-hadoop-common-lib-HADOOP-HOME-share-hadoop-hdfs-”-Launch-the-Flume-Agent-to-sink-to-the-HDFS"><a href="#Update-the-Sink-to-write-to-your-HDFSvi-The-configuration-file-needs-to-define-the-sources-the-channels-and-the-sinks-Sources-channels-and-sinks-are-defined-per-agent-in-this-case-called-‘TwitterAgent’-Flume-Instance-Twitter-Agent-Sink-Configuration-HDFS-Sink-Ensure-that-the-owner-of-the-Flume-Agent-has-permission-to-write-to-this-HDFS-Directory-Because-we-have-used-Y-m-d-H-formatting-in-our-HDFS-Path-we-must-specify-how-Flume-should-get-the-timestamp-of-the-tweet-To-use-the-timestamp-of-the-destination-i-e-the-HDFS-Sink-we-can-use-TwitterAgent-sinks-HDFS-hdfs-useLocalTimeStamp-true-Alternatively-to-use-the-timestamp-of-the-actual-event-tweet-we-can-use-Source-interceptors-Ensure-that-the-Hadoop-Libraries-are-on-the-Flume-Classpath-so-that-Flume-knows-how-to-access-and-write-to-your-HDFScpvi-Update-the-Flume-Classpath-to-point-to-the-correct-directories-on-your-system-Alternatively-copy-the-Hadoop-Common-and-HDFS-libraries-to-the-the-Flume-lib-folder-”-HADOOP-HOME-share-hadoop-common-HADOOP-HOME-share-hadoop-common-lib-HADOOP-HOME-share-hadoop-hdfs-”-Launch-the-Flume-Agent-to-sink-to-the-HDFS" class="headerlink" title="Update the Sink to write to your HDFSvi# The configuration file needs to define the sources,# the channels and the sinks.# Sources, channels and sinks are defined per agent,# in this case called ‘TwitterAgent’# Flume Instance - Twitter Agent===..# Sink Configuration - HDFS Sink==# Ensure that the owner of the Flume Agent has permission to write to this HDFS Directory======# Because we have used %Y/%m/%d/%H formatting in our HDFS Path# we must specify how Flume should get the timestamp of the tweet.# To use the timestamp of the destination i.e. the HDFS Sink, we can use# TwitterAgent.sinks.HDFS.hdfs.useLocalTimeStamp = true# Alternatively, to use the timestamp of the actual event (tweet), we can use Source interceptors==# Ensure that the Hadoop Libraries are on the Flume Classpath so that Flume knows how to access and write to your HDFScpvi# Update the Flume Classpath to point to the correct directories on your system# Alternatively, copy the Hadoop Common and HDFS libraries to the the Flume lib folder=”$HADOOP_HOME/share/hadoop/common/:$HADOOP_HOME/share/hadoop/common/lib/:$HADOOP_HOME/share/hadoop/hdfs/*”# Launch the Flume Agent to sink to the HDFS"></a>Update the Sink to write to your HDFSvi# The configuration file needs to define the sources,# the channels and the sinks.# Sources, channels and sinks are defined per agent,# in this case called ‘TwitterAgent’# Flume Instance - Twitter Agent===..# Sink Configuration - HDFS Sink==# Ensure that the owner of the Flume Agent has permission to write to this HDFS Directory======# Because we have used %Y/%m/%d/%H formatting in our HDFS Path# we must specify how Flume should get the timestamp of the tweet.# To use the timestamp of the destination i.e. the HDFS Sink, we can use# TwitterAgent.sinks.HDFS.hdfs.useLocalTimeStamp = true# Alternatively, to use the timestamp of the actual event (tweet), we can use Source interceptors==# Ensure that the Hadoop Libraries are on the Flume Classpath so that Flume knows how to access and write to your HDFScpvi# Update the Flume Classpath to point to the correct directories on your system# Alternatively, copy the Hadoop Common and HDFS libraries to the the Flume lib folder=”$HADOOP_HOME/share/hadoop/common/<em>:$HADOOP_HOME/share/hadoop/common/lib/</em>:$HADOOP_HOME/share/hadoop/hdfs/*”# Launch the Flume Agent to sink to the HDFS<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">conf/flume-twitter.conf</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">    TwitterAgent.sources  Twitter</span><br><span class="line">    TwitterAgent.channels  MemChannel</span><br><span class="line">    TwitterAgent.sinks  HDFS</span><br><span class="line"></span><br><span class="line">    .</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">    TwitterAgent.sinks.HDFS.type  hdfs</span><br><span class="line">    TwitterAgent.sinks.HDFS.channel  MemChannel</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">    TwitterAgent.sinks.HDFS.hdfs.path  hdfs://hadoop1:9000/user/flume/twitter/data/%Y/%m/%d/%H/</span><br><span class="line">    TwitterAgent.sinks.HDFS.hdfs.fileType  DataStream</span><br><span class="line">    TwitterAgent.sinks.HDFS.hdfs.writeFormat  Text</span><br><span class="line">    TwitterAgent.sinks.HDFS.hdfs.batchSize  1000</span><br><span class="line">    TwitterAgent.sinks.HDFS.hdfs.rollSize  0</span><br><span class="line">    TwitterAgent.sinks.HDFS.hdfs.rollCount  10000</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">    TwitterAgent.sources.Twitter.interceptors  interceptor1</span><br><span class="line">    TwitterAgent.sources.Twitter.interceptors.interceptor1.type  timestamp</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"> conf/flume-env.sh.template conf/flume-env.sh</span><br><span class="line"> conf/flume-env.sh</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">    FLUME_CLASSPATH</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">bin/flume-ng agent --name TwitterAgent --conf conf --conf-file conf/flume-twitter.conf</span><br></pre></td></tr></table></figure></h1><p>巴什<a href>复制</a><br>请注意，我们不再需要在我们的启动命令中显式定义Root Logger作为Flume，并自动从conf目录中读取log4j.properties和flume-env.sh。如果一切顺利，推文将在您上面指定的路径上以近乎实时的方式写入您的HDFS。</p>
+<p><img src="https://www.keisan.io/knowledgebase/real-time-data-pipeline-flume-kafka-spark/flume-hdfs-twitter-data.png#" alt><br>要了解有关Apache Flume的更多信息，包括创建复杂的链式数据流及其他源，通道和接收器类型，请参阅<a href="https://flume.apache.org/FlumeUserGuide.html" target="_blank" rel="noopener">Apache Flume文档</a>。<br><br><strong>阿帕奇卡夫卡</strong><br>到目前为止，我们构建了一个数据管道，用于将简单的基于事件的数据（即推文）提取到我们的系统中，写入日志文件，控制台或HDFS。我们的目标是让他们使用Apache Spark，以便我们可以近乎实时地解析它们，并最终在Spark中构建预测模型（我将在下一篇文章中介绍）。我们将在实时数据管道中讨论的下一项技术是<a href="https://kafka.apache.org/" target="_blank" rel="noopener">Apache Kafka</a>。<br>正如其网站上所述“ <em>Apache Kafka是一个分布式流媒体平台</em> ”。那么为什么我们需要在数据管道中使用它呢？好吧，当您需要构建实时流数据流水线时，Kafka非常适合，就像我们在本文中一样，它以可靠，可扩展和容错的方式在系统之间获取数据。在尝试将Apache Kafka集成到我们的数据管道之前，让我们探讨一下Apache Kafka背后的一些核心概念。官方的<a href="https://kafka.apache.org/" target="_blank" rel="noopener">Apache Kafka文档</a>是对Apache Kafka的一个很好的介绍，所以我强烈建议您在第一个实例中阅读它。对于那些已经熟悉发布 - 订阅消息传递系统的人来说，您可能对某些概念很熟悉，但我建议您先阅读官方文档。</p>
+<p><img src="https://www.keisan.io/knowledgebase/real-time-data-pipeline-flume-kafka-spark/kafka-overview.png#" alt></p>
+<ul>
+<li><strong>消息</strong> - 消息是可以存储对象的字节数组，例如String和JSON对象。</li>
+<li><strong>主题</strong> - 主题本质上是消息的类别。您可能有一个主题来存储我们的推文。您可能有另一个主题来存储警报。Kafka在这些主题中存储记录流。由于Kafka是一个分布式系统，因此主题在Kafka集群中的众多节点之间进行分区。还可以跨群集中的节点复制主题。Kafka中的主题本身由分区组成，分区是附加到的有序且不可变的记录序列，正是这些分区允许主题分布在Kafka集群中的节点上，因为主题可以有多个分区。单独的分区完全适合其服务节点。</li>
+<li><strong>生产者</strong> - 生产者向主题编写/发布数据。生产者选择将哪个记录分配给主题中的哪个分区。通过将密钥附加到消息，生产者可以保证同一密钥中的所有消息将发布到主题中的同一分区。Kafka保证生产者发送到特定主题分区的消息将按照发送顺序附加。</li>
+<li><strong>消费者</strong> - 消费者从主题阅读（即消费）。主题可以有零个，一个或多个订阅它的消费者，称为多订户主题（在Kafka中总是如此）。当从主题消费时，消费者组可以配置多个消费者，并且发布到主题的每个记录被递送到每个订阅消费者组内的一个消费者，具有相同密钥的所有消息到达相同的消费者。如果所有使用者属于同一个使用者组，则记录将在Consumer实例上有效地进行负载平衡，因为每个Consumer实例将从他们订阅的每个主题中的唯一分区子集中读取消息。如果所有消费者属于不同的消费者组，则每条记录将广播到所有消费者实例。</li>
+</ul>
+<p>Kafka的伟大之处在于它是一个分布式，可靠且容错的流媒体平台。对于具有复制因子N的主题，可以在不丢失任何记录的情况下发生N-1服务器故障。此外，由于每个主题都是附加的有序记录序列，因此分区中的每条消息都会分配一个唯一的偏移量–Kafka不记录哪些消息已被哪些消费者读取，以便仅保留未读消息，而是保留_所有_消息消息可配置的时间量，无论它们是否已被消耗。因此，Kafka可以轻松处理大量的Consumer实例，因为消费者自己可以跟踪他们的读取位置，并且可以很好地存储大量数据，具有低延迟，高性能和增加的复制。<br>除了作为传统消息代理的替代品之外，Kafka还允许我们构建低延迟数据管道，因为我们可以开发消费者以可靠和容错的方式订阅基于事件的实时数据，这是特别有用的对于关键的实时数据，必须保证数据的交付以用于集成和向前的目的。虽然我们实时处理推文的例子并不十分重要，但现在将Kafka部署到我们的实时数据管道中可以教会我们在为客户实施任务关键型实时生产系统时的宝贵经验。<br><br><strong>卡夫卡频道</strong><br>那么我们如何将Apache Kafka集成到我们刚刚起步的数据管道中呢？那么，我们将实现以下设计：</p>
+<ul>
+<li><strong>制片人</strong> - 我们将使用Flume Twitter Source收集并直接将我们的推文发布到Kafka频道，无需额外的缓冲</li>
+<li><strong>主题</strong> - 我们将配置一个主题来存储我们在Kafka的推文</li>
+<li><strong>消费者</strong> - 我们将使用Spark Streaming API及其与Kafka的集成来使用Kafka Channel中的消息</li>
+</ul>
+<p>在我们继续之前，让我们花点时间讨论一下这种方法的优缺点。正如我之前所描述的，Flume Channels是位于Flume Sources和Flume Sinks之间的缓冲区，允许Sources收集数据而不用担心Sinks，它们可能以不同的速率运行。此外，使用事务来实现对通道的写入和读取 - 仅在提交事务之后，该事务中的一批事件才可用于接收器。Flume支持开箱即用的各种频道：</p>
+<ul>
+<li><strong>内存通道</strong> - 事件存储在内存中的队列中。使用内存通道的优点是它支持非常高的吞吐量，因为所有数据都保存在内存中。但是，对于必须保证交付的关键任务事件，不应使用它，因为数据不会持久存在。因此，如果代理失败，您可能会丢失数据。</li>
+<li><strong>文件通道</strong> - 文件通道将所有事件写入磁盘并设计为高度并发 - 它可以同时处理多个源和接收器。如果无法容忍数据丢失并且数据持久性和可恢复性很重要，则文件通道可能会以性能为代价。</li>
+</ul>
+<p>其他开箱即用的通道包括JDBC通道（事件持久保存到数据库）和可溢出内存通道（事件存储在内存和磁盘中）。Flume还支持Kafka频道，其中事件存储在Kafka集群中，提供高可用性，可靠性和复制。在我们的例子中，直接从我们的Flume Twitter Source使用Kafka频道的优势在于不需要额外的缓冲，它增加了我们数据管道的可靠性，并且通过使用没有显式接收器的源拦截器，它允许我们编写将事件转换为Kafka主题以供其他应用程序使用，例如我们最终的Spark Streaming Application。根据您的要求，您可以设计不同的Flume代理和数据管道。例如，如果要求高性能且数据不是任务关键型，<br>现在我们已经介绍了一些理论，让我们开始实现其余的数据管道。和以前一样，我将使用一个CentOS 7 Minimal Installation服务器来执行以下命令。在生产环境中，您将拥有一个多节点集群，但出于简单的开发目的，我将使用单节点集群。请注意，<strong>ZooKeeper</strong>超出了本文的范围，但我将在以后再回到它。现在，只需将ZooKeeper视为配置的集中服务（例如，从中央源引导集群配置）和分布式集群管理（例如实时节点状态） - 即Kafka使用ZooKeeper来帮助形成其生产者集群，消费者和代理节点。</p>
+<h1 id="Unpack-the-Kafka-Binary-to-a-directory-of-choicetar-Basic-Configuration-of-the-internal-ZooKeeper-Servicevi-Absolute-path-to-the-ZooKeeper-Data-Directory-and-Client-Port-lt-gt-Basic-Configuration-of-the-Kafka-Servervi-Kafka-Server-Log-Directory-and-ZooKeeper-Co-ordinator-Service-lt-gt-lt-gt-Start-the-internal-ZooKeeper-Service-Start-the-Kafka-Server-Create-the-Twitter-Topic-for-our-Tweets-lt-gt-”twitter”"><a href="#Unpack-the-Kafka-Binary-to-a-directory-of-choicetar-Basic-Configuration-of-the-internal-ZooKeeper-Servicevi-Absolute-path-to-the-ZooKeeper-Data-Directory-and-Client-Port-lt-gt-Basic-Configuration-of-the-Kafka-Servervi-Kafka-Server-Log-Directory-and-ZooKeeper-Co-ordinator-Service-lt-gt-lt-gt-Start-the-internal-ZooKeeper-Service-Start-the-Kafka-Server-Create-the-Twitter-Topic-for-our-Tweets-lt-gt-”twitter”" class="headerlink" title="Unpack the Kafka Binary to a directory of choicetar# Basic Configuration of the internal ZooKeeper Servicevi# Absolute path to the ZooKeeper Data Directory and Client Port=&lt;&gt;=# Basic Configuration of the Kafka Servervi# Kafka Server Log Directory and ZooKeeper Co-ordinator Service=&lt;&gt;=&lt;&gt;# Start the internal ZooKeeper Service# Start the Kafka Server# Create the Twitter Topic for our Tweets&lt;&gt;”twitter”."></a>Unpack the Kafka Binary to a directory of choicetar# Basic Configuration of the internal ZooKeeper Servicevi# Absolute path to the ZooKeeper Data Directory and Client Port=&lt;&gt;=# Basic Configuration of the Kafka Servervi# Kafka Server Log Directory and ZooKeeper Co-ordinator Service=&lt;&gt;=&lt;&gt;# Start the internal ZooKeeper Service# Start the Kafka Server# Create the Twitter Topic for our Tweets&lt;&gt;”twitter”.<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">-xzf kafka_2.12-0.10.2.1.tgz</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"> config/zookeeper.properties</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">    dataDirZooKeeper Data Directory</span><br><span class="line">    clientPort2181</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"> config/server.properties</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">    log.dirsKafka Log Directory</span><br><span class="line">    zookeeper.connectHostname:2181</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">bin/zookeeper-server-start.sh -daemon config/zookeeper.properties</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">bin/kafka-server-start.sh config/server.properties</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">bin/kafka-topics.sh --create --zookeeper ZooKeeper Hostname:2181 --replication-factor 1 --partitions 2 --topic twitter</span><br><span class="line">Created topic</span><br></pre></td></tr></table></figure></h1><p>巴什<a href>复制</a><br>现在Kafka已经启动并且我们已经创建了我们的Twitter主题，我们需要更新我们的Flume代理以写入Kafka频道。目前，我们将Flume Logger Sink输出到控制台，以便我们确认我们新设计的Flume Agent仍在工作。在本文的下一部分中，我们将讨论Apache Spark以及如何配置它以从Kafka Channel读取。</p>
+<h1 id="Update-the-Flume-Agent-to-act-as-the-Kafka-Producer-and-Consumercd-FLUME-HOMEvi-The-configuration-file-needs-to-define-the-sources-the-channels-and-the-sinks-Sources-channels-and-sinks-are-defined-per-agent-in-this-case-called-‘TwitterAgent’-Flume-Instance-Twitter-Agent-Source-Configuration-Inbuilt-TwitterSource-lt-gt-lt-gt-lt-gt-lt-gt-lt-gt-Channel-Configuration-Kafka-Channel-lt-gt-lt-gt-true-Sink-Configuration-Logger-Sink-Launch-the-Flume-Agent-using-the-Kafka-Channel-and-sinking-to-the-Console"><a href="#Update-the-Flume-Agent-to-act-as-the-Kafka-Producer-and-Consumercd-FLUME-HOMEvi-The-configuration-file-needs-to-define-the-sources-the-channels-and-the-sinks-Sources-channels-and-sinks-are-defined-per-agent-in-this-case-called-‘TwitterAgent’-Flume-Instance-Twitter-Agent-Source-Configuration-Inbuilt-TwitterSource-lt-gt-lt-gt-lt-gt-lt-gt-lt-gt-Channel-Configuration-Kafka-Channel-lt-gt-lt-gt-true-Sink-Configuration-Logger-Sink-Launch-the-Flume-Agent-using-the-Kafka-Channel-and-sinking-to-the-Console" class="headerlink" title="Update the Flume Agent to act as the Kafka Producer and Consumercd$FLUME_HOMEvi# The configuration file needs to define the sources,# the channels and the sinks.# Sources, channels and sinks are defined per agent,# in this case called ‘TwitterAgent’# Flume Instance - Twitter Agent===# Source Configuration - Inbuilt TwitterSource===&lt;&gt;=&lt;&gt;=&lt;&gt;=&lt;&gt;=&lt;&gt;==# Channel Configuration - Kafka Channel====&lt;&gt;==&lt;&gt;=true# Sink Configuration - Logger Sink==# Launch the Flume Agent using the Kafka Channel and sinking to the Console="></a>Update the Flume Agent to act as the Kafka Producer and Consumercd$FLUME_HOMEvi# The configuration file needs to define the sources,# the channels and the sinks.# Sources, channels and sinks are defined per agent,# in this case called ‘TwitterAgent’# Flume Instance - Twitter Agent===# Source Configuration - Inbuilt TwitterSource===&lt;&gt;=&lt;&gt;=&lt;&gt;=&lt;&gt;=&lt;&gt;==# Channel Configuration - Kafka Channel====&lt;&gt;==&lt;&gt;=true# Sink Configuration - Logger Sink==# Launch the Flume Agent using the Kafka Channel and sinking to the Console=<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">conf/flume-twitter.conf</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">    TwitterAgent.sources  Twitter</span><br><span class="line">    TwitterAgent.channels  Kafka</span><br><span class="line">    TwitterAgent.sinks  Logger</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">    TwitterAgent.sources.Twitter.type  org.apache.flume.source.twitter.TwitterSource</span><br><span class="line">    TwitterAgent.sources.Twitter.channels  Kafka</span><br><span class="line">    TwitterAgent.sources.Twitter.consumerKey  Your Twitter App Consumer Key</span><br><span class="line">    TwitterAgent.sources.Twitter.consumerSecret  Your Twitter App Consumer Secret</span><br><span class="line">    TwitterAgent.sources.Twitter.accessToken  Your Twitter App Access Token</span><br><span class="line">    TwitterAgent.sources.Twitter.accessTokenSecret  Your Twitter App Access Token Secret</span><br><span class="line">    TwitterAgent.sources.Twitter.keywords  Comma Delimited List of Keywords to filter the Tweets</span><br><span class="line">    TwitterAgent.sources.Twitter.interceptors  interceptor1</span><br><span class="line">    TwitterAgent.sources.Twitter.interceptors.interceptor1.type  timestamp</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">    TwitterAgent.channels.Kafka.type  org.apache.flume.channel.kafka.KafkaChannel</span><br><span class="line">    TwitterAgent.channels.Kafka.capacity  10000</span><br><span class="line">    TwitterAgent.channels.Kafka.transactionCapacity  100</span><br><span class="line">    TwitterAgent.channels.Kafka.brokerList  Kafka Broker Hostname:9092</span><br><span class="line">    TwitterAgent.channels.Kafka.topic  twitter</span><br><span class="line">    TwitterAgent.channels.Kafka.zookeeperConnect  ZooKeeper Hostname:2181</span><br><span class="line">    TwitterAgent.channels.Kafka.parseAsFlumeEvent  </span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">    TwitterAgent.sinks.Logger.type  logger</span><br><span class="line">    TwitterAgent.sinks.Logger.channel  Kafka</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">bin/flume-ng agent --name TwitterAgent --conf conf --conf-file conf/flume-twitter.conf -Dflume.root.loggerDEBUG,console</span><br></pre></td></tr></table></figure></h1><p>巴什<a href>复制</a><br>当您运行上面的最终命令时，您的控制台将生成大量输出，包括以前的推文。如果您想明确检查Kafka是否正在接收来自Flume Producer的消息，我们可以通过命令行运行Kafka Consumer来订阅Twitter主题并从头开始显示所有消息。</p>
+<h1 id="Run-a-Kafka-Consumer-subscribed-to-the-Twitter-Topiccd-KAFKA-HOME-lt-gt"><a href="#Run-a-Kafka-Consumer-subscribed-to-the-Twitter-Topiccd-KAFKA-HOME-lt-gt" class="headerlink" title="Run a Kafka Consumer subscribed to the Twitter Topiccd$KAFKA_HOME&lt;&gt;"></a>Run a Kafka Consumer subscribed to the Twitter Topiccd$KAFKA_HOME&lt;&gt;<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/kafka-console-consumer.sh --zookeeper ZooKeeper Hostname:2181 --topic twitter --from-beginning</span><br></pre></td></tr></table></figure></h1><p>巴什<a href>复制</a></p>
+<p><strong>Apache Spark</strong><br>我们现在已经设置了一个Flume Agent来使用我们的Twitter应用程序收集推文，将这些推文发布到Kafka主题，最后使用来自Kafka频道的推文并将它们下载到Logger或HDFS。本文的最后一部分将介绍如何使用Spark Streaming API将Apache Spark连接到Kafka以使用Kafka的推文。（我的下一篇文章将描述我们如何使用Apache Spark执行一些分析并使用我们的实时推文流构建预测模型！）<br><a href="https://spark.apache.org/" target="_blank" rel="noopener">Apache Spark</a>是一个大数据处理引擎和集群计算框架，能够批量和实时地执行大规模数据处理和分析，包括机器学习。<a href="https://spark.apache.org/streaming/" target="_blank" rel="noopener">Spark Streaming</a>扩展了核心Spark API，允许我们在实时流数据流上重复使用相同的代码进行批处理，从而允许我们执行实时数据处理和分析。与往常一样，<a href="https://spark.apache.org/docs/latest/programming-guide.html" target="_blank" rel="noopener">Apache Spark</a>官方<a href="https://spark.apache.org/docs/latest/programming-guide.html" target="_blank" rel="noopener">文档</a>是开始熟悉Apache Spark的最佳场所。</p>
+<p><img src="https://www.keisan.io/knowledgebase/real-time-data-pipeline-flume-kafka-spark/spark-cluster-overview.png#" alt></p>
+<ul>
+<li><strong>弹性分布式数据集</strong> - 弹性分布式数据集（RDR）是Spark中基本的内存数据结构 - 它们是一个不可变的分布式对象集合，分为跨集群中节点的逻辑分区。Spark隐藏了底层分区，因此可以暴露更高级别的API，开发人员可以使用Java，Scala或Python对RDD（如地图和过滤）执行典型操作，而无需担心（过多！）底层框架。RDD存储在内存中并且是不可变的 - RDD上的_转换_操作<em>懒惰的</em>意味着结果不是立即计算的，仅在需要操作时计算。RDD也是可缓存的，这意味着数据可以持久保存到其他介质（例如磁盘），并且记录在Spark集群中进行分区和分布。RDD的设计部分是为了有效地运行迭代算法，例如机器学习和图算法，以及数据挖掘。</li>
+<li><strong>Spark上下文</strong> - Spark上下文是Spark应用程序的核心，允许它通过资源管理器（如Mesos，YARN或Apache Spark自己的集群管理器）访问Spark集群。</li>
+<li><strong>驱动程序</strong> - Spark Driver是一个程序，它声明了对RDD数据进行的一系列转换和操作，并为Spark应用程序托管Spark上下文。驱动程序将Spark应用程序拆分为任务，然后由驱动程序调度和协调。</li>
+<li><strong>Workers</strong> - Workers / Slaves是Spark实例，它执行线程池中驱动程序安排的任务。</li>
+<li><strong>执行程序</strong> - 执行程序是实际执行任务并驻留在Workers中的代理程序，用于报告活动任务的心跳和指标。</li>
+</ul>
+<p>在本文的其余部分，我们将专注于<a href="https://spark.apache.org/docs/latest/streaming-programming-guide.html" target="_blank" rel="noopener">Spark Streaming API</a>及其核心组件。</p>
+<p><img src="https://www.keisan.io/knowledgebase/real-time-data-pipeline-flume-kafka-spark/spark-streaming-flow.png#" alt></p>
+<ul>
+<li><strong>离散的流</strong> - 除批量处理外，Spark还支持通过其高吞吐量，可扩展且容错的Streaming API（核心Spark API的扩展）处理实时数据流，例如我们的Twitter流。Discretized Streams，或DStream，代表连续的数据流，可以从输入数据流（如上面介绍的Flume和Kafka）创建。输入数据流被分成批处理（在内部，DStream是一系列连续的RDD），然后由Spark引擎处理（允许我们重用为批处理开发的代码以进行近实时处理）以生成最终的流结果也是分批的。</li>
+</ul>
+<p>为了完成本文，我们将使用Spark的Streaming API将Apache Spark与Kafka集成，以使用来自Kafka的推文。显然，这并没有说明Spark的全部分析能力，但在我的下一篇文章中，我们将通过对Spark中的推文流进行分析来构建我们的实时数据管道！<br>首先，我们将使用Spark自己的集群管理器和我们的CentOS 7 Minimal Installation Server配置和部署一个非常基本的单节点Spark集群。</p>
+<h1 id="Unpack-the-Spark-Binary-to-a-directory-of-choicetar-Basic-Single-Node-Spark-Deployment-Environment-Configuration-Note-that-Spark-properties-can-be-set-directly-using-SparkConf-passed-to-your-SparkContext-You-can-also-specify-relevant-default-configuration-values-using-conf-spark-defaults-conf-as-follows-gt-vi-Spark-Deployment-Environment-Properties-In-this-example-we-will-be-using-Spark’s-own-cluster-manager-lt-gt-lt-gt-Networking-Properties-lt-gt-Hadoop-Properties-Start-the-Spark-Master-Start-a-Spark-Slave-lt-gt"><a href="#Unpack-the-Spark-Binary-to-a-directory-of-choicetar-Basic-Single-Node-Spark-Deployment-Environment-Configuration-Note-that-Spark-properties-can-be-set-directly-using-SparkConf-passed-to-your-SparkContext-You-can-also-specify-relevant-default-configuration-values-using-conf-spark-defaults-conf-as-follows-gt-vi-Spark-Deployment-Environment-Properties-In-this-example-we-will-be-using-Spark’s-own-cluster-manager-lt-gt-lt-gt-Networking-Properties-lt-gt-Hadoop-Properties-Start-the-Spark-Master-Start-a-Spark-Slave-lt-gt" class="headerlink" title="Unpack the Spark Binary to a directory of choicetar# Basic Single-Node Spark Deployment Environment Configuration# Note that Spark properties can be set directly using SparkConf passed to your SparkContext# You can also specify relevant default configuration values using conf/spark-defaults.conf as follows&gt;vi# Spark Deployment Environment Properties# In this example, we will be using Spark’s own cluster manager&lt;&gt;&lt;&gt;# Networking Properties&lt;&gt;# Hadoop Properties# Start the Spark Master# Start a Spark Slave&lt;&gt;"></a>Unpack the Spark Binary to a directory of choicetar# Basic Single-Node Spark Deployment Environment Configuration# Note that Spark properties can be set directly using SparkConf passed to your SparkContext# You can also specify relevant default configuration values using conf/spark-defaults.conf as follows&gt;vi# Spark Deployment Environment Properties# In this example, we will be using Spark’s own cluster manager&lt;&gt;&lt;&gt;# Networking Properties&lt;&gt;# Hadoop Properties# Start the Spark Master# Start a Spark Slave&lt;&gt;<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">-xzf spark-2.1.0-bin-hadoop2.7.tgz</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  spark-defaults.conf</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">    spark.master                            spark://Cluster Manager Hostname:7077</span><br><span class="line">    spark.driver.cores                      1</span><br><span class="line">    spark.driver.maxResultSize              1g</span><br><span class="line">    spark.driver.memory                     1g</span><br><span class="line">    spark.executor.memory                   2g</span><br><span class="line">    spark.local.dir                         Spark Scratch Directory</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">    spark.driver.host                       Driver Hostname</span><br><span class="line">    spark.network.timeout                   120s</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">    spark.hadoop.dfs.replication            1</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">sbin/start-master.sh</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">sbin/start-slave.sh spark://Cluster Manager Hostname:7077</span><br></pre></td></tr></table></figure></h1><p>巴什<a href>复制</a><br>您可以通过<cluster manager主机名>：8080（默认）访问Spark Master UI，以确认您的单节点Spark群集已启动并与1个worker一起运行。现在我们已经部署了非常基本的单节点Spark Cluster，让我们使用Twitter Source和Interceptor更新我们的Flume Agent，但是没有使用Kafka Channel将事件写入Kafka主题以供Apache Spark使用。</cluster></p>
+<h1 id="Update-the-Flume-Agent-so-that-Spark-can-pull-data-from-a-Custom-Sink-using-a-Flume-Receivercd-FLUME-HOMEvi-The-configuration-file-needs-to-define-the-sources-the-channels-and-the-sinks-Sources-channels-and-sinks-are-defined-per-agent-in-this-case-called-‘TwitterAgent’-Flume-Instance-Twitter-Agent-Source-Configuration-Inbuilt-TwitterSource-lt-gt-lt-gt-lt-gt-lt-gt-lt-gt-Channel-Configuration-Kafka-Channel-lt-gt-lt-gt-true"><a href="#Update-the-Flume-Agent-so-that-Spark-can-pull-data-from-a-Custom-Sink-using-a-Flume-Receivercd-FLUME-HOMEvi-The-configuration-file-needs-to-define-the-sources-the-channels-and-the-sinks-Sources-channels-and-sinks-are-defined-per-agent-in-this-case-called-‘TwitterAgent’-Flume-Instance-Twitter-Agent-Source-Configuration-Inbuilt-TwitterSource-lt-gt-lt-gt-lt-gt-lt-gt-lt-gt-Channel-Configuration-Kafka-Channel-lt-gt-lt-gt-true" class="headerlink" title="Update the Flume Agent so that Spark can pull data from a Custom Sink using a Flume Receivercd$FLUME_HOMEvi# The configuration file needs to define the sources,# the channels and the sinks.# Sources, channels and sinks are defined per agent,# in this case called ‘TwitterAgent’# Flume Instance - Twitter Agent==# Source Configuration - Inbuilt TwitterSource===&lt;&gt;=&lt;&gt;=&lt;&gt;=&lt;&gt;=&lt;&gt;# Channel Configuration - Kafka Channel====&lt;&gt;==&lt;&gt;=true"></a>Update the Flume Agent so that Spark can pull data from a Custom Sink using a Flume Receivercd$FLUME_HOMEvi# The configuration file needs to define the sources,# the channels and the sinks.# Sources, channels and sinks are defined per agent,# in this case called ‘TwitterAgent’# Flume Instance - Twitter Agent==# Source Configuration - Inbuilt TwitterSource===&lt;&gt;=&lt;&gt;=&lt;&gt;=&lt;&gt;=&lt;&gt;# Channel Configuration - Kafka Channel====&lt;&gt;==&lt;&gt;=true<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">conf/flume-twitter.conf</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">    TwitterAgent.sources  Twitter</span><br><span class="line">    TwitterAgent.channels  Kafka</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">    TwitterAgent.sources.Twitter.type  org.apache.flume.source.twitter.TwitterSource</span><br><span class="line">    TwitterAgent.sources.Twitter.channels  Kafka</span><br><span class="line">    TwitterAgent.sources.Twitter.consumerKey  Your Twitter App Consumer Key</span><br><span class="line">    TwitterAgent.sources.Twitter.consumerSecret  Your Twitter App Consumer Secret</span><br><span class="line">    TwitterAgent.sources.Twitter.accessToken  Your Twitter App Access Token</span><br><span class="line">    TwitterAgent.sources.Twitter.accessTokenSecret  Your Twitter App Access Token Secret</span><br><span class="line">    TwitterAgent.sources.Twitter.keywords  Comma Delimited List of Keywords to filter the Tweets</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">    TwitterAgent.channels.Kafka.type  org.apache.flume.channel.kafka.KafkaChannel</span><br><span class="line">    TwitterAgent.channels.Kafka.capacity  10000</span><br><span class="line">    TwitterAgent.channels.Kafka.transactionCapacity  100</span><br><span class="line">    TwitterAgent.channels.Kafka.brokerList  Kafka Broker Hostname:9092</span><br><span class="line">    TwitterAgent.channels.Kafka.topic  twitter</span><br><span class="line">    TwitterAgent.channels.Kafka.zookeeperConnect  ZooKeeper Hostname:2181</span><br><span class="line">    TwitterAgent.channels.Kafka.parseAsFlumeEvent</span><br></pre></td></tr></table></figure></h1><p>巴什<a href>复制</a><br>我们现在准备编写我们的Spark Streaming Application来读取Kafka的推文并在Spark中对它们执行一些简单的处理。如上所述，Spark公开了一个更高级别的API，以便开发人员可以用Java，Scala或Python编写他们的Spark应用程序。作为Java开发人员，我自然会选择Java或Scala！<br><strong>Spark Streaming应用程序</strong><br>Spark Streaming支持两种从Kafka读取数据的方法：</p>
+<ul>
+<li><strong>基于接收器的方法</strong> - 工作器上的执行器内的接收器任务用于接收由Spark Streaming Context启动的作业处理的数据。但是，此方法不可靠，并且在节点故障的情况下可能导致数据丢失。</li>
+<li><strong>直接方法</strong> - 在这种方法中，Spark定期向Kafka查询每个主题和分区中的最新偏移，这些偏移用于在从Kafka读取时定义偏移范围。这种方法提供了更好的可靠性和效率</li>
+</ul>
+<p>我们将使用直接方法来消费来自Kafka的消息并在Spark中处理它们。由于我将用Java编写Spark Streaming Application，因此我将首先创建一个<a href="https://maven.apache.org/" target="_blank" rel="noopener">Apache Maven</a>项目来处理所有构建依赖项。我将配置Maven来构建一个_胖_ JAR，这意味着我们将提交给Apache Spark的最终JAR不仅包括我们的Spark Streaming Application，还包括它需要运行的所有必需依赖项。我的POM文件中有几点需要注意：</p>
+<ul>
+<li><strong>Spark Streaming Kafka</strong> - 为了将我们的Spark Streaming应用程序与Kafka连接，需要依赖spark-streaming-kafka-0-8_2.11</li>
+<li><strong>提供的依赖关系</strong> - Spark-core_2.11和spark-streaming_2.11已在Spark安装中提供，因此我们在POM中提供了这些标记</li>
+<li><strong>Maven Assembly插件</strong> - 我们将使用Maven Assembly Plugin构建我们的_胖_ JAR，包括所有必需的依赖项</li>
+</ul>
+<p><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemalocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"><modelversion></modelversion><!-- Maven Coordinates --><groupid></groupid><artifactid></artifactid><version></version><packaging></packaging><!-- Project Information --><name></name><description></description><url></url><organization><name></name><url></url></organization><developers><developer><id></id><name></name><email></email><url></url><organization></organization><organizationurl></organizationurl><roles><role></role><role></role></roles><timezone></timezone></developer></developers><!-- Repositories --><repositories><!-- Confluent Repository for KafkaAvroDecoder --><repository><id></id><url></url></repository></repositories><!-- Properties --><properties>&lt;apache.avro.version&gt;&lt;/apache.avro.version&gt;&lt;apache.spark.core.2.11.version&gt;&lt;/apache.spark.core.2.11.version&gt;&lt;apache.spark.streaming.2.11.version&gt;&lt;/apache.spark.streaming.2.11.version&gt;&lt;apache.spark.streaming.kafka-0-8_2.11.version&gt;&lt;/apache.spark.streaming.kafka-0-8_2.11.version&gt;&lt;confluent.kafka.avro.serializer.version&gt;&lt;/confluent.kafka.avro.serializer.version&gt;&lt;jdk.version&gt;&lt;/jdk.version&gt;&lt;maven.plugins.maven-assembly-plugin.version&gt;&lt;/maven.plugins.maven-assembly-plugin.version&gt;&lt;maven.plugins.maven-compiler-plugin.version&gt;&lt;/maven.plugins.maven-compiler-plugin.version&gt;&lt;output.directory&gt;&lt;/output.directory&gt;&lt;project.build.sourceEncoding&gt;&lt;/project.build.sourceEncoding&gt;</properties><!-- Dependencies --><dependencies><!-- Apache Avro --><dependency><groupid></groupid><artifactid></artifactid><version></version></dependency><!-- Apache Spark --><dependency><groupid></groupid><artifactid></artifactid><version></version><scope></scope></dependency><dependency><groupid></groupid><artifactid></artifactid><version></version><scope></scope></dependency><dependency><groupid></groupid><artifactid></artifactid><version></version></dependency><!-- Confluent Kafka Avro Serializer --><dependency><groupid></groupid><artifactid></artifactid><version></version></dependency></dependencies><!-- Build --><build><!-- Plugins --><plugins><!-- Maven Compiler: Compile the Sources of the Project --><plugin><groupid></groupid><artifactid></artifactid><version></version><configuration><source><target></target></configuration></plugin><!-- Maven Assembly: Aggregate project output with its dependencies --><plugin><groupid></groupid><artifactid></artifactid><version></version><configuration><!-- Final JAR Filename --><finalname></finalname><!-- Include all Project Dependencies --><descriptorrefs><descriptorref></descriptorref></descriptorrefs><!-- JAR with dependencies Output Target Directory --><outputdirectory></outputdirectory></configuration><executions><!-- Bind the assembly to the package phase --><execution><id></id><phase></phase><goals><goal></goal></goals></execution></executions></plugin></plugins></build></project><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br></pre></td><td class="code"><pre><span class="line">4.0.0</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">    io.keisan.knowledgebase.spark.streaming</span><br><span class="line">    keisan-spark-kafka</span><br><span class="line">    0.0.1-SNAPSHOT</span><br><span class="line">    jar</span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">    Spark Kafka Direct Integration</span><br><span class="line">    Keisan Knowledgebase Spark Streaming Project - Kafka Direct Integration</span><br><span class="line">    https://www.keisan.io/knowledgebase</span><br><span class="line">    </span><br><span class="line">        Keisan Ltd</span><br><span class="line">        https://www.keisan.io</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">        </span><br><span class="line">            jillur.quddus</span><br><span class="line">            Jillur Quddus</span><br><span class="line">            contactus@keisan.io</span><br><span class="line">            https://www.keisan.io</span><br><span class="line">            Keisan Ltd</span><br><span class="line">            https://www.keisan.io</span><br><span class="line">            </span><br><span class="line">                Lead Engineer</span><br><span class="line">                Data Scientist</span><br><span class="line">            </span><br><span class="line">            Europe/London</span><br><span class="line">        </span><br><span class="line">    </span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line"></span><br><span class="line">        </span><br><span class="line">        </span><br><span class="line">            confluent</span><br><span class="line">            http://packages.confluent.io/maven/</span><br><span class="line">        </span><br><span class="line"></span><br><span class="line">    </span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">        1.8.1</span><br><span class="line">        2.1.0</span><br><span class="line">        2.1.0</span><br><span class="line">        2.1.0</span><br><span class="line">        3.2.1</span><br><span class="line">        1.8</span><br><span class="line">        3.0.0</span><br><span class="line">        3.6.1</span><br><span class="line">        /keisan/knowledgebase/spark/jars</span><br><span class="line">        UTF-8</span><br><span class="line">    </span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line"></span><br><span class="line">        </span><br><span class="line">        </span><br><span class="line">            org.apache.avro</span><br><span class="line">            avro</span><br><span class="line">            $&#123;apache.avro.version&#125;</span><br><span class="line">        </span><br><span class="line"></span><br><span class="line">        </span><br><span class="line">        </span><br><span class="line">            org.apache.spark</span><br><span class="line">            spark-core_2.11</span><br><span class="line">            $&#123;apache.spark.core.2.11.version&#125;</span><br><span class="line">            provided</span><br><span class="line">        </span><br><span class="line">        </span><br><span class="line">            org.apache.spark</span><br><span class="line">            spark-streaming_2.11</span><br><span class="line">            $&#123;apache.spark.streaming.2.11.version&#125;</span><br><span class="line">            provided</span><br><span class="line">        </span><br><span class="line">        </span><br><span class="line">            org.apache.spark</span><br><span class="line">            spark-streaming-kafka-0-8_2.11</span><br><span class="line">            $&#123;apache.spark.streaming.kafka-0-8_2.11.version&#125;</span><br><span class="line">        </span><br><span class="line"></span><br><span class="line">        </span><br><span class="line">        </span><br><span class="line">            io.confluent</span><br><span class="line">            kafka-avro-serializer</span><br><span class="line">            $&#123;confluent.kafka.avro.serializer.version&#125;</span><br><span class="line">        </span><br><span class="line"></span><br><span class="line">    </span><br><span class="line"></span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line"></span><br><span class="line">        </span><br><span class="line">        </span><br><span class="line"></span><br><span class="line">            </span><br><span class="line">            </span><br><span class="line">                org.apache.maven.plugins</span><br><span class="line">                maven-compiler-plugin</span><br><span class="line">                $&#123;maven.plugins.maven-compiler-plugin.version&#125;</span><br><span class="line">                </span><br><span class="line">                    $&#123;jdk.version&#125;</span><br><span class="line">                    $&#123;jdk.version&#125;</span><br><span class="line">                </span><br><span class="line">            </span><br><span class="line"></span><br><span class="line">            </span><br><span class="line">            </span><br><span class="line">                org.apache.maven.plugins</span><br><span class="line">                maven-assembly-plugin</span><br><span class="line">                $&#123;maven.plugins.maven-assembly-plugin.version&#125;</span><br><span class="line">                </span><br><span class="line"></span><br><span class="line">                    </span><br><span class="line">                    keisan-spark-kafka-$&#123;project.version&#125;</span><br><span class="line"></span><br><span class="line">                    </span><br><span class="line">                    </span><br><span class="line">                        jar-with-dependencies</span><br><span class="line">                    </span><br><span class="line"></span><br><span class="line">                    </span><br><span class="line">                    $&#123;output.directory&#125;</span><br><span class="line"></span><br><span class="line">                </span><br><span class="line">                </span><br><span class="line"></span><br><span class="line">                    </span><br><span class="line">                    </span><br><span class="line">                        make-assembly</span><br><span class="line">                        package</span><br><span class="line">                        </span><br><span class="line">                            single</span><br></pre></td></tr></table></figure></p>
+<p>XML<a href>复制</a><br>我们现在准备开始开发我们的Spark Streaming Application。要创建输入DStream，我们需要导入<em>KafkaUtils</em>并使用Spark Streaming Context创建直接流，Kafka Broker正在侦听的主机名和端口以及我们要从中使用消息的Kafka主题。<br><strong>简单的纯文本处理</strong><br>在下面的示例中，我们只是使用Kafka的推文，将值解码为Strings并将它们输出到Spark Executor Standard Out。<br>package…..;import..;import..;import..;import..;import…;import….;import……;import……;import…..;import..;/**</p>
+<ul>
+<li>Example Spark Streaming Application with Kafka Direct Integration<br>*</li>
+<li>Periodically query Kafka for the latest offsets in each Topic and Partition.</li>
+<li>Consume the tweets using a String Decoder and display them in the console.<br>*</li>
+<li>Usage: StreamingKafkaDirectStringDecoder</li>
+<li>broker: The hostname and port at which the Kafka Broker is listening<br>*</li>
+<li>@author jillur.quddus</li>
+<li>@version 0.0.1<br><em>
+</em>/publicclassStreamingKafkaDirectStringDecoder{publicstaticvoidmain([])throws{if(.!=1){..println(“Usage: StreamingKafkaDirectStringDecoder <broker>“);.exit(1);}// Create a Java Streaming Context with a Batch Interval of 5 seconds=newSparkConf().setAppName(“Kafka Direct String Decoder”);=newJavaStreamingContext(,.seconds(5));// Specify the Kafka Broker Options and set of Topics=[0];&lt;,&gt;=newHashMap&lt;,&gt;();.put(“metadata.broker.list”,);&lt;&gt;=.singleton(“twitter”);// Create an input DStream using KafkaUtils and simple plain-text message processing&lt;,&gt;=.createDirectStream(,.class,.class,.class,.class,,);.foreachRDD(-&gt;{.foreach(-&gt;..println(.));});// Start the computation.start();// Wait for the computation to terminate.awaitTermination();}}<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">iokeisanknowledgebasesparkstreamingkafka</span><br><span class="line"></span><br><span class="line"> javautilCollections</span><br><span class="line"> javautilHashMap</span><br><span class="line"> javautilMap</span><br><span class="line"> javautilSet</span><br><span class="line"></span><br><span class="line"> orgapachesparkSparkConf</span><br><span class="line"> orgapachesparkstreamingDurations</span><br><span class="line"> orgapachesparkstreamingapijavaJavaPairInputDStream</span><br><span class="line"> orgapachesparkstreamingapijavaJavaStreamingContext</span><br><span class="line"> orgapachesparkstreamingkafkaKafkaUtils</span><br><span class="line"></span><br><span class="line"> kafkaserializerStringDecoder</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">   </span><br><span class="line"></span><br><span class="line">       String args  InterruptedException </span><br><span class="line"></span><br><span class="line">          argslength    </span><br><span class="line">            Systemerr</span><br><span class="line">            System</span><br><span class="line">        </span><br><span class="line"></span><br><span class="line">        </span><br><span class="line">        SparkConf conf   </span><br><span class="line">        JavaStreamingContext jssc   conf Durations</span><br><span class="line"></span><br><span class="line">        </span><br><span class="line">        String broker  args</span><br><span class="line">        MapString String kafkaParameters   String String</span><br><span class="line">        kafkaParameters broker</span><br><span class="line">        SetString topics  Collections</span><br><span class="line"></span><br><span class="line">        </span><br><span class="line">        JavaPairInputDStreamString String kafkaDirectStream  KafkaUtilsjssc</span><br><span class="line">                String String StringDecoder StringDecoder kafkaParameters topics</span><br><span class="line">        kafkaDirectStreamrdd  </span><br><span class="line">            rddrecord  Systemoutrecord_2</span><br><span class="line">        </span><br><span class="line"></span><br><span class="line">        </span><br><span class="line">        jssc</span><br><span class="line"></span><br><span class="line">        </span><br><span class="line">        jssc</span><br></pre></td></tr></table></figure></broker></li>
+</ul>
+<p>Java的<a href>复制</a><br><strong>Avro处理</strong><br>请注意，我们在数据管道中使用的Flume Twitter Source实际上将推文转换为<strong>Avro</strong>格式，并将这些Avro消息发送到下游。Avro是一个基于数据序列化模式和语言中立的系统，它使用JSON来声明数据结构和模式。您可以使用返回Bytes原始数组的<a href="http://apache.spinellicreations.com/kafka/0.8.2.0/scaladoc/kafka/serializer/DefaultDecoder.html" target="_blank" rel="noopener">DefaultDecoder</a>，然后使用Avro的二进制解码器或Confluent的<a href="http://docs.confluent.io/current/schema-registry/docs/serializer-formatter.html" target="_blank" rel="noopener">KafkaAvroDecoder</a>解码它，以接收带有Avro记录的消息，而不是使用简单地将值解码为上面的Streaming应用程序中的字符串的<a href="http://docs.confluent.io/current/schema-registry/docs/serializer-formatter.html" target="_blank" rel="noopener">StringDecoder。</a>他们的价值观<br><strong>运行Spark Streaming应用程序</strong><br>我们现在准备运行我们的Spark Streaming Application！使用Maven构建_胖_ JAR并将其提交给Spark集群。因为出于本文的目的，我们仅使用单节点Spark集群进行开发和调试，所以在客户端模式下部署我们的应用程序是有意义的。</p>
+<h1 id="Submit-our-Spark-Streaming-Applicationcd-SPARK-HOME-lt-gt-Launch-the-Flume-Agent-using-the-Twitter-Source-and-Kafka-Channelcd-FLUME-HOME"><a href="#Submit-our-Spark-Streaming-Applicationcd-SPARK-HOME-lt-gt-Launch-the-Flume-Agent-using-the-Twitter-Source-and-Kafka-Channelcd-FLUME-HOME" class="headerlink" title="Submit our Spark Streaming Applicationcd$SPARK_HOME&lt;&gt;# Launch the Flume Agent using the Twitter Source and Kafka Channelcd$FLUME_HOME"></a>Submit our Spark Streaming Applicationcd$SPARK_HOME&lt;&gt;# Launch the Flume Agent using the Twitter Source and Kafka Channelcd$FLUME_HOME<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">bin/spark-submit --class io.keisan.knowledgebase.spark.streaming.kafka.StreamingKafkaDirectStringDecoder --deploy-mode client /keisan/knowledgebase/spark/jars/keisan-spark-kafka-0.0.1-SNAPSHOT-jar-with-dependencies.jar Kafka Broker Hostname:Port</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"> </span><br><span class="line">bin/flume-ng agent --name TwitterAgent --conf conf --conf-file conf/flume-twitter.conf</span><br></pre></td></tr></table></figure></h1><p>巴什<a href>复制</a><br>如果您现在检查Spark Executor输出，您应该能够看到从近乎实时地从Kafka流向Spark的推文！<br>我们现在已经成功开发了一种近实时，高吞吐量，可靠且容错的数据流水线。Apache Flume用于收集发布到Apache Kafka的基于事件的数据（在我们的示例中为推文）。然后，Apache Spark用于使用来自Apache Kafka的数据并执行接近实时的数据处理。显然，简单地摄取和打印数据绝不会展示Apache Spark的功能！因此，在我的下一篇文章中，我将讨论如何在Spark中基于事件的数据流实时构建预测模型和实时数据分析。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/04/23/yuque/Apache Kafka 和Spark的实时数据管道/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
         
-          <a class="article-more-a" href="/2019/04/23/yuque/使用Spark和MLlib进行机器学习简介（DataFrame API）/#more">more >></a>
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/我的建立图书推荐系统之旅。。。" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/04/23/yuque/我的建立图书推荐系统之旅。。。/">我的建立图书推荐系统之旅。。。</a>
+    </h1>
+  
+
+        
+        <a href="/2019/04/23/yuque/我的建立图书推荐系统之旅。。。/" class="archive-article-date">
+  	<time datetime="2019-04-23T08:28:16.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-23</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1554396102648-d76c57c9-629d-4bfc-baf1-09826f912b2a.jpeg#align=left&amp;display=inline&amp;height=497&amp;name=1_Gql-Vlc4BQJz_x8GhJXX2A.jpeg&amp;originHeight=1280&amp;originWidth=1920&amp;size=642247&amp;status=done&amp;width=746" alt="1_Gql-Vlc4BQJz_x8GhJXX2A.jpeg"><br>推荐系统一直让我的思绪占据了一段时间，由于我倾向于阅读书籍，因此探索Book Crossing数据集非常吸引人。<br>在线推荐系统是许多电子商务网站的事情。推荐系统广泛地向最适合其口味和特征的顾客推荐产品。有关推荐系统的更多详细信息，请阅读我关于推荐系统的<a href="https://medium.com/@chhavi.saluja1401/recommendation-systems-made-simple-b5a79cac8862" target="_blank" rel="noopener">介绍性文章</a>和<a href="https://towardsdatascience.com/collaborative-filtering-based-recommendation-systems-exemplified-ecbffe1c20b1" target="_blank" rel="noopener">使用Python</a>的<a href="https://towardsdatascience.com/collaborative-filtering-based-recommendation-systems-exemplified-ecbffe1c20b1" target="_blank" rel="noopener">一些插图</a>。<br>当我遇到<a href="http://www2.informatik.uni-freiburg.de/~cziegler/BX/" target="_blank" rel="noopener">Book Crossing</a>数据集时，我开始构建图书推荐系统。该数据集由Cai-Nicolas Ziegler于2004年编制，包含三个用户，书籍和评级表。显性评级以1-10的等级表示（较高的值表示较高的评价），隐式评级表示为0。<br>在构建任何机器学习模型之前，了解数据是什么以及我们要实现的目标至关重要。数据探索揭示了隐藏的趋势和见解，数据预处理使数据可供ML算法使用。<br>那么，让我们开始吧。。。<br>
+        
+          <a class="article-more-a" href="/2019/04/23/yuque/我的建立图书推荐系统之旅。。。/#more">more >></a>
         
       
 
@@ -184,7 +337,7 @@
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2019/04/23/yuque/使用Spark和MLlib进行机器学习简介（DataFrame API）/">展开全文 >></a>
+          <a class="article-more-a" href="/2019/04/23/yuque/我的建立图书推荐系统之旅。。。/">展开全文 >></a>
         </p>
       
 
@@ -214,27 +367,67 @@
 
 
   
-    <article id="post-yuque/2019-04-23" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-yuque/转移学习:重新启动Inception V3以进行自定义图像分类" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/23/yuque/2019-04-23/">Tue Apr 23 2019 00:00:00 GMT+0800 (China Standard Time)</a>
+      <a class="article-title" href="/2019/04/23/yuque/转移学习:重新启动Inception V3以进行自定义图像分类/">转移学习:重新启动Inception V3以进行自定义图像分类</a>
     </h1>
   
 
         
-        <a href="/2019/04/23/yuque/2019-04-23/" class="archive-article-date">
-  	<time datetime="2019-04-23T01:46:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-23</time>
+        <a href="/2019/04/23/yuque/转移学习:重新启动Inception V3以进行自定义图像分类/" class="archive-article-date">
+  	<time datetime="2019-04-23T08:27:37.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-23</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h4 id="test"><a href="#test" class="headerlink" title="test"></a>test</h4><p>…………………..</p>
+        <p>让我们通过将现有的图像分类器（Inception V3）调整为自定义任务来体验转移学习的强大功能：对产品图像进行分类，以帮助食品和杂货零售商减少仓库和零售店库存管理过程中的人力。<br>这项工作的源代码可以在我下面的GitHub存储库中找到。<br><a href="https://github.com/wisdal/Image-classification-transfer-learning" target="_blank" rel="noopener">https://github.com/wisdal/Image-classification-transfer-learning</a><br>使用的工具：TensorFlow v1.1，Python 3.4，Jupyter。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1552903355906-1736cd25-8311-4055-a6bd-aa237d022793.png#align=left&amp;display=inline&amp;height=436&amp;name=1_OiM9iXjO4R8Vq_wCSfQZIg.png&amp;originHeight=584&amp;originWidth=1000&amp;size=759418&amp;status=done&amp;width=746" alt="1_OiM9iXjO4R8Vq_wCSfQZIg.png"></p>
+<p><br>深度神经网络的应用实际上是在滚动。无论是医疗保健，运输还是零售，各行各业的公司都对投资构建智能解决方案感到兴奋。同时，让我们希望人类的智慧仍然无可争议:)<br><a name="9dd10fb0"></a></p>
+<h3 id="趋势AI文章："><a href="#趋势AI文章：" class="headerlink" title="趋势AI文章："></a>趋势AI文章：</h3><blockquote>
+<p><a href="https://chatbotslife.com/how-neural-networks-work-ff4c7ad371f7" target="_blank" rel="noopener">1.神经网络如何工作</a>&gt; <a href="https://chatbotslife.com/resnets-highwaynets-and-densenets-oh-my-9bb15918ee32" target="_blank" rel="noopener">2. ResNets，HighwayNets和DenseNets，哦，我的！</a>&gt; <a href="https://chatbotslife.com/machine-learning-for-dummies-part-1-dbaca076ec07" target="_blank" rel="noopener">3.机器学习傻瓜</a><br>在实际情况下，强大的图像分类器等解决方案可以帮助公司跟踪货架库存，对产品进行分类，记录产品量，从专用设备（无人机？机器人？）实时捕获的原始产品图像。当然，能够识别产品并从给定的图片预测其类别是交易的一部分，这就是这个实验的全部内容：我们将培训机器人从图像中分类食品和杂货产品。</p>
+</blockquote>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1552903381892-b439e8f9-e1d2-49ed-9eb1-02be65c96a4f.png#align=left&amp;display=inline&amp;height=390&amp;name=1_OiM9iXjO4R8Vq_wCSfQZIg.png&amp;originHeight=523&amp;originWidth=1000&amp;size=593236&amp;status=done&amp;width=746" alt="1_OiM9iXjO4R8Vq_wCSfQZIg.png"></p>
+<p>“这是一项轻松的任务！”，我们认为是人类，但计算机程序并不一定如此。无论如何，这个假设甚至都不适用于所有类别的人类; 一个5岁的孩子是一个完美的反例！当我们放大时，一切都是为了在您的生活中看到足够的产品图像，您可以从给定的图像轻松识别您之前看过的任何产品。<br>当我们使用现有标记数据训练模型时，我们尝试将这种经验概念转移到模型，以便学习如何准确地区分训练数据集中存在的不同类别的数据。从这个意义上说，我们使用<strong>人工神经网络</strong>，它只不过是模仿人类大脑的实际运作方式。使用这些算法构建模型的知识稍后将在未标记的观察上进行测试。在我们的示例中，模型将基于其先前学习的内容标记输入图像，因此通常分配给该任务的名称<strong>监督学习 </strong>。<br>谈到性能，已经注意到，在大多数监督学习的情况下，训练有素的模型往往比人类提供更好的准确性。在这个实际任务中，您会惊讶地发现即使在困难的条件下（模糊的图像，质量差的图像等），我们的算法也非常优于人类。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1552903421984-d099ab43-1a63-4ccb-9833-783d03b242b8.png#align=left&amp;display=inline&amp;height=381&amp;name=1_OiM9iXjO4R8Vq_wCSfQZIg.png&amp;originHeight=420&amp;originWidth=823&amp;size=329410&amp;status=done&amp;width=746" alt="1_OiM9iXjO4R8Vq_wCSfQZIg.png"><br><br><br>我们有一个来自hackerearth的产品图像数据集可以<a href="https://he-s3.s3.amazonaws.com/media/hackathon/deep-learning-challenge-1/identify-the-objects/a0409a00-8-dataset_dp.zip" target="_blank" rel="noopener">在这里</a>下载。我们应该如何进行，为什么我们使用转学习？</p>
+<hr>
+<p><a name="c0139b0c"></a></p>
+<h3 id="为何转学？"><a href="#为何转学？" class="headerlink" title="为何转学？"></a><strong>为何转学？</strong></h3><p>当我们考虑对图像进行分类时，我们常常选择从头开始构建我们的模型以获得最佳匹配。这是一个选项，但构建自定义深度学习模型需要大量的计算资源和大量的培训数据。此外，已经存在的模型在分类来自各种类别的图像时表现得相当好。您可能听说过<a href="http://www.image-net.org/" target="_blank" rel="noopener">ImageNet</a>及其大视觉识别挑战。在这个计算机视觉挑战中，模型试图将大量图像分类为1000个类，如“斑马”，“达尔马提亚”和“洗碗机”。<a href="https://research.googleblog.com/2016/03/train-your-own-image-classifier-with.html" target="_blank" rel="noopener">Inception V3</a>是Google Brain Team为此而建立的模型。毋庸置疑，该模型表现非常出色。<br><br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1552903675886-eeb54f5e-2e91-4943-9a2c-afc8761e6979.png#align=left&amp;display=inline&amp;height=278&amp;name=1_OiM9iXjO4R8Vq_wCSfQZIg.png&amp;originHeight=373&amp;originWidth=1000&amp;size=109931&amp;status=done&amp;width=746" alt="1_OiM9iXjO4R8Vq_wCSfQZIg.png"></p>
+<p>那么，我们可以利用这个模型的存在来进行像现在这样的自定义图像分类任务吗？嗯，这个概念有一个名字：<a href="https://en.wikipedia.org/wiki/Transfer_learning" target="_blank" rel="noopener"><strong>转移学习</strong></a>。它可能不如从头开始的完整培训那么高效，但对于许多应用来说都是惊人的有效。通过修改现有的丰富深度学习模型，它可以显着减少训练数据和时间。<br><a name="d2db47fa"></a></p>
+<h3 id="为什么会这样"><a href="#为什么会这样" class="headerlink" title="为什么会这样"></a><strong>为什么会这样</strong></h3><p>在神经网络中，神经元被分层组织。不同的层可以对其输入执行不同类型的转换。信号可能在多次遍历各层之后从第一层（输入）传播到最后一层（输出）。作为最后一个隐藏层，“瓶颈”具有足够的汇总信息，以提供执行实际分类任务的下一层。<br>在<a href="https://github.com/wisdal/image-classification-transfer-learning/blob/master/retrain.py" target="_blank" rel="noopener">retrain.py</a>脚本中，我们删除旧的顶层，并在我们下载的图片上训练一个新的顶层。<br>我们的最后一层再训练可以用于新类的原因是，结果表明，区分ImageNet中所有1000个类所需的信息通常也可用于区分新类型的对象。<br>我们现在弄脏手！</p>
+<hr>
+<p><a name="81ef9f80"></a></p>
+<h3 id="第1步：预处理图像"><a href="#第1步：预处理图像" class="headerlink" title="第1步：预处理图像"></a><strong>第1步：预处理图像</strong></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">label_counts = train.label.value_counts（）</span><br><span class="line">plt.figure（figsize =（12,6））</span><br><span class="line">sns.barplot（label_counts.index，label_counts.values，alpha = 0.9）</span><br><span class="line">plt.xticks（rotation =&apos;vertical&apos;）</span><br><span class="line">plt.xlabel （&apos;Image Labels&apos;，fontsize = 12）</span><br><span class="line">plt.ylabel（&apos;Counts&apos;，fontsize = 12）</span><br><span class="line">plt.show（）</span><br></pre></td></tr></table></figure>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1552903798892-d0219c97-9167-48dc-a792-2f0f3a65e604.png#align=left&amp;display=inline&amp;height=419&amp;name=1_OiM9iXjO4R8Vq_wCSfQZIg.png&amp;originHeight=419&amp;originWidth=721&amp;size=14783&amp;status=done&amp;width=721" alt="1_OiM9iXjO4R8Vq_wCSfQZIg.png"><br>假设您已经下载了<a href="https://he-s3.s3.amazonaws.com/media/hackathon/deep-learning-challenge-1/identify-the-objects/a0409a00-8-dataset_dp.zip" target="_blank" rel="noopener">数据集</a>，您会发现它附带了一个我们需要正确设置的“train”文件夹。我们的目标是将每个图像放在代表其类别的子文件夹中。最后，我们应该有x个子文件夹，x是不同类别的数量。<br><br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1552904730643-3f6be018-2297-4b30-af9e-7dd590e648ac.png#align=left&amp;display=inline&amp;height=426&amp;name=1_OiM9iXjO4R8Vq_wCSfQZIg.png&amp;originHeight=481&amp;originWidth=843&amp;size=35297&amp;status=done&amp;width=746" alt="1_OiM9iXjO4R8Vq_wCSfQZIg.png"></p>
+<p>为了这个预处理目的，我为您提供了<a href="https://github.com/wisdal/image-classification-transfer-learning/blob/master/pre_process.ipynb" target="_blank" rel="noopener">pre_process.ipynb</a>笔记本。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">for img in tqdm(train.values):</span><br><span class="line">    filename=img[0]</span><br><span class="line">    label=img[1]</span><br><span class="line">    src=os.path.join(data_root,&apos;train_img&apos;,filename+&apos;.png&apos;)</span><br><span class="line">    label_dir=os.path.join(data_root,&apos;train&apos;,label)</span><br><span class="line">    dest=os.path.join(label_dir,filename+&apos;.jpg&apos;)</span><br><span class="line">    im=Image.open(src)</span><br><span class="line">    rgb_im=im.convert(&apos;RGB&apos;)</span><br><span class="line">    if not os.path.exists(label_dir):</span><br><span class="line">        os.makedirs(label_dir)</span><br><span class="line">    rgb_im.save(dest)  </span><br><span class="line">    if not os.path.exists(os.path.join(data_root,&apos;train2&apos;,label)):</span><br><span class="line">        os.makedirs(os.path.join(data_root,&apos;train2&apos;,label))</span><br><span class="line">    rgb_im.save(os.path.join(data_root,&apos;train2&apos;,label,filename+&apos;.jpg&apos;))</span><br></pre></td></tr></table></figure>
+<p>笔记本不仅仅是配置图像子文件夹，所以一定要检查它。<br>因为我们的数据集带有<strong>25个独特的标签，</strong>而我们<strong>只有3215个训练图像</strong>，我们需要增加数据以防止我们的模型过度拟合。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">datagen = ImageDataGenerator(</span><br><span class="line">        rotation_range=40,</span><br><span class="line">        width_shift_range=0.2,</span><br><span class="line">        height_shift_range=0.2,</span><br><span class="line">        shear_range=0.2,</span><br><span class="line">        zoom_range=0.2,</span><br><span class="line">        horizontal_flip=True,</span><br><span class="line">        fill_mode=&apos;nearest&apos;)</span><br><span class="line"></span><br><span class="line">class_size=600</span><br><span class="line"></span><br><span class="line">src_train_dir=os.path.join(data_root,&apos;train&apos;)</span><br><span class="line">dest_train_dir=os.path.join(data_root,&apos;train2&apos;)</span><br><span class="line">it=0</span><br><span class="line">for count in label_counts.values:</span><br><span class="line">    #nb of generations per image for this class label in order to make it size ~= class_size</span><br><span class="line">    ratio=math.floor(class_size/count)-1</span><br><span class="line">    print(count,count*(ratio+1))</span><br><span class="line">    dest_lab_dir=os.path.join(dest_train_dir,label_counts.index[it])</span><br><span class="line">    src_lab_dir=os.path.join(src_train_dir,label_counts.index[it])</span><br><span class="line">    if not os.path.exists(dest_lab_dir):</span><br><span class="line">        os.makedirs(dest_lab_dir)</span><br><span class="line">    for file in os.listdir(src_lab_dir):</span><br><span class="line">        img=load_img(os.path.join(src_lab_dir,file))</span><br><span class="line">        #img.save(os.path.join(dest_lab_dir,file))</span><br><span class="line">        x=img_to_array(img) </span><br><span class="line">        x=x.reshape((1,) + x.shape)</span><br><span class="line">        i=0</span><br><span class="line">        for batch in datagen.flow(x, batch_size=1,save_to_dir=dest_lab_dir, save_format=&apos;jpg&apos;):</span><br><span class="line">            i+=1</span><br><span class="line">            if i &gt; ratio:</span><br><span class="line">                break </span><br><span class="line">    it=it+1</span><br></pre></td></tr></table></figure>
+<p><a name="a57a7ff4"></a></p>
+<h3 id="第2步：重新训练瓶颈并微调模型"><a href="#第2步：重新训练瓶颈并微调模型" class="headerlink" title="第2步：重新训练瓶颈并微调模型"></a><strong>第2步：重新训练瓶颈并微调模型</strong></h3><p>由谷歌提供，我们立即开始使用retrain.py脚本。该脚本默认下载Inception V3 <a href="http://download.tensorflow.org/models/image/imagenet/inception-v3-2016-03-01.tar.gz" target="_blank" rel="noopener">预训练模型</a>。<br>重新训练脚本是我们算法的核心组件，也是使用从初始v3开始的转移学习的任何自定义图像分类任务的核心组件。它是由TensorFlow作者自己设计的，用于此特定目的（自定义图像分类）。<br><a name="6af7ed82"></a></p>
+<h4 id="脚本的作用："><a href="#脚本的作用：" class="headerlink" title="脚本的作用："></a>脚本的作用：</h4><p>它训练一个新的顶层（瓶颈），可以识别特定类别的图像。顶层接收每个图像的2048维向量作为输入。然后在该表示之上训练softmax层。假设softmax层包含N个标签，这对应于学习与学习的偏差和权重相对应的N + 2048 <em> N（或1001 </em> N）个模型参数。<br>该脚本完全可以自定义，这里是可配置的参数列表：</p>
+<ul>
+<li><strong>image_dir</strong>：标记图像文件夹的路径。幸运的是，我们在预处理步骤中正确设置了它。</li>
+<li><strong>output_graph，intermediate_output_graphs_dir，output_labels等</strong>：保存输出文件的位置。</li>
+<li><strong>失真功能：</strong>我的最爱。仅此功能就值得整整一段。您可能已经注意到我们的训练集中的图像是完美的（清晰，高质量，明确）但不幸的是，在生产中并非总是如此。该算法可能会在部署后遇到，模糊图像，昏暗的图像等。</li>
+</ul>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1552904870948-60b8d20b-8035-44db-b9b4-909606809a52.png#align=left&amp;display=inline&amp;height=617&amp;name=1_OiM9iXjO4R8Vq_wCSfQZIg.png&amp;originHeight=724&amp;originWidth=876&amp;size=572978&amp;status=done&amp;width=746" alt="1_OiM9iXjO4R8Vq_wCSfQZIg.png"></p>
+<p>我们的算法应该足够智能，以捕捉这些图像代表相同的事情，并不是那么明显（这只是一个小例子）</p>
+<ul>
+<li>[…]这就是失真特征的全部内容。我们有意地在训练过程中随机变换图像（大小，颜色，方向等）以使机器人习惯于不良图像，以避免在这种情况下失去预测准确性。</li>
+<li><strong>how_many_training_steps</strong>：时代数。</li>
+<li><strong>学习率</strong>。</li>
+<li>…</li>
+</ul>
+<p>您可以随意使用这些参数。<strong>学习率</strong>，<strong>nb。时期</strong>等是确定性参数。使用它们来微调您的模型并记住您可以随时使用TensorBoard来可视化您的训练结果。<br>您可以从一开始就获得约85％的准确度（零微调）。<br><a name="1fdd8e7a"></a></p>
+<h3 id="第3步：在看不见的记录上测试模型"><a href="#第3步：在看不见的记录上测试模型" class="headerlink" title="第3步：在看不见的记录上测试模型"></a>第3步：在看不见的记录上测试模型</h3><p>这一步没什么可疯狂的。只是一个小脚本来测试在上一步中构建和保存的模型，在我们数据集的“test”文件夹中的图像上。<br>查看<a href="https://github.com/wisdal/Image-classification-transfer-learning/blob/master/test.ipynb" target="_blank" rel="noopener">测试</a>笔记本，了解需要完成的工作。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">def run_graph(src, labels, input_layer_name, output_layer_name,</span><br><span class="line">              num_top_predictions):</span><br><span class="line">    with tf.Session() as sess:</span><br><span class="line">    i=0</span><br><span class="line">    #outfile=open(&apos;submit.txt&apos;,&apos;w&apos;)</span><br><span class="line">    #outfile.write(&apos;image_id, label \n&apos;)</span><br><span class="line">    for f in os.listdir(dest):</span><br><span class="line">        image_data=load_image(os.path.join(dest,test[i]+&apos;.jpg&apos;))</span><br><span class="line">        #image_data=load_image(os.path.join(src,f))</span><br><span class="line">        softmax_tensor = sess.graph.get_tensor_by_name(output_layer_name)</span><br><span class="line">        predictions, = sess.run(softmax_tensor, &#123;input_layer_name: image_data&#125;)</span><br><span class="line"></span><br><span class="line">        # Sort to show labels in order of confidence</span><br><span class="line">        top_k = predictions.argsort()[-num_top_predictions:][::-1]</span><br><span class="line">        for node_id in top_k:</span><br><span class="line">            human_string = labels[node_id]</span><br><span class="line">            score = predictions[node_id]</span><br><span class="line">            #print(&apos;%s (score = %.5f) %s , %s&apos; % (test[i], human_string))</span><br><span class="line">            print(&apos;%s, %s&apos; % (test[i], human_string))</span><br><span class="line">            #outfile.write(test[i]+&apos;, &apos;+human_string+&apos;\n&apos;)</span><br><span class="line">        i+=1</span><br><span class="line">    return 0</span><br></pre></td></tr></table></figure>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1552904928699-8cc5dd07-ebf5-4116-a3e3-5d4ece361238.png#align=left&amp;display=inline&amp;height=663&amp;name=1_OiM9iXjO4R8Vq_wCSfQZIg.png&amp;originHeight=663&amp;originWidth=664&amp;size=265517&amp;status=done&amp;width=664" alt="1_OiM9iXjO4R8Vq_wCSfQZIg.png"><br><a name="54bbba80"></a></p>
+<h3 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h3><p>而已！希望这篇文章对你有用。随意评论并提出改进建议。<br>我鼓励你试一试，并在评论中告诉我你能达到多少准确度。我很乐意收到你的来信。<br>正如我之前所说，你肯定能够获得<strong>超过85％</strong>的基准精度。剩下的就是微调！在我的情况下，我的最终模型在测试装置上的准确性让我感到震惊，考虑到需要的工作量很少。很好地理解事情的工作方式有时候会有所帮助:)。我认为该项目是任何想要尝试图像失真或超参数调整的人的良好基础。这就是为我增加了更多的百分点。<br>请随意查看我在<a href="https://github.com/wisdal/Image-classification-transfer-learning" target="_blank" rel="noopener">GitHub上的</a>代码。<br>资源：<a href="https://www.tensorflow.org/tutorials/image_recognition" target="_blank" rel="noopener">tensorflow.org/tutorials/image_recognition</a></p>
 
       
 
@@ -247,7 +440,7 @@
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2019/04/23/yuque/2019-04-23/">展开全文 >></a>
+          <a class="article-more-a" href="/2019/04/23/yuque/转移学习:重新启动Inception V3以进行自定义图像分类/">展开全文 >></a>
         </p>
       
 
@@ -277,95 +470,40 @@
 
 
   
-    <article id="post-yuque/PyTorch中用卷积神经网络进行传递学习" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-yuque/如何使您的MLflow项目易于共享和协作" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/22/yuque/PyTorch中用卷积神经网络进行传递学习/">PyTorch中用卷积神经网络进行传递学习</a>
+      <a class="article-title" href="/2019/04/23/yuque/如何使您的MLflow项目易于共享和协作/">如何使您的MLflow项目易于共享和协作</a>
     </h1>
   
 
         
-        <a href="/2019/04/22/yuque/PyTorch中用卷积神经网络进行传递学习/" class="archive-article-date">
-  	<time datetime="2019-04-22T08:14:06.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-22</time>
+        <a href="/2019/04/23/yuque/如何使您的MLflow项目易于共享和协作/" class="archive-article-date">
+  	<time datetime="2019-04-23T08:26:58.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-23</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1555920901097-06e57631-8c71-4acf-b75b-d4e0bfdc2164.jpeg#align=left&amp;display=inline&amp;height=498&amp;name=1_niPDCrom9F0lrdFa3LrBqA.jpeg&amp;originHeight=683&amp;originWidth=1024&amp;size=294870&amp;status=done&amp;width=746" alt="1_niPDCrom9F0lrdFa3LrBqA.jpeg"><br><a name="d3c9fb87"></a></p>
-<h2 id="如何使用预训练的卷积神经网络进行PyTorch对象识别"><a href="#如何使用预训练的卷积神经网络进行PyTorch对象识别" class="headerlink" title="如何使用预训练的卷积神经网络进行PyTorch对象识别"></a>如何使用预训练的卷积神经网络进行PyTorch对象识别</h2>
+        <p><a name="a0a97361"></a></p>
+<h3 id="TL-DR（适用于mlflow用户）"><a href="#TL-DR（适用于mlflow用户）" class="headerlink" title="TL; DR（适用于mlflow用户）"></a>TL; DR（适用于mlflow用户）</h3><p>在您的工作流程中更改此：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mlflow ui</span><br></pre></td></tr></table></figure>
+<p>对此：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">neptune mlflow</span><br></pre></td></tr></table></figure></p>
+<p>并进行你的mlflow实验：</p>
+<ul>
+<li>主持，</li>
+<li>备份，</li>
+<li>组织，</li>
+<li>易于与他人分享和讨论。</li>
+</ul>
+<p>分享您的工作可以和我分享此<a href="https://ui.neptune.ml/jakub-czakon/mlflow-integration/e/MLFLOW-10/output?path=artifacts%2F" target="_blank" rel="noopener"><strong>MLflow实验</strong></a>一样简单。<br>
         
-          <a class="article-more-a" href="/2019/04/22/yuque/PyTorch中用卷积神经网络进行传递学习/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/04/22/yuque/PyTorch中用卷积神经网络进行传递学习/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/PyTorch：了解自动微分的工作原理" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/22/yuque/PyTorch：了解自动微分的工作原理/">PyTorch：了解自动微分的工作原理</a>
-    </h1>
-  
-
-        
-        <a href="/2019/04/22/yuque/PyTorch：了解自动微分的工作原理/" class="archive-article-date">
-  	<time datetime="2019-04-22T07:58:48.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-22</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>当我开始编码神经网络时，我最终使用了我周围的其他人正在使用的东西。TensorFlow。<br>但最近，PyTorch已成为成为深度学习框架之王的主要竞争者。它真正引诱的是它的动态计算图范式。不要担心最后一行现在对你没有意义。到这篇文章结束时，它会。但请相信，它使调试神经网络更容易。<br>
-        
-          <a class="article-more-a" href="/2019/04/22/yuque/PyTorch：了解自动微分的工作原理/#more">more >></a>
+          <a class="article-more-a" href="/2019/04/23/yuque/如何使您的MLflow项目易于共享和协作/#more">more >></a>
         
       
 
@@ -378,7 +516,7 @@
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2019/04/22/yuque/PyTorch：了解自动微分的工作原理/">展开全文 >></a>
+          <a class="article-more-a" href="/2019/04/23/yuque/如何使您的MLflow项目易于共享和协作/">展开全文 >></a>
         </p>
       
 
@@ -408,161 +546,36 @@
 
 
   
-    <article id="post-yuque/梯度下降优化算法概述" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-yuque/建立你的第一个语音助手" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/22/yuque/梯度下降优化算法概述/">梯度下降优化算法概述</a>
+      <a class="article-title" href="/2019/04/23/yuque/建立你的第一个语音助手/">建立你的第一个语音助手</a>
     </h1>
   
 
         
-        <a href="/2019/04/22/yuque/梯度下降优化算法概述/" class="archive-article-date">
-  	<time datetime="2019-04-22T05:48:09.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-22</time>
+        <a href="/2019/04/23/yuque/建立你的第一个语音助手/" class="archive-article-date">
+  	<time datetime="2019-04-23T08:26:18.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-23</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>梯度下降优化算法综述</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1555912309128-8d8bc286-c5f6-48ca-88db-71827569cc6f.png#align=left&amp;display=inline&amp;height=687&amp;originHeight=572&amp;originWidth=1121&amp;size=0&amp;status=done&amp;width=1347" alt></p>
-<p>这篇文章探讨了许多最流行的基于梯度的优化算法实际上是有效的。<br>注意: 如果你正在寻找一篇评论论文，这篇博客文章也是关于 arXiv 的文章。<br>更新 09.02.2018: 添加 AMSGrad。<br>更新 24.11.2017: 本文中的大部分内容现在也可以作为幻灯片提供。<br>更新 15.06.2017: 添加了 AdaMax 和 Nadam 的衍生产品。<br>更新 21.0 6.16: 此帖子已发布至黑客新闻。讨论提供了一些相关工作和其他技术的有趣的指针。</p>
+        <blockquote>
+<p>如今，听到某人与不在场的人交谈并不奇怪。我们向Alexa询问天气情况并将恒温器的温度降低。然后，我们问Siri我们当天的日程安排是什么，并打电话给人们。我们现在比以往任何时候都使用语音和语音接口技术。我无法想象再做手动了！这真的是未来。</p>
+<ul>
+<li>福布斯</li>
+</ul>
+</blockquote>
+<p><a name="61a3ec66"></a></p>
+<h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>谁不想拥有一个总是倾听你的电话，预测你的每一个需要，并在必要时采取行动的助手？基于人工智能的语音助手，现在可以享受这种奢侈品。<br>语音助手有一些小包装，可以在听到您的命令后执行各种操作。他们可以打开灯，回答问题，播放音乐，下订单和做各种基于AI的东西。<br>语音助理不要与虚拟助手混淆，虚拟助手是远程工作的人，因此可以处理各种任务。相反，语音助理是基于技术的。随着语音助理变得更加强大，它们在个人和商业领域的实用性也将增长。<br>
         
-          <a class="article-more-a" href="/2019/04/22/yuque/梯度下降优化算法概述/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/04/22/yuque/梯度下降优化算法概述/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/爱最近邻算法的10个理由" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/22/yuque/爱最近邻算法的10个理由/">爱最近邻算法的10个理由</a>
-    </h1>
-  
-
-        
-        <a href="/2019/04/22/yuque/爱最近邻算法的10个理由/" class="archive-article-date">
-  	<time datetime="2019-04-22T05:31:38.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-22</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>我一见钟情就爱上了k-Nearest Neighbors算法，但这不是盲目的爱。我有很多理由对此感到生气。</p>
-        
-          <a class="article-more-a" href="/2019/04/22/yuque/爱最近邻算法的10个理由/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/04/22/yuque/爱最近邻算法的10个理由/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/了解XGBoost背后的数学的端到端指南" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/22/yuque/了解XGBoost背后的数学的端到端指南/">了解XGBoost背后的数学的端到端指南</a>
-    </h1>
-  
-
-        
-        <a href="/2019/04/22/yuque/了解XGBoost背后的数学的端到端指南/" class="archive-article-date">
-  	<time datetime="2019-04-22T03:54:55.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-22</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1555905325086-0831bee2-c1df-4c1e-8db7-b5226263f504.jpeg#align=left&amp;display=inline&amp;height=370&amp;name=0_k_mwDVMBdOTeSsJY.jpg&amp;originHeight=370&amp;originWidth=500&amp;size=50726&amp;status=done&amp;width=500" alt="0_k_mwDVMBdOTeSsJY.jpg"><br><br><br>
-        
-          <a class="article-more-a" href="/2019/04/22/yuque/了解XGBoost背后的数学的端到端指南/#more">more >></a>
+          <a class="article-more-a" href="/2019/04/23/yuque/建立你的第一个语音助手/#more">more >></a>
         
       
 
@@ -575,7 +588,7 @@
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2019/04/22/yuque/了解XGBoost背后的数学的端到端指南/">展开全文 >></a>
+          <a class="article-more-a" href="/2019/04/23/yuque/建立你的第一个语音助手/">展开全文 >></a>
         </p>
       
 
@@ -605,30 +618,29 @@
 
 
   
-    <article id="post-yuque/在机器学习预测中转换分类数据的可用性" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-yuque/使用Spark Structured Streaming，XGBoost和Scala进行实时预测" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/22/yuque/在机器学习预测中转换分类数据的可用性/">在机器学习预测中转换分类数据的可用性</a>
+      <a class="article-title" href="/2019/04/23/yuque/使用Spark Structured Streaming，XGBoost和Scala进行实时预测/">使用Spark Structured Streaming，XGBoost和Scala进行实时预测</a>
     </h1>
   
 
         
-        <a href="/2019/04/22/yuque/在机器学习预测中转换分类数据的可用性/" class="archive-article-date">
-  	<time datetime="2019-04-22T03:43:14.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-22</time>
+        <a href="/2019/04/23/yuque/使用Spark Structured Streaming，XGBoost和Scala进行实时预测/" class="archive-article-date">
+  	<time datetime="2019-04-23T08:25:35.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-23</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p><a name="2365d7f8"></a></p>
-<h2 id="使用邮政编码，纬度和经度的快速示例"><a href="#使用邮政编码，纬度和经度的快速示例" class="headerlink" title="使用邮政编码，纬度和经度的快速示例"></a>使用邮政编码，纬度和经度的快速示例</h2><p><em>作者：Kevin Velasco和Alex Shropshire</em><br>鉴于2014 - 2015年King County，WA House Sales的数据集（<a href="https://www.kaggle.com/harlfoxem/housesalesprediction" target="_blank" rel="noopener">https://www.kaggle.com/harlfoxem/housesalesprediction</a>），我们的任务是创建一个模型来准确预测房屋销售价格。在初步数据探索和清理之后，我们发现了大量可用信息来描述住宅的质量，但没有太多有用的信息来定位。<br>
+        <p>在本文中，我们将讨论构建完整的机器学习管道。第一部分将侧重于在标准批处理模式下训练二元分类器，在第二部分中我们将进行一些实时预测。我们将使用来自<a href="https://www.kaggle.com/c/titanic/data" target="_blank" rel="noopener">泰坦尼克号的</a>数据<a href="https://www.kaggle.com/c/titanic/data" target="_blank" rel="noopener">：机器学习灾难</a>中的众多Kaggle比赛之一。在开始之前，请知道您应该熟悉<a href="https://www.tutorialspoint.com/scala/index.htm" target="_blank" rel="noopener">Scala</a>，<a href="https://spark.apache.org/" target="_blank" rel="noopener">Apache Spark</a>和<a href="http://xgboost.readthedocs.io/en/latest/get_started/" target="_blank" rel="noopener">Xgboost</a>。所有源代码也将在<a href="https://github.com/BogdanCojocar/medium-articles/tree/master/titanic_spark" target="_blank" rel="noopener">Github上提供</a>。很酷，现在让我们开始吧！<br>
         
-          <a class="article-more-a" href="/2019/04/22/yuque/在机器学习预测中转换分类数据的可用性/#more">more >></a>
+          <a class="article-more-a" href="/2019/04/23/yuque/使用Spark Structured Streaming，XGBoost和Scala进行实时预测/#more">more >></a>
         
       
 
@@ -641,7 +653,7 @@
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2019/04/22/yuque/在机器学习预测中转换分类数据的可用性/">展开全文 >></a>
+          <a class="article-more-a" href="/2019/04/23/yuque/使用Spark Structured Streaming，XGBoost和Scala进行实时预测/">展开全文 >></a>
         </p>
       
 
@@ -671,31 +683,249 @@
 
 
   
-    <article id="post-yuque/决策树完整指南" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-yuque/PySpark ML和XGBoost完全集成在Kaggle Titanic数据集上进行了测试" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/22/yuque/决策树完整指南/">决策树完整指南</a>
+      <a class="article-title" href="/2019/04/23/yuque/PySpark ML和XGBoost完全集成在Kaggle Titanic数据集上进行了测试/">PySpark ML和XGBoost完全集成在Kaggle Titanic数据集上进行了测试</a>
     </h1>
   
 
         
-        <a href="/2019/04/22/yuque/决策树完整指南/" class="archive-article-date">
-  	<time datetime="2019-04-22T03:18:02.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-22</time>
+        <a href="/2019/04/23/yuque/PySpark ML和XGBoost完全集成在Kaggle Titanic数据集上进行了测试/" class="archive-article-date">
+  	<time datetime="2019-04-23T08:24:24.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-23</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p><a name="277a94b0"></a></p>
-<h2 id="关于机器学习中顶级算法需要了解的一切"><a href="#关于机器学习中顶级算法需要了解的一切" class="headerlink" title="关于机器学习中顶级算法需要了解的一切"></a>关于机器学习中顶级算法需要了解的一切</h2><p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1555903743398-56687233-944c-47b4-b126-72614121f06b.jpeg#align=left&amp;display=inline&amp;height=560&amp;name=0_8k5UmElJ_TyUwAcF.jpg&amp;originHeight=750&amp;originWidth=1000&amp;size=52269&amp;status=done&amp;width=746" alt="0_8k5UmElJ_TyUwAcF.jpg"><br>一开始，学习机器学习（ML）可能是令人生畏的。像“Gradient Descent”，“Latent Dirichlet Allocation”或“Convolutional Layer”这样的术语可能会吓到很多人。但是有一些友好的方式进入该学科，我认为从决策树开始是一个明智的决定。</p>
-<p>
+        <p>在本教程中，我们将讨论使用标准机器学习管道集成PySpark和XGBoost。我们将使用来自<a href="https://www.kaggle.com/c/titanic/data" target="_blank" rel="noopener">泰坦尼克号的</a>数据<a href="https://www.kaggle.com/c/titanic/data" target="_blank" rel="noopener">：机器学习灾难</a>中的众多Kaggle比赛之一。在开始之前，请知道您应该熟悉<a href="https://spark.apache.org/" target="_blank" rel="noopener">Apache Spark</a>和<a href="http://xgboost.readthedocs.io/en/latest/get_started/" target="_blank" rel="noopener">Xgboost</a>以及Python。本教程中使用的代码可以在<a href="https://github.com/BogdanCojocar/medium-articles/blob/master/titanic_xgboost/titanic_xgboost.ipynb" target="_blank" rel="noopener">github</a>上的Jupyther笔记本中找到。<br><a name="fa501ee4"></a></p>
+<h4 id="第1步：下载或构建XGBoost-jar"><a href="#第1步：下载或构建XGBoost-jar" class="headerlink" title="第1步：下载或构建XGBoost jar"></a>第1步：下载或构建XGBoost jar</h4><p>python代码需要两个scala jar依赖项才能工作。您可以直接从maven下载它们：</p>
+<ul>
+<li><a href="https://mvnrepository.com/artifact/ml.dmlc/xgboost4j/0.72" target="_blank" rel="noopener">xgboost4j</a></li>
+<li><a href="https://mvnrepository.com/artifact/ml.dmlc/xgboost4j-spark/0.72" target="_blank" rel="noopener">xgboost4j火花</a></li>
+</ul>
+<p>如果您希望自己构建它们，可以从我之前的<a href="https://medium.com/@bogdan.cojocar/how-to-make-xgboost-available-in-the-spark-notebook-de14e425c948" target="_blank" rel="noopener">教程中</a>找到如何进行构建。<br><a name="059757b0"></a></p>
+<h4 id="第2步：下载XGBoost-python包装器"><a href="#第2步：下载XGBoost-python包装器" class="headerlink" title="第2步：下载XGBoost python包装器"></a>第2步：下载XGBoost python包装器</h4><p>您可以从<a href="https://github.com/dmlc/xgboost/files/2161553/sparkxgb.zip" target="_blank" rel="noopener">此处</a>下载PySpark XGBoost代码。这是我们要编写的部分和XGBoost scala实现之间的接口。我们将在本教程后面的代码中看到它如何集成。<br><a name="f8c06a61"></a></p>
+<h4 id="第3步：启动一个新的Jupyter笔记本"><a href="#第3步：启动一个新的Jupyter笔记本" class="headerlink" title="第3步：启动一个新的Jupyter笔记本"></a>第3步：启动一个新的Jupyter笔记本</h4><p>我们将开始一个新的笔记本，以便能够编写我们的代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jupyter notebook</span><br></pre></td></tr></table></figure>
+<p><a name="cdde53ac"></a></p>
+<h4 id="第4步：将自定义XGBoost-jar添加到Spark应用程序"><a href="#第4步：将自定义XGBoost-jar添加到Spark应用程序" class="headerlink" title="第4步：将自定义XGBoost jar添加到Spark应用程序"></a>第4步：将自定义XGBoost jar添加到Spark应用程序</h4><p>在开始Spark之前，我们需要添加我们之前下载的jar。我们可以使用<code>--jars</code>标志来做到这一点：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">import os </span><br><span class="line">os.environ [&apos;PYSPARK_SUBMIT_ARGS&apos;] =&apos; -  jars xgboost4j-spark-0.72.jar，xgboost4j-0.72.jar pyspark-shell&apos;</span><br></pre></td></tr></table></figure>
+<p><a name="13d9ee40"></a></p>
+<h4 id="第5步：将PySpark集成到Jupyther笔记本中"><a href="#第5步：将PySpark集成到Jupyther笔记本中" class="headerlink" title="第5步：将PySpark集成到Jupyther笔记本中"></a>第5步：将PySpark集成到Jupyther笔记本中</h4><p>使PySpark可用的最简单方法是使用该<code>[findspark](https://github.com/minrk/findspark)</code>软件包：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">import findspark </span><br><span class="line">findspark.init（）</span><br></pre></td></tr></table></figure>
+<p><a name="dd505c79"></a></p>
+<h4 id="第6步：启动spark会话"><a href="#第6步：启动spark会话" class="headerlink" title="第6步：启动spark会话"></a>第6步：启动spark会话</h4><p>我们现在准备开始火花会议。我们正在创建一个将在本地运行的spark应用程序，并将使用与使用的核心一样多的线程<code>local[*]</code> ：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">spark = SparkSession\</span><br><span class="line">        .builder\</span><br><span class="line">        .appName(&quot;PySpark XGBOOST Titanic&quot;)\</span><br><span class="line">        .master(&quot;local[*]&quot;)\</span><br><span class="line">        .getOrCreate()</span><br></pre></td></tr></table></figure>
+<p><a name="47ff7d29"></a></p>
+<h4 id="第7步：添加PySpark-XGBoost包装器代码"><a href="#第7步：添加PySpark-XGBoost包装器代码" class="headerlink" title="第7步：添加PySpark XGBoost包装器代码"></a>第7步：添加PySpark XGBoost包装器代码</h4><p>正如我们现在有了spark会话，我们可以添加先前下载的包装器代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">spark.sparkContext.addPyFile(&quot;YOUR_PATH/sparkxgb.zip&quot;)</span><br></pre></td></tr></table></figure>
+<p><a name="7f1a0f62"></a></p>
+<h4 id="第8步：定义架构"><a href="#第8步：定义架构" class="headerlink" title="第8步：定义架构"></a>第8步：定义架构</h4><p>接下来，我们定义从csv读取的数据的模式。这通常比让火花推断模式更好，因为它消耗的资源更少，我们可以完全控制字段。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">schema = StructType(</span><br><span class="line">  [StructField(&quot;PassengerId&quot;, DoubleType()),</span><br><span class="line">    StructField(&quot;Survival&quot;, DoubleType()),</span><br><span class="line">    StructField(&quot;Pclass&quot;, DoubleType()),</span><br><span class="line">    StructField(&quot;Name&quot;, StringType()),</span><br><span class="line">    StructField(&quot;Sex&quot;, StringType()),</span><br><span class="line">    StructField(&quot;Age&quot;, DoubleType()),</span><br><span class="line">    StructField(&quot;SibSp&quot;, DoubleType()),</span><br><span class="line">    StructField(&quot;Parch&quot;, DoubleType()),</span><br><span class="line">    StructField(&quot;Ticket&quot;, StringType()),</span><br><span class="line">    StructField(&quot;Fare&quot;, DoubleType()),</span><br><span class="line">    StructField(&quot;Cabin&quot;, StringType()),</span><br><span class="line">    StructField(&quot;Embarked&quot;, StringType())</span><br><span class="line">  ])</span><br></pre></td></tr></table></figure>
+<p><a name="44ee9a9a"></a></p>
+<h4 id="步骤9：将csv数据读入数据帧"><a href="#步骤9：将csv数据读入数据帧" class="headerlink" title="步骤9：将csv数据读入数据帧"></a>步骤9：将csv数据读入数据帧</h4><p>我们将csv读入a <code>DataFrame</code>，确保我们提到我们有一个标题，我们也<code>null</code>用0 替换值：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">df_raw = spark\</span><br><span class="line">  .read\</span><br><span class="line">  .option(&quot;header&quot;, &quot;true&quot;)\</span><br><span class="line">  .schema(schema)\</span><br><span class="line">  .csv(&quot;YOUR_PATH/train.csv&quot;)</span><br><span class="line">df = df_raw.na.fill(0)</span><br></pre></td></tr></table></figure>
+<p><a name="f50eacdc"></a></p>
+<h4 id="步骤10：C-将标称值转换为数字"><a href="#步骤10：C-将标称值转换为数字" class="headerlink" title="步骤10：C 将标称值转换为数字"></a>步骤10：C <strong>将标称值转换为数字</strong></h4><p>在浏览此步骤的代码之前，让我们简要介绍一些Spark ML概念。他们介绍了ML管道的概念，它是一组构建在其上的高级API <code>DataFrames</code>，可以更轻松地将多个算法组合到一个流程中。管道的主要元素是<code>Transformer</code>和<code>Estimator</code>。第一个可以表示可以将a <code>DataFrame</code>转换为另一个<code>DataFrame</code>的算法，而后者是可以适合a <code>DataFrame</code>来生成a 的算法<code>Transformer</code> 。<br>为了将名义值转换为数字值，我们需要<code>Transformer</code>为每列定义一个：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">sexIndexer = StringIndexer()\</span><br><span class="line">  .setInputCol(&quot;Sex&quot;)\</span><br><span class="line">  .setOutputCol(&quot;SexIndex&quot;)\</span><br><span class="line">  .setHandleInvalid(&quot;keep&quot;)</span><br><span class="line">    </span><br><span class="line">cabinIndexer = StringIndexer()\</span><br><span class="line">  .setInputCol(&quot;Cabin&quot;)\</span><br><span class="line">  .setOutputCol(&quot;CabinIndex&quot;)\</span><br><span class="line">  .setHandleInvalid(&quot;keep&quot;)</span><br><span class="line">    </span><br><span class="line">embarkedIndexer = StringIndexer()\</span><br><span class="line">  .setInputCol(&quot;Embarked&quot;)\</span><br><span class="line">  .setOutputCol(&quot;EmbarkedIndex&quot;)\</span><br><span class="line">  .setHandleInvalid(&quot;keep&quot;)</span><br></pre></td></tr></table></figure>
+<p>我们正在使用它<code>StringIndexer</code>来转换价值观。对于每个<code>Transformer</code>我们定义的输入列和输出列将包含修改后的值。<br><a name="fd3cbfb0"></a></p>
+<h4 id="步骤11：将列组合成特征向量"><a href="#步骤11：将列组合成特征向量" class="headerlink" title="步骤11：将列组合成特征向量"></a>步骤11：<strong>将列组合成特征向量</strong></h4><p>我们将使用另一个<code>Transformer</code>将XGBoost分类中使用的列组合<code>Estimator</code>成一个向量：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">vectorAssembler = VectorAssembler()\</span><br><span class="line">  .setInputCols([&quot;Pclass&quot;, &quot;SexIndex&quot;, &quot;Age&quot;, &quot;SibSp&quot;, &quot;Parch&quot;, &quot;Fare&quot;, &quot;CabinIndex&quot;, &quot;EmbarkedIndex&quot;])\</span><br><span class="line">  .setOutputCol(&quot;features&quot;)</span><br></pre></td></tr></table></figure>
+<p><a name="220de1c1"></a></p>
+<h4 id="第12步：定义XGBoostEstimator"><a href="#第12步：定义XGBoostEstimator" class="headerlink" title="第12步：定义XGBoostEstimator"></a>第12步：定义XGBoostEstimator</h4><p>在这一步中，我们定义了<code>Estimator</code>将产生模型的东西。这里使用的大多数参数都是默认的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">xgboost = XGBoostEstimator(</span><br><span class="line">    featuresCol=&quot;features&quot;, </span><br><span class="line">    labelCol=&quot;Survival&quot;, </span><br><span class="line">    predictionCol=&quot;prediction&quot;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>我们只定义<code>feature, label</code>（必须匹配来自的列<code>DataFrame</code>）和<code>prediction</code>包含分类器输出的新列。<br><a name="07d0e7ba"></a></p>
+<h4 id="步骤13：建立管道和分类器"><a href="#步骤13：建立管道和分类器" class="headerlink" title="步骤13：建立管道和分类器"></a>步骤13：<strong>建立管道和分类器</strong></h4><p>在我们创建了所有单独的步骤之后，我们可以定义实际的管道和操作的顺序：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pipeline = Pipeline().setStages([sexIndexer, cabinIndexer, embarkedIndexer, vectorAssembler, xgboost])</span><br></pre></td></tr></table></figure>
+<p>输入<code>DataFrame</code>将被多次转换，最终将生成使用我们的数据训练的模型。<br><a name="4e3e3575"></a></p>
+<h4 id="步骤14：训练模型并预测新的测试数据"><a href="#步骤14：训练模型并预测新的测试数据" class="headerlink" title="步骤14：训练模型并预测新的测试数据"></a>步骤14：训练模型并预测新的测试数据</h4><p>我们首先将数据分成火车和测试，然后我们将模型与火车数据拟合，最后我们看到我们为每位乘客获得的预测：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">trainDF, testDF = df.randomSplit([0.8, 0.2], seed=24)</span><br><span class="line">model = pipeline.fit(trainDF)</span><br><span class="line">model.transform(testDF).select(col(&quot;PassengerId&quot;), col(&quot;prediction&quot;)).show()</span><br></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/04/23/yuque/PySpark ML和XGBoost完全集成在Kaggle Titanic数据集上进行了测试/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
         
-          <a class="article-more-a" href="/2019/04/22/yuque/决策树完整指南/#more">more >></a>
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/使用MLflow赋予Spark功能" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/04/23/yuque/使用MLflow赋予Spark功能/">使用MLflow赋予Spark功能</a>
+    </h1>
+  
+
+        
+        <a href="/2019/04/23/yuque/使用MLflow赋予Spark功能/" class="archive-article-date">
+  	<time datetime="2019-04-23T08:23:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-23</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>这篇文章旨在介绍我们使用<a href="https://mlflow.org/" target="_blank" rel="noopener"><strong>MLflow</strong></a>的初步经验。<br>我们将通过记录所有探索性迭代，开始使用自己的<a href="https://mlflow.org/docs/latest/tracking.html" target="_blank" rel="noopener">跟踪服务器</a>发现MLflow 。然后，我们将展示使用UDF将Spark与MLflow相关联的经验。<br><a name="50f198f0"></a></p>
+<h4 id="上下文"><a href="#上下文" class="headerlink" title="上下文"></a>上下文</h4><p>我们利用机器学习和人工智能的力量，使人们能够控制自己的健康和福祉。机器学习模型因此是我们正在开发的数据产品的核心，这就是为什么MLFLow，一个涵盖ML生命周期所有方面的开源平台引起了我们的注意。<br><a name="MLflow"></a></p>
+<h3 id="MLflow"><a href="#MLflow" class="headerlink" title="MLflow"></a>MLflow</h3><p>MLflow的主要目标是在ML之上提供额外的层，允许数据科学家与几乎任何机器学习库（<a href="https://github.com/h2oai" target="_blank" rel="noopener"><em>h2o，</em></a><a href="https://keras.io/" target="_blank" rel="noopener"><em>keras，</em></a><a href="http://mleap-docs.combust.ml/" target="_blank" rel="noopener"><em>mleap，</em></a><a href="https://pytorch.org/" target="_blank" rel="noopener"><em>pytorch，</em></a><a href="http://scikit-learn.org/stable/" target="_blank" rel="noopener"><em>sklearn和</em></a><a href="https://www.tensorflow.org/" target="_blank" rel="noopener"><em>tensorflow</em></a>）一起工作，同时，它将他们的工作带到另一个层次。<br>MLflow提供三个组件：</p>
+<ul>
+<li><a href="https://mlflow.org/docs/latest/tracking.html" target="_blank" rel="noopener"><strong>跟踪</strong></a>  - 记录和查询实验：代码，数据，配置和结果。跟踪建模进度非常有用。</li>
+<li><a href="https://mlflow.org/docs/latest/projects.html" target="_blank" rel="noopener"><strong>项目</strong></a>  - 在任何平台（<strong>_即_</strong> <a href="https://aws.amazon.com/sagemaker" target="_blank" rel="noopener"><em>Sagemaker</em></a>）上可重复运行的包装格式。</li>
+<li><a href="https://mlflow.org/docs/latest/models.html" target="_blank" rel="noopener"><strong>模型</strong></a>  - 将模型发送到各种部署工具的通用格式。<blockquote>
+<p><strong>MLflow</strong>（目前处于alpha版本）是一个管理ML生命周期的开源平台，包括实验，可重复性和部署。<br><a name="181d871e"></a></p>
+</blockquote>
+<h4 id="设置MLflow"><a href="#设置MLflow" class="headerlink" title="设置MLflow"></a>设置MLflow</h4>为了使用MLflow，我们首先需要设置所有Python环境以使用MLflow，我们将使用<a href="https://github.com/pyenv/pyenv" target="_blank" rel="noopener">PyEnv </a>_（_<a href="https://gist.github.com/chris-zen/9e61db6924bd37fbe414f648614ca4c5" target="_blank" rel="noopener"><em>在Mac中</em></a><strong>_设置_</strong>_ → _<a href="https://gist.github.com/chris-zen/9e61db6924bd37fbe414f648614ca4c5" target="_blank" rel="noopener"><em>Python）</em></a>。这将提供一个虚拟环境，我们可以在其中安装运行它所需的所有库。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">pyenv install 3.7.0</span><br><span class="line">pyenv global 3.7.0 # Use Python 3.7</span><br><span class="line">mkvirtualenv mlflow # Create a Virtual Env with Python 3.7</span><br><span class="line">workon mlflow</span><br></pre></td></tr></table></figure>
+<p>安装所需的库</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">pip install mlflow==0.7.0 \</span><br><span class="line">            Cython==0.29 \ </span><br><span class="line">            numpy==1.14.5 \</span><br><span class="line">            pandas==0.23.4 \</span><br><span class="line">            pyarrow==0.11.0</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><strong>注意：</strong>我们使用PyArrow将模型作为UDF启动。PyArrow和Numpy版本需要修复，因为最新的版本之间存在一些冲突。</p>
+</blockquote>
+<p><a name="9a02c96e"></a></p>
+<h4 id="启动跟踪UI"><a href="#启动跟踪UI" class="headerlink" title="启动跟踪UI"></a>启动跟踪UI</h4><p>MLflow Tracking允许我们使用<a href="https://mlflow.org/docs/latest/python_api/index.html#python-api" target="_blank" rel="noopener">Python</a>和<a href="https://mlflow.org/docs/latest/rest-api.html#rest-api" target="_blank" rel="noopener">REST</a> API 记录和查询实验。此外，还可以定义我们将存储模型工件的位置（<em>Localhost，</em><a href="https://mlflow.org/docs/latest/tracking.html#amazon-s3" target="_blank" rel="noopener"><em>Amazon S3</em></a>_，_<a href="https://mlflow.org/docs/latest/tracking.html#azure-blob-storage" target="_blank" rel="noopener"><em>Azure Blob存储</em></a>_，_<a href="https://mlflow.org/docs/latest/tracking.html#google-cloud-storage" target="_blank" rel="noopener"><em>Google云存储</em></a>_或_<a href="https://mlflow.org/docs/latest/tracking.html#sftp-server" target="_blank" rel="noopener"><em>SFTP服务器</em></a>）。由于我们使用AWS ，因此我们将尝试将<strong>S3</strong>作为工件存储。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># Running a Tracking Server</span><br><span class="line">mlflow server \</span><br><span class="line">    --file-store /tmp/mlflow/fileStore \</span><br><span class="line">    --default-artifact-root s3://&lt;bucket&gt;/mlflow/artifacts/ \</span><br><span class="line">    --host localhost</span><br><span class="line">    --port 5000</span><br></pre></td></tr></table></figure>
+<p>MLflow建议使用<strong>持久性文件存储</strong>。这<code>file-store</code>是服务器存储运行和实验元数据的位置。因此，在运行服务器时，请确保这指向持久文件系统位置。在这里，我们只是<code>/tmp</code>用于实验。<br>请记住，如果我们想使用mlflow服务器运行旧实验，它们必须存在于文件存储中。但是，如果没有它们，我们仍然可以在UDF中使用它们，因为只需要模型路径。</p>
+<blockquote>
+<p><strong><em>注意：</em></strong>请记住跟踪UI，模型客户端必须能够访问工件位置。这意味着，无论跟踪UI是否在EC2实例上，如果我们在本地运行MLflow，我们的机器应该可以直接访问S3来编写工件模型。</p>
+</blockquote>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1552639247139-4605b9cb-f981-43fc-a969-9a2155d75965.png#align=left&amp;display=inline&amp;height=239&amp;name=1_z6iObWdxXOtcIj_cUk2gag.png&amp;originHeight=642&amp;originWidth=2000&amp;size=114273&amp;status=done&amp;width=746" alt="1_z6iObWdxXOtcIj_cUk2gag.png"><br><a name="7d519d5b"></a></p>
+<h4 id="运行模型"><a href="#运行模型" class="headerlink" title="运行模型"></a>运行模型</h4><p>跟踪服务器运行后，我们可以开始训练我们的模型。<br>作为一个例子，我们将使用<a href="https://github.com/mlflow/mlflow/blob/master/examples/sklearn_elasticnet_wine/train.py" target="_blank" rel="noopener"><strong><em>MLflow Sklearn示例中</em></strong></a>提供的wine示例的修改。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">MLFLOW_TRACKING_URI=http://localhost:5000 python wine_quality.py \</span><br><span class="line">  --alpha 0.9</span><br><span class="line">  --l1_ration 0.5</span><br><span class="line">  --wine_file ./data/winequality-red.csv</span><br></pre></td></tr></table></figure>
+<p>如前所述，MLflow允许记录模型的参数，度量和工件，因此我们可以跟踪这些在不同迭代中如何演变。此功能非常有用，因为我们可以通过检查Tracking Server来重现我们的最佳模型，或者验证哪些代码正在执行所需的迭代，因为<strong>它记录</strong><em>（免费）</em><strong>git哈希提交</strong>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">with mlflow.start_run():</span><br><span class="line"></span><br><span class="line">    ... model ...</span><br><span class="line"></span><br><span class="line">    mlflow.log_param(&quot;source&quot;, wine_path)</span><br><span class="line">    mlflow.log_param(&quot;alpha&quot;, alpha)</span><br><span class="line">    mlflow.log_param(&quot;l1_ratio&quot;, l1_ratio)</span><br><span class="line"></span><br><span class="line">    mlflow.log_metric(&quot;rmse&quot;, rmse)</span><br><span class="line">    mlflow.log_metric(&quot;r2&quot;, r2)</span><br><span class="line">    mlflow.log_metric(&quot;mae&quot;, mae)</span><br><span class="line"></span><br><span class="line">    mlflow.set_tag(&apos;domain&apos;, &apos;wine&apos;)</span><br><span class="line">    mlflow.set_tag(&apos;predict&apos;, &apos;quality&apos;)</span><br><span class="line">    mlflow.sklearn.log_model(lr, &quot;model&quot;)</span><br></pre></td></tr></table></figure>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1552639366867-dba4caa9-6ea2-4ca8-b59a-737bbfa774fc.png#align=left&amp;display=inline&amp;height=365&amp;name=1_3soEGGuFumQXV5LSZNCnrA.png&amp;originHeight=489&amp;originWidth=1000&amp;size=130330&amp;status=done&amp;width=746" alt="1_3soEGGuFumQXV5LSZNCnrA.png"><br><a name="146d11ee"></a></p>
+<h4 id="服务模型"><a href="#服务模型" class="headerlink" title="服务模型"></a>服务模型</h4><p> 使用“ &gt; <strong><em>mlflow服务器</em></strong>&gt; _ ”_启动的&gt; <strong>MLflow跟踪服务器</strong>还托管REST API，用于跟踪运行并将数据写入本地文件系统。您可以使用“ &gt; <strong>_MLFLOW_TRACKING_URI_</strong>&gt; _”<em>环境变量指定跟踪服务器URI，MLflow跟踪API会自动与该URI处的跟踪服务器通信，以创建/获取运行信息，记录指标等。<br>**</em>参考：<em>**[</em>文档//运行跟踪服务器<em>](<a href="https://mlflow.org/docs/latest/tracking.html#running-a-tracking-server" target="_blank" rel="noopener">https://mlflow.org/docs/latest/tracking.html#running-a-tracking-server</a>)<br>为了提供模型，我们只需要运行一个<strong>跟踪服务器</strong>（**</em>参见_<strong><em>启动UI</em>）和一个</strong>模型运行ID**。<br><br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1552639490766-7db77f84-79f9-486e-963c-c574d85d438e.png#align=left&amp;display=inline&amp;height=120&amp;name=1_vBVbyT3F_YFjjfJuSDVrUA.png&amp;originHeight=161&amp;originWidth=1000&amp;size=81585&amp;status=done&amp;width=746" alt="1_vBVbyT3F_YFjjfJuSDVrUA.png"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"># Serve a sklearn model through 127.0.0.0:5005</span><br><span class="line">MLFLOW_TRACKING_URI=http://0.0.0.0:5000 mlflow sklearn serve \</span><br><span class="line">  --port 5005  \</span><br><span class="line">  --run_id 0f8691808e914d1087cf097a08730f17 \</span><br><span class="line">  --model-path model</span><br></pre></td></tr></table></figure>
+<p>要使用<strong>MLflow服务功能</strong>为模型提供<strong>服务，</strong>我们需要访问跟踪UI，因此只需指定即可检索模型信息<code>--run_id</code> 。<br>一旦跟踪服务器为模型提供服务，我们就可以查询新的模型端点。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"># Query Tracking Server Endpoint</span><br><span class="line">curl -X POST \</span><br><span class="line">  http://127.0.0.1:5005/invocations \</span><br><span class="line">  -H &apos;Content-Type: application/json&apos; \</span><br><span class="line">  -d &apos;[</span><br><span class="line">	&#123;</span><br><span class="line">		&quot;fixed acidity&quot;: 3.42, </span><br><span class="line">		&quot;volatile acidity&quot;: 1.66, </span><br><span class="line">		&quot;citric acid&quot;: 0.48, </span><br><span class="line">		&quot;residual sugar&quot;: 4.2, </span><br><span class="line">		&quot;chloridessssss&quot;: 0.229, </span><br><span class="line">		&quot;free sulfur dsioxide&quot;: 19, </span><br><span class="line">		&quot;total sulfur dioxide&quot;: 25, </span><br><span class="line">		&quot;density&quot;: 1.98, </span><br><span class="line">		&quot;pH&quot;: 5.33, </span><br><span class="line">		&quot;sulphates&quot;: 4.39, </span><br><span class="line">		&quot;alcohol&quot;: 10.8</span><br><span class="line">	&#125;</span><br><span class="line">]&apos;</span><br><span class="line"></span><br><span class="line">&gt; &#123;&quot;predictions&quot;: [5.825055635303461]&#125;</span><br></pre></td></tr></table></figure>
+<p><a name="e475db1c"></a></p>
+<h3 id="从Spark运行模型"><a href="#从Spark运行模型" class="headerlink" title="从Spark运行模型"></a>从Spark运行模型</h3><p>虽然通过训练模型和使用服务功能（<strong><em>ref：</em></strong><a href="https://mlflow.org/docs/latest/models.html#local" target="_blank" rel="noopener"><em>mlflow // docs // models #local）</em></a>实时为模型提供服务非常强大，但使用Spark（批量或流式传输）应用模型更是如此强大，因为它加入了分配力量。<a href="https://mlflow.org/docs/latest/models.html#local" target="_blank" rel="noopener"></a><br>想象一下，进行离线训练，然后以更简单的方式将输出模型应用于所有数据。这就是Spark和MLflow共同完美的地方。<br><a name="92cfd913"></a></p>
+<h4 id="安装PySpark-Jupyter-Spark"><a href="#安装PySpark-Jupyter-Spark" class="headerlink" title="安装PySpark + Jupyter + Spark"></a>安装PySpark + Jupyter + Spark</h4><p><strong><em>参考：</em></strong><a href="https://blog.sicara.com/get-started-pyspark-jupyter-guide-tutorial-ae2fe84f594f" target="_blank" rel="noopener"><em>PySpark开始 - Jupyter</em></a><br>展示我们如何将MLflow模型应用于Spark数据帧。我们需要使用PySpark设置Jupyter笔记本。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">首先下载最新的稳定Apache Spark（当前版本2.3.2）。</span><br><span class="line"></span><br><span class="line">cd ~/Downloads/</span><br><span class="line">tar -xzf spark-2.3.2-bin-hadoop2.7.tgz</span><br><span class="line">mv ~/Downloads/spark-2.3.2-bin-hadoop2.7 ~/</span><br><span class="line">ln -s ~/spark-2.3.2-bin-hadoop2.7 ~/spark̀</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">在我们的virtualEnv中安装PySpark和Jupyter</span><br><span class="line"></span><br><span class="line">pip install pyspark jupyter</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">设置Environmnet变量</span><br><span class="line"></span><br><span class="line">export SPARK_HOME=~/spark</span><br><span class="line">export PATH=$SPARK_HOME/bin:$PATH</span><br><span class="line">export PYSPARK_DRIVER_PYTHON=jupyter</span><br><span class="line">export PYSPARK_DRIVER_PYTHON_OPTS=&quot;notebook --notebook-dir=$&#123;HOME&#125;/Projects/notebooks&quot;</span><br><span class="line">通过定义notebook-dir，我们将能够将我们的笔记本存储和保存在所需的文件夹中。</span><br></pre></td></tr></table></figure>
+<p><a name="f6e12a2e"></a></p>
+<h4 id="从PySpark启动Jupyter"><a href="#从PySpark启动Jupyter" class="headerlink" title="从PySpark启动Jupyter"></a>从PySpark启动Jupyter</h4><p>由于我们将Jupyter配置为<strong><em>PySpark驱动程序</em></strong>，现在我们可以使用附加到我们笔记本的PySpark上下文启动Jupyter。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">(mlflow) afranzi:~$ pyspark</span><br><span class="line">[I 19:05:01.572 NotebookApp] sparkmagic extension enabled!</span><br><span class="line">[I 19:05:01.573 NotebookApp] Serving notebooks from local directory: /Users/afranzi/Projects/notebooks</span><br><span class="line">[I 19:05:01.573 NotebookApp] The Jupyter Notebook is running at:</span><br><span class="line">[I 19:05:01.573 NotebookApp] http://localhost:8888/?token=c06252daa6a12cfdd33c1d2e96c8d3b19d90e9f6fc171745</span><br><span class="line">[I 19:05:01.573 NotebookApp] Use Control-C to stop this server and shut down all kernels (twice to skip confirmation).</span><br><span class="line">[C 19:05:01.574 NotebookApp]</span><br><span class="line"></span><br><span class="line">    Copy/paste this URL into your browser when you connect for the first time,</span><br><span class="line">    to login with a token:</span><br><span class="line">        http://localhost:8888/?token=c06252daa6a12cfdd33c1d2e96c8d3b19d90e9f6fc171745</span><br></pre></td></tr></table></figure>
+<p>如上所示，MLflow提供了将模型工件记录到S3的功能。因此，一旦我们选择了一个模型，我们就可以使用该<code>mlflow.pyfunc</code>模块将其作为UDF导入。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">import mlflow.pyfunc</span><br><span class="line"></span><br><span class="line">model_path = &apos;s3://&lt;bucket&gt;/mlflow/artifacts/1/0f8691808e914d1087cf097a08730f17/artifacts/model&apos;</span><br><span class="line">wine_path = &apos;/Users/afranzi/Projects/data/winequality-red.csv&apos;</span><br><span class="line">wine_udf = mlflow.pyfunc.spark_udf(spark, model_path)</span><br><span class="line"></span><br><span class="line">df = spark.read.format(&quot;csv&quot;).option(&quot;header&quot;, &quot;true&quot;).option(&apos;delimiter&apos;, &apos;;&apos;).load(wine_path)</span><br><span class="line">columns = [ &quot;fixed acidity&quot;, &quot;volatile acidity&quot;, &quot;citric acid&quot;,</span><br><span class="line">            &quot;residual sugar&quot;, &quot;chlorides&quot;, &quot;free sulfur dioxide&quot;,</span><br><span class="line">            &quot;total sulfur dioxide&quot;, &quot;density&quot;, &quot;pH&quot;,</span><br><span class="line">            &quot;sulphates&quot;, &quot;alcohol&quot;</span><br><span class="line">          ]</span><br><span class="line">          </span><br><span class="line">df.withColumn(&apos;prediction&apos;, wine_udf(*columns)).show(100, False)</span><br></pre></td></tr></table></figure>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1552639783096-5f2fa010-2bff-4b1f-a478-ec4bde5b218d.png#align=left&amp;display=inline&amp;height=250&amp;name=1_hqSqC1493Tmu5-OHNcKhRg.png&amp;originHeight=335&amp;originWidth=1000&amp;size=196030&amp;status=done&amp;width=746" alt="1_hqSqC1493Tmu5-OHNcKhRg.png"><br>到目前为止，我们已经展示了如何通过在我们所有的葡萄酒数据集中运行葡萄酒质量预测来将PySpark与MLflow结合使用。但是当您需要使用Scala Spark的Python MLflow模块时会发生什么？<br>我们还设法通过在Scala和Python之间共享Spark Context来测试它。这意味着我们注册的MLflow UDF在Python，然后从斯卡拉用它（<em>叶氏，不是一个很好的解决方案，但至少它的东西</em><strong>🍭</strong>）。<br><a name="9f923831"></a></p>
+<h4 id="Scala-Spark-MLflow"><a href="#Scala-Spark-MLflow" class="headerlink" title="Scala Spark + MLflow"></a>Scala Spark + MLflow</h4><p>对于此示例，我们将Toree <a href="https://toree.apache.org/" target="_blank" rel="noopener"><strong>内核</strong></a>添加到现有的Jupyter中。<br>安装Spark + Toree + Jupyter</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">pip install toree</span><br><span class="line">jupyter toree install --spark_home=/Users/afranzi/spark --sys-prefix</span><br><span class="line">jupyter kernelspec list</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Available kernels:</span><br><span class="line">  apache_toree_scala    /Users/afranzi/.virtualenvs/mlflow/share/jupyter/kernels/apache_toree_scala</span><br><span class="line">  python3               /Users/afranzi/.virtualenvs/mlflow/share/jupyter/kernels/python3</span><br></pre></td></tr></table></figure>
+<p>正如您在附带的笔记本中看到的，UDF在Spark和PySpark之间共享。我们希望这最后一部分对那些喜欢Scala并且必须将ML模型投入生产的团队有所帮助。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">1</span>]:</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.sql.functions.col</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.sql.types.StructType</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.sql.&#123;Column, DataFrame&#125;</span><br><span class="line"><span class="keyword">import</span> scala.util.matching.Regex</span><br><span class="line"></span><br><span class="line">val FirstAtRe: Regex = <span class="string">"^_"</span>.r</span><br><span class="line">val AliasRe: Regex = <span class="string">"[\\s_.:@]+"</span>.r</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getFieldAlias</span><span class="params">(field_name: String)</span>:</span> String = &#123;</span><br><span class="line">    FirstAtRe.replaceAllIn(AliasRe.replaceAllIn(field_name, <span class="string">"_"</span>), <span class="string">""</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">selectFieldsNormalized</span><span class="params">(columns: List[String])</span><span class="params">(df: DataFrame)</span>:</span> DataFrame = &#123;</span><br><span class="line">    val fieldsToSelect: List[Column] = columns.map(field =&gt;</span><br><span class="line">        col(field).<span class="keyword">as</span>(getFieldAlias(field))</span><br><span class="line">    )</span><br><span class="line">    df.select(fieldsToSelect: _*)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">normalizeSchema</span><span class="params">(df: DataFrame)</span>:</span> DataFrame = &#123;</span><br><span class="line">    val schema = df.columns.toList</span><br><span class="line">    df.transform(selectFieldsNormalized(schema))</span><br><span class="line">&#125;</span><br><span class="line">FirstAtRe = ^_</span><br><span class="line">AliasRe = [\s_.:@]+</span><br><span class="line">getFieldAlias: (field_name: String)String</span><br><span class="line">selectFieldsNormalized: (columns: List[String])(df: org.apache.spark.sql.DataFrame)org.apache.spark.sql.DataFrame</span><br><span class="line">normalizeSchema: (df: org.apache.spark.sql.DataFrame)org.apache.spark.sql.DataFrame</span><br><span class="line">Out[<span class="number">1</span>]:</span><br><span class="line">[\s_.:@]+</span><br><span class="line">In [<span class="number">2</span>]:</span><br><span class="line">val winePath = <span class="string">"~/Research/mlflow-workshop/examples/wine_quality/data/winequality-red.csv"</span></span><br><span class="line">val modelPath = <span class="string">"/tmp/mlflow/artifactStore/0/96cba14c6e4b452e937eb5072467bf79/artifacts/model"</span></span><br><span class="line">winePath = ~/Research/mlflow-workshop/examples/wine_quality/data/winequality-red.csv</span><br><span class="line">modelPath = /tmp/mlflow/artifactStore/<span class="number">0</span>/<span class="number">96</span>cba14c6e4b452e937eb5072467bf79/artifacts/model</span><br><span class="line">Out[<span class="number">2</span>]:</span><br><span class="line">/tmp/mlflow/artifactStore/<span class="number">0</span>/<span class="number">96</span>cba14c6e4b452e937eb5072467bf79/artifacts/model</span><br><span class="line">In [<span class="number">3</span>]:</span><br><span class="line">val df = spark.read</span><br><span class="line">              .format(<span class="string">"csv"</span>)</span><br><span class="line">              .option(<span class="string">"header"</span>, <span class="string">"true"</span>)</span><br><span class="line">              .option(<span class="string">"delimiter"</span>, <span class="string">";"</span>)</span><br><span class="line">              .load(winePath)</span><br><span class="line">              .transform(normalizeSchema)</span><br><span class="line">df = [fixed_acidity: string, volatile_acidity: string ... <span class="number">10</span> more fields]</span><br><span class="line">Out[<span class="number">3</span>]:</span><br><span class="line">[fixed_acidity: string, volatile_acidity: string ... <span class="number">10</span> more fields]</span><br><span class="line">In [<span class="number">4</span>]:</span><br><span class="line">%%PySpark</span><br><span class="line"><span class="keyword">import</span> mlflow</span><br><span class="line"><span class="keyword">from</span> mlflow <span class="keyword">import</span> pyfunc</span><br><span class="line"></span><br><span class="line">model_path = <span class="string">"/tmp/mlflow/artifactStore/0/96cba14c6e4b452e937eb5072467bf79/artifacts/model"</span></span><br><span class="line">wine_quality_udf = mlflow.pyfunc.spark_udf(spark, model_path)</span><br><span class="line"></span><br><span class="line">spark.udf.register(<span class="string">"wineQuality"</span>, wine_quality_udf)</span><br><span class="line">Out[<span class="number">4</span>]:</span><br><span class="line">&lt;function spark_udf.&lt;locals&gt;.predict at <span class="number">0x1116a98c8</span>&gt;</span><br><span class="line">In [<span class="number">6</span>]:</span><br><span class="line">df.createOrReplaceTempView(<span class="string">"wines"</span>)</span><br><span class="line">In [<span class="number">10</span>]:</span><br><span class="line">%%SQL</span><br><span class="line">SELECT </span><br><span class="line">    quality,</span><br><span class="line">    wineQuality(</span><br><span class="line">        fixed_acidity,</span><br><span class="line">        volatile_acidity,</span><br><span class="line">        citric_acid,</span><br><span class="line">        residual_sugar,</span><br><span class="line">        chlorides,</span><br><span class="line">        free_sulfur_dioxide,</span><br><span class="line">        total_sulfur_dioxide,</span><br><span class="line">        density,</span><br><span class="line">        pH,</span><br><span class="line">        sulphates,</span><br><span class="line">        alcohol</span><br><span class="line">    ) AS prediction</span><br><span class="line">FROM wines</span><br><span class="line">LIMIT <span class="number">10</span></span><br><span class="line">Out[<span class="number">10</span>]:</span><br><span class="line">+-------+------------------+</span><br><span class="line">|quality|        prediction|</span><br><span class="line">+-------+------------------+</span><br><span class="line">|      <span class="number">5</span>| <span class="number">5.576883967129615</span>|</span><br><span class="line">|      <span class="number">5</span>|  <span class="number">5.50664776916154</span>|</span><br><span class="line">|      <span class="number">5</span>| <span class="number">5.525504822954496</span>|</span><br><span class="line">|      <span class="number">6</span>| <span class="number">5.504311247097457</span>|</span><br><span class="line">|      <span class="number">5</span>| <span class="number">5.576883967129615</span>|</span><br><span class="line">|      <span class="number">5</span>|<span class="number">5.5556903912725755</span>|</span><br><span class="line">|      <span class="number">5</span>| <span class="number">5.467882654744997</span>|</span><br><span class="line">|      <span class="number">7</span>| <span class="number">5.710602976324739</span>|</span><br><span class="line">|      <span class="number">7</span>| <span class="number">5.657319539336507</span>|</span><br><span class="line">|      <span class="number">5</span>| <span class="number">5.345098606538708</span>|</span><br><span class="line">+-------+------------------+</span><br><span class="line"></span><br><span class="line">In [<span class="number">17</span>]:</span><br><span class="line">spark.catalog.listFunctions.filter(<span class="string">'name like "%wineQuality%").show(20, false)</span></span><br><span class="line"><span class="string">+-----------+--------+-----------+---------+-----------+</span></span><br><span class="line"><span class="string">|name       |database|description|className|isTemporary|</span></span><br><span class="line"><span class="string">+-----------+--------+-----------+---------+-----------+</span></span><br><span class="line"><span class="string">|wineQuality|null    |null       |null     |true       |</span></span><br><span class="line"><span class="string">+-----------+--------+-----------+---------+-----------+</span></span><br></pre></td></tr></table></figure>
+<p><a name="38ce27d8"></a></p>
+<h4 id="下一步"><a href="#下一步" class="headerlink" title="下一步"></a>下一步</h4><p>尽管MLflow目前处于Alpha（🥁），但它看起来很有希望。只需能够运行多个机器学习框架并从同一端点使用它们，它就能将所有推荐系统提升到新的水平。<br>此外，MLflow 通过在它们之间建立公共层，使&gt; <strong>数据工程师</strong>和数据科学家&gt; <strong>更加接近</strong> 。&gt;<br>在对MLflow进行这项研究之后，我们确信我们将进一步研究它并开始在Spark管道和我们的推荐系统中使用它。<br>让文件存储与数据库同步而不是使用FS会很好。这应该允许多个端点使用相同的文件存储。就像使用相同的<a href="https://aws.amazon.com/glue/" target="_blank" rel="noopener">Glue Metastore</a>有多个<a href="https://prestodb.io/" target="_blank" rel="noopener">Presto</a>和<a href="https://aws.amazon.com/athena/" target="_blank" rel="noopener">Athena</a>实例一样。<a href="https://aws.amazon.com/glue/" target="_blank" rel="noopener"></a><br>最后，感谢MLflow背后的所有社区，使其成为可能，让我们的数据更有趣。<br>如果您正在玩MLflow，请<strong>随时联系我们</strong>并提供有关您如何使用它的一些反馈！更重要的是，如果您在生产中使用MLflow。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/04/23/yuque/使用MLflow赋予Spark功能/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/12产品管理的行为数据类型" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/04/23/yuque/12产品管理的行为数据类型/">12产品管理的行为数据类型</a>
+    </h1>
+  
+
+        
+        <a href="/2019/04/23/yuque/12产品管理的行为数据类型/" class="archive-article-date">
+  	<time datetime="2019-04-23T08:23:02.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-23</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>行为数据，描述观察到的用户或客户行为的数据，可以让您真正了解人们如何或将来可能使用您的产品。听到人们说他们想要的东西是一回事，但看看他们的实际表现会更好。<br>获得比您想象的行为数据更容易。无论您是在进行研究，运行实验来验证假设或功能，还是您刚刚发布了一项功能，行为数据都是您最好的，可以说是最有信息量的朋友。<br>本文旨在通过向您提供产品团队可用的所有类型的行为数据列表来帮助您。希望它提供了一些新的选项，如果您尝试使用数据来推动团队的决策，您可以考虑这些选项。<br>
+        
+          <a class="article-more-a" href="/2019/04/23/yuque/12产品管理的行为数据类型/#more">more >></a>
         
       
 
@@ -708,7 +938,7 @@
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2019/04/22/yuque/决策树完整指南/">展开全文 >></a>
+          <a class="article-more-a" href="/2019/04/23/yuque/12产品管理的行为数据类型/">展开全文 >></a>
         </p>
       
 
@@ -738,34 +968,34 @@
 
 
   
-    <article id="post-yuque/使用Apache Spark的实时机器学习管道" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-yuque/XGBoost算法:长期可能在位！" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/19/yuque/使用Apache Spark的实时机器学习管道/">使用Apache Spark的实时机器学习管道</a>
+      <a class="article-title" href="/2019/04/23/yuque/XGBoost算法:长期可能在位！/">XGBoost算法:长期可能在位！</a>
     </h1>
   
 
         
-        <a href="/2019/04/19/yuque/使用Apache Spark的实时机器学习管道/" class="archive-article-date">
-  	<time datetime="2019-04-19T05:42:50.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-19</time>
+        <a href="/2019/04/23/yuque/XGBoost算法:长期可能在位！/" class="archive-article-date">
+  	<time datetime="2019-04-23T08:22:24.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-23</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>如何使用Apache Spark中的实时机器学习管道构建预测模型?<br><br><br><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1555652691362-c6b02332-cce0-4d23-ae29-159ea7a10346.jpeg#align=left&amp;display=inline&amp;height=426&amp;name=1-main-image.jpg&amp;originHeight=426&amp;originWidth=640&amp;size=118962&amp;status=done&amp;width=640" alt="1-main-image.jpg"></p>
+        <p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1554692595416-69c4133a-0fb6-4ae5-b308-642403bd2216.png#align=left&amp;display=inline&amp;height=521&amp;name=1.png&amp;originHeight=699&amp;originWidth=1000&amp;size=991609&amp;status=done&amp;width=746" alt="1.png"><br>我还记得十五年前我第一份工作的第一天。我刚完成研究生课程，并以分析师的身份加入了一家全球投资银行。在我的第一天，我一直拉直领带，并试着记住我学过的一切。与此同时，在内心深处，我想知道我是否对企业界足够好。感觉到我的焦虑，我的老板微笑着说：<br><em>“别担心！你唯一需要知道的就是回归建模！“</em><br>我记得自己在想，“我得到了这个！”。我知道回归建模; 线性和逻辑回归。我的老板是对的。在我任职期间，我专门建立了基于回归的统计模型。我并不孤单。事实上，在那个时候，回归建模是无可争议的预测分析女王。快进十五年，回归建模的时代已经结束。老女王已经过去了。新女王的名字很长，名字很久; XGBoost或Extreme Gradient Boosting！<br>
         
-          <a class="article-more-a" href="/2019/04/19/yuque/使用Apache Spark的实时机器学习管道/#more">more >></a>
+          <a class="article-more-a" href="/2019/04/23/yuque/XGBoost算法:长期可能在位！/#more">more >></a>
         
       
 
       
-    </div>
+    </p></div>
     <div class="article-info article-info-index">
       
       
@@ -773,7 +1003,7 @@
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2019/04/19/yuque/使用Apache Spark的实时机器学习管道/">展开全文 >></a>
+          <a class="article-more-a" href="/2019/04/23/yuque/XGBoost算法:长期可能在位！/">展开全文 >></a>
         </p>
       
 
