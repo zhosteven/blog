@@ -6,26 +6,35 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://zhos.me">
-  <title>了解XGBoost背后的数学的端到端指南 | A+</title>
+  <title>三种流行的聚类方法以及何时使用每种方法 | A+</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="article">
-<meta property="og:title" content="了解XGBoost背后的数学的端到端指南">
-<meta property="og:url" content="http://zhos.me/2019/04/23/yuque/了解XGBoost背后的数学的端到端指南/index.html">
+  <meta name="description" content="主页预测 三种流行的聚类方法以及何时使用每种方法#ODSC - 开放数据科学跟随在急于寻找区分标记数据的新方法的过程中，我们常常忘记无监督学习所能做的一切。无监督的机器学习本身就非常强大，而群集是迄今为止这类问题中最常见的表达方式。这是三种最流行的聚类方法的快速破解，以及哪种类型的情况最适合。聚类与监督问题有一点共同点就是没有银弹; 每个算法都有其时间和地点，具体取决于您要完成的任务。这应该给你一">
+<meta property="og:type" content="article">
+<meta property="og:title" content="三种流行的聚类方法以及何时使用每种方法">
+<meta property="og:url" content="http://zhos.me/2019/04/24/yuque/三种流行的聚类方法以及何时使用每种方法/index.html">
 <meta property="og:site_name" content="A+">
+<meta property="og:description" content="主页预测 三种流行的聚类方法以及何时使用每种方法#ODSC - 开放数据科学跟随在急于寻找区分标记数据的新方法的过程中，我们常常忘记无监督学习所能做的一切。无监督的机器学习本身就非常强大，而群集是迄今为止这类问题中最常见的表达方式。这是三种最流行的聚类方法的快速破解，以及哪种类型的情况最适合。聚类与监督问题有一点共同点就是没有银弹; 每个算法都有其时间和地点，具体取决于您要完成的任务。这应该给你一">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1555905325086-0831bee2-c1df-4c1e-8db7-b5226263f504.jpeg#align=left&display=inline&height=370&name=0_k_mwDVMBdOTeSsJY.jpg&originHeight=370&originWidth=500&size=50726&status=done&width=500">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1555905398295-b8d2f1e4-e1ba-4c6a-9d16-b23808e50484.png#align=left&display=inline&height=37&name=0_WMZihujWAUgn1zVh.png&originHeight=37&originWidth=174&size=1245&status=done&width=174">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1555905422591-f91e6c27-2b9e-4c13-b810-7f79329d6ac7.png#align=left&display=inline&height=29&name=0_QBd4Qvrs5RloK6IM.png&originHeight=29&originWidth=147&size=1051&status=done&width=147">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1555905460291-ca44e8ca-d010-49c2-8b9e-c4692dbc864a.png#align=left&display=inline&height=35&name=0_s9U0Ad_VOzBkyDH5.png&originHeight=35&originWidth=165&size=1401&status=done&width=165">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1555905487032-23a4dcda-0add-4545-8842-94af9efcc58c.png#align=left&display=inline&height=259&name=0_xyTVkljGQQZ_DHwE.png&originHeight=259&originWidth=125&size=2969&status=done&width=125">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1555905510224-9cbb47fe-329b-4203-acf6-2d204ce993ed.png#align=left&display=inline&height=51&name=0_gopsLgrolEqfM8Bj.png&originHeight=51&originWidth=117&size=1036&status=done&width=117">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1555905530978-90c111bc-7e73-4dad-8550-591aa713ce1c.png#align=left&display=inline&height=256&name=0_El05Q1qoIFY2_oGu.png&originHeight=256&originWidth=226&size=3825&status=done&width=226">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1555905561380-51262668-d654-4515-871f-ea7c95f67633.png#align=left&display=inline&height=48&name=0_CUGEtqF5Z68U9gIQ.png&originHeight=48&originWidth=210&size=1511&status=done&width=210">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1555905592855-e2ae7bf7-2ebd-41a3-9130-37c04bb1e1a6.png#align=left&display=inline&height=36&name=0_LfMPG1eQkQZ49uDw.png&originHeight=36&originWidth=169&size=1430&status=done&width=169">
-<meta property="og:updated_time" content="2019-04-23T10:24:59.767Z">
+<meta property="og:image" content="https://cdn-images-1.medium.com/fit/c/40/40/1*DrFZWGuK36unnXcJvBLqOA.jpeg#alt=zhos">
+<meta property="og:image" content="https://cdn-images-1.medium.com/fit/c/63/63/1*M8Ygp_xqnlE0-QPveLV1iQ.png#alt=%E8%BD%AC%E5%88%B0%23ODSC%20%20-%20%20Open%20Data%20Science%E7%9A%84%E4%B8%AA%E4%BA%BA%E8%B5%84%E6%96%99&height=50&width=50">
+<meta property="og:image" content="https://cdn-images-1.medium.com/max/1000/0*6pi7EIaXJrsvU7B2.png#height=300&width=640">
+<meta property="og:image" content="https://cdn-images-1.medium.com/max/1000/0*P7kqBIOLpswRe7Uj.png#height=479&width=637">
+<meta property="og:image" content="https://cdn-images-1.medium.com/max/1000/0*PsWzDG4KTp0lmtp2.png#height=117&width=700">
+<meta property="og:image" content="https://cdn-images-1.medium.com/max/1000/0*qnYyMiEkBxv6Boac.png#height=251&width=700">
+<meta property="og:image" content="https://cdn-images-1.medium.com/max/1000/0*81zyZPWxJsKTa6MM.png#height=302&width=700">
+<meta property="og:image" content="https://cdn-images-1.medium.com/max/1000/0*gmM5qi-RIj4l1fKe.png#height=372&width=700">
+<meta property="og:image" content="https://cdn-images-1.medium.com/max/1000/0*tk1vtTx6jh0rRv88.png#height=162&width=300">
+<meta property="og:image" content="https://cdn-images-1.medium.com/max/1000/0*1ll0bnyCFWsnyrKY.png#height=162&width=300">
+<meta property="og:image" content="https://cdn-images-1.medium.com/fit/c/75/75/1*tqCurXdzmPFYiuXrXD9Vuw.png#alt=%E9%A2%84%E6%B5%8B">
+<meta property="og:image" content="https://cdn-images-1.medium.com/fit/c/45/45/1*M8Ygp_xqnlE0-QPveLV1iQ.png#alt=%E8%BD%AC%E5%88%B0%23ODSC%20%20-%20%20Open%20Data%20Science%E7%9A%84%E4%B8%AA%E4%BA%BA%E8%B5%84%E6%96%99">
+<meta property="og:image" content="https://cdn-images-1.medium.com/fit/c/45/45/1*M8Ygp_xqnlE0-QPveLV1iQ.png#alt=%E8%BD%AC%E5%88%B0%23ODSC%20%20-%20%20Open%20Data%20Science%E7%9A%84%E4%B8%AA%E4%BA%BA%E8%B5%84%E6%96%99">
+<meta property="og:image" content="https://cdn-images-1.medium.com/fit/c/45/45/1*_3_kZsNdL_rVO4HEjsr7dA@2x.jpeg#alt=%E8%BD%AC%E5%88%B0Ella%20Alderson%E7%9A%84%E4%B8%AA%E4%BA%BA%E8%B5%84%E6%96%99">
+<meta property="og:image" content="https://cdn-images-1.medium.com/fit/c/45/45/1*DrFZWGuK36unnXcJvBLqOA.jpeg#alt=zhos">
+<meta property="og:updated_time" content="2019-04-24T01:52:23.588Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="了解XGBoost背后的数学的端到端指南">
-<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1555905325086-0831bee2-c1df-4c1e-8db7-b5226263f504.jpeg#align=left&display=inline&height=370&name=0_k_mwDVMBdOTeSsJY.jpg&originHeight=370&originWidth=500&size=50726&status=done&width=500">
+<meta name="twitter:title" content="三种流行的聚类方法以及何时使用每种方法">
+<meta name="twitter:description" content="主页预测 三种流行的聚类方法以及何时使用每种方法#ODSC - 开放数据科学跟随在急于寻找区分标记数据的新方法的过程中，我们常常忘记无监督学习所能做的一切。无监督的机器学习本身就非常强大，而群集是迄今为止这类问题中最常见的表达方式。这是三种最流行的聚类方法的快速破解，以及哪种类型的情况最适合。聚类与监督问题有一点共同点就是没有银弹; 每个算法都有其时间和地点，具体取决于您要完成的任务。这应该给你一">
+<meta name="twitter:image" content="https://cdn-images-1.medium.com/fit/c/40/40/1*DrFZWGuK36unnXcJvBLqOA.jpeg#alt=zhos">
   
     <link rel="alternative" href="/atom.xml" title="A+" type="application/atom+xml">
   
@@ -155,60 +164,44 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-yuque/了解XGBoost背后的数学的端到端指南" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-yuque/三种流行的聚类方法以及何时使用每种方法" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      了解XGBoost背后的数学的端到端指南
+      三种流行的聚类方法以及何时使用每种方法
     </h1>
   
 
         
-        <a href="/2019/04/23/yuque/了解XGBoost背后的数学的端到端指南/" class="archive-article-date">
-  	<time datetime="2019-04-23T08:21:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-23</time>
+        <a href="/2019/04/24/yuque/三种流行的聚类方法以及何时使用每种方法/" class="archive-article-date">
+  	<time datetime="2019-04-24T01:51:30.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-24</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1555905325086-0831bee2-c1df-4c1e-8db7-b5226263f504.jpeg#align=left&amp;display=inline&amp;height=370&amp;name=0_k_mwDVMBdOTeSsJY.jpg&amp;originHeight=370&amp;originWidth=500&amp;size=50726&amp;status=done&amp;width=500" alt="0_k_mwDVMBdOTeSsJY.jpg"><br><br><br><a id="more"></a><br><br><br><br>自从2014年推出以来，XGBoost一直被誉为机器学习黑客马拉松和竞赛的圣杯。从预测广告点击率到分类高能物理事件，XGBoost已经证明了它在性能和速度方面的优势。<br>在任何ML黑客马拉松中，我总是将XGBoost作为我的首选算法。它始终如一的精确度和节省的时间证明了它的实用性。但它是如何实际工作的？什么样的数学能力XGBoost？我们很快就会找到这些问题的答案。<br>XGBoost的联合创始人之一Tianqi Chen宣布（2016年）XGBoost的创新系统功能和算法优化使其比大多数<a href="https://www.indiumsoftware.com/machine-learning/" target="_blank" rel="noopener">机器学习解决方案的</a>速度快10倍。一个真正神奇的技术！<br>在本文中，我们将首先看看XGBoost的强大功能，然后深入探讨这种流行且强大的技术的内部运作。能够在Python或R中实现它是件好事，但了解算法的细节可以帮助您成为更好的数据科学家。<br><em>注意：我们建议您仔细阅读以下文章，以完全理解本文中提到的各种术语和概念：</em></p>
+        <p><a href="https://medium.com/" target="_blank" rel="noopener">主页</a><a href="https://medium.com/predict?source=logo-ece6ab666fa4---661161fab0d0" target="_blank" rel="noopener">预测</a><a href="https://medium.com/me/list/queue" target="_blank" rel="noopener"></a><img src="https://cdn-images-1.medium.com/fit/c/40/40/1*DrFZWGuK36unnXcJvBLqOA.jpeg#alt=zhos" alt><a href></a><a name="e0dd"></a></p>
+<h1 id="三种流行的聚类方法以及何时使用每种方法"><a href="#三种流行的聚类方法以及何时使用每种方法" class="headerlink" title="三种流行的聚类方法以及何时使用每种方法"></a>三种流行的聚类方法以及何时使用每种方法</h1><p><a href="https://medium.com/@ODSC?source=post_header_lockup" target="_blank" rel="noopener"><img src="https://cdn-images-1.medium.com/fit/c/63/63/1*M8Ygp_xqnlE0-QPveLV1iQ.png#alt=%E8%BD%AC%E5%88%B0%23ODSC%20%20-%20%20Open%20Data%20Science%E7%9A%84%E4%B8%AA%E4%BA%BA%E8%B5%84%E6%96%99&amp;height=50&amp;width=50" alt></a><a href="https://medium.com/@ODSC" target="_blank" rel="noopener">#ODSC - 开放数据科学</a>跟随<img src="https://cdn-images-1.medium.com/max/1000/0*6pi7EIaXJrsvU7B2.png#height=300&amp;width=640" alt>在急于寻找区分标记数据的新方法的过程中，我们常常忘记无监督学习所能做的一切。无监督的<a href="https://opendatascience.com/tag/machine-learning/" target="_blank" rel="noopener"><strong>机器学习</strong></a>本身就非常强大，而群集是迄今为止这类问题中最常见的表达方式。<br>这是三种最流行的聚类方法的快速破解，以及哪种类型的情况最适合。聚类与监督问题有一点共同点就是没有银弹; 每个算法都有其时间和地点，具体取决于您要完成的任务。这应该给你一些直觉，就像何时使用它们一样，只有一点点数学。<br><a href></a><a name="0519"></a></p>
+<h3 id="分层聚类"><a href="#分层聚类" class="headerlink" title="分层聚类"></a>分层聚类</h3><p>想象一下，你有集群的一些数量_ķ_你有兴趣在寻找。您所知道的是，您可以将数据集分解为顶级的许多不同组，但您可能也对组内的组或这些组内的组感兴趣。为了获得这种结构，我们使用层次聚类。<br>我们从_n个_不同的点和我们想要发现的_k个_不同的簇开始; 就我们而言，_n_ = 4，_k_ = 2。<br><img src="https://cdn-images-1.medium.com/max/1000/0*P7kqBIOLpswRe7Uj.png#height=479&amp;width=637" alt>首先将每个点视为自己的集群。<br><img src="https://cdn-images-1.medium.com/max/1000/0*PsWzDG4KTp0lmtp2.png#height=117&amp;width=700" alt>然后，我们开始将每个单点集群合并为更大的集群，使用最接近的集群。我们找到距离成对距离矩阵的最小距离 - 这只是每个群集与其他群集距离的表格。<br>这被初始化为每个点之间的欧几里德距离，但在此之后，我们切换到测量簇距离的各种不同方式之一。如果您有兴趣了解有关这些技术的更多信息，请查看单链路聚类，完整链路聚类，clique边距和Ward’s方法。<br>无论如何，我们开始合并最接近的集群。假设我们知道x1和x3最接近。然后我们将这两个合并到一个新的集群中，<em>ca。</em><br><img src="https://cdn-images-1.medium.com/max/1000/0*qnYyMiEkBxv6Boac.png#height=251&amp;width=700" alt>我们现在使用我们偏爱上述抓斗的方法重新计算每个其他群集的距离。然后我们重复，一遍又一遍地合并我们的聚类，直到我们得到_k个_顶级聚类 - 在我们的例子中，两个聚类。假设我们发现x2更接近于ca而不是x4。<br><img src="https://cdn-images-1.medium.com/max/1000/0*81zyZPWxJsKTa6MM.png#height=302&amp;width=700" alt>我们现在有两个顶级集群，cb和x4（请记住，每个点都作为自己的集群开始）。我们现在可以搜索我们创建的树结构来搜索子集群，在我们原来的2-D视图中看起来像这样：<br><img src="https://cdn-images-1.medium.com/max/1000/0*gmM5qi-RIj4l1fKe.png#height=372&amp;width=700" alt><a href></a><a name="9a94"></a></p>
+<h3 id="基于密度的聚类"><a href="#基于密度的聚类" class="headerlink" title="基于密度的聚类"></a>基于密度的聚类</h3><p>分层聚类有助于理解数据中的任何隐藏结构，但它有一个主要的缺陷。在上面显示的版本中，我们假设每个数据点都是相关的 - 在现实世界中几乎不是这种情况。<br>基于密度的聚类方法提供安全阀。我们不会假设每个点都是某个集群的一部分，而是只关注紧密堆积的点并假设其他所有点都是噪声。<br>该方法需要两个参数：半径ε和邻域密度Σ。对于每个点，我们计算Neps（x） - 距离x最多ε的点数。如果Neps（x）≥Σ，不计算x，那么x被认为是<em>核心点</em>。如果一个点不是核心点，但它是核心点邻域的成员，那么它被认为是<em>边界点</em>。其他一切都被认为是<em>噪音。</em><br>基于密度的聚类的最常见且实际上是表演性实现之一是基于密度的具有噪声的应用的空间聚类，更好地称为DBSCAN。DBSCAN的工作原理是跨不同的核心点运行连接组件算法。如果两个核心点共享边界点，或者核心点是另一个核心点邻域中的边界点，那么它们就是相同连通组件的一部分，这组成了一个集群。<br>假设我们有一个相对较小的ε和一个相当大的Σ。我们可能会结束这样的集群：<br><img src="https://cdn-images-1.medium.com/max/1000/0*tk1vtTx6jh0rRv88.png#height=162&amp;width=300" alt>看到？那两个孤独的点距离两个星团很远，而且他们真的没有什么意义 - 所以它们只是噪音。<br>请注意，我们也能够以这种方式发现非凸簇（参见橙色弧）。很简约！<br>我们不需要为基于密度的聚类指定一些我们感兴趣的聚类 - 它将根据您的ε和Σ自动发现一些聚类。当您希望所有群集具有相似的密度时，这尤其有用。<br><a href></a><a name="c756"></a></p>
+<h3 id="K-Means聚类"><a href="#K-Means聚类" class="headerlink" title="K-Means聚类"></a>K-Means聚类</h3><p>分层聚类擅长于发现数据中的嵌入式结构，而基于密度的方法在寻找具有相似密度的未知数量的聚类方面表现优异。但是，两者都无法在整个数据集中找到“共识”。分层聚类可以将看起来很接近的聚类放在一起，但不考虑其他点的信息。基于密度的方法仅查看附近点的小邻域，同样无法考虑完整数据集。<br>这就是K-means聚类的用武之地。从某种意义上说，K-means考虑数据集中的每个点，并使用该信息在一系列迭代中进化聚类。<br>K-means通过选择_k个<em>中心点或</em>装置来工作_，因此选择K-Means。然后将这些均值用作其群集的质心：任何最接近给定均值的点都将分配给该均值的群集。<br>分配完所有点后，移动每个群集并获取其包含的所有点的平均值。这个新的“平均”点是集群的新均值。<br>只需重复这两个步骤，直到点分配停止变化！<br><img src="https://cdn-images-1.medium.com/max/1000/0*1ll0bnyCFWsnyrKY.png#height=162&amp;width=300" alt>一旦点分配停止改变，该算法就会被收敛。<br>我们现在将拥有_k个_不同的簇，每个簇的质心更接近其簇中的每个点，而不是任何其他质心。再次计算质心不会改变分配，所以我们停下来。这就是K-means的全部内容，但它是一种非常强大的方法，可以在考虑整个数据集时查找已知数量的聚类。<br>有很多方法可以初始化你的资金。Forgy方法从数据中随机选择_k个_随机观测值并将其作为起点。随机分区方法将数据集中的每个点分配给随机簇，然后根据这些点计算质心并恢复算法。<br>虽然K-means是一个NP难问题，但是启发式方法能够在多项式时间内找到对全局最优的适当近似，并且能够有效地处理大数据集，在某些情况下使其成为层次聚类的可靠选择。<br>聚类是一个奇怪的世界，拥有更奇怪的技术集合。这三种方法只是最流行的一些方法，但它们可以帮助您在数据中发现未知分组。集群在探索性数据分析，查找其他分析的初始化点以及部署非常简单方面非常有用。明智地使用群集可以为您的数据提供令人惊讶的见解。考虑一下你腰带上的另一个缺口。<br><a href="https://opendatascience.com/" target="_blank" rel="noopener">阅读OpenDataScience.com上的更多数据科学文章</a></p>
 <ul>
-<li><a href="https://www.analyticsvidhya.com/blog/2018/06/comprehensive-guide-for-ensemble-models/" target="_blank" rel="noopener"><em>综合建模综合指南（使用Python代码）</em></a><br><a name="767fa455"></a><h3 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h3></li>
-<li>XGBoost的力量</li>
-<li>为什么要合奏学习？</li>
-<li>展示推动潜力</li>
-<li>使用梯度下降来优化损失函数</li>
-<li>XGBoost的独特功能<br><a name="885849d6"></a><h3 id="XGBoost的力量"><a href="#XGBoost的力量" class="headerlink" title="XGBoost的力量"></a>XGBoost的力量</h3>这种强大算法的优点在于其可扩展性，通过并行和分布式计算推动快速学习，并提供高效的内存使用。<br>因此，欧洲核子研究中心认为它是对大型强子对撞机信号进行分类的最佳方法也就不足为奇了。欧洲核子研究中心提出的这一特殊挑战需要一种可扩展的解决方案，以便以每年3PB的速率处理数据，并在复杂的物理过程中有效地区分极为罕见的信号和背景噪声。XGBoost成为最有用，最直接和最强大的解决方案。<br>现在，让我们深入探讨XGBoost的内部运作。<br><a name="dcf5ee71"></a><h3 id="为什么合奏学习？"><a href="#为什么合奏学习？" class="headerlink" title="为什么合奏学习？"></a>为什么合奏学习？</h3>XGBoost是一种集成学习方法。有时，依靠一个机器学习模型的结果可能还不够。集成学习提供了一种系统的解决方案，可以结合多个学习者的预测能力。结果是单个模型，它给出了几个模型的聚合输出。<br>形成整体的模型，也称为基础学习者，可以来自相同的学习算法或不同的学习算法。<strong>套袋和助力是两种广泛使用的整体学习者</strong>。虽然这两种技术可以与几种统计模型一起使用，但最主要的用法是使用决策树。<br>在更详细地介绍一下增强的概念之前，让我们先简单讨论一下装袋。<br><a name="79608bd8"></a><h3 id="套袋"><a href="#套袋" class="headerlink" title="套袋"></a>套袋</h3>虽然决策树是最容易解释的模型之一，但它们表现出高度可变的行为。考虑我们随机分成两部分的单个训练数据集。现在，让我们使用每个部分来训练决策树，以获得两个模型。<br>当我们适合这两种模型时，它们会产生不同的结果。据说决策树由于这种行为而与高方差相关联。套袋或增强聚合有助于减少任何学习者的差异。并行生成的几个决策树构成了装袋技术的基础学习者。将替换样本数据提供给这些学习者进行培训。最终预测是所有学习者的平均输出。<br><a name="779f5ac5"></a><h3 id="推进"><a href="#推进" class="headerlink" title="推进"></a>推进</h3>在增强中，树是顺序构建的，使得每个后续树旨在减少先前树的错误。每棵树都从其前身学习并更新残差。因此，序列中接下来生长的树将从残差的更新版本中学习。<br>提升的基础学习者是弱学习者，其中偏见很高，预测能力比随机猜测好一点。这些弱学习者中的每一个都为预测提供了一些重要信息，通过有效地结合这些弱学习者，使得提升技术能够产生强大的学习者。最后的强大学习者会降低偏见和差异。<br><strong>与随机森林这样的套袋技术形成对比，其中树木最大程度地生长，增强使用树木，分裂较少</strong>。这种不太深的小树是高度可解释的。可以通过诸如k折交叉验证的验证技术来最佳地选择诸如树的数量或迭代，梯度增强学习的速率以及树的深度之类的参数。<strong>拥有大量树木可能会导致过度拟合。因此，有必要仔细选择提升的停止标准。</strong><br>提升包括三个简单的步骤：</li>
-<li>定义初始模型F0以预测目标变量y。该模型将与残差（y - F0）相关联</li>
-<li>新模型h1适合于前一步骤的残差</li>
-<li>现在，F0和h1组合起来给F1，F0的提升版本。F1的均方误差将低于F0的误差：</li>
+<li><a href="https://medium.com/tag/machine-learning?source=post" target="_blank" rel="noopener">机器学习</a></li>
+<li><a href="https://medium.com/tag/data-science?source=post" target="_blank" rel="noopener">数据科学</a></li>
+<li><a href="https://medium.com/tag/data?source=post" target="_blank" rel="noopener">数据</a></li>
+<li><a href="https://medium.com/tag/technology?source=post" target="_blank" rel="noopener">技术</a></li>
+<li><p><a href="https://medium.com/tag/clustering?source=post" target="_blank" rel="noopener">聚类</a><br>920拍手<a href="https://medium.com/@james_aka_yale" target="_blank" rel="noopener">詹姆斯乐</a> 和253人<a href="https://medium.com/p/4227c80ba2b6/share/twitter" target="_blank" rel="noopener"></a><a href="https://medium.com/p/4227c80ba2b6/share/facebook" target="_blank" rel="noopener"></a><em> 跟随[![](<a href="https://cdn-images-1.medium.com/fit/c/75/75/1" target="_blank" rel="noopener">https://cdn-images-1.medium.com/fit/c/75/75/1</a></em>M8Ygp_xqnlE0-QPveLV1iQ.png#alt=%E8%BD%AC%E5%88%B0%23ODSC%20%20-%20%20Open%20Data%20Science%E7%9A%84%E4%B8%AA%E4%BA%BA%E8%B5%84%E6%96%99)](<a href="https://medium.com/@ODSC?source=footer_card)[]()" target="_blank" rel="noopener">https://medium.com/@ODSC?source=footer_card)[]()</a><a name="52beb5e8"></a></p>
+<h3 id="ODSC-开放数据科学"><a href="#ODSC-开放数据科学" class="headerlink" title="#ODSC - 开放数据科学"></a><a href="https://medium.com/@ODSC" target="_blank" rel="noopener">#ODSC - 开放数据科学</a></h3><p>我们的热情是将数以千计的最优秀和最聪明的数据科学家聚集在一起，以获得令人难以置信的学习和网络体验。</p>
+</li>
+<li><p>跟随<a href="https://medium.com/predict?source=footer_card" target="_blank" rel="noopener"><img src="https://cdn-images-1.medium.com/fit/c/75/75/1*tqCurXdzmPFYiuXrXD9Vuw.png#alt=%E9%A2%84%E6%B5%8B" alt></a><a href></a><a name="d9882595"></a></p>
+<h3 id="预测"><a href="#预测" class="headerlink" title="预测"></a><a href="https://medium.com/predict?source=footer_card" target="_blank" rel="noopener">预测</a></h3><p>未来写的地方</p>
+</li>
 </ul>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1555905398295-b8d2f1e4-e1ba-4c6a-9d16-b23808e50484.png#align=left&amp;display=inline&amp;height=37&amp;name=0_WMZihujWAUgn1zVh.png&amp;originHeight=37&amp;originWidth=174&amp;size=1245&amp;status=done&amp;width=174" alt="0_WMZihujWAUgn1zVh.png"><br>为了提高F1的性能，我们可以在F1的残差之后建模并创建一个新模型F2：<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1555905422591-f91e6c27-2b9e-4c13-b810-7f79329d6ac7.png#align=left&amp;display=inline&amp;height=29&amp;name=0_QBd4Qvrs5RloK6IM.png&amp;originHeight=29&amp;originWidth=147&amp;size=1051&amp;status=done&amp;width=147" alt="0_QBd4Qvrs5RloK6IM.png"><br>这可以在<em>‘m’</em>次迭代中完成，直到残差尽可能地最小化：<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1555905460291-ca44e8ca-d010-49c2-8b9e-c4692dbc864a.png#align=left&amp;display=inline&amp;height=35&amp;name=0_s9U0Ad_VOzBkyDH5.png&amp;originHeight=35&amp;originWidth=165&amp;size=1401&amp;status=done&amp;width=165" alt="0_s9U0Ad_VOzBkyDH5.png"><br>这里，加法学习者不会干扰前面步骤中创建的功能。相反，他们传授自己的信息来减少错误。<br><a name="d12fff5a"></a></p>
-<h3 id="展示推动潜力"><a href="#展示推动潜力" class="headerlink" title="展示推动潜力"></a>展示推动潜力</h3><p>考虑以下数据，其中多年的经验是预测变量，工资（以千美元计）是目标。使用回归树作为基础学习者，我们可以创建一个模型来预测薪水。为简单起见，我们可以选择平方损失作为我们的损失函数，我们的目标是最小化平方误差。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1555905487032-23a4dcda-0add-4545-8842-94af9efcc58c.png#align=left&amp;display=inline&amp;height=259&amp;name=0_xyTVkljGQQZ_DHwE.png&amp;originHeight=259&amp;originWidth=125&amp;size=2969&amp;status=done&amp;width=125" alt="0_xyTVkljGQQZ_DHwE.png"><br>作为第一步，应使用函数F0（x）初始化模型。F0（x）应该是一个最小化损失函数或MSE（均方误差）的函数，在这种情况下：<br>将上述等式的第一个微分相对于γ，可以看出该函数在平均值i = 1nyin处最小化。因此，可以通过以下方式启动增强模型：<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1555905510224-9cbb47fe-329b-4203-acf6-2d204ce993ed.png#align=left&amp;display=inline&amp;height=51&amp;name=0_gopsLgrolEqfM8Bj.png&amp;originHeight=51&amp;originWidth=117&amp;size=1036&amp;status=done&amp;width=117" alt="0_gopsLgrolEqfM8Bj.png"><br>F0（x）给出了我们模型第一阶段的预测。现在，每个实例的残差为（yi-F0（x））。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1555905530978-90c111bc-7e73-4dad-8550-591aa713ce1c.png#align=left&amp;display=inline&amp;height=256&amp;name=0_El05Q1qoIFY2_oGu.png&amp;originHeight=256&amp;originWidth=226&amp;size=3825&amp;status=done&amp;width=226" alt="0_El05Q1qoIFY2_oGu.png"><br>我们可以使用F0（x）中的残差来创建h1（x）。h1（x）将是一个回归树，它将尝试减少前一步骤中的残差。h1（x）的输出不是y的预测; 相反，它将有助于预测连续函数F1（x），这将减少残差。<br>加法模型h1（x）计算树的每个叶子的残差（y-F0）的平均值。通过对F0（x）和h1（x）求和来获得增强函数F1（x）。这样，h1（x）从F0（x）的残差中学习并在F1（x）中对其进行抑制。<br>这可以重复2次迭代以计算h2（x）和h3（x）。这些加法学习器中的每一个，hm（x），将利用来自前一函数Fm-1（x）的残差。<br>F0（x），F1（x）和F2（x）的MSE分别为875,692和540.令人惊讶的是，这些简单的弱学习者可以大大减少错误！<br>请注意，每个学习者hm（x）都会对残差进行训练。增强中的所有加性学习者都是在每个步骤的残差之后建模的。直觉上，可以观察到提升学习者利用剩余误差中的模式。在通过增强达到最大精度的阶段，残差看起来是随机分布的，没有任何模式。<br><strong>Fn和hn的情节</strong><br><a name="999d2be0"></a></p>
-<h3 id="使用梯度下降来优化损失函数"><a href="#使用梯度下降来优化损失函数" class="headerlink" title="使用梯度下降来优化损失函数"></a>使用梯度下降来优化损失函数</h3><p>在上面讨论的情况下，MSE是损失函数。平均值最小化了错误。当MAE（平均绝对误差）是损失函数时，中值将用作F0（x）来初始化模型。y的单位变化也会导致MAE的单位变化。<br>对于MSE，观察到的变化大致呈指数变化。不是在残差上拟合hm（x），而是将其拟合在损失函数的梯度上，或者发生损失的步骤，将使该过程通用并适用于所有损失函数。<br>梯度下降有助于我们最小化任何可微分的功能。之前，hm（x）的回归树预测了树的每个终端节点的平均残差。在梯度增强中，将计算平均梯度分量。<br>对于每个节点，存在乘以hm（x）的因子γ。这说明了拆分的每个分支的影响差异。与传统的梯度下降技术不同，梯度增强有助于预测附加模型的最佳梯度，这种技术可减少每次迭代时输出的误差。<br>梯度增强涉及以下步骤：</p>
-<ul>
-<li>F0（x） - 用于初始化增强算法 - 将被定义：</li>
-</ul>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1555905561380-51262668-d654-4515-871f-ea7c95f67633.png#align=left&amp;display=inline&amp;height=48&amp;name=0_CUGEtqF5Z68U9gIQ.png&amp;originHeight=48&amp;originWidth=210&amp;size=1511&amp;status=done&amp;width=210" alt="0_CUGEtqF5Z68U9gIQ.png"></p>
-<ul>
-<li>迭代计算损失函数的梯度：</li>
-<li>每个hm（x）适合在每个步骤获得的梯度</li>
-<li>导出每个终端节点的乘法因子γm，并定义增强模型Fm（x）：</li>
-</ul>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1555905592855-e2ae7bf7-2ebd-41a3-9130-37c04bb1e1a6.png#align=left&amp;display=inline&amp;height=36&amp;name=0_LfMPG1eQkQZ49uDw.png&amp;originHeight=36&amp;originWidth=169&amp;size=1430&amp;status=done&amp;width=169" alt="0_LfMPG1eQkQZ49uDw.png"><br><a name="ef97a5c8"></a></p>
-<h3 id="XGBoost的独特功能"><a href="#XGBoost的独特功能" class="headerlink" title="XGBoost的独特功能"></a>XGBoost的独特功能</h3><p>XGBoost是渐变增强的流行实现。让我们来讨论XGBoost的一些功能，让它变得如此有趣。</p>
-<ul>
-<li><strong>正规化：</strong> XGBoost可以通过L1和L2正则化来惩罚复杂模型。正规化有助于防止过度拟合</li>
-<li><strong>处理稀疏数据：</strong>缺少值或数据处理步骤（如单热编码）会使数据稀疏。XGBoost采用了稀疏感知的拆分查找算法来处理数据中不同类型的稀疏模式</li>
-<li><strong>加权分位数草图：</strong>大多数现有的基于树的算法可以在数据点具有相等权重时找到分裂点（使用分位数草图算法）。但是，他们没有能力处理加权数据。XGBoost具有分布式加权分位数草图算法，可有效处理加权数据</li>
-<li><strong>并行学习的块结构：</strong>为了加快计算速度，XGBoost可以在CPU上使用多个内核。这是可能的，因为其系统设计中的块结构。数据被分类并存储在称为块的内存单元中。与其他算法不同，这使得数据布局可以通过后续迭代重用，而不是再次计算。此功能还可用于拆分查找和列子采样等步骤</li>
-<li><strong>缓存感知：</strong>在XGBoost中，需要非连续内存访问才能按行索引获取渐变统计信息。因此，XGBoost旨在最佳地利用硬件。这是通过在每个线程中分配内部缓冲区来完成的，其中可以存储梯度统计信息</li>
-<li><strong>核外计算：</strong>此功能可优化可用磁盘空间，并在处理不适合内存的大型数据集时最大化其使用率<br><a name="447e2209"></a><h3 id="结束笔记"><a href="#结束笔记" class="headerlink" title="结束笔记"></a>结束笔记</h3>所以这就是为流行的XGBoost算法提供动力的数学。如果你的基础知识是坚实的，那么这篇文章对你来说一定是轻而易举的。它是如此强大的算法，虽然还有其它技术（如CATBoost），但XGBoost仍然是机器学习社区的改变者。<br>如果您对该文章或任何上述概念有任何疑问，请在下面的评论部分与我联系。</li>
-</ul>
+<p><a href="https://medium.com/predict/five-interview-questions-to-predict-a-good-data-scientist-40d310cdcd68?source=placement_card_footer_grid---------0-41" target="_blank" rel="noopener"></a><a href="https://medium.com/predict/five-interview-questions-to-predict-a-good-data-scientist-40d310cdcd68?source=placement_card_footer_grid---------0-41" target="_blank" rel="noopener"></a><a href="https://medium.com/@ODSC" target="_blank" rel="noopener"><img src="https://cdn-images-1.medium.com/fit/c/45/45/1*M8Ygp_xqnlE0-QPveLV1iQ.png#alt=%E8%BD%AC%E5%88%B0%23ODSC%20%20-%20%20Open%20Data%20Science%E7%9A%84%E4%B8%AA%E4%BA%BA%E8%B5%84%E6%96%99" alt></a><a href="https://medium.com/@ODSC?source=placement_card_footer_grid---------0-41" target="_blank" rel="noopener">#ODSC - 开放数据科学</a><a href="https://medium.com/predict/five-interview-questions-to-predict-a-good-data-scientist-40d310cdcd68?source=placement_card_footer_grid---------0-41" target="_blank" rel="noopener">2018年10月12日</a>2.4K<a href="https://medium.com/predict/a-technical-look-at-how-criminals-use-ai-4080f2e325a9?source=placement_card_footer_grid---------1-41" target="_blank" rel="noopener"></a><a href="https://medium.com/predict/a-technical-look-at-how-criminals-use-ai-4080f2e325a9?source=placement_card_footer_grid---------1-41" target="_blank" rel="noopener"></a><a href="https://medium.com/@ODSC" target="_blank" rel="noopener"><img src="https://cdn-images-1.medium.com/fit/c/45/45/1*M8Ygp_xqnlE0-QPveLV1iQ.png#alt=%E8%BD%AC%E5%88%B0%23ODSC%20%20-%20%20Open%20Data%20Science%E7%9A%84%E4%B8%AA%E4%BA%BA%E8%B5%84%E6%96%99" alt></a><a href="https://medium.com/@ODSC?source=placement_card_footer_grid---------1-41" target="_blank" rel="noopener">#ODSC - 开放数据科学</a><a href="https://medium.com/predict/a-technical-look-at-how-criminals-use-ai-4080f2e325a9?source=placement_card_footer_grid---------1-41" target="_blank" rel="noopener">2018年9月29日</a>1.3K<a href="https://medium.com/predict/the-missing-antimatter-mystery-be7453d0a69d?source=placement_card_footer_grid---------2-41" target="_blank" rel="noopener"></a><a href="https://medium.com/predict/the-missing-antimatter-mystery-be7453d0a69d?source=placement_card_footer_grid---------2-41" target="_blank" rel="noopener"></a><a href="https://medium.com/@Ella_alderson" target="_blank" rel="noopener"><img src="https://cdn-images-1.medium.com/fit/c/45/45/1*_3_kZsNdL_rVO4HEjsr7dA@2x.jpeg#alt=%E8%BD%AC%E5%88%B0Ella%20Alderson%E7%9A%84%E4%B8%AA%E4%BA%BA%E8%B5%84%E6%96%99" alt></a><a href="https://medium.com/@Ella_alderson?source=placement_card_footer_grid---------2-41" target="_blank" rel="noopener">艾拉·奥尔德森</a><a href="https://medium.com/predict/the-missing-antimatter-mystery-be7453d0a69d?source=placement_card_footer_grid---------2-41" target="_blank" rel="noopener">2018年11月2日</a>2.2K回应<img src="https://cdn-images-1.medium.com/fit/c/45/45/1*DrFZWGuK36unnXcJvBLqOA.jpeg#alt=zhos" alt></p>
 
       
 
@@ -288,7 +281,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://zhos.me/2019/04/23/yuque/了解XGBoost背后的数学的端到端指南/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://zhos.me/2019/04/24/yuque/三种流行的聚类方法以及何时使用每种方法/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -302,18 +295,9 @@
   
 <nav id="article-nav">
   
-    <a href="/2019/04/23/yuque/webhook实现服务器自动部署/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          webhook实现服务器自动部署
-        
-      </div>
-    </a>
   
-  
-    <a href="/2019/04/23/yuque/PyTorch中用卷积神经网络进行传递学习/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">PyTorch中用卷积神经网络进行传递学习</div>
+    <a href="/2019/04/23/yuque/Apache Kafka 和Spark的实时数据管道/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Apache Kafka 和Spark的实时数据管道</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -340,7 +324,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#目录"><span class="toc-number">1.</span> <span class="toc-text">目录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#XGBoost的力量"><span class="toc-number">2.</span> <span class="toc-text">XGBoost的力量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#为什么合奏学习？"><span class="toc-number">3.</span> <span class="toc-text">为什么合奏学习？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#套袋"><span class="toc-number">4.</span> <span class="toc-text">套袋</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#推进"><span class="toc-number">5.</span> <span class="toc-text">推进</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#展示推动潜力"><span class="toc-number">6.</span> <span class="toc-text">展示推动潜力</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用梯度下降来优化损失函数"><span class="toc-number">7.</span> <span class="toc-text">使用梯度下降来优化损失函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#XGBoost的独特功能"><span class="toc-number">8.</span> <span class="toc-text">XGBoost的独特功能</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#结束笔记"><span class="toc-number">9.</span> <span class="toc-text">结束笔记</span></a></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#三种流行的聚类方法以及何时使用每种方法"><span class="toc-number">1.</span> <span class="toc-text">三种流行的聚类方法以及何时使用每种方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#分层聚类"><span class="toc-number">1.0.1.</span> <span class="toc-text">分层聚类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#基于密度的聚类"><span class="toc-number">1.0.2.</span> <span class="toc-text">基于密度的聚类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#K-Means聚类"><span class="toc-number">1.0.3.</span> <span class="toc-text">K-Means聚类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ODSC-开放数据科学"><span class="toc-number">1.0.4.</span> <span class="toc-text">#ODSC - 开放数据科学</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#预测"><span class="toc-number">1.0.5.</span> <span class="toc-text">预测</span></a></li></ol></li></ol>
                     </div>
                 </span>
             </div>
