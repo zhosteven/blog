@@ -235,42 +235,16 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p><br><a href></a><a name="d7c5e717"></a></p>
-<h1 id="大数据和Hadoop时代的维度建模和Kimball数据集市"><a href="#大数据和Hadoop时代的维度建模和Kimball数据集市" class="headerlink" title="大数据和Hadoop时代的维度建模和Kimball数据集市"></a><a href="https://opendatascience.com/dimensional-modeling-and-kimball-data-marts-in-the-age-of-big-data-and-hadoop/" target="_blank" rel="noopener">大数据和Hadoop时代的维度建模和Kimball数据集市</a></h1><p><br><a href></a><a name="10d8a32a"></a></p>
-<h2 id="尺寸造型死了吗？"><a href="#尺寸造型死了吗？" class="headerlink" title="尺寸造型死了吗？"></a>尺寸造型死了吗？</h2><p>在我给出这个问题的答案之前，让我们退后一步，首先看一下维度数据建模的含义。<a href></a><a name="d41d8cd9"></a></p>
-<p>##<br><a href></a><a name="4855e340"></a></p>
-<h2 id="为什么我们需要对数据建模？"><a href="#为什么我们需要对数据建模？" class="headerlink" title="为什么我们需要对数据建模？"></a>为什么我们需要对数据建模？</h2><p>与常见的误解相反，数据模型的唯一目的不是作为设计物理数据库的ER图。数据模型表示企业中业务流程的复杂性。它们记录了重要的业务规则和概念，有助于标准化关键企业术语。它们提供了清晰度，有助于发现有关业务流程的模糊思维和模糊性。此外，您可以使用数据模型与其他利益相关者进行通信。如果没有蓝图，你就不会建造房屋或桥梁。那么为什么要在没有计划的情况下构建数据应用程序（如数据仓库）呢？<a href></a><a name="d41d8cd9-1"></a></p>
-<p>##<br><a href></a><a name="81f7c110"></a></p>
-<h2 id="为什么我们需要尺寸模型？"><a href="#为什么我们需要尺寸模型？" class="headerlink" title="为什么我们需要尺寸模型？"></a>为什么我们需要尺寸模型？</h2><p>维度建模是一种建模数据的特殊方法。我们还使用单词data mart或star schema作为维度模型的同义词。星型模式针对数据分析进行了优化。看看下面的维度模型。理解起来非常直观。我们立即了解如何按客户，产品或日期对订单数据进行切片和切块，并通过汇总和比较指标来衡量订单业务流程的绩效。关于维度建模的核心思想之一是在事务性业务流程中定义最低级别的粒度。当我们切片并切块并钻取数据时，这就是我们无法进一步向下钻取的叶级。换句话说，星型模式中最低级别的粒度是事实与所有维度表的连接，没有任何聚合。<a href></a><a name="d41d8cd9-2"></a></p>
-<p>##<br><a href></a><a name="e6da9907"></a></p>
-<h2 id="数据建模与维度建模"><a href="#数据建模与维度建模" class="headerlink" title="数据建模与维度建模"></a>数据建模与维度建模</h2><p>在标准数据建模中，我们的目标是消除数据重复和冗余。当数据发生变化时，我们只需要在一个地方进行更改。这也有助于提高数据质量。值不会在多个位置不同步。看看下面的模型。它包含表示地理概念的各种表。在规范化模型中，我们为每个实体都有一个单独的表。在维度模型中，我们只有一个表：地理。在此表中，城市将重复多次。每个城市一次。如果国家更改其名称，我们必须在许多地方更新该国家/地区注意：标准数据建模也称为3NF建模。数据建模的标准方法不适合商业智能工作负载的用途。很多表都会产生大量的连接。加入缓慢的事情。在数据分析中，我们尽可能避免使用它们。在维度模型中，我们将多个相关表格去规范化为一个表格，例如，我们前面示例中的各个表格可以预先连接到一个表格中：地理位置。<a href></a><a name="d41d8cd9-3"></a></p>
-<p>###<br><a href></a><a name="da4e375b"></a></p>
-<h3 id="那么为什么有些人声称尺寸建模已经死了呢？"><a href="#那么为什么有些人声称尺寸建模已经死了呢？" class="headerlink" title="那么为什么有些人声称尺寸建模已经死了呢？"></a>那么为什么有些人声称尺寸建模已经死了呢？</h3><p>我认为你会同意一般的数据建模和特别是维度建模是一个非常有用的练习。那么为什么有些人声称维度建模在大数据和Hadoop时代没用呢？你可以想象这有很多原因。<a href></a><a name="d41d8cd9-4"></a></p>
-<p>###<br><a href></a><a name="98dfb4b0"></a></p>
-<h3 id="数据仓库已经死了混乱"><a href="#数据仓库已经死了混乱" class="headerlink" title="数据仓库已经死了混乱"></a>数据仓库已经死了混乱</h3><p>首先，有些人将维度建模与数据仓库混淆。他们声称数据仓库已经死亡，因此维度建模也可以归入历史垃圾箱。这是一个逻辑上连贯的论点。但是，数据仓库的概念远未过时。我们始终需要集成且可靠的数据来填充BI仪表板。如果您想了解更多信息，我建议我们<a href="https://sonra.io/big-data-data-warehouse-business-intelligence-professionals/" target="_blank" rel="noopener">为数据仓库专业人员提供大数据</a>培训课程 。在本课程中，我将详细介绍数据仓库与以往相关的内容。我还将展示新兴的大数据工具和技术如何对数据仓库有用。<a href></a><a name="d41d8cd9-5"></a></p>
-<p>###<br><a href></a><a name="34e4985d"></a></p>
-<h3 id="阅读误解的图式"><a href="#阅读误解的图式" class="headerlink" title="阅读误解的图式"></a>阅读误解的图式</h3><p>我经常听到的第二个论点是这样的。“我们遵循读取方法的模式，不再需要对数据进行建模”。在我看来，读取模式的概念是数据分析中最大的误解之一。我同意最初将原始数据存储在轻量级模式的数据转储中很有用。但是，这个论点不应该被用作不完全建模数据的借口。读取方法的模式正在推动下游流程的能力和责任。有人仍然需要咬住定义数据类型。访问无架构数据转储的每个进程都需要自己弄清楚发生了什么。这种类型的工作加起来是完全冗余的，并且可以通过定义数据类型和适当的模式来轻松避免。<a href></a><a name="d41d8cd9-6"></a></p>
-<p>###<br><a href></a><a name="7babfe70"></a></p>
-<h3 id="重新规范了非规范化。模型的物理方面。"><a href="#重新规范了非规范化。模型的物理方面。" class="headerlink" title="重新规范了非规范化。模型的物理方面。"></a>重新规范了非规范化。模型的物理方面。</h3><p>实际上是否有一些有效的参数来声明尺寸模型已经过时了？确实有一些比我上面列出的更好的论据。他们需要对物理数据建模和Hadoop工作方式有所了解。忍受我。之前我简要提到了为什么我们在维度上建模数据的原因之一。这与数据在我们的数据存储中物理存储的方式有关。在标准数据建模中，每个真实世界实体都有自己的表。我们这样做是为了避免数据冗余以及数据质量问题蔓延到我们的数据中的风险。我们拥有的表越多，我们需要的连接越多。这是不利的。表连接很昂贵，特别是当我们从数据集中连接大量记录时。当我们以维度方式对数据建模时，我们将多个表合并为一个。我们说我们预先加入或取消规范化数据。我们现在拥有更少的表，更少的连接，从而降低了延迟并提高了查询性能。<a href="https://www.linkedin.com/feed/update/urn:li:activity:6270196381496020992/?commentUrn=urn%3Ali%3Acomment%3A(activity%3A6270196381496020992%2C6270935167486042112" target="_blank" rel="noopener">在LinkedIn上</a>)参与<a href="https://www.linkedin.com/feed/update/urn:li:activity:6270196381496020992/?commentUrn=urn%3Ali%3Acomment%3A(activity%3A6270196381496020992%2C6270935167486042112" target="_blank" rel="noopener">这篇文章</a>)的讨论 <a href></a><a name="d41d8cd9-7"></a></p>
-<p>###<br><a href></a><a name="27f3b9f3"></a></p>
-<h3 id="将去标准化完全结束"><a href="#将去标准化完全结束" class="headerlink" title="将去标准化完全结束"></a>将去标准化完全结束</h3><p>为什么不将去标准化完全结束呢？摆脱所有联接，只有一个事实表？实际上，这将完全消除对任何连接的需要。但是，你可以想象，它有一些副作用。首先，它增加了所需的存储量。我们现在需要存储大量冗余数据。随着用于数据分析的柱状存储格式的出现，现在这不是一个问题。去标准化的一个更大的问题是，每当其中一个属性的值发生变化时，我们就必须在多个位置更新值 - 可能是数千或数百万次更新。解决这个问题的一种方法是每晚完全重新加载我们的模型。通常，这比应用大量更新要快得多，也更容易。列式数据库通常采用以下方法。它们首先将更新存储在内存中，然后将它们异步写入磁盘。<a href></a><a name="d41d8cd9-8"></a></p>
-<p>###<br><a href></a><a name="16517b98"></a></p>
-<h3 id="分布式关系数据库（MPP）上的数据分布"><a href="#分布式关系数据库（MPP）上的数据分布" class="headerlink" title="分布式关系数据库（MPP）上的数据分布"></a>分布式关系数据库（MPP）上的数据分布</h3><p>在Hadoop上创建维度模型时，例如Hive，SparkSQL等，我们需要更好地理解该技术的一个核心特征，将其与分布式关系数据库（MPP）（如Teradata等）区分开来。当在MPP中的节点之间分配数据时，我们控制记录的位置。基于我们的分区策略，例如散列，列表，范围等，我们可以在同一节点上的列表中共同定位各个记录的键。由于我们不需要通过网络发送任何数据，因此保证数据协同定位，我们的连接速度非常快。看看下面的例子。ORDER和ORDER_ITEM表中具有相同ORDER_ID的记录最终在同一节点上。order_id和order_item表的键位于相同的节点上。<a href></a><a name="d41d8cd9-9"></a></p>
-<p>###<br><a href></a><a name="80ea4792"></a></p>
-<h3 id="Hadoop上的数据分发"><a href="#Hadoop上的数据分发" class="headerlink" title="Hadoop上的数据分发"></a>Hadoop上的数据分发</h3><p>这与基于Hadoop的系统非常不同。我们将数据拆分为大型块，并在Hadoop分布式文件系统（HDFS）上的节点上分发和复制它们。有了这种数据分发策略，我们无法保证数据的共存性。看看下面的例子。ORDER_ID键的记录最终在不同的节点上。为了加入，我们需要通过网络发送数据，这会影响性能。处理此问题的一种策略是跨群集中的所有节点复制其中一个连接表。这称为广播连接，我们在MPP上使用相同的策略。可以想象，它仅适用于小型查找或维度表。那么当我们拥有一个大型事实表和一个大型维度表（例如客户或产品）时，我们该怎么办？或者当我们有两个大的事实表时。<a href></a><a name="d41d8cd9-10"></a></p>
-<p>###<br><a href></a><a name="e136916f"></a></p>
-<h3 id="Hadoop上的维度模型"><a href="#Hadoop上的维度模型" class="headerlink" title="Hadoop上的维度模型"></a>Hadoop上的维度模型</h3><p>为了解决这个性能问题，我们可以将大维度表去规范化到事实表中，以保证数据位于同一位置。我们可以在所有节点上广播较小的维度表。为了连接两个大的事实表，我们可以使用更高的粒度在表内嵌入具有较低粒度的表，例如嵌套在ORDER表内的大型ORDER_ITEM表。现代查询引擎（如Impala或Drill）允许我们平移这些数据这种嵌套数据的策略对于痛苦的Kimball概念也很有用，例如用于在维模型中表示M：N关系的桥表。<a href></a><a name="d41d8cd9-11"></a></p>
-<p>###<br><a href></a><a name="93546846"></a></p>
-<h3 id="Hadoop和慢慢改变的维度"><a href="#Hadoop和慢慢改变的维度" class="headerlink" title="Hadoop和慢慢改变的维度"></a>Hadoop和慢慢改变的维度</h3><p>Hadoop文件系统上的存储是不可变的。换句话说，您只能插入和追加记录。您无法修改数据。如果您来自关系数据仓库背景，这看起来有点奇怪。但是，引擎盖下的数据库以类似的方式工作。在进程异步更新数据文件中的数据之前，它们将所有对数据的更改存储在不可变写入日志中（在Oracle中称为重做日志）。不变性对我们的维度模型有什么影响？您可能还记得维度建模过程中慢速变化尺寸（SCD）的概念。SCD可选择保留属性更改的历史记录。它们允许我们根据某个时间点的属性值报告指标。但这不是默认行为。默认情况下，我们使用最新值更新维度表。那么我们对Hadoop的选择是什么？记得！我们无法更新数据。我们可以简单地使SCD成为默认行为并审核任何更改。如果我们想要针对当前值运行报告，我们可以在仅检索最新值的SCD上创建一个View。这可以使用窗口函数轻松完成。或者，<a href></a><a name="d41d8cd9-12"></a></p>
-<p>###<br><a href></a><a name="40d68116"></a></p>
-<h3 id="Hadoop上的存储演变"><a href="#Hadoop上的存储演变" class="headerlink" title="Hadoop上的存储演变"></a>Hadoop上的存储演变</h3><p>Hadoop平台的供应商并未忽视这些Hadoop限制。在Hive中，我们现在有ACID事务和可更新表。根据<a href="https://issues.apache.org/jira/browse/HIVE/component/12322671/?selectedTab=com.atlassian.jira.jira-projects-plugin:component-issues-panel" target="_blank" rel="noopener">开放主要问题</a>的数量  而且我自己的经验，这个功能似乎还没有生产就绪。Cloudera采用了不同的方法。使用Kudu，他们创建了一种新的可更新存储格式，它不是HDFS而是本地OS文件系统。它完全消除了Hadoop的限制，类似于柱状MPP中的传统存储层。一般来说，最好在MPP上运行任何BI和仪表板用例，例如Impala + Kudu，而不是Hadoop。已经说过MPP在弹性，并发性和可伸缩性方面都有自己的局限性。当您遇到这些限制时，Hadoop及其近亲Spark是BI工作负载的不错选择。<a href></a><a name="d41d8cd9-13"></a></p>
-<p>###<br><a href></a><a name="12255d79"></a></p>
-<h3 id="判决。维度模型和星型模式是否已过时？"><a href="#判决。维度模型和星型模式是否已过时？" class="headerlink" title="判决。维度模型和星型模式是否已过时？"></a>判决。维度模型和星型模式是否已过时？</h3><p>我们都知道Ralph Kimball退休了。但他的主要思想和观念仍然有效并且依然存在。我们必须使它们适应新技术和存储类型，但它们仍然可以增加价值。 <br><br><br></p>
-
+        <p><br><a href></a><br><a name="e23a55da"></a></p>
+<h1 id="大数据和Hadoop时代的维度建模和Kimball数据集市"><a href="#大数据和Hadoop时代的维度建模和Kimball数据集市" class="headerlink" title="大数据和Hadoop时代的维度建模和Kimball数据集市"></a><a href="https://opendatascience.com/dimensional-modeling-and-kimball-data-marts-in-the-age-of-big-data-and-hadoop/" target="_blank" rel="noopener">大数据和Hadoop时代的维度建模和Kimball数据集市</a></h1><p><a href></a><br><a name="581a35a8"></a></p>
+<h2 id="尺寸造型死了吗？"><a href="#尺寸造型死了吗？" class="headerlink" title="尺寸造型死了吗？"></a>尺寸造型死了吗？</h2><p>在我给出这个问题的答案之前，让我们退后一步，首先看一下维度数据建模的含义。<a href></a><br>
+        
+          <a class="article-more-a" href="/2019/04/24/yuque/大数据和Hadoop时代的维度建模和Kimball数据集市/#more">more >></a>
+        
       
 
       
-    </div>
+    </p></div>
     <div class="article-info article-info-index">
       
       
