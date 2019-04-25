@@ -15,7 +15,7 @@
 <meta property="og:site_name" content="A+">
 <meta property="og:description" content="最近一个相当热门的话题是机器学习 - 与计算统计密切相关的跨部门学科，让计算机在没有明确编程的情况下学习。它已被发现在数据分析领域具有重要意义 - 从估算贷款和保险风险到试图在现实条件下自主驾驶汽车。在下面的文章中，我想向读者介绍一下  MLlib - 作为Spark Framework一部分的机器学习库。关于以下文本的一个重要事项 - 目的是介绍图书馆，而不是机器学习或统计学背后的概念和理论，因">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-04-24T03:02:06.747Z">
+<meta property="og:updated_time" content="2019-04-25T09:50:01.074Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用Spark和MLlib进行机器学习简介（DataFrame API）">
 <meta name="twitter:description" content="最近一个相当热门的话题是机器学习 - 与计算统计密切相关的跨部门学科，让计算机在没有明确编程的情况下学习。它已被发现在数据分析领域具有重要意义 - 从估算贷款和保险风险到试图在现实条件下自主驾驶汽车。在下面的文章中，我想向读者介绍一下  MLlib - 作为Spark Framework一部分的机器学习库。关于以下文本的一个重要事项 - 目的是介绍图书馆，而不是机器学习或统计学背后的概念和理论，因">
@@ -161,7 +161,7 @@
 
         
         <a href="/2019/04/23/yuque/使用Spark和MLlib进行机器学习简介（DataFrame API）/" class="archive-article-date">
-  	<time datetime="2019-04-23T08:15:15.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-23</time>
+  	<time datetime="2019-04-23T03:42:56.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-23</time>
 </a>
         
       </header>
@@ -200,30 +200,50 @@
 <li>高斯混合模型</li>
 </ul>
 </li>
-<li>协同过滤<br><a name="Featurization"></a><h4 id="Featurization"><a href="#Featurization" class="headerlink" title="Featurization"></a>Featurization</h4></li>
-<li>特征提取</li>
+<li><p>协同过滤<br><a name="Featurization"></a></p>
+<h4 id="Featurization"><a href="#Featurization" class="headerlink" title="Featurization"></a>Featurization</h4></li>
+<li><p>特征提取</p>
+</li>
 <li>转型</li>
 <li>维度降低</li>
-<li>选择<br><a name="3326ad94"></a><h4 id="管道"><a href="#管道" class="headerlink" title="管道"></a>管道</h4></li>
-<li>撰写管道</li>
-<li>构建，评估和调整机器学习管道<br><a name="5207208b"></a><h4 id="坚持"><a href="#坚持" class="headerlink" title="坚持"></a>坚持</h4></li>
-<li>将算法，模型和管道保存到持久数据存储中以供以后使用</li>
-<li>从持久数据存储加载算法，模型和管道<br><a name="442bc484"></a><h4 id="公用事业"><a href="#公用事业" class="headerlink" title="公用事业"></a>公用事业</h4></li>
-<li>线性代数</li>
+<li><p>选择<br><a name="3326ad94"></a></p>
+<h4 id="管道"><a href="#管道" class="headerlink" title="管道"></a>管道</h4></li>
+<li><p>撰写管道</p>
+</li>
+<li><p>构建，评估和调整机器学习管道<br><a name="5207208b"></a></p>
+<h4 id="坚持"><a href="#坚持" class="headerlink" title="坚持"></a>坚持</h4></li>
+<li><p>将算法，模型和管道保存到持久数据存储中以供以后使用</p>
+</li>
+<li><p>从持久数据存储加载算法，模型和管道<br><a name="442bc484"></a></p>
+<h4 id="公用事业"><a href="#公用事业" class="headerlink" title="公用事业"></a>公用事业</h4></li>
+<li><p>线性代数</p>
+</li>
 <li>统计</li>
 <li>数据处理</li>
-<li>其他<br><a name="DataFrame"></a><h2 id="DataFrame"><a href="#DataFrame" class="headerlink" title="DataFrame"></a>DataFrame</h2>如前所述，这  <code>DataFrame</code> 是Spark版本2.x中使用的新API，它应该是旧<code>RDD</code> API 的替代品  。A  <code>DataFrame</code> 是一个Spark  <code>Dataset</code> （简而言之 - 一个分布式，强类型的数据集合，该接口在Spark 1.6中引入）组织成命名列（代表变量）。<br>该概念实际上与关系数据库中的表或R / Python中的数据框相同，但具有一组隐式优化。<br><a name="b4d3c72e"></a><h3 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h3>使用<code>DataFrame</code> API比使用旧API有  哪些主要卖点和好处  <code>RDD</code> ？这里有几个：</li>
-<li>熟悉 - 如前所述，该概念类似于更广泛的已知和使用的处理数据的方法，如关系数据库中的表或例如R中的数据框构造。</li>
+<li><p>其他<br><a name="DataFrame"></a></p>
+<h2 id="DataFrame"><a href="#DataFrame" class="headerlink" title="DataFrame"></a>DataFrame</h2><p>如前所述，这  <code>DataFrame</code> 是Spark版本2.x中使用的新API，它应该是旧<code>RDD</code> API 的替代品  。A  <code>DataFrame</code> 是一个Spark  <code>Dataset</code> （简而言之 - 一个分布式，强类型的数据集合，该接口在Spark 1.6中引入）组织成命名列（代表变量）。<br>该概念实际上与关系数据库中的表或R / Python中的数据框相同，但具有一组隐式优化。<br><a name="b4d3c72e"></a></p>
+<h3 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h3><p>使用<code>DataFrame</code> API比使用旧API有  哪些主要卖点和好处  <code>RDD</code> ？这里有几个：</p>
+</li>
+<li><p>熟悉 - 如前所述，该概念类似于更广泛的已知和使用的处理数据的方法，如关系数据库中的表或例如R中的数据框构造。</p>
+</li>
 <li>统一API - API在语言中是一致的，因此我们不会浪费时间来适应差异，并且可以专注于重要的事情。</li>
 <li>Spark SQL - 它使我们能够通过SQL查询和类似SQL的特定语言访问和操作数据。</li>
 <li>优化 - 在一系列优化下实现  <code>Dataset</code> ，在处理数据时为我们提供更多性能。</li>
 <li>众多可能的来源 - 我们可以构建一个  <code>DataSet</code> 来自外部数据库，现有的  <code>RDD</code>s，CSV文件，JSON和许多其他结构化数据源。<br><a name="7a417cc7"></a><h3 id="创建DataFrame"><a href="#创建DataFrame" class="headerlink" title="创建DataFrame"></a>创建DataFrame</h3>如上所述 - 我们有多个可能的来源，我们可以从中创建一个  <code>DataFrame</code>。要从<code>Dataset</code> 外部源加载流  ，我们将使用该  <code>DataStreamReader</code> 接口。<br>在下面的例子中，我们假设一个名为的变量  <code>spark</code> 存在于  <code>SparkSession</code>。在  <code>DataStreamReader</code> 该届会议可以通过调用来获得  <code>read</code> 在该实例方法。<br>我们可以通过<code>option</code>在reader实例上调用方法来为底层数据源添加输入选项  。它需要a  <code>key</code> 和a  <code>value</code> 作为参数（或整体  <code>Map</code>）。<br>有两种方法来加载数据：<em>特定格式的方法，如  <code>csv</code>，  <code>jdbc</code>等</em>与指定的格式明确的  <code>format</code> 方法，然后调用通用的  <code>load</code> 方法。如果未指定格式，则为<code>Parquet</code>默认格式  。<br>以下是创建a <code>DataFrame</code>和使用的方法时最常见的用例  ：<br><a name="68c2d314"></a><h4 id="实木复合地板"><a href="#实木复合地板" class="headerlink" title="实木复合地板"></a>实木复合地板</h4><code>Parquet</code> 是由Apache开发的<code>Hadoop</code>/ <code>Spark</code> 生态系统项目的柱状存储格式  。<br>我们通过调用 带有 文件路径的<code>load</code> 或  <code>parquet</code>方法<code>Parquet</code>作为参数来  加载它  ，例如：<br>spark.read.load（ “一些/路径/到/ file.parquet”）<br><a name="CSV"></a><h4 id="CSV"><a href="#CSV" class="headerlink" title="CSV"></a>CSV</h4>众所周知的逗号分隔值文件。Spark可以自动推断<code>CSV</code> 加载文件的架构  。<br>我们通过调用<code>csv</code> 带有<code>CSV</code> 文件路径的方法作为参数来  加载它  ，例如：</li>
 </ul>
 <ol>
-<li>spark.read.load(“some/path/to/file.parquet”)<br><a name="CSV-1"></a><h4 id="CSV-1"><a href="#CSV-1" class="headerlink" title="CSV"></a>CSV</h4>众所周知的逗号分隔值文件。Spark可以自动推断<code>CSV</code> 加载文件的架构  。<br>我们通过调用<code>csv</code> 带有<code>CSV</code> 文件路径的方法作为参数来  加载它  ，例如：</li>
-<li>spark.read.<strong>csv</strong>(“some/path/to/file.csv”)<br><a name="JSON"></a><h4 id="JSON"><a href="#JSON" class="headerlink" title="JSON"></a>JSON</h4>Web应用程序最广泛使用的JavaScript Object Notation格式，用于异步前端/后端通信。Spark可以自动推断<code>JSON</code> 加载文件的架构  。<br>我们通过调用<code>json</code> 带有<code>JSON</code> 文件路径的方法作为参数来  加载它  ，例如：</li>
-<li>spark.read.<strong>json</strong>(“some/path/to/file.json”)<br><a name="1fecf515"></a><h4 id="蜂巢"><a href="#蜂巢" class="headerlink" title="蜂巢"></a>蜂巢</h4>Apache  <code>Hive</code> 是一个数据仓库软件包。对于接口  <code>DataFrame</code>，  <code>Hive</code> 我们需要一个  <code>SparkSession</code> 启用  <code>Hive</code>支持和类路径中所有需要的依赖项，以便Spark自动加载它们。<br>我们不会介绍与<code>Hive</code> 数据存储的接口，  因为这需要  <code>Hive</code> 更深入地了解它的工作原理和工作方式。有关该主题的更多信息，请参阅有关该主题的官方  <a href="https://spark.apache.org/docs/latest/sql-programming-guide.html#hive-tables" target="_blank" rel="noopener">文档</a>  。<br><a name="68051bf4"></a><h4 id="数据库"><a href="#数据库" class="headerlink" title="数据库"></a>数据库</h4>我们可以轻松地与任何类型的数据库接口使用  <code>JDBC</code>。为了使它成为可能您需要为<code>JDBC</code> 您的类路径中包含的要连接的数据库提供所需的  驱动程序。<br>我们将使用<code>load</code> 前面提到的  方法，但我们需要将格式从默认的one（<code>Parquet</code>）更改<code>jdbc</code> 为<code>format</code> 在阅读器上  使用该  方法。我们也可以使用该  <code>jdbc</code> 方法并向其传递一个<code>Properties</code> 将保存连接属性的  类实例。<br>我们<code>JDBC</code> 通过<code>option</code> 前面提到的方法指定  连接属性  。<a href="https://spark.apache.org/docs/latest/sql-programming-guide.html#jdbc-to-other-databases" target="_blank" rel="noopener">此处</a>提供<a href="https://spark.apache.org/docs/latest/sql-programming-guide.html#jdbc-to-other-databases" target="_blank" rel="noopener">了</a>可以传递的可能选项的完整列表及其说明  。<br>下面是一个快速示例，说明如何<code>DataFrame</code> 从  <code>JDBC</code> 源代码创建  （例如来自官方文档）：</li>
-<li>val jdbcDF = spark.read</li>
+<li><p>spark.read.load(“some/path/to/file.parquet”)<br><a name="CSV-1"></a></p>
+<h4 id="CSV-1"><a href="#CSV-1" class="headerlink" title="CSV"></a>CSV</h4><p>众所周知的逗号分隔值文件。Spark可以自动推断<code>CSV</code> 加载文件的架构  。<br>我们通过调用<code>csv</code> 带有<code>CSV</code> 文件路径的方法作为参数来  加载它  ，例如：</p>
+</li>
+<li><p>spark.read.<strong>csv</strong>(“some/path/to/file.csv”)<br><a name="JSON"></a></p>
+<h4 id="JSON"><a href="#JSON" class="headerlink" title="JSON"></a>JSON</h4><p>Web应用程序最广泛使用的JavaScript Object Notation格式，用于异步前端/后端通信。Spark可以自动推断<code>JSON</code> 加载文件的架构  。<br>我们通过调用<code>json</code> 带有<code>JSON</code> 文件路径的方法作为参数来  加载它  ，例如：</p>
+</li>
+<li><p>spark.read.<strong>json</strong>(“some/path/to/file.json”)<br><a name="1fecf515"></a></p>
+<h4 id="蜂巢"><a href="#蜂巢" class="headerlink" title="蜂巢"></a>蜂巢</h4><p>Apache  <code>Hive</code> 是一个数据仓库软件包。对于接口  <code>DataFrame</code>，  <code>Hive</code> 我们需要一个  <code>SparkSession</code> 启用  <code>Hive</code>支持和类路径中所有需要的依赖项，以便Spark自动加载它们。<br>我们不会介绍与<code>Hive</code> 数据存储的接口，  因为这需要  <code>Hive</code> 更深入地了解它的工作原理和工作方式。有关该主题的更多信息，请参阅有关该主题的官方  <a href="https://spark.apache.org/docs/latest/sql-programming-guide.html#hive-tables" target="_blank" rel="noopener">文档</a>  。<br><a name="68051bf4"></a></p>
+<h4 id="数据库"><a href="#数据库" class="headerlink" title="数据库"></a>数据库</h4><p>我们可以轻松地与任何类型的数据库接口使用  <code>JDBC</code>。为了使它成为可能您需要为<code>JDBC</code> 您的类路径中包含的要连接的数据库提供所需的  驱动程序。<br>我们将使用<code>load</code> 前面提到的  方法，但我们需要将格式从默认的one（<code>Parquet</code>）更改<code>jdbc</code> 为<code>format</code> 在阅读器上  使用该  方法。我们也可以使用该  <code>jdbc</code> 方法并向其传递一个<code>Properties</code> 将保存连接属性的  类实例。<br>我们<code>JDBC</code> 通过<code>option</code> 前面提到的方法指定  连接属性  。<a href="https://spark.apache.org/docs/latest/sql-programming-guide.html#jdbc-to-other-databases" target="_blank" rel="noopener">此处</a>提供<a href="https://spark.apache.org/docs/latest/sql-programming-guide.html#jdbc-to-other-databases" target="_blank" rel="noopener">了</a>可以传递的可能选项的完整列表及其说明  。<br>下面是一个快速示例，说明如何<code>DataFrame</code> 从  <code>JDBC</code> 源代码创建  （例如来自官方文档）：</p>
+</li>
+<li><p>val jdbcDF = spark.read</p>
+</li>
 <li>.<strong>format</strong>(“jdbc”)</li>
 <li>.<strong>option</strong>(“url”, “jdbc:postgresql:dbserver”)</li>
 <li>.<strong>option</strong>(“dbtable”, “schema.tablename”)</li>
@@ -237,11 +257,20 @@
 <li>connectionProperties.<strong>put</strong>(“user”, “username”)</li>
 <li>connectionProperties.<strong>put</strong>(“password”, “password”)</li>
 <li>val jdbcDF2 = spark.read</li>
-<li>.<strong>jdbc</strong>(“jdbc:postgresql:dbserver”, “schema.tablename”, connectionProperties)<br><a name="RDD"></a><h4 id="RDD"><a href="#RDD" class="headerlink" title="RDD"></a>RDD</h4>我们可以自动将a转换  <code>RDD</code> 为a  <code>DataFrame</code>。案例类的参数名称将成为列名。它支持嵌套复杂类型，如  <code>Seq</code> 或  <code>Array</code>。<br>我们需要做的就是简单地调用  <code>toDF</code> 方法  <code>RDD</code>，即：</li>
-<li>val dataFrame = someRDD.<strong>toDF </strong>（）<br><a name="a8d2bf0a"></a><h3 id="定义架构"><a href="#定义架构" class="headerlink" title="定义架构"></a>定义架构</h3>数据的模式通常可以自动推断，但如果我们的数据没有选项，或者我们只想手动定义它，我们有三种主要方法：<br><a name="36774b1d"></a><h4 id="铸件"><a href="#铸件" class="headerlink" title="铸件"></a>铸件</h4>将列从一种类型显式转换为另一种类型。例如：</li>
-<li>val dataFrame = otherDataFrame</li>
-<li>.<strong>withColumn</strong>(“numericalColumn”, <strong>dataFrame</strong>(“numericalColumn”).<strong>cast</strong>(DoubleType))<br><a name="StructType"></a><h4 id="StructType"><a href="#StructType" class="headerlink" title="StructType"></a>StructType</h4>使用  <code>StructType</code> 和  <code>StructField</code> 类型显式定义  <code>DataType</code> 每列的内容。例如：</li>
-<li>val schemaStruct =</li>
+<li><p>.<strong>jdbc</strong>(“jdbc:postgresql:dbserver”, “schema.tablename”, connectionProperties)<br><a name="RDD"></a></p>
+<h4 id="RDD"><a href="#RDD" class="headerlink" title="RDD"></a>RDD</h4><p>我们可以自动将a转换  <code>RDD</code> 为a  <code>DataFrame</code>。案例类的参数名称将成为列名。它支持嵌套复杂类型，如  <code>Seq</code> 或  <code>Array</code>。<br>我们需要做的就是简单地调用  <code>toDF</code> 方法  <code>RDD</code>，即：</p>
+</li>
+<li><p>val dataFrame = someRDD.<strong>toDF </strong>（）<br><a name="a8d2bf0a"></a></p>
+<h3 id="定义架构"><a href="#定义架构" class="headerlink" title="定义架构"></a>定义架构</h3><p>数据的模式通常可以自动推断，但如果我们的数据没有选项，或者我们只想手动定义它，我们有三种主要方法：<br><a name="36774b1d"></a></p>
+<h4 id="铸件"><a href="#铸件" class="headerlink" title="铸件"></a>铸件</h4><p>将列从一种类型显式转换为另一种类型。例如：</p>
+</li>
+<li><p>val dataFrame = otherDataFrame</p>
+</li>
+<li><p>.<strong>withColumn</strong>(“numericalColumn”, <strong>dataFrame</strong>(“numericalColumn”).<strong>cast</strong>(DoubleType))<br><a name="StructType"></a></p>
+<h4 id="StructType"><a href="#StructType" class="headerlink" title="StructType"></a>StructType</h4><p>使用  <code>StructType</code> 和  <code>StructField</code> 类型显式定义  <code>DataType</code> 每列的内容。例如：</p>
+</li>
+<li><p>val schemaStruct =</p>
+</li>
 <li><strong>StructType</strong>(</li>
 <li><strong>StructField</strong>(“intColumn”, IntegerType, true) ::</li>
 <li><strong>StructField</strong>(“longColumn”, LongType, true) ::</li>
@@ -250,16 +279,22 @@
 <li>val df = spark.read</li>
 <li>.<strong>schema</strong>(schemaStruct)</li>
 <li>.<strong>option</strong>(“header”, true)</li>
-<li>.<strong>csv</strong>(dataPath)<br><a name="b1dfa093"></a><h4 id="编码器"><a href="#编码器" class="headerlink" title="编码器"></a>编码器</h4>这是Spark SQL的序列化和反序列化框架的概念。我们可以通过使用  <code>Encoders</code> 提供架构  <code>case object</code>。</li>
-<li>case class <strong>SchemaClass</strong>(intColumn: Int, longColumn: Long, booleanColumn: Boolean)</li>
+<li><p>.<strong>csv</strong>(dataPath)<br><a name="b1dfa093"></a></p>
+<h4 id="编码器"><a href="#编码器" class="headerlink" title="编码器"></a>编码器</h4><p>这是Spark SQL的序列化和反序列化框架的概念。我们可以通过使用  <code>Encoders</code> 提供架构  <code>case object</code>。</p>
+</li>
+<li><p>case class <strong>SchemaClass</strong>(intColumn: Int, longColumn: Long, booleanColumn: Boolean)</p>
+</li>
 <li></li>
 <li>val schemaEncoded = Encoders.product[SchemaClass].schema</li>
 <li></li>
 <li>val df = spark.read</li>
 <li>.<strong>schema</strong>(schemaEncoded)</li>
 <li>.<strong>option</strong>(“header”, true)</li>
-<li>.<strong>csv</strong>(dataPath)<br><a name="a52b63ce"></a><h3 id="保存DataFrame"><a href="#保存DataFrame" class="headerlink" title="保存DataFrame"></a>保存DataFrame</h3>我们可以<code>DataFrame</code> 通过使用<code>DataFrameWriter</code> 我们可以<code>DataFrame</code> 通过简单地调用  <code>write</code> 方法从a获得的接口  来保存  到持久存储  。<br><code>DataFrame</code> 在大多数情况下，写入  几乎完全相同，我们只是调用前面提到的方法  <code>write</code> 而不是  <code>read</code>。例如，写  <code>DataFrame</code> 一个  <code>JSON</code> 文件：</li>
-<li>val dataFrame = spark.read.<strong>csv</strong>(“someFile.csv”)</li>
+<li><p>.<strong>csv</strong>(dataPath)<br><a name="a52b63ce"></a></p>
+<h3 id="保存DataFrame"><a href="#保存DataFrame" class="headerlink" title="保存DataFrame"></a>保存DataFrame</h3><p>我们可以<code>DataFrame</code> 通过使用<code>DataFrameWriter</code> 我们可以<code>DataFrame</code> 通过简单地调用  <code>write</code> 方法从a获得的接口  来保存  到持久存储  。<br><code>DataFrame</code> 在大多数情况下，写入  几乎完全相同，我们只是调用前面提到的方法  <code>write</code> 而不是  <code>read</code>。例如，写  <code>DataFrame</code> 一个  <code>JSON</code> 文件：</p>
+</li>
+<li><p>val dataFrame = spark.read.<strong>csv</strong>(“someFile.csv”)</p>
+</li>
 <li></li>
 <li>dataFrame.write.<strong>json</strong>(“newFile”)<br><a name="eae6add1"></a><h3 id="探索DataFrame"><a href="#探索DataFrame" class="headerlink" title="探索DataFrame"></a>探索DataFrame</h3>我们有两种主要方法来检查<code>DataFrame</code> （或任何其他  <code>Dataset</code>）的内容和结构  -  <code>show</code> 和  <code>printSchema</code>。<br>该  <code>show</code> 方法有五个版本：</li>
 </ol>
@@ -426,7 +461,7 @@
 <li><a href="https://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.sql.functions$" target="_blank" rel="noopener">SQL函数可用</a></li>
 <li><a href="https://spark.apache.org/docs/latest/ml-features.html" target="_blank" rel="noopener">特征变换器文档</a></li>
 <li><a href="https://spark.apache.org/docs/latest/ml-classification-regression.html" target="_blank" rel="noopener">分类和回归算法文档</a></li>
-<li><a href="https://scalac.io/2016/12/01/extending-the-pipeline.html" target="_blank" rel="noopener">扩展管道</a><br><a name="d41d8cd9"></a><br>####</li>
+<li><a href="https://scalac.io/2016/12/01/extending-the-pipeline.html" target="_blank" rel="noopener">扩展管道</a><br><a name="d41d8cd9"></a><br>#### </li>
 </ul>
 
       
@@ -521,18 +556,18 @@
   
 <nav id="article-nav">
   
-    <a href="/2019/04/23/yuque/强大机器学习的三大支柱:规范测试，强大的训练和形式验证/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2019/04/23/yuque/Spark上的实际Python工作负载:独立群集/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          强大机器学习的三大支柱:规范测试，强大的训练和形式验证
+          Spark上的实际Python工作负载:独立群集
         
       </div>
     </a>
   
   
-    <a href="/2019/04/23/yuque/热衷最近邻算法的10个理由/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">热衷最近邻算法的10个理由</div>
+    <a href="/2019/04/22/yuque/PyTorch中用卷积神经网络进行传递学习/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">PyTorch中用卷积神经网络进行传递学习</div>
       <i class="icon-circle-right"></i>
     </a>
   

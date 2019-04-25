@@ -22,7 +22,7 @@
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1555905530978-90c111bc-7e73-4dad-8550-591aa713ce1c.png#align=left&display=inline&height=256&name=0_El05Q1qoIFY2_oGu.png&originHeight=256&originWidth=226&size=3825&status=done&width=226">
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1555905561380-51262668-d654-4515-871f-ea7c95f67633.png#align=left&display=inline&height=48&name=0_CUGEtqF5Z68U9gIQ.png&originHeight=48&originWidth=210&size=1511&status=done&width=210">
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1555905592855-e2ae7bf7-2ebd-41a3-9130-37c04bb1e1a6.png#align=left&display=inline&height=36&name=0_LfMPG1eQkQZ49uDw.png&originHeight=36&originWidth=169&size=1430&status=done&width=169">
-<meta property="og:updated_time" content="2019-04-23T02:07:48.695Z">
+<meta property="og:updated_time" content="2019-04-25T09:50:01.086Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="了解XGBoost背后的数学的端到端指南">
 <meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1555905325086-0831bee2-c1df-4c1e-8db7-b5226263f504.jpeg#align=left&display=inline&height=370&name=0_k_mwDVMBdOTeSsJY.jpg&originHeight=370&originWidth=500&size=50726&status=done&width=500">
@@ -175,15 +175,24 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1555905325086-0831bee2-c1df-4c1e-8db7-b5226263f504.jpeg#align=left&amp;display=inline&amp;height=370&amp;name=0_k_mwDVMBdOTeSsJY.jpg&amp;originHeight=370&amp;originWidth=500&amp;size=50726&amp;status=done&amp;width=500" alt="0_k_mwDVMBdOTeSsJY.jpg"><br><br><br><a id="more"></a><br><br><br><br>自从2014年推出以来，XGBoost一直被誉为机器学习黑客马拉松和竞赛的圣杯。从预测广告点击率到分类高能物理事件，XGBoost已经证明了它在性能和速度方面的优势。<br>在任何ML黑客马拉松中，我总是将XGBoost作为我的首选算法。它始终如一的精确度和节省的时间证明了它的实用性。但它是如何实际工作的？什么样的数学能力XGBoost？我们很快就会找到这些问题的答案。<br>XGBoost的联合创始人之一Tianqi Chen宣布（2016年）XGBoost的创新系统功能和算法优化使其比大多数<a href="https://www.indiumsoftware.com/machine-learning/" target="_blank" rel="noopener">机器学习解决方案的</a>速度快10倍。一个真正神奇的技术！<br>在本文中，我们将首先看看XGBoost的强大功能，然后深入探讨这种流行且强大的技术的内部运作。能够在Python或R中实现它是件好事，但了解算法的细节可以帮助您成为更好的数据科学家。<br><em>注意：我们建议您仔细阅读以下文章，以完全理解本文中提到的各种术语和概念：</em></p>
+        <p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1555905325086-0831bee2-c1df-4c1e-8db7-b5226263f504.jpeg#align=left&amp;display=inline&amp;height=370&amp;name=0_k_mwDVMBdOTeSsJY.jpg&amp;originHeight=370&amp;originWidth=500&amp;size=50726&amp;status=done&amp;width=500" alt="0_k_mwDVMBdOTeSsJY.jpg"><br><br><br><a id="more"></a></p>
+<p>自从2014年推出以来，XGBoost一直被誉为机器学习黑客马拉松和竞赛的圣杯。从预测广告点击率到分类高能物理事件，XGBoost已经证明了它在性能和速度方面的优势。<br>在任何ML黑客马拉松中，我总是将XGBoost作为我的首选算法。它始终如一的精确度和节省的时间证明了它的实用性。但它是如何实际工作的？什么样的数学能力XGBoost？我们很快就会找到这些问题的答案。<br>XGBoost的联合创始人之一Tianqi Chen宣布（2016年）XGBoost的创新系统功能和算法优化使其比大多数<a href="https://www.indiumsoftware.com/machine-learning/" target="_blank" rel="noopener">机器学习解决方案的</a>速度快10倍。一个真正神奇的技术！<br>在本文中，我们将首先看看XGBoost的强大功能，然后深入探讨这种流行且强大的技术的内部运作。能够在Python或R中实现它是件好事，但了解算法的细节可以帮助您成为更好的数据科学家。<br><em>注意：我们建议您仔细阅读以下文章，以完全理解本文中提到的各种术语和概念：</em></p>
 <ul>
-<li><a href="https://www.analyticsvidhya.com/blog/2018/06/comprehensive-guide-for-ensemble-models/" target="_blank" rel="noopener"><em>综合建模综合指南（使用Python代码）</em></a><br><a name="767fa455"></a><h3 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h3></li>
-<li>XGBoost的力量</li>
+<li><p><a href="https://www.analyticsvidhya.com/blog/2018/06/comprehensive-guide-for-ensemble-models/" target="_blank" rel="noopener"><em>综合建模综合指南（使用Python代码）</em></a><br><a name="767fa455"></a></p>
+<h3 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h3></li>
+<li><p>XGBoost的力量</p>
+</li>
 <li>为什么要合奏学习？</li>
 <li>展示推动潜力</li>
 <li>使用梯度下降来优化损失函数</li>
-<li>XGBoost的独特功能<br><a name="885849d6"></a><h3 id="XGBoost的力量"><a href="#XGBoost的力量" class="headerlink" title="XGBoost的力量"></a>XGBoost的力量</h3>这种强大算法的优点在于其可扩展性，通过并行和分布式计算推动快速学习，并提供高效的内存使用。<br>因此，欧洲核子研究中心认为它是对大型强子对撞机信号进行分类的最佳方法也就不足为奇了。欧洲核子研究中心提出的这一特殊挑战需要一种可扩展的解决方案，以便以每年3PB的速率处理数据，并在复杂的物理过程中有效地区分极为罕见的信号和背景噪声。XGBoost成为最有用，最直接和最强大的解决方案。<br>现在，让我们深入探讨XGBoost的内部运作。<br><a name="dcf5ee71"></a><h3 id="为什么合奏学习？"><a href="#为什么合奏学习？" class="headerlink" title="为什么合奏学习？"></a>为什么合奏学习？</h3>XGBoost是一种集成学习方法。有时，依靠一个机器学习模型的结果可能还不够。集成学习提供了一种系统的解决方案，可以结合多个学习者的预测能力。结果是单个模型，它给出了几个模型的聚合输出。<br>形成整体的模型，也称为基础学习者，可以来自相同的学习算法或不同的学习算法。<strong>套袋和助力是两种广泛使用的整体学习者</strong>。虽然这两种技术可以与几种统计模型一起使用，但最主要的用法是使用决策树。<br>在更详细地介绍一下增强的概念之前，让我们先简单讨论一下装袋。<br><a name="79608bd8"></a><h3 id="套袋"><a href="#套袋" class="headerlink" title="套袋"></a>套袋</h3>虽然决策树是最容易解释的模型之一，但它们表现出高度可变的行为。考虑我们随机分成两部分的单个训练数据集。现在，让我们使用每个部分来训练决策树，以获得两个模型。<br>当我们适合这两种模型时，它们会产生不同的结果。据说决策树由于这种行为而与高方差相关联。套袋或增强聚合有助于减少任何学习者的差异。并行生成的几个决策树构成了装袋技术的基础学习者。将替换样本数据提供给这些学习者进行培训。最终预测是所有学习者的平均输出。<br><a name="779f5ac5"></a><h3 id="推进"><a href="#推进" class="headerlink" title="推进"></a>推进</h3>在增强中，树是顺序构建的，使得每个后续树旨在减少先前树的错误。每棵树都从其前身学习并更新残差。因此，序列中接下来生长的树将从残差的更新版本中学习。<br>提升的基础学习者是弱学习者，其中偏见很高，预测能力比随机猜测好一点。这些弱学习者中的每一个都为预测提供了一些重要信息，通过有效地结合这些弱学习者，使得提升技术能够产生强大的学习者。最后的强大学习者会降低偏见和差异。<br><strong>与随机森林这样的套袋技术形成对比，其中树木最大程度地生长，增强使用树木，分裂较少</strong>。这种不太深的小树是高度可解释的。可以通过诸如k折交叉验证的验证技术来最佳地选择诸如树的数量或迭代，梯度增强学习的速率以及树的深度之类的参数。<strong>拥有大量树木可能会导致过度拟合。因此，有必要仔细选择提升的停止标准。</strong><br>提升包括三个简单的步骤：</li>
-<li>定义初始模型F0以预测目标变量y。该模型将与残差（y - F0）相关联</li>
+<li><p>XGBoost的独特功能<br><a name="885849d6"></a></p>
+<h3 id="XGBoost的力量"><a href="#XGBoost的力量" class="headerlink" title="XGBoost的力量"></a>XGBoost的力量</h3><p>这种强大算法的优点在于其可扩展性，通过并行和分布式计算推动快速学习，并提供高效的内存使用。<br>因此，欧洲核子研究中心认为它是对大型强子对撞机信号进行分类的最佳方法也就不足为奇了。欧洲核子研究中心提出的这一特殊挑战需要一种可扩展的解决方案，以便以每年3PB的速率处理数据，并在复杂的物理过程中有效地区分极为罕见的信号和背景噪声。XGBoost成为最有用，最直接和最强大的解决方案。<br>现在，让我们深入探讨XGBoost的内部运作。<br><a name="dcf5ee71"></a></p>
+<h3 id="为什么合奏学习？"><a href="#为什么合奏学习？" class="headerlink" title="为什么合奏学习？"></a>为什么合奏学习？</h3><p>XGBoost是一种集成学习方法。有时，依靠一个机器学习模型的结果可能还不够。集成学习提供了一种系统的解决方案，可以结合多个学习者的预测能力。结果是单个模型，它给出了几个模型的聚合输出。<br>形成整体的模型，也称为基础学习者，可以来自相同的学习算法或不同的学习算法。<strong>套袋和助力是两种广泛使用的整体学习者</strong>。虽然这两种技术可以与几种统计模型一起使用，但最主要的用法是使用决策树。<br>在更详细地介绍一下增强的概念之前，让我们先简单讨论一下装袋。<br><a name="79608bd8"></a></p>
+<h3 id="套袋"><a href="#套袋" class="headerlink" title="套袋"></a>套袋</h3><p>虽然决策树是最容易解释的模型之一，但它们表现出高度可变的行为。考虑我们随机分成两部分的单个训练数据集。现在，让我们使用每个部分来训练决策树，以获得两个模型。<br>当我们适合这两种模型时，它们会产生不同的结果。据说决策树由于这种行为而与高方差相关联。套袋或增强聚合有助于减少任何学习者的差异。并行生成的几个决策树构成了装袋技术的基础学习者。将替换样本数据提供给这些学习者进行培训。最终预测是所有学习者的平均输出。<br><a name="779f5ac5"></a></p>
+<h3 id="推进"><a href="#推进" class="headerlink" title="推进"></a>推进</h3><p>在增强中，树是顺序构建的，使得每个后续树旨在减少先前树的错误。每棵树都从其前身学习并更新残差。因此，序列中接下来生长的树将从残差的更新版本中学习。<br>提升的基础学习者是弱学习者，其中偏见很高，预测能力比随机猜测好一点。这些弱学习者中的每一个都为预测提供了一些重要信息，通过有效地结合这些弱学习者，使得提升技术能够产生强大的学习者。最后的强大学习者会降低偏见和差异。<br><strong>与随机森林这样的套袋技术形成对比，其中树木最大程度地生长，增强使用树木，分裂较少</strong>。这种不太深的小树是高度可解释的。可以通过诸如k折交叉验证的验证技术来最佳地选择诸如树的数量或迭代，梯度增强学习的速率以及树的深度之类的参数。<strong>拥有大量树木可能会导致过度拟合。因此，有必要仔细选择提升的停止标准。</strong><br>提升包括三个简单的步骤：</p>
+</li>
+<li><p>定义初始模型F0以预测目标变量y。该模型将与残差（y - F0）相关联</p>
+</li>
 <li>新模型h1适合于前一步骤的残差</li>
 <li>现在，F0和h1组合起来给F1，F0的提升版本。F1的均方误差将低于F0的误差：</li>
 </ul>

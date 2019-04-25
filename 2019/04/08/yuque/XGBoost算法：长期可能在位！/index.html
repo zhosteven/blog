@@ -20,7 +20,7 @@
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1554692717316-9be63bbc-6094-4bb5-9f12-b539e3e52244.jpeg#align=left&display=inline&height=539&name=3.jpeg&originHeight=722&originWidth=1000&size=255796&status=done&width=746">
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1554692803667-2230a8de-9a3a-4b1d-9fde-6930d429d55c.png#align=left&display=inline&height=388&name=4.png&originHeight=404&originWidth=777&size=88329&status=done&width=746">
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1554692844187-5bdcc8c1-b4c5-4fb7-95c6-79baf19ffc03.jpeg#align=left&display=inline&height=420&name=5.jpeg&originHeight=540&originWidth=960&size=70860&status=done&width=746">
-<meta property="og:updated_time" content="2019-04-23T02:07:48.707Z">
+<meta property="og:updated_time" content="2019-04-25T09:50:01.098Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="XGBoost算法：长期可能在位！">
 <meta name="twitter:description" content="我还记得十五年前我第一份工作的第一天。我刚完成研究生课程，并以分析师的身份加入了一家全球投资银行。在我的第一天，我一直拉直领带，并试着记住我学过的一切。与此同时，在内心深处，我想知道我是否对企业界足够好。感觉到我的焦虑，我的老板微笑着说：“别担心！你唯一需要知道的就是回归建模！“我记得自己在想，“我得到了这个！”。我知道回归建模; 线性和逻辑回归。我的老板是对的。在我任职期间，我专门建立了基于回归">
@@ -182,8 +182,11 @@
 <li>广泛的应用：可用于解决回归，分类，排名和用户定义的预测问题。</li>
 <li>可移植性：在Windows，Linux和OS X上运行顺畅。</li>
 <li>语言：支持所有主要的编程语言，包括C ++，Python，R，Java，Scala和Julia。</li>
-<li>云集成：支持AWS，Azure和Yarn集群，适用于Flink，Spark和其他生态系统。<br><a name="8186e153"></a><h3 id="如何为XGBoost建立直觉？"><a href="#如何为XGBoost建立直觉？" class="headerlink" title="如何为XGBoost建立直觉？"></a>如何为XGBoost建立直觉？</h3>决策树以其最简单的形式，易于可视化和可解释的算法，但为下一代基于树的算法建立直觉可能有点棘手。请参阅下面的简单类比，以更好地了解基于树的算法的演变。<br><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1554692717316-9be63bbc-6094-4bb5-9f12-b539e3e52244.jpeg#align=left&amp;display=inline&amp;height=539&amp;name=3.jpeg&amp;originHeight=722&amp;originWidth=1000&amp;size=255796&amp;status=done&amp;width=746" alt="3.jpeg"><br>想象一下，你是一名招聘经理，面试几位具有优秀资历的候选人。基于树的算法演变的每一步都可以看作是访谈过程的一个版本。</li>
-<li><strong>决策树</strong>：每个招聘经理都有一套标准，如教育水平，经验年数，面试表现。决策树类似于招聘经理根据他或她自己的标准面试候选人。</li>
+<li><p>云集成：支持AWS，Azure和Yarn集群，适用于Flink，Spark和其他生态系统。<br><a name="8186e153"></a></p>
+<h3 id="如何为XGBoost建立直觉？"><a href="#如何为XGBoost建立直觉？" class="headerlink" title="如何为XGBoost建立直觉？"></a>如何为XGBoost建立直觉？</h3><p>决策树以其最简单的形式，易于可视化和可解释的算法，但为下一代基于树的算法建立直觉可能有点棘手。请参阅下面的简单类比，以更好地了解基于树的算法的演变。<br><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1554692717316-9be63bbc-6094-4bb5-9f12-b539e3e52244.jpeg#align=left&amp;display=inline&amp;height=539&amp;name=3.jpeg&amp;originHeight=722&amp;originWidth=1000&amp;size=255796&amp;status=done&amp;width=746" alt="3.jpeg"><br>想象一下，你是一名招聘经理，面试几位具有优秀资历的候选人。基于树的算法演变的每一步都可以看作是访谈过程的一个版本。</p>
+</li>
+<li><p><strong>决策树</strong>：每个招聘经理都有一套标准，如教育水平，经验年数，面试表现。决策树类似于招聘经理根据他或她自己的标准面试候选人。</p>
+</li>
 <li><strong>套袋</strong>：现在想象一下，而不是一个面试官，现在有一个面试小组，每个面试官都有一个投票。套袋或自助聚合涉及通过民主投票过程将来自所有调查员的输入结合起来以做出最终决定。</li>
 <li><strong>随机森林</strong>：它是一种基于装袋的算法，具有关键差异，其中仅随机选择特征的子集。换句话说，每个面试官只会根据某些随机选择的资格测试受访者（例如，测试编程技能的技术面试和评估非技术技能的行为面试）。</li>
 <li><strong>提升</strong>：这是一种替代方法，每位访调员根据前一位访调员的反馈改变评估标准。通过部署更加动态的评估流程，“提高”面试流程的效率。</li>

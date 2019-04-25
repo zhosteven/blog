@@ -15,7 +15,7 @@
 <meta property="og:site_name" content="A+">
 <meta property="og:description" content="MLflow模型MLflow模型是用于打包机器学习模型的标准格式，可用于各种下游工具 - 例如，通过REST API实时提供服务或在Apache Spark上进行批量推理。该格式定义了一种约定，允许您以不同的“风格”保存模型，这些“风味”可以被不同的下游工具理解。 目录  存储格式 模型API 内置型号口味 自定义口味 内置部署工具存储格式每个MLflow模型都是一个包含任意文件MLmodel">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-04-24T03:02:06.763Z">
+<meta property="og:updated_time" content="2019-04-25T09:50:01.138Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MLflow模型">
 <meta name="twitter:description" content="MLflow模型MLflow模型是用于打包机器学习模型的标准格式，可用于各种下游工具 - 例如，通过REST API实时提供服务或在Apache Spark上进行批量推理。该格式定义了一种约定，允许您以不同的“风格”保存模型，这些“风味”可以被不同的下游工具理解。 目录  存储格式 模型API 内置型号口味 自定义口味 内置部署工具存储格式每个MLflow模型都是一个包含任意文件MLmodel">
@@ -226,11 +226,11 @@
 <li><a href="https://mlflow.org/docs/latest/models.html#export-a-python-function-model-as-an-apache-spark-udf" target="_blank" rel="noopener">将<code>python_function</code>模型导出为Apache Spark UDF</a><br><a name="14f802bf"></a><h3 id="将python-function模型部署为本地REST-API端点"><a href="#将python-function模型部署为本地REST-API端点" class="headerlink" title="将python_function模型部署为本地REST API端点"></a><a href="https://mlflow.org/docs/latest/models.html#id7" target="_blank" rel="noopener">将<code>python_function</code>模型部署为本地REST API端点</a><a href="https://mlflow.org/docs/latest/models.html#deploy-a-python-function-model-as-a-local-rest-api-endpoint" target="_blank" rel="noopener"></a></h3>MLflow可以在本地部署模型作为本地REST API端点，或直接对CSV文件进行评分。在部署到远程模型服务器之前，此功能是测试模型的便捷方式。您可以使用CLI界面在本地部署Python函数flavor到<a href="https://mlflow.org/docs/latest/python_api/mlflow.pyfunc.html#module-mlflow.pyfunc" target="_blank" rel="noopener"><code>mlflow.pyfunc</code></a>模块。本地REST API服务器接受以下数据格式作为输入：<blockquote>
 <ul>
 <li>JSON序列化的pandas DataFrames的<code>split</code>方向。例如， 。使用 请求标头值指定此格式。从MLflow 0.9.0开始，如果是（即没有格式规范），这将是默认格式。<code>data = pandas_df.to_json(orient=&#39;split&#39;)`</code>Content-Type<code>application/json; format=pandas-split</code>Content-Type<code></code>application/json`</li>
+<li>JSON序列化的pandas DataFrames的<code>records</code>方向。<em>我们不建议使用此格式，因为无法保证保留列顺序。</em>目前，使用 或的<code>Content-Type</code>请求标头值 指定此格式。从MLflow 0.9.0开始，将参考 格式。为了向前兼容，我们建议使用格式或指定内容类型。<code>application/json; format=pandas-records`</code>application/json<code>application/json</code>split<code>split</code>application/json; format=pandas-records`</li>
+<li>CSV序列化的pandas DataFrames。例如，。使用请求标头值指定此格式。<code>data = pandas_df.to_csv()`</code>Content-Type<code></code>text/csv`</li>
 </ul>
 </blockquote>
 </li>
-<li>JSON序列化的pandas DataFrames的<code>records</code>方向。<em>我们不建议使用此格式，因为无法保证保留列顺序。</em>目前，使用 或的<code>Content-Type</code>请求标头值 指定此格式。从MLflow 0.9.0开始，将参考 格式。为了向前兼容，我们建议使用格式或指定内容类型。<code>application/json; format=pandas-records`</code>application/json<code>application/json</code>split<code>split</code>application/json; format=pandas-records`</li>
-<li>CSV序列化的pandas DataFrames。例如，。使用请求标头值指定此格式。<code>data = pandas_df.to_csv()`</code>Content-Type<code></code>text/csv`</li>
 </ul>
 <p>有关序列化pandas DataFrames的更多信息，请参阅 <a href="https://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.to_json.html" target="_blank" rel="noopener">pandas.DataFrame.to_json</a>。<br><a name="ddf7d2a5"></a></p>
 <h4 id="命令"><a href="#命令" class="headerlink" title="命令"></a>命令<a href="https://mlflow.org/docs/latest/models.html#commands" target="_blank" rel="noopener"></a></h4><ul>
@@ -381,11 +381,11 @@
   
 <nav id="article-nav">
   
-    <a href="/2019/03/15/yuque/将ML投入生产：在Python中使用Apache Kafka/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2019/03/15/yuque/使用MLflow赋予Spark功能/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          将ML投入生产：在Python中使用Apache Kafka
+          使用MLflow赋予Spark功能
         
       </div>
     </a>

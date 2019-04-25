@@ -17,7 +17,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1552619383275-64d84bcf-39a4-48a9-b35c-64a3282025bf.png#align=left&display=inline&height=367&originHeight=527&originWidth=1070&size=0&status=done&width=746">
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1552619764349-39a712fe-a675-4e68-8258-fcfec15858f3.png#align=left&display=inline&height=901&originHeight=1333&originWidth=1104&size=0&status=done&width=746">
-<meta property="og:updated_time" content="2019-04-24T03:02:06.763Z">
+<meta property="og:updated_time" content="2019-04-25T09:50:01.142Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Mlflow介绍">
 <meta name="twitter:description" content="介绍MLflow是一个完整的机器学习生命周期的开源平台。这意味着它具有在训练和运行期间监控模型的组件，存储模型的能力，在生产代码中加载模型以及创建管道。MLflow的主要目标是在ML之上提供额外的层，允许数据科学家与几乎任何机器学习库（h2o，keras，mleap，pytorch，sklearn和tensorflow）一起工作，同时，它将他们的工作带到另一个层次。MLflow提供三个组件：">
@@ -219,8 +219,11 @@
 <li><a href="https://mlflow.org/docs/latest/tutorial.html#comparing-the-models" target="_blank" rel="noopener">比较模型</a></li>
 <li><a href="https://mlflow.org/docs/latest/tutorial.html#packaging-the-training-code" target="_blank" rel="noopener">打包培训代码</a></li>
 <li><a href="https://mlflow.org/docs/latest/tutorial.html#serving-the-model" target="_blank" rel="noopener">服务模型</a></li>
-<li><a href="https://mlflow.org/docs/latest/tutorial.html#more-resources" target="_blank" rel="noopener">更多资源</a><br><a name="60691d91"></a><h2 id="你需要什么"><a href="#你需要什么" class="headerlink" title="你需要什么"></a><a href="https://mlflow.org/docs/latest/tutorial.html#id5" target="_blank" rel="noopener">你需要什么</a><a href="https://mlflow.org/docs/latest/tutorial.html#what-you-ll-need" target="_blank" rel="noopener"></a></h2>要运行本教程，您需要：</li>
-<li>安装MLflow（通过）<code>pip install mlflow</code></li>
+<li><p><a href="https://mlflow.org/docs/latest/tutorial.html#more-resources" target="_blank" rel="noopener">更多资源</a><br><a name="60691d91"></a></p>
+<h2 id="你需要什么"><a href="#你需要什么" class="headerlink" title="你需要什么"></a><a href="https://mlflow.org/docs/latest/tutorial.html#id5" target="_blank" rel="noopener">你需要什么</a><a href="https://mlflow.org/docs/latest/tutorial.html#what-you-ll-need" target="_blank" rel="noopener"></a></h2><p>要运行本教程，您需要：</p>
+</li>
+<li><p>安装MLflow（通过）<code>pip install mlflow</code></p>
+</li>
 <li>安装<a href="https://conda.io/docs/user-guide/install/index.html#" target="_blank" rel="noopener">conda</a></li>
 <li>克隆（下载）MLflow存储库 <code>git clone https://github.com/mlflow/mlflow</code></li>
 <li><code>cd</code>进入<code>examples</code>你的MLflow克隆目录 - 我们将使用这个工作目录来运行教程。我们避免直接从我们的MLflow克隆中运行，因为这样做会导致教程从源代码中使用MLflow，而不是使用MLflow的PyPI安装。<br><a name="a162534b"></a><h2 id="训练模型"><a href="#训练模型" class="headerlink" title="训练模型"></a>训练<a href="https://mlflow.org/docs/latest/tutorial.html#id6" target="_blank" rel="noopener">模型</a></h2>首先，训练一个带有两个超参数的线性回归模型：<code>alpha</code>和<code>l1_ratio</code>。</li>
@@ -257,7 +260,8 @@
 </blockquote>
 <p>部署服务器后，您可以传递一些示例数据并查看预测。以下示例用于<code>curl</code>向<code>split</code>pyfunc服务器发送带有方向的JSON序列化pandas DataFrame 。有关pyfunc模型服务器接受的输入数据格式的更多信息，请参阅 <a href="https://mlflow.org/docs/latest/models.html#pyfunc-deployment" target="_blank" rel="noopener">MLflow部署工具文档</a>。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -X POST -H &quot;Content-Type:application/json; format=pandas-split&quot; --data &apos;&#123;&quot;columns&quot;:[&quot;alcohol&quot;, &quot;chlorides&quot;, &quot;citric acid&quot;, &quot;density&quot;, &quot;fixed acidity&quot;, &quot;free sulfur dioxide&quot;, &quot;pH&quot;, &quot;residual sugar&quot;, &quot;sulphates&quot;, &quot;total sulfur dioxide&quot;, &quot;volatile acidity&quot;],&quot;data&quot;:[[12.8, 0.029, 0.48, 0.98, 6.2, 29, 3.33, 1.2, 0.39, 75, 0.66]]&#125;&apos; http://127.0.0.1:1234/invocations</span><br></pre></td></tr></table></figure>
-<p>服务器应该响应输出类似于：<br><br><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&quot;predictions&quot;: [6.379428821398614]&#125;</span><br></pre></td></tr></table></figure></p>
+<p>服务器应该响应输出类似于：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&quot;predictions&quot;: [6.379428821398614]&#125;</span><br></pre></td></tr></table></figure>
 
       
 
@@ -351,11 +355,11 @@
   
 <nav id="article-nav">
   
-    <a href="/2019/03/15/yuque/MLflow项目/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2019/03/15/yuque/MLFLOW概念/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          MLflow项目
+          MLFLOW概念
         
       </div>
     </a>

@@ -22,7 +22,7 @@
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1555912309113-4b5d5c9d-7f6a-4ea9-8a74-e3aad3fd3cbf.png#align=left&display=inline&height=121&originHeight=287&originWidth=996&size=0&status=done&width=420">
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/gif/219582/1555912309251-2d20a355-5617-4861-9a52-ff6dfb3efb90.gif#align=left&display=inline&percent=0&size=0&status=done&width=374">
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/gif/219582/1555912309028-63601ab7-a1bd-4d03-89e3-5e9dfafa34f4.gif#align=left&display=inline&percent=0&size=0&status=done&width=375">
-<meta property="og:updated_time" content="2019-04-24T03:02:06.751Z">
+<meta property="og:updated_time" content="2019-04-25T09:50:01.082Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="梯度下降优化算法概述">
 <meta name="twitter:description" content="梯度下降优化算法综述  这篇文章探讨了许多最流行的基于梯度的优化算法实际上是有效的。注意: 如果你正在寻找一篇评论论文，这篇博客文章也是关于 arXiv 的文章。更新 09.02.2018: 添加 AMSGrad。更新 24.11.2017: 本文中的大部分内容现在也可以作为幻灯片提供。更新 15.06.2017: 添加了 AdaMax 和 Nadam 的衍生产品。更新 21.0 6.16: 此帖">
@@ -179,22 +179,7 @@
         <p>梯度下降优化算法综述</p>
 <p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1555912309128-8d8bc286-c5f6-48ca-88db-71827569cc6f.png#align=left&amp;display=inline&amp;height=687&amp;originHeight=572&amp;originWidth=1121&amp;size=0&amp;status=done&amp;width=1347" alt></p>
 <p>这篇文章探讨了许多最流行的基于梯度的优化算法实际上是有效的。<br>注意: 如果你正在寻找一篇评论论文，这篇博客文章也是关于 arXiv 的文章。<br>更新 09.02.2018: 添加 AMSGrad。<br>更新 24.11.2017: 本文中的大部分内容现在也可以作为幻灯片提供。<br>更新 15.06.2017: 添加了 AdaMax 和 Nadam 的衍生产品。<br>更新 21.0 6.16: 此帖子已发布至黑客新闻。讨论提供了一些相关工作和其他技术的有趣的指针。</p>
-<a id="more"></a><br>目录:<br><em> 梯度下降变量
-  </em> 批量梯度下降<br>  <em> 随机梯度下降
-  </em> 小批量梯度下降<br><em> 挑战
-</em> 梯度下降优化算法<br>  <em> 动量
-  </em> 加速梯度<br>  <em> Adagrad
-  </em> 阿德达塔<br>  <em> RMSprop
-  </em> 亚当<br>  <em> AdaMax
-  </em> 那达慕<br>  <em> AMSGrad
-  </em> 算法可视化<br>  <em> 选择哪个优化器？
-</em> SGD 的并行化和分发<br>  <em> 霍格菲尔德!
-  </em> 倾盆大雨<br>  <em> SGD 的延迟容忍算法
-  </em> TensorFlow<br>  <em> 弹性平均 SGD
-</em> 优化 SGD 的附加策略<br>  <em> 洗牌与课程学习
-  </em> 批量标准化<br>  <em> 提前停车
-  </em> 梯度噪声<br><em> 结论
-</em> 参考资料<br><br>梯度下降算法是进行优化的最流行的算法之一，也是迄今为止优化神经网络的最常见的方法。与此同时，每个最先进的深度学习库都包含优化梯度下降的各种算法的实现 (例如 lasagne 、 caffe 和 keras 的文档)。然而，这些算法通常被用作黑盒优化器，因为很难对它们的优缺点进行实际解释。<br>这篇博客文章旨在为你提供优化梯度下降的不同算法的行为的直觉，这将有助于你使用它们。我们首先来看一下梯度下降的不同变体。然后，我们将简要总结培训过程中的挑战。随后，我们将介绍最常见的优化算法，展示它们解决这些挑战的动机，以及这将如何导致它们更新规则的推导。我们还将简要介绍在并行和分布式环境中优化梯度下降的算法和体系结构。最后，我们将考虑有助于优化梯度下降的附加策略。<br>Gradient descent is a way to minimize an objective function J(θ)J(θ) parameterized by a model’s parameters θ∈Rdθ∈Rd by updating the parameters in the opposite direction of the gradient of the objective function ∇θJ(θ)∇θJ(θ) w.r.t. to the parameters. The learning rate ηηdetermines the size of the steps we take to reach a (local) minimum. In other words, we follow the direction of the slope of the surface created by the objective function downhill until we reach a valley. If you are unfamiliar with gradient descent, you can find a good introduction on optimizing neural networks <a href="http://cs231n.github.io/optimization-1/" target="_blank" rel="noopener">here</a>.<br><a name="fae5c6de"></a><br># 梯度下降变量<br>梯度下降有三种变体，它们与我们用来计算目标函数梯度的数据不同。根据数据量，我们在参数更新的准确性和执行更新所需的时间之间进行权衡。<br><a name="d6a6c613"></a><br>## Batch gradient descent<br>Vanilla gradient descent, aka batch gradient descent, computes the gradient of the cost function w.r.t. to the parameters θθ for the entire training dataset:<br>θ=θ−η⋅∇θJ(θ)θ=θ−η⋅∇θJ(θ).<br>由于我们需要计算整个数据集的梯度来执行一次更新，批量梯度下降可能非常缓慢，对于不适合内存的数据集来说也是棘手的。批量梯度下降也不允许我们在线更新我们的模型，即动态更新新的例子。<br>在代码中，批量梯度下降看起来是这样的:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(nb_epochs):</span><br><span class="line">  params_grad = evaluate_gradient(loss_function, data, params)</span><br><span class="line">  params = params - learning_rate * params_grad</span><br></pre></td></tr></table></figure>
+<a id="more"></a><br>目录:<br><br>- 梯度下降变量<br>  - 批量梯度下降<br>  - 随机梯度下降<br>  - 小批量梯度下降<br>- 挑战<br>- 梯度下降优化算法<br>  - 动量<br>  - 加速梯度<br>  - Adagrad<br>  - 阿德达塔<br>  - RMSprop<br>  - 亚当<br>  - AdaMax<br>  - 那达慕<br>  - AMSGrad<br>  - 算法可视化<br>  - 选择哪个优化器？<br>- SGD 的并行化和分发<br>  - 霍格菲尔德!<br>  - 倾盆大雨<br>  - SGD 的延迟容忍算法<br>  - TensorFlow<br>  - 弹性平均 SGD<br>- 优化 SGD 的附加策略<br>  - 洗牌与课程学习<br>  - 批量标准化<br>  - 提前停车<br>  - 梯度噪声<br>- 结论<br>- 参考资料<br><br>梯度下降算法是进行优化的最流行的算法之一，也是迄今为止优化神经网络的最常见的方法。与此同时，每个最先进的深度学习库都包含优化梯度下降的各种算法的实现 (例如 lasagne 、 caffe 和 keras 的文档)。然而，这些算法通常被用作黑盒优化器，因为很难对它们的优缺点进行实际解释。<br>这篇博客文章旨在为你提供优化梯度下降的不同算法的行为的直觉，这将有助于你使用它们。我们首先来看一下梯度下降的不同变体。然后，我们将简要总结培训过程中的挑战。随后，我们将介绍最常见的优化算法，展示它们解决这些挑战的动机，以及这将如何导致它们更新规则的推导。我们还将简要介绍在并行和分布式环境中优化梯度下降的算法和体系结构。最后，我们将考虑有助于优化梯度下降的附加策略。<br>Gradient descent is a way to minimize an objective function J(θ)J(θ) parameterized by a model’s parameters θ∈Rdθ∈Rd by updating the parameters in the opposite direction of the gradient of the objective function ∇θJ(θ)∇θJ(θ) w.r.t. to the parameters. The learning rate ηηdetermines the size of the steps we take to reach a (local) minimum. In other words, we follow the direction of the slope of the surface created by the objective function downhill until we reach a valley. If you are unfamiliar with gradient descent, you can find a good introduction on optimizing neural networks <a href="http://cs231n.github.io/optimization-1/" target="_blank" rel="noopener">here</a>.<br><a name="fae5c6de"></a><br># 梯度下降变量<br>梯度下降有三种变体，它们与我们用来计算目标函数梯度的数据不同。根据数据量，我们在参数更新的准确性和执行更新所需的时间之间进行权衡。<br><a name="d6a6c613"></a><br>## Batch gradient descent<br>Vanilla gradient descent, aka batch gradient descent, computes the gradient of the cost function w.r.t. to the parameters θθ for the entire training dataset:<br>θ=θ−η⋅∇θJ(θ)θ=θ−η⋅∇θJ(θ).<br>由于我们需要计算整个数据集的梯度来执行一次更新，批量梯度下降可能非常缓慢，对于不适合内存的数据集来说也是棘手的。批量梯度下降也不允许我们在线更新我们的模型，即动态更新新的例子。<br>在代码中，批量梯度下降看起来是这样的:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(nb_epochs):</span><br><span class="line">  params_grad = evaluate_gradient(loss_function, data, params)</span><br><span class="line">  params = params - learning_rate * params_grad</span><br></pre></td></tr></table></figure>
 <p>对于预定义的周期数，我们首先计算整个数据集 w.r.t.的损失函数的梯度向量参数。我们的参数向量参数。请注意，最先进的深度学习库提供了自动区分功能，可以有效地计算梯度 w.r.t.一些参数。如果你自己推导梯度，那么梯度检查是一个好主意。(有关如何正确检查渐变的一些伟大提示，请参见这里。))<br>然后，我们用决定我们执行的更新有多大的学习率，在梯度的相反方向更新我们的参数。保证批量梯度下降收敛到凸误差曲面的全局最小值，收敛到非凸曲面的局部最小值。<br><a name="96d56606"></a></p>
 <h2 id="随机梯度下降"><a href="#随机梯度下降" class="headerlink" title="随机梯度下降"></a>随机梯度下降</h2><p>相反，随机梯度下降 (SGD) 对每个训练示例 x (i) 和标签 y (i) 执行参数更新:<br>θ=θ−η⋅∇θJ(θ;x(i);y(i))θ=θ−η⋅∇θJ(θ;x(i);y(i)).<br>批量梯度下降对大型数据集执行冗余计算，因为它在每次参数更新之前为类似示例重新计算梯度。SGD 通过一次执行一次更新来消除这种冗余。因此，它通常速度更快，也可以用于在线学习。<br>SGD 以很高的方差执行频繁更新，导致目标函数像图 1 中那样波动很大。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1555912309125-b3e24e2a-491a-46cb-81f0-4ff78a8983ac.png#align=left&amp;display=inline&amp;height=228&amp;originHeight=380&amp;originWidth=484&amp;size=0&amp;status=done&amp;width=290" alt>图片 1: SGD 波动 (来源: 维基百科)<br>当批量梯度下降收敛到参数所在流域的最小值时，SGD 的波动一方面使它能够跳到新的更好的局部最小值。另一方面，由于 SGD 将继续过度拍摄，这最终使收敛复杂化到精确的最小值。然而，当我们慢慢降低学习率时，SGD 显示出与批梯度下降相同的收敛行为, 对于非凸和凸优化，几乎可以肯定地收敛到局部或全局最小值。<br>它的代码片段只是在训练示例上添加了一个循环，并评估了梯度 w.r.t.每个例子。请注意，我们在本节中解释的每个时代洗牌训练数据。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(nb_epochs):</span><br><span class="line">  np.random.shuffle(data)</span><br><span class="line">  <span class="keyword">for</span> example <span class="keyword">in</span> data:</span><br><span class="line">    params_grad = evaluate_gradient(loss_function, example, params)</span><br><span class="line">    params = params - learning_rate * params_grad</span><br></pre></td></tr></table></figure></p>
 <p><a name="8e86b4b1"></a></p>
@@ -391,18 +376,18 @@
   
 <nav id="article-nav">
   
-    <a href="/2019/04/23/yuque/Spark上的实际Python工作负载:独立群集/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2019/04/22/yuque/Boosted Trees简介/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          Spark上的实际Python工作负载:独立群集
+          Boosted Trees简介
         
       </div>
     </a>
   
   
-    <a href="/2019/04/22/yuque/在机器学习预测中转换分类数据的可用性/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">在机器学习预测中转换分类数据的可用性</div>
+    <a href="/2019/04/22/yuque/爱最近邻算法的10个理由/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">爱最近邻算法的10个理由</div>
       <i class="icon-circle-right"></i>
     </a>
   

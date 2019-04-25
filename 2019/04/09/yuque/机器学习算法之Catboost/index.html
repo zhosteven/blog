@@ -21,7 +21,7 @@
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/svg/219582/1554781155389-93a7215e-d007-4830-920f-142037a32da3.svg#align=left&display=inline&height=45&name=quicklatex.com-ee1016d396b7f2e9bf0c56da53622a6d_l3.svg&originHeight=45&originWidth=228&size=21085&status=done&width=228">
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/svg/219582/1554781177243-b8740f17-a6b4-4ee0-9a1e-c55b07a97263.svg#align=left&display=inline&height=21&originHeight=13&originWidth=13&size=0&status=done&width=21">
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/svg/219582/1554781202962-c55dfd4f-061f-4a87-93bf-f8efa8c27511.svg#align=left&display=inline&height=43&name=quicklatex.com-8bd8af636423556804d679d48898e880_l3.svg&originHeight=43&originWidth=122&size=14909&status=done&width=122">
-<meta property="og:updated_time" content="2019-04-23T02:07:48.703Z">
+<meta property="og:updated_time" content="2019-04-25T09:50:01.094Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="机器学习算法之Catboost">
 <meta name="twitter:description" content="CatBoost是俄罗斯的搜索巨头Yandex在2017年开源的机器学习库，是Gradient Boosting(梯度提升) + Categorical Features(类别型特征)，也是基于梯度提升决策树的机器学习框架。">
@@ -227,8 +227,11 @@
 <li>is_fitted_</li>
 <li>tree_count_</li>
 <li>feature_importances_</li>
-<li>random_seed_<br><a name="c74cf90e"></a><h3 id="CatBoost参数详解"><a href="#CatBoost参数详解" class="headerlink" title="CatBoost参数详解"></a>CatBoost参数详解</h3>通用参数：</li>
-<li>loss_function 损失函数，支持的有RMSE, Logloss, MAE, CrossEntropy, Quantile, LogLinQuantile, Multiclass, MultiClassOneVsAll, MAPE, Poisson。默认RMSE。</li>
+<li><p>random_seed_<br><a name="c74cf90e"></a></p>
+<h3 id="CatBoost参数详解"><a href="#CatBoost参数详解" class="headerlink" title="CatBoost参数详解"></a>CatBoost参数详解</h3><p>通用参数：</p>
+</li>
+<li><p>loss_function 损失函数，支持的有RMSE, Logloss, MAE, CrossEntropy, Quantile, LogLinQuantile, Multiclass, MultiClassOneVsAll, MAPE, Poisson。默认RMSE。</p>
+</li>
 <li>custom_metric 训练过程中输出的度量值。这些功能未经优化，仅出于信息目的显示。默认None。</li>
 <li>eval_metric 用于过拟合检验（设置True）和最佳模型选择（设置True）的loss function，用于优化。</li>
 <li>iterations 最大树数。默认1000。</li>
