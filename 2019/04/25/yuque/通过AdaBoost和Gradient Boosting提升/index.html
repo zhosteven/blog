@@ -6,25 +6,25 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://zhos.me">
-  <title>K均值聚类的剖析 | A+</title>
+  <title>通过AdaBoost和Gradient Boosting提升 | A+</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="K均值聚类的剖析假设您想根据内容和主题对数百（或数千）个文档进行分类，或者您希望出于某种原因将不同的图像组合在一起。或者甚至更多，让我们认为您已经分类了相同的数据，但是您想挑战那个标签。您想知道数据分类是否有意义，或者可以改进。好吧，我的建议是你对数据进行聚类。信息通常因噪声和冗余而变暗，并且将数据分组到具有相似特征的群集（群集）中是一种有效的方式。聚类是一种广泛用于查找具有相似特征的观察组（称">
+  <meta name="description" content="你有过或曾经参加过Kaggle比赛吗？大多数获奖者通过使用助推算法来做到这一点。为什么AdaBoost，GBM和XGBoost是冠军的首选算法？首先，如果您从未听说过Ensemble Learning或Boosting，请查看我的帖子“Ensemble Learning：当每个人都猜测……我猜！”这样您就可以更好地理解这些算法了。更有见识？好，我们开始吧！因此，提升任何其他整体算法的想法是将几个弱">
 <meta property="og:type" content="article">
-<meta property="og:title" content="K均值聚类的剖析">
-<meta property="og:url" content="http://zhos.me/2019/04/24/yuque/K均值聚类的剖析/index.html">
+<meta property="og:title" content="通过AdaBoost和Gradient Boosting提升">
+<meta property="og:url" content="http://zhos.me/2019/04/25/yuque/通过AdaBoost和Gradient Boosting提升/index.html">
 <meta property="og:site_name" content="A+">
-<meta property="og:description" content="K均值聚类的剖析假设您想根据内容和主题对数百（或数千）个文档进行分类，或者您希望出于某种原因将不同的图像组合在一起。或者甚至更多，让我们认为您已经分类了相同的数据，但是您想挑战那个标签。您想知道数据分类是否有意义，或者可以改进。好吧，我的建议是你对数据进行聚类。信息通常因噪声和冗余而变暗，并且将数据分组到具有相似特征的群集（群集）中是一种有效的方式。聚类是一种广泛用于查找具有相似特征的观察组（称">
+<meta property="og:description" content="你有过或曾经参加过Kaggle比赛吗？大多数获奖者通过使用助推算法来做到这一点。为什么AdaBoost，GBM和XGBoost是冠军的首选算法？首先，如果您从未听说过Ensemble Learning或Boosting，请查看我的帖子“Ensemble Learning：当每个人都猜测……我猜！”这样您就可以更好地理解这些算法了。更有见识？好，我们开始吧！因此，提升任何其他整体算法的想法是将几个弱">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://zhos.me/2019/04/24/yuque/K均值聚类的剖析/190f95402e2e224359a47beb563d4371#height=396&width=480">
-<meta property="og:image" content="http://zhos.me/2019/04/24/yuque/K均值聚类的剖析/fa4ee7cb3a141539790be2e9efccd9f9#height=427&width=652">
-<meta property="og:image" content="http://zhos.me/2019/04/24/yuque/K均值聚类的剖析/fefcd49388a159fb4d81eb29236fdf62#height=398&width=750">
-<meta property="og:image" content="http://zhos.me/2019/04/24/yuque/K均值聚类的剖析/1903dc215ae2cc0cea67305f84d22cab#height=302&width=750">
-<meta property="og:image" content="http://zhos.me/2019/04/24/yuque/K均值聚类的剖析/cece62ab5a99d5282edc74a3d87d6f97#height=312&width=713">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1556181495601-e7ce3139-8ef5-414d-9a5e-1be09f839b1c.jpeg#align=left&display=inline&height=389&name=image.jpeg&originHeight=522&originWidth=1000&size=40393&status=done&width=746">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1556181552739-c7403b78-195f-4dab-86cb-c40e42266623.png#align=left&display=inline&height=249&name=image.png&originHeight=334&originWidth=1000&size=66661&status=done&width=746">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1556181569642-68a4ce85-606b-4c3b-8ad0-1ff1d969b1d5.png#align=left&display=inline&height=298&name=0_paPv7vXuq4eBHZY7.png&originHeight=339&originWidth=850&size=126055&status=done&width=746">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1556181608315-6eda4e08-7c17-41b4-98a2-d46ff35d5ee7.png#align=left&display=inline&height=236&name=0_wEVHN-LIA12WeRR-.png&originHeight=236&originWidth=596&size=13463&status=done&width=596">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1556181639694-fbb63fbf-26bc-4197-801d-67b04de5069c.png#align=left&display=inline&height=259&name=0_AEUFEJazjp3dOWFC.png&originHeight=267&originWidth=769&size=17037&status=done&width=746">
 <meta property="og:updated_time" content="2019-04-25T08:41:54.550Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="K均值聚类的剖析">
-<meta name="twitter:description" content="K均值聚类的剖析假设您想根据内容和主题对数百（或数千）个文档进行分类，或者您希望出于某种原因将不同的图像组合在一起。或者甚至更多，让我们认为您已经分类了相同的数据，但是您想挑战那个标签。您想知道数据分类是否有意义，或者可以改进。好吧，我的建议是你对数据进行聚类。信息通常因噪声和冗余而变暗，并且将数据分组到具有相似特征的群集（群集）中是一种有效的方式。聚类是一种广泛用于查找具有相似特征的观察组（称">
-<meta name="twitter:image" content="http://zhos.me/2019/04/24/yuque/K均值聚类的剖析/190f95402e2e224359a47beb563d4371#height=396&width=480">
+<meta name="twitter:title" content="通过AdaBoost和Gradient Boosting提升">
+<meta name="twitter:description" content="你有过或曾经参加过Kaggle比赛吗？大多数获奖者通过使用助推算法来做到这一点。为什么AdaBoost，GBM和XGBoost是冠军的首选算法？首先，如果您从未听说过Ensemble Learning或Boosting，请查看我的帖子“Ensemble Learning：当每个人都猜测……我猜！”这样您就可以更好地理解这些算法了。更有见识？好，我们开始吧！因此，提升任何其他整体算法的想法是将几个弱">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1556181495601-e7ce3139-8ef5-414d-9a5e-1be09f839b1c.jpeg#align=left&display=inline&height=389&name=image.jpeg&originHeight=522&originWidth=1000&size=40393&status=done&width=746">
   
     <link rel="alternative" href="/atom.xml" title="A+" type="application/atom+xml">
   
@@ -154,40 +154,61 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-yuque/K均值聚类的剖析" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-yuque/通过AdaBoost和Gradient Boosting提升" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      K均值聚类的剖析
+      通过AdaBoost和Gradient Boosting提升
     </h1>
   
 
         
-        <a href="/2019/04/24/yuque/K均值聚类的剖析/" class="archive-article-date">
-  	<time datetime="2019-04-24T02:23:42.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-24</time>
+        <a href="/2019/04/25/yuque/通过AdaBoost和Gradient Boosting提升/" class="archive-article-date">
+  	<time datetime="2019-04-25T08:34:43.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-25</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p><br><a href></a><br><a name="40a75a10"></a></p>
-<h1 id="K均值聚类的剖析"><a href="#K均值聚类的剖析" class="headerlink" title="K均值聚类的剖析"></a><a href="https://opendatascience.com/the-anatomy-of-k-means-clustering/" target="_blank" rel="noopener">K均值聚类的剖析</a></h1><p>假设您想根据内容和主题对数百（或数千）个文档进行分类，或者您希望出于某种原因将不同的图像组合在一起。或者甚至更多，让我们认为您已经分类了相同的数据，但是您想挑战那个标签。您想知道数据分类是否有意义，或者可以改进。好吧，我的建议是你对数据进行聚类。信息通常因噪声和冗余而变暗，并且将数据分组到具有相似特征的群集（群集）中是一种有效的方式。<strong><strong>聚类</strong></strong>是一种广泛用于查找具有相似特征的观察组（称为聚类）的技术。此过程不是由特定目的驱动的，这意味着您不必专门告诉您的算法如何对这些观察进行分组，因为它自己进行（组有机地形成）。结果是，同一组中的观察（或数据点）在它们之间比另一组中的其他观察更相似。目标是获得尽可能相似的同一组中的数据点，并使不同组中的数据点尽可能不相似。K-means非常适合探索性分析，非常适合了解您的数据并提供几乎所有数据类型的见解。无论是图像，图形还是文本，K-means都非常灵活，几乎可以满足所有需求。<br><a id="more"></a></p>
-<!--more-->
-<p><a name="f80873ec"></a></p>
-<h3 id="无监督学习中的摇滚之一"><a href="#无监督学习中的摇滚之一" class="headerlink" title="无监督学习中的摇滚之一"></a><strong><strong>无监督学习中的摇滚之一</strong></strong></h3><p>聚类（包括K均值聚类）是一种用于数据分类的无监督学习技术。<strong><strong>无监督学习</strong></strong>意味着没有输出变量来指导学习过程（没有这个或那个，没有对错），并且算法探索数据以找到模式。我们只观察这些特征，但没有确定结果的测量值，因为我们想要找出它们。与已经标记了现有数据的监督学习相反，您知道要在所获得的新数据中确定哪种行为，无监督学习技术不使用标记数据，并且算法留给自己发现数据中的结构。在聚类技术领域，<strong><strong>K-means</strong></strong>可能是最知名且经常使用的技术之一。K-means使用迭代细化方法基于用户定义的聚类数（由变量<strong>K</strong>表示）和数据集来产生其最终聚类。例如，如果将K设置为3，那么如果将K设置为4，则数据集将分组为3个集群，您将将数据分组为4个集群，依此类推。K-means从任意选择的数据点开始，作为数据组的提议<strong><strong>方法</strong></strong>，并迭代地重新计算新的均值，以便收敛到数据点的最终聚类。但是，如果您只提供一个值（K），算法如何决定如何对数据进行分组？当您定义K的值时，您实际上是在告诉算法您需要多少平均值或<strong>质心</strong>（如果设置K = 3，则创建3个均值或质心，其中包含3个聚类）。甲<strong><strong>形心</strong></strong>是表示群集（平均值）的中心的数据点，并且它可能不一定是该数据集的成员。这就是算法的工作原理：</p>
+        <p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1556181495601-e7ce3139-8ef5-414d-9a5e-1be09f839b1c.jpeg#align=left&amp;display=inline&amp;height=389&amp;name=image.jpeg&amp;originHeight=522&amp;originWidth=1000&amp;size=40393&amp;status=done&amp;width=746" alt="image.jpeg"><em>你有过或曾经参加过Kaggle比赛吗？大多数获奖者通过使用助推算法来做到这一点。为什么AdaBoost，GBM和XGBoost是冠军的首选算法？</em><br>首先，如果您从未听说过Ensemble Learning或Boosting，请查看我的帖子<a href="https://medium.com/diogo-menezes-borges/ensemble-learning-when-everybody-takes-a-guess-i-guess-ec35f6cb4600" target="_blank" rel="noopener"><em>“Ensemble Learning：当每个人都猜测……我猜！”</em></a>这样您就可以更好地理解这些算法了。<br>更有见识？好，我们开始吧！<br>因此，提升任何其他整体算法的想法是将几个弱学习者组合成一个更强大的学习者。Boosting算法的一般思想是按顺序尝试预测器，其中每个后续模型都试图修复其前任的错误。<br><a id="more"></a><br><!--more--><br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1556181552739-c7403b78-195f-4dab-86cb-c40e42266623.png#align=left&amp;display=inline&amp;height=249&amp;name=image.png&amp;originHeight=334&amp;originWidth=1000&amp;size=66661&amp;status=done&amp;width=746" alt="image.png"><br><a name="5bf5"></a></p>
+<h3 id="自适应提升"><a href="#自适应提升" class="headerlink" title="自适应提升"></a>自适应提升</h3><p>自适应Boosting或最常见的AdaBoost是Boosting算法。<strong>令人震惊！</strong>该算法用于纠正其前身的方法是通过以前的模型更多地关注配备不足的训练实例。因此，在每个新的预测器中，焦点将是每次都在更难的情况下。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1556181569642-68a4ce85-606b-4c3b-8ad0-1ff1d969b1d5.png#align=left&amp;display=inline&amp;height=298&amp;name=0_paPv7vXuq4eBHZY7.png&amp;originHeight=339&amp;originWidth=850&amp;size=126055&amp;status=done&amp;width=746" alt="0_paPv7vXuq4eBHZY7.png"><br>我们以图像为例。要构建AdaBoost分类器，假设我们作为第一个基本分类器训练决策树算法，以对我们的训练数据进行预测。现在，遵循AdaBoost的方法，增加了错误分类的训练实例的权重。第二个分类器经过训练并确认更新的权重，并且一遍又一遍地重复该过程。<br>在每个模型预测结束时，我们最终会提高错误分类实例的权重，以便下一个模型能够更好地完成它们，依此类推。<br>这种顺序学习技术听起来有点像<a href="https://medium.com/diogo-menezes-borges/what-is-gradient-descent-235a6c8d26b0" target="_blank" rel="noopener">Gradient Descent</a>，除了不是调整单个预测器的参数以最小化成本函数，AdaBoost会向整体添加预测器，逐渐使其变得更好。该算法的最大缺点是模型不能并行化，因为每个预测器只能在前一个预测器经过训练和评估后才能进行训练。<br>以下是执行AdaBoost算法的步骤：</p>
 <ol>
-<li>K质心是随机创建的（基于预定义的K值）</li>
-<li>K-means将数据集中的每个数据点分配到最近的质心（最小化它们之间的欧几里德距离），这意味着如果数据点比任何其他质心更接近该群集的质心，则认为该数据点位于特定群集中</li>
-<li>然后K-means通过获取分配给该质心簇的所有数据点的平均值来重新计算质心，从而减少与前一步骤相关的总簇内方差。K均值中的“均值”是指平均数据并找到新的质心</li>
-<li>该算法在步骤2和3之间迭代，直到满足某些标准（例如，数据点与其对应质心之间的距离之和最小化，达到最大迭代次数，质心值没有变化或者没有数据点改变簇）</li>
+<li>最初，所有观察都给予相同的权重。</li>
+<li>模型建立在数据子集上。</li>
+<li>使用此模型，可以对整个数据集进行预测。</li>
+<li>通过比较预测值和实际值来计算误差。</li>
+<li>在创建下一个模型时，会对未正确预测的数据点赋予更高的权重。</li>
+<li>可以使用误差值确定权重。例如，误差越大，分配给观察的权重越大。</li>
+<li>重复该过程，直到误差函数没有改变，或达到估计量的最大限制。</li>
 </ol>
-<p><img src="190f95402e2e224359a47beb563d4371#height=396&amp;width=480" alt>在该示例中，在5次迭代之后，计算的质心保持相同，并且数据点不再切换簇（算法收敛）。这里，每个质心显示为深色数据点。资料来源：<a href="https://medium.com/r/?url=http%3A%2F%2Fai.stanford.edu" target="_blank" rel="noopener">http</a>：<a href="https://medium.com/r/?url=http%3A%2F%2Fai.stanford.edu" target="_blank" rel="noopener">//ai.stanford.edu</a>运行此算法的初始结果可能不是最佳结果，并且使用不同的随机起始质心重新运行它可能提供更好的性能（不同的初始对象可能产生不同的聚类结果）。出于这个原因，通常的做法是使用不同的起点多次运行算法并评估不同的启动方法（例如Forgy或Kaufman方法）。但另一个问题出现了：你如何知道K的正确值，或者创建多少个质心？对此没有通用的答案，虽然质心或簇的最佳数量不是先验已知的，但是存在不同的方法来尝试估计它。一种常用的方法是测试不同数量的簇并测量得到的平方误差之和，选择K值，在该值处增加将导致误差和的非常小的减小，而减小将急剧增加误差和。定义最佳簇数的这一点被称为<strong><strong>“肘点”</strong></strong>，可以用作视觉测量来找到K值的最佳选择。<img src="fa4ee7cb3a141539790be2e9efccd9f9#height=427&amp;width=652" alt>在此示例中，肘点位于3个簇中K-means是您的数据科学工具包中必不可少的，有几个原因。首先，它<strong><strong>易于</strong></strong>实现并带来<strong><strong>高效的性能</strong></strong>。毕竟，您只需要定义一个参数（K的值）来查看结果。它也<strong><strong>很快</strong></strong>并且可以很好地处理<strong><strong>大型数据集</strong></strong>，使其能够处理当前的大量数据。它非常<strong><strong>灵活</strong></strong>，可以与几乎任何数据类型一起使用，其<strong><strong>结果易于解释，</strong></strong>并且比其他算法更<strong><strong>易于解释</strong></strong>。此外，该算法非常<strong><strong>受欢迎</strong></strong>，您几乎可以在任何学科中找到用例和实现。<em><a href="https://opendatascience.com/k-means-clustering-applied-to-gis-data/" target="_blank" rel="noopener">[相关文章：K-Means聚类应用于GIS数据]</a></em><a href></a><br><a name="8b94c67f"></a></p>
-<h3 id="但是一切都有一个黑暗的一面"><a href="#但是一切都有一个黑暗的一面" class="headerlink" title="但是一切都有一个黑暗的一面"></a>但是一切都有一个黑暗的一面</h3><p>然而，K-means存在一些<strong>缺点</strong>。第一个是你需要定义<strong><strong>集群</strong></strong>的<strong><strong>数量，</strong></strong>这个决定会严重影响结果。此外，由于初始质心的位置是随机的，因此结果可能不具有可比性并且显示缺乏一致性。K-means生成具有<strong><strong>统一大小的</strong></strong>簇（每个簇具有大致相同的观察量），即使数据可能以不同的方式运行，并且它对异常值和噪声数据非常敏感。此外，它假设每个聚类中的数据点被建模为位于该聚类质心周围的球体内（<strong><strong>球形限制）</strong></strong>但是，当违反此条件（或任何先前的条件）时，算法可以以非直观的方式运行。<img src="fefcd49388a159fb4d81eb29236fdf62#height=398&amp;width=750" alt>例1<strong><strong>示例1：</strong></strong>在左侧，数据的直观聚类，两组数据点之间的明显分离（由一个较大的数据点包围的一个小环的形状）。在右侧，通过K均值算法（K值为2）聚类的相同数据点，其中每个质心用菱形表示。如您所见，该算法无法识别直观的聚类。<img src="1903dc215ae2cc0cea67305f84d22cab#height=302&amp;width=750" alt>例2<strong><strong>示例2：</strong></strong>左侧是两个可识别数据组的聚类。在右侧，K-means聚类在相同数据点上的结果不适合直观的聚类。与示例1的情况一样，由于算法的球形限制，K-means创建的分区不能反映我们在视觉上识别的内容。它试图找到围绕它们的整齐数据球体的质心，并且当簇的几何形状偏离球体时表现很差。<img src="cece62ab5a99d5282edc74a3d87d6f97#height=312&amp;width=713" alt>例3<strong><strong>示例3：</strong></strong>再次，在左侧有两个清晰的集群（一个小的紧密数据组和另一个较大且分散的集群），K-means无法识别（右侧）。这里，为了平衡两个数据组之间的簇内距离并生成具有统一大小的簇，该算法混合两个数据组并创建2个不代表数据集的人工簇。有趣的是，无论这些数据点之间的关系多么明显，K-means都不允许彼此远离的数据点共享同一个集群。<a href></a><br><a name="e5f4518d"></a></p>
-<h3 id="现在做什么？"><a href="#现在做什么？" class="headerlink" title="现在做什么？"></a><strong><strong>现在做什么？</strong></strong></h3><p>问题是，现实生活中的数据几乎总是复杂，杂乱无章，嘈杂。现实世界中的情况很少反映出明确的条件，即可立即应用这些类型的算法。在K-means算法的情况下，<strong>预计</strong>它的至少一个假设会被违反，因此我们不仅要识别这个，而且要知道在这种情况下该做什么。<em><a href="https://opendatascience.com/three-popular-clustering-methods-and-when-to-use-each/" target="_blank" rel="noopener">[相关文章：三种流行的聚类方法以及何时使用]</a></em>好消息是有其他选择，可以纠正缺陷。例如，将数据转换为<a href="https://medium.com/r/?url=https%3A%2F%2Fwww.r-bloggers.com%2Fexploring-assumptions-of-k-means-clustering-using-r%2F" target="_blank" rel="noopener">极坐标</a>可以解决我们在示例1中描述的球形限制。如果发现严重的限制，也可以考虑使用其他类型的聚类算法。可能的方法是使用<a href="https://medium.com/r/?url=https%3A%2F%2Fwww.datascience.com%2Fblog%2Fk-means-alternatives" target="_blank" rel="noopener">基于密度</a>或<a href="https://medium.com/r/?url=https%3A%2F%2Fwww.datascience.com%2Fblog%2Fk-means-alternatives" target="_blank" rel="noopener">基于</a><a href="https://medium.com/r/?url=https%3A%2F%2Fhdbscan.readthedocs.io%2Fen%2Flatest%2Fhow_hdbscan_works.html" target="_blank" rel="noopener">层次的</a>算法，这些算法修复了一些K均值限制（但有其自身的局限性）。总之，K-means是一种具有大量潜在用途的精彩算法，因此它具有多种功能，几乎可用于任何类型的数据分组。但是从来没有免费的午餐：如果你不想被引导到错误的结果，你需要了解它的假设和它的运作方式。<em><a href="https://medium.com/@lopezyse/c22340543397" target="_blank" rel="noopener">原文在这里。</a></em><br></p>
+<p><strong>超参数</strong><br><code>**base_estimators**</code>：指定基本类型估计器，即用作基础学习器的算法。<br><code>**n_estimators**</code><strong>：</strong>它定义了基本估算器的数量，默认值为10，但您可以增加它以获得更好的性能。<br><code>**learning_rate**</code><strong> ：</strong>与梯度下降算法相同的影响<br><code>**max_depth**</code><strong> ：</strong>个体估算器的最大深度<br><code>n_jobs</code> ：表示系统允许使用的处理器数量。值“-1”表示没有限制;<br><code>random_state</code> ：使模型的输出可复制。当您给它一个固定值以及相同的参数和训练数据时，它将始终产生相同的结果。<br><a name="21f7"></a></p>
+<h3 id="渐变提升"><a href="#渐变提升" class="headerlink" title="渐变提升"></a>渐变提升</h3><p>这是另一种非常流行的Boosting算法，其工作基础与我们在AdaBoost中看到的一样。渐变增强通过将先前预测变量未完成的预测顺序添加到整体来工作，从而确保先前产生的错误得到纠正。<br>不同之处在于它对前任的不足之处的价值所起的作用。与在每次交互时调整实例权重的AdaBoost相反，此方法<strong>尝试将新预测器拟合到先前预测器所产生的_残差_。</strong><br>因此，您可以了解Gradient Boosting，首先了解<a href="https://medium.com/diogo-menezes-borges/what-is-gradient-descent-235a6c8d26b0" target="_blank" rel="noopener">Gradient Descent</a>非常重要。<br>以下是执行Gradien Boosting算法的步骤：</p>
+<ol>
+<li>模型建立在数据子集上。</li>
+<li>使用此模型，可以对整个数据集进行预测。</li>
+<li>通过比较预测值和实际值来计算误差。</li>
+<li>使用计算为目标变量的误差创建新模型。我们的目标是找到最佳分割以最小化错误。</li>
+<li>这个新模型的预测与之前的预测结合起来。</li>
+<li>使用此预测值和实际值计算新错误。</li>
+<li>重复该过程，直到误差函数没有改变，或达到估计量的最大限制。<br><a name="73a2"></a><h4 id="超参数"><a href="#超参数" class="headerlink" title="超参数"></a>超参数</h4><code>min_samples_split**:**</code><strong> </strong>在要考虑拆分的节点中所需的最小观察次数。它用于控制过度拟合。<br><code>min_samples_leaf</code> ：终端或叶节点中所需的最小样本数。应该为不平衡的阶级问题选择较低的值，因为少数群体占大多数的地区将非常小。<br><code>min_weight_fraction_leaf</code><strong> ：</strong>类似于前一个但是定义了观察总数的一小部分而不是整数。<br><code>max_depth</code> ：树的最大深度。用于控制过度拟合。<br><code>max_lead_nodes</code> ：树中最大叶子数。如果定义了这个<code>max_depth</code>则被忽略。<br><code>max_features</code> ：搜索最佳拆分时应考虑的功能数量。<br><a name="1665"></a><h3 id="XGBoost"><a href="#XGBoost" class="headerlink" title="XGBoost"></a>XGBoost</h3>Extreme Gradient Boosting是Gradient Boosting的高级实现。该算法具有高预测能力，比任何其他梯度增强技术快十倍。此外，还包括各种<a href="https://medium.com/diogo-menezes-borges/regularisation-do-i-really-need-you-74a5af9e1399" target="_blank" rel="noopener">正规化</a>，可减少过度拟合并提高整体性能。<br><strong>好处</strong></li>
+</ol>
+<ul>
+<li>实施正规化有助于减少过度拟合（GB没有）;</li>
+<li>实现并行处理比GB快得多;</li>
+<li>允许用户定义自定义优化目标和评估标准，为模型添加全新维度;</li>
+<li>XGBoost有一个内置的例程来处理缺失值;</li>
+<li>XGBoost进行分割<code>max_depth</code>，然后开始向后修剪树，并删除没有正增益的分裂;</li>
+<li>XGBoost允许用户在增强过程的每次迭代中运行交叉验证，因此很容易在一次运行中获得精确的最佳增强迭代次数。<br><a name="a469"></a><h3 id="轻GB"><a href="#轻GB" class="headerlink" title="轻GB"></a>轻GB</h3>对于非常大的数据集，<strong>Light Gradient Boosting</strong>是最好的，与其他所有相比，因为它需要更少的时间来运行。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1556181608315-6eda4e08-7c17-41b4-98a2-d46ff35d5ee7.png#align=left&amp;display=inline&amp;height=236&amp;name=0_wEVHN-LIA12WeRR-.png&amp;originHeight=236&amp;originWidth=596&amp;size=13463&amp;status=done&amp;width=596" alt="0_wEVHN-LIA12WeRR-.png"><br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1556181639694-fbb63fbf-26bc-4197-801d-67b04de5069c.png#align=left&amp;display=inline&amp;height=259&amp;name=0_AEUFEJazjp3dOWFC.png&amp;originHeight=267&amp;originWidth=769&amp;size=17037&amp;status=done&amp;width=746" alt="0_AEUFEJazjp3dOWFC.png"></li>
+</ul>
+<p>该算法基于<a href="https://datascience.stackexchange.com/questions/26699/decision-trees-leaf-wise-best-first-and-level-wise-tree-traverse?rq=1" target="_blank" rel="noopener">叶子树生长，</a>与其他工作在水平方式模式中相反。你可以在<a href="https://www.analyticsvidhya.com/blog/2017/06/which-algorithm-takes-the-crown-light-gbm-vs-xgboost/" target="_blank" rel="noopener">这里</a>看到XGBoost和Light GB之间的比较。<br><strong><em>如果您喜欢它，请关注我以获取更多出版物，请不要忘记，请给予掌声！</em></strong><br>你是强大的读者鼓掌！<br><strong>资源：</strong></p>
+<ul>
+<li>第7章，<a href="https://medium.com/@aureliengeron" target="_blank" rel="noopener">AurélienGéron </a><em>使用Scikit-Learn和TensorFlow</em>实践机器学习_</li>
+<li>Analytics Vidhya，<a href="https://www.analyticsvidhya.com/blog/2018/06/comprehensive-guide-for-ensemble-models/" target="_blank" rel="noopener"><em>集成学习综合指南（使用Python代码）</em></a></li>
+</ul>
 
       
 
@@ -267,7 +288,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://zhos.me/2019/04/24/yuque/K均值聚类的剖析/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://zhos.me/2019/04/25/yuque/通过AdaBoost和Gradient Boosting提升/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -281,18 +302,9 @@
   
 <nav id="article-nav">
   
-    <a href="/2019/04/24/yuque/大数据和Hadoop时代的维度建模和Kimball数据集市/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          大数据和Hadoop时代的维度建模和Kimball数据集市
-        
-      </div>
-    </a>
   
-  
-    <a href="/2019/04/24/yuque/三种流行的聚类方法以及何时使用每种方法/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">三种流行的聚类方法以及何时使用每种方法</div>
+    <a href="/2019/04/24/yuque/大数据和Hadoop时代的维度建模和Kimball数据集市/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">大数据和Hadoop时代的维度建模和Kimball数据集市</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -319,7 +331,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#K均值聚类的剖析"><span class="toc-number">1.</span> <span class="toc-text">K均值聚类的剖析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#无监督学习中的摇滚之一"><span class="toc-number">1.0.1.</span> <span class="toc-text">无监督学习中的摇滚之一</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#但是一切都有一个黑暗的一面"><span class="toc-number">1.0.2.</span> <span class="toc-text">但是一切都有一个黑暗的一面</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#现在做什么？"><span class="toc-number">1.0.3.</span> <span class="toc-text">现在做什么？</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#自适应提升"><span class="toc-number">1.</span> <span class="toc-text">自适应提升</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#渐变提升"><span class="toc-number">2.</span> <span class="toc-text">渐变提升</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#超参数"><span class="toc-number">2.1.</span> <span class="toc-text">超参数</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#XGBoost"><span class="toc-number">3.</span> <span class="toc-text">XGBoost</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#轻GB"><span class="toc-number">4.</span> <span class="toc-text">轻GB</span></a></li></ol>
                     </div>
                 </span>
             </div>
