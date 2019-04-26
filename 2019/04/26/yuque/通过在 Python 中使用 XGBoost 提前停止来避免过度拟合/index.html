@@ -18,7 +18,7 @@
 <meta property="og:image" content="http://zhos.me/2019/04/26/yuque/通过在%20Python%20中使用%20XGBoost%20提前停止来避免过度拟合/img/3b5a137b9d5bd85033c44aac0f3068ff.jpg#alt=Avoid%20Overfitting%20By%20Early%20Stopping%20With%20XGBoost%20In%20Python">
 <meta property="og:image" content="http://zhos.me/2019/04/26/yuque/通过在%20Python%20中使用%20XGBoost%20提前停止来避免过度拟合/img/3dd164f486ba1862fa97f82eb6693360.jpg#alt=XGBoost%20Learning%20Curve%20Log%20Loss">
 <meta property="og:image" content="http://zhos.me/2019/04/26/yuque/通过在%20Python%20中使用%20XGBoost%20提前停止来避免过度拟合/img/cdfec3000bac01a37daacb6f874ff978.jpg#alt=XGBoost%20Learning%20Curve%20Classification%20Error">
-<meta property="og:updated_time" content="2019-04-26T03:22:05.971Z">
+<meta property="og:updated_time" content="2019-04-26T03:23:11.179Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="通过在 Python 中使用 XGBoost 提前停止来避免过度拟合">
 <meta name="twitter:description" content="通过在 Python 中使用 XGBoost 提前停止来避免过度拟合 原文： https://machinelearningmastery.com/avoid-overfitting-by-early-stopping-with-xgboost-in-python/  过度拟合是复杂的非线性学习算法（例如梯度提升）的问题。 在这篇文章中，您将了解如何使用早期停止来限制 Python 中的 XGB">
@@ -172,13 +172,12 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p><a href></a><a name="49c4a9fb"></a></p>
+        <p><a href></a><br><a name="49c4a9fb"></a></p>
 <h1 id="通过在-Python-中使用-XGBoost-提前停止来避免过度拟合"><a href="#通过在-Python-中使用-XGBoost-提前停止来避免过度拟合" class="headerlink" title="通过在 Python 中使用 XGBoost 提前停止来避免过度拟合"></a>通过在 Python 中使用 XGBoost 提前停止来避免过度拟合</h1><blockquote>
 <p>原文： <a href="https://machinelearningmastery.com/avoid-overfitting-by-early-stopping-with-xgboost-in-python/" target="_blank" rel="noopener">https://machinelearningmastery.com/avoid-overfitting-by-early-stopping-with-xgboost-in-python/</a></p>
 </blockquote>
 <p>过度拟合是复杂的非线性学习算法（例如梯度提升）的问题。</p>
-<p>在这篇文章中，您将了解如何使用早期停止来限制 Python 中的 XGBoost 过度拟合。</p>
-<p>阅读这篇文章后，你会知道：</p>
+<p>在这篇文章中，您将了解如何使用早期停止来限制 Python 中的 XGBoost 过度拟合。<br><a id="more"></a><br><!--more--><br>阅读这篇文章后，你会知道：</p>
 <ul>
 <li>关于早期停止作为减少训练数据过度拟合的方法。</li>
 <li>如何在训练期间监控 XGBoost 模型的表现并绘制学习曲线。</li>
@@ -186,17 +185,17 @@
 </ul>
 <p>让我们开始吧。</p>
 <ul>
-<li><strong>2017 年 1 月更新</strong>：已更新，以反映 scikit-learn API 版本 0.18.1 中的更改​​。</li>
+<li><strong>2017 年 1 月更新</strong>：已更新，以反映 scikit-learn API 版本 0.18.1 中的更改。</li>
 <li><strong>更新 March / 2018</strong> ：添加了备用链接以下载数据集，因为原始图像已被删除。</li>
 </ul>
 <p><img src="img/3b5a137b9d5bd85033c44aac0f3068ff.jpg#alt=Avoid%20Overfitting%20By%20Early%20Stopping%20With%20XGBoost%20In%20Python" alt></p>
 <p>通过 Python 中的 XGBoost 提前停止来避免过度拟合<br><br>照片由 <a href="https://www.flickr.com/photos/michitux/7218180540/" target="_blank" rel="noopener">Michael Hamann</a> 拍摄，保留一些权利。</p>
-<p><a href></a><a name="a876c49b"></a></p>
+<p><a href></a><br><a name="a876c49b"></a></p>
 <h2 id="提前停止以避免过度拟合"><a href="#提前停止以避免过度拟合" class="headerlink" title="提前停止以避免过度拟合"></a>提前停止以避免过度拟合</h2><p><a href="https://en.wikipedia.org/wiki/Early_stopping" target="_blank" rel="noopener">早期停止</a>是一种训练复杂机器学习模型的方法，以避免过度拟合。</p>
 <p>它通过监视在单独的测试数据集上训练的模型的表现并且一旦在固定数量的训练迭代之后测试数据集上的表现没有改善就停止训练过程。</p>
 <p>它通过尝试自动选择测试数据集上的表现开始降低的拐点来避免过度拟合，同时随着模型开始过度拟合，训练数据集上的表现继续提高。</p>
 <p>表现度量可以是针对训练模型而优化的损失函数（例如对数损失），或者一般对问题感兴趣的外部度量（例如分类准确度）。</p>
-<p><a href></a><a name="bd09b8be"></a></p>
+<p><a href></a><br><a name="bd09b8be"></a></p>
 <h2 id="使用-XGBoost-监控训练表现"><a href="#使用-XGBoost-监控训练表现" class="headerlink" title="使用 XGBoost 监控训练表现"></a>使用 XGBoost 监控训练表现</h2><p>XGBoost 模型可以在训练期间评估和报告模型的测试集上的表现。</p>
 <p>它通过在训练模型和指定详细输出时调用 <strong>model.fit（）</strong>时指定测试数据集和评估指标来支持此功能。</p>
 <p>例如，我们可以在独立测试集（ <strong>eval_set</strong> ）上报告二进制分类错误率（“_ 错误 _”），同时训练 XGBoost 模型，如下所示：</p>
@@ -218,7 +217,7 @@
 <p>下面提供了输出，为简洁起见，将其截断。我们可以看到，每次训练迭代都会报告分类错误（在每个提升的树被添加到模型之后）。</p>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">[<span class="number">89</span>]	validation_0-error:<span class="number">0.204724</span></span><br><span class="line">[<span class="number">90</span>]	validation_0-error:<span class="number">0.208661</span></span><br><span class="line">[<span class="number">91</span>]	validation_0-error:<span class="number">0.208661</span></span><br><span class="line">[<span class="number">92</span>]	validation_0-error:<span class="number">0.208661</span></span><br><span class="line">[<span class="number">93</span>]	validation_0-error:<span class="number">0.208661</span></span><br><span class="line">[<span class="number">94</span>]	validation_0-error:<span class="number">0.208661</span></span><br><span class="line">[<span class="number">95</span>]	validation_0-error:<span class="number">0.212598</span></span><br><span class="line">[<span class="number">96</span>]	validation_0-error:<span class="number">0.204724</span></span><br><span class="line">[<span class="number">97</span>]	validation_0-error:<span class="number">0.212598</span></span><br><span class="line">[<span class="number">98</span>]	validation_0-error:<span class="number">0.216535</span></span><br><span class="line">[<span class="number">99</span>]	validation_0-error:<span class="number">0.220472</span></span><br><span class="line">Accuracy: <span class="number">77.95</span>%</span><br></pre></td></tr></table></figure>
 <p>回顾所有输出，我们可以看到测试集上的模型表现平稳，甚至在训练结束时变得更糟。</p>
-<p><a href></a><a name="7a25cb01"></a></p>
+<p><a href></a><br><a name="7a25cb01"></a></p>
 <h2 id="使用学习曲线评估-XGBoost-模型"><a href="#使用学习曲线评估-XGBoost-模型" class="headerlink" title="使用学习曲线评估 XGBoost 模型"></a>使用学习曲线评估 XGBoost 模型</h2><p>我们可以在评估数据集上检索模型的表现并绘制它以深入了解在训练时如何展开学习。</p>
 <p>在拟合 XGBoost 模型时，我们为 <strong>eval_metric</strong> 参数提供了一对 X 和 y 对。除了测试集，我们还可以提供训练数据集。这将提供一份报告，说明模型在训练期间对训练和测试集的执行情况。</p>
 <p>例如：</p>
@@ -243,7 +242,7 @@
 <p>XGBoost 学习曲线分类错误</p>
 <p>通过回顾 logloss 图，看起来有机会提前停止学习，也许在 20 世纪到 40 世纪左右。</p>
 <p>我们看到了类似的分类错误故事，其中错误似乎在 40 左右的时间内重新出现。</p>
-<p><a href></a><a name="c8947272"></a></p>
+<p><a href></a><br><a name="c8947272"></a></p>
 <h2 id="早期停止使用-XGBoost"><a href="#早期停止使用-XGBoost" class="headerlink" title="早期停止使用 XGBoost"></a>早期停止使用 XGBoost</h2><p>XGBoost 支持在固定次数的迭代后提前停止。</p>
 <p>除了为每个时期指定用于评估的度量和度量数据集之外，还必须指定一个窗口，其中没有观察到任何改进的时期数。这在 <strong>early_stopping_rounds</strong> 参数中指定。</p>
 <p>例如，我们可以检查 10 个时期的对数损失没有改善如下：</p>
@@ -255,7 +254,7 @@
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">[<span class="number">35</span>]	validation_0-logloss:<span class="number">0.487962</span></span><br><span class="line">[<span class="number">36</span>]	validation_0-logloss:<span class="number">0.488218</span></span><br><span class="line">[<span class="number">37</span>]	validation_0-logloss:<span class="number">0.489582</span></span><br><span class="line">[<span class="number">38</span>]	validation_0-logloss:<span class="number">0.489334</span></span><br><span class="line">[<span class="number">39</span>]	validation_0-logloss:<span class="number">0.490969</span></span><br><span class="line">[<span class="number">40</span>]	validation_0-logloss:<span class="number">0.48978</span></span><br><span class="line">[<span class="number">41</span>]	validation_0-logloss:<span class="number">0.490704</span></span><br><span class="line">[<span class="number">42</span>]	validation_0-logloss:<span class="number">0.492369</span></span><br><span class="line">Stopping. Best iteration:</span><br><span class="line">[<span class="number">32</span>]	validation_0-logloss:<span class="number">0.487297</span></span><br></pre></td></tr></table></figure>
 <p>我们可以看到模型在第 42 纪元停止训练（接近我们对学习曲线的手动判断的预期），并且在第 32 纪元观察到具有最佳损失的模型。</p>
 <p>选择 <strong>early_stopping_rounds</strong> 作为训练时期总数（在这种情况下为 10％）的合理函数通常是个好主意，或者尝试对应于在情节上可以观察到的拐点时期。学习曲线。</p>
-<p><a href></a><a name="3ae14696"></a></p>
+<p><a href></a><br><a name="3ae14696"></a></p>
 <h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><p>在这篇文章中，您发现了监控表现和提前停止。</p>
 <p>你了解到：</p>
 <ul>

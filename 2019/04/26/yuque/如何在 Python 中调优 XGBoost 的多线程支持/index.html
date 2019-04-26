@@ -8,21 +8,21 @@
   <link rel="dns-prefetch" href="http://zhos.me">
   <title>如何在 Python 中调优 XGBoost 的多线程支持 | A+</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="如何在 Python 中调优 XGBoost 的多线程支持 原文： https://machinelearningmastery.com/best-tune-multithreading-support-xgboost-python/  用于梯度提升用途的 XGBoost 库专为高效的多核并行处理而设计。 这使它可以在训练时有效地使用系统中的所有 CPU 核心。 在这篇文章中，您将发现 Pytho">
+  <meta name="description" content="如何在 Python 中调优 XGBoost 的多线程支持 原文： https://machinelearningmastery.com/best-tune-multithreading-support-xgboost-python/  用于梯度提升用途的 XGBoost 库专为高效的多核并行处理而设计。 这使它可以在训练时有效地使用系统中的所有 CPU 核心。 在这篇文章中，您将发现 Pyth">
 <meta property="og:type" content="article">
 <meta property="og:title" content="如何在 Python 中调优 XGBoost 的多线程支持">
 <meta property="og:url" content="http://zhos.me/2019/04/26/yuque/如何在 Python 中调优 XGBoost 的多线程支持/index.html">
 <meta property="og:site_name" content="A+">
-<meta property="og:description" content="如何在 Python 中调优 XGBoost 的多线程支持 原文： https://machinelearningmastery.com/best-tune-multithreading-support-xgboost-python/  用于梯度提升用途的 XGBoost 库专为高效的多核并行处理而设计。 这使它可以在训练时有效地使用系统中的所有 CPU 核心。 在这篇文章中，您将发现 Pytho">
+<meta property="og:description" content="如何在 Python 中调优 XGBoost 的多线程支持 原文： https://machinelearningmastery.com/best-tune-multithreading-support-xgboost-python/  用于梯度提升用途的 XGBoost 库专为高效的多核并行处理而设计。 这使它可以在训练时有效地使用系统中的所有 CPU 核心。 在这篇文章中，您将发现 Pyth">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://zhos.me/2019/04/26/yuque/如何在%20Python%20中调优%20XGBoost%20的多线程支持/img/ed8730017a4b756792937527e1a8af75.jpg">
-<meta property="og:image" content="http://zhos.me/2019/04/26/yuque/如何在%20Python%20中调优%20XGBoost%20的多线程支持/img/146726c5dc2eed3eec56e9a56373187a.jpg">
-<meta property="og:image" content="http://zhos.me/2019/04/26/yuque/如何在%20Python%20中调优%20XGBoost%20的多线程支持/img/146f19ae6f7ee6886994a2b084b410b3.jpg">
-<meta property="og:updated_time" content="2019-04-26T03:22:05.971Z">
+<meta property="og:image" content="http://zhos.me/2019/04/26/yuque/如何在%20Python%20中调优%20XGBoost%20的多线程支持/img/ed8730017a4b756792937527e1a8af75.jpg#alt=How%20to%20Best%20Tune%20Multithreading%20Support%20for%20XGBoost%20in%20Python">
+<meta property="og:image" content="http://zhos.me/2019/04/26/yuque/如何在%20Python%20中调优%20XGBoost%20的多线程支持/img/146726c5dc2eed3eec56e9a56373187a.jpg#alt=XGBoost%20Tune%20Number%20of%20Threads%20for%20Single%20Model">
+<meta property="og:image" content="http://zhos.me/2019/04/26/yuque/如何在%20Python%20中调优%20XGBoost%20的多线程支持/img/146f19ae6f7ee6886994a2b084b410b3.jpg#alt=XGBoost%20Time%20to%20Train%20Model%20on%201%20to%2032%20Cores">
+<meta property="og:updated_time" content="2019-04-26T03:23:11.179Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="如何在 Python 中调优 XGBoost 的多线程支持">
-<meta name="twitter:description" content="如何在 Python 中调优 XGBoost 的多线程支持 原文： https://machinelearningmastery.com/best-tune-multithreading-support-xgboost-python/  用于梯度提升用途的 XGBoost 库专为高效的多核并行处理而设计。 这使它可以在训练时有效地使用系统中的所有 CPU 核心。 在这篇文章中，您将发现 Pytho">
-<meta name="twitter:image" content="http://zhos.me/2019/04/26/yuque/如何在%20Python%20中调优%20XGBoost%20的多线程支持/img/ed8730017a4b756792937527e1a8af75.jpg">
+<meta name="twitter:description" content="如何在 Python 中调优 XGBoost 的多线程支持 原文： https://machinelearningmastery.com/best-tune-multithreading-support-xgboost-python/  用于梯度提升用途的 XGBoost 库专为高效的多核并行处理而设计。 这使它可以在训练时有效地使用系统中的所有 CPU 核心。 在这篇文章中，您将发现 Pyth">
+<meta name="twitter:image" content="http://zhos.me/2019/04/26/yuque/如何在%20Python%20中调优%20XGBoost%20的多线程支持/img/ed8730017a4b756792937527e1a8af75.jpg#alt=How%20to%20Best%20Tune%20Multithreading%20Support%20for%20XGBoost%20in%20Python">
   
     <link rel="alternative" href="/atom.xml" title="A+" type="application/atom+xml">
   
@@ -172,7 +172,8 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="如何在-Python-中调优-XGBoost-的多线程支持"><a href="#如何在-Python-中调优-XGBoost-的多线程支持" class="headerlink" title="如何在 Python 中调优 XGBoost 的多线程支持"></a>如何在 Python 中调优 XGBoost 的多线程支持</h1><blockquote>
+        <p><a href></a><br><a name="ebc866e6"></a></p>
+<h1 id="如何在-Python-中调优-XGBoost-的多线程支持"><a href="#如何在-Python-中调优-XGBoost-的多线程支持" class="headerlink" title="如何在 Python 中调优 XGBoost 的多线程支持"></a>如何在 Python 中调优 XGBoost 的多线程支持</h1><blockquote>
 <p>原文： <a href="https://machinelearningmastery.com/best-tune-multithreading-support-xgboost-python/" target="_blank" rel="noopener">https://machinelearningmastery.com/best-tune-multithreading-support-xgboost-python/</a></p>
 </blockquote>
 <p>用于梯度提升用途的 XGBoost 库专为高效的多核并行处理而设计。</p>
@@ -184,23 +185,7 @@
 <li>如何评估增加 XGBoost 上的线程数的效果。</li>
 <li>如何在使用交叉验证和网格搜索时充分利用多线程 XGBoost。</li>
 </ul>
-<p>让我们开始吧。</p>
-<ul>
-<li><strong>2017 年 1 月更新</strong>：已更新，以反映 scikit-learn API 版本 0.18.1 中的更改​​。</li>
-</ul>
-<p><img src="img/ed8730017a4b756792937527e1a8af75.jpg" alt="How to Best Tune Multithreading Support for XGBoost in Python"></p>
-<p>如何最好地调整 Python 中 XGBoost 的多线程支持<br>照片由 <a href="https://www.flickr.com/photos/nicholas_t/14946860658/" target="_blank" rel="noopener">Nicholas A. Tonelli</a> ，保留一些权利。</p>
-<h2 id="问题描述：Otto-Dataset"><a href="#问题描述：Otto-Dataset" class="headerlink" title="问题描述：Otto Dataset"></a>问题描述：Otto Dataset</h2><p>在本教程中，我们将使用 <a href="https://www.kaggle.com/c/otto-group-product-classification-challenge" target="_blank" rel="noopener">Otto Group 产品分类挑战</a>数据集。</p>
-<p>此数据集可从 Kaggle 获得（您需要注册 Kaggle 才能下载此数据集）。您可以从<a href="https://www.kaggle.com/c/otto-group-product-classification-challenge/data" target="_blank" rel="noopener">数据页面</a>下载训练数据集 <strong>train.zip</strong> ，并将解压缩的 <strong>trian.csv</strong> 文件放入您的工作目录。</p>
-<p>该数据集描述了超过 61,000 种产品的 93 个模糊细节，这些产品分为 10 个产品类别（例如时尚，电子等）。输入属性是某种不同事件的计数。</p>
-<p>目标是对新产品进行预测，因为 10 个类别中的每个类别都有一组概率，并且使用多类对数损失（也称为交叉熵）来评估模型。</p>
-<p>这个竞赛在 2015 年 5 月完成，这个数据集对 XGBoost 来说是一个很好的挑战，因为有大量的例子和问题的难度以及需要很少的数据准备这一事实（除了将字符串类变量编码为整数）。</p>
-<h2 id="线程数的影响"><a href="#线程数的影响" class="headerlink" title="线程数的影响"></a>线程数的影响</h2><p>XGBoost 在 C ++中实现，以明确地使用 <a href="https://en.wikipedia.org/wiki/OpenMP" target="_blank" rel="noopener">OpenMP API</a> 进行并行处理。</p>
-<p>梯度提升中的并行性可以在单个树的构造中实现，而不是像随机森林那样并行创建树。这是因为在增强中，树木被顺序添加到模型中。 XGBoost 的速度既可以在单个树木的构造中增加平行度，也可以有效地准备输入数据，以帮助加快树木的构建。</p>
-<p>根据您的平台，您可能需要专门编译 XGBoost 以支持多线程。有关详细信息，请参阅 <a href="https://github.com/dmlc/xgboost/blob/master/doc/build.md" target="_blank" rel="noopener">XGBoost 安装说明</a>。</p>
-<p>用于 scikit-learn 的 XGBoost 的 <strong>XGBClassifier</strong> 和 <strong>XGBRegressor</strong> 包装类提供了 <strong>nthread</strong> 参数，用于指定 XGBoost 在训练期间可以使用的线程数。</p>
-<p>默认情况下，此参数设置为-1 以使用系统中的所有核心。</p>
-<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">model = XGBClassifier(nthread=<span class="number">-1</span>)</span><br></pre></td></tr></table></figure>
+<a id="more"></a><br>让我们开始吧。<br><br>- <strong>2017 年 1 月更新</strong>：已更新，以反映 scikit-learn API 版本 0.18.1 中的更改。<br><br><img src="img/ed8730017a4b756792937527e1a8af75.jpg#alt=How%20to%20Best%20Tune%20Multithreading%20Support%20for%20XGBoost%20in%20Python" alt><br><br>如何最好地调整 Python 中 XGBoost 的多线程支持<br><br>照片由 <a href="https://www.flickr.com/photos/nicholas_t/14946860658/" target="_blank" rel="noopener">Nicholas A. Tonelli</a> ，保留一些权利。<br><br><a href></a><br><a name="6efbeb5d"></a><br>## 问题描述：Otto Dataset<br><br>在本教程中，我们将使用 <a href="https://www.kaggle.com/c/otto-group-product-classification-challenge" target="_blank" rel="noopener">Otto Group 产品分类挑战</a>数据集。<br><br>此数据集可从 Kaggle 获得（您需要注册 Kaggle 才能下载此数据集）。您可以从<a href="https://www.kaggle.com/c/otto-group-product-classification-challenge/data" target="_blank" rel="noopener">数据页面</a>下载训练数据集 <strong>train.zip</strong> ，并将解压缩的 <strong>trian.csv</strong> 文件放入您的工作目录。<br><br>该数据集描述了超过 61,000 种产品的 93 个模糊细节，这些产品分为 10 个产品类别（例如时尚，电子等）。输入属性是某种不同事件的计数。<br><br>目标是对新产品进行预测，因为 10 个类别中的每个类别都有一组概率，并且使用多类对数损失（也称为交叉熵）来评估模型。<br><br>这个竞赛在 2015 年 5 月完成，这个数据集对 XGBoost 来说是一个很好的挑战，因为有大量的例子和问题的难度以及需要很少的数据准备这一事实（除了将字符串类变量编码为整数）。<br><br><a href></a><br><a name="90147ec7"></a><br>## 线程数的影响<br><br>XGBoost 在 C ++中实现，以明确地使用 <a href="https://en.wikipedia.org/wiki/OpenMP" target="_blank" rel="noopener">OpenMP API</a> 进行并行处理。<br><br>梯度提升中的并行性可以在单个树的构造中实现，而不是像随机森林那样并行创建树。这是因为在增强中，树木被顺序添加到模型中。 XGBoost 的速度既可以在单个树木的构造中增加平行度，也可以有效地准备输入数据，以帮助加快树木的构建。<br><br>根据您的平台，您可能需要专门编译 XGBoost 以支持多线程。有关详细信息，请参阅 <a href="https://github.com/dmlc/xgboost/blob/master/doc/build.md" target="_blank" rel="noopener">XGBoost 安装说明</a>。<br><br>用于 scikit-learn 的 XGBoost 的 <strong>XGBClassifier</strong> 和 <strong>XGBRegressor</strong> 包装类提供了 <strong>nthread</strong> 参数，用于指定 XGBoost 在训练期间可以使用的线程数。<br><br>默认情况下，此参数设置为-1 以使用系统中的所有核心。<br><br><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">model = XGBClassifier(nthread=<span class="number">-1</span>)</span><br></pre></td></tr></table></figure>
 <p>通常，您应该为 XGBoost 安装获得多线程支持，而无需任何额外的工作。</p>
 <p>根据您的 Python 环境（例如 Python 3），您可能需要显式启用 XGBoost 的多线程支持。如果您需要帮助， <a href="https://github.com/dmlc/xgboost/blob/master/demo/guide-python/sklearn_parallel.py" target="_blank" rel="noopener">XGBoost 库提供了一个示例</a>。</p>
 <p>您可以通过构建许多不同的 XGBoost 模型来确认 XGBoost 多线程支持是否正常工作，指定线程数并计算构建每个模型所需的时间。这一趋势将向您展示启用了多线程支持，并指出了构建模型时的效果。</p>
@@ -212,15 +197,16 @@
 <p>运行此示例总结了每个配置的执行时间（以秒为单位），例如：</p>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="number">1</span>, <span class="number">115.51652717590332</span>)</span><br><span class="line">(<span class="number">2</span>, <span class="number">62.7727689743042</span>)</span><br><span class="line">(<span class="number">3</span>, <span class="number">46.042901039123535</span>)</span><br><span class="line">(<span class="number">4</span>, <span class="number">40.55334496498108</span>)</span><br></pre></td></tr></table></figure>
 <p>下面提供了这些时间的图表。</p>
-<p><img src="img/146726c5dc2eed3eec56e9a56373187a.jpg" alt="XGBoost Tune Number of Threads for Single Model"></p>
+<p><img src="img/146726c5dc2eed3eec56e9a56373187a.jpg#alt=XGBoost%20Tune%20Number%20of%20Threads%20for%20Single%20Model" alt></p>
 <p>XGBoost Tune 单个模型的线程数</p>
 <p>随着线程数量的增加，我们可以看到执行时间减少的好趋势。</p>
 <p>如果您没有看到每个新线程的运行时间有所改善，您可能需要研究如何在安装过程中或运行时在 XGBoost 中启用多线程支持。</p>
 <p>我们可以在具有更多内核的机器上运行相同的代码。据报道，大型 Amazon Web Services EC2 实例具有 32 个核心。我们可以调整上面的代码来计算训练具有 1 到 32 个内核的模型所需的时间。结果如下。</p>
-<p><img src="img/146f19ae6f7ee6886994a2b084b410b3.jpg" alt="XGBoost Time to Train Model on 1 to 32 Cores"></p>
+<p><img src="img/146f19ae6f7ee6886994a2b084b410b3.jpg#alt=XGBoost%20Time%20to%20Train%20Model%20on%201%20to%2032%20Cores" alt></p>
 <p>XGBoost 在 1 到 32 个核心上训练模型的时间</p>
 <p>值得注意的是，除了 16 个线程（大约 7 秒）之外，我们没有看到太多改进。我希望其原因是亚马逊实例仅在硬件中提供 16 个内核，并且超线程可以提供额外的 16 个内核。结果表明，如果您的计算机具有超线程，则可能需要将 <strong>num_threads</strong> 设置为等于计算机中物理 CPU 核心的数量。</p>
 <p>使用 OpenMP 进行 XGBoost 的低级优化实现会挤出像这样的大型机器的每个最后一个周期。</p>
+<p><a href></a><br><a name="b5a236a2"></a></p>
 <h2 id="交叉验证-XGBoost-模型时的并行性"><a href="#交叉验证-XGBoost-模型时的并行性" class="headerlink" title="交叉验证 XGBoost 模型时的并行性"></a>交叉验证 XGBoost 模型时的并行性</h2><p>scikit-learn 中的 k-fold 交叉验证支持也支持多线程。</p>
 <p>例如， <strong>cross_val_score（）</strong>函数上的 <strong>n_jobs</strong> 参数用于使用 k-fold 交叉验证评估数据集上的模型，允许您指定要运行的并行作业数。</p>
 <p>默认情况下，此值设置为 1，但可以设置为-1 以使用系统上的所有 CPU 核心，这是一种很好的做法。例如：</p>
@@ -240,6 +226,7 @@
 <p>我们可以看到，通过交叉验证折叠并行化 XGBoost 会带来好处。这是有道理的，因为 10 个连续快速任务比（10 除以 num_cores）慢任务更好。</p>
 <p>有趣的是，我们可以看到通过在 XGBoost 和交叉验证中启用多线程来实现最佳结果。这是令人惊讶的，因为这意味着 num_cores 数量的并行 XGBoost 模型在其模型构造中竞争相同的 num_cores。然而，这实现了最快的结果，并且建议使用 XGBoost 进行交叉验证。</p>
 <p>因为网格搜索使用相同的基础方法来实现并行性，所以我们期望同样的发现可用于优化 XGBoost 的超参数。</p>
+<p><a href></a><br><a name="3ae14696"></a></p>
 <h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><p>在这篇文章中，您发现了 XGBoost 的多线程功能。</p>
 <p>你了解到：</p>
 <ul>
@@ -379,7 +366,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#如何在-Python-中调优-XGBoost-的多线程支持"><span class="toc-number">1.</span> <span class="toc-text">如何在 Python 中调优 XGBoost 的多线程支持</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#问题描述：Otto-Dataset"><span class="toc-number">1.1.</span> <span class="toc-text">问题描述：Otto Dataset</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#线程数的影响"><span class="toc-number">1.2.</span> <span class="toc-text">线程数的影响</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#交叉验证-XGBoost-模型时的并行性"><span class="toc-number">1.3.</span> <span class="toc-text">交叉验证 XGBoost 模型时的并行性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#摘要"><span class="toc-number">1.4.</span> <span class="toc-text">摘要</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#如何在-Python-中调优-XGBoost-的多线程支持"><span class="toc-number">1.</span> <span class="toc-text">如何在 Python 中调优 XGBoost 的多线程支持</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#交叉验证-XGBoost-模型时的并行性"><span class="toc-number">1.1.</span> <span class="toc-text">交叉验证 XGBoost 模型时的并行性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#摘要"><span class="toc-number">1.2.</span> <span class="toc-text">摘要</span></a></li></ol></li></ol>
                     </div>
                 </span>
             </div>

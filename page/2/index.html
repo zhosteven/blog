@@ -1227,7 +1227,8 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="如何配置梯度提升算法"><a href="#如何配置梯度提升算法" class="headerlink" title="如何配置梯度提升算法"></a>如何配置梯度提升算法</h1><blockquote>
+        <p><a href></a><a name="741f0088"></a></p>
+<h1 id="如何配置梯度提升算法"><a href="#如何配置梯度提升算法" class="headerlink" title="如何配置梯度提升算法"></a>如何配置梯度提升算法</h1><blockquote>
 <p>原文： <a href="https://machinelearningmastery.com/configure-gradient-boosting-algorithm/" target="_blank" rel="noopener">https://machinelearningmastery.com/configure-gradient-boosting-algorithm/</a></p>
 </blockquote>
 <p>梯度提升是应用机器学习最强大的技术之一，因此很快成为最受欢迎的技术之一。</p>
@@ -1240,8 +1241,9 @@
 <li>从顶级 Kaggle 竞争对手配置梯度提升和 XGBoost 的经验法则。</li>
 </ul>
 <p>让我们开始吧。</p>
-<p><img src="img/e28ff0c7b20a64f211069bb538f08486.jpg" alt="How to Configure the Gradient Boosting Algorithm"></p>
-<p>如何配置梯度提升算法<br>照片来自 <a href="https://www.flickr.com/photos/stone65/7925550064/" target="_blank" rel="noopener">Chris Sorge</a> ，保留一些权利。</p>
+<p><img src="img/e28ff0c7b20a64f211069bb538f08486.jpg#alt=How%20to%20Configure%20the%20Gradient%20Boosting%20Algorithm" alt></p>
+<p>如何配置梯度提升算法<br><br>照片来自 <a href="https://www.flickr.com/photos/stone65/7925550064/" target="_blank" rel="noopener">Chris Sorge</a> ，保留一些权利。</p>
+<p><a href></a><a name="8953dbc5"></a></p>
 <h2 id="如何配置梯度增压机"><a href="#如何配置梯度增压机" class="headerlink" title="如何配置梯度增压机"></a>如何配置梯度增压机</h2><p>在 1999 年的论文“<a href="https://statweb.stanford.edu/~jhf/ftp/trebst.pdf" target="_blank" rel="noopener">贪婪函数逼近：梯度提升机</a>”中，Jerome Friedman 评论了树木数量（M）和学习率（v）之间的权衡：</p>
 <blockquote>
 <p>v-M 的权衡显而易见;较小的 v 值会产生较大的最佳 M 值。它们还提供更高的准确度，v <1 的回报递减。 0.125。对于 m> 1，错误分类错误率非常平坦。 200，因此它的最佳 M 值是不稳定的。 ……这些结果的定性性质相当普遍。</1></p>
@@ -1277,6 +1279,7 @@
 <blockquote>
 <p>n 的典型值可以是 1/2，但是对于大的 N，n 可以基本上小于 1/2。</p>
 </blockquote>
+<p><a href></a><a name="33f1d615"></a></p>
 <h2 id="R-中梯度提升的配置"><a href="#R-中梯度提升的配置" class="headerlink" title="R 中梯度提升的配置"></a>R 中梯度提升的配置</h2><p>梯度提升算法在 R 中实现为 <a href="https://cran.r-project.org/web/packages/gbm/index.html" target="_blank" rel="noopener">gbm 包</a>。</p>
 <p>回顾<a href="https://cran.r-project.org/web/packages/gbm/gbm.pdf" target="_blank" rel="noopener">软件包文档</a>，gbm（）函数指定合理的默认值：</p>
 <ul>
@@ -1298,6 +1301,7 @@
 <blockquote>
 <p>我通常瞄准 3,000 到 10,000 次迭代，收缩率在 0.01 到 0.001 之间。</p>
 </blockquote>
+<p><a href></a><a name="9402ae6e"></a></p>
 <h2 id="在-scikit-learn-中配置梯度提升"><a href="#在-scikit-learn-中配置梯度提升" class="headerlink" title="在 scikit-learn 中配置梯度提升"></a>在 scikit-learn 中配置梯度提升</h2><p>Python 库提供了用于分类的梯度提升的实现，称为 <a href="http://scikit-learn.org/stable/modules/generated/sklearn.ensemble.GradientBoostingClassifier.html" target="_blank" rel="noopener">GradientBoostingClassifier</a> 类，并且回归称为 <a href="http://scikit-learn.org/stable/modules/generated/sklearn.ensemble.GradientBoostingRegressor.html" target="_blank" rel="noopener">GradientBoostingRegressor</a> 类。</p>
 <p>查看此库中算法的默认配置很有用。</p>
 <p>有许多参数，但下面是几个关键的默认值。</p>
@@ -1315,6 +1319,7 @@
 <p>我们发现 max_leaf_nodes = k 给出了与 max_depth = k-1 相当的结果，但是以稍高的训练误差为代价训练得更快。</p>
 </blockquote>
 <p>在一项小型研究中，证明了梯度提升的正则化方法“<a href="http://scikit-learn.org/stable/auto_examples/ensemble/plot_gradient_boosting_regularization.html" target="_blank" rel="noopener">梯度提升正则化</a>”，结果显示了使用收缩和二次采样的好处。</p>
+<p><a href></a><a name="29e7039b"></a></p>
 <h2 id="在-XGBoost-中配置梯度提升"><a href="#在-XGBoost-中配置梯度提升" class="headerlink" title="在 XGBoost 中配置梯度提升"></a>在 XGBoost 中配置梯度提升</h2><p>XGBoost 库专用于梯度提升算法。</p>
 <p>它也指定了值得注意的默认参数，首先是 <a href="https://github.com/dmlc/xgboost/blob/master/doc/parameter.md" target="_blank" rel="noopener">XGBoost 参数页面</a>：</p>
 <ul>
@@ -1353,7 +1358,7 @@
 <li>互动深度：10+。</li>
 </ul>
 <p>在同一个谈话的<a href="http://www.slideshare.net/ShangxuanZhang/winning-data-science-competitions-presented-by-owen-zhang" target="_blank" rel="noopener">更新幻灯片中，他总结了他用于 XGBoost 的常见参数：</a></p>
-<p><img src="img/a135310fc17a2814209801719aeeeceb.jpg" alt="Owen Zhang Table of Suggestions for Hyperparameter Tuning of XGBoost"></p>
+<p><img src="img/a135310fc17a2814209801719aeeeceb.jpg#alt=Owen%20Zhang%20Table%20of%20Suggestions%20for%20Hyperparameter%20Tuning%20of%20XGBoost" alt></p>
 <p>Owen Zhang 超级参数调整 XGBoost 的建议表</p>
 <p>我们可以在这张表中看到一些有趣的东西。</p>
 <ul>
@@ -1363,7 +1368,7 @@
 <li>调整最小叶重量，作为罕见事件数量百分比的近似比率为 3。</li>
 </ul>
 <p>欧文在 2015 年波士顿 ODSC 题为“<a href="https://www.youtube.com/watch?v=7YnVZrabTA8" target="_blank" rel="noopener">开源工具和数据科学竞赛</a>”的类似演讲中，他再次总结了他使用的常用参数：</p>
-<p><img src="img/e5b7b7097db7d9e7fd1c4b15821ce44c.jpg" alt="Owen Zhang Suggestions for Tuning XGBoost"></p>
+<p><img src="img/e5b7b7097db7d9e7fd1c4b15821ce44c.jpg#alt=Owen%20Zhang%20Suggestions%20for%20Tuning%20XGBoost" alt></p>
 <p>Owen Zhang 关于调整 XGBoost 的建议</p>
 <p>我们可以看到一些可能相关的细微差别。</p>
 <ul>
@@ -1372,10 +1377,11 @@
 <li>没有行的子采样。</li>
 </ul>
 <p>最后，Abhishek Thakur 在题为“<a href="https://www.linkedin.com/pulse/approaching-almost-any-machine-learning-problem-abhishek-thakur" target="_blank" rel="noopener">接近（几乎）任何机器学习问题</a>”的帖子中提供了一个类似的表格，列出了关键的 XGBoost 参数和调整建议。</p>
-<p><img src="img/5d3f0eee33d08c57dec1e88506d7cc2a.jpg" alt="Abhishek Thakur Suggestions for Tuning XGBoost"></p>
+<p><img src="img/5d3f0eee33d08c57dec1e88506d7cc2a.jpg#alt=Abhishek%20Thakur%20Suggestions%20for%20Tuning%20XGBoost" alt></p>
 <p>Abhishek Thakur 对调整 XGBoost 的建议</p>
 <p>点差确实涵盖了上面建议的一般默认值以及更多。</p>
 <p>值得注意的是，Abhishek 确实提供了一些调整 alpha 和 beta 模型惩罚术语以及行采样的建议。</p>
+<p><a href></a><a name="3ae14696"></a></p>
 <h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><p>在这篇文章中，您深入了解了如何为您自己的机器学习问题配置梯度提升。</p>
 <p>特别是你学到了：</p>
 <ul>
@@ -1446,7 +1452,8 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="如何在-Python-中调优-XGBoost-的多线程支持"><a href="#如何在-Python-中调优-XGBoost-的多线程支持" class="headerlink" title="如何在 Python 中调优 XGBoost 的多线程支持"></a>如何在 Python 中调优 XGBoost 的多线程支持</h1><blockquote>
+        <p><a href></a><br><a name="ebc866e6"></a></p>
+<h1 id="如何在-Python-中调优-XGBoost-的多线程支持"><a href="#如何在-Python-中调优-XGBoost-的多线程支持" class="headerlink" title="如何在 Python 中调优 XGBoost 的多线程支持"></a>如何在 Python 中调优 XGBoost 的多线程支持</h1><blockquote>
 <p>原文： <a href="https://machinelearningmastery.com/best-tune-multithreading-support-xgboost-python/" target="_blank" rel="noopener">https://machinelearningmastery.com/best-tune-multithreading-support-xgboost-python/</a></p>
 </blockquote>
 <p>用于梯度提升用途的 XGBoost 库专为高效的多核并行处理而设计。</p>
@@ -1458,71 +1465,9 @@
 <li>如何评估增加 XGBoost 上的线程数的效果。</li>
 <li>如何在使用交叉验证和网格搜索时充分利用多线程 XGBoost。</li>
 </ul>
-<p>让我们开始吧。</p>
-<ul>
-<li><strong>2017 年 1 月更新</strong>：已更新，以反映 scikit-learn API 版本 0.18.1 中的更改​​。</li>
-</ul>
-<p><img src="img/ed8730017a4b756792937527e1a8af75.jpg" alt="How to Best Tune Multithreading Support for XGBoost in Python"></p>
-<p>如何最好地调整 Python 中 XGBoost 的多线程支持<br>照片由 <a href="https://www.flickr.com/photos/nicholas_t/14946860658/" target="_blank" rel="noopener">Nicholas A. Tonelli</a> ，保留一些权利。</p>
-<h2 id="问题描述：Otto-Dataset"><a href="#问题描述：Otto-Dataset" class="headerlink" title="问题描述：Otto Dataset"></a>问题描述：Otto Dataset</h2><p>在本教程中，我们将使用 <a href="https://www.kaggle.com/c/otto-group-product-classification-challenge" target="_blank" rel="noopener">Otto Group 产品分类挑战</a>数据集。</p>
-<p>此数据集可从 Kaggle 获得（您需要注册 Kaggle 才能下载此数据集）。您可以从<a href="https://www.kaggle.com/c/otto-group-product-classification-challenge/data" target="_blank" rel="noopener">数据页面</a>下载训练数据集 <strong>train.zip</strong> ，并将解压缩的 <strong>trian.csv</strong> 文件放入您的工作目录。</p>
-<p>该数据集描述了超过 61,000 种产品的 93 个模糊细节，这些产品分为 10 个产品类别（例如时尚，电子等）。输入属性是某种不同事件的计数。</p>
-<p>目标是对新产品进行预测，因为 10 个类别中的每个类别都有一组概率，并且使用多类对数损失（也称为交叉熵）来评估模型。</p>
-<p>这个竞赛在 2015 年 5 月完成，这个数据集对 XGBoost 来说是一个很好的挑战，因为有大量的例子和问题的难度以及需要很少的数据准备这一事实（除了将字符串类变量编码为整数）。</p>
-<h2 id="线程数的影响"><a href="#线程数的影响" class="headerlink" title="线程数的影响"></a>线程数的影响</h2><p>XGBoost 在 C ++中实现，以明确地使用 <a href="https://en.wikipedia.org/wiki/OpenMP" target="_blank" rel="noopener">OpenMP API</a> 进行并行处理。</p>
-<p>梯度提升中的并行性可以在单个树的构造中实现，而不是像随机森林那样并行创建树。这是因为在增强中，树木被顺序添加到模型中。 XGBoost 的速度既可以在单个树木的构造中增加平行度，也可以有效地准备输入数据，以帮助加快树木的构建。</p>
-<p>根据您的平台，您可能需要专门编译 XGBoost 以支持多线程。有关详细信息，请参阅 <a href="https://github.com/dmlc/xgboost/blob/master/doc/build.md" target="_blank" rel="noopener">XGBoost 安装说明</a>。</p>
-<p>用于 scikit-learn 的 XGBoost 的 <strong>XGBClassifier</strong> 和 <strong>XGBRegressor</strong> 包装类提供了 <strong>nthread</strong> 参数，用于指定 XGBoost 在训练期间可以使用的线程数。</p>
-<p>默认情况下，此参数设置为-1 以使用系统中的所有核心。</p>
-<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">model = XGBClassifier(nthread=<span class="number">-1</span>)</span><br></pre></td></tr></table></figure>
-<p>通常，您应该为 XGBoost 安装获得多线程支持，而无需任何额外的工作。</p>
-<p>根据您的 Python 环境（例如 Python 3），您可能需要显式启用 XGBoost 的多线程支持。如果您需要帮助， <a href="https://github.com/dmlc/xgboost/blob/master/demo/guide-python/sklearn_parallel.py" target="_blank" rel="noopener">XGBoost 库提供了一个示例</a>。</p>
-<p>您可以通过构建许多不同的 XGBoost 模型来确认 XGBoost 多线程支持是否正常工作，指定线程数并计算构建每个模型所需的时间。这一趋势将向您展示启用了多线程支持，并指出了构建模型时的效果。</p>
-<p>例如，如果您的系统有 4 个核心，您可以训练 8 个不同的模型，并计算创建每个模型所需的时间（以秒为单位），然后比较时间。</p>
-<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># evaluate the effect of the number of threads</span></span><br><span class="line">results = []</span><br><span class="line">num_threads = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]</span><br><span class="line"><span class="keyword">for</span> n <span class="keyword">in</span> num_threads:</span><br><span class="line">	start = time.time()</span><br><span class="line">	model = XGBClassifier(nthread=n)</span><br><span class="line">	model.fit(X_train, y_train)</span><br><span class="line">	elapsed = time.time() - start</span><br><span class="line">	print(n, elapsed)</span><br><span class="line">	results.append(elapsed)</span><br></pre></td></tr></table></figure>
-<p>我们可以在 Otto 数据集上使用这种方法。下面提供完整示例以确保完整性。</p>
-<p>您可以更改 <strong>num_threads</strong> 阵列以满足系统上的核心数。</p>
-<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Otto, tune number of threads</span></span><br><span class="line"><span class="keyword">from</span> pandas <span class="keyword">import</span> read_csv</span><br><span class="line"><span class="keyword">from</span> xgboost <span class="keyword">import</span> XGBClassifier</span><br><span class="line"><span class="keyword">from</span> sklearn.preprocessing <span class="keyword">import</span> LabelEncoder</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">from</span> matplotlib <span class="keyword">import</span> pyplot</span><br><span class="line"><span class="comment"># load data</span></span><br><span class="line">data = read_csv(<span class="string">'train.csv'</span>)</span><br><span class="line">dataset = data.values</span><br><span class="line"><span class="comment"># split data into X and y</span></span><br><span class="line">X = dataset[:,<span class="number">0</span>:<span class="number">94</span>]</span><br><span class="line">y = dataset[:,<span class="number">94</span>]</span><br><span class="line"><span class="comment"># encode string class values as integers</span></span><br><span class="line">label_encoded_y = LabelEncoder().fit_transform(y)</span><br><span class="line"><span class="comment"># evaluate the effect of the number of threads</span></span><br><span class="line">results = []</span><br><span class="line">num_threads = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]</span><br><span class="line"><span class="keyword">for</span> n <span class="keyword">in</span> num_threads:</span><br><span class="line">	start = time.time()</span><br><span class="line">	model = XGBClassifier(nthread=n)</span><br><span class="line">	model.fit(X, label_encoded_y)</span><br><span class="line">	elapsed = time.time() - start</span><br><span class="line">	print(n, elapsed)</span><br><span class="line">	results.append(elapsed)</span><br><span class="line"><span class="comment"># plot results</span></span><br><span class="line">pyplot.plot(num_threads, results)</span><br><span class="line">pyplot.ylabel(<span class="string">'Speed (seconds)'</span>)</span><br><span class="line">pyplot.xlabel(<span class="string">'Number of Threads'</span>)</span><br><span class="line">pyplot.title(<span class="string">'XGBoost Training Speed vs Number of Threads'</span>)</span><br><span class="line">pyplot.show()</span><br></pre></td></tr></table></figure>
-<p>运行此示例总结了每个配置的执行时间（以秒为单位），例如：</p>
-<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="number">1</span>, <span class="number">115.51652717590332</span>)</span><br><span class="line">(<span class="number">2</span>, <span class="number">62.7727689743042</span>)</span><br><span class="line">(<span class="number">3</span>, <span class="number">46.042901039123535</span>)</span><br><span class="line">(<span class="number">4</span>, <span class="number">40.55334496498108</span>)</span><br></pre></td></tr></table></figure>
-<p>下面提供了这些时间的图表。</p>
-<p><img src="img/146726c5dc2eed3eec56e9a56373187a.jpg" alt="XGBoost Tune Number of Threads for Single Model"></p>
-<p>XGBoost Tune 单个模型的线程数</p>
-<p>随着线程数量的增加，我们可以看到执行时间减少的好趋势。</p>
-<p>如果您没有看到每个新线程的运行时间有所改善，您可能需要研究如何在安装过程中或运行时在 XGBoost 中启用多线程支持。</p>
-<p>我们可以在具有更多内核的机器上运行相同的代码。据报道，大型 Amazon Web Services EC2 实例具有 32 个核心。我们可以调整上面的代码来计算训练具有 1 到 32 个内核的模型所需的时间。结果如下。</p>
-<p><img src="img/146f19ae6f7ee6886994a2b084b410b3.jpg" alt="XGBoost Time to Train Model on 1 to 32 Cores"></p>
-<p>XGBoost 在 1 到 32 个核心上训练模型的时间</p>
-<p>值得注意的是，除了 16 个线程（大约 7 秒）之外，我们没有看到太多改进。我希望其原因是亚马逊实例仅在硬件中提供 16 个内核，并且超线程可以提供额外的 16 个内核。结果表明，如果您的计算机具有超线程，则可能需要将 <strong>num_threads</strong> 设置为等于计算机中物理 CPU 核心的数量。</p>
-<p>使用 OpenMP 进行 XGBoost 的低级优化实现会挤出像这样的大型机器的每个最后一个周期。</p>
-<h2 id="交叉验证-XGBoost-模型时的并行性"><a href="#交叉验证-XGBoost-模型时的并行性" class="headerlink" title="交叉验证 XGBoost 模型时的并行性"></a>交叉验证 XGBoost 模型时的并行性</h2><p>scikit-learn 中的 k-fold 交叉验证支持也支持多线程。</p>
-<p>例如， <strong>cross_val_score（）</strong>函数上的 <strong>n_jobs</strong> 参数用于使用 k-fold 交叉验证评估数据集上的模型，允许您指定要运行的并行作业数。</p>
-<p>默认情况下，此值设置为 1，但可以设置为-1 以使用系统上的所有 CPU 核心，这是一种很好的做法。例如：</p>
-<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">results = cross_val_score(model, X, label_encoded_y, cv=kfold, scoring=<span class="string">'log_loss'</span>, n_jobs=<span class="number">-1</span>, verbose=<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
-<p>这就提出了如何配置交叉验证的问题：</p>
-<ul>
-<li>禁用 XGBoost 中的多线程支持，并允许交叉验证在所有核心上运行。</li>
-<li>在交叉验证中禁用多线程支持，并允许 XGBoost 在所有核心上运行。</li>
-<li>为 XGBoost 和 Cross 验证启用多线程支持。</li>
-</ul>
-<p>我们可以通过简单计算在每种情况下评估模型所需的时间来得到这个问题的答案。</p>
-<p>在下面的示例中，我们使用 10 倍交叉验证来评估 Otto 训练数据集上的默认 XGBoost 模型。评估上述每个场景，并报告评估模型所花费的时间。</p>
-<p>完整的代码示例如下所示。</p>
-<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Otto, parallel cross validation</span></span><br><span class="line"><span class="keyword">from</span> pandas <span class="keyword">import</span> read_csv</span><br><span class="line"><span class="keyword">from</span> xgboost <span class="keyword">import</span> XGBClassifier</span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> StratifiedKFold</span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> cross_val_score</span><br><span class="line"><span class="keyword">from</span> sklearn.preprocessing <span class="keyword">import</span> LabelEncoder</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="comment"># load data</span></span><br><span class="line">data = read_csv(<span class="string">'train.csv'</span>)</span><br><span class="line">dataset = data.values</span><br><span class="line"><span class="comment"># split data into X and y</span></span><br><span class="line">X = dataset[:,<span class="number">0</span>:<span class="number">94</span>]</span><br><span class="line">y = dataset[:,<span class="number">94</span>]</span><br><span class="line"><span class="comment"># encode string class values as integers</span></span><br><span class="line">label_encoded_y = LabelEncoder().fit_transform(y)</span><br><span class="line"><span class="comment"># prepare cross validation</span></span><br><span class="line">kfold = StratifiedKFold(n_splits=<span class="number">10</span>, shuffle=<span class="literal">True</span>, random_state=<span class="number">7</span>)</span><br><span class="line"><span class="comment"># Single Thread XGBoost, Parallel Thread CV</span></span><br><span class="line">start = time.time()</span><br><span class="line">model = XGBClassifier(nthread=<span class="number">1</span>)</span><br><span class="line">results = cross_val_score(model, X, label_encoded_y, cv=kfold, scoring=<span class="string">'neg_log_loss'</span>, n_jobs=<span class="number">-1</span>)</span><br><span class="line">elapsed = time.time() - start</span><br><span class="line">print(<span class="string">"Single Thread XGBoost, Parallel Thread CV: %f"</span> % (elapsed))</span><br><span class="line"><span class="comment"># Parallel Thread XGBoost, Single Thread CV</span></span><br><span class="line">start = time.time()</span><br><span class="line">model = XGBClassifier(nthread=<span class="number">-1</span>)</span><br><span class="line">results = cross_val_score(model, X, label_encoded_y, cv=kfold, scoring=<span class="string">'neg_log_loss'</span>, n_jobs=<span class="number">1</span>)</span><br><span class="line">elapsed = time.time() - start</span><br><span class="line">print(<span class="string">"Parallel Thread XGBoost, Single Thread CV: %f"</span> % (elapsed))</span><br><span class="line"><span class="comment"># Parallel Thread XGBoost and CV</span></span><br><span class="line">start = time.time()</span><br><span class="line">model = XGBClassifier(nthread=<span class="number">-1</span>)</span><br><span class="line">results = cross_val_score(model, X, label_encoded_y, cv=kfold, scoring=<span class="string">'neg_log_loss'</span>, n_jobs=<span class="number">-1</span>)</span><br><span class="line">elapsed = time.time() - start</span><br><span class="line">print(<span class="string">"Parallel Thread XGBoost and CV: %f"</span> % (elapsed))</span><br></pre></td></tr></table></figure>
-<p>运行该示例将打印以下结果：</p>
-<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Single Thread XGBoost, Parallel Thread CV: <span class="number">359.854589</span></span><br><span class="line">Parallel Thread XGBoost, Single Thread CV: <span class="number">330.498101</span></span><br><span class="line">Parallel Thread XGBoost <span class="keyword">and</span> CV: <span class="number">313.382301</span></span><br></pre></td></tr></table></figure>
-<p>我们可以看到，通过交叉验证折叠并行化 XGBoost 会带来好处。这是有道理的，因为 10 个连续快速任务比（10 除以 num_cores）慢任务更好。</p>
-<p>有趣的是，我们可以看到通过在 XGBoost 和交叉验证中启用多线程来实现最佳结果。这是令人惊讶的，因为这意味着 num_cores 数量的并行 XGBoost 模型在其模型构造中竞争相同的 num_cores。然而，这实现了最快的结果，并且建议使用 XGBoost 进行交叉验证。</p>
-<p>因为网格搜索使用相同的基础方法来实现并行性，所以我们期望同样的发现可用于优化 XGBoost 的超参数。</p>
-<h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><p>在这篇文章中，您发现了 XGBoost 的多线程功能。</p>
-<p>你了解到：</p>
-<ul>
-<li>如何检查系统上是否启用了 XGBoost 中的多线程支持。</li>
-<li>如何增加线程数会影响训练 XGBoost 模型的表现。</li>
-<li>如何在 Python 中最佳地配置 XGBoost 和交叉验证，以最短的运行时间。</li>
-</ul>
-<p>您对 XGBoost 或此帖子的多线程支持有任何疑问吗？在评论中提出您的问题，我会尽力回答。</p>
-
+        
+          <a class="article-more-a" href="/2019/04/26/yuque/如何在 Python 中调优 XGBoost 的多线程支持/#more">more >></a>
+        
       
 
       
@@ -1584,103 +1529,19 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p><a href></a><a name="49c4a9fb"></a></p>
+        <p><a href></a><br><a name="49c4a9fb"></a></p>
 <h1 id="通过在-Python-中使用-XGBoost-提前停止来避免过度拟合"><a href="#通过在-Python-中使用-XGBoost-提前停止来避免过度拟合" class="headerlink" title="通过在 Python 中使用 XGBoost 提前停止来避免过度拟合"></a>通过在 Python 中使用 XGBoost 提前停止来避免过度拟合</h1><blockquote>
 <p>原文： <a href="https://machinelearningmastery.com/avoid-overfitting-by-early-stopping-with-xgboost-in-python/" target="_blank" rel="noopener">https://machinelearningmastery.com/avoid-overfitting-by-early-stopping-with-xgboost-in-python/</a></p>
 </blockquote>
 <p>过度拟合是复杂的非线性学习算法（例如梯度提升）的问题。</p>
-<p>在这篇文章中，您将了解如何使用早期停止来限制 Python 中的 XGBoost 过度拟合。</p>
-<p>阅读这篇文章后，你会知道：</p>
-<ul>
-<li>关于早期停止作为减少训练数据过度拟合的方法。</li>
-<li>如何在训练期间监控 XGBoost 模型的表现并绘制学习曲线。</li>
-<li>如何使用早期停止来提前停止在最佳时期训练 XGBoost 模型。</li>
-</ul>
-<p>让我们开始吧。</p>
-<ul>
-<li><strong>2017 年 1 月更新</strong>：已更新，以反映 scikit-learn API 版本 0.18.1 中的更改​​。</li>
-<li><strong>更新 March / 2018</strong> ：添加了备用链接以下载数据集，因为原始图像已被删除。</li>
-</ul>
-<p><img src="img/3b5a137b9d5bd85033c44aac0f3068ff.jpg#alt=Avoid%20Overfitting%20By%20Early%20Stopping%20With%20XGBoost%20In%20Python" alt></p>
-<p>通过 Python 中的 XGBoost 提前停止来避免过度拟合<br><br>照片由 <a href="https://www.flickr.com/photos/michitux/7218180540/" target="_blank" rel="noopener">Michael Hamann</a> 拍摄，保留一些权利。</p>
-<p><a href></a><a name="a876c49b"></a></p>
-<h2 id="提前停止以避免过度拟合"><a href="#提前停止以避免过度拟合" class="headerlink" title="提前停止以避免过度拟合"></a>提前停止以避免过度拟合</h2><p><a href="https://en.wikipedia.org/wiki/Early_stopping" target="_blank" rel="noopener">早期停止</a>是一种训练复杂机器学习模型的方法，以避免过度拟合。</p>
-<p>它通过监视在单独的测试数据集上训练的模型的表现并且一旦在固定数量的训练迭代之后测试数据集上的表现没有改善就停止训练过程。</p>
-<p>它通过尝试自动选择测试数据集上的表现开始降低的拐点来避免过度拟合，同时随着模型开始过度拟合，训练数据集上的表现继续提高。</p>
-<p>表现度量可以是针对训练模型而优化的损失函数（例如对数损失），或者一般对问题感兴趣的外部度量（例如分类准确度）。</p>
-<p><a href></a><a name="bd09b8be"></a></p>
-<h2 id="使用-XGBoost-监控训练表现"><a href="#使用-XGBoost-监控训练表现" class="headerlink" title="使用 XGBoost 监控训练表现"></a>使用 XGBoost 监控训练表现</h2><p>XGBoost 模型可以在训练期间评估和报告模型的测试集上的表现。</p>
-<p>它通过在训练模型和指定详细输出时调用 <strong>model.fit（）</strong>时指定测试数据集和评估指标来支持此功能。</p>
-<p>例如，我们可以在独立测试集（ <strong>eval_set</strong> ）上报告二进制分类错误率（“_ 错误 _”），同时训练 XGBoost 模型，如下所示：</p>
-<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">eval_set = [(X_test, y_test)]</span><br><span class="line">model.fit(X_train, y_train, eval_metric=<span class="string">"error"</span>, eval_set=eval_set, verbose=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
-<p>XGBoost 支持一套评估指标，不仅限于：</p>
-<ul>
-<li>“ <em>rmse</em> ”表示均方根误差。</li>
-<li>“ <em>mae</em> ”表示平均绝对误差。</li>
-<li>“ _logloss_mlogloss_ ”用于多级对数损失（交叉熵）。</li>
-<li>“_ 错误 _”表示分类错误。</li>
-<li>“ <em>auc</em> ”用于 ROC 曲线下的面积。</li>
-</ul>
-<p>完整列表在 XGBoost 参数网页的“<a href="http://xgboost.readthedocs.io/en/latest//parameter.html" target="_blank" rel="noopener">学习任务参数</a>”部分中提供。</p>
-<p>例如，我们可以演示如何跟踪 <a href="https://archive.ics.uci.edu/ml/datasets/Pima+Indians+Diabetes" target="_blank" rel="noopener">Pima 印第安人糖尿病数据集</a>的 XGBoost 模型训练的表现，可从 UCI 机器学习库获取（更新：<a href="https://raw.githubusercontent.com/jbrownlee/Datasets/master/pima-indians-diabetes.data.csv" target="_blank" rel="noopener">从此处下载</a>）。</p>
-<p>完整示例如下：</p>
-<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># monitor training performance</span></span><br><span class="line"><span class="keyword">from</span> numpy <span class="keyword">import</span> loadtxt</span><br><span class="line"><span class="keyword">from</span> xgboost <span class="keyword">import</span> XGBClassifier</span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split</span><br><span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> accuracy_score</span><br><span class="line"><span class="comment"># load data</span></span><br><span class="line">dataset = loadtxt(<span class="string">'pima-indians-diabetes.csv'</span>, delimiter=<span class="string">","</span>)</span><br><span class="line"><span class="comment"># split data into X and y</span></span><br><span class="line">X = dataset[:,<span class="number">0</span>:<span class="number">8</span>]</span><br><span class="line">Y = dataset[:,<span class="number">8</span>]</span><br><span class="line"><span class="comment"># split data into train and test sets</span></span><br><span class="line">X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=<span class="number">0.33</span>, random_state=<span class="number">7</span>)</span><br><span class="line"><span class="comment"># fit model no training data</span></span><br><span class="line">model = XGBClassifier()</span><br><span class="line">eval_set = [(X_test, y_test)]</span><br><span class="line">model.fit(X_train, y_train, eval_metric=<span class="string">"error"</span>, eval_set=eval_set, verbose=<span class="literal">True</span>)</span><br><span class="line"><span class="comment"># make predictions for test data</span></span><br><span class="line">y_pred = model.predict(X_test)</span><br><span class="line">predictions = [round(value) <span class="keyword">for</span> value <span class="keyword">in</span> y_pred]</span><br><span class="line"><span class="comment"># evaluate predictions</span></span><br><span class="line">accuracy = accuracy_score(y_test, predictions)</span><br><span class="line">print(<span class="string">"Accuracy: %.2f%%"</span> % (accuracy * <span class="number">100.0</span>))</span><br></pre></td></tr></table></figure>
-<p>运行此示例在 67％的数据上训练模型，并在 33％的测试数据集上评估每个训练时期的模型。</p>
-<p>每次迭代都会报告分类错误，最后报告分类准确性。</p>
-<p>下面提供了输出，为简洁起见，将其截断。我们可以看到，每次训练迭代都会报告分类错误（在每个提升的树被添加到模型之后）。</p>
-<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">[<span class="number">89</span>]	validation_0-error:<span class="number">0.204724</span></span><br><span class="line">[<span class="number">90</span>]	validation_0-error:<span class="number">0.208661</span></span><br><span class="line">[<span class="number">91</span>]	validation_0-error:<span class="number">0.208661</span></span><br><span class="line">[<span class="number">92</span>]	validation_0-error:<span class="number">0.208661</span></span><br><span class="line">[<span class="number">93</span>]	validation_0-error:<span class="number">0.208661</span></span><br><span class="line">[<span class="number">94</span>]	validation_0-error:<span class="number">0.208661</span></span><br><span class="line">[<span class="number">95</span>]	validation_0-error:<span class="number">0.212598</span></span><br><span class="line">[<span class="number">96</span>]	validation_0-error:<span class="number">0.204724</span></span><br><span class="line">[<span class="number">97</span>]	validation_0-error:<span class="number">0.212598</span></span><br><span class="line">[<span class="number">98</span>]	validation_0-error:<span class="number">0.216535</span></span><br><span class="line">[<span class="number">99</span>]	validation_0-error:<span class="number">0.220472</span></span><br><span class="line">Accuracy: <span class="number">77.95</span>%</span><br></pre></td></tr></table></figure>
-<p>回顾所有输出，我们可以看到测试集上的模型表现平稳，甚至在训练结束时变得更糟。</p>
-<p><a href></a><a name="7a25cb01"></a></p>
-<h2 id="使用学习曲线评估-XGBoost-模型"><a href="#使用学习曲线评估-XGBoost-模型" class="headerlink" title="使用学习曲线评估 XGBoost 模型"></a>使用学习曲线评估 XGBoost 模型</h2><p>我们可以在评估数据集上检索模型的表现并绘制它以深入了解在训练时如何展开学习。</p>
-<p>在拟合 XGBoost 模型时，我们为 <strong>eval_metric</strong> 参数提供了一对 X 和 y 对。除了测试集，我们还可以提供训练数据集。这将提供一份报告，说明模型在训练期间对训练和测试集的执行情况。</p>
-<p>例如：</p>
-<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">eval_set = [(X_train, y_train), (X_test, y_test)]</span><br><span class="line">model.fit(X_train, y_train, eval_metric=<span class="string">"error"</span>, eval_set=eval_set, verbose=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
-<p>此外，通过调用 <strong>model.evals_result（）</strong>函数，模型在训练后存储并使模型在每个评估集上的表现可用。这将返回评估数据集和分数的字典，例如：</p>
-<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">results = model.evals_result()</span><br><span class="line">print(results)</span><br></pre></td></tr></table></figure>
-<p>这将打印如下结果（为简洁起见，将其截断）：</p>
-<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">	<span class="string">'validation_0'</span>: &#123;<span class="string">'error'</span>: [<span class="number">0.259843</span>, <span class="number">0.26378</span>, <span class="number">0.26378</span>, ...]&#125;,</span><br><span class="line">	<span class="string">'validation_1'</span>: &#123;<span class="string">'error'</span>: [<span class="number">0.22179</span>, <span class="number">0.202335</span>, <span class="number">0.196498</span>, ...]&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>‘ _validation_0_ ‘和’ _validation_1_ ‘中的每一个对应于在 <strong>fit（）调用中向 </strong>eval_set<strong> 参数提供数据集的顺序</strong>。</p>
-<p>可以按如下方式访问特定的结果数组，例如第一个数据集和错误度量标准：</p>
-<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">results[<span class="string">'validation_0'</span>][<span class="string">'error'</span>]</span><br></pre></td></tr></table></figure>
-<p>此外，我们可以通过为 <strong>fit（）</strong>函数的 eval_metric 参数提供一系列度量来指定更多评估度量来评估和收集。</p>
-<p>然后，我们可以使用这些收集的表现度量来创建线图，并进一步了解模型在训练时期的训练和测试数据集上的表现。</p>
-<p>下面是完整的代码示例，显示了如何在线图上显示收集的结果。</p>
-<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># plot learning curve</span></span><br><span class="line"><span class="keyword">from</span> numpy <span class="keyword">import</span> loadtxt</span><br><span class="line"><span class="keyword">from</span> xgboost <span class="keyword">import</span> XGBClassifier</span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split</span><br><span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> accuracy_score</span><br><span class="line"><span class="keyword">from</span> matplotlib <span class="keyword">import</span> pyplot</span><br><span class="line"><span class="comment"># load data</span></span><br><span class="line">dataset = loadtxt(<span class="string">'pima-indians-diabetes.csv'</span>, delimiter=<span class="string">","</span>)</span><br><span class="line"><span class="comment"># split data into X and y</span></span><br><span class="line">X = dataset[:,<span class="number">0</span>:<span class="number">8</span>]</span><br><span class="line">Y = dataset[:,<span class="number">8</span>]</span><br><span class="line"><span class="comment"># split data into train and test sets</span></span><br><span class="line">X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=<span class="number">0.33</span>, random_state=<span class="number">7</span>)</span><br><span class="line"><span class="comment"># fit model no training data</span></span><br><span class="line">model = XGBClassifier()</span><br><span class="line">eval_set = [(X_train, y_train), (X_test, y_test)]</span><br><span class="line">model.fit(X_train, y_train, eval_metric=[<span class="string">"error"</span>, <span class="string">"logloss"</span>], eval_set=eval_set, verbose=<span class="literal">True</span>)</span><br><span class="line"><span class="comment"># make predictions for test data</span></span><br><span class="line">y_pred = model.predict(X_test)</span><br><span class="line">predictions = [round(value) <span class="keyword">for</span> value <span class="keyword">in</span> y_pred]</span><br><span class="line"><span class="comment"># evaluate predictions</span></span><br><span class="line">accuracy = accuracy_score(y_test, predictions)</span><br><span class="line">print(<span class="string">"Accuracy: %.2f%%"</span> % (accuracy * <span class="number">100.0</span>))</span><br><span class="line"><span class="comment"># retrieve performance metrics</span></span><br><span class="line">results = model.evals_result()</span><br><span class="line">epochs = len(results[<span class="string">'validation_0'</span>][<span class="string">'error'</span>])</span><br><span class="line">x_axis = range(<span class="number">0</span>, epochs)</span><br><span class="line"><span class="comment"># plot log loss</span></span><br><span class="line">fig, ax = pyplot.subplots()</span><br><span class="line">ax.plot(x_axis, results[<span class="string">'validation_0'</span>][<span class="string">'logloss'</span>], label=<span class="string">'Train'</span>)</span><br><span class="line">ax.plot(x_axis, results[<span class="string">'validation_1'</span>][<span class="string">'logloss'</span>], label=<span class="string">'Test'</span>)</span><br><span class="line">ax.legend()</span><br><span class="line">pyplot.ylabel(<span class="string">'Log Loss'</span>)</span><br><span class="line">pyplot.title(<span class="string">'XGBoost Log Loss'</span>)</span><br><span class="line">pyplot.show()</span><br><span class="line"><span class="comment"># plot classification error</span></span><br><span class="line">fig, ax = pyplot.subplots()</span><br><span class="line">ax.plot(x_axis, results[<span class="string">'validation_0'</span>][<span class="string">'error'</span>], label=<span class="string">'Train'</span>)</span><br><span class="line">ax.plot(x_axis, results[<span class="string">'validation_1'</span>][<span class="string">'error'</span>], label=<span class="string">'Test'</span>)</span><br><span class="line">ax.legend()</span><br><span class="line">pyplot.ylabel(<span class="string">'Classification Error'</span>)</span><br><span class="line">pyplot.title(<span class="string">'XGBoost Classification Error'</span>)</span><br><span class="line">pyplot.show()</span><br></pre></td></tr></table></figure>
-<p>运行此代码会报告每个纪元的训练和测试数据集的分类错误。我们可以通过在 <strong>fit（）</strong>函数的调用中设置 <strong>verbose = False</strong> （默认值）来关闭它。</p>
-<p>创建了两个图。第一个显示了训练和测试数据集中每个时期的 XGBoost 模型的对数损失。</p>
-<p><img src="img/3dd164f486ba1862fa97f82eb6693360.jpg#alt=XGBoost%20Learning%20Curve%20Log%20Loss" alt></p>
-<p>XGBoost 学习曲线日志丢失</p>
-<p>第二个图显示了训练和测试数据集中每个时期的 XGBoost 模型的分类错误。</p>
-<p><img src="img/cdfec3000bac01a37daacb6f874ff978.jpg#alt=XGBoost%20Learning%20Curve%20Classification%20Error" alt></p>
-<p>XGBoost 学习曲线分类错误</p>
-<p>通过回顾 logloss 图，看起来有机会提前停止学习，也许在 20 世纪到 40 世纪左右。</p>
-<p>我们看到了类似的分类错误故事，其中错误似乎在 40 左右的时间内重新出现。</p>
-<p><a href></a><a name="c8947272"></a></p>
-<h2 id="早期停止使用-XGBoost"><a href="#早期停止使用-XGBoost" class="headerlink" title="早期停止使用 XGBoost"></a>早期停止使用 XGBoost</h2><p>XGBoost 支持在固定次数的迭代后提前停止。</p>
-<p>除了为每个时期指定用于评估的度量和度量数据集之外，还必须指定一个窗口，其中没有观察到任何改进的时期数。这在 <strong>early_stopping_rounds</strong> 参数中指定。</p>
-<p>例如，我们可以检查 10 个时期的对数损失没有改善如下：</p>
-<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">eval_set = [(X_test, y_test)]</span><br><span class="line">model.fit(X_train, y_train, early_stopping_rounds=<span class="number">10</span>, eval_metric=<span class="string">"logloss"</span>, eval_set=eval_set, verbose=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
-<p>如果提供了多个评估数据集或多个评估指标，则提前停止将使用列表中的最后一个。</p>
-<p>下面提供了完整性的完整示例，提前停止。</p>
-<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># early stopping</span></span><br><span class="line"><span class="keyword">from</span> numpy <span class="keyword">import</span> loadtxt</span><br><span class="line"><span class="keyword">from</span> xgboost <span class="keyword">import</span> XGBClassifier</span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split</span><br><span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> accuracy_score</span><br><span class="line"><span class="comment"># load data</span></span><br><span class="line">dataset = loadtxt(<span class="string">'pima-indians-diabetes.csv'</span>, delimiter=<span class="string">","</span>)</span><br><span class="line"><span class="comment"># split data into X and y</span></span><br><span class="line">X = dataset[:,<span class="number">0</span>:<span class="number">8</span>]</span><br><span class="line">Y = dataset[:,<span class="number">8</span>]</span><br><span class="line"><span class="comment"># split data into train and test sets</span></span><br><span class="line">seed = <span class="number">7</span></span><br><span class="line">test_size = <span class="number">0.33</span></span><br><span class="line">X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=test_size, random_state=seed)</span><br><span class="line"><span class="comment"># fit model no training data</span></span><br><span class="line">model = XGBClassifier()</span><br><span class="line">eval_set = [(X_test, y_test)]</span><br><span class="line">model.fit(X_train, y_train, early_stopping_rounds=<span class="number">10</span>, eval_metric=<span class="string">"logloss"</span>, eval_set=eval_set, verbose=<span class="literal">True</span>)</span><br><span class="line"><span class="comment"># make predictions for test data</span></span><br><span class="line">y_pred = model.predict(X_test)</span><br><span class="line">predictions = [round(value) <span class="keyword">for</span> value <span class="keyword">in</span> y_pred]</span><br><span class="line"><span class="comment"># evaluate predictions</span></span><br><span class="line">accuracy = accuracy_score(y_test, predictions)</span><br><span class="line">print(<span class="string">"Accuracy: %.2f%%"</span> % (accuracy * <span class="number">100.0</span>))</span><br></pre></td></tr></table></figure>
-<p>运行该示例提供以下输出，为简洁起见，将其截断：</p>
-<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">[<span class="number">35</span>]	validation_0-logloss:<span class="number">0.487962</span></span><br><span class="line">[<span class="number">36</span>]	validation_0-logloss:<span class="number">0.488218</span></span><br><span class="line">[<span class="number">37</span>]	validation_0-logloss:<span class="number">0.489582</span></span><br><span class="line">[<span class="number">38</span>]	validation_0-logloss:<span class="number">0.489334</span></span><br><span class="line">[<span class="number">39</span>]	validation_0-logloss:<span class="number">0.490969</span></span><br><span class="line">[<span class="number">40</span>]	validation_0-logloss:<span class="number">0.48978</span></span><br><span class="line">[<span class="number">41</span>]	validation_0-logloss:<span class="number">0.490704</span></span><br><span class="line">[<span class="number">42</span>]	validation_0-logloss:<span class="number">0.492369</span></span><br><span class="line">Stopping. Best iteration:</span><br><span class="line">[<span class="number">32</span>]	validation_0-logloss:<span class="number">0.487297</span></span><br></pre></td></tr></table></figure>
-<p>我们可以看到模型在第 42 纪元停止训练（接近我们对学习曲线的手动判断的预期），并且在第 32 纪元观察到具有最佳损失的模型。</p>
-<p>选择 <strong>early_stopping_rounds</strong> 作为训练时期总数（在这种情况下为 10％）的合理函数通常是个好主意，或者尝试对应于在情节上可以观察到的拐点时期。学习曲线。</p>
-<p><a href></a><a name="3ae14696"></a></p>
-<h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><p>在这篇文章中，您发现了监控表现和提前停止。</p>
-<p>你了解到：</p>
-<ul>
-<li>关于在模型过度训练数据之前停止模型训练的早期停止技术。</li>
-<li>如何在训练期间监控 XGBoost 模型的表现并绘制学习曲线。</li>
-<li>如何在训练 XGBoost 模型时配置早期停止。</li>
-</ul>
-<p>您对过度拟合或有关此帖子有任何疑问吗？在评论中提出您的问题，我会尽力回答。</p>
-
+<p>在这篇文章中，您将了解如何使用早期停止来限制 Python 中的 XGBoost 过度拟合。<br>
+        
+          <a class="article-more-a" href="/2019/04/26/yuque/通过在 Python 中使用 XGBoost 提前停止来避免过度拟合/#more">more >></a>
+        
       
 
       
-    </div>
+    </p></div>
     <div class="article-info article-info-index">
       
       
