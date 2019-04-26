@@ -8,21 +8,21 @@
   <link rel="dns-prefetch" href="http://zhos.me">
   <title>如何配置梯度提升算法 | A+</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="如何配置梯度提升算法 原文： https://machinelearningmastery.com/configure-gradient-boosting-algorithm/  梯度提升是应用机器学习最强大的技术之一，因此很快成为最受欢迎的技术之一。 但是，如何为您的问题配置梯度提升？ 在这篇文章中，您将了解如何通过查看书籍，论文和竞赛结果中报告的配置来配置机器学习问题的梯度提升。 阅读这篇文">
+  <meta name="description" content="如何配置梯度提升算法 原文： https://machinelearningmastery.com/configure-gradient-boosting-algorithm/  梯度提升是应用机器学习最强大的技术之一，因此很快成为最受欢迎的技术之一。 但是，如何为您的问题配置梯度提升？">
 <meta property="og:type" content="article">
 <meta property="og:title" content="如何配置梯度提升算法">
 <meta property="og:url" content="http://zhos.me/2019/04/26/yuque/如何配置梯度提升算法/index.html">
 <meta property="og:site_name" content="A+">
-<meta property="og:description" content="如何配置梯度提升算法 原文： https://machinelearningmastery.com/configure-gradient-boosting-algorithm/  梯度提升是应用机器学习最强大的技术之一，因此很快成为最受欢迎的技术之一。 但是，如何为您的问题配置梯度提升？ 在这篇文章中，您将了解如何通过查看书籍，论文和竞赛结果中报告的配置来配置机器学习问题的梯度提升。 阅读这篇文">
+<meta property="og:description" content="如何配置梯度提升算法 原文： https://machinelearningmastery.com/configure-gradient-boosting-algorithm/  梯度提升是应用机器学习最强大的技术之一，因此很快成为最受欢迎的技术之一。 但是，如何为您的问题配置梯度提升？">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://zhos.me/2019/04/26/yuque/如何配置梯度提升算法/img/e28ff0c7b20a64f211069bb538f08486.jpg#alt=How%20to%20Configure%20the%20Gradient%20Boosting%20Algorithm">
 <meta property="og:image" content="http://zhos.me/2019/04/26/yuque/如何配置梯度提升算法/img/a135310fc17a2814209801719aeeeceb.jpg#alt=Owen%20Zhang%20Table%20of%20Suggestions%20for%20Hyperparameter%20Tuning%20of%20XGBoost">
 <meta property="og:image" content="http://zhos.me/2019/04/26/yuque/如何配置梯度提升算法/img/e5b7b7097db7d9e7fd1c4b15821ce44c.jpg#alt=Owen%20Zhang%20Suggestions%20for%20Tuning%20XGBoost">
 <meta property="og:image" content="http://zhos.me/2019/04/26/yuque/如何配置梯度提升算法/img/5d3f0eee33d08c57dec1e88506d7cc2a.jpg#alt=Abhishek%20Thakur%20Suggestions%20for%20Tuning%20XGBoost">
-<meta property="og:updated_time" content="2019-04-26T03:23:11.179Z">
+<meta property="og:updated_time" content="2019-04-26T03:24:06.807Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="如何配置梯度提升算法">
-<meta name="twitter:description" content="如何配置梯度提升算法 原文： https://machinelearningmastery.com/configure-gradient-boosting-algorithm/  梯度提升是应用机器学习最强大的技术之一，因此很快成为最受欢迎的技术之一。 但是，如何为您的问题配置梯度提升？ 在这篇文章中，您将了解如何通过查看书籍，论文和竞赛结果中报告的配置来配置机器学习问题的梯度提升。 阅读这篇文">
+<meta name="twitter:description" content="如何配置梯度提升算法 原文： https://machinelearningmastery.com/configure-gradient-boosting-algorithm/  梯度提升是应用机器学习最强大的技术之一，因此很快成为最受欢迎的技术之一。 但是，如何为您的问题配置梯度提升？">
 <meta name="twitter:image" content="http://zhos.me/2019/04/26/yuque/如何配置梯度提升算法/img/e28ff0c7b20a64f211069bb538f08486.jpg#alt=How%20to%20Configure%20the%20Gradient%20Boosting%20Algorithm">
   
     <link rel="alternative" href="/atom.xml" title="A+" type="application/atom+xml">
@@ -173,13 +173,12 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p><a href></a><a name="741f0088"></a></p>
+        <p><a href></a><br><a name="741f0088"></a></p>
 <h1 id="如何配置梯度提升算法"><a href="#如何配置梯度提升算法" class="headerlink" title="如何配置梯度提升算法"></a>如何配置梯度提升算法</h1><blockquote>
 <p>原文： <a href="https://machinelearningmastery.com/configure-gradient-boosting-algorithm/" target="_blank" rel="noopener">https://machinelearningmastery.com/configure-gradient-boosting-algorithm/</a></p>
 </blockquote>
 <p>梯度提升是应用机器学习最强大的技术之一，因此很快成为最受欢迎的技术之一。</p>
-<p>但是，如何为您的问题配置梯度提升？</p>
-<p>在这篇文章中，您将了解如何通过查看书籍，论文和竞赛结果中报告的配置来配置机器学习问题的梯度提升。</p>
+<p>但是，如何为您的问题配置梯度提升？<br><a id="more"></a><br>在这篇文章中，您将了解如何通过查看书籍，论文和竞赛结果中报告的配置来配置机器学习问题的梯度提升。</p>
 <p>阅读这篇文章后，你会知道：</p>
 <ul>
 <li>如何根据原始来源配置梯度提升。</li>
@@ -189,7 +188,7 @@
 <p>让我们开始吧。</p>
 <p><img src="img/e28ff0c7b20a64f211069bb538f08486.jpg#alt=How%20to%20Configure%20the%20Gradient%20Boosting%20Algorithm" alt></p>
 <p>如何配置梯度提升算法<br><br>照片来自 <a href="https://www.flickr.com/photos/stone65/7925550064/" target="_blank" rel="noopener">Chris Sorge</a> ，保留一些权利。</p>
-<p><a href></a><a name="8953dbc5"></a></p>
+<p><a href></a><br><a name="8953dbc5"></a></p>
 <h2 id="如何配置梯度增压机"><a href="#如何配置梯度增压机" class="headerlink" title="如何配置梯度增压机"></a>如何配置梯度增压机</h2><p>在 1999 年的论文“<a href="https://statweb.stanford.edu/~jhf/ftp/trebst.pdf" target="_blank" rel="noopener">贪婪函数逼近：梯度提升机</a>”中，Jerome Friedman 评论了树木数量（M）和学习率（v）之间的权衡：</p>
 <blockquote>
 <p>v-M 的权衡显而易见;较小的 v 值会产生较大的最佳 M 值。它们还提供更高的准确度，v <1 的回报递减。 0.125。对于 m> 1，错误分类错误率非常平坦。 200，因此它的最佳 M 值是不稳定的。 ……这些结果的定性性质相当普遍。</1></p>
@@ -197,7 +196,7 @@
 <p>他建议首先为树木数量设置一个较大的值，然后调整收缩参数以获得最佳结果。本文的研究优选收缩值为 0.1，树木的数量在 100 到 500 之间，树木中的终端节点数在 2 到 8 之间。</p>
 <p>在 1999 年的论文“ <a href="https://statweb.stanford.edu/~jhf/ftp/stobst.pdf" target="_blank" rel="noopener">Stochastic Gradient Boosting</a> ”中，弗里德曼重申了对收缩参数的偏好：</p>
 <blockquote>
-<p>“收缩”参数 0 &lt; v＆lt; 1 控制程序的学习率。根据经验……，发现小值（v​​ &lt;= 0.1）导致更好的泛化误差。</p>
+<p>“收缩”参数 0 &lt; v＆lt; 1 控制程序的学习率。根据经验……，发现小值（v &lt;= 0.1）导致更好的泛化误差。</p>
 </blockquote>
 <p>在论文中，弗里德曼介绍并实证研究了随机梯度提升（基于行的子采样）。他发现几乎所有的子采样百分比都比所谓的确定性提升更好，或许 30％到 50％是一个很好的选择一些问题的价值和 50％到 80％的其他问题。</p>
 <blockquote>
@@ -225,7 +224,7 @@
 <blockquote>
 <p>n 的典型值可以是 1/2，但是对于大的 N，n 可以基本上小于 1/2。</p>
 </blockquote>
-<p><a href></a><a name="33f1d615"></a></p>
+<p><a href></a><br><a name="33f1d615"></a></p>
 <h2 id="R-中梯度提升的配置"><a href="#R-中梯度提升的配置" class="headerlink" title="R 中梯度提升的配置"></a>R 中梯度提升的配置</h2><p>梯度提升算法在 R 中实现为 <a href="https://cran.r-project.org/web/packages/gbm/index.html" target="_blank" rel="noopener">gbm 包</a>。</p>
 <p>回顾<a href="https://cran.r-project.org/web/packages/gbm/gbm.pdf" target="_blank" rel="noopener">软件包文档</a>，gbm（）函数指定合理的默认值：</p>
 <ul>
@@ -247,7 +246,7 @@
 <blockquote>
 <p>我通常瞄准 3,000 到 10,000 次迭代，收缩率在 0.01 到 0.001 之间。</p>
 </blockquote>
-<p><a href></a><a name="9402ae6e"></a></p>
+<p><a href></a><br><a name="9402ae6e"></a></p>
 <h2 id="在-scikit-learn-中配置梯度提升"><a href="#在-scikit-learn-中配置梯度提升" class="headerlink" title="在 scikit-learn 中配置梯度提升"></a>在 scikit-learn 中配置梯度提升</h2><p>Python 库提供了用于分类的梯度提升的实现，称为 <a href="http://scikit-learn.org/stable/modules/generated/sklearn.ensemble.GradientBoostingClassifier.html" target="_blank" rel="noopener">GradientBoostingClassifier</a> 类，并且回归称为 <a href="http://scikit-learn.org/stable/modules/generated/sklearn.ensemble.GradientBoostingRegressor.html" target="_blank" rel="noopener">GradientBoostingRegressor</a> 类。</p>
 <p>查看此库中算法的默认配置很有用。</p>
 <p>有许多参数，但下面是几个关键的默认值。</p>
@@ -265,7 +264,7 @@
 <p>我们发现 max_leaf_nodes = k 给出了与 max_depth = k-1 相当的结果，但是以稍高的训练误差为代价训练得更快。</p>
 </blockquote>
 <p>在一项小型研究中，证明了梯度提升的正则化方法“<a href="http://scikit-learn.org/stable/auto_examples/ensemble/plot_gradient_boosting_regularization.html" target="_blank" rel="noopener">梯度提升正则化</a>”，结果显示了使用收缩和二次采样的好处。</p>
-<p><a href></a><a name="29e7039b"></a></p>
+<p><a href></a><br><a name="29e7039b"></a></p>
 <h2 id="在-XGBoost-中配置梯度提升"><a href="#在-XGBoost-中配置梯度提升" class="headerlink" title="在 XGBoost 中配置梯度提升"></a>在 XGBoost 中配置梯度提升</h2><p>XGBoost 库专用于梯度提升算法。</p>
 <p>它也指定了值得注意的默认参数，首先是 <a href="https://github.com/dmlc/xgboost/blob/master/doc/parameter.md" target="_blank" rel="noopener">XGBoost 参数页面</a>：</p>
 <ul>
@@ -327,7 +326,7 @@
 <p>Abhishek Thakur 对调整 XGBoost 的建议</p>
 <p>点差确实涵盖了上面建议的一般默认值以及更多。</p>
 <p>值得注意的是，Abhishek 确实提供了一些调整 alpha 和 beta 模型惩罚术语以及行采样的建议。</p>
-<p><a href></a><a name="3ae14696"></a></p>
+<p><a href></a><br><a name="3ae14696"></a></p>
 <h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><p>在这篇文章中，您深入了解了如何为您自己的机器学习问题配置梯度提升。</p>
 <p>特别是你学到了：</p>
 <ul>

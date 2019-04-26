@@ -8,19 +8,19 @@
   <link rel="dns-prefetch" href="http://zhos.me">
   <title>在 Python 中使用 XGBoost 进行梯度提升的数据准备 | A+</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="在 Python 中使用 XGBoost 进行梯度提升的数据准备 原文： https://machinelearningmastery.com/data-preparation-gradient-boosting-xgboost-python/  XGBoost 因其速度和表现而成为 Gradient Boosting 的流行实现。 在内部，XGBoost 模型将所有问题表示为回归预测建模问题，仅">
+  <meta name="description" content="在 Python 中使用 XGBoost 进行梯度提升的数据准备 原文： https://machinelearningmastery.com/data-preparation-gradient-boosting-xgboost-python/  XGBoost 因其速度和表现而成为 Gradient Boosting 的流行实现。 在内部，XGBoost 模型将所有问题表示为回归预测建模问题，">
 <meta property="og:type" content="article">
 <meta property="og:title" content="在 Python 中使用 XGBoost 进行梯度提升的数据准备">
 <meta property="og:url" content="http://zhos.me/2019/04/26/yuque/在 Python 中使用 XGBoost 进行梯度提升的数据准备/index.html">
 <meta property="og:site_name" content="A+">
-<meta property="og:description" content="在 Python 中使用 XGBoost 进行梯度提升的数据准备 原文： https://machinelearningmastery.com/data-preparation-gradient-boosting-xgboost-python/  XGBoost 因其速度和表现而成为 Gradient Boosting 的流行实现。 在内部，XGBoost 模型将所有问题表示为回归预测建模问题，仅">
+<meta property="og:description" content="在 Python 中使用 XGBoost 进行梯度提升的数据准备 原文： https://machinelearningmastery.com/data-preparation-gradient-boosting-xgboost-python/  XGBoost 因其速度和表现而成为 Gradient Boosting 的流行实现。 在内部，XGBoost 模型将所有问题表示为回归预测建模问题，">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://zhos.me/2019/04/26/yuque/在%20Python%20中使用%20XGBoost%20进行梯度提升的数据准备/img/93adf08afc03afb270f7ec43a70644cd.jpg">
-<meta property="og:updated_time" content="2019-04-26T03:22:05.971Z">
+<meta property="og:image" content="http://zhos.me/2019/04/26/yuque/在%20Python%20中使用%20XGBoost%20进行梯度提升的数据准备/img/93adf08afc03afb270f7ec43a70644cd.jpg#alt=Data%20Preparation%20for%20Gradient%20Boosting%20with%20XGBoost%20in%20Python">
+<meta property="og:updated_time" content="2019-04-26T03:24:06.807Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="在 Python 中使用 XGBoost 进行梯度提升的数据准备">
-<meta name="twitter:description" content="在 Python 中使用 XGBoost 进行梯度提升的数据准备 原文： https://machinelearningmastery.com/data-preparation-gradient-boosting-xgboost-python/  XGBoost 因其速度和表现而成为 Gradient Boosting 的流行实现。 在内部，XGBoost 模型将所有问题表示为回归预测建模问题，仅">
-<meta name="twitter:image" content="http://zhos.me/2019/04/26/yuque/在%20Python%20中使用%20XGBoost%20进行梯度提升的数据准备/img/93adf08afc03afb270f7ec43a70644cd.jpg">
+<meta name="twitter:description" content="在 Python 中使用 XGBoost 进行梯度提升的数据准备 原文： https://machinelearningmastery.com/data-preparation-gradient-boosting-xgboost-python/  XGBoost 因其速度和表现而成为 Gradient Boosting 的流行实现。 在内部，XGBoost 模型将所有问题表示为回归预测建模问题，">
+<meta name="twitter:image" content="http://zhos.me/2019/04/26/yuque/在%20Python%20中使用%20XGBoost%20进行梯度提升的数据准备/img/93adf08afc03afb270f7ec43a70644cd.jpg#alt=Data%20Preparation%20for%20Gradient%20Boosting%20with%20XGBoost%20in%20Python">
   
     <link rel="alternative" href="/atom.xml" title="A+" type="application/atom+xml">
   
@@ -170,13 +170,13 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="在-Python-中使用-XGBoost-进行梯度提升的数据准备"><a href="#在-Python-中使用-XGBoost-进行梯度提升的数据准备" class="headerlink" title="在 Python 中使用 XGBoost 进行梯度提升的数据准备"></a>在 Python 中使用 XGBoost 进行梯度提升的数据准备</h1><blockquote>
+        <p><a href></a><br><a name="c9cfeb64"></a></p>
+<h1 id="在-Python-中使用-XGBoost-进行梯度提升的数据准备"><a href="#在-Python-中使用-XGBoost-进行梯度提升的数据准备" class="headerlink" title="在 Python 中使用 XGBoost 进行梯度提升的数据准备"></a>在 Python 中使用 XGBoost 进行梯度提升的数据准备</h1><blockquote>
 <p>原文： <a href="https://machinelearningmastery.com/data-preparation-gradient-boosting-xgboost-python/" target="_blank" rel="noopener">https://machinelearningmastery.com/data-preparation-gradient-boosting-xgboost-python/</a></p>
 </blockquote>
 <p>XGBoost 因其速度和表现而成为 Gradient Boosting 的流行实现。</p>
 <p>在内部，XGBoost 模型将所有问题表示为回归预测建模问题，仅将数值作为输入。如果您的数据格式不同，则必须将其准备为预期格式。</p>
-<p>在这篇文章中，您将了解如何准备数据，以便在 Python 中使用 XGBoost 库进行梯度提升。</p>
-<p>阅读这篇文章后你会知道：</p>
+<p>在这篇文章中，您将了解如何准备数据，以便在 Python 中使用 XGBoost 库进行梯度提升。<br><a id="more"></a><br>阅读这篇文章后你会知道：</p>
 <ul>
 <li>如何编码字符串输出变量进行分类。</li>
 <li>如何使用一个热编码准备分类输入变量。</li>
@@ -185,11 +185,12 @@
 <p>让我们开始吧。</p>
 <ul>
 <li><strong>2016 年 9 月更新</strong>：我在 impute 示例中更新了一些小错字。</li>
-<li><strong>2017 年 1 月更新</strong>：已更新，以反映 scikit-learn API 版本 0.18.1 中的更改​​。</li>
+<li><strong>2017 年 1 月更新</strong>：已更新，以反映 scikit-learn API 版本 0.18.1 中的更改。</li>
 <li><strong>2017 年 1 月更新</strong>：更新了将输入数据转换为字符串的乳腺癌示例。</li>
 </ul>
-<p><img src="img/93adf08afc03afb270f7ec43a70644cd.jpg" alt="Data Preparation for Gradient Boosting with XGBoost in Python"></p>
-<p>使用 Python 中的 XGBoost 进行梯度提升的数据准备<br>照片由 <a href="https://www.flickr.com/photos/blachswan/14990404869/" target="_blank" rel="noopener">Ed Dunens</a> 拍摄，保留一些权利。</p>
+<p><img src="img/93adf08afc03afb270f7ec43a70644cd.jpg#alt=Data%20Preparation%20for%20Gradient%20Boosting%20with%20XGBoost%20in%20Python" alt></p>
+<p>使用 Python 中的 XGBoost 进行梯度提升的数据准备<br><br>照片由 <a href="https://www.flickr.com/photos/blachswan/14990404869/" target="_blank" rel="noopener">Ed Dunens</a> 拍摄，保留一些权利。</p>
+<p><a href></a><br><a name="f35a8707"></a></p>
 <h2 id="标签编码字符串类值"><a href="#标签编码字符串类值" class="headerlink" title="标签编码字符串类值"></a>标签编码字符串类值</h2><p>虹膜花分类问题是具有字符串类值的问题的示例。</p>
 <p>这是一个预测问题，其中以厘米为单位给出鸢尾花的测量值，任务是预测给定花属于哪个物种。</p>
 <p>下面是原始数据集的示例。您可以从 <a href="http://archive.ics.uci.edu/ml/datasets/Iris" target="_blank" rel="noopener">UCI 机器学习库</a>中了解有关此数据集的更多信息并以 CSV 格式下载原始数据。</p>
@@ -203,6 +204,7 @@
 <p>运行该示例将生成以下输出：</p>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">XGBClassifier(base_score=<span class="number">0.5</span>, colsample_bylevel=<span class="number">1</span>, colsample_bytree=<span class="number">1</span>,</span><br><span class="line">       gamma=<span class="number">0</span>, learning_rate=<span class="number">0.1</span>, max_delta_step=<span class="number">0</span>, max_depth=<span class="number">3</span>,</span><br><span class="line">       min_child_weight=<span class="number">1</span>, missing=<span class="literal">None</span>, n_estimators=<span class="number">100</span>, nthread=<span class="number">-1</span>,</span><br><span class="line">       objective=<span class="string">'multi:softprob'</span>, reg_alpha=<span class="number">0</span>, reg_lambda=<span class="number">1</span>,</span><br><span class="line">       scale_pos_weight=<span class="number">1</span>, seed=<span class="number">0</span>, silent=<span class="literal">True</span>, subsample=<span class="number">1</span>)</span><br><span class="line">Accuracy: <span class="number">92.00</span>%</span><br></pre></td></tr></table></figure>
 <p>请注意 XGBoost 模型如何配置为使用 <strong>multi：softprob</strong> 目标自动建模多类分类问题，该目标是 softmax loss 函数的一种变体，用于模拟类概率。这表明在内部，输出类自动转换为一种热类型编码。</p>
+<p><a href></a><br><a name="4a4ceeab"></a></p>
 <h2 id="一个热编码分类数据"><a href="#一个热编码分类数据" class="headerlink" title="一个热编码分类数据"></a>一个热编码分类数据</h2><p>一些数据集仅包含分类数据，例如乳腺癌数据集。</p>
 <p>该数据集描述了乳腺癌活组织检查的技术细节，预测任务是预测患者是否复发癌症。</p>
 <p>下面是原始数据集的示例。您可以在 <a href="http://archive.ics.uci.edu/ml/datasets/Breast+Cancer" target="_blank" rel="noopener">UCI 机器学习库</a>中了解有关此数据集的更多信息，并从 <a href="http://mldata.org/repository/data/viewslug/datasets-uci-breast-cancer/" target="_blank" rel="noopener">mldata.org</a> 以 CSV 格式下载。</p>
@@ -231,6 +233,7 @@
 <p>运行此示例，我们得到以下输出：</p>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">(<span class="string">'X shape: : '</span>, (<span class="number">285</span>, <span class="number">43</span>))</span><br><span class="line">XGBClassifier(base_score=<span class="number">0.5</span>, colsample_bylevel=<span class="number">1</span>, colsample_bytree=<span class="number">1</span>,</span><br><span class="line">       gamma=<span class="number">0</span>, learning_rate=<span class="number">0.1</span>, max_delta_step=<span class="number">0</span>, max_depth=<span class="number">3</span>,</span><br><span class="line">       min_child_weight=<span class="number">1</span>, missing=<span class="literal">None</span>, n_estimators=<span class="number">100</span>, nthread=<span class="number">-1</span>,</span><br><span class="line">       objective=<span class="string">'binary:logistic'</span>, reg_alpha=<span class="number">0</span>, reg_lambda=<span class="number">1</span>,</span><br><span class="line">       scale_pos_weight=<span class="number">1</span>, seed=<span class="number">0</span>, silent=<span class="literal">True</span>, subsample=<span class="number">1</span>)</span><br><span class="line">Accuracy: <span class="number">71.58</span>%</span><br></pre></td></tr></table></figure>
 <p>我们再次看到 XGBoost 框架自动选择’ <strong>binary：logistic</strong> ‘目标，这是二进制分类问题的正确目标。</p>
+<p><a href></a><br><a name="5580048b"></a></p>
 <h2 id="支持缺失数据"><a href="#支持缺失数据" class="headerlink" title="支持缺失数据"></a>支持缺失数据</h2><p>XGBoost 可以自动学习如何最好地处理丢失的数据。</p>
 <p>事实上，XGBoost 被设计为处理稀疏数据，如前一节中的一个热编码数据，并且通过最小化损失函数来处理丢失数据的方式与处理稀疏或零值的方式相同。</p>
 <p>有关如何在 XGBoost 中处理缺失值的技术细节的更多信息，请参见文章 <a href="https://arxiv.org/abs/1603.02754" target="_blank" rel="noopener">XGBoost：可伸缩树升压系统</a>中的第 3.4 节“_ 稀疏感知拆分查找 _”。</p>
@@ -260,6 +263,7 @@
 <p>运行此示例，我们看到的结果等同于将值固定为一（1）。这表明至少在这种情况下，我们最好用不同的零（0）值而不是有效值（1）或估算值来标记缺失值。</p>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Accuracy: <span class="number">79.80</span>%</span><br></pre></td></tr></table></figure>
 <p>当您缺少值时，尝试这两种方法（自动处理和输入）是一个很好的教训。</p>
+<p><a href></a><br><a name="3ae14696"></a></p>
 <h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><p>在这篇文章中，您发现了如何使用 Python 中的 XGBoost 为梯度提升准备机器学习数据。</p>
 <p>具体来说，你学到了：</p>
 <ul>
