@@ -8,19 +8,19 @@
   <link rel="dns-prefetch" href="http://zhos.me">
   <title>如何在 Python 中使用 XGBoost 评估梯度提升模型 | A+</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="如何在 Python 中使用 XGBoost 评估梯度提升模型 原文： https://machinelearningmastery.com/evaluate-gradient-boosting-models-xgboost-python/  开发预测模型的目标是开发一个对看不见的数据准确的模型。 这可以使用统计技术来实现，其中训练数据集被仔细地用于估计模型在新的和未看到的数据上的表现。 在本教程">
+  <meta name="description" content="如何在 Python 中使用 XGBoost 评估梯度提升模型 原文： https://machinelearningmastery.com/evaluate-gradient-boosting-models-xgboost-python/  开发预测模型的目标是开发一个对看不见的数据准确的模型。 这可以使用统计技术来实现，其中训练数据集被仔细地用于估计模型在新的和未看到的数据上的表现。 在本教">
 <meta property="og:type" content="article">
 <meta property="og:title" content="如何在 Python 中使用 XGBoost 评估梯度提升模型">
 <meta property="og:url" content="http://zhos.me/2019/04/26/yuque/如何在 Python 中使用 XGBoost 评估梯度提升模型/index.html">
 <meta property="og:site_name" content="A+">
-<meta property="og:description" content="如何在 Python 中使用 XGBoost 评估梯度提升模型 原文： https://machinelearningmastery.com/evaluate-gradient-boosting-models-xgboost-python/  开发预测模型的目标是开发一个对看不见的数据准确的模型。 这可以使用统计技术来实现，其中训练数据集被仔细地用于估计模型在新的和未看到的数据上的表现。 在本教程">
+<meta property="og:description" content="如何在 Python 中使用 XGBoost 评估梯度提升模型 原文： https://machinelearningmastery.com/evaluate-gradient-boosting-models-xgboost-python/  开发预测模型的目标是开发一个对看不见的数据准确的模型。 这可以使用统计技术来实现，其中训练数据集被仔细地用于估计模型在新的和未看到的数据上的表现。 在本教">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://zhos.me/2019/04/26/yuque/如何在%20Python%20中使用%20XGBoost%20评估梯度提升模型/img/22202cde2c6a7833a222b951de920b6b.jpg">
-<meta property="og:updated_time" content="2019-04-26T03:23:11.175Z">
+<meta property="og:image" content="http://zhos.me/2019/04/26/yuque/如何在%20Python%20中使用%20XGBoost%20评估梯度提升模型/img/22202cde2c6a7833a222b951de920b6b.jpg#alt=How%20to%20Evaluate%20Gradient%20Boosting%20Models%20with%20XGBoost%20in%20Python">
+<meta property="og:updated_time" content="2019-04-26T03:24:22.435Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="如何在 Python 中使用 XGBoost 评估梯度提升模型">
-<meta name="twitter:description" content="如何在 Python 中使用 XGBoost 评估梯度提升模型 原文： https://machinelearningmastery.com/evaluate-gradient-boosting-models-xgboost-python/  开发预测模型的目标是开发一个对看不见的数据准确的模型。 这可以使用统计技术来实现，其中训练数据集被仔细地用于估计模型在新的和未看到的数据上的表现。 在本教程">
-<meta name="twitter:image" content="http://zhos.me/2019/04/26/yuque/如何在%20Python%20中使用%20XGBoost%20评估梯度提升模型/img/22202cde2c6a7833a222b951de920b6b.jpg">
+<meta name="twitter:description" content="如何在 Python 中使用 XGBoost 评估梯度提升模型 原文： https://machinelearningmastery.com/evaluate-gradient-boosting-models-xgboost-python/  开发预测模型的目标是开发一个对看不见的数据准确的模型。 这可以使用统计技术来实现，其中训练数据集被仔细地用于估计模型在新的和未看到的数据上的表现。 在本教">
+<meta name="twitter:image" content="http://zhos.me/2019/04/26/yuque/如何在%20Python%20中使用%20XGBoost%20评估梯度提升模型/img/22202cde2c6a7833a222b951de920b6b.jpg#alt=How%20to%20Evaluate%20Gradient%20Boosting%20Models%20with%20XGBoost%20in%20Python">
   
     <link rel="alternative" href="/atom.xml" title="A+" type="application/atom+xml">
   
@@ -170,24 +170,25 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="如何在-Python-中使用-XGBoost-评估梯度提升模型"><a href="#如何在-Python-中使用-XGBoost-评估梯度提升模型" class="headerlink" title="如何在 Python 中使用 XGBoost 评估梯度提升模型"></a>如何在 Python 中使用 XGBoost 评估梯度提升模型</h1><blockquote>
+        <p><a href></a><br><a name="715bc429"></a></p>
+<h1 id="如何在-Python-中使用-XGBoost-评估梯度提升模型"><a href="#如何在-Python-中使用-XGBoost-评估梯度提升模型" class="headerlink" title="如何在 Python 中使用 XGBoost 评估梯度提升模型"></a>如何在 Python 中使用 XGBoost 评估梯度提升模型</h1><blockquote>
 <p>原文： <a href="https://machinelearningmastery.com/evaluate-gradient-boosting-models-xgboost-python/" target="_blank" rel="noopener">https://machinelearningmastery.com/evaluate-gradient-boosting-models-xgboost-python/</a></p>
 </blockquote>
 <p>开发预测模型的目标是开发一个对看不见的数据准确的模型。</p>
 <p>这可以使用统计技术来实现，其中训练数据集被仔细地用于估计模型在新的和未看到的数据上的表现。</p>
-<p>在本教程中，您将了解如何使用 Python 中的 XGBoost 评估梯度提升模型的表现。</p>
-<p>完成本教程后，您将了解到。</p>
+<p>在本教程中，您将了解如何使用 Python 中的 XGBoost 评估梯度提升模型的表现。<br><a id="more"></a><br>完成本教程后，您将了解到。</p>
 <ul>
 <li>如何使用训练和测试数据集评估 XGBoost 模型的表现。</li>
 <li>如何使用 k-fold 交叉验证评估 XGBoost 模型的表现。</li>
 </ul>
 <p>让我们开始吧。</p>
 <ul>
-<li><strong>2017 年 1 月更新</strong>：已更新，以反映 scikit-learn API 版本 0.18.1 中的更改​​。</li>
+<li><strong>2017 年 1 月更新</strong>：已更新，以反映 scikit-learn API 版本 0.18.1 中的更改。</li>
 <li><strong>更新 March / 2018</strong> ：添加了备用链接以下载数据集，因为原始图像已被删除。</li>
 </ul>
-<p><img src="img/22202cde2c6a7833a222b951de920b6b.jpg" alt="How to Evaluate Gradient Boosting Models with XGBoost in Python"></p>
-<p>如何在 Python 中使用 XGBoost 评估梯度提升模型<br>照片由 <a href="https://www.flickr.com/photos/nox_noctis_silentium/5526750448/" target="_blank" rel="noopener">Timitrius</a> ，保留一些权利。</p>
+<p><img src="img/22202cde2c6a7833a222b951de920b6b.jpg#alt=How%20to%20Evaluate%20Gradient%20Boosting%20Models%20with%20XGBoost%20in%20Python" alt></p>
+<p>如何在 Python 中使用 XGBoost 评估梯度提升模型<br><br>照片由 <a href="https://www.flickr.com/photos/nox_noctis_silentium/5526750448/" target="_blank" rel="noopener">Timitrius</a> ，保留一些权利。</p>
+<p><a href></a><br><a name="59eee2e3"></a></p>
 <h2 id="使用训练和测试集评估-XGBoost-模型"><a href="#使用训练和测试集评估-XGBoost-模型" class="headerlink" title="使用训练和测试集评估 XGBoost 模型"></a>使用训练和测试集评估 XGBoost 模型</h2><p>我们可以用来评估机器学习算法表现的最简单方法是使用不同的训练和测试数据集。</p>
 <p>我们可以将原始数据集分成两部分。在第一部分训练算法，然后对第二部分进行预测，并根据预期结果评估预测。</p>
 <p>拆分的大小可能取决于数据集的大小和细节，尽管通常使用 67％的数据进行训练，剩余的 33％用于测试。</p>
@@ -199,6 +200,7 @@
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># train-test split evaluation of xgboost model</span></span><br><span class="line"><span class="keyword">from</span> numpy <span class="keyword">import</span> loadtxt</span><br><span class="line"><span class="keyword">from</span> xgboost <span class="keyword">import</span> XGBClassifier</span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split</span><br><span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> accuracy_score</span><br><span class="line"><span class="comment"># load data</span></span><br><span class="line">dataset = loadtxt(<span class="string">'pima-indians-diabetes.csv'</span>, delimiter=<span class="string">","</span>)</span><br><span class="line"><span class="comment"># split data into X and y</span></span><br><span class="line">X = dataset[:,<span class="number">0</span>:<span class="number">8</span>]</span><br><span class="line">Y = dataset[:,<span class="number">8</span>]</span><br><span class="line"><span class="comment"># split data into train and test sets</span></span><br><span class="line">X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=<span class="number">0.33</span>, random_state=<span class="number">7</span>)</span><br><span class="line"><span class="comment"># fit model no training data</span></span><br><span class="line">model = XGBClassifier()</span><br><span class="line">model.fit(X_train, y_train)</span><br><span class="line"><span class="comment"># make predictions for test data</span></span><br><span class="line">y_pred = model.predict(X_test)</span><br><span class="line">predictions = [round(value) <span class="keyword">for</span> value <span class="keyword">in</span> y_pred]</span><br><span class="line"><span class="comment"># evaluate predictions</span></span><br><span class="line">accuracy = accuracy_score(y_test, predictions)</span><br><span class="line">print(<span class="string">"Accuracy: %.2f%%"</span> % (accuracy * <span class="number">100.0</span>))</span><br></pre></td></tr></table></figure>
 <p>运行此示例总结了测试集上模型的表现。</p>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Accuracy: <span class="number">77.95</span>%</span><br></pre></td></tr></table></figure>
+<p><a href></a><br><a name="3c720b1a"></a></p>
 <h2 id="使用-k-fold-交叉验证评估-XGBoost-模型"><a href="#使用-k-fold-交叉验证评估-XGBoost-模型" class="headerlink" title="使用 k-fold 交叉验证评估 XGBoost 模型"></a>使用 k-fold 交叉验证评估 XGBoost 模型</h2><p>交叉验证是一种可用于估计机器学习算法表现的方法，其方差小于单个训练测试集拆分。</p>
 <p>它的工作原理是将数据集分成 k 部分（例如 k = 5 或 k = 10）。每次分割数据称为折叠。该算法在 k-1 折叠上进行训练，其中一个被扣住并在保持的背部折叠上进行测试。重复这一过程，以便数据集的每个折叠都有机会成为阻碍测试集。</p>
 <p>运行交叉验证后，您最终得到 k 个不同的表现分数，您可以使用均值和标准差来总结。</p>
@@ -216,6 +218,7 @@
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># stratified k-fold cross validation evaluation of xgboost model</span></span><br><span class="line"><span class="keyword">from</span> numpy <span class="keyword">import</span> loadtxt</span><br><span class="line"><span class="keyword">import</span> xgboost</span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> StratifiedKFold</span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> cross_val_score</span><br><span class="line"><span class="comment"># load data</span></span><br><span class="line">dataset = loadtxt(<span class="string">'pima-indians-diabetes.csv'</span>, delimiter=<span class="string">","</span>)</span><br><span class="line"><span class="comment"># split data into X and y</span></span><br><span class="line">X = dataset[:,<span class="number">0</span>:<span class="number">8</span>]</span><br><span class="line">Y = dataset[:,<span class="number">8</span>]</span><br><span class="line"><span class="comment"># CV model</span></span><br><span class="line">model = xgboost.XGBClassifier()</span><br><span class="line">kfold = StratifiedKFold(n_splits=<span class="number">10</span>, random_state=<span class="number">7</span>)</span><br><span class="line">results = cross_val_score(model, X, Y, cv=kfold)</span><br><span class="line">print(<span class="string">"Accuracy: %.2f%% (%.2f%%)"</span> % (results.mean()*<span class="number">100</span>, results.std()*<span class="number">100</span>))</span><br></pre></td></tr></table></figure>
 <p>运行此示例将生成以下输出。</p>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Accuracy: <span class="number">76.95</span>% (<span class="number">5.88</span>%)</span><br></pre></td></tr></table></figure>
+<p><a href></a><br><a name="c42b2058"></a></p>
 <h2 id="什么技术使用时"><a href="#什么技术使用时" class="headerlink" title="什么技术使用时"></a>什么技术使用时</h2><ul>
 <li>通常，k 折交叉验证是用于评估机器学习算法在看不见的数据上的表现的金标准，其中 k 设置为 3,5 或 10。</li>
 <li>当存在大量类或每个类的实例不平衡时，使用分层交叉验证来强制执行类分发。</li>
@@ -223,6 +226,7 @@
 </ul>
 <p>最好的建议是试验并找到一种快速解决问题的技术，并产生可用于制定决策的合理表现估算。</p>
 <p>如果有疑问，请对回归问题使用 10 倍交叉验证，并对分类问题进行 10 倍交叉验证。</p>
+<p><a href></a><br><a name="3ae14696"></a></p>
 <h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><p>在本教程中，您了解了如何通过估计 XGBoost 模型在未见数据上的执行情况来评估它们。</p>
 <p>具体来说，你学到了：</p>
 <ul>
