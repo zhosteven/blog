@@ -30,7 +30,7 @@
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1555921748149-8c9488fb-057a-4653-b9a6-e8cebb5c26a5.png#align=left&display=inline&height=253&name=1_kEmyc_lZ0TWYOgvgLlUsqw.png&originHeight=352&originWidth=1037&size=163233&status=done&width=746">
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1555921756640-b27f9696-30e5-4473-b376-b120561ef75e.png#align=left&display=inline&height=253&name=1_CSBH0Ow44MBMmSo-F4tKDA.png&originHeight=352&originWidth=1039&size=97709&status=done&width=746">
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1555921784284-991cd560-2a71-460e-9d23-41b980b755af.png#align=left&display=inline&height=436&name=1_fd6oQi9p4adNAg36aOs1Ow.png&originHeight=436&originWidth=424&size=16498&status=done&width=424">
-<meta property="og:updated_time" content="2019-04-24T03:02:06.739Z">
+<meta property="og:updated_time" content="2019-04-25T10:06:05.634Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="PyTorch中用卷积神经网络进行传递学习">
 <meta name="twitter:description" content="如何使用预训练的卷积神经网络进行PyTorch对象识别">
@@ -250,7 +250,7 @@
 <p>在<a href="https://www.coursera.org/lecture/machine-learning/model-selection-and-train-validation-test-sets-QGKbr" target="_blank" rel="noopener">诊断</a>用于对象识别<a href="https://www.coursera.org/lecture/machine-learning/model-selection-and-train-validation-test-sets-QGKbr" target="_blank" rel="noopener">的网络时</a>，查看测试集和各个预测的整体性能会很有帮助。<br><a name="6da952e6"></a></p>
 <h4 id="模型结果"><a href="#模型结果" class="headerlink" title="模型结果"></a>模型结果</h4><p>以下是模型指甲的两个预测：<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1555921635253-36b8850d-a3fc-4310-9ab8-36f58f9b5d7e.png#align=left&amp;display=inline&amp;height=254&amp;name=1_RWI7Ct5JSUZz5gkFyD6Ntg.png&amp;originHeight=352&amp;originWidth=1034&amp;size=119024&amp;status=done&amp;width=746" alt="1_RWI7Ct5JSUZz5gkFyD6Ntg.png"><br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1555921647234-aeb64257-a281-4481-945d-0e9d7ce00e0e.png#align=left&amp;display=inline&amp;height=254&amp;name=1_QWozitnzhJz4wFFrQsAVZw.png&amp;originHeight=352&amp;originWidth=1035&amp;size=64425&amp;status=done&amp;width=746" alt="1_QWozitnzhJz4wFFrQsAVZw.png"><br>这些都很简单，所以我很高兴模型没有问题！</p>
 <hr>
-<p>我们不仅仅想关注正确的预测，我们很快就会看到一些错误的输出。现在让我们评估整个测试集的性能。为此，我们希望迭代测试<code>DataLoader</code>并计算每个示例的损失和准确性。<br>用于对象识别的卷积神经网络通常根据<a href="https://stats.stackexchange.com/questions/95391/what-is-the-definition-of-top-n-accuracy" target="_blank" rel="noopener">topk精度来测量</a>。这指的是真实类是否在k最可能预测的类中。例如，前5个准确度是右类在5个最高概率预测中的百分比。您可以从PyTorch张量中获取topk最可能的概率和类，如下所示：</p>
+<p>我们不仅仅想关注正确的预测，我们很快就会看到一些错误的输出。现在让我们评估整个测试集的性能。为此，我们希望迭代测试<code>DataLoader</code>并计算每个示例的损失和准确性。<br>用于对象识别的卷积神经网络通常根据<a href="https://stats.stackexchange.com/questions/95391/what-is-the-definition-of-top-n-accuracy" target="_blank" rel="noopener">top�来测量</a>。这指的是真实类是否在k最可能预测的类中。例如，前5个准确度是右类在5个最高概率预测中的百分比。您可以从PyTorch张量中获取topk最可能的概率和类，如下所示：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">top_5_ps，top_5_classes = ps.topk（5，dim = 1）</span><br><span class="line">top_5_ps.shape</span><br><span class="line">（128,5）</span><br></pre></td></tr></table></figure>
 <p>在整个测试集上评估模型，我们计算指标：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">最终测试前1加权精度= 88.65％</span><br><span class="line">最终测试前5加权精度= 98.00％</span><br><span class="line">每个图像的最终测试交叉熵= 0.3772。</span><br></pre></td></tr></table></figure>
@@ -355,18 +355,18 @@
   
 <nav id="article-nav">
   
-    <a href="/2019/04/23/yuque/了解XGBoost背后的数学的端到端指南/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2019/04/23/yuque/XGBoost算法:长期可能在位！/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          了解XGBoost背后的数学的端到端指南
+          XGBoost算法:长期可能在位！
         
       </div>
     </a>
   
   
-    <a href="/2019/04/23/yuque/使用分类数据/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">使用分类数据</div>
+    <a href="/2019/04/23/yuque/Pytorch:如何以及何时使用Module，Sequential，ModuleList和ModuleDict/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Pytorch:如何以及何时使用Module，Sequential，ModuleList和ModuleDict</div>
       <i class="icon-circle-right"></i>
     </a>
   
