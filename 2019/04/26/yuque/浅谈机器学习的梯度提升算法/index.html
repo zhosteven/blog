@@ -8,19 +8,19 @@
   <link rel="dns-prefetch" href="http://zhos.me">
   <title>浅谈机器学习的梯度提升算法 | A+</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="浅谈机器学习的梯度提升算法 原文： https://machinelearningmastery.com/gentle-introduction-gradient-boosting-algorithm-machine-learning/  梯度提升是构建预测模型的最强大技术之一。 在这篇文章中，您将发现梯度提升机器学习算法，并轻松介绍它的来源和工作原理。 阅读这篇文章后，你会知道：  从学习理论和">
+  <meta name="description" content="浅谈机器学习的梯度提升算法原文： https://machinelearningmastery.com/gentle-introduction-gradient-boosting-algorithm-machine-learning/梯度提升是构建预测模型的最强大技术之一。在这篇文章中，您将发...">
 <meta property="og:type" content="article">
 <meta property="og:title" content="浅谈机器学习的梯度提升算法">
 <meta property="og:url" content="http://zhos.me/2019/04/26/yuque/浅谈机器学习的梯度提升算法/index.html">
 <meta property="og:site_name" content="A+">
-<meta property="og:description" content="浅谈机器学习的梯度提升算法 原文： https://machinelearningmastery.com/gentle-introduction-gradient-boosting-algorithm-machine-learning/  梯度提升是构建预测模型的最强大技术之一。 在这篇文章中，您将发现梯度提升机器学习算法，并轻松介绍它的来源和工作原理。 阅读这篇文章后，你会知道：  从学习理论和">
+<meta property="og:description" content="浅谈机器学习的梯度提升算法原文： https://machinelearningmastery.com/gentle-introduction-gradient-boosting-algorithm-machine-learning/梯度提升是构建预测模型的最强大技术之一。在这篇文章中，您将发...">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://zhos.me/2019/04/26/yuque/浅谈机器学习的梯度提升算法/img/3dde9db909245469cc477e5f07363bbe.jpg">
-<meta property="og:updated_time" content="2019-04-26T03:24:22.431Z">
+<meta property="og:image" content="http://zhos.me/2019/04/26/yuque/浅谈机器学习的梯度提升算法/img/3dde9db909245469cc477e5f07363bbe.jpg#alt=A%20Gentle%20Introduction%20to%20the%20Gradient%20Boosting%20Algorithm%20for%20Machine%20Learning">
+<meta property="og:updated_time" content="2019-04-28T01:30:08.003Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="浅谈机器学习的梯度提升算法">
-<meta name="twitter:description" content="浅谈机器学习的梯度提升算法 原文： https://machinelearningmastery.com/gentle-introduction-gradient-boosting-algorithm-machine-learning/  梯度提升是构建预测模型的最强大技术之一。 在这篇文章中，您将发现梯度提升机器学习算法，并轻松介绍它的来源和工作原理。 阅读这篇文章后，你会知道：  从学习理论和">
-<meta name="twitter:image" content="http://zhos.me/2019/04/26/yuque/浅谈机器学习的梯度提升算法/img/3dde9db909245469cc477e5f07363bbe.jpg">
+<meta name="twitter:description" content="浅谈机器学习的梯度提升算法原文： https://machinelearningmastery.com/gentle-introduction-gradient-boosting-algorithm-machine-learning/梯度提升是构建预测模型的最强大技术之一。在这篇文章中，您将发...">
+<meta name="twitter:image" content="http://zhos.me/2019/04/26/yuque/浅谈机器学习的梯度提升算法/img/3dde9db909245469cc477e5f07363bbe.jpg#alt=A%20Gentle%20Introduction%20to%20the%20Gradient%20Boosting%20Algorithm%20for%20Machine%20Learning">
   
     <link rel="alternative" href="/atom.xml" title="A+" type="application/atom+xml">
   
@@ -170,20 +170,21 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="浅谈机器学习的梯度提升算法"><a href="#浅谈机器学习的梯度提升算法" class="headerlink" title="浅谈机器学习的梯度提升算法"></a>浅谈机器学习的梯度提升算法</h1><blockquote>
+        <p><a href></a><br><a name="06084c14"></a></p>
+<h1 id="浅谈机器学习的梯度提升算法"><a href="#浅谈机器学习的梯度提升算法" class="headerlink" title="浅谈机器学习的梯度提升算法"></a>浅谈机器学习的梯度提升算法</h1><blockquote>
 <p>原文： <a href="https://machinelearningmastery.com/gentle-introduction-gradient-boosting-algorithm-machine-learning/" target="_blank" rel="noopener">https://machinelearningmastery.com/gentle-introduction-gradient-boosting-algorithm-machine-learning/</a></p>
 </blockquote>
 <p>梯度提升是构建预测模型的最强大技术之一。</p>
-<p>在这篇文章中，您将发现梯度提升机器学习算法，并轻松介绍它的来源和工作原理。</p>
-<p>阅读这篇文章后，你会知道：</p>
+<p>在这篇文章中，您将发现梯度提升机器学习算法，并轻松介绍它的来源和工作原理。<br><a id="more"></a><br>阅读这篇文章后，你会知道：</p>
 <ul>
 <li>从学习理论和 AdaBoost 推动的起源。</li>
 <li>梯度提升的工作原理包括损失函数，弱学习器和加法模型。</li>
 <li>如何通过各种正则化方案提高基本算法的表现</li>
 </ul>
 <p>让我们开始吧。</p>
-<p><img src="img/3dde9db909245469cc477e5f07363bbe.jpg" alt="A Gentle Introduction to the Gradient Boosting Algorithm for Machine Learning"></p>
-<p>机器学习梯度提升算法的温和介绍<br><a href="https://www.flickr.com/photos/bpprice/12298787813/" target="_blank" rel="noopener">brando.n</a> 的照片，保留一些权利。</p>
+<p><img src="img/3dde9db909245469cc477e5f07363bbe.jpg#alt=A%20Gentle%20Introduction%20to%20the%20Gradient%20Boosting%20Algorithm%20for%20Machine%20Learning" alt></p>
+<p>机器学习梯度提升算法的温和介绍<br><br><a href="https://www.flickr.com/photos/bpprice/12298787813/" target="_blank" rel="noopener">brando.n</a> 的照片，保留一些权利。</p>
+<p><a href></a><br><a name="85ea0f3a"></a></p>
 <h2 id="提升的起源"><a href="#提升的起源" class="headerlink" title="提升的起源"></a>提升的起源</h2><p>提升的想法来自于弱学习器是否可以被修改为变得更好的想法。</p>
 <p>Michael Kearns 将目标阐述为“_ 假设推进问题 _”从实际角度阐述了目标：</p>
 <blockquote>
@@ -201,6 +202,7 @@
 <ul>
 <li><a href="http://www.amazon.com/dp/0465060722?tag=inspiredalgor-20" target="_blank" rel="noopener">大概正确：大自然在复杂世界中学习和繁荣的算法</a>，第 152 页，2013</li>
 </ul>
+<p><a href></a><br><a name="160ff038"></a></p>
 <h3 id="AdaBoost-第一个提升算法"><a href="#AdaBoost-第一个提升算法" class="headerlink" title="AdaBoost 第一个提升算法"></a>AdaBoost 第一个提升算法</h3><p>在应用中取得巨大成功的第一个实现提升的是 <a href="http://machinelearningmastery.com/boosting-and-adaboost-for-machine-learning/" target="_blank" rel="noopener">Adaptive Boosting 或 AdaBoost</a> 。</p>
 <blockquote>
 <p>提升是指通过组合粗略和中度不准确的经验法则来产生非常准确的预测规则的一般问题。</p>
@@ -221,6 +223,7 @@
 <ul>
 <li><a href="http://machinelearningmastery.com/boosting-and-adaboost-for-machine-learning/" target="_blank" rel="noopener">Boosting 和 AdaBoost 机器学习</a>。</li>
 </ul>
+<p><a href></a><br><a name="19cc01d6"></a></p>
 <h3 id="AdaBoost-作为梯度提升的推广"><a href="#AdaBoost-作为梯度提升的推广" class="headerlink" title="AdaBoost 作为梯度提升的推广"></a>AdaBoost 作为梯度提升的推广</h3><p>AdaBoost 和相关算法首先由 Breiman 称之为 ARCing 算法的统计框架重铸。</p>
 <blockquote>
 <p>Arcing 是 Adaptive Reweighting and Combining 的首字母缩写。电弧放电算法中的每个步骤都包括加权最小化，然后重新计算[分类器]和[加权输入]。</p>
@@ -238,22 +241,26 @@
 <li><a href="https://statweb.stanford.edu/~jhf/ftp/trebst.pdf" target="_blank" rel="noopener">贪婪函数逼近：梯度增压机</a> [PDF]，1999</li>
 </ul>
 <p>泛化允许使用任意可微分损失函数，将技术扩展到二元分类问题之外，以支持回归，多类分类等。</p>
+<p><a href></a><br><a name="618eb446"></a></p>
 <h2 id="梯度提升的工作原理"><a href="#梯度提升的工作原理" class="headerlink" title="梯度提升的工作原理"></a>梯度提升的工作原理</h2><p>梯度提升涉及三个要素：</p>
 <ol>
 <li>要优化的损失函数。</li>
 <li>做出预测的弱学习器。</li>
 <li>添加模型，添加弱学习器以最小化损失函数。</li>
 </ol>
+<p><a href></a><br><a name="f33b6e75"></a></p>
 <h3 id="1-损失功能"><a href="#1-损失功能" class="headerlink" title="1.损失功能"></a>1.损失功能</h3><p>使用的损失函数取决于要解决的问题类型。</p>
 <p>它必须是可区分的，但支持许多标准丢失函数，您可以定义自己的函数。</p>
 <p>例如，回归可能使用平方误差，分类可能使用对数损失。</p>
 <p>梯度提升框架的一个好处是不必为可能想要使用的每个损失函数导出新的增强算法，相反，它是足够通用的框架，可以使用任何可微分损失函数。</p>
+<p><a href></a><br><a name="b84d6c64"></a></p>
 <h3 id="2-弱小的学习器"><a href="#2-弱小的学习器" class="headerlink" title="2.弱小的学习器"></a>2.弱小的学习器</h3><p>决策树被用作梯度提升中的弱学习器。</p>
 <p>特别是使用回归树，其输出分裂的实际值并且其输出可以被加在一起，允许添加后续模型输出并“校正”预测中的残差。</p>
 <p>树木以贪婪的方式构建，根据基尼等纯度分数选择最佳分割点，或尽量减少损失。</p>
 <p>最初，例如在 AdaBoost 的情况下，使用非常短的决策树，其仅具有单个分割，称为决策残余。较大的树木通常可以使用 4 到 8 级。</p>
 <p>通常以特定方式约束弱学习器，例如最大层数，节点，分裂或叶节点。</p>
 <p>这是为了确保学习器保持弱势，但仍然可以贪婪地构建。</p>
+<p><a href></a><br><a name="128ccd78"></a></p>
 <h3 id="3-添加剂模型"><a href="#3-添加剂模型" class="headerlink" title="3.添加剂模型"></a>3.添加剂模型</h3><p>树一次添加一个树，模型中的现有树不会更改。</p>
 <p>梯度下降程序用于最小化添加树木时的损失。</p>
 <p>传统上，梯度下降用于最小化一组参数，例如回归方程中的系数或神经网络中的权重。在计算错误或丢失之后，更新权重以最小化该错误。</p>
@@ -267,6 +274,7 @@
 </ul>
 <p>然后将新树的输出添加到现有树序列的输出中，以便纠正或改进模型的最终输出。</p>
 <p>一旦损失达到可接受的水平或在外部验证数据集上不再改进，则添加固定数量的树或训练停止。</p>
+<p><a href></a><br><a name="c70d6ec0"></a></p>
 <h2 id="基本梯度提升的改进"><a href="#基本梯度提升的改进" class="headerlink" title="基本梯度提升的改进"></a>基本梯度提升的改进</h2><p>梯度提升是一种贪婪算法，可以快速过度训练数据集。</p>
 <p>它可以受益于惩罚算法的各个部分的正则化方法，并且通常通过减少过度拟合来改善算法的表现。</p>
 <p>在本节中，我们将介绍基本梯度提升的 4 个增强功能：</p>
@@ -276,6 +284,7 @@
 <li>随机抽样</li>
 <li>惩罚学习</li>
 </ol>
+<p><a href></a><br><a name="f55e90fa"></a></p>
 <h3 id="1-树约束"><a href="#1-树约束" class="headerlink" title="1.树约束"></a>1.树约束</h3><p>重要的是弱势学习器有技巧但仍然很弱。</p>
 <p>树可以通过多种方式进行约束。</p>
 <p>一个好的通用启发式方法是，树的创建越多，模型中需要的树就越多，反之，在不受约束的单个树中，所需的树就越少。</p>
@@ -287,6 +296,7 @@
 <li><strong>每次分割的观察次数</strong>对训练节点的训练数据量施加最小约束，然后才能考虑分割</li>
 <li><strong>最小化损失</strong>是对添加到树中的任何拆分的改进的约束。</li>
 </ul>
+<p><a href></a><br><a name="aa587d55"></a></p>
 <h3 id="2-加权更新"><a href="#2-加权更新" class="headerlink" title="2.加权更新"></a>2.加权更新</h3><p>每棵树的预测按顺序加在一起。</p>
 <p>可以对每个树对该总和的贡献进行加权以减慢算法的学习。这种加权称为收缩或学习率。</p>
 <blockquote>
@@ -305,6 +315,7 @@
 <ul>
 <li><a href="https://statweb.stanford.edu/~jhf/ftp/stobst.pdf" target="_blank" rel="noopener">随机梯度提升</a> [PDF]，1999</li>
 </ul>
+<p><a href></a><br><a name="81dd3443"></a></p>
 <h3 id="3-随机梯度提升"><a href="#3-随机梯度提升" class="headerlink" title="3.随机梯度提升"></a>3.随机梯度提升</h3><p>对装袋合奏和随机森林的深入了解允许从训练数据集的子样本中贪婪地创建树。</p>
 <p>可以使用相同的益处来减少梯度提升模型中序列中的树之间的相关性。</p>
 <p>这种增强的变化称为随机梯度提升。</p>
@@ -325,6 +336,7 @@
 <ul>
 <li><a href="https://arxiv.org/abs/1603.02754" target="_blank" rel="noopener">XGBoost：可扩展的树升压系统</a>，2016</li>
 </ul>
+<p><a href></a><br><a name="f879ff45"></a></p>
 <h3 id="4-Penalized-Gradient-Boosting"><a href="#4-Penalized-Gradient-Boosting" class="headerlink" title="4. Penalized Gradient Boosting"></a>4. Penalized Gradient Boosting</h3><p>除了它们的结构之外，还可以对参数化树施加附加约束。</p>
 <p>像 CART 这样的经典决策树不被用作弱学习器，而是使用称为回归树的修改形式，其在叶节点（也称为终端节点）中具有数值。在一些文献中，树叶中的值可以称为权重。</p>
 <p>因此，可以使用流行的正则化函数来规范树的叶权值，例如：</p>
@@ -336,8 +348,10 @@
 <p>额外的正则化项有助于平滑最终学习的权重以避免过度拟合。直观地，正则化目标将倾向于选择采用简单和预测函数的模型。</p>
 </blockquote>
 <p>— <a href="https://arxiv.org/abs/1603.02754" target="_blank" rel="noopener">XGBoost: A Scalable Tree Boosting System</a>, 2016</p>
+<p><a href></a><br><a name="9b15adfc"></a></p>
 <h2 id="梯度提升资源"><a href="#梯度提升资源" class="headerlink" title="梯度提升资源"></a>梯度提升资源</h2><p>梯度提升是一种迷人的算法，我相信你想要更深入。</p>
 <p>本节列出了可用于了解梯度提升算法的更多信息。</p>
+<p><a href></a><br><a name="503e3040"></a></p>
 <h3 id="梯度提升视频"><a href="#梯度提升视频" class="headerlink" title="梯度提升视频"></a>梯度提升视频</h3><ul>
 <li><a href="https://www.youtube.com/watch?v=wPqtzj5VZus" target="_blank" rel="noopener">Gradient Boosting Machine Learning</a> ，Trevor Hastie，2014</li>
 <li><a href="https://www.youtube.com/watch?v=sRktKszFmSk" target="_blank" rel="noopener">Gradient Boosting</a> ，Alexander Ihler，2012</li>
@@ -346,6 +360,7 @@
 <li><a href="https://www.youtube.com/watch?v=0IhraqUVJ_E" target="_blank" rel="noopener">xgboost：用于快速准确梯度提升的 R 包</a>，2016</li>
 <li><a href="https://www.youtube.com/watch?v=Vly8xGnNiWs" target="_blank" rel="noopener">XGBoost：可扩展的树木升压系统</a>，陈天琪，2016</li>
 </ul>
+<p><a href></a><br><a name="caec0098"></a></p>
 <h3 id="教科书中的梯度提升"><a href="#教科书中的梯度提升" class="headerlink" title="教科书中的梯度提升"></a>教科书中的梯度提升</h3><ul>
 <li>第 8.2.3 节 Boosting，第 321 页，<a href="http://www.amazon.com/dp/1461471370?tag=inspiredalgor-20" target="_blank" rel="noopener">统计学习简介：在 R</a> 中的应用。</li>
 <li>第 8.6 节 Boosting，第 203 页，<a href="http://www.amazon.com/dp/1461468485?tag=inspiredalgor-20" target="_blank" rel="noopener">应用预测建模</a>。</li>
@@ -353,6 +368,7 @@
 <li>第 16.4 节 Boosting，第 556 页，<a href="http://www.amazon.com/dp/0262018020?tag=inspiredalgor-20" target="_blank" rel="noopener">机器学习：概率视角</a></li>
 <li>第 10 章 Boosting 和 Additive 树，第 337 页，<a href="http://www.amazon.com/dp/0387848576?tag=inspiredalgor-20" target="_blank" rel="noopener">统计学习的要素：数据挖掘，推理和预测</a></li>
 </ul>
+<p><a href></a><br><a name="b2dbcae0"></a></p>
 <h3 id="Gradient-Boosting-Papers"><a href="#Gradient-Boosting-Papers" class="headerlink" title="Gradient Boosting Papers"></a>Gradient Boosting Papers</h3><ul>
 <li><a href="http://www.cis.upenn.edu/~mkearns/papers/boostnote.pdf" target="_blank" rel="noopener">关于假设提升的思考</a> [PDF]，Michael Kearns，1988</li>
 <li><a href="http://cns.bu.edu/~gsc/CN710/FreundSc95.pdf" target="_blank" rel="noopener">在线学习的决策理论推广及其应用</a> [PDF]，1995</li>
@@ -360,15 +376,18 @@
 <li><a href="https://statweb.stanford.edu/~jhf/ftp/stobst.pdf" target="_blank" rel="noopener">随机梯度提升</a> [PDF]，1999</li>
 <li><a href="http://maths.dur.ac.uk/~dma6kp/pdf/face_recognition/Boosting/Mason99AnyboostLong.pdf" target="_blank" rel="noopener">在函数空间中提升算法作为梯度下降</a> [PDF]，1999</li>
 </ul>
+<p><a href></a><br><a name="d1c39522"></a></p>
 <h3 id="梯度提升幻灯片"><a href="#梯度提升幻灯片" class="headerlink" title="梯度提升幻灯片"></a>梯度提升幻灯片</h3><ul>
 <li><a href="http://homes.cs.washington.edu/~tqchen/pdf/BoostedTree.pdf" target="_blank" rel="noopener">Boosted Trees 简介</a>，2014</li>
 <li><a href="http://www.chengli.io/tutorials/gradient_boosting.pdf" target="_blank" rel="noopener">一个温和的梯度提升介绍</a>，程力</li>
 </ul>
+<p><a href></a><br><a name="ad97806a"></a></p>
 <h3 id="梯度提升网页"><a href="#梯度提升网页" class="headerlink" title="梯度提升网页"></a>梯度提升网页</h3><ul>
 <li><a href="https://en.wikipedia.org/wiki/Boosting_(machine_learning" target="_blank" rel="noopener">提升（机器学习）</a>)</li>
 <li><a href="https://en.wikipedia.org/wiki/Gradient_boosting" target="_blank" rel="noopener">梯度提升</a></li>
 <li><a href="http://scikit-learn.org/stable/modules/ensemble.html#gradient-tree-boosting" target="_blank" rel="noopener">在 scikit-learn</a> 中提升梯度树</li>
 </ul>
+<p><a href></a><br><a name="3ae14696"></a></p>
 <h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><p>在这篇文章中，您发现了用于机器学习中预测建模的梯度提升算法。</p>
 <p>具体来说，你学到了：</p>
 <ul>

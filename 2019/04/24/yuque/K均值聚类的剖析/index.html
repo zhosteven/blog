@@ -8,22 +8,22 @@
   <link rel="dns-prefetch" href="http://zhos.me">
   <title>K均值聚类的剖析 | A+</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="K均值聚类的剖析假设您想根据内容和主题对数百（或数千）个文档进行分类，或者您希望出于某种原因将不同的图像组合在一起。或者甚至更多，让我们认为您已经分类了相同的数据，但是您想挑战那个标签。您想知道数据分类是否有意义，或者可以改进。好吧，我的建议是你对数据进行聚类。信息通常因噪声和冗余而变暗，并且将数据分组到具有相似特征的群集（群集）中是一种有效的方式。聚类是一种广泛用于查找具有相似特征的观察组（称">
+  <meta name="description" content="K均值聚类的剖析假设您想根据内容和主题对数百（或数千）个文档进行分类，或者您希望出于某种原因将不同的图像组合在一起。或者甚至更多，让我们认为您已经分类了相同的数据，但是您想挑战那个标签。您想知道数据分类是否有意义，或者可以改进。好吧，我的建议是你对数据进行聚类。信息通常因噪声和冗余而变暗，并且...">
 <meta property="og:type" content="article">
 <meta property="og:title" content="K均值聚类的剖析">
 <meta property="og:url" content="http://zhos.me/2019/04/24/yuque/K均值聚类的剖析/index.html">
 <meta property="og:site_name" content="A+">
-<meta property="og:description" content="K均值聚类的剖析假设您想根据内容和主题对数百（或数千）个文档进行分类，或者您希望出于某种原因将不同的图像组合在一起。或者甚至更多，让我们认为您已经分类了相同的数据，但是您想挑战那个标签。您想知道数据分类是否有意义，或者可以改进。好吧，我的建议是你对数据进行聚类。信息通常因噪声和冗余而变暗，并且将数据分组到具有相似特征的群集（群集）中是一种有效的方式。聚类是一种广泛用于查找具有相似特征的观察组（称">
+<meta property="og:description" content="K均值聚类的剖析假设您想根据内容和主题对数百（或数千）个文档进行分类，或者您希望出于某种原因将不同的图像组合在一起。或者甚至更多，让我们认为您已经分类了相同的数据，但是您想挑战那个标签。您想知道数据分类是否有意义，或者可以改进。好吧，我的建议是你对数据进行聚类。信息通常因噪声和冗余而变暗，并且...">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://zhos.me/2019/04/24/yuque/K均值聚类的剖析/190f95402e2e224359a47beb563d4371#height=396&width=480">
 <meta property="og:image" content="http://zhos.me/2019/04/24/yuque/K均值聚类的剖析/fa4ee7cb3a141539790be2e9efccd9f9#height=427&width=652">
 <meta property="og:image" content="http://zhos.me/2019/04/24/yuque/K均值聚类的剖析/fefcd49388a159fb4d81eb29236fdf62#height=398&width=750">
 <meta property="og:image" content="http://zhos.me/2019/04/24/yuque/K均值聚类的剖析/1903dc215ae2cc0cea67305f84d22cab#height=302&width=750">
 <meta property="og:image" content="http://zhos.me/2019/04/24/yuque/K均值聚类的剖析/cece62ab5a99d5282edc74a3d87d6f97#height=312&width=713">
-<meta property="og:updated_time" content="2019-04-26T03:23:11.183Z">
+<meta property="og:updated_time" content="2019-04-28T01:30:08.011Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="K均值聚类的剖析">
-<meta name="twitter:description" content="K均值聚类的剖析假设您想根据内容和主题对数百（或数千）个文档进行分类，或者您希望出于某种原因将不同的图像组合在一起。或者甚至更多，让我们认为您已经分类了相同的数据，但是您想挑战那个标签。您想知道数据分类是否有意义，或者可以改进。好吧，我的建议是你对数据进行聚类。信息通常因噪声和冗余而变暗，并且将数据分组到具有相似特征的群集（群集）中是一种有效的方式。聚类是一种广泛用于查找具有相似特征的观察组（称">
+<meta name="twitter:description" content="K均值聚类的剖析假设您想根据内容和主题对数百（或数千）个文档进行分类，或者您希望出于某种原因将不同的图像组合在一起。或者甚至更多，让我们认为您已经分类了相同的数据，但是您想挑战那个标签。您想知道数据分类是否有意义，或者可以改进。好吧，我的建议是你对数据进行聚类。信息通常因噪声和冗余而变暗，并且...">
 <meta name="twitter:image" content="http://zhos.me/2019/04/24/yuque/K均值聚类的剖析/190f95402e2e224359a47beb563d4371#height=396&width=480">
   
     <link rel="alternative" href="/atom.xml" title="A+" type="application/atom+xml">

@@ -8,27 +8,19 @@
   <link rel="dns-prefetch" href="http://zhos.me">
   <title>如何使用 Amazon Web Services 在云中训练 XGBoost 模型 | A+</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="如何使用 Amazon Web Services 在云中训练 XGBoost 模型 原文： https://machinelearningmastery.com/train-xgboost-models-cloud-amazon-web-services/  XGBoost 库提供了针对速度和表现而设计的梯度提升实现。 它的实现是为了充分利用您的计算资源，包括所有 CPU 内核和内存。 在这篇文章">
+  <meta name="description" content="如何使用 Amazon Web Services 在云中训练 XGBoost 模型原文： https://machinelearningmastery.com/train-xgboost-models-cloud-amazon-web-services/XGBoost 库提供了针对速度和表现而...">
 <meta property="og:type" content="article">
 <meta property="og:title" content="如何使用 Amazon Web Services 在云中训练 XGBoost 模型">
 <meta property="og:url" content="http://zhos.me/2019/04/26/yuque/如何使用 Amazon Web Services 在云中训练 XGBoost 模型/index.html">
 <meta property="og:site_name" content="A+">
-<meta property="og:description" content="如何使用 Amazon Web Services 在云中训练 XGBoost 模型 原文： https://machinelearningmastery.com/train-xgboost-models-cloud-amazon-web-services/  XGBoost 库提供了针对速度和表现而设计的梯度提升实现。 它的实现是为了充分利用您的计算资源，包括所有 CPU 内核和内存。 在这篇文章">
+<meta property="og:description" content="如何使用 Amazon Web Services 在云中训练 XGBoost 模型原文： https://machinelearningmastery.com/train-xgboost-models-cloud-amazon-web-services/XGBoost 库提供了针对速度和表现而...">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://zhos.me/2019/04/26/yuque/如何使用%20Amazon%20Web%20Services%20在云中训练%20XGBoost%20模型/img/8fc444ce754e273d86054d651b717e58.jpg">
-<meta property="og:image" content="http://zhos.me/2019/04/26/yuque/如何使用%20Amazon%20Web%20Services%20在云中训练%20XGBoost%20模型/img/827f7a153d004f35332b92fb724b1b92.jpg">
-<meta property="og:image" content="http://zhos.me/2019/04/26/yuque/如何使用%20Amazon%20Web%20Services%20在云中训练%20XGBoost%20模型/img/3aa11a0f106d6a9d26e5ff0f0928e835.jpg">
-<meta property="og:image" content="http://zhos.me/2019/04/26/yuque/如何使用%20Amazon%20Web%20Services%20在云中训练%20XGBoost%20模型/img/5e64e6084bf9d023d5ec4456be032864.jpg">
-<meta property="og:image" content="http://zhos.me/2019/04/26/yuque/如何使用%20Amazon%20Web%20Services%20在云中训练%20XGBoost%20模型/img/55f115adb23074958d7ba0cc5e9d3806.jpg">
-<meta property="og:image" content="http://zhos.me/2019/04/26/yuque/如何使用%20Amazon%20Web%20Services%20在云中训练%20XGBoost%20模型/img/bd44282a665a01e05415b64e9cd8c8a9.jpg">
-<meta property="og:image" content="http://zhos.me/2019/04/26/yuque/如何使用%20Amazon%20Web%20Services%20在云中训练%20XGBoost%20模型/img/1101c608e9fa5e91924c8ae683a032d7.jpg">
-<meta property="og:image" content="http://zhos.me/2019/04/26/yuque/如何使用%20Amazon%20Web%20Services%20在云中训练%20XGBoost%20模型/img/f3934cc34a4286f62b58aefe764d7bcb.jpg">
-<meta property="og:image" content="http://zhos.me/2019/04/26/yuque/如何使用%20Amazon%20Web%20Services%20在云中训练%20XGBoost%20模型/img/32556da7a55111fbc0f2e72e76132613.jpg">
-<meta property="og:updated_time" content="2019-04-26T03:24:22.419Z">
+<meta property="og:image" content="http://zhos.me/2019/04/26/yuque/如何使用%20Amazon%20Web%20Services%20在云中训练%20XGBoost%20模型/img/5e64e6084bf9d023d5ec4456be032864.jpg#alt=Select%20N%20California">
+<meta property="og:updated_time" content="2019-04-28T01:30:08.003Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="如何使用 Amazon Web Services 在云中训练 XGBoost 模型">
-<meta name="twitter:description" content="如何使用 Amazon Web Services 在云中训练 XGBoost 模型 原文： https://machinelearningmastery.com/train-xgboost-models-cloud-amazon-web-services/  XGBoost 库提供了针对速度和表现而设计的梯度提升实现。 它的实现是为了充分利用您的计算资源，包括所有 CPU 内核和内存。 在这篇文章">
-<meta name="twitter:image" content="http://zhos.me/2019/04/26/yuque/如何使用%20Amazon%20Web%20Services%20在云中训练%20XGBoost%20模型/img/8fc444ce754e273d86054d651b717e58.jpg">
+<meta name="twitter:description" content="如何使用 Amazon Web Services 在云中训练 XGBoost 模型原文： https://machinelearningmastery.com/train-xgboost-models-cloud-amazon-web-services/XGBoost 库提供了针对速度和表现而...">
+<meta name="twitter:image" content="http://zhos.me/2019/04/26/yuque/如何使用%20Amazon%20Web%20Services%20在云中训练%20XGBoost%20模型/img/5e64e6084bf9d023d5ec4456be032864.jpg#alt=Select%20N%20California">
   
     <link rel="alternative" href="/atom.xml" title="A+" type="application/atom+xml">
   
@@ -178,12 +170,12 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="如何使用-Amazon-Web-Services-在云中训练-XGBoost-模型"><a href="#如何使用-Amazon-Web-Services-在云中训练-XGBoost-模型" class="headerlink" title="如何使用 Amazon Web Services 在云中训练 XGBoost 模型"></a>如何使用 Amazon Web Services 在云中训练 XGBoost 模型</h1><blockquote>
+        <p><a href></a><br><a name="e6cce315"></a></p>
+<h1 id="如何使用-Amazon-Web-Services-在云中训练-XGBoost-模型"><a href="#如何使用-Amazon-Web-Services-在云中训练-XGBoost-模型" class="headerlink" title="如何使用 Amazon Web Services 在云中训练 XGBoost 模型"></a>如何使用 Amazon Web Services 在云中训练 XGBoost 模型</h1><blockquote>
 <p>原文： <a href="https://machinelearningmastery.com/train-xgboost-models-cloud-amazon-web-services/" target="_blank" rel="noopener">https://machinelearningmastery.com/train-xgboost-models-cloud-amazon-web-services/</a></p>
 </blockquote>
 <p>XGBoost 库提供了针对速度和表现而设计的梯度提升实现。</p>
-<p>它的实现是为了充分利用您的计算资源，包括所有 CPU 内核和内存。</p>
-<p>在这篇文章中，您将了解如何在亚马逊的云服务上设置服务器，以便快速，廉价地创建非常大的模型。</p>
+<p>它的实现是为了充分利用您的计算资源，包括所有 CPU 内核和内存。<br><a id="more"></a><br>在这篇文章中，您将了解如何在亚马逊的云服务上设置服务器，以便快速，廉价地创建非常大的模型。</p>
 <p>阅读这篇文章后你会知道：</p>
 <ul>
 <li>如何设置和配置 Amazon EC2 服务器实例以与 XGBoost 一起使用。</li>
@@ -191,8 +183,8 @@
 <li>如何将数据和代码传输到您的服务器并训练一个非常大的模型。</li>
 </ul>
 <p>让我们开始吧。</p>
-<p><img src="img/8fc444ce754e273d86054d651b717e58.jpg" alt="How to Train XGBoost Models in the Cloud with Amazon Web Services"></p>
-<p>如何使用亚马逊网络服务在云中训练 XGBoost 模型<br>照片由 <a href="https://www.flickr.com/photos/archer10/4272153040/" target="_blank" rel="noopener">Dennis Jarvis</a> 拍摄，保留一些权利。</p>
+<p>如何使用亚马逊网络服务在云中训练 XGBoost 模型<br><br>照片由 <a href="https://www.flickr.com/photos/archer10/4272153040/" target="_blank" rel="noopener">Dennis Jarvis</a> 拍摄，保留一些权利。</p>
+<p><a href></a><br><a name="9ae756a7"></a></p>
 <h2 id="教程概述"><a href="#教程概述" class="headerlink" title="教程概述"></a>教程概述</h2><p>这个过程非常简单。以下是我们将在本教程中完成的步骤的概述。</p>
 <ol>
 <li>设置您的 AWS 账户（如果需要）。</li>
@@ -203,54 +195,50 @@
 </ol>
 <p><strong>注意，在 Amazon</strong> 上使用虚拟服务器实例需要花钱。临时模型开发的成本非常低（例如每小时不到一美元），这就是为什么它如此吸引人，但它不是免费的。</p>
 <p>服务器实例运行 Linux。尽管不需要您知道如何导航 Linux 或类 Unix 环境，但这是可取的。我们只是运行我们的 Python 脚本，因此不需要高级技能。</p>
+<p><a href></a><br><a name="efcb9770"></a></p>
 <h2 id="1-设置您的-AWS-账户（如果需要）"><a href="#1-设置您的-AWS-账户（如果需要）" class="headerlink" title="1.设置您的 AWS 账户（如果需要）"></a>1.设置您的 AWS 账户（如果需要）</h2><p>您需要在 Amazon Web Services 上拥有一个帐户。</p>
 <ul>
 <li>1.您可以通过单击“登录到控制台”，使用 Amazon Web Services 门户创建帐户。从那里，您可以使用现有的亚马逊帐户登录或创建新帐户。</li>
 </ul>
-<p><img src="img/827f7a153d004f35332b92fb724b1b92.jpg" alt="AWS Sign-in Button"></p>
 <p>AWS 登录按钮</p>
 <ul>
 <li>2.如果要创建帐户，您需要提供您的详细信息以及亚马逊可以收取的有效信用卡。如果您已经是亚马逊客户并且已将您的信用卡存档，那么此过程会快得多。</li>
 </ul>
 <p><strong>注意</strong>：如果您已经创建了一个新帐户，则可能需要向 Amazon 支持请求才能获得批准在本教程的其余部分中使用更大（非免费）的服务器实例。</p>
+<p><a href></a><br><a name="d85ca940"></a></p>
 <h2 id="2-启动服务器实例"><a href="#2-启动服务器实例" class="headerlink" title="2.启动服务器实例"></a>2.启动服务器实例</h2><p>现在您已拥有 AWS 账户，您希望启动可在其上运行 XGBoost 的 EC2 虚拟服务器实例。</p>
 <p>启动实例就像选择要加载和启动虚拟服务器的映像一样简单。</p>
 <p>我们将使用现有的 Fedora Linux 映像并手动安装 Python 和 XGBoost。</p>
 <ul>
 <li>1.如果您尚未登录 <a href="https://console.aws.amazon.com/console/home" target="_blank" rel="noopener">AWS 控制台</a>，请登录。</li>
 </ul>
-<p><img src="img/3aa11a0f106d6a9d26e5ff0f0928e835.jpg" alt="AWS Console"></p>
 <p>AWS 控制台</p>
 <ul>
 <li>2.单击 EC2 以启动新的虚拟服务器。</li>
 <li>3.选择“N.加州“从右上角的下拉菜单开始。这很重要，否则您可能无法找到我们计划使用的图像（称为 AMI）。</li>
 </ul>
-<p><img src="img/5e64e6084bf9d023d5ec4456be032864.jpg" alt="Select N California"></p>
+<p><img src="img/5e64e6084bf9d023d5ec4456be032864.jpg#alt=Select%20N%20California" alt></p>
 <p>选择 N California</p>
 <ul>
 <li>4.单击“启动实例”按钮。</li>
 <li>5.单击“社区 AMI”。 AMI 是亚马逊机器映像。它是服务器的冻结实例，您可以在新虚拟服务器上进行选择和实例化。</li>
 </ul>
-<p><img src="img/55f115adb23074958d7ba0cc5e9d3806.jpg" alt="Community AMIs"></p>
 <p>社区 AMI</p>
 <ul>
 <li>6.在“搜索社区 AMI”搜索框中输入 AMI：“ <strong>ami-02d09662</strong> ”，然后按 Enter 键。您应该看到一个结果。</li>
 </ul>
 <p>这是 <a href="https://getfedora.org/" target="_blank" rel="noopener">Fedora Linux</a> 24 版本的基础安装图像。这是一个非常易于使用的 Linux 发行版。</p>
-<p><img src="img/bd44282a665a01e05415b64e9cd8c8a9.jpg" alt="Select the 64-bit Fedora Linux AMI"></p>
 <p>选择 64 位 Fedora Linux AMI</p>
 <ul>
 <li>7.单击“选择”以在搜索结果中选择 AMI。</li>
 <li>8.现在您需要选择运行映像的硬件。向下滚动并选择“c3.8xlarge”硬件。</li>
 </ul>
 <p>这是一个包含 32 个 CPU 核心，60 GB RAM 和 2 个大型 SSD 磁盘的大型实例。</p>
-<p><img src="img/1101c608e9fa5e91924c8ae683a032d7.jpg" alt="Select the c3.8xlarge Instance Type"></p>
 <p>选择 c3.8xlarge 实例类型</p>
 <ul>
 <li>9.单击“查看并启动”以完成服务器实例的配置。</li>
 </ul>
 <p>您将看到类似“您的实例配置不符合免费使用套餐”的警告。这只是表明您将在此服务器上收取费用。我们知道这一点，忽略这个警告。</p>
-<p><img src="img/f3934cc34a4286f62b58aefe764d7bcb.jpg" alt="Your instance configuration is not eligible for the free usage tier"></p>
 <p>您的实例配置不符合免费使用套餐的条件</p>
 <ul>
 <li>10.单击“启动”按钮。</li>
@@ -270,9 +258,9 @@
 <ul>
 <li>15.单击“查看实例”以查看实例的状态。</li>
 </ul>
-<p><img src="img/32556da7a55111fbc0f2e72e76132613.jpg" alt="Review Your Running Instance and Note its IP Address"></p>
 <p>检查您的运行实例并记下其 IP 地址</p>
 <p>您的服务器现在正在运行，可以登录。</p>
+<p><a href></a><br><a name="dba80045"></a></p>
 <h2 id="3-登录和配置"><a href="#3-登录和配置" class="headerlink" title="3.登录和配置"></a>3.登录和配置</h2><p>现在您已经启动了服务器实例，现在可以登录并配置它以供使用。</p>
 <p>每次启动服务器时都需要配置服务器。因此，批处理所有工作是个好主意，这样您就可以充分利用已配置的服务器。</p>
 <p>配置服务器不会花费很长时间，总共可能需要 10 分钟。</p>
@@ -280,7 +268,7 @@
 <li>1.如果您还没有，请单击 Amazon EC2 控制台中的“查看实例”。</li>
 <li>2.将“公共 IP”（在“描述”中的屏幕底部）复制到剪贴板。</li>
 </ul>
-<p>在此示例中，我的 IP 地址为 52.53.185.166。<br><strong>请勿使用此 IP 地址，您的 IP 地址会有所不同</strong>。</p>
+<p>在此示例中，我的 IP 地址为 52.53.185.166。<br><br><strong>请勿使用此 IP 地址，您的 IP 地址会有所不同</strong>。</p>
 <ul>
 <li>3.打开终端并将目录更改为您下载密钥对的位置。使用 SSH 登录您的服务器，例如您可以输入：</li>
 </ul>
@@ -293,6 +281,7 @@
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat /proc/cpuinfo | grep processor | wc -l</span><br></pre></td></tr></table></figure>
 <p>你应该看到：</p>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">32</span></span><br></pre></td></tr></table></figure>
+<p><a href></a><br><a name="aa15121b"></a></p>
 <h3 id="3A。安装支持包"><a href="#3A。安装支持包" class="headerlink" title="3A。安装支持包"></a>3A。安装支持包</h3><p>第一步是安装所有软件包以支持 XGBoost。</p>
 <p>这包括 GCC，Python 和 SciPy 堆栈。我们将使用 Fedora 包管理器 <a href="https://en.wikipedia.org/wiki/DNF_(software" target="_blank" rel="noopener">dnf</a>) （新的 yum）。</p>
 <p>这是一行：</p>
@@ -300,20 +289,24 @@
 <p>输入“y”并在提示时按 Enter 确认要安装的软件包。</p>
 <p>这将需要几分钟时间来下载并安装所有必需的软件包。</p>
 <p>完成后，我们可以确认环境已成功安装。</p>
+<p><a href></a><br><a name="a38c48e7"></a></p>
 <h4 id="i）检查-GCC"><a href="#i）检查-GCC" class="headerlink" title="i）检查 GCC"></a>i）检查 GCC</h4><p>类型：</p>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc --version</span><br></pre></td></tr></table></figure>
 <p>You should see:</p>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">gcc (GCC) <span class="number">6.1</span><span class="number">.1</span> <span class="number">20160621</span> (Red Hat <span class="number">6.1</span><span class="number">.1</span><span class="number">-3</span>)</span><br><span class="line">Copyright (C) <span class="number">2016</span> Free Software Foundation, Inc.</span><br><span class="line">This <span class="keyword">is</span> free software; see the source <span class="keyword">for</span> copying conditions.  There <span class="keyword">is</span> NO</span><br><span class="line">warranty; <span class="keyword">not</span> even <span class="keyword">for</span> MERCHANTABILITY <span class="keyword">or</span> FITNESS FOR A PARTICULAR PURPOSE.</span><br></pre></td></tr></table></figure>
+<p><a href></a><br><a name="72f8e147"></a></p>
 <h4 id="ii）检查-Python"><a href="#ii）检查-Python" class="headerlink" title="ii）检查 Python"></a>ii）检查 Python</h4><p>Type:</p>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python --version</span><br></pre></td></tr></table></figure>
 <p>You should see:</p>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Python <span class="number">2.7</span><span class="number">.12</span></span><br></pre></td></tr></table></figure>
+<p><a href></a><br><a name="91ef4ff1"></a></p>
 <h4 id="iii）检查-SciPy"><a href="#iii）检查-SciPy" class="headerlink" title="iii）检查 SciPy"></a>iii）检查 SciPy</h4><p>Type:</p>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">python -c <span class="string">"import scipy;print(scipy.__version__)"</span></span><br><span class="line">python -c <span class="string">"import numpy;print(numpy.__version__)"</span></span><br><span class="line">python -c <span class="string">"import pandas;print(pandas.__version__)"</span></span><br><span class="line">python -c <span class="string">"import sklearn;print(sklearn.__version__)"</span></span><br></pre></td></tr></table></figure>
 <p>你应该看到类似的东西：</p>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">0.16</span><span class="number">.1</span></span><br><span class="line"><span class="number">1.11</span><span class="number">.0</span></span><br><span class="line"><span class="number">0.18</span><span class="number">.0</span></span><br><span class="line"><span class="number">0.17</span><span class="number">.1</span></span><br></pre></td></tr></table></figure>
 <p><strong>注意</strong>：如果其中任何一项检查失败，请停止并更正任何错误。在继续之前，您必须拥有完整的工作环境。</p>
 <p>我们现在准备安装 XGBoost。</p>
+<p><a href></a><br><a name="525916d3"></a></p>
 <h3 id="3B。构建并安装-XGBoost"><a href="#3B。构建并安装-XGBoost" class="headerlink" title="3B。构建并安装 XGBoost"></a>3B。构建并安装 XGBoost</h3><p>XGBoost 的<a href="https://xgboost.readthedocs.io/en/latest/build.html#python-package-installation" target="_blank" rel="noopener">安装说明已完成，我们可以直接关注它们。</a></p>
 <p>首先，我们需要在服务器上下载项目。</p>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git clone --recursive https://github.com/dmlc/xgboost</span><br><span class="line">cd xgboost</span><br></pre></td></tr></table></figure>
@@ -328,6 +321,7 @@
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -c <span class="string">"import xgboost;print(xgboost.__version__)"</span></span><br></pre></td></tr></table></figure>
 <p>这应该打印如下：</p>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">0.4</span></span><br></pre></td></tr></table></figure>
+<p><a href></a><br><a name="d946dfe6"></a></p>
 <h2 id="4-训练-XGBoost-模型"><a href="#4-训练-XGBoost-模型" class="headerlink" title="4.训练 XGBoost 模型"></a>4.训练 XGBoost 模型</h2><p>让我们通过运行带有大量内核的 XGBoost 来测试您的大型 AWS 实例。</p>
 <p>在本教程中，我们将使用 <a href="https://www.kaggle.com/c/otto-group-product-classification-challenge" target="_blank" rel="noopener">Otto Group 产品分类挑战</a>数据集。</p>
 <p>此数据集可从 Kaggle 免费获得（您需要注册 Kaggle 才能下载此数据集）。它描述了超过 61,000 种产品的 93 个模糊细节，这些产品分为 10 个产品类别（例如时装，电子产品等）。输入变量是某种不同事件的计数。</p>
@@ -358,6 +352,7 @@
 <p>您可以将代码作为后台进程运行，并通过键入以下内容将输出重定向到文件：</p>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nohup python script.py &gt;script.py.out <span class="number">2</span>&gt;&amp;<span class="number">1</span> &amp;</span><br></pre></td></tr></table></figure>
 <p>现在我们完成了，我们可以关闭 AWS 实例。</p>
+<p><a href></a><br><a name="4e7690bd"></a></p>
 <h2 id="5-关闭您的-AWS-实例"><a href="#5-关闭您的-AWS-实例" class="headerlink" title="5.关闭您的 AWS 实例"></a>5.关闭您的 AWS 实例</h2><p>完成工作后，您必须关闭实例。</p>
 <p>请记住，您需要按照使用该实例的时间收费。它很便宜，但如果你不使用它，你不想留下实例。</p>
 <ul>
@@ -373,6 +368,7 @@
 </ul>
 <p>实例可能需要几秒钟才能关闭并从实例列表中删除。</p>
 <p>而已。</p>
+<p><a href></a><br><a name="3ae14696"></a></p>
 <h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><p>在这篇文章中，您了解了如何在 Amazon 云基础架构上训练大型 XGBoost 模型。</p>
 <p>具体来说，你学到了：</p>
 <ul>

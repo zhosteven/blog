@@ -149,71 +149,6 @@
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-yuque/使用Spark Structured Streaming，XGBoost和Scala进行实时预测" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/18/yuque/使用Spark Structured Streaming，XGBoost和Scala进行实时预测/">使用Spark Structured Streaming，XGBoost和Scala进行实时预测</a>
-    </h1>
-  
-
-        
-        <a href="/2019/03/18/yuque/使用Spark Structured Streaming，XGBoost和Scala进行实时预测/" class="archive-article-date">
-  	<time datetime="2019-03-18T03:06:19.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-18</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>在本文中，我们将讨论构建完整的机器学习管道。第一部分将侧重于在标准批处理模式下训练二元分类器，在第二部分中我们将进行一些实时预测。我们将使用来自<a href="https://www.kaggle.com/c/titanic/data" target="_blank" rel="noopener">泰坦尼克号的</a>数据<a href="https://www.kaggle.com/c/titanic/data" target="_blank" rel="noopener">：机器学习灾难</a>中的众多Kaggle比赛之一。在开始之前，请知道您应该熟悉<a href="https://www.tutorialspoint.com/scala/index.htm" target="_blank" rel="noopener">Scala</a>，<a href="https://spark.apache.org/" target="_blank" rel="noopener">Apache Spark</a>和<a href="http://xgboost.readthedocs.io/en/latest/get_started/" target="_blank" rel="noopener">Xgboost</a>。所有源代码也将在<a href="https://github.com/BogdanCojocar/medium-articles/tree/master/titanic_spark" target="_blank" rel="noopener">Github上提供</a>。很酷，现在让我们开始吧！<br>
-        
-          <a class="article-more-a" href="/2019/03/18/yuque/使用Spark Structured Streaming，XGBoost和Scala进行实时预测/#more">more >></a>
-        
-      
-
-      
-    </p></div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/03/18/yuque/使用Spark Structured Streaming，XGBoost和Scala进行实时预测/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
     <article id="post-yuque/PySpark ML和XGBoost完全集成在Kaggle Titanic数据集上进行了测试" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1259,9 +1194,132 @@
 
 
   
+    <article id="post-yuque/Capsule Networks：一种全新且极具吸引力的AI架构" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/12/21/yuque/Capsule Networks：一种全新且极具吸引力的AI架构/">Capsule Networks：一种全新且极具吸引力的AI架构</a>
+    </h1>
+  
+
+        
+        <a href="/2018/12/21/yuque/Capsule Networks：一种全新且极具吸引力的AI架构/" class="archive-article-date">
+  	<time datetime="2018-12-21T07:02:37.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-21</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><a href="https://heartbeat.fritz.ai/capsule-networks-a-new-and-attractive-ai-architecture-bd1198cc8ad4" target="_blank" rel="noopener">链接</a><br><a name="481b"></a></p>
+<h2 id="本文已被翻译成英文并首次发表于Deep-Learning-Turkey-。"><a href="#本文已被翻译成英文并首次发表于Deep-Learning-Turkey-。" class="headerlink" title="本文已被翻译成英文并首次发表于Deep Learning Turkey_。_"></a><a href="#481b"></a><em>本文已被翻译成英文并首次发表于</em><a href="https://medium.com/deep-learning-turkiye/yapay-zekan%C4%B1n-yeni-ve-%C3%A7ekici-mimarisi-kaps%C3%BCl-a%C4%9F%C4%B1na-uygulamal%C4%B1-bir-bak%C4%B1%C5%9F-ef7310e3d847" target="_blank" rel="noopener">Deep Learning Turkey</a>_。_</h2><p><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545375946092-dea95dae-971e-4274-a86b-98c17c3ee82a.png#width=826" alt><br><a href="https://heartbeat.fritz.ai/a-beginners-guide-to-convolutional-neural-networks-cnn-cf26c5ee17ed" target="_blank" rel="noopener">卷积神经网络</a>（CNN）在计算机视觉应用中经常是首选，因为它们在对象识别和分类任务上取得了成功。CNN由堆叠在一起的许多神经元组成。计算跨神经元的卷积需要大量计算，因此池化过程通常用于减小网络层的大小。卷积方法可以通过简单的计算学习数据的许多复杂特征。通过对我们的输入执行许多矩阵乘法和求和，我们可以得出我们问题的答案。<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545375976729-c04cb9d8-3367-460d-87bb-a85c2e57ac26.png#width=665" alt></p>
+<p><strong><em>我总是听到CNN有多棒。什么时候失败？</em></strong></p>
+<p>CNN在解决对象识别和分类问题方面取得了巨大成功。但是，它们并不完美。如果CNN显示的方向对象不熟悉，或者对象出现在不习惯的位置，则预测任务可能会失败。</p>
+<p>例如，如果您将一张脸倒置，网络将无法再识别眼睛，鼻子，嘴巴以及两者之间的空间关系。同样，如果你改变了脸部的特定区域（即切换眼睛和鼻子的位置），网络将能够识别脸部，但它不再是真实的脸部。CNN学习图像中的统计模式，但是他们没有学习关于什么使事物看起来像脸的基本概念。<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545376002462-0627f195-0f85-4cd8-a27c-fbd4ecd9ea94.png#width=826" alt><br>关于为什么CNN无法学习概念的理论，_AI_之_父_<strong>Geoffrey Hinton</strong>专注于用于缩小网络规模和计算要求的池化操作。他感叹道：</p>
+<blockquote>
+<p><em>“在卷积神经网络中使用的池化操作是一个很大的错误，它运作良好的事实是一场灾难！”</em><br>汇集层正在破坏信息，使网络无法学习更高级别的概念。所以他开始着手开发一种新的架构，这种架构并没有过多地依赖于这种操作。</p>
+</blockquote>
+<p><strong>结果：胶囊网络</strong><br><a name="9d89"></a></p>
+<h3 id="什么是胶囊网络？"><a href="#什么是胶囊网络？" class="headerlink" title="什么是胶囊网络？"></a><a href="#9d89"></a>什么是胶囊网络？</h3><p>Hinton和Sabour借鉴了神经科学的观点，认为大脑被组织成称为<strong><em>胶囊的</em></strong>模块。这些胶囊特别擅长处理物体的特征，如姿势（位置，大小，方向），变形，速度，反照率，色调，纹理等。</p>
+<p>理论上，大脑必须有一种机制，用于<strong>_将_</strong>低级视觉信息<strong>_路由_</strong>到它认为最适合处理它的胶囊。已经提出了<strong>胶囊网络</strong>和<strong>动态路由算法</strong>作为卷积神经网络模型不充分的问题的解决方案。</p>
+<p><img src="https://cdn-images-1.medium.com/max/750/1*y9RmBVmzKY63CET4LYRcUA.png#width=" alt><br><a href="https://www.wikiart.org/en/pablo-picasso/untitled-1937-8" target="_blank" rel="noopener">Portrait de femme au col d`hermine（奥尔加）</a></p>
+<p>胶囊表示图像中存在的特定实体的各种特征。一个非常特殊的特征是图像中存在实例化的实体。实例化的实体是一个参数，如位置，大小，方向，变形，速度，反照率，色调，纹理等。表示其存在的一种显而易见的方法是使用一个单独的逻辑单元，其输出是实体存在的概率[ <a href="https://arxiv.org/pdf/1710.09829.pdf" target="_blank" rel="noopener">1</a> ]。为了获得比CNN更好的结果，我们应该使用迭代<strong>路由协议</strong>机制。这些功能称为<strong>实例化参数</strong>。在经典CNN模型中，不能获得图像中对象的这种属性。平均/最大池化层减小了一组信息的大小，同时减小了大小。</p>
+<blockquote>
+<p><strong>好吧，某处有一个嘴唇，鼻子和眼睛，但卷积神经网络无法决定它应该在哪里以及它在哪里。</strong> &gt; <strong>对于传统的网络，错位的功能不会让它失望！</strong></p>
+</blockquote>
+<p><a name="65d9"></a></p>
+<h3 id="壁球功能"><a href="#壁球功能" class="headerlink" title="壁球功能"></a><a href="#65d9"></a>壁球功能</h3><p><a name="q16xns"></a></p>
+<h4 id="壁球功能-1"><a href="#壁球功能-1" class="headerlink" title="壁球功能"></a><a href="#q16xns"></a><img src="https://cdn-images-1.medium.com/max/750/1*b3unKamre_roNMTS7H_6EA.png#width=" alt>壁球功能</h4><p>在深度神经网络中，激活函数是应用于层输出的简单数学运算。它们用于近似存在于数据中的非线性关系。激活层通常作用于标量值 - 例如，对向量中的每个元素进行标准化，使其落在0和1之间。<br>在Capsule Networks中，一种称为<em>squash函数</em>的特殊类型的激活函数用于归一化向量的大小，而不是标量元素本身。<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545376097052-2994fe87-934e-4515-9a1b-7187e3ac549d.png#width=826" alt></p>
+<p><a href="https://arxiv.org/pdf/1710.09829.pdf" target="_blank" rel="noopener">协议路由算法</a><br>这些壁球功能的输出告诉我们如何通过训练学习不同概念的各种胶囊来路由数据。图像中每个对象的属性在路由它们的向量中表示。例如，脸部的激活可以将图像的不同部分路由到理解眼睛，鼻子，嘴巴和耳朵的胶囊。<br><a name="d0f9"></a></p>
+<h3 id="胶囊网络在MNIST数据集中的应用"><a href="#胶囊网络在MNIST数据集中的应用" class="headerlink" title="胶囊网络在MNIST数据集中的应用"></a><a href="#d0f9"></a>胶囊网络在MNIST数据集中的应用</h3><p><img src="https://cdn-images-1.medium.com/max/1000/0*EXnVG4QgSdxLBt0g.png#width=" alt><a href="http://www.machinelearningtutorial.net/2018/01/11/dynamic-routing-between-capsules-a-novel-architecture-for-convolutional-neural-networks/" target="_blank" rel="noopener">由胶囊网络执行的角度估计</a></p>
+<p><strong><em>现在，下一步至关重要：</em></strong></p>
+<p>就像不同层次的深层CNN中的层学习图像的不同语义属性（内容，纹理，样式等）一样，胶囊也可以组织成不同的层次。在一个级别的胶囊进行预测，了解物体的形状，并将它们传递给更高级别的胶囊，这些胶囊可以了解方向。当多个预测一致时，更高级别的预测变得活跃。<a href="https://www.ijcai.org/Proceedings/81-2/Papers/019.pdf" target="_blank" rel="noopener">此过程被描述为动态路由，我现在将更详细地讨论。</a></p>
+<p><strong><em>那么，让我们创建一个逐步的胶囊架构来分类MNIST数据集：</em></strong></p>
+<p>第一层有一个经典的卷积层。在第二层中，在称为<em>主要胶囊</em>的层中执行卷积处理，其中应用该<code>squash</code>函数。每个主要胶囊接收图像的一个小区域作为输入（称为其感受野），并且它试图检测特定图案的存在和姿势 - 例如，圆圈。</p>
+<p>更高层中的胶囊（称为路由胶囊）检测更大和更复杂的对象，例如数字8，由两个圆圈组成。然后他们使用一种新颖的挤压功能来保证这些矢量的长度在0到1之间。</p>
+<p>在主胶囊层之前施加标准卷积层，并获得9×9×256的输出。在主胶囊层中应用具有32个通道的新卷积过程，步幅为2.然而，将其与其他卷积过程分开的这个特征是压缩的功能。最后，这给出了主要胶囊的输出。</p>
+<p><img src="https://cdn-images-1.medium.com/max/1000/1*ih6faUAZq9rhpo8sOFKYSw.gif#width=" alt><a href="https://medium.freecodecamp.org/understanding-capsule-networks-ais-alluring-new-architecture-bdb228173ddc" target="_blank" rel="noopener">初级胶囊的卷积过程</a></p>
+<p>这提供了6x6输出。然而，在胶囊层中，实现动态路由算法，使得这些8长度输出DigitCaps向量的32个输出由于具有第三层动态路由的胶囊层而获得（逐协议路由算法） 。逐协议算法包括协议（检测和路由）更新的几次迭代。</p>
+<p><img src="https://cdn-images-1.medium.com/max/1000/1*k29n44uHy_rrfgKO2qLvGQ.png#width=" alt><a href="https://medium.freecodecamp.org/understanding-capsule-networks-ais-alluring-new-architecture-bdb228173ddc" target="_blank" rel="noopener">Capulel层</a><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span>  <span class="title">CapsNet</span>（<span class="title">input_shape</span>，<span class="title">n_class</span>，<span class="title">num_routing</span>）：</span></span><br><span class="line"><span class="function">    “””</span></span><br><span class="line"><span class="function">    胶囊网络的<span class="title">MNIST</span>数据集。</span></span><br><span class="line"><span class="function">       ：“<span class="title">input_shape</span>”参数：<span class="title">vdata</span>形状，3<span class="title">d</span>，[<span class="title">w</span>，<span class="title">h</span>，<span class="title">c</span>]</span></span><br><span class="line"><span class="function">       ：“<span class="title">n_class</span>”参数：类的数量</span></span><br><span class="line"><span class="function">       ：“<span class="title">num_routing</span>”参数：动态路由迭代次数</span></span><br><span class="line"><span class="function">       ：功能输出：两个<span class="title">Keras</span>模型，第一个用于训练，第二个用于<span class="title">evalaution</span>。</span></span><br><span class="line"><span class="function">            `<span class="title">eval_model</span>`用于同时进行训练。</span></span><br><span class="line"><span class="function">    “””</span></span><br><span class="line">    X = layers.Input（形状= input_shape）</span><br><span class="line"></span><br><span class="line">    ＃ <span class="number">1</span>层：卷积层（Conv2D）</span><br><span class="line">    器CONV1 = layers.Conv2D（过滤器= <span class="number">256</span>，kernel_size = <span class="number">9</span>，步幅= <span class="number">1</span>，填充= <span class="string">'有效'</span>，活化= <span class="string">' RELU '</span>，名字= <span class="string">' CONV1 '</span>）（x）的</span><br><span class="line"></span><br><span class="line">    ＃ <span class="number">2</span>层：Conv2D壁球活化，[无，num_capsule，dim_capsule]来回整形。</span><br><span class="line">    primarycaps = PrimaryCap（CONV1，dim_capsule = <span class="number">8</span>，n_channels = <span class="number">32</span>，kernel_size = <span class="number">9</span>，步幅= <span class="number">2</span>，填充= <span class="string">'有效'</span>）</span><br><span class="line"></span><br><span class="line">    ＃ <span class="number">3</span>层：胶囊层。运行：动态路由算法。</span><br><span class="line">    digitcaps = CapsuleLayer（num_capsule = n_class，dim_capsule = <span class="number">16</span>，num_routing = num_routing，</span><br><span class="line">                             name = <span class="string">' digitcaps '</span>）（primarycaps）</span><br><span class="line"></span><br><span class="line">    ＃ <span class="number">4</span>层：</span><br><span class="line">    ＃如果你使用Tensorflow，你可以跳过这个会话:)</span><br><span class="line"></span><br><span class="line">    out_caps =长度（名称= <span class="string">' capsnet '</span>）（digitcaps）</span><br></pre></td></tr></table></figure></p>
+<p>动态路由在<a href="https://github.com/deeplearningturkiye/kapsul-agi-capsule-network" target="_blank" rel="noopener">capsulelayers.py</a>类<code>CapsuleLayer (layers.Layer)</code>函数中定义。由于该计算步骤，在图像中不存在对象的区域中矢量值较小，而检测区域中的矢量尺寸根据属性而变化。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">类 CapsuleLayer（层。层）：</span><br><span class="line">    “””</span><br><span class="line">    胶囊层。它类似于密集层。密集层有`in_num`输入，每个都是标量，输出</span><br><span class="line">    来自前一层的神经元，它有<span class="string">'out_num`输出神经元。CapsuleLayer只是扩展了神经元的输出</span></span><br><span class="line"><span class="string">    从标量到矢量。所以它的输入形状= [None，input_num_capsule，input_dim_capsule]和输出形状= \</span></span><br><span class="line"><span class="string">    [None，num_capsule，dim_capsule]。对于密集层，input_dim_capsule = dim_capsule = 1。</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string">    ：param num_capsule：此图层中的胶囊数</span></span><br><span class="line"><span class="string">    ：param dim_capsule：此层中胶囊的输出向量的维度</span></span><br><span class="line"><span class="string">    ：param routings：路由算法的迭代次数</span></span><br><span class="line"><span class="string">    “””</span></span><br><span class="line"><span class="string">    DEF  __init__（自，num_capsule，dim_capsule，路线= 3，</span></span><br><span class="line"><span class="string">                 kernel_initializer = '</span> glorot_uniform <span class="string">'，</span></span><br><span class="line"><span class="string">                 ** kwargs）：</span></span><br><span class="line"><span class="string">        超级（CapsuleLayer，自我）。__init __（** kwargs）</span></span><br><span class="line"><span class="string">        self .nu​​m_capsule = num_capsule</span></span><br><span class="line"><span class="string">        self .dim_capsule = dim_capsule</span></span><br><span class="line"><span class="string">        自我 .routings =路线</span></span><br><span class="line"><span class="string">        self .kernel_initializer = initializers.get（kernel_initializer）</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    def  build（self，input_shape）：</span></span><br><span class="line"><span class="string">        assert  len（input_shape）&gt; =  3，“输入Tensor应该有shape = [None，input_num_capsule，input_dim_capsule] ”</span></span><br><span class="line"><span class="string">        self .input_num_capsule = input_shape [ 1 ]</span></span><br><span class="line"><span class="string">        self .input_dim_capsule = input_shape [ 2 ]</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        ＃变换矩阵</span></span><br><span class="line"><span class="string">        self .W =  self .add_weight（shape = [ self .nu​​m_capsule，self .input_num_capsule，</span></span><br><span class="line"><span class="string">                                        self .dim_capsule，self .input_dim_capsule]，</span></span><br><span class="line"><span class="string">                                 initializer = self .kernel_initializer，</span></span><br><span class="line"><span class="string">                                 name = '</span> W <span class="string">'）</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        self .built =  真的</span></span><br></pre></td></tr></table></figure></p>
+<p>你也可以在<a href="https://github.com/deeplearningturkiye/kapsul-agi-capsule-network" target="_blank" rel="noopener">这里</a>找到所有的工作。<br><a name="0fa8"></a></p>
+<h3 id="测试性能🏅"><a href="#测试性能🏅" class="headerlink" title="测试性能🏅"></a><a href="#0fa8"></a>测试性能🏅</h3><p>当使用10,000图像测试数据集进行测试时，我们获得了<a href="http://yann.lecun.com/exdb/mnist/" target="_blank" rel="noopener">MNIST</a>数据集的<strong>99.61％</strong>准确度，并且获得了<a href="https://www.kaggle.com/zalando-research/fashionmnist" target="_blank" rel="noopener">FASHION MNIST</a>数据集的<strong>92.22％</strong>准确度。是啊！😎<br>对于具有<strong>80％重叠</strong>手写数字的<strong>MultiMNIST</strong>数据集，当数据重叠时，胶囊网络的性能似乎非常好，特别是与CNN模型相比时。<br><img src="https://cdn-images-1.medium.com/max/1000/1*SHDKu_mb0DRp0OwTbWCPtg.jpeg#width=" alt><a href="https://arxiv.org/pdf/1710.09829.pdf" target="_blank" rel="noopener">MultiMNIST数据集的胶囊网络输出</a></p>
+<p><a name="3689"></a></p>
+<h3 id="MNIST的50纪元工作时间⏳"><a href="#MNIST的50纪元工作时间⏳" class="headerlink" title="MNIST的50纪元工作时间⏳"></a><a href="#3689"></a>MNIST的50纪元工作时间⏳</h3><p>与CNN相比，由于其计算复杂性，胶囊网络的训练时间较慢。以下是各种硬件和云服务器上的50纪元培训时间：<br><img src="https://cdn-images-1.medium.com/max/1000/1*tL-IKEmfUiKE0cOmJW-c4g.png#width=" alt><br><img src="https://cdn-images-1.medium.com/max/1000/1*3tX5wuhfLPeinWsdEemi3Q.jpeg#width=" alt><a href="https://thescinder.files.wordpress.com/2017/06/goingtoneedagpuimgflip1.jpg" target="_blank" rel="noopener">当然 ：）</a><br>要使用Google Colab支持，最吸引人的选项，请阅读&gt; <a href="https://medium.com/deep-learning-turkey/google-colab-free-gpu-tutorial-e113627b9f5d" target="_blank" rel="noopener">Google Colab免费GPU教程！</a></p>
+<p><a name="d950"></a></p>
+<h3 id="✔️Pros和❌Consof-Capsule-Networks"><a href="#✔️Pros和❌Consof-Capsule-Networks" class="headerlink" title="✔️Pros和❌Consof Capsule Networks"></a><a href="#d950"></a>✔️Pros和❌Consof Capsule Networks</h3><p>与其他最先进的技术相比，✔️Capsule网络在MNIST数据集中取得了最大的成功。</p>
+<p>✔️使用较小的数据集成功。（通过强制模型学习胶囊中的特征变体，它可以用更少的训练数据更有效地推断可能的变体。）</p>
+<p>✔️逐协议算法允许我们区分重叠图像中的对象。</p>
+<p>✔️使用激活矢量更容易解释图像。</p>
+<p>✔️Capsule网络维护对象的等效性，色调，姿势，反照率，纹理，变形，速度和位置等信息。</p>
+<hr>
+<p>与现有技术模型相比，❌CIFAR10在数据集方面没有成功。</p>
+<p>❌尚未在非常大的数据集上进行测试。</p>
+<p>❌由于协议路由算法，训练模型需要更多时间。</p>
+<p>具有不同路由算法的胶囊网络模型的应用表明它是一个需要更多实验并且仍在开发的主题。</p>
+<blockquote>
+<p><a href="https://www.cs.toronto.edu/~hinton/csc2535/notes/lec6b.pdf" target="_blank" rel="noopener">“卷积神经网络注定失败” Geoffrey Hinton</a><br><a name="cd5c"></a></p>
+</blockquote>
+<h3 id="另一个例子"><a href="#另一个例子" class="headerlink" title="另一个例子"></a><a href="#cd5c"></a>另一个例子</h3><p><img src="https://cdn-images-1.medium.com/max/750/1*KSQA6cFQK6EiZ0oerCx7BQ.png#width=" alt><br><img src="https://cdn-images-1.medium.com/max/750/1*ifzv7ASKL7TyJU-4GZblbw.png#width=" alt><a href="https://hackernoon.com/capsule-networks-are-shaking-up-ai-heres-how-to-use-them-c233a0971952" target="_blank" rel="noopener">卷积神经网络的重要安全问题举例</a></p>
+<p><strong>在上面示出的示例中，当仅改变Kim Kardashian的图像的方向时，预测准确度显着下降。</strong>在右边的图像中，我们可以很容易地判断出一只眼睛和她的嘴是不正确放置的，这不是一个人的假设。然而，我们看到了0.90的预测分数。</p>
+<p>受过良好训练的CNN在这种方法上存在一些障碍。除了容易被具有不正确位置的特征的图像欺骗之外，当以不同方向观看图像时CNN也容易混淆。</p>
+<p>毫无疑问，CNN可能受到<a href="https://heartbeat.fritz.ai/introduction-to-generative-adversarial-networks-gans-35ef44f21193" target="_blank" rel="noopener">对抗性攻击的</a>影响。这是一个可能导致安全问题的重要约束，特别是当我们将潜在模式嵌入到对象中以使其看起来像其他东西时。但是，正如我们所知，<em>我们可以通过Capsule Networks解决这个问题！</em></p>
+<p><strong>✨胶囊网络的模型是值得和有前途的！</strong></p>
+<hr>
+<p>📝 <strong>我们关于胶囊网络的学术论文：</strong><a href="https://ieeexplore.ieee.org/document/8404385/" target="_blank" rel="noopener">使用胶囊网络识别手语</a>听力和语言障碍者继续通过唇读或手和脸的运动（即手语）进行交流。胶囊网络可以帮助确保残疾人不仅可以充分参与生活，还可以通过与他人的健康和有效沟通来提高生活质量。</p>
+<p><em>在这项工作中; Capsule Networks 以</em><strong><em>94.2％的</em></strong><em>验证准确度识别手语的数字。</em></p>
+<p><img src="https://cdn-images-1.medium.com/max/1000/1*Lzr1bVSB5UXVf6RXQwVbZg.png#width=" alt><a href="https://github.com/ardamavi/Sign-Language-Digits-Dataset" target="_blank" rel="noopener">手语数字数据集，Arda Mavi ve Zeynep Dikle</a></p>
+<hr>
+<p><a name="9d62"></a></p>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a><a href="#9d62"></a>参考</h3><p>[1] Sabour，S.，Frosst，N. ve Hinton，GE，“ <a href="https://arxiv.org/pdf/1710.09829.pdf" target="_blank" rel="noopener">胶囊之间的动态路由</a> ”，arXiv preprint arXiv：1710.09829,2017。<br>[2] Hinton，GE，Krizhevsky A. ve Wang，SD“ <a href="http://www.cs.toronto.edu/~fritz/absps/transauto6.pdf" target="_blank" rel="noopener">转换自动编码器</a>。”国际人工神经网络会议。斯普林格，柏林，海德堡，2011年。<br>[3] <a href="https://www.cs.toronto.edu/~hinton/csc2535/notes/lec6b.pdf" target="_blank" rel="noopener">CSC2535：2013高级机器学习认真对待逆向图形</a>，Geoffrey Hinton多伦多大学计算机科学系，2013年。<br>[4] MNIST数据集的胶囊网络实现（土耳其语解释，深度学习Türkiye，<a href="https://github.com/deeplearningturkiye/kapsul-agi-capsule-network" target="_blank" rel="noopener">kapsul-agi-capsule-network</a>。<br>[5] <a href="https://ieeexplore.ieee.org/document/8404385/" target="_blank" rel="noopener">使用胶囊网络识别手语</a>，<a href="https://www.linkedin.com/in/fuatbeser/" target="_blank" rel="noopener">FuatBeşer</a>，<a href="http://www.ayyucekizrak.com/" target="_blank" rel="noopener">MerveAyyüceKIZRAK</a>，<a href="http://www.yildiz.edu.tr/~bbolat/" target="_blank" rel="noopener">BülentBOLAT</a>，<a href="http://www.yildiz.edu.tr/~tulay/" target="_blank" rel="noopener">TülayYILDIRIM</a>，<a href="https://github.com/ayyucekizrak/Kapsul-Aglari-ile-Isaret-Dili-Tanima" target="_blank" rel="noopener">https：//github.com/ayyucekizrak/Kapsul-Aglari-ile-Isaret-Dili-Tanima</a></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/12/21/yuque/Capsule Networks：一种全新且极具吸引力的AI架构/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/6/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/8/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="/page/6/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/8/">Next &raquo;</a>
     </nav>
   
 

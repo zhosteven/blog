@@ -8,22 +8,22 @@
   <link rel="dns-prefetch" href="http://zhos.me">
   <title>XGBoost算法：长期可能在位！ | A+</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="我还记得十五年前我第一份工作的第一天。我刚完成研究生课程，并以分析师的身份加入了一家全球投资银行。在我的第一天，我一直拉直领带，并试着记住我学过的一切。与此同时，在内心深处，我想知道我是否对企业界足够好。感觉到我的焦虑，我的老板微笑着说：“别担心！你唯一需要知道的就是回归建模！“我记得自己在想，“我得到了这个！”。我知道回归建模; 线性和逻辑回归。我的老板是对的。在我任职期间，我专门建立了基于回归">
+  <meta name="description" content="我还记得十五年前我第一份工作的第一天。我刚完成研究生课程，并以分析师的身份加入了一家全球投资银行。在我的第一天，我一直拉直领带，并试着记住我学过的一切。与此同时，在内心深处，我想知道我是否对企业界足够好。感觉到我的焦虑，我的老板微笑着说：“别担心！你唯一需要知道的就是回归建模！“我记得自己在想...">
 <meta property="og:type" content="article">
 <meta property="og:title" content="XGBoost算法：长期可能在位！">
 <meta property="og:url" content="http://zhos.me/2019/04/08/yuque/XGBoost算法：长期可能在位！/index.html">
 <meta property="og:site_name" content="A+">
-<meta property="og:description" content="我还记得十五年前我第一份工作的第一天。我刚完成研究生课程，并以分析师的身份加入了一家全球投资银行。在我的第一天，我一直拉直领带，并试着记住我学过的一切。与此同时，在内心深处，我想知道我是否对企业界足够好。感觉到我的焦虑，我的老板微笑着说：“别担心！你唯一需要知道的就是回归建模！“我记得自己在想，“我得到了这个！”。我知道回归建模; 线性和逻辑回归。我的老板是对的。在我任职期间，我专门建立了基于回归">
+<meta property="og:description" content="我还记得十五年前我第一份工作的第一天。我刚完成研究生课程，并以分析师的身份加入了一家全球投资银行。在我的第一天，我一直拉直领带，并试着记住我学过的一切。与此同时，在内心深处，我想知道我是否对企业界足够好。感觉到我的焦虑，我的老板微笑着说：“别担心！你唯一需要知道的就是回归建模！“我记得自己在想...">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1554692595416-69c4133a-0fb6-4ae5-b308-642403bd2216.png#align=left&display=inline&height=521&name=1.png&originHeight=699&originWidth=1000&size=991609&status=done&width=746">
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1554692646873-57905125-7adf-4713-81ff-c3e752d91669.jpeg#align=left&display=inline&height=398&name=2.jpeg&originHeight=493&originWidth=925&size=124452&status=done&width=746">
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1554692717316-9be63bbc-6094-4bb5-9f12-b539e3e52244.jpeg#align=left&display=inline&height=539&name=3.jpeg&originHeight=722&originWidth=1000&size=255796&status=done&width=746">
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1554692803667-2230a8de-9a3a-4b1d-9fde-6930d429d55c.png#align=left&display=inline&height=388&name=4.png&originHeight=404&originWidth=777&size=88329&status=done&width=746">
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1554692844187-5bdcc8c1-b4c5-4fb7-95c6-79baf19ffc03.jpeg#align=left&display=inline&height=420&name=5.jpeg&originHeight=540&originWidth=960&size=70860&status=done&width=746">
-<meta property="og:updated_time" content="2019-04-26T03:23:11.247Z">
+<meta property="og:updated_time" content="2019-04-28T01:30:08.075Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="XGBoost算法：长期可能在位！">
-<meta name="twitter:description" content="我还记得十五年前我第一份工作的第一天。我刚完成研究生课程，并以分析师的身份加入了一家全球投资银行。在我的第一天，我一直拉直领带，并试着记住我学过的一切。与此同时，在内心深处，我想知道我是否对企业界足够好。感觉到我的焦虑，我的老板微笑着说：“别担心！你唯一需要知道的就是回归建模！“我记得自己在想，“我得到了这个！”。我知道回归建模; 线性和逻辑回归。我的老板是对的。在我任职期间，我专门建立了基于回归">
+<meta name="twitter:description" content="我还记得十五年前我第一份工作的第一天。我刚完成研究生课程，并以分析师的身份加入了一家全球投资银行。在我的第一天，我一直拉直领带，并试着记住我学过的一切。与此同时，在内心深处，我想知道我是否对企业界足够好。感觉到我的焦虑，我的老板微笑着说：“别担心！你唯一需要知道的就是回归建模！“我记得自己在想...">
 <meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1554692595416-69c4133a-0fb6-4ae5-b308-642403bd2216.png#align=left&display=inline&height=521&name=1.png&originHeight=699&originWidth=1000&size=991609&status=done&width=746">
   
     <link rel="alternative" href="/atom.xml" title="A+" type="application/atom+xml">

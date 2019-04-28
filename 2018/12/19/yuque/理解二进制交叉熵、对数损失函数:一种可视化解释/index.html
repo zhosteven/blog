@@ -8,12 +8,12 @@
   <link rel="dns-prefetch" href="http://zhos.me">
   <title>理解二进制交叉熵、对数损失函数:一种可视化解释 | A+</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="链接  介绍如果您正在训练二进制分类器，则可能使用二进制交叉熵/对数损失作为损失函数。你有没有想过使用这种损失函数究竟是什么意思？ 问题是，考虑到今天的库和框架的易用性，很容易忽略所使用的损失函数的真正含义。动机我正在寻找一篇博文，以一种视觉上清晰简洁的方式解释二进制交叉熵/对数损失背后的概念，所以我可以在Data Science Retreat向我的学生展示它。 由于我找不到任何符合我目的的东西">
+  <meta name="description" content="链接介绍如果您正在训练二进制分类器，则可能使用二进制交叉熵/对数损失作为损失函数。你有没有想过使用这种损失函数究竟是什么意思？ 问题是，考虑到今天的库和框架的易用性，很容易忽略所使用的损失函数的真正含义。动机我正在寻找一篇博文，以一种视觉上清晰简洁的方式解释二进制交叉熵/对数损失背后的概念，所...">
 <meta property="og:type" content="article">
 <meta property="og:title" content="理解二进制交叉熵、对数损失函数:一种可视化解释">
 <meta property="og:url" content="http://zhos.me/2018/12/19/yuque/理解二进制交叉熵、对数损失函数:一种可视化解释/index.html">
 <meta property="og:site_name" content="A+">
-<meta property="og:description" content="链接  介绍如果您正在训练二进制分类器，则可能使用二进制交叉熵/对数损失作为损失函数。你有没有想过使用这种损失函数究竟是什么意思？ 问题是，考虑到今天的库和框架的易用性，很容易忽略所使用的损失函数的真正含义。动机我正在寻找一篇博文，以一种视觉上清晰简洁的方式解释二进制交叉熵/对数损失背后的概念，所以我可以在Data Science Retreat向我的学生展示它。 由于我找不到任何符合我目的的东西">
+<meta property="og:description" content="链接介绍如果您正在训练二进制分类器，则可能使用二进制交叉熵/对数损失作为损失函数。你有没有想过使用这种损失函数究竟是什么意思？ 问题是，考虑到今天的库和框架的易用性，很容易忽略所使用的损失函数的真正含义。动机我正在寻找一篇博文，以一种视觉上清晰简洁的方式解释二进制交叉熵/对数损失背后的概念，所...">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2018/png/219582/1545208575711-9a5c4e19-f272-468f-b36e-0d7074d62586.png#align=left&display=inline&height=111&originHeight=111&originWidth=625&status=done&width=625">
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2018/png/219582/1545208606509-b2a7b1cd-b1cf-4ca4-baca-88196d101a0b.png#align=left&display=inline&height=110&originHeight=110&originWidth=643&status=done&width=643">
@@ -37,10 +37,10 @@
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2018/png/219582/1545215611182-db1eab68-632e-45e8-ac03-396234f18194.png#align=left&display=inline&height=75&originHeight=75&originWidth=230&status=done&width=230">
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2018/png/219582/1545215637206-7fda25fc-c763-46c0-9eca-6e4fe9cec776.png#align=left&display=inline&height=92&originHeight=92&originWidth=592&status=done&width=592">
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2018/png/219582/1545215662641-4915d2cb-3c29-4fc8-a535-c0db8b055951.png#align=left&display=inline&height=79&originHeight=79&originWidth=548&status=done&width=548">
-<meta property="og:updated_time" content="2019-04-26T03:23:11.275Z">
+<meta property="og:updated_time" content="2019-04-28T01:30:08.099Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="理解二进制交叉熵、对数损失函数:一种可视化解释">
-<meta name="twitter:description" content="链接  介绍如果您正在训练二进制分类器，则可能使用二进制交叉熵/对数损失作为损失函数。你有没有想过使用这种损失函数究竟是什么意思？ 问题是，考虑到今天的库和框架的易用性，很容易忽略所使用的损失函数的真正含义。动机我正在寻找一篇博文，以一种视觉上清晰简洁的方式解释二进制交叉熵/对数损失背后的概念，所以我可以在Data Science Retreat向我的学生展示它。 由于我找不到任何符合我目的的东西">
+<meta name="twitter:description" content="链接介绍如果您正在训练二进制分类器，则可能使用二进制交叉熵/对数损失作为损失函数。你有没有想过使用这种损失函数究竟是什么意思？ 问题是，考虑到今天的库和框架的易用性，很容易忽略所使用的损失函数的真正含义。动机我正在寻找一篇博文，以一种视觉上清晰简洁的方式解释二进制交叉熵/对数损失背后的概念，所...">
 <meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2018/png/219582/1545208575711-9a5c4e19-f272-468f-b36e-0d7074d62586.png#align=left&display=inline&height=111&originHeight=111&originWidth=625&status=done&width=625">
   
     <link rel="alternative" href="/atom.xml" title="A+" type="application/atom+xml">
@@ -316,8 +316,8 @@
     </a>
   
   
-    <a href="/2018/12/19/yuque/关于目标检测，所有你应该知道的深度学习模型/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">关于目标检测，所有你应该知道的深度学习模型</div>
+    <a href="/2018/12/19/yuque/目标检测和定位算法的演变/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">目标检测和定位算法的演变</div>
       <i class="icon-circle-right"></i>
     </a>
   

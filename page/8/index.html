@@ -149,129 +149,6 @@
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-yuque/Capsule Networks：一种全新且极具吸引力的AI架构" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/12/21/yuque/Capsule Networks：一种全新且极具吸引力的AI架构/">Capsule Networks：一种全新且极具吸引力的AI架构</a>
-    </h1>
-  
-
-        
-        <a href="/2018/12/21/yuque/Capsule Networks：一种全新且极具吸引力的AI架构/" class="archive-article-date">
-  	<time datetime="2018-12-21T07:02:37.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-21</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><a href="https://heartbeat.fritz.ai/capsule-networks-a-new-and-attractive-ai-architecture-bd1198cc8ad4" target="_blank" rel="noopener">链接</a><br><a name="481b"></a></p>
-<h2 id="本文已被翻译成英文并首次发表于Deep-Learning-Turkey-。"><a href="#本文已被翻译成英文并首次发表于Deep-Learning-Turkey-。" class="headerlink" title="本文已被翻译成英文并首次发表于Deep Learning Turkey_。_"></a><a href="#481b"></a><em>本文已被翻译成英文并首次发表于</em><a href="https://medium.com/deep-learning-turkiye/yapay-zekan%C4%B1n-yeni-ve-%C3%A7ekici-mimarisi-kaps%C3%BCl-a%C4%9F%C4%B1na-uygulamal%C4%B1-bir-bak%C4%B1%C5%9F-ef7310e3d847" target="_blank" rel="noopener">Deep Learning Turkey</a>_。_</h2><p><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545375946092-dea95dae-971e-4274-a86b-98c17c3ee82a.png#width=826" alt><br><a href="https://heartbeat.fritz.ai/a-beginners-guide-to-convolutional-neural-networks-cnn-cf26c5ee17ed" target="_blank" rel="noopener">卷积神经网络</a>（CNN）在计算机视觉应用中经常是首选，因为它们在对象识别和分类任务上取得了成功。CNN由堆叠在一起的许多神经元组成。计算跨神经元的卷积需要大量计算，因此池化过程通常用于减小网络层的大小。卷积方法可以通过简单的计算学习数据的许多复杂特征。通过对我们的输入执行许多矩阵乘法和求和，我们可以得出我们问题的答案。<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545375976729-c04cb9d8-3367-460d-87bb-a85c2e57ac26.png#width=665" alt></p>
-<p><strong><em>我总是听到CNN有多棒。什么时候失败？</em></strong></p>
-<p>CNN在解决对象识别和分类问题方面取得了巨大成功。但是，它们并不完美。如果CNN显示的方向对象不熟悉，或者对象出现在不习惯的位置，则预测任务可能会失败。</p>
-<p>例如，如果您将一张脸倒置，网络将无法再识别眼睛，鼻子，嘴巴以及两者之间的空间关系。同样，如果你改变了脸部的特定区域（即切换眼睛和鼻子的位置），网络将能够识别脸部，但它不再是真实的脸部。CNN学习图像中的统计模式，但是他们没有学习关于什么使事物看起来像脸的基本概念。<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545376002462-0627f195-0f85-4cd8-a27c-fbd4ecd9ea94.png#width=826" alt><br>关于为什么CNN无法学习概念的理论，_AI_之_父_<strong>Geoffrey Hinton</strong>专注于用于缩小网络规模和计算要求的池化操作。他感叹道：</p>
-<blockquote>
-<p><em>“在卷积神经网络中使用的池化操作是一个很大的错误，它运作良好的事实是一场灾难！”</em><br>汇集层正在破坏信息，使网络无法学习更高级别的概念。所以他开始着手开发一种新的架构，这种架构并没有过多地依赖于这种操作。</p>
-</blockquote>
-<p><strong>结果：胶囊网络</strong><br><a name="9d89"></a></p>
-<h3 id="什么是胶囊网络？"><a href="#什么是胶囊网络？" class="headerlink" title="什么是胶囊网络？"></a><a href="#9d89"></a>什么是胶囊网络？</h3><p>Hinton和Sabour借鉴了神经科学的观点，认为大脑被组织成称为<strong><em>胶囊的</em></strong>模块。这些胶囊特别擅长处理物体的特征，如姿势（位置，大小，方向），变形，速度，反照率，色调，纹理等。</p>
-<p>理论上，大脑必须有一种机制，用于<strong>_将_</strong>低级视觉信息<strong>_路由_</strong>到它认为最适合处理它的胶囊。已经提出了<strong>胶囊网络</strong>和<strong>动态路由算法</strong>作为卷积神经网络模型不充分的问题的解决方案。</p>
-<p><img src="https://cdn-images-1.medium.com/max/750/1*y9RmBVmzKY63CET4LYRcUA.png#width=" alt><br><a href="https://www.wikiart.org/en/pablo-picasso/untitled-1937-8" target="_blank" rel="noopener">Portrait de femme au col d`hermine（奥尔加）</a></p>
-<p>胶囊表示图像中存在的特定实体的各种特征。一个非常特殊的特征是图像中存在实例化的实体。实例化的实体是一个参数，如位置，大小，方向，变形，速度，反照率，色调，纹理等。表示其存在的一种显而易见的方法是使用一个单独的逻辑单元，其输出是实体存在的概率[ <a href="https://arxiv.org/pdf/1710.09829.pdf" target="_blank" rel="noopener">1</a> ]。为了获得比CNN更好的结果，我们应该使用迭代<strong>路由协议</strong>机制。这些功能称为<strong>实例化参数</strong>。在经典CNN模型中，不能获得图像中对象的这种属性。平均/最大池化层减小了一组信息的大小，同时减小了大小。</p>
-<blockquote>
-<p><strong>好吧，某处有一个嘴唇，鼻子和眼睛，但卷积神经网络无法决定它应该在哪里以及它在哪里。</strong> &gt; <strong>对于传统的网络，错位的功能不会让它失望！</strong></p>
-</blockquote>
-<p><a name="65d9"></a></p>
-<h3 id="壁球功能"><a href="#壁球功能" class="headerlink" title="壁球功能"></a><a href="#65d9"></a>壁球功能</h3><p><a name="q16xns"></a></p>
-<h4 id="壁球功能-1"><a href="#壁球功能-1" class="headerlink" title="壁球功能"></a><a href="#q16xns"></a><img src="https://cdn-images-1.medium.com/max/750/1*b3unKamre_roNMTS7H_6EA.png#width=" alt>壁球功能</h4><p>在深度神经网络中，激活函数是应用于层输出的简单数学运算。它们用于近似存在于数据中的非线性关系。激活层通常作用于标量值 - 例如，对向量中的每个元素进行标准化，使其落在0和1之间。<br>在Capsule Networks中，一种称为<em>squash函数</em>的特殊类型的激活函数用于归一化向量的大小，而不是标量元素本身。<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545376097052-2994fe87-934e-4515-9a1b-7187e3ac549d.png#width=826" alt></p>
-<p><a href="https://arxiv.org/pdf/1710.09829.pdf" target="_blank" rel="noopener">协议路由算法</a><br>这些壁球功能的输出告诉我们如何通过训练学习不同概念的各种胶囊来路由数据。图像中每个对象的属性在路由它们的向量中表示。例如，脸部的激活可以将图像的不同部分路由到理解眼睛，鼻子，嘴巴和耳朵的胶囊。<br><a name="d0f9"></a></p>
-<h3 id="胶囊网络在MNIST数据集中的应用"><a href="#胶囊网络在MNIST数据集中的应用" class="headerlink" title="胶囊网络在MNIST数据集中的应用"></a><a href="#d0f9"></a>胶囊网络在MNIST数据集中的应用</h3><p><img src="https://cdn-images-1.medium.com/max/1000/0*EXnVG4QgSdxLBt0g.png#width=" alt><a href="http://www.machinelearningtutorial.net/2018/01/11/dynamic-routing-between-capsules-a-novel-architecture-for-convolutional-neural-networks/" target="_blank" rel="noopener">由胶囊网络执行的角度估计</a></p>
-<p><strong><em>现在，下一步至关重要：</em></strong></p>
-<p>就像不同层次的深层CNN中的层学习图像的不同语义属性（内容，纹理，样式等）一样，胶囊也可以组织成不同的层次。在一个级别的胶囊进行预测，了解物体的形状，并将它们传递给更高级别的胶囊，这些胶囊可以了解方向。当多个预测一致时，更高级别的预测变得活跃。<a href="https://www.ijcai.org/Proceedings/81-2/Papers/019.pdf" target="_blank" rel="noopener">此过程被描述为动态路由，我现在将更详细地讨论。</a></p>
-<p><strong><em>那么，让我们创建一个逐步的胶囊架构来分类MNIST数据集：</em></strong></p>
-<p>第一层有一个经典的卷积层。在第二层中，在称为<em>主要胶囊</em>的层中执行卷积处理，其中应用该<code>squash</code>函数。每个主要胶囊接收图像的一个小区域作为输入（称为其感受野），并且它试图检测特定图案的存在和姿势 - 例如，圆圈。</p>
-<p>更高层中的胶囊（称为路由胶囊）检测更大和更复杂的对象，例如数字8，由两个圆圈组成。然后他们使用一种新颖的挤压功能来保证这些矢量的长度在0到1之间。</p>
-<p>在主胶囊层之前施加标准卷积层，并获得9×9×256的输出。在主胶囊层中应用具有32个通道的新卷积过程，步幅为2.然而，将其与其他卷积过程分开的这个特征是压缩的功能。最后，这给出了主要胶囊的输出。</p>
-<p><img src="https://cdn-images-1.medium.com/max/1000/1*ih6faUAZq9rhpo8sOFKYSw.gif#width=" alt><a href="https://medium.freecodecamp.org/understanding-capsule-networks-ais-alluring-new-architecture-bdb228173ddc" target="_blank" rel="noopener">初级胶囊的卷积过程</a></p>
-<p>这提供了6x6输出。然而，在胶囊层中，实现动态路由算法，使得这些8长度输出DigitCaps向量的32个输出由于具有第三层动态路由的胶囊层而获得（逐协议路由算法） 。逐协议算法包括协议（检测和路由）更新的几次迭代。</p>
-<p><img src="https://cdn-images-1.medium.com/max/1000/1*k29n44uHy_rrfgKO2qLvGQ.png#width=" alt><a href="https://medium.freecodecamp.org/understanding-capsule-networks-ais-alluring-new-architecture-bdb228173ddc" target="_blank" rel="noopener">Capulel层</a><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span>  <span class="title">CapsNet</span>（<span class="title">input_shape</span>，<span class="title">n_class</span>，<span class="title">num_routing</span>）：</span></span><br><span class="line"><span class="function">    “””</span></span><br><span class="line"><span class="function">    胶囊网络的<span class="title">MNIST</span>数据集。</span></span><br><span class="line"><span class="function">       ：“<span class="title">input_shape</span>”参数：<span class="title">vdata</span>形状，3<span class="title">d</span>，[<span class="title">w</span>，<span class="title">h</span>，<span class="title">c</span>]</span></span><br><span class="line"><span class="function">       ：“<span class="title">n_class</span>”参数：类的数量</span></span><br><span class="line"><span class="function">       ：“<span class="title">num_routing</span>”参数：动态路由迭代次数</span></span><br><span class="line"><span class="function">       ：功能输出：两个<span class="title">Keras</span>模型，第一个用于训练，第二个用于<span class="title">evalaution</span>。</span></span><br><span class="line"><span class="function">            `<span class="title">eval_model</span>`用于同时进行训练。</span></span><br><span class="line"><span class="function">    “””</span></span><br><span class="line">    X = layers.Input（形状= input_shape）</span><br><span class="line"></span><br><span class="line">    ＃ <span class="number">1</span>层：卷积层（Conv2D）</span><br><span class="line">    器CONV1 = layers.Conv2D（过滤器= <span class="number">256</span>，kernel_size = <span class="number">9</span>，步幅= <span class="number">1</span>，填充= <span class="string">'有效'</span>，活化= <span class="string">' RELU '</span>，名字= <span class="string">' CONV1 '</span>）（x）的</span><br><span class="line"></span><br><span class="line">    ＃ <span class="number">2</span>层：Conv2D壁球活化，[无，num_capsule，dim_capsule]来回整形。</span><br><span class="line">    primarycaps = PrimaryCap（CONV1，dim_capsule = <span class="number">8</span>，n_channels = <span class="number">32</span>，kernel_size = <span class="number">9</span>，步幅= <span class="number">2</span>，填充= <span class="string">'有效'</span>）</span><br><span class="line"></span><br><span class="line">    ＃ <span class="number">3</span>层：胶囊层。运行：动态路由算法。</span><br><span class="line">    digitcaps = CapsuleLayer（num_capsule = n_class，dim_capsule = <span class="number">16</span>，num_routing = num_routing，</span><br><span class="line">                             name = <span class="string">' digitcaps '</span>）（primarycaps）</span><br><span class="line"></span><br><span class="line">    ＃ <span class="number">4</span>层：</span><br><span class="line">    ＃如果你使用Tensorflow，你可以跳过这个会话:)</span><br><span class="line"></span><br><span class="line">    out_caps =长度（名称= <span class="string">' capsnet '</span>）（digitcaps）</span><br></pre></td></tr></table></figure></p>
-<p>动态路由在<a href="https://github.com/deeplearningturkiye/kapsul-agi-capsule-network" target="_blank" rel="noopener">capsulelayers.py</a>类<code>CapsuleLayer (layers.Layer)</code>函数中定义。由于该计算步骤，在图像中不存在对象的区域中矢量值较小，而检测区域中的矢量尺寸根据属性而变化。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">类 CapsuleLayer（层。层）：</span><br><span class="line">    “””</span><br><span class="line">    胶囊层。它类似于密集层。密集层有`in_num`输入，每个都是标量，输出</span><br><span class="line">    来自前一层的神经元，它有<span class="string">'out_num`输出神经元。CapsuleLayer只是扩展了神经元的输出</span></span><br><span class="line"><span class="string">    从标量到矢量。所以它的输入形状= [None，input_num_capsule，input_dim_capsule]和输出形状= \</span></span><br><span class="line"><span class="string">    [None，num_capsule，dim_capsule]。对于密集层，input_dim_capsule = dim_capsule = 1。</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string">    ：param num_capsule：此图层中的胶囊数</span></span><br><span class="line"><span class="string">    ：param dim_capsule：此层中胶囊的输出向量的维度</span></span><br><span class="line"><span class="string">    ：param routings：路由算法的迭代次数</span></span><br><span class="line"><span class="string">    “””</span></span><br><span class="line"><span class="string">    DEF  __init__（自，num_capsule，dim_capsule，路线= 3，</span></span><br><span class="line"><span class="string">                 kernel_initializer = '</span> glorot_uniform <span class="string">'，</span></span><br><span class="line"><span class="string">                 ** kwargs）：</span></span><br><span class="line"><span class="string">        超级（CapsuleLayer，自我）。__init __（** kwargs）</span></span><br><span class="line"><span class="string">        self .nu​​m_capsule = num_capsule</span></span><br><span class="line"><span class="string">        self .dim_capsule = dim_capsule</span></span><br><span class="line"><span class="string">        自我 .routings =路线</span></span><br><span class="line"><span class="string">        self .kernel_initializer = initializers.get（kernel_initializer）</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    def  build（self，input_shape）：</span></span><br><span class="line"><span class="string">        assert  len（input_shape）&gt; =  3，“输入Tensor应该有shape = [None，input_num_capsule，input_dim_capsule] ”</span></span><br><span class="line"><span class="string">        self .input_num_capsule = input_shape [ 1 ]</span></span><br><span class="line"><span class="string">        self .input_dim_capsule = input_shape [ 2 ]</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        ＃变换矩阵</span></span><br><span class="line"><span class="string">        self .W =  self .add_weight（shape = [ self .nu​​m_capsule，self .input_num_capsule，</span></span><br><span class="line"><span class="string">                                        self .dim_capsule，self .input_dim_capsule]，</span></span><br><span class="line"><span class="string">                                 initializer = self .kernel_initializer，</span></span><br><span class="line"><span class="string">                                 name = '</span> W <span class="string">'）</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        self .built =  真的</span></span><br></pre></td></tr></table></figure></p>
-<p>你也可以在<a href="https://github.com/deeplearningturkiye/kapsul-agi-capsule-network" target="_blank" rel="noopener">这里</a>找到所有的工作。<br><a name="0fa8"></a></p>
-<h3 id="测试性能🏅"><a href="#测试性能🏅" class="headerlink" title="测试性能🏅"></a><a href="#0fa8"></a>测试性能🏅</h3><p>当使用10,000图像测试数据集进行测试时，我们获得了<a href="http://yann.lecun.com/exdb/mnist/" target="_blank" rel="noopener">MNIST</a>数据集的<strong>99.61％</strong>准确度，并且获得了<a href="https://www.kaggle.com/zalando-research/fashionmnist" target="_blank" rel="noopener">FASHION MNIST</a>数据集的<strong>92.22％</strong>准确度。是啊！😎<br>对于具有<strong>80％重叠</strong>手写数字的<strong>MultiMNIST</strong>数据集，当数据重叠时，胶囊网络的性能似乎非常好，特别是与CNN模型相比时。<br><img src="https://cdn-images-1.medium.com/max/1000/1*SHDKu_mb0DRp0OwTbWCPtg.jpeg#width=" alt><a href="https://arxiv.org/pdf/1710.09829.pdf" target="_blank" rel="noopener">MultiMNIST数据集的胶囊网络输出</a></p>
-<p><a name="3689"></a></p>
-<h3 id="MNIST的50纪元工作时间⏳"><a href="#MNIST的50纪元工作时间⏳" class="headerlink" title="MNIST的50纪元工作时间⏳"></a><a href="#3689"></a>MNIST的50纪元工作时间⏳</h3><p>与CNN相比，由于其计算复杂性，胶囊网络的训练时间较慢。以下是各种硬件和云服务器上的50纪元培训时间：<br><img src="https://cdn-images-1.medium.com/max/1000/1*tL-IKEmfUiKE0cOmJW-c4g.png#width=" alt><br><img src="https://cdn-images-1.medium.com/max/1000/1*3tX5wuhfLPeinWsdEemi3Q.jpeg#width=" alt><a href="https://thescinder.files.wordpress.com/2017/06/goingtoneedagpuimgflip1.jpg" target="_blank" rel="noopener">当然 ：）</a><br>要使用Google Colab支持，最吸引人的选项，请阅读&gt; <a href="https://medium.com/deep-learning-turkey/google-colab-free-gpu-tutorial-e113627b9f5d" target="_blank" rel="noopener">Google Colab免费GPU教程！</a></p>
-<p><a name="d950"></a></p>
-<h3 id="✔️Pros和❌Consof-Capsule-Networks"><a href="#✔️Pros和❌Consof-Capsule-Networks" class="headerlink" title="✔️Pros和❌Consof Capsule Networks"></a><a href="#d950"></a>✔️Pros和❌Consof Capsule Networks</h3><p>与其他最先进的技术相比，✔️Capsule网络在MNIST数据集中取得了最大的成功。</p>
-<p>✔️使用较小的数据集成功。（通过强制模型学习胶囊中的特征变体，它可以用更少的训练数据更有效地推断可能的变体。）</p>
-<p>✔️逐协议算法允许我们区分重叠图像中的对象。</p>
-<p>✔️使用激活矢量更容易解释图像。</p>
-<p>✔️Capsule网络维护对象的等效性，色调，姿势，反照率，纹理，变形，速度和位置等信息。</p>
-<hr>
-<p>与现有技术模型相比，❌CIFAR10在数据集方面没有成功。</p>
-<p>❌尚未在非常大的数据集上进行测试。</p>
-<p>❌由于协议路由算法，训练模型需要更多时间。</p>
-<p>具有不同路由算法的胶囊网络模型的应用表明它是一个需要更多实验并且仍在开发的主题。</p>
-<blockquote>
-<p><a href="https://www.cs.toronto.edu/~hinton/csc2535/notes/lec6b.pdf" target="_blank" rel="noopener">“卷积神经网络注定失败” Geoffrey Hinton</a><br><a name="cd5c"></a></p>
-</blockquote>
-<h3 id="另一个例子"><a href="#另一个例子" class="headerlink" title="另一个例子"></a><a href="#cd5c"></a>另一个例子</h3><p><img src="https://cdn-images-1.medium.com/max/750/1*KSQA6cFQK6EiZ0oerCx7BQ.png#width=" alt><br><img src="https://cdn-images-1.medium.com/max/750/1*ifzv7ASKL7TyJU-4GZblbw.png#width=" alt><a href="https://hackernoon.com/capsule-networks-are-shaking-up-ai-heres-how-to-use-them-c233a0971952" target="_blank" rel="noopener">卷积神经网络的重要安全问题举例</a></p>
-<p><strong>在上面示出的示例中，当仅改变Kim Kardashian的图像的方向时，预测准确度显着下降。</strong>在右边的图像中，我们可以很容易地判断出一只眼睛和她的嘴是不正确放置的，这不是一个人的假设。然而，我们看到了0.90的预测分数。</p>
-<p>受过良好训练的CNN在这种方法上存在一些障碍。除了容易被具有不正确位置的特征的图像欺骗之外，当以不同方向观看图像时CNN也容易混淆。</p>
-<p>毫无疑问，CNN可能受到<a href="https://heartbeat.fritz.ai/introduction-to-generative-adversarial-networks-gans-35ef44f21193" target="_blank" rel="noopener">对抗性攻击的</a>影响。这是一个可能导致安全问题的重要约束，特别是当我们将潜在模式嵌入到对象中以使其看起来像其他东西时。但是，正如我们所知，<em>我们可以通过Capsule Networks解决这个问题！</em></p>
-<p><strong>✨胶囊网络的模型是值得和有前途的！</strong></p>
-<hr>
-<p>📝 <strong>我们关于胶囊网络的学术论文：</strong><a href="https://ieeexplore.ieee.org/document/8404385/" target="_blank" rel="noopener">使用胶囊网络识别手语</a>听力和语言障碍者继续通过唇读或手和脸的运动（即手语）进行交流。胶囊网络可以帮助确保残疾人不仅可以充分参与生活，还可以通过与他人的健康和有效沟通来提高生活质量。</p>
-<p><em>在这项工作中; Capsule Networks 以</em><strong><em>94.2％的</em></strong><em>验证准确度识别手语的数字。</em></p>
-<p><img src="https://cdn-images-1.medium.com/max/1000/1*Lzr1bVSB5UXVf6RXQwVbZg.png#width=" alt><a href="https://github.com/ardamavi/Sign-Language-Digits-Dataset" target="_blank" rel="noopener">手语数字数据集，Arda Mavi ve Zeynep Dikle</a></p>
-<hr>
-<p><a name="9d62"></a></p>
-<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a><a href="#9d62"></a>参考</h3><p>[1] Sabour，S.，Frosst，N. ve Hinton，GE，“ <a href="https://arxiv.org/pdf/1710.09829.pdf" target="_blank" rel="noopener">胶囊之间的动态路由</a> ”，arXiv preprint arXiv：1710.09829,2017。<br>[2] Hinton，GE，Krizhevsky A. ve Wang，SD“ <a href="http://www.cs.toronto.edu/~fritz/absps/transauto6.pdf" target="_blank" rel="noopener">转换自动编码器</a>。”国际人工神经网络会议。斯普林格，柏林，海德堡，2011年。<br>[3] <a href="https://www.cs.toronto.edu/~hinton/csc2535/notes/lec6b.pdf" target="_blank" rel="noopener">CSC2535：2013高级机器学习认真对待逆向图形</a>，Geoffrey Hinton多伦多大学计算机科学系，2013年。<br>[4] MNIST数据集的胶囊网络实现（土耳其语解释，深度学习Türkiye，<a href="https://github.com/deeplearningturkiye/kapsul-agi-capsule-network" target="_blank" rel="noopener">kapsul-agi-capsule-network</a>。<br>[5] <a href="https://ieeexplore.ieee.org/document/8404385/" target="_blank" rel="noopener">使用胶囊网络识别手语</a>，<a href="https://www.linkedin.com/in/fuatbeser/" target="_blank" rel="noopener">FuatBeşer</a>，<a href="http://www.ayyucekizrak.com/" target="_blank" rel="noopener">MerveAyyüceKIZRAK</a>，<a href="http://www.yildiz.edu.tr/~bbolat/" target="_blank" rel="noopener">BülentBOLAT</a>，<a href="http://www.yildiz.edu.tr/~tulay/" target="_blank" rel="noopener">TülayYILDIRIM</a>，<a href="https://github.com/ayyucekizrak/Kapsul-Aglari-ile-Isaret-Dili-Tanima" target="_blank" rel="noopener">https：//github.com/ayyucekizrak/Kapsul-Aglari-ile-Isaret-Dili-Tanima</a></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/12/21/yuque/Capsule Networks：一种全新且极具吸引力的AI架构/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
     <article id="post-yuque/F-35是1.4万亿美元的国家灾难" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -387,211 +264,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2018/12/21/yuque/F-35是1.4万亿美元的国家灾难/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/眼底水肿病变区域自动分割" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/12/21/yuque/眼底水肿病变区域自动分割/">眼底水肿病变区域自动分割</a>
-    </h1>
-  
-
-        
-        <a href="/2018/12/21/yuque/眼底水肿病变区域自动分割/" class="archive-article-date">
-  	<time datetime="2018-12-21T01:28:40.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-21</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><a href="https://github.com/ShawnBIT/AI-Challenger-Retinal-Edema-Segmentation" target="_blank" rel="noopener">链接</a><br><a name="4np7ea"></a></p>
-<h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a><a href="#4np7ea"></a>背景</h3><ul>
-<li><p>视网膜水肿是一种眼疾，可导致视力模糊，影响正常生活。</p>
-</li>
-<li><p>OCT（光学相干断层扫描）可用于帮助医生判断视网膜水肿。</p>
-</li>
-<li><p>早期发现水肿症状可以在疾病的治疗中发挥关键作用。</p>
-</li>
-<li><p>我们的任务是设计算法，以自动检测视网膜水肿的类型，并根据OCT图像划分视网膜水肿区域。</p>
-</li>
-</ul>
-<p><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545362517258-ac147a70-c630-4ba9-9596-429ce59aaf05.png#width=323" alt><br><a name="tevkbe"></a></p>
-<h3 id="数据统计信息"><a href="#数据统计信息" class="headerlink" title="数据统计信息"></a><a href="#tevkbe"></a>数据统计信息</h3><p><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545363237135-d6a8f54b-194f-41e9-8998-42c2794fd373.png#width=745" alt><br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545363261530-b1e78b3c-8896-4cf1-b15a-3f6656d5c9b7.png#width=634" alt><br><a name="2obuzk"></a></p>
-<h3 id="数据可视化"><a href="#数据可视化" class="headerlink" title="数据可视化"></a><a href="#2obuzk"></a>数据可视化</h3><p><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545363314506-c30f03d8-0647-4d55-ad77-3398e87c36a3.png#width=566" alt></p>
-<ul>
-<li><p>视网膜边缘弯曲</p>
-</li>
-<li><p>病变之间的包含关系</p>
-</li>
-</ul>
-<p><a name="1xo7et"></a></p>
-<h3 id="数据处理"><a href="#数据处理" class="headerlink" title="数据处理"></a><a href="#1xo7et"></a>数据处理</h3><p>堆叠上部和下部切片以形成三通道输入<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545363525794-cfdcff1f-fcfa-45bf-a7bd-86330b40bd22.png#width=826" alt><br>正则化<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545363568658-bfc944e3-aee5-41cb-9e36-87604ccbc425.png#width=826" alt><br>数据增强（仅随机水平翻转）<br><a name="gpzgyi"></a></p>
-<h3 id="问题和挑战"><a href="#问题和挑战" class="headerlink" title="问题和挑战"></a><a href="#gpzgyi"></a>问题和挑战</h3><p>这两项任务（分割和检测）如何相互促进？ •多任务学习框架<br><br><br><br>多尺度的视网膜水肿病变<br><br>•UNet和UNet ++<br><br>三种视网膜水肿样本不平衡<br><br>•指数对数损失<br><br>如何扩大感受野以检测边缘弯曲？<br><br>•扩张模块</p>
-<p><a name="xtsmsg"></a></p>
-<h3 id="基线"><a href="#基线" class="headerlink" title="基线"></a><a href="#xtsmsg"></a>基线</h3><p>分段 -  UNet<br><br>•下采样16×<br><br>•频道：[16,32,64,128,256]•输入：原始图像<br>检测 -  ResNet18<br><br>•调整大小224 * 224<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545363778350-5ef98156-3f52-4bc4-81f7-ac1ff58bd5cb.png#width=826" alt><br><a name="12ngly"></a></p>
-<h3 id="多任务框架"><a href="#多任务框架" class="headerlink" title="多任务框架"></a><a href="#12ngly"></a>多任务框架</h3><p><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545363824351-0b2aef87-4aa5-4d54-9da2-950238d08bc2.png#width=826" alt></p>
-<ul>
-<li><p>共同学习分割和检测</p>
-</li>
-<li><p>减少时间和计算成本</p>
-</li>
-<li><p>改善两项任务的效果</p>
-</li>
-</ul>
-<p><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545363883446-cddecdd3-133c-4d7a-a48f-7ee3ce3c782e.png#width=826" alt><br><a name="45hwtb"></a></p>
-<h3 id="UNet-和DeepSupervision"><a href="#UNet-和DeepSupervision" class="headerlink" title="UNet ++和DeepSupervision"></a><a href="#45hwtb"></a>UNet ++和DeepSupervision</h3><ul>
-<li><p>密集的未来联系</p>
-</li>
-<li><p>深度监督</p>
-</li>
-<li><p>更有效地融合低级和高级功能</p>
-</li>
-</ul>
-<p><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545363984175-b5734e15-36a3-4a26-b548-247f21e500b5.png#width=826" alt><br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545364004491-f0fd9292-3bf9-4d45-b764-712c129650ff.png#width=826" alt><br><a name="mcxadi"></a></p>
-<h3 id="Exponential-Logarithmic-Loss"><a href="#Exponential-Logarithmic-Loss" class="headerlink" title="Exponential Logarithmic Loss"></a><a href="#mcxadi"></a>Exponential Logarithmic Loss</h3><p><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545364043982-9f418634-6d4e-421e-8ed9-0b5bdd78898b.png#width=593" alt><br>x : pixel position d il : Kronecker delta<br>i : label e : pseudocount for<br>l : ground truth label at x<br>p i ( x ) : Softmax probability which acts as the portion of pixel<br>x owned by label i<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545364142210-f09d6809-e1cf-428e-a8ec-e1e7a750d02a.png#width=462" alt><br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545364180115-716d53bf-c3dd-46fb-bc90-f18e23866c24.png#width=826" alt><br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545364198735-685fb3a5-9739-4820-9578-63357d19b78b.png#width=771" alt><br>小物件怎么样？<br><br>细分？（2,3级）<br><a name="ymmopw"></a></p>
-<h3 id="扩张模块"><a href="#扩张模块" class="headerlink" title="扩张模块"></a><a href="#ymmopw"></a>扩张模块</h3><p>感受野计算公式<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545364372343-71750b48-5889-4c2f-8d71-4ba7d15c8b40.png#width=504" alt><br>UNet编码器的接收域<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545364421357-aae861a2-0977-4ad8-9b07-c0f7af8ab715.png#width=398" alt><br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545364444046-68a08360-b0a9-4c89-b14d-85c7707c6eab.png#width=826" alt><br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545364472055-2f2fcbe0-1c8c-4719-bcab-3d7860331235.png#width=826" alt><br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545364500288-3ff90cf8-acdc-47e6-80d7-9df1b0f98cb0.png#width=778" alt><br>大对象怎么样？<br><br>细分？（第1类）<br><a name="hvmwoz"></a></p>
-<h3 id="实验摘要"><a href="#实验摘要" class="headerlink" title="实验摘要"></a><a href="#hvmwoz"></a>实验摘要</h3><p><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545364586336-051b209a-18bc-4c1f-959a-656c8b1ab2e2.png#width=826" alt><br>Memory : 7.3 G(batch=8), Inference time : 9.5 s/patient<br><a name="d14kdy"></a></p>
-<h3 id="可视化"><a href="#可视化" class="headerlink" title="可视化"></a><a href="#d14kdy"></a>可视化</h3><p><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545364667315-bb12e09f-92b4-4d6c-9427-10ce7851f341.png#width=826" alt><br><a name="f7g5bu"></a></p>
-<h3 id="未来工作"><a href="#未来工作" class="headerlink" title="未来工作"></a><a href="#f7g5bu"></a>未来工作</h3><ul>
-<li><p>检测框架（Mask R-CNN）</p>
-</li>
-<li><p>3D语义分割模型</p>
-</li>
-<li><p>在骨干中使用Res-block或Dense-block</p>
-</li>
-<li><p>考虑病变的关系</p>
-</li>
-</ul>
-<p><a name="db4gcg"></a></p>
-<h3 id="结论"><a href="#结论" class="headerlink" title="结论"></a><a href="#db4gcg"></a>结论</h3><p>构建端到端的多任务框架，可以同时检测和分割视网膜水肿病变。<br><br>•使用最新的UNet ++模型更好地集成高级和低级功能。<br><br>使用新的指数对数损失函数来增强两种类型的小病变的分割。<br><br>•引入扩张卷积模块，显着增加模型的感受野。<br><br>只有随机水平翻转数据增强，没有后期处理。<br><br>•测试装置上单个模型的骰子为0.736。 测试集上的融合模型的骰子为0.744，检测AUC为0.986。 另外，当我们设置批次为8时，推理阶段的记忆为7.3G，每个患者的推理时间为9.5s。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/12/21/yuque/眼底水肿病变区域自动分割/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/语义分割 -  U-Net（第1部分）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/12/20/yuque/语义分割 -  U-Net（第1部分）/">语义分割 -  U-Net（第1部分）</a>
-    </h1>
-  
-
-        
-        <a href="/2018/12/20/yuque/语义分割 -  U-Net（第1部分）/" class="archive-article-date">
-  	<time datetime="2018-12-20T07:47:26.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-20</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><a href="https://medium.com/@keremturgutlu/semantic-segmentation-u-net-part-1-d8d6f6005066" target="_blank" rel="noopener">链接</a></p>
-<p>这里再次写信给我6个月前的自我……<br><br>在这篇文章中，我将主要关注语义分割，像素分类任务和特定的算法。 我将提供一些关于我最近一直在努力的案例的演练。<br><br>根据定义，语义分割是将图像划分为连贯的部分。 例如，对属于我们的数据集中的人，汽车，树或任何其他实体的每个像素进行分类。</p>
-<p><a name="h3mvhf"></a></p>
-<h4 id="语义分割与实例分割"><a href="#语义分割与实例分割" class="headerlink" title="语义分割与实例分割"></a><a href="#h3mvhf"></a>语义分割与实例分割</h4><p>与实例分割相比，语义分割相对容易。</p>
-<p>在实例分割中，我们的目标不仅是对每个人，汽车或树进行像素预测，而且还分别将每个实体识别为人1，人2，树1，树2，汽车1，汽车2，汽车3 等等。 用于实例分割的现有技术算法是Mask-RCNN：具有多个子网络一起工作的两阶段方法：RPN（区域提议网络），FPN（特征金字塔网络）和FCN（完全卷积网络）[5， 6,7,8]。</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545292254188-fd4348f0-a59e-441b-b0f9-9ef087b52277.png#width=640" alt><br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545292265350-a6d4cf06-7a19-4037-8f98-3faa8427aa38.png#width=643" alt><br><a name="7zozib"></a></p>
-<h4 id="案例研究：Data-Science-Bowl-2018"><a href="#案例研究：Data-Science-Bowl-2018" class="headerlink" title="案例研究：Data Science Bowl 2018"></a><a href="#7zozib"></a>案例研究：Data Science Bowl 2018</h4><p>数据科学比赛2018刚刚结束，我从中学到了很多东西。也许我学到的最重要的一课，即使是深入学习，与传统的ML相比，更自动化的技术，前后处理对于获得好的结果可能是至关重要的。这些是从业者获得的重要技能，它们定义了您构建和建模问题的方式。<br><br>我不会详细讨论这个特定的比赛，因为对于任务本身和整个比赛中使用的方法都有大量的讨论和解释。但我会简要提及获胜的解决方案，因为它与这篇文章的基础有关。 [13]<br><br>数据科学比赛2018就像其他数据科学比赛一样，由Booz Allen基金会组织。今年的任务是在给定的显微镜图像中识别细胞核并独立地为每个细胞核提供掩模。<br><br>现在，花一两个时间来猜测这个任务需要哪种类型的细分;语义还是实例？<br><br>这是一个掩盖图像样本，它是原始的显微镜图像。<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545292383227-8c6f4c64-4e97-4006-90c9-558b1d59c4e0.png#width=729" alt><br>虽然起初听起来像是语义分段任务，但这里的任务是实例分割。我们需要独立地处理图像中的每个核，并将它们识别为核1，核2，核3，……类似于我们对汽车1，汽车2，人1等的示例。也许这项任务的动机是跟踪细胞样本中细胞核的大小，数量和特征。自动化该跟踪过程并进一步加速用于治疗各种疾病的不同治疗方法的实验是非常重要的。<br><br>现在，您可能会认为如果本文是关于语义分段的，并且如果Data Science Bowl 2018是实例分段任务的一个示例，那么为什么我一直在谈论这个特定的竞争。如果你正在考虑这个问题，那么你肯定是对的，而且这次比赛的最终目标确实不是语义分割的一个例子。但是，随着我们将继续前进，您将看到如何将此实例分段问题实际转变为多类语义分段任务。这是我尝试但在实践中失败的方法，但也成为获胜解决方案的高级动机。<br><br>在这3个月的比赛期间，只有两个模型（或其变体）在论坛中共享或至少明确讨论过; Mask-RCNN和U-Net。正如我之前提到的，Mask-RCNN是最先进的物体检测算法，它可以检测单个物体并预测其掩模，如实例分割。 Mask-RCNN的实施和培训更加困难，因为它采用了两阶段学习方法，您首先优化RPN（区域提案网络），然后同时预测边界框，类和掩模。<br><br>另一方面，U-Net是一种非常流行的端到端编码器 - 解码器网络，用于语义分割[9]。它最初是发明并首次用于生物医学图像分割，这是我们为Data Science Bowl所做的一项非常类似的任务。竞争中没有银弹，没有任何一个没有邮政或预处理的建筑或建筑设计中的任何小调整都没有得到最高分。我没有机会为这次比赛尝试Mask-RCNN，所以我在U-Net周围进行了实验并学到了很多东西。<br><br>此外，由于我们的主题是语义分割，我将把Mask-RCNN留给其他博客文章进行解释。但是如果你仍然坚持在自己的CV应用程序中尝试它们，这里有两个流行的github存储库，在Tensorflow和PyTorch中实现。 [10,11]<br><br>现在，我们可以继续使用U-Net并深入了解它的细节……<br><br>这是开始的架构：<br><br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545292433921-5a4506b4-63e9-48d0-adce-6d7e750d5209.png#width=826" alt><br>对于熟悉传统卷积神经网络的人来说，架构的第一部分（表示为DOWN）将是熟悉的。第一部分被调用，或者您可能认为它是编码器部分，您应用卷积块，然后进行maxpool下采样，将输入图像编码为多个不同级别的要素表示。<br><br>网络的第二部分包括上采样和连接，然后是常规卷积操作。 CNN中的上采样可能是一些读者的新概念，但这个想法相当简单：我们正在扩展要素尺寸以使用左边相应的连接块来满足相同的尺寸。您可能会看到灰色和绿色箭头，我们将两个要素图连接在一起。与其他完全卷积分割网络相比，U-Net在这种意义上的主要贡献在于，在网络中进行上采样和深入研究的同时，我们将更高分辨率的特征从下部与上采样特征连接起来，以便更好地定位和学习表示。以下卷积。由于上采样是稀疏操作，因此我们需要从早期阶段获得良好的优先级以更好地表示本地化。在FPN（特征金字塔网络）中也可以看到组合匹配级别的类似想法。 [7]<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545292475699-4aa5a478-7954-41a5-ab80-9e8a6125d4e4.png#width=765" alt><br>我们可以在下部定义一个操作块作为卷积→下采样。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># a sample down block</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">make_conv_bn_relu</span><span class="params">(in_channels, out_channels, kernel_size=<span class="number">3</span>, stride=<span class="number">1</span>, padding=<span class="number">1</span>)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> [</span><br><span class="line">        nn.Conv2d(in_channels, out_channels, kernel_size=kernel_size,  stride=stride, padding=padding, bias=<span class="literal">False</span>),</span><br><span class="line">        nn.BatchNorm2d(out_channels),</span><br><span class="line">        nn.ReLU(inplace=<span class="literal">True</span>)</span><br><span class="line">    ]</span><br><span class="line">self.down1 = nn.Sequential(</span><br><span class="line">    *make_conv_bn_relu(in_channels, <span class="number">64</span>, kernel_size=<span class="number">3</span>, stride=<span class="number">1</span>, padding=<span class="number">1</span> ),</span><br><span class="line">    *make_conv_bn_relu(<span class="number">64</span>, <span class="number">64</span>, kernel_size=<span class="number">3</span>, stride=<span class="number">1</span>, padding=<span class="number">1</span> ),</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># convolutions followed by a maxpool</span></span><br><span class="line">down1 = self.down1(x)</span><br><span class="line">out1   = F.max_pool2d(down1, kernel_size=<span class="number">2</span>, stride=<span class="number">2</span>)</span><br></pre></td></tr></table></figure></p>
-<p>类似地，我们可以将一个操作块定义为上采样→连接→卷积。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># a sample up block</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">make_conv_bn_relu</span><span class="params">(in_channels, out_channels, kernel_size=<span class="number">3</span>, stride=<span class="number">1</span>, padding=<span class="number">1</span>)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> [</span><br><span class="line">        nn.Conv2d(in_channels, out_channels, kernel_size=kernel_size,  stride=stride, padding=padding, bias=<span class="literal">False</span>),</span><br><span class="line">        nn.BatchNorm2d(out_channels),</span><br><span class="line">        nn.ReLU(inplace=<span class="literal">True</span>)</span><br><span class="line">    ]</span><br><span class="line">self.up4 = nn.Sequential(</span><br><span class="line">    *make_conv_bn_relu(<span class="number">128</span>,<span class="number">64</span>, kernel_size=<span class="number">3</span>, stride=<span class="number">1</span>, padding=<span class="number">1</span> ),</span><br><span class="line">    *make_conv_bn_relu(<span class="number">64</span>,<span class="number">64</span>, kernel_size=<span class="number">3</span>, stride=<span class="number">1</span>, padding=<span class="number">1</span> )</span><br><span class="line">)</span><br><span class="line">self.final_conv = nn.Conv2d(<span class="number">32</span>, num_classes, kernel_size=<span class="number">1</span>, stride=<span class="number">1</span>, padding=<span class="number">0</span> )</span><br><span class="line"></span><br><span class="line"><span class="comment"># upsample out_last, concatenate with down1 and apply conv operations</span></span><br><span class="line">out   = F.upsample(out_last, scale_factor=<span class="number">2</span>, mode=<span class="string">'bilinear'</span>)  </span><br><span class="line">out   = torch.cat([down1, out], <span class="number">1</span>)</span><br><span class="line">out   = self.up4(out)</span><br><span class="line"></span><br><span class="line"><span class="comment"># final 1x1 conv for predictions</span></span><br><span class="line">final_out = self.final_conv(out)</span><br></pre></td></tr></table></figure></p>
-<p>通过仔细检查图形，您可能会注意到输出尺寸（388 x 388）与原始输入（572 x 572）不同。如果您希望获得一致的大小，您可以应用填充卷积来保持跨越级联级别的维度，就像我们在上面的示例代码中所做的那样。<br><br>当提到这样的上采样时，您可能会遇到以下任一项：转置卷积，上卷积，反卷积或上移。包括我自己和PyTorch文档在内的许多人都不喜欢反卷积这个术语，因为在上采样阶段我们实际上正在进行常规的卷积运算，并且没有任何关于它的信息。如果您不熟悉基本的卷积运算及其算术，我会强烈建议您访问此处。 [12]<br><br>我将解释从最简单到更复杂的上采样方法。以下是在PyTorch中对2D张量进行上采样的三种方法：<br><a name="qab0nn"></a></p>
-<h4 id="最近邻"><a href="#最近邻" class="headerlink" title="最近邻"></a><a href="#qab0nn"></a>最近邻</h4><p>这是在将张量调整（转换）为更大张量时找到丢失像素值的最简单方法，例如， 2x2到4x4,5x5或6x6。<br><br>让我们使用Numpy逐步实现这个基本的计算机视觉算法：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">nn_interpolate</span><span class="params">(A, new_size)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    Nearest Neighbor Interpolation, Step by Step</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    <span class="comment"># get sizes</span></span><br><span class="line">    old_size = A.shape</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># calculate row and column ratios</span></span><br><span class="line">    row_ratio, col_ratio = new_size[<span class="number">0</span>]/old_size[<span class="number">0</span>], new_size[<span class="number">1</span>]/old_size[<span class="number">1</span>]</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># define new pixel row position i</span></span><br><span class="line">    new_row_positions = np.array(range(new_size[<span class="number">0</span>]))+<span class="number">1</span></span><br><span class="line">    new_col_positions = np.array(range(new_size[<span class="number">1</span>]))+<span class="number">1</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment"># normalize new row and col positions by ratios</span></span><br><span class="line">    new_row_positions = new_row_positions / row_ratio</span><br><span class="line">    new_col_positions = new_col_positions / col_ratio</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># apply ceil to normalized new row and col positions</span></span><br><span class="line">    new_row_positions = np.ceil(new_row_positions)</span><br><span class="line">    new_col_positions = np.ceil(new_col_positions)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># find how many times to repeat each element</span></span><br><span class="line">    row_repeats = np.array(list(Counter(new_row_positions).values()))</span><br><span class="line">    col_repeats = np.array(list(Counter(new_col_positions).values()))</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># perform column-wise interpolation on the columns of the matrix</span></span><br><span class="line">    row_matrix = np.dstack([np.repeat(A[:, i], row_repeats) </span><br><span class="line">                            <span class="keyword">for</span> i <span class="keyword">in</span> range(old_size[<span class="number">1</span>])])[<span class="number">0</span>]</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># perform column-wise interpolation on the columns of the matrix</span></span><br><span class="line">    nrow, ncol = row_matrix.shape</span><br><span class="line">    final_matrix = np.stack([np.repeat(row_matrix[i, :], col_repeats)</span><br><span class="line">                             <span class="keyword">for</span> i <span class="keyword">in</span> range(nrow)])</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> final_matrix</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">nn_interpolate</span><span class="params">(A, new_size)</span>:</span></span><br><span class="line">    <span class="string">"""Vectorized Nearest Neighbor Interpolation"""</span></span><br><span class="line"></span><br><span class="line">    old_size = A.shape</span><br><span class="line">    row_ratio, col_ratio = np.array(new_size)/np.array(old_size)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># row wise interpolation </span></span><br><span class="line">    row_idx = (np.ceil(range(<span class="number">1</span>, <span class="number">1</span> + int(old_size[<span class="number">0</span>]*row_ratio))/row_ratio) - <span class="number">1</span>).astype(int)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># column wise interpolation</span></span><br><span class="line">    col_idx = (np.ceil(range(<span class="number">1</span>, <span class="number">1</span> + int(old_size[<span class="number">1</span>]*col_ratio))/col_ratio) - <span class="number">1</span>).astype(int)</span><br><span class="line"></span><br><span class="line">    final_matrix = A[:, row_idx][col_idx, :]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> final_matrix</span><br></pre></td></tr></table></figure></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545292610278-9d12de49-89e6-454e-a3ed-35ea21ccbf82.png#width=826" alt><br><strong>[PyTorch]</strong> F.upsample(…, mode = “nearest”)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; input = torch.arange(1, 5).view(1, 1, 2, 2)</span><br><span class="line">&gt;&gt;&gt; input</span><br><span class="line"></span><br><span class="line">(0 ,0 ,.,.) =</span><br><span class="line">  1  2</span><br><span class="line">  3  4</span><br><span class="line">[torch.FloatTensor of size (1,1,2,2)]</span><br><span class="line"></span><br><span class="line">&gt;&gt;&gt; m = nn.Upsample(scale_factor=2, mode=&apos;nearest&apos;)</span><br><span class="line">&gt;&gt;&gt; m(input)</span><br><span class="line"></span><br><span class="line">(0 ,0 ,.,.) =</span><br><span class="line">  1  1  2  2</span><br><span class="line">  1  1  2  2</span><br><span class="line">  3  3  4  4</span><br><span class="line">  3  3  4  4</span><br><span class="line">[torch.FloatTensor of size (1,1,4,4)]</span><br></pre></td></tr></table></figure></p>
-<p>双线性插值<br><br>双线性插值算法的计算效率低于最近邻居，但它是一种更精确的近似。 根据距离计算单个像素值作为所有其他值的加权平均值。<br><br>[PyTorch] F.upsample（…，mode =“bilinear”）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; input = torch.arange(1, 5).view(1, 1, 2, 2)</span><br><span class="line">&gt;&gt;&gt; input</span><br><span class="line"></span><br><span class="line">(0 ,0 ,.,.) =</span><br><span class="line">  1  2</span><br><span class="line">  3  4</span><br><span class="line">[torch.FloatTensor of size (1,1,2,2)]</span><br><span class="line">&gt;&gt;&gt; m = nn.Upsample(scale_factor=2, mode=&apos;bilinear&apos;)</span><br><span class="line">&gt;&gt;&gt; m(input)</span><br><span class="line"></span><br><span class="line">(0 ,0 ,.,.) =</span><br><span class="line">  1.0000  1.2500  1.7500  2.0000</span><br><span class="line">  1.5000  1.7500  2.2500  2.5000</span><br><span class="line">  2.5000  2.7500  3.2500  3.5000</span><br><span class="line">  3.0000  3.2500  3.7500  4.0000</span><br><span class="line">[torch.FloatTensor of size (1,1,4,4)]</span><br></pre></td></tr></table></figure></p>
-<p>转置卷积<br><br>在转置卷积中，我们通过反向传播学习权重。 在论文中，我遇到了针对各种情况的所有这些上采样方法，并且在实践中，您可能会更改您的体系结构并尝试所有这些以查看哪种方法最适合您自己的问题。 我个人更喜欢转置卷积，因为我们对它有更多的控制权，但你也可以选择双线性插值或最近邻居。<br><strong>[PyTorch]</strong> nn.ConvTranspose2D(…, stride=…, padding=…)<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545292702247-9ed06c87-3b1d-49f0-9794-88a906ebb639.png#width=826" alt><br>如果我们回到最初的案例，数据科学碗，在竞争中使用香草U-Net方法的主要缺点是重叠核。 如上图所示，如果您创建一个二元蒙版并将其用作目标，U-Net肯定会预测类似于此的东西，并且您将拥有多个核的组合掩模，这些核重叠或彼此非常接近。<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545292738956-2056a9a8-93c3-46b1-aca5-6dfc1da18863.png#width=730" alt><br>关于重叠实例问题，U-Net论文的作者使用加权交叉熵来强调学习细胞的边界。 此方法帮助他们分离重叠的实例。 基本的想法是更多地加权边界，并推动网络在近距离实例之间找到学习差距。[9]<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545292766571-1bab28fe-4b7d-4e4d-b158-f641816a25cd.png#width=780" alt><br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545292777101-f5f1af70-43dc-40e4-a20c-6bb04d662c03.png#width=826" alt><br>这种问题的另一种解决方案是许多竞争者使用的方法，包括获胜的解决方案，是将二进制掩码转换为多类目标。 U-Net的优点在于，您可以构建网络以根据需要输出任意数量的通道，并通过在最后一层使用1x1卷积来表示任何通道中的任何类。<br>引自Data Science Bowl获奖解决方案：</p>
-<blockquote>
-<p>用于具有S形激活的网络的2通道掩模，即（掩模 - 边界，边界）或用于具有softmax激活的网络的3通道掩模，即（掩模 - 边界，边界，1  - 掩模 - 边界）<br>2通道全面罩即（面罩，边框）</p>
-</blockquote>
-<p>在进行这些预测之后，诸如分水岭的经典图像处理算法可以用于后处理以进一步分割单个核。[14]<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545292929262-dda5f714-55e9-4a52-b5ef-7402a732ea29.png#width=320" alt><br>这是第一次正式的计算机视觉竞赛，我有勇气参加Kaggle，它是一个数据科学碗。虽然我只在前20％（这被认为是平均分数）完成了比赛，但我感到很高兴参加数据科学碗并学习如果我实际上没有参与的话我可能永远不会学到的东西并试着靠自己。积极学习远比观看或阅读来自在线资源的类似方法更富有成效。<br><br>作为一名刚刚开始用Fast.ai开始练习数月的深度学习练习者，这对我来说是一个重要的一步，也是我永无止境的旅程，在获得经验方面非常有价值。所以，对于那些在你之前从未见过或已经解决的挑战感到暗示的人，我强烈建议你专门去处理这些类型的挑战，以便感受学习以前你不知道的东西的乐趣。<br><br>我在本次比赛中学到的另一个有价值的教训是，在计算机视觉中（这也适用于NLP）竞赛，通过眼睛检查每一个预测非常重要，看看哪些有效，哪些无效。如果您的数据足够小，您应该去检查每个输出。如果出现问题，这将允许您进一步提出更好的想法，甚至调试代码。<br><a name="79zwnl"></a></p>
-<h4 id="转移学习及其他"><a href="#转移学习及其他" class="headerlink" title="转移学习及其他"></a><a href="#79zwnl"></a>转移学习及其他</h4><p>到目前为止，我们已经定义了vanilla U-Net的构建块，并提到了我们如何操纵目标来解决实例分割问题。现在我们可以进一步讨论这些类型的编码器 - 解码器网络的灵活性。通过灵活性，我的意思是你拥有它的自由以及你可以对它进行设计的创造力。<br><br>任何在某些时候进行深度学习的人都会转移学习，因为这是一个非常强大的想法。简而言之，转移学习是使用预训练网络的概念，该网络在许多样本上进行训练，以完成我们所面临的类似任务，但缺少相同数量的数据。即使有足够的数据传输，学习也可以在一定程度上提升性能，不仅适用于计算机视觉任务，也适用于NLP。<br><br>迁移学习也被证明是U-Net类似架构的强大技术。我们之前已经定义了U-Net的两个主要组件;向上和向上。我们这次将这些部分重新编号为编码器和解码器。编码器部分基本上接受输入并将其编码在低维特征空间中，该特征空间表示我们在较低维度中的输入。现在想象用你最喜欢的ImageNet获胜者替换这个编码器; VGG，ResNet，Inception，NasNet，……你想要的。这些网络经过精心设计，可以做一个常见的事情：以最佳方式编码自然图像进行分类，ImageNet上的预训练重量等待您在线抓取它们。<br><br>那么为什么不使用这些架构之一作为我们的编码器并以与原始U-Net相同的方式构建解码器，但更好的是，使用类固醇。<br><br>TernausNet是Kaggle Carvana挑战赛的赢家架构，它使用与VGG11相同的传输学习理念作为编码器。 [15,16]<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545293023504-202250cf-02aa-47c8-bc29-5661cddacdad.png#width=832" alt><br><a name="4rcezx"></a></p>
-<h4 id="Fast-ai：动态U-Net"><a href="#Fast-ai：动态U-Net" class="headerlink" title="Fast.ai：动态U-Net"></a><a href="#4rcezx"></a>Fast.ai：动态U-Net</h4><p>受到TernausNet论文和许多其他优秀资源的启发，我想概括为U-Net架构使用预训练或自定义编码器的想法。 所以，我想出了一个通用的架构：动态Unet。<br><br>Dynamic Unet是这个想法的一个实现，它通过为您完成所有计算和匹配，自动为任何给定的编码器创建解码器部分。 编码器既可以是现成的预训练网络，也可以是您自己定义的任何自定义架构。<br><br>它是用PyTorch编写的，目前在Fast.ai库中。 您可以参考此笔记本以查看其中的操作或查看来源。 Dynamic Unet的主要目标是节省实践者的时间，并允许使用尽可能少的代码更容易地使用不同的编码器进行实验。<br><br>在第2部分中，我将解释体积数据的3D编码器解码器模型，例如MRI扫描，并给出我一直在研究的真实世界的例子。</p>
-<p><strong>References</strong></p>
-<p>[5] Faster R-CNN: Towards Real-Time Object Detection with Region Proposal Networks: <a href="https://arxiv.org/abs/1506.01497" target="_blank" rel="noopener">https://arxiv.org/abs/1506.01497</a><br>[6] Mask R-CNN: <a href="https://arxiv.org/abs/1703.06870" target="_blank" rel="noopener">https://arxiv.org/abs/1703.06870</a><br>[7] Feature Pyramid Networks for Object Detection: <a href="https://arxiv.org/abs/1612.03144" target="_blank" rel="noopener">https://arxiv.org/abs/1612.03144</a><br>[8] Fully Convolutional Networks for Semantic Segmentation: <a href="https://people.eecs.berkeley.edu/~jonlong/long_shelhamer_fcn.pdf" target="_blank" rel="noopener">https://people.eecs.berkeley.edu/~jonlong/long_shelhamer_fcn.pdf</a><br>[9] U-net: Convolutional Networks for Biomedical Image Segmentation: <a href="https://arxiv.org/abs/1505.04597" target="_blank" rel="noopener">https://arxiv.org/abs/1505.04597</a><br>[10] Tensorflow Mask-RCNN: <a href="https://github.com/matterport/Mask_RCNN" target="_blank" rel="noopener">https://github.com/matterport/Mask_RCNN</a><br>[11] Pytorch Mask-RCNN:_ _<a href="https://github.com/multimodallearning/pytorch-mask-rcnn" target="_blank" rel="noopener">https://github.com/multimodallearning/pytorch-mask-rcnn</a><br>[12] Convolution Arithmetic: <a href="https://github.com/vdumoulin/conv_arithmetic/blob/master/README.md" target="_blank" rel="noopener">https://github.com/vdumoulin/conv_arithmetic</a><br>[13] Data Science Bowl 2018 Winning Solution, ods-ai: <a href="https://www.kaggle.com/c/data-science-bowl-2018/discussion/54741" target="_blank" rel="noopener">https://www.kaggle.com/c/data-science-bowl-2018/discussion/54741</a><br>[14] Watershed Algorithm <a href="https://docs.opencv.org/3.3.1/d3/db4/tutorial_py_watershed.html" target="_blank" rel="noopener">https://docs.opencv.org/3.3.1/d3/db4/tutorial_py_watershed.html</a><br>[15] Carvana Image Masking Challenge: <a href="https://www.kaggle.com/c/carvana-image-masking-challenge" target="_blank" rel="noopener">https://www.kaggle.com/c/carvana-image-masking-challenge</a><br>[16] TernausNet: U-Net with VGG11 Encoder Pre-Trained on ImageNet for Image Segmentation: <a href="https://arxiv.org/abs/1801.05746" target="_blank" rel="noopener">https://arxiv.org/abs/1801.05746</a></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/12/20/yuque/语义分割 -  U-Net（第1部分）/">展开全文 >></a>
         </p>
       
 
@@ -740,86 +412,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2018/12/20/yuque/Pytorch：如何以及何时使用Module，Sequential，ModuleList和ModuleDict/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/使用新的fastai库实现世界一流的结果" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/12/20/yuque/使用新的fastai库实现世界一流的结果/">使用新的fastai库实现世界一流的结果</a>
-    </h1>
-  
-
-        
-        <a href="/2018/12/20/yuque/使用新的fastai库实现世界一流的结果/" class="archive-article-date">
-  	<time datetime="2018-12-20T06:20:52.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-20</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><a href="https://towardsdatascience.com/transfer-learning-using-the-fastai-library-d686b238213e" target="_blank" rel="noopener">链接</a></p>
-<p><a name="hmoufh"></a></p>
-<h3 id="动机"><a href="#动机" class="headerlink" title="动机"></a><a href="#hmoufh"></a>动机</h3><p>我目前正在做一个fast.ai Live MOOC，名为《Practical Deep learning for Coders》，将于2019年1月在fast.ai网站上公开发布。 以下代码基于该课程的第1课。 我将使用位于Pytorch 1.0顶部的fastai V1库。 fastai库提供了许多有用的功能，使我们能够快速，轻松地构建神经网络并训练我们的模型。 我正在撰写此博客，作为在数据集上试验课程示例的一部分，该数据集在结构和复杂性上有所不同，并表明使用fastai库是多么容易。<br>在下面的例子中，您将看到在<a href="https://plantvillage.psu.edu/" target="_blank" rel="noopener">PlantVintage</a>数据集上进行转移学习并获得世界级结果是多么荒谬。 PlantVintage数据包含植物叶片的图像，其中包括通常在作物上发现的38种疾病类别，是来自斯坦福大学背景图像开放数据集的一个背景类别–DAGS。 我从这个<a href="https://github.com/MarkoArsenovic/DeepLearning_PlantDiseases" target="_blank" rel="noopener">Github Repo</a>上给出的链接下载了数据。 我对这个例子特别感兴趣，因为在我写这篇博客的时候，我为一个帮助农民发展业务的组织工作，提供产品和技术解决方案，以便更好地管理农场。 让我们开始吧！<br>PS：这个博客也在我的<a href="https://github.com/aayushmnit" target="_blank" rel="noopener">GitHub</a>个人资料中作为jupyter笔记本发布。<br><a name="5dzgih"></a></p>
-<h3 id="导入快速AI库"><a href="#导入快速AI库" class="headerlink" title="导入快速AI库"></a><a href="#5dzgih"></a>导入快速AI库</h3><p>让我们导入fastai库并将我们的batch_size参数定义为64.通常，图像数据库很大，所以我们需要使用批量将这些图像提供给GPU，批量大小64意味着我们将一次提供64个图像来更新深度参数 学习模式。 如果由于GPU RAM较小而导致内存不足，则可以将批量大小减小到32或16。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> fastai <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> fastai.vision <span class="keyword">import</span> *</span><br><span class="line">bs =<span class="number">64</span></span><br></pre></td></tr></table></figure></p>
-<p><a name="vr3dmp"></a></p>
-<h3 id="看数据"><a href="#看数据" class="headerlink" title="看数据"></a><a href="#vr3dmp"></a>看数据</h3><p>我们处理问题时首先要做的是查看数据。 在我们弄清楚如何解决问题之前，我们总是需要很好地理解问题是什么以及数据是什么样的。 查看数据意味着了解数据目录的结构，标签是什么以及一些示例图像是什么样的。 我们的数据已经在train和validation文件夹中分割，在每个子目录中，我们的文件夹名称代表该子文件夹中存在的所有图像的类名。 幸运的是，fastai库有一个方便的功能，<a href="https://docs.fast.ai/vision.data#ImageDataBunch.from_folder" target="_blank" rel="noopener">ImageDataBunch.from_folder</a>自动从文件夹名称中获取标签名称。 fastai库提供了很棒的文档来浏览它们的库函数，并提供有关如何使用它们的实例。 加载数据后，我们还可以使用.normalize到ImageNet参数来规范化数据。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">## Declaring path of dataset</span></span><br><span class="line">path_img = Path(<span class="string">'/home/jupyter/fastai_v3_experimentation/data/PlantVillage/'</span>)</span><br><span class="line"><span class="comment">## Loading data </span></span><br><span class="line">data = ImageDataBunch.from_folder(path=path_img, train=<span class="string">'train'</span>, valid=<span class="string">'valid'</span>, ds_tfms=get_transforms(),size=<span class="number">224</span>, bs=bs, check_ext=<span class="literal">False</span>)</span><br><span class="line"><span class="comment">## Normalizing data based on Image net parameters</span></span><br><span class="line">data.normalize(imagenet_stats)</span><br></pre></td></tr></table></figure></p>
-<p>要查看随机的图像样本，我们可以使用.show_batch（）函数ImageDataBunch类。 正如我们在下面所看到的，我们有一些不同作物上的疾病病例加上来自DAGS数据集的一些背景噪声图像，这些图像将作为噪声。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">data.show_batch(rows=<span class="number">3</span>, figsize=(<span class="number">10</span>,<span class="number">8</span>))</span><br></pre></td></tr></table></figure></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545287666783-17e163b9-fba6-4ab9-9952-1168913169b0.png#width=826" alt><br>让我们打印数据库中存在的所有数据类。 总的来说，我们在动机部分中提到了39个课程中的图像。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">print(data.classes)</span><br><span class="line">len(data.classes),data.c</span><br></pre></td></tr></table></figure></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545287718206-c67e4447-9a83-4032-86c8-5d298c775b72.png#width=826" alt><br><a name="hzustc"></a></p>
-<h3 id="使用预先训练的模型转移学习：ResNet-50"><a href="#使用预先训练的模型转移学习：ResNet-50" class="headerlink" title="使用预先训练的模型转移学习：ResNet 50"></a><a href="#hzustc"></a>使用预先训练的模型转移学习：ResNet 50</h3><p>现在我们将开始训练我们的模型。 我们将使用卷积神经网络骨干ResNet 50和具有单个隐藏层的完全连接头作为分类器。 如果您想了解所有架构细节，也可以阅读ResNet论文。 要创建转移学习模型，我们需要使用Learner类中的函数create_cnn，并从模型类中提供预先训练的模型。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">## To create a ResNET 50 with pretrained weights</span></span><br><span class="line">learn = create_cnn(data, models.resnet50, metrics=error_rate)</span><br></pre></td></tr></table></figure></p>
-<p>由create_cnn函数创建的ResNet50模型具有冻结的初始层，我们将学习最后完全连接的层的权重。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">learn.fit_one_cycle(<span class="number">5</span>)</span><br></pre></td></tr></table></figure></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545287818426-ef1da8b8-26e2-4bee-835a-abfa2386fa31.png#width=584" alt><br>正如我们在上面看到的那样，只使用默认设置运行五个周期，我们对这个细粒度分类任务的准确度在验证数据集上约为99.64％。 让我们保存模型，因为我们稍后会对其进行微调。 如果你想知道这个结果有多好，它已经超过了这个<a href="https://github.com/MarkoArsenovic/DeepLearning_PlantDiseases" target="_blank" rel="noopener">Github Page</a>的96.53％的浅层学习（仅培训最后一层）基准。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">learn.save(<span class="string">'plant_vintage_stage1'</span>)</span><br></pre></td></tr></table></figure></p>
-<p>FastAI库还提供了更快地探索结果的功能，并查找我们的模型是否正在学习应该学习的内容。 我们将首先看到模型最混淆的类别。 我们将尝试使用ClassificationInterpretation类来查看模型预测的是否合理。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">interp = ClassificationInterpretation.from_learner(learn)</span><br><span class="line">interp.plot_top_losses(<span class="number">4</span>, figsize=(<span class="number">20</span>,<span class="number">25</span>))</span><br></pre></td></tr></table></figure></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545287958131-9082d640-9b93-482c-8ed4-7becd11c97b9.png#width=826" alt><br>在这种情况下，该模型在从玉米植株上的灰色叶斑病和番茄叶片中的早/晚疫病检测北叶枯病方面变得混乱，其在视觉上看起来非常相似。 这是我们的分类器正常工作的指示器。 此外，当我们绘制混淆矩阵时，我们可以看到大多数事物都被正确分类，并且它几乎是一个接近完美的模型。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">interp.plot_confusion_matrix(figsize=(<span class="number">20</span>,<span class="number">20</span>), dpi=<span class="number">60</span>)</span><br></pre></td></tr></table></figure></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545288034116-dbb5f685-7a96-4031-8b2b-e54abae02d81.png#width=826" alt><br>所以到目前为止，我们只训练了最后的分类层，但是如果我们想要优化早期的层也会如此。 在迁移学习中，应谨慎调整初始图层，学习率应保持在较低水平。 FastAI库提供了一个功能，可以查看要训练的理想学习速率，让我们绘制它。 lr_find函数以多学习速率运行数据子集的模型，以确定哪种学习速率最佳。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">learn.lr_find()</span><br><span class="line">learn.recorder.plot()</span><br></pre></td></tr></table></figure></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545288100487-9ddefc18-b8fb-4fe1-8232-8cc43139a730.png#width=447" alt><br>看起来我们应该保持低于10e-4的学习率。 对于网络中的不同层，我们可以使用切片函数来对数分布10e-6到10e-4之间的学习速率。 保持初始层的最低学习速率，并为后续层增加它。 让我们解冻所有层，以便我们可以使用unfreeze()函数训练整个模型。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">learn.unfreeze()</span><br><span class="line">learn.fit_one_cycle(<span class="number">2</span>, max_lr=slice(<span class="number">1e-7</span>,<span class="number">1e-5</span>))</span><br></pre></td></tr></table></figure></p>
-<p><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545288161256-736a1108-3167-4d5f-be85-2ab6317a60c3.png#width=528" alt><br>正如我们通过训练所有层次所看到的，我们将准确度提高到99.7％，这与使用Inception-v3模型的Github基准测试中的99.76％相当。<br><a name="zv6xnx"></a></p>
-<h3 id="结论"><a href="#结论" class="headerlink" title="结论"></a><a href="#zv6xnx"></a>结论</h3><p>Fast.ai是Jeremy Howard和他的团队的一项出色的倡议，我相信fastai库可以通过使构建深度学习模型变得非常简单，真正实现将深度学习民主化的动机。<br><br>我希望你喜欢阅读，并随意使用我的代码为你的目的尝试。 此外，如果对代码或博客文章有任何反馈，请随时联系LinkedIn或发送电子邮件至<a href="mailto:aayushmnit@gmail.com" target="_blank" rel="noopener">aayushmnit@gmail.com</a>。<br><br>PS：如果你喜欢这些内容，请留下评论或鼓掌，并希望我更频繁地写这样的博客。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/12/20/yuque/使用新的fastai库实现世界一流的结果/">展开全文 >></a>
         </p>
       
 
@@ -1207,9 +799,416 @@
 
 
   
+    <article id="post-yuque/目标检测和定位算法的演变" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/12/19/yuque/目标检测和定位算法的演变/">目标检测和定位算法的演变</a>
+    </h1>
+  
+
+        
+        <a href="/2018/12/19/yuque/目标检测和定位算法的演变/" class="archive-article-date">
+  	<time datetime="2018-12-19T06:21:01.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-19</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><a href="https://towardsdatascience.com/evolution-of-object-detection-and-localization-algorithms-e241021d8bad" target="_blank" rel="noopener">链接</a><br>通过对基本概念的直观解释，了解对象检测和本地化的最新进展。<br>目标检测是计算机视觉领域中非常迅速成熟的领域之一。 感谢深度学习！ 每年，新的算法/模型都会比以前更好。 事实上，Facebook AI团队上周刚刚发布了最先进的物体检测软件系统之一。 该软件称为Detectron，它包含许多用于物体检测的研究项目，并由Caffe2深度学习框架提供支持。<br>今天，有大量用于目标检测的预训练模型（YOLO，RCNN，Faster RCNN，Mask RCNN，Multibox等）。 因此，只需花费少量精力即可检测视频或图像中的大多数对象。 但我的博客的目标不是谈论这些模型的实现。 相反，我试图以清晰简洁的方式解释基本概念。<br>我最近完成了3周的Andrew Ng的卷积神经网络课程，其中他谈到了目标检测算法。 此博客的大部分内容都受到该课程的启发。<br><br>编辑：我目前正在进行Fast.ai的尖端深度学习编码课程，由Jeremy Howard教授。 现在，我使用PyTorch和fast.ai库实现了下面讨论的算法。 这是代码的<a href="https://github.com/groverpr/deep-learning/tree/master/computer_vision" target="_blank" rel="noopener">链接</a>。 如果您想了解下面讨论的算法的实现部分，请查看此信息。 该实现已经从fast.ai<a href="https://github.com/fastai/fastai/tree/master/courses" target="_blank" rel="noopener">课程笔记</a>本借用，附有评论和注释。<br><a name="zs11cg"></a></p>
+<h2 id="关于CNN的简介"><a href="#关于CNN的简介" class="headerlink" title="关于CNN的简介"></a><a href="#zs11cg"></a>关于CNN的简介</h2><p>在我解释目标检测算法的工作之前，我想在卷积神经网络（也称为CNN或ConvNets）上写上几笔。 CNN是深度学习时代大多数计算机视觉任务的基本构建模块。<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545200900345-553c0b70-f95a-4497-aed7-dc9b3febdcde.png#width=826" alt><br><strong>我们想要什么？</strong> 我们需要一些查看图像的算法，查看图像中的图案并告知图像中的对象类型。 例如，是猫或狗的形象。<br><strong>什么是电脑的图像？</strong> 只是数字矩阵。 对于例如 见上图1。 左边的图像只是手写数字2的28 * 28像素图像（取自MNIST数据），在Excel电子表格中表示为数字矩阵。<br><strong>我们怎样才能教电脑学会识别图像中的物体？</strong> 通过让计算机学习垂直边缘，水平边缘，圆形以及许多其他人类未知的模式。<br><strong>计算机如何学习模式？</strong>卷积！<br><br>（阅读本文时请看上图）卷积是两个矩阵之间的数学运算，给出第三个矩阵。 我们称之为滤波器或内核（图1中的3x3）的较小矩阵在图像像素矩阵上操作。 根据滤波器矩阵中的数字，输出矩阵可以识别输入图像中存在的特定模式。 在上面的示例中，滤波器是垂直边缘检测器，其学习输入图像中的垂直边缘。 在深度学习的背景下，输入图像及其后续输出从许多这样的滤波器传递。 过滤器中的数字是通过神经网络学习的，模式是自己导出的。<br><strong>为什么卷积有效？</strong> 因为在大多数图像中，对象具有可以通过卷积来利用的相对像素密度（数字的大小）的一致性。<br>我知道CNN上只有几行对于不了解CNN的读者来说是不够的。 但CNN不是本博客的主题，我已经提供了基本介绍，因此读者可能不需要再打开10个链接来先了解CNN，然后再继续。<br>阅读本博客后，如果您仍想了解更多关于CNN的信息，我强烈建议您阅读Adam Geitgey撰写的这篇<a href="https://medium.com/@ageitgey/machine-learning-is-fun-part-3-deep-learning-and-convolutional-neural-networks-f40359318721" target="_blank" rel="noopener">博客</a>。<br><a name="hcfpka"></a></p>
+<h2 id="计算机视觉任务的分类"><a href="#计算机视觉任务的分类" class="headerlink" title="计算机视觉任务的分类"></a><a href="#hcfpka"></a>计算机视觉任务的分类</h2><p><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545201176058-a349b8fe-bc13-4e55-8106-c6bc54387534.png#width=826" alt><br>以图2中的猫狗图像为例，以下是计算机视觉建模算法最常见的任务：</p>
+<ol>
+<li><p><strong>图像分类</strong>：这是最常见的计算机视觉问题，其中算法查看图像并对其中的对象进行分类。 图像分类具有广泛的应用，从社交网络上的面部检测到医学中的癌症检测。 通常使用卷积神经网络（CNN）对这些问题进行建模。</p>
+</li>
+<li><p><strong>目标分类和定位</strong>：假设我们不仅想知道图像中是否有猫，而且猫的确切位置。 对象定位算法不仅标记对象的类，还在图像中的对象位置周围绘制边界框。</p>
+</li>
+<li><p><strong>多个目标检测和定位</strong>：如果图像中有多个物体（如上图中的3只狗和2只猫），我们想要检测它们，该怎么办？ 这将是一个对象检测和定位问题。 众所周知的应用是在自动驾驶汽车中，该算法不仅需要检测汽车，还需要检测车架中的行人，摩托车，树木和其他物体。 这些问题需要利用从图像分类和对象定位中学到的思想或概念。</p>
+</li>
+</ol>
+<p>现在回到计算机视觉任务。 在深度学习的背景下，上述3种任务之间的基本算法差异就是选择相关的输入和输出。 让我用信息图解释这一行。<br><a name="rdrdnd"></a></p>
+<h2 id="1-图像分类"><a href="#1-图像分类" class="headerlink" title="1 图像分类"></a><a href="#rdrdnd"></a>1 图像分类</h2><p><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545201367951-62c92f43-597b-4174-82e8-9f7640900af4.png#width=826" alt></p>
+<ol>
+<li><p>图2中的信息图显示了用于图像分类的典型CNN的外观。通过n滤波器（图3中n = 4）卷积一些高度，宽度和通道深度（上面的情况下为940,550,3）的输入图像[如果你仍然感到困惑究竟卷积是什么意思，请检查 这个链接来理解深度神经网络中的卷积]。</p>
+</li>
+<li><p>卷积的输出用非线性变换处理，通常是Max Pool和RELU。</p>
+</li>
+<li><p>Convolution，Max Pool和RELU的上述3个操作被执行多次。</p>
+</li>
+<li><p>最终层的输出被发送到Softmax层，该层转换0和1之间的数字，从而给出图像特定类的概率。 我们将损失降至最低，以便使最后一层的预测接近实际值。</p>
+</li>
+</ol>
+<p><a name="0vv7zh"></a></p>
+<h2 id="2-物体分类和定位"><a href="#2-物体分类和定位" class="headerlink" title="2.物体分类和定位"></a><a href="#0vv7zh"></a>2.物体分类和定位</h2><p><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545201635254-f917f28e-ef71-4efd-a175-9c89c060370f.png#width=826" alt></p>
+<p>现在，为了使我们的模型绘制对象的边界框，我们只需更改前一算法的输出标签，以使我们的模型学习对象类以及对象在图像中的位置。 我们在输出层添加4个数字，包括对象的质心位置和图像中边界框的宽度和高度的比例。<br>简单吧？ 只需添加一堆输出单元即可吐出您想要识别的不同位置的x,y坐标。 对于我们拥有的所有图像中的特定对象，这些不同的位置或界标将是一致的。 对于例如对于汽车而言,高度将小于宽度，并且与图像中的其他点相比，质心将具有一些特定的像素密度。<br><br>隐含相同的逻辑，如果图像中有多个对象并且我们想要对所有这些对象进行分类和定位，您认为会发生什么变化？ 我建议你暂时停下来思考，你可能会自己得到答案。<br><a name="irp4tp"></a></p>
+<h2 id="3-目标检测和定位"><a href="#3-目标检测和定位" class="headerlink" title="3.目标检测和定位"></a><a href="#irp4tp"></a>3.目标检测和定位</h2><p><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545201786310-58306acb-5629-4864-8fb1-fa3c62ebdca7.png#width=826" alt></p>
+<p>为了检测图像中的各种对象，我们可以直接使用我们从目前为止学到的东西。 不同之处在于我们希望我们的算法能够对图像中的所有对象进行分类和定位，而不仅仅是一个。 因此，我们的想法是，只需将图像裁剪成多个图像，然后为所有裁剪的图像运行CNN以检测对象。<br>算法的工作方式如下：</p>
+<ol>
+<li><p>制作一个比实际图像尺寸小得多的窗口。 裁剪它并将其传递给ConvNet（CNN）并让ConvNet进行预测。</p>
+</li>
+<li><p>继续滑动窗口并将裁剪后的图像传递到ConvNet。</p>
+</li>
+<li><p>在使用此窗口大小裁剪图像的所有部分后，再次重复所有步骤以获得更大的窗口大小。 再次将裁剪后的图像传递到ConvNet并让它进行预测。</p>
+</li>
+<li><p>最后，您将拥有一组裁剪区域，这些区域将包含一些对象，以及对象的类和边界框</p>
+</li>
+</ol>
+<p>该解决方案被称为具有滑动窗口的物体检测。 这是非常基本的解决方案，有以下几点需要注意：<br><strong>A.计算成本高：</strong>裁剪多个图像并通过ConvNet传递它将在计算上非常昂贵。<br><strong>解决方案</strong>：有一个简单的hack来提高滑动窗口方法的计算能力。 它是用1x1卷积层替换ConvNet中的完全连接层，对于给定的窗口大小，只传递一次输入图像。 因此，在实际实现中，我们不会一次传递一个裁剪后的图像，但我们会立即传递完整的图像。</p>
+<p><strong>B.不准确的边界框</strong>：我们在整个图像上滑动方形窗口，也许对象是矩形的，或者没有一个正方形与对象的实际大小完全匹配。 虽然该算法具有查找和定位图像中多个对象的能力，但是边界框的准确性仍然很差。<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545202101543-96dbf0cd-cf32-463f-bc52-ce24e9fa7c51.png#width=478" alt><br>我已经谈到了对象检测问题的最基本的解决方案。 但它有许多警告，并不是最准确的，并且实施起来计算成本很高。 那么，我们如何才能使我们的算法更好更快？<br><strong>好的解决方案？YOLO
+</strong><br>事实证明，我们有YOLO（你只看一次），它比滑动窗口算法更准确，更快。 它仅基于我们已经知道的算法顶部的微小调整。 我们的想法是将图像分成多个网格。 然后我们改变数据的标签，以便我们为每个网格单元实现定位和分类算法。 让我再向您解释一下这个信息图。<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545202200059-aac2dc95-09af-4e82-9b90-0ff6da1c6b8e.png#width=826" alt></p>
+<p><a name="1k73ha"></a></p>
+<h4 id="YOLO简单的步骤："><a href="#YOLO简单的步骤：" class="headerlink" title="YOLO简单的步骤："></a><a href="#1k73ha"></a>YOLO简单的步骤：</h4><blockquote>
+<ol>
+<li>将图像分成多个网格。 为了说明，我在上图中绘制了4x4网格，但YOLO的实际实现具有不同的网格数量。 （7x7用于在PASCAL VOC数据集上培训YOLO）</li>
+</ol>
+</blockquote>
+<blockquote>
+<ol start="2">
+<li>标记训练数据，如上图所示。 如果C是我们数据中唯一对象的数量，S <em> S是我们分割图像的网格数，那么我们的输出向量将是长度S </em> S <em>（C + 5）。 对于例如 在上面的例子中，我们的目标向量是4 </em> 4 <em>（3 + 5），因为我们将图像划分为4 </em> 4网格，并训练3个独特的对象：汽车，光和行人。</li>
+</ol>
+</blockquote>
+<blockquote>
+<ol start="3">
+<li>制作一个具有损失函数的深度卷积神经网络作为输出激活和标签矢量之间的误差。 基本上，该模型通过ConvNet仅在输入图像的一个前向通道中预测所有网格的输出。</li>
+</ol>
+</blockquote>
+<blockquote>
+<ol start="4">
+<li>请记住，对象存在于网格单元格（P.Object）中的标签由该网格中对象的质心的存在决定。 重要的是不允许在不同的网格中多次对一个对象进行计数。</li>
+</ol>
+</blockquote>
+<p><strong>YOLO的注意事项及其解决方案：</strong></p>
+<ul>
+<li>A.无法检测同一网格中的多个对象。</li>
+</ul>
+<p> 通过选择较小的网格大小可以解决此问题。 但即使选择较小的网格大小，在对象彼此非常接近的情况下，算法仍然会失败，如鸟群的图像。<br>解决方案：<strong>Anchor boxes</strong>。 除了每个网格单元具有5 + C标签（其中C是不同对象的数量）之外，<strong>Anchor boxes</strong>的想法是每个网格单元具有（5 + C）* A标签，其中A是必需的<strong>Anchor boxes</strong>。 如果将一个对象分配给一个网格中的一个<strong>Anchor boxes</strong>，则可以将另一个对象分配给同一网格的另一个<strong>Anchor boxes</strong>。<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545202412058-e7d724af-065d-48e1-b4cb-f0b6183a5eac.png#width=826" alt></p>
+<ul>
+<li>B.可多次检测一个物体的可能性。</li>
+</ul>
+<p>解决方案：非最大抑制。 非最大抑制消除了非常接近高概率边界框的低概率边界框。<br><a name="csrntv"></a></p>
+<h2 id="结论："><a href="#结论：" class="headerlink" title="结论："></a><a href="#csrntv"></a>结论：</h2><p>截至今天，有多种版本的预训练YOLO模型可用于不同的深度学习框架，包括Tensorflow。 最新的YOLO论文是：“YOLO9000：更好，更快，更强”。 该模型接受了9000个课程的培训。 还有一些基于选择性区域提案的区域CNN（R-CNN）算法，我没有讨论过。 由Facebook AI开发的Detectron软件系统也实现了R-CNN，Masked R-CNN的变体。<br><a name="4c1f"></a></p>
+<h4 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献:"></a><a href="#4c1f"></a>参考文献:</h4><ol>
+<li><p><strong>You Only Look Once: Unified, Real-Time Object Detection</strong><br><a href="https://arxiv.org/pdf/1506.02640.pdf" target="_blank" rel="noopener">https://arxiv.org/pdf/1506.02640.pdf</a></p>
+</li>
+<li><p><strong>YOLO9000: Better, Faster, Stronger</strong><br><a href="https://arxiv.org/pdf/1612.08242.pdf" target="_blank" rel="noopener">https://arxiv.org/pdf/1612.08242.pdf</a></p>
+</li>
+<li><p><strong>Convolutional Neural Networks by Andrew Ng (deeplearning.ai)</strong><br><a href="https://www.coursera.org/learn/convolutional-neural-networks" target="_blank" rel="noopener">https://www.coursera.org/learn/convolutional-neural-networks</a></p>
+</li>
+</ol>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/12/19/yuque/目标检测和定位算法的演变/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/评论：U-Net（生物医学图像分割）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/12/19/yuque/评论：U-Net（生物医学图像分割）/">评论：U-Net（生物医学图像分割）</a>
+    </h1>
+  
+
+        
+        <a href="/2018/12/19/yuque/评论：U-Net（生物医学图像分割）/" class="archive-article-date">
+  	<time datetime="2018-12-19T05:38:12.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-19</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><a href="https://towardsdatascience.com/review-u-net-biomedical-image-segmentation-d02bf06ca760" target="_blank" rel="noopener">链接</a><br>在这个U-Net评论中。 U-Net是生物医学图像分割领域着名的全卷积网络（FCN）之一，它在2015年MICCAI上发表，在我写这篇故事时引用了3000多篇。 （SH Tsang @ Medium）<br>在生物医学图像标注领域，我们总是需要获得相关知识的专家来标注每个图像。 而且他们也会花费大量时间来标注。 如果标注过程变为自动，则可以实现较少的人力和较低的成本。 或者它可以作为减少人为错误的辅助角色。</p>
+<blockquote>
+<p>您可能会问：“阅读有关生物医学图像分割的内容是否过于狭窄？”<br>但是，我们可能会学习它的技术，并将其应用于不同的行业。 比如说，在施工/制造/制造过程中的质量控制/自动检查/自动机器人，或者我们可能想到的任何其他东西。 这些活动涉及定量诊断。 如果我们可以自动化，则可以以更高的精度节省成本。</p>
+</blockquote>
+<p>在本文中，他们分割/标注电子显微镜（EM）图像。 他们还对网络进行了一些修改，以便在2015 ISBI中一下子对X射线图像进行分段/标注。<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545198583802-f9cc7158-6135-46a5-b544-1978e1871a3f.png#align=left&amp;display=inline&amp;height=354&amp;originHeight=256&amp;originWidth=512&amp;status=done&amp;width=708" alt><br><a name="6f31bc1f"></a></p>
+<h2 id="什么是涵盖的"><a href="#什么是涵盖的" class="headerlink" title="什么是涵盖的"></a><a href="#w9n2hv"></a>什么是涵盖的</h2><ol>
+<li>A. EM图像分割</li>
+<li>U-Net网络架构</li>
+<li>重叠平铺策略</li>
+<li>数据增强的弹性变形</li>
+<li>触摸物体的分离</li>
+<li><p>结果<br><a name="583d02e2"></a></p>
+<h2 id="B-牙科X射线图像分割"><a href="#B-牙科X射线图像分割" class="headerlink" title="B.牙科X射线图像分割"></a><a href="#vs2glw"></a>B.牙科X射线图像分割</h2></li>
+<li><p>U-Net的一些修改</p>
+</li>
+<li><p>结果<br><a name="1f5abe88"></a></p>
+<h2 id="A-1-U-net网络架构"><a href="#A-1-U-net网络架构" class="headerlink" title="A.1 U-net网络架构"></a><a href="#iuwfgw"></a>A.1 U-net网络架构</h2><p><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545199231926-18020858-3aa4-47c6-b68c-3b9f477175f6.png#align=left&amp;display=inline&amp;height=574&amp;originHeight=627&amp;originWidth=902&amp;status=done&amp;width=826" alt><br>U-net架构如上所示。 它由收缩路径和扩展路径组成。<br><a name="464297ce"></a></p>
+<h4 id="收缩路径"><a href="#收缩路径" class="headerlink" title="收缩路径"></a><a href="#8nvimi"></a>收缩路径</h4><p>连续两次3×3转换和2×2最大合并完成。 这有助于提取更多高级功能，但也会减少功能图的大小。<br><a name="e0ad13ea"></a></p>
+<h4 id="扩张路径"><a href="#扩张路径" class="headerlink" title="扩张路径"></a><a href="#9scaye"></a>扩张路径</h4></li>
+<li><p>连续执行2×2 Up-conv和2×3×3 Conv以恢复分割图的大小。 但是，上述过程虽然增加了“什么”，但减少了“哪里”。 这意味着，我们可以获得高级功能，但我们也会丢失本地化信息。</p>
+</li>
+<li>因此，在每个up-conv之后，我们还具有相同级别的特征映射（灰色箭头）的串联。 这有助于将收缩路径的本地化信息提供给扩展路径。</li>
+<li><p>最后，1×1转换将特征映射大小从64映射到2，因为输出特征映射只有2个类，单元格和膜。<br><a name="b359c062"></a></p>
+<h2 id="A-2-重叠平铺策略"><a href="#A-2-重叠平铺策略" class="headerlink" title="A.2 重叠平铺策略"></a><a href="#uqa0mk"></a>A.2 重叠平铺策略</h2><p><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545199376322-d00ca454-7b16-4c02-bb99-ebef49b086d1.png#align=left&amp;display=inline&amp;height=267&amp;originHeight=267&amp;originWidth=557&amp;status=done&amp;width=557" alt><br>由于使用了无填充卷积，因此输出大小小于输入大小。 不是在网络之前缩小尺寸而是在网络之后进行上采样，而是使用重叠切片策略。 由此，如上图所示，逐个部分地预测整个图像。 使用蓝色区域预测图像中的黄色区域。 在图像边界处，通过镜像外推图像。<br><a name="ff8a9392"></a></p>
+<h2 id="A-3数据增强的弹性变形"><a href="#A-3数据增强的弹性变形" class="headerlink" title="A.3数据增强的弹性变形"></a><a href="#t1qdkv"></a>A.3数据增强的弹性变形</h2><p><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545199438382-5e3f4be0-d382-4924-a7d8-19a220a66152.png#align=left&amp;display=inline&amp;height=473&amp;originHeight=473&amp;originWidth=488&amp;status=done&amp;width=488" alt><br>由于训练集只能由专家标注，因此训练集很小。 为了增加训练集的大小，通过随机变形输入图像和输出分割图来完成数据增加。<br><a name="ad98132d"></a></p>
+<h2 id="A-4接触目标的分离"><a href="#A-4接触目标的分离" class="headerlink" title="A.4接触目标的分离"></a><a href="#6xmasa"></a>A.4接触目标的分离</h2><p><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545199528214-e934fe93-dcae-42bf-81db-1289452fbe16.png#align=left&amp;display=inline&amp;height=278&amp;originHeight=278&amp;originWidth=503&amp;status=done&amp;width=503" alt><br>由于触摸物体彼此紧密放置，它们很容易被网络合并，将它们分开，重量图被应用于网络的输出。<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545199557533-ba5e366c-233e-468f-89a7-ca7cbe75af22.png#align=left&amp;display=inline&amp;height=78&amp;originHeight=77&amp;originWidth=439&amp;status=done&amp;width=444" alt><br>为了如上计算权重图，d1(x)是到位置x处最近的单元边界的距离，d2(x)是到第二个最近的单元边界的距离。 因此，在边界处，重量如图中高得多。<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545199618197-57bfbffa-b257-4989-a971-882147af45b5.png#align=left&amp;display=inline&amp;height=118&amp;originHeight=118&amp;originWidth=423&amp;status=done&amp;width=423" alt><br>因此，交叉熵函数在权重图处在每个位置处罚。 它有助于迫使网络学习触摸细胞之间的小分离边界。<br><a name="d5f7fde3"></a></p>
+<h3 id="A-5-结果"><a href="#A-5-结果" class="headerlink" title="A.5. 结果"></a><a href="#7761"></a>A.5. 结果</h3><p><a name="3e377a66"></a></p>
+<h4 id="A-5-1-ISBI-2012-Challenge"><a href="#A-5-1-ISBI-2012-Challenge" class="headerlink" title="A.5.1. ISBI 2012 Challenge"></a><a href="#b2c8"></a>A.5.1. ISBI 2012 Challenge</h4><p><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545199702716-70057810-8bc6-46ca-8dc2-70a1e6e63c40.png#align=left&amp;display=inline&amp;height=267&amp;originHeight=267&amp;originWidth=774&amp;status=done&amp;width=774" alt><br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545199710221-c1e90900-ada5-4943-966f-35894c3de37a.png#align=left&amp;display=inline&amp;height=222&amp;originHeight=222&amp;originWidth=567&amp;status=done&amp;width=567" alt></p>
+</li>
+<li><p>变形误差：一种惩罚拓扑分歧的分段指标。</p>
+</li>
+<li>Rand Error：两个聚类或分段之间相似性的度量。</li>
+<li>像素错误：标准像素错误。</li>
+<li>训练时间：10小时</li>
+<li>测试速度：每张图像约1秒<br><a name="52ed776c"></a><h4 id="A-5-2-PhC-U373-and-DIC-HeLa-数据集"><a href="#A-5-2-PhC-U373-and-DIC-HeLa-数据集" class="headerlink" title="A.5.2. PhC-U373 and DIC-HeLa 数据集"></a><a href="#89a2"></a><strong>A.5.2. PhC-U373 and DIC-HeLa 数据集</strong></h4><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545199768149-5b434356-9e41-4638-a066-09b9d8a5df2e.png#align=left&amp;display=inline&amp;height=317&amp;originHeight=340&amp;originWidth=886&amp;status=done&amp;width=826" alt><br><a name="530d6eee"></a><h3 id="B-1-U-Net的一些修改"><a href="#B-1-U-Net的一些修改" class="headerlink" title="B.1. U-Net的一些修改"></a><a href="#7dbc"></a>B.1. U-Net的一些修改</h3><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545199805742-7dc888f5-e4f3-4d3f-83db-dbec0df55e50.png#align=left&amp;display=inline&amp;height=193&amp;originHeight=234&amp;originWidth=1000&amp;status=done&amp;width=826" alt><br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545199816881-16840727-0a97-47a5-9e45-4a30f0e54fa7.png#align=left&amp;display=inline&amp;height=535&amp;originHeight=535&amp;originWidth=770&amp;status=done&amp;width=770" alt><br>这次，使用4×4 Up-conv，并使用1×1 Conv将特征映射从64映射到7，因为每个位置的输出有7个类。<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545199843951-b3dd1726-e02f-46fb-9016-0951ea0be26e.png#align=left&amp;display=inline&amp;height=276&amp;originHeight=276&amp;originWidth=728&amp;status=done&amp;width=728" alt><br>在重叠平铺策略中，使用零填充而不是在图像边界处镜像。 因为镜像对牙齿没有任何意义。<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545199870989-cf53104b-0645-4518-9319-f0726d67e413.png#align=left&amp;display=inline&amp;height=371&amp;originHeight=371&amp;originWidth=733&amp;status=done&amp;width=733" alt><br>使用softmax损失的低分辨率特征图还有额外的损耗层，以指导深层直接学习分段类。<br><a name="7785671a"></a><h3 id="B-2-结果"><a href="#B-2-结果" class="headerlink" title="B.2. 结果"></a><a href="#d538"></a>B.2. 结果</h3><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545199907301-15f83213-8564-4f2b-964b-2eb02f92eafe.png#align=left&amp;display=inline&amp;height=561&amp;originHeight=561&amp;originWidth=633&amp;status=done&amp;width=633" alt><br>I have also reviewed <a href="https://medium.com/datadriveninvestor/review-cumedvision1-fully-convolutional-network-biomedical-image-segmentation-5434280d6e6" target="_blank" rel="noopener">CUMedVision1</a> and <a href="https://medium.com/datadriveninvestor/review-cumedvision2-dcan-winner-of-2015-miccai-gland-segmentation-challenge-contest-biomedical-878b5a443560" target="_blank" rel="noopener">CUMedVision2</a>. Please feel free to visit if interested.<br><a name="References"></a><h3 id="References"><a href="#References" class="headerlink" title="References"></a><a href="#76be"></a>References</h3></li>
+</ol>
+<ul>
+<li><p>[2015] [MICCAI]<br><a href="https://arxiv.org/abs/1505.04597" target="_blank" rel="noopener">U-Net: Convolutional Networks for Biomedical Image Segmentation</a></p>
+</li>
+<li><p>[2015] [ISBI]<br><a href="http://www-o.ntust.edu.tw/~cweiwang/ISBI2015/challenge2/isbi2015_Ronneberger.pdf" target="_blank" rel="noopener">Dental X-ray Image Segmentation using a U-shaped Deep Convolutional Network</a></p>
+</li>
+</ul>
+<p><a name="3416b5da"></a></p>
+<h3 id="My-Related-Reviews"><a href="#My-Related-Reviews" class="headerlink" title="My Related Reviews"></a><a href="#2785"></a>My Related Reviews</h3><p>[<a href="https://medium.com/datadriveninvestor/review-cumedvision1-fully-convolutional-network-biomedical-image-segmentation-5434280d6e6" target="_blank" rel="noopener">CUMedVision1</a>] [<a href="https://medium.com/datadriveninvestor/review-cumedvision2-dcan-winner-of-2015-miccai-gland-segmentation-challenge-contest-biomedical-878b5a443560" target="_blank" rel="noopener">CUMedVision2</a>] [<a href="https://towardsdatascience.com/review-fcn-semantic-segmentation-eb8c9b50d2d1" target="_blank" rel="noopener">FCN</a>] [<a href="https://towardsdatascience.com/review-deconvnet-unpooling-layer-semantic-segmentation-55cf8a6e380e" target="_blank" rel="noopener">DeconvNet</a>]</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/12/19/yuque/评论：U-Net（生物医学图像分割）/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/去除正则化会避免模型过拟合吗？" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/12/19/yuque/去除正则化会避免模型过拟合吗？/">去除正则化会避免模型过拟合吗？</a>
+    </h1>
+  
+
+        
+        <a href="/2018/12/19/yuque/去除正则化会避免模型过拟合吗？/" class="archive-article-date">
+  	<time datetime="2018-12-19T04:28:16.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-19</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><a href="https://medium.com/@diazagasatya/will-dropout-regularization-prevents-your-model-to-overfit-11afa10cd4e0" target="_blank" rel="noopener">medium</a><br><em>有人可能会争辩说，最好是过拟合你的模型，然后对其进行逆向工程而不是相反。</em><br>在这个项目中，我们可以看到将Dropout正则化实现到神经网络后的准确性和验证损失的差异。 我们将使用PyTorch库从头开始构建一个顺序神经网络，以便在fashion-MNIST数据集中对10个不同的类进行分类。 这个数据集是28x28灰度图像的衣服。 我们将深入研究dropout的方法，并证明它是否能防止过度拟合。<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545194059986-5d2850f6-9304-4568-b09c-e84e6bf6c37e.png#width=699" alt><br>该项目的灵感来自：</p>
+<blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Facebook Udacity PyTorch Challenge.</span><br></pre></td></tr></table></figure>
+</blockquote>
+<p>首先，我们将创建一个没有正则化实现的神经网络，我们的假设是我们可以推断，随着时间的推移，我们的模型在验证集中表现不佳，因为我们用训练集训练我们的模型越多， 通过对测试数据的特定特征进行分类则越好，从而创建不良的泛化模型去推理。<br><a name="dhgofx"></a></p>
+<h4 id="让我们导入Fashion-MNIST数据集"><a href="#让我们导入Fashion-MNIST数据集" class="headerlink" title="让我们导入Fashion-MNIST数据集"></a><a href="#dhgofx"></a>让我们导入Fashion-MNIST数据集</h4><p>让我们使用torchvision下载数据集，通常我们将20％的数据集分开用于验证集。 但在这种情况下，我们将直接从torchvision下载数据集。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">from</span> torchvision <span class="keyword">import</span> datasets, transforms</span><br><span class="line"><span class="keyword">import</span> helper</span><br><span class="line">transform = transforms.Compose([transforms.ToTensor(), </span><br><span class="line">                                transforms.Normalize((<span class="number">0.5</span>,<span class="number">0.5</span>,<span class="number">0.5</span>),</span><br><span class="line">                                (<span class="number">0.5</span>,<span class="number">0.5</span>,<span class="number">0.5</span>))])</span><br><span class="line">traindataset = datasets.FashionMNIST(<span class="string">'~/.pytorch/F_MNIST_data/'</span>, download=<span class="literal">True</span>,train=<span class="literal">True</span>,transform=transform)</span><br><span class="line">trainloader = torch.utils.data.DataLoader(dataset=traindataset, batch_size=<span class="number">64</span>, shuffle=<span class="literal">True</span>)</span><br><span class="line">testdataset = datasets.FashionMNIST(<span class="string">'~/.pytorch/F_MNIST_data/'</span>, download=<span class="literal">True</span>,train=<span class="literal">False</span>,transform=transform)</span><br><span class="line">testloader = torch.utils.data.DataLoader(dataset=testdataset, batch_size=<span class="number">64</span>, shuffle=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure></p>
+<p>我们需要导入torchvision来下载数据集和转换。 然后我们使用变换库将图像转换为张量并进行标准化。 通常批量训练和验证集以提高训练速度并且改组数据也会增加训练和测试数据的学习差异。<br>定义神经网络<br><br>这个模型将有2个隐藏层，输入层将有784个单元，并且在最终层将有10个输出，因为我们有10个不同的类进行分类。 我们将使用交叉熵损失，因为它具有对数性质，可以将我们的输出归一化到接近零或一。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">from torch import nn</span><br><span class="line">from torch.functional import F</span><br><span class="line">class FashionNeuralNetwork(nn.Module):</span><br><span class="line">    def __init__(self):</span><br><span class="line">        super().__init__()</span><br><span class="line">        # Create layers here</span><br><span class="line">        self.layer_input = nn.Linear(784,256)</span><br><span class="line">        self.layer_hidden_one = nn.Linear(256,128)</span><br><span class="line">        self.layer_hidden_two = nn.Linear(128,64)</span><br><span class="line">        self.layer_output = nn.Linear(64,10)</span><br><span class="line">    </span><br><span class="line">   def forward(self, x):</span><br><span class="line">        # Flattened the input to make sure it fits the layer input</span><br><span class="line">        x = x.view(x.shape[0],-1)</span><br><span class="line">        # Pass in the input to the layer and do forward propagation</span><br><span class="line">        x = F.relu(self.layer_input(x))</span><br><span class="line">        x = F.relu(self.layer_hidden_one(x))</span><br><span class="line">        x = F.relu(self.layer_hidden_two(x))</span><br><span class="line">        # Dimension = 1</span><br><span class="line">        x = F.log_softmax(self.layer_output(x),dim=1)</span><br><span class="line">        return x</span><br></pre></td></tr></table></figure></p>
+<p>该神经网络将使用ReLU作为隐藏层的非线性激活函数，并使用log-softmax激活输出和负对数似然函数用于我们的损失函数。 如果我们查看PyTorch库中的<a href="https://pytorch.org/docs/stable/nn.html#torch.nn.CrossEntropyLoss" target="_blank" rel="noopener">交叉熵损失</a>的文档，该标准将nn.LogSoftmax()和nn.NLLLoss()组合在一个单独的类中。 损失可以描述为：<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545194731399-7541a6eb-2940-4587-9157-62c90ab37010.png#width=611" alt></p>
+<p>请注意，转发传播结束时的线性函数的dim = 1，这意味着输出结果的每一行的概率总和必须等于1.给单个元素的概率最高图像的概率最高 被归类为相应的类索引。<br>我们必须确保模型的输出形状正确性，<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># Instantiate the model</span><br><span class="line">model = FashionNeuralNetwork()</span><br><span class="line"># Get the images and labels from the test loader</span><br><span class="line">images, labels = next(iter(testloader))</span><br><span class="line"># Get the log probability prediction from our model</span><br><span class="line">log_ps = model(images)</span><br><span class="line"># Normalize the probability by taking the exponent of the log-prob</span><br><span class="line">ps = torch.exp(log_ps)</span><br><span class="line"># Print out the size</span><br><span class="line">print(ps.shape)</span><br></pre></td></tr></table></figure></p>
+<p>确保输出为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">torch.Size([64, 10])</span><br></pre></td></tr></table></figure></p>
+<p><a name="o3h0uo"></a></p>
+<h4 id="测量我们模型的准确性"><a href="#测量我们模型的准确性" class="headerlink" title="测量我们模型的准确性"></a><a href="#o3h0uo"></a>测量我们模型的准确性</h4><p>由于我们想要一个类的最高概率，我们将使用ps.topk来获得top-k值和top-k索引的元组，例如，如果在4个元素中最高为kth，我们将得到3作为指数。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">top_p, top_class = ps.topk(1,dim=1)</span><br><span class="line"># Print out the most likely classes for the first 10 examples</span><br><span class="line">print(top_class[:10,:])</span><br></pre></td></tr></table></figure></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545195322539-23690b05-a8bf-47b0-92ab-a35a3245d1a2.png#width=122" alt><br>top_class是尺寸为64x1的2D张量，而我们的标签是尺寸为64的1D张量。为了测量标签和模型预测之间的准确度，我们必须确保张量的形状是相同的。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># We have to reshape the labels to 64x1 using the view() method</span><br><span class="line">equals = top_class == labels.view(*top_class.shape)</span><br><span class="line">print(equals.shape)</span><br></pre></td></tr></table></figure></p>
+<p>比较张量的输出将是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">torch.Size([64, 1])</span><br></pre></td></tr></table></figure></p>
+<p>为了计算模型的准确性，我们只需计算模型正确预测的次数。 如果我们的预测与标签相同，则上面的==运算符将逐行检查。 最终结果将是二进制0不相同，1正确预测。 我们可以使用torch.mean计算平均值，但我们需要将equals转换为FloatTensor。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">accuracy = torch.mean(equals.type(torch.FloatTensor))</span><br><span class="line"># Print the accuracy</span><br><span class="line">print(f&apos;Accuracy: &#123;accuracy.item()*100&#125;%&apos;)</span><br></pre></td></tr></table></figure></p>
+<p><a name="go1ssu"></a></p>
+<h4 id="训练我们的模型"><a href="#训练我们的模型" class="headerlink" title="训练我们的模型"></a><a href="#go1ssu"></a>训练我们的模型</h4><p>由于我们希望损失函数与Logarithm Softmax函数的行为相反，我们将使用负对数似然来计算我们的损失。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">from torch import optim</span><br><span class="line"># Instantiate the model</span><br><span class="line">model = FashionNeuralNetwork()</span><br><span class="line"># Use Negative Log Likelyhood as our loss function</span><br><span class="line">loss_function = nn.NLLLoss()</span><br><span class="line"># Use ADAM optimizer to utilize momentum</span><br><span class="line">optimizer = optim.Adam(model.parameters(), lr=0.003)</span><br><span class="line"># Train the model 30 cycles</span><br><span class="line">epochs = 30</span><br><span class="line"># Initialize two empty arrays to hold the train and test losses</span><br><span class="line">train_losses, test_losses = [],[]</span><br><span class="line"># Start the training</span><br><span class="line">for i in range(epochs):</span><br><span class="line">    running_loss = 0</span><br><span class="line">    # Loop through all of the train set forward and back propagate</span><br><span class="line">    for images,labels in trainloader:</span><br><span class="line">        optimizer.zero_grad()                      </span><br><span class="line">        log_ps = model(images)                     </span><br><span class="line">        loss = loss_function(log_ps, labels)       </span><br><span class="line">        loss.backward()                            # Backpropagate</span><br><span class="line">        optimizer.step()                           </span><br><span class="line">        running_loss += loss.item()                </span><br><span class="line">    </span><br><span class="line">    # Initialize test loss and accuracy to be 0 </span><br><span class="line">    test_loss = 0</span><br><span class="line">    accuracy = 0</span><br><span class="line">    </span><br><span class="line">    # Turn off the gradients</span><br><span class="line">    with torch.no_grad():</span><br><span class="line">        # Loop through all of the validation set</span><br><span class="line">        for images, labels in testloader:</span><br><span class="line">            log_ps = model(images)                                 </span><br><span class="line">            ps = torch.exp(log_ps)                                 </span><br><span class="line">            test_loss += loss_function(log_ps, labels)             </span><br><span class="line">            top_p, top_class = ps.topk(1,dim=1)                    </span><br><span class="line">            equals = top_class == labels.view(*top_class.shape)   </span><br><span class="line">            accuracy += torch.mean(equals.type(torch.FloatTensor))</span><br><span class="line">    </span><br><span class="line">    # Append the average losses to the array for plotting       </span><br><span class="line">    train_losses.append(running_loss/len(trainloader))</span><br><span class="line">    test_losses.append(test_loss/len(testloader))</span><br></pre></td></tr></table></figure></p>
+<p>打印我们的模型<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545195544515-f2c011c6-a9ad-4673-a266-508907165f04.png#width=684" alt><br>这证明了我们的假设，即完全说明我们的模型将训练的很好，但不能推广训练数据集之外的图像。 我们可以看到，30个周期的训练损失显著减少，但我们的验证损失在大约36-48％之间波动。 这是过度拟合的标志，这个情况说明，模型学习训练数据集的特定特征和模式，它无法正确分类数据集之外的图像。 这通常很糟糕，因为这意味着如果我们使用推理，模型就无法正确分类。<br><a name="r5sdzs"></a></p>
+<h4 id="为了清楚的说明"><a href="#为了清楚的说明" class="headerlink" title="为了清楚的说明"></a><a href="#r5sdzs"></a>为了清楚的说明</h4><p>让我们画图看一下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"># Plot the graph here</span><br><span class="line">%matplotlib inline</span><br><span class="line">%config InlineBackend.figure_format = &apos;retina&apos;</span><br><span class="line">import matplotlib.pyplot as plt</span><br><span class="line">plt.plot(train_losses, label=&apos;Training Loss&apos;)</span><br><span class="line">plt.plot(test_losses, label=&apos;Validation Loss&apos;)</span><br><span class="line">plt.legend(frameon=True)</span><br></pre></td></tr></table></figure></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545195769635-b5ee1591-723d-4cb7-a10b-2b0a8740d404.png#width=554" alt><br><a name="4gv0rl"></a></p>
+<h4 id="过度拟合"><a href="#过度拟合" class="headerlink" title="过度拟合"></a><a href="#4gv0rl"></a>过度拟合</h4><p>从上图中我们可以清楚地看到，我们的模型并没有很好地泛华。 这意味着该模型在对训练数据集之外的图像进行分类方面做得不好。 这真的很糟糕，这意味着我们的模型只学习我们的训练数据集的具体内容，它变得如此个别，以至于它只能识别来自训练集的图像。 如果我们从图表中看到，每个周期的训练损失都会显著减少，但是，我们可以看到验证损失却没发生什么变化。<br><a name="mm70mi"></a></p>
+<h4 id="正则"><a href="#正则" class="headerlink" title="正则"></a><a href="#mm70mi"></a>正则</h4><p>这就是正则化的用武之地，其中一种方法是进行L2正则化，也称为<em>early-stopping</em>，这基本上意味着我们将在验证损失最低时停止训练我们的模型。 在这种情况下，我们的验证损失在3-5个时期后达到最佳。 这意味着超过5个周期，我们的模型泛化会变得更糟。<br><br>但是，还有另一种方法可以解决这个问题。 我们可以为我们的模型进行<em>dropout</em>，以进行更多的泛化。 基本上，我们的模型通过在大型重量上滚雪球并使其他要训练的重量不足而贪婪地行动。 通过具有随机丢失，具有较小权重的节点将有机会在循环期间被训练，从而在结束时给出更一般化的分数。 换句话说，它迫使网络在权重之间共享信息，从而提供更好的泛化能力。<br>注意：<br><br>在训练期间，我们希望实行dropout，但是，在验证过程中，我们需要我们模型的全部功能，因为那时我们可以完全测量模型对这些图像进行泛化其准确性。 如果我们使用model.eval()模式，我们将停止使用dropout，并且不要忘记在训练期间使用model.train()再次使用它。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">### Define our new Network with Dropouts</span><br><span class="line">class FashionNeuralNetworkDropout(nn.Module):</span><br><span class="line">    def __init__(self):</span><br><span class="line">        super().__init__()</span><br><span class="line">        # Create layers here</span><br><span class="line">        self.layer_input = nn.Linear(784,256)</span><br><span class="line">        self.layer_hidden_one = nn.Linear(256,128)</span><br><span class="line">        self.layer_hidden_two = nn.Linear(128,64)</span><br><span class="line">        self.layer_output = nn.Linear(64,10)</span><br><span class="line">        </span><br><span class="line">        # 20% Dropout here</span><br><span class="line">        self.dropout = nn.Dropout(p=0.2)</span><br><span class="line">    def forward(self, x):</span><br><span class="line">        # Flattened the input to make sure it fits the layer input</span><br><span class="line">        x = x.view(x.shape[0],-1)</span><br><span class="line">        # Pass in the input to the layer and do forward propagation</span><br><span class="line">        x = self.dropout(F.relu(self.layer_input(x)))</span><br><span class="line">        x = self.dropout(F.relu(self.layer_hidden_one(x)))</span><br><span class="line">        x = self.dropout(F.relu(self.layer_hidden_two(x)))</span><br><span class="line">        # Dimension = 1</span><br><span class="line">        x = F.log_softmax(self.layer_output(x),dim=1)</span><br><span class="line">        return x</span><br></pre></td></tr></table></figure></p>
+<p>这个神经网络将与第一个模型非常相似，但是，我们将增加20％的丢失。 现在让我们训练这个模型吧！<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">from torch import optim</span><br><span class="line"># Instantiate the model</span><br><span class="line">model = FashionNeuralNetworkDropout()</span><br><span class="line"># Use Negative Log Likelyhood as our loss function</span><br><span class="line">loss_function = nn.NLLLoss()</span><br><span class="line"># Use ADAM optimizer to utilize momentum</span><br><span class="line">optimizer = optim.Adam(model.parameters(), lr=0.003)</span><br><span class="line"># Train the model 30 cycles</span><br><span class="line">epochs = 30</span><br><span class="line"># Initialize two empty arrays to hold the train and test losses</span><br><span class="line">train_losses, test_losses = [],[]</span><br><span class="line"># Start the training</span><br><span class="line">for i in range(epochs):</span><br><span class="line">    running_loss = 0</span><br><span class="line"># Loop through all of the train set forward and back propagate</span><br><span class="line">    for images,labels in trainloader:</span><br><span class="line">        optimizer.zero_grad()                      </span><br><span class="line">        log_ps = model(images)                     </span><br><span class="line">        loss = loss_function(log_ps, labels)       </span><br><span class="line">        loss.backward()                            # Backpropagate</span><br><span class="line">        optimizer.step()                           </span><br><span class="line">        running_loss += loss.item()                </span><br><span class="line">    </span><br><span class="line">    # Initialize test loss and accuracy to be 0 </span><br><span class="line">    test_loss = 0</span><br><span class="line">    accuracy = 0</span><br><span class="line">    </span><br><span class="line">    # Turn off the gradients</span><br><span class="line">    with torch.no_grad():</span><br><span class="line">        # Turn on Evaluation mode</span><br><span class="line">        model.eval()</span><br><span class="line">        # Loop through all of the validation set</span><br><span class="line">        for images, labels in testloader:</span><br><span class="line">            log_ps = model(images)                                 </span><br><span class="line">            ps = torch.exp(log_ps)                                 </span><br><span class="line">            test_loss += loss_function(log_ps, labels)             </span><br><span class="line">            top_p, top_class = ps.topk(1,dim=1)                    </span><br><span class="line">            equals = top_class == labels.view(*top_class.shape)   </span><br><span class="line">            accuracy += torch.mean(equals.type(torch.FloatTensor))</span><br><span class="line"></span><br><span class="line">    # Turn on Training mode again</span><br><span class="line">    model.train()</span><br><span class="line">    </span><br><span class="line">    # Append the average losses to the array for plotting       </span><br><span class="line">    train_losses.append(running_loss/len(trainloader))</span><br><span class="line">    test_losses.append(test_loss/len(testloader))</span><br></pre></td></tr></table></figure></p>
+<p>输出结果：<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545196342869-4eae3b68-560b-4427-8e2f-34dec5ae5da0.png#width=687" alt><br>这里的目标是使验证损失与我们的训练损失一样低，这意味着我们的模型相当准确。 让我们再次绘制图表，看看正则化后的差异。 即使精度水平仅整体上升0.3％，该模型也没有过度拟合，因为它保持了在训练期间训练的所有节点的平衡。 让我们绘制图表并查看差异：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"># Plot the graph here</span><br><span class="line">%matplotlib inline</span><br><span class="line">%config InlineBackend.figure_format = &apos;retina&apos;</span><br><span class="line">import matplotlib.pyplot as plt</span><br><span class="line">plt.plot(train_losses, label=&apos;Training Loss&apos;)</span><br><span class="line">plt.plot(test_losses, label=&apos;Validation Loss&apos;)</span><br><span class="line">plt.legend(frameon=True)</span><br></pre></td></tr></table></figure></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545196385024-ee9585c8-819c-4da5-aaa1-10592b806d57.png#width=555" alt><br><a name="hsnqvc"></a></p>
+<h4 id="推理"><a href="#推理" class="headerlink" title="推理"></a><a href="#hsnqvc"></a>推理</h4><p>现在我们的模型可以更好地泛化，让我们用提供模型尝试用训练数据集之外的图像进行预测，并可视化模型的分类。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"># Make sure to make our model in the evaluation mode</span><br><span class="line">model.eval()</span><br><span class="line"># Get the next image and label</span><br><span class="line">images, labels = next(iter(testloader))</span><br><span class="line">img = images[0]</span><br><span class="line"># Convert 2D image to 1D vector</span><br><span class="line">img = img.view(1, 784)</span><br><span class="line"># Calculate the class probabilities (log-softmax) for img</span><br><span class="line">with torch.no_grad():</span><br><span class="line">    output = model.forward(img)</span><br><span class="line"># Normalize the output</span><br><span class="line">ps = torch.exp(output)</span><br><span class="line"># Plot the image and probabilities</span><br><span class="line">helper.view_classify(img.view(1, 28, 28), ps, version=&apos;Fashion&apos;)</span><br></pre></td></tr></table></figure></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545196482739-f2d874ee-fbb1-4c28-915c-d2c72a8db458.png#width=624" alt><br><a name="67g8gr"></a></p>
+<h4 id="结论"><a href="#结论" class="headerlink" title="结论"></a><a href="#67g8gr"></a>结论</h4><p>这很棒！ 我们可以看到培训损失和验证损失之间的显着平衡。 可以肯定地说，如果我们训练模型进行更多循环并微调我们的超参数，则验证损失将减少。 从上图中我们可以看出，我们的模型随着时间的推移更好地泛化，模型在6-8个时期之后可以获得更好的精度，并且可以肯定地说模型通过实现模型的丢失来防止过度拟合。<br><a name="bc98"></a></p>
+<h3 id="Thank-you-so-much-for-your-time-and-please-check-out-this-repository-for-the-full-code"><a href="#Thank-you-so-much-for-your-time-and-please-check-out-this-repository-for-the-full-code" class="headerlink" title="Thank you so much for your time, and please check out this repository for the full code!"></a><a href="#bc98"></a>Thank you so much for your time, and please check out this <a href="https://github.com/diazagasatya/deep_learning_fastai/blob/master/main/Fashion%20MNIST%20-%20Classification%20Problem.ipynb" target="_blank" rel="noopener">repository</a> for the full code!</h3><p>This is my <a href="https://www.diazidabagus.com/" target="_blank" rel="noopener">Portfolio</a> and <a href="https://www.linkedin.com/in/diaz-agasatya-16487b109/" target="_blank" rel="noopener">Linked-In</a> profile :)</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/12/19/yuque/去除正则化会避免模型过拟合吗？/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/迁移学习：使用Fast.AI库对4种北极犬进行分类" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/12/19/yuque/迁移学习：使用Fast.AI库对4种北极犬进行分类/">迁移学习：使用Fast.AI库对4种北极犬进行分类</a>
+    </h1>
+  
+
+        
+        <a href="/2018/12/19/yuque/迁移学习：使用Fast.AI库对4种北极犬进行分类/" class="archive-article-date">
+  	<time datetime="2018-12-19T02:16:20.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-19</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><a href="https://medium.com/@diazagasatya/transfer-learning-classification-of-4-different-types-of-arctic-dog-using-fast-ai-library-665cb424af5e" target="_blank" rel="noopener">链接</a></p>
+<p>该项目的灵感来自Adrian Rosebrock，Francisco Ingham和Jeremy Howard。</p>
+<p>在本课程中，我们将从Google Images创建自己的数据集。</p>
+<p>我将使用FastAI库中的Resnet34的架构。<br>
+        
+          <a class="article-more-a" href="/2018/12/19/yuque/迁移学习：使用Fast.AI库对4种北极犬进行分类/#more">more >></a>
+        
+      
+
+      
+    </p></div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/12/19/yuque/迁移学习：使用Fast.AI库对4种北极犬进行分类/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/7/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/9/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="/page/7/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span>
     </nav>
   
 

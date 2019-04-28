@@ -8,19 +8,19 @@
   <link rel="dns-prefetch" href="http://zhos.me">
   <title>如何在 Python 中使用 XGBoost 保存梯度提升模型 | A+</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="如何在 Python 中使用 XGBoost 保存梯度提升模型 原文： https://machinelearningmastery.com/save-gradient-boosting-models-xgboost-python/  XGBoost 可用于使用梯度提升算法为表格数据创建一些表现最佳的模型。 经过训练，将模型保存到文件中以便以后用于预测新的测试和验证数据集以及全新数据通常是一种很好">
+  <meta name="description" content="如何在 Python 中使用 XGBoost 保存梯度提升模型原文： https://machinelearningmastery.com/save-gradient-boosting-models-xgboost-python/XGBoost 可用于使用梯度提升算法为表格数据创建一些表现最佳...">
 <meta property="og:type" content="article">
 <meta property="og:title" content="如何在 Python 中使用 XGBoost 保存梯度提升模型">
 <meta property="og:url" content="http://zhos.me/2019/04/26/yuque/如何在 Python 中使用 XGBoost 保存梯度提升模型/index.html">
 <meta property="og:site_name" content="A+">
-<meta property="og:description" content="如何在 Python 中使用 XGBoost 保存梯度提升模型 原文： https://machinelearningmastery.com/save-gradient-boosting-models-xgboost-python/  XGBoost 可用于使用梯度提升算法为表格数据创建一些表现最佳的模型。 经过训练，将模型保存到文件中以便以后用于预测新的测试和验证数据集以及全新数据通常是一种很好">
+<meta property="og:description" content="如何在 Python 中使用 XGBoost 保存梯度提升模型原文： https://machinelearningmastery.com/save-gradient-boosting-models-xgboost-python/XGBoost 可用于使用梯度提升算法为表格数据创建一些表现最佳...">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://zhos.me/2019/04/26/yuque/如何在%20Python%20中使用%20XGBoost%20保存梯度提升模型/img/5a3953dc573c491c8f0f4131ffbd4ec7.jpg">
-<meta property="og:updated_time" content="2019-04-26T03:24:22.431Z">
+<meta property="og:image" content="http://zhos.me/2019/04/26/yuque/如何在%20Python%20中使用%20XGBoost%20保存梯度提升模型/img/5a3953dc573c491c8f0f4131ffbd4ec7.jpg#alt=How%20to%20Save%20Gradient%20Boosting%20Models%20with%20XGBoost%20in%20Python">
+<meta property="og:updated_time" content="2019-04-28T01:30:08.003Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="如何在 Python 中使用 XGBoost 保存梯度提升模型">
-<meta name="twitter:description" content="如何在 Python 中使用 XGBoost 保存梯度提升模型 原文： https://machinelearningmastery.com/save-gradient-boosting-models-xgboost-python/  XGBoost 可用于使用梯度提升算法为表格数据创建一些表现最佳的模型。 经过训练，将模型保存到文件中以便以后用于预测新的测试和验证数据集以及全新数据通常是一种很好">
-<meta name="twitter:image" content="http://zhos.me/2019/04/26/yuque/如何在%20Python%20中使用%20XGBoost%20保存梯度提升模型/img/5a3953dc573c491c8f0f4131ffbd4ec7.jpg">
+<meta name="twitter:description" content="如何在 Python 中使用 XGBoost 保存梯度提升模型原文： https://machinelearningmastery.com/save-gradient-boosting-models-xgboost-python/XGBoost 可用于使用梯度提升算法为表格数据创建一些表现最佳...">
+<meta name="twitter:image" content="http://zhos.me/2019/04/26/yuque/如何在%20Python%20中使用%20XGBoost%20保存梯度提升模型/img/5a3953dc573c491c8f0f4131ffbd4ec7.jpg#alt=How%20to%20Save%20Gradient%20Boosting%20Models%20with%20XGBoost%20in%20Python">
   
     <link rel="alternative" href="/atom.xml" title="A+" type="application/atom+xml">
   
@@ -170,12 +170,12 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="如何在-Python-中使用-XGBoost-保存梯度提升模型"><a href="#如何在-Python-中使用-XGBoost-保存梯度提升模型" class="headerlink" title="如何在 Python 中使用 XGBoost 保存梯度提升模型"></a>如何在 Python 中使用 XGBoost 保存梯度提升模型</h1><blockquote>
+        <p><a href></a><br><a name="a241bea6"></a></p>
+<h1 id="如何在-Python-中使用-XGBoost-保存梯度提升模型"><a href="#如何在-Python-中使用-XGBoost-保存梯度提升模型" class="headerlink" title="如何在 Python 中使用 XGBoost 保存梯度提升模型"></a>如何在 Python 中使用 XGBoost 保存梯度提升模型</h1><blockquote>
 <p>原文： <a href="https://machinelearningmastery.com/save-gradient-boosting-models-xgboost-python/" target="_blank" rel="noopener">https://machinelearningmastery.com/save-gradient-boosting-models-xgboost-python/</a></p>
 </blockquote>
 <p>XGBoost 可用于使用梯度提升算法为表格数据创建一些表现最佳的模型。</p>
-<p>经过训练，将模型保存到文件中以便以后用于预测新的测试和验证数据集以及全新数据通常是一种很好的做法。</p>
-<p>在本文中，您将了解如何使用标准 Python pickle API 将 XGBoost 模型保存到文件中。</p>
+<p>经过训练，将模型保存到文件中以便以后用于预测新的测试和验证数据集以及全新数据通常是一种很好的做法。<br><a id="more"></a><br>在本文中，您将了解如何使用标准 Python pickle API 将 XGBoost 模型保存到文件中。</p>
 <p>完成本教程后，您将了解：</p>
 <ul>
 <li>如何使用 pickle 保存并稍后加载训练有素的 XGBoost 模型。</li>
@@ -183,11 +183,12 @@
 </ul>
 <p>让我们开始吧。</p>
 <ul>
-<li><strong>2017 年 1 月更新</strong>：已更新，以反映 scikit-learn API 版本 0.18.1 中的更改​​。</li>
+<li><strong>2017 年 1 月更新</strong>：已更新，以反映 scikit-learn API 版本 0.18.1 中的更改。</li>
 <li><strong>更新 March / 2018</strong> ：添加了备用链接以下载数据集，因为原始图像已被删除。</li>
 </ul>
-<p><img src="img/5a3953dc573c491c8f0f4131ffbd4ec7.jpg" alt="How to Save Gradient Boosting Models with XGBoost in Python"></p>
-<p>如何在 Python 中使用 XGBoost 保存梯度提升模型<br>照片来自 <a href="https://www.flickr.com/photos/keoni101/5334841889/" target="_blank" rel="noopener">Keoni Cabral</a> ，保留一些权利。</p>
+<p><img src="img/5a3953dc573c491c8f0f4131ffbd4ec7.jpg#alt=How%20to%20Save%20Gradient%20Boosting%20Models%20with%20XGBoost%20in%20Python" alt></p>
+<p>如何在 Python 中使用 XGBoost 保存梯度提升模型<br><br>照片来自 <a href="https://www.flickr.com/photos/keoni101/5334841889/" target="_blank" rel="noopener">Keoni Cabral</a> ，保留一些权利。</p>
+<p><a href></a><br><a name="02dcf5d8"></a></p>
 <h2 id="使用-Pickle-序列化您的-XGBoost-模型"><a href="#使用-Pickle-序列化您的-XGBoost-模型" class="headerlink" title="使用 Pickle 序列化您的 XGBoost 模型"></a>使用 Pickle 序列化您的 XGBoost 模型</h2><p>Pickle 是在 Python 中序列化对象的标准方法。</p>
 <p>您可以使用 <a href="https://docs.python.org/2/library/pickle.html" target="_blank" rel="noopener">Python pickle API</a> 序列化您的机器学习算法并将序列化格式保存到文件中，例如：</p>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># save model to file</span></span><br><span class="line">pickle.dump(model, open(<span class="string">"pima.pickle.dat"</span>, <span class="string">"wb"</span>))</span><br></pre></td></tr></table></figure>
@@ -200,6 +201,7 @@
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pima.pickle.dat</span><br></pre></td></tr></table></figure>
 <p>加载模型并对训练数据集进行预测后，将打印模型的准确性。</p>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Accuracy: <span class="number">77.95</span>%</span><br></pre></td></tr></table></figure>
+<p><a href></a><br><a name="ca017e1b"></a></p>
 <h2 id="使用-joblib-序列化-XGBoost-模型"><a href="#使用-joblib-序列化-XGBoost-模型" class="headerlink" title="使用 joblib 序列化 XGBoost 模型"></a>使用 joblib 序列化 XGBoost 模型</h2><p>Joblib 是 SciPy 生态系统的一部分，并提供用于管道化 Python 作业的实用程序。</p>
 <p><a href="https://pypi.python.org/pypi/joblib" target="_blank" rel="noopener">Joblib API</a> 提供了用于保存和加载有效利用 NumPy 数据结构的 Python 对象的实用程序。对于非常大的模型，使用它可能是一种更快捷的方法。</p>
 <p>API 看起来很像 pickle API，例如，您可以保存训练有素的模型，如下所示：</p>
@@ -212,6 +214,7 @@
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">pima.joblib.dat</span><br><span class="line">pima.joblib.dat_01.npy</span><br><span class="line">pima.joblib.dat_02.npy</span><br></pre></td></tr></table></figure>
 <p>加载模型后，将在训练数据集上对其进行评估，并打印预测的准确性。</p>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Accuracy: <span class="number">77.95</span>%</span><br></pre></td></tr></table></figure>
+<p><a href></a><br><a name="3ae14696"></a></p>
 <h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><p>在这篇文章中，您了解了如何序列化经过训练的 XGBoost 模型，然后加载它们以进行预测。</p>
 <p>具体来说，你学到了：</p>
 <ul>

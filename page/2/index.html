@@ -169,176 +169,19 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="应用机器学习的-XGBoost-简介"><a href="#应用机器学习的-XGBoost-简介" class="headerlink" title="应用机器学习的 XGBoost 简介"></a>应用机器学习的 XGBoost 简介</h1><blockquote>
+        <p><a href></a><br><a name="7957bf63"></a></p>
+<h1 id="应用机器学习的-XGBoost-简介"><a href="#应用机器学习的-XGBoost-简介" class="headerlink" title="应用机器学习的 XGBoost 简介"></a>应用机器学习的 XGBoost 简介</h1><blockquote>
 <p>原文： <a href="https://machinelearningmastery.com/gentle-introduction-xgboost-applied-machine-learning/" target="_blank" rel="noopener">https://machinelearningmastery.com/gentle-introduction-xgboost-applied-machine-learning/</a></p>
 </blockquote>
 <p>XGBoost 是一种算法，最近一直主导应用机器学习和 Kaggle 竞争结构化或表格数据。</p>
-<p>XGBoost 是为速度和表现而设计的梯度提升决策树的实现。</p>
-<p>在这篇文章中，您将发现 XGBoost 并轻松了解它的来源，来自何处以及如何了解更多信息。</p>
-<p>阅读这篇文章后你会知道：</p>
-<ul>
-<li>XGBoost 是什么以及项目的目标。</li>
-<li>为什么 XGBoost 必须与您的机器学习工具包分开。</li>
-<li>在下一个机器学习项目中，您可以了解更多信息以开始使用 XGBoost。</li>
-</ul>
-<p>让我们开始吧。</p>
-<p><img src="img/2bb9abbef6f07700041dc880c95acda8.jpg" alt="A Gentle Introduction to XGBoost for Applied Machine Learning"></p>
-<p>应用机器学习的 XGBoost 的温和介绍<br><a href="https://www.flickr.com/photos/sigfridlundberg/14945045482/" target="_blank" rel="noopener">Sigfrid Lundberg</a> 的照片，保留一些权利。</p>
-<h2 id="什么是-XGBoost？"><a href="#什么是-XGBoost？" class="headerlink" title="什么是 XGBoost？"></a>什么是 XGBoost？</h2><p>XGBoost 代表 e <strong>X</strong> treme <strong>G</strong> radient <strong>B</strong> oosting。</p>
-<blockquote>
-<p>但是，名称 xgboost 实际上指的是推动增强树算法的计算资源限制的工程目标。这就是为什么许多人使用 xgboost 的原因。</p>
-</blockquote>
-<ul>
-<li>陈天琪回答问题“ <a href="https://www.quora.com/What-is-the-difference-between-the-R-gbm-gradient-boosting-machine-and-xgboost-extreme-gradient-boosting" target="_blank" rel="noopener">R gbm（梯度提升机）和 xgboost（极限梯度提升）有什么区别？</a> “在 Quora 上</li>
-</ul>
-<p>它是 <a href="http://homes.cs.washington.edu/~tqchen/" target="_blank" rel="noopener">Tianqi Chen</a> 创建的梯度提升机的实现，现在得到了许多开发人员的贡献。它属于分布式机器学习社区或 <a href="http://dmlc.ml/" target="_blank" rel="noopener">DMLC</a> 旗下的更广泛的工具集，他们也是流行的 <a href="https://github.com/dmlc/mxnet" target="_blank" rel="noopener">mxnet 深度学习库</a>的创建者。</p>
-<p>Tianqi Chen 在后期<a href="http://homes.cs.washington.edu/~tqchen/2016/03/10/story-and-lessons-behind-the-evolution-of-xgboost.html" target="_blank" rel="noopener">故事和 XGBoost 演变背后的教训</a>中提供了关于 XGBoost 创作的简短而有趣的背景故事。</p>
-<p>XGBoost 是一个软件库，您可以在您的机器上下载和安装，然后从各种界面进行访问。具体来说，XGBoost 支持以下主要接口：</p>
-<ul>
-<li>命令行界面（CLI）。</li>
-<li>C ++（编写库的语言）。</li>
-<li>Python 界面以及 scikit-learn 中的模型。</li>
-<li>R 接口以及插入符号包中的模型。</li>
-<li>朱莉娅。</li>
-<li>像 Scala 这样的 Java 和 JVM 语言以及像 Hadoop 这样的平台。</li>
-</ul>
-<h2 id="XGBoost-功能"><a href="#XGBoost-功能" class="headerlink" title="XGBoost 功能"></a>XGBoost 功能</h2><p>该库激光专注于计算速度和模型表现，因此几乎没有多余的装饰。尽管如此，它确实提供了许多高级功能。</p>
-<h3 id="型号特点"><a href="#型号特点" class="headerlink" title="型号特点"></a>型号特点</h3><p>该模型的实现支持 scikit-learn 和 R 实现的功能，以及正规化等新增功能。支持三种主要形式的梯度提升：</p>
-<ul>
-<li><strong>Gradient Boosting</strong> 算法也称为梯度提升机，包括学习率。</li>
-<li><strong>随机梯度提升</strong>，每个分割级别在行，列和列处进行子采样。</li>
-<li><strong>正则化梯度提升</strong>同时具有 L1 和 L2 正则化。</li>
-</ul>
-<h3 id="系统功能"><a href="#系统功能" class="headerlink" title="系统功能"></a>系统功能</h3><p>该库提供了一个在各种计算环境中使用的系统，尤其是：</p>
-<ul>
-<li><strong>在训练期间使用所有 CPU 内核构建树的并行化</strong>。</li>
-<li><strong>分布式计算</strong>用于使用一组机器训练超大型模型。</li>
-<li><strong>非核心计算</strong>适用于不适合内存的超大型数据集。</li>
-<li><strong>缓存优化</strong>的数据结构和算法，以充分利用硬件。</li>
-</ul>
-<h3 id="算法特征"><a href="#算法特征" class="headerlink" title="算法特征"></a>算法特征</h3><p>该算法的实现是为了提高计算时间和内存资源的效率而设计的。设计目标是充分利用可用资源来训练模型。一些关键的算法实现功能包括：</p>
-<ul>
-<li><strong>稀疏感知</strong>实现，自动处理缺失的数据值。</li>
-<li><strong>块结构</strong>支持树形结构的并行化。</li>
-<li><strong>继续训练</strong>，以便您可以进一步提升已安装的新数据模型。</li>
-</ul>
-<p>XGBoost 是免费的开源软件，可在许可的 Apache-2 许可下使用。</p>
-<h2 id="为什么要使用-XGBoost？"><a href="#为什么要使用-XGBoost？" class="headerlink" title="为什么要使用 XGBoost？"></a>为什么要使用 XGBoost？</h2><p>使用 XGBoost 的两个原因也是该项目的两个目标：</p>
-<ol>
-<li>执行速度。</li>
-<li>模特表演。</li>
-</ol>
-<h3 id="1-XGBoost-执行速度"><a href="#1-XGBoost-执行速度" class="headerlink" title="1. XGBoost 执行速度"></a>1. XGBoost 执行速度</h3><p>通常，XGBoost 很快。与梯度提升的其他实现相比，真的很快。</p>
-<p><a href="https://www.linkedin.com/in/szilard" target="_blank" rel="noopener">Szilard Pafka</a> 进行了一些客观的基准测试，比较了 XGBoost 与梯度提升和袋装决策树的其他实现的表现。他在 2015 年 5 月的博客文章“<a href="http://datascience.la/benchmarking-random-forest-implementations/" target="_blank" rel="noopener">基准随机森林实施基准</a>”中写下了他的结果。</p>
-<p>他还提供了 <a href="https://github.com/szilard/benchm-ml" target="_blank" rel="noopener">GitHub</a> 上的所有代码以及更为广泛的硬数字结果报告。</p>
-<p><img src="img/6198624aaad562ea913e9dd529a072e5.jpg" alt="Benchmark Performance of XGBoost"></p>
-<p>XGBoost 的基准表现，取自<a href="http://datascience.la/benchmarking-random-forest-implementations/" target="_blank" rel="noopener">基准随机森林实施</a>。</p>
-<p>他的结果显示 XGBoost 几乎总是比 R，Python Spark 和 H2O 的其他基准测试实现更快。</p>
-<p>从他的实验中，他评论说：</p>
-<blockquote>
-<p>我也尝试过 xgboost，一个流行的增强库，它也可以构建随机森林。它速度快，内存效率高，精度高</p>
-</blockquote>
-<ul>
-<li>Szilard Pafka，<a href="http://datascience.la/benchmarking-random-forest-implementations/" target="_blank" rel="noopener">基准随机森林实施基准</a>。</li>
-</ul>
-<h3 id="2-XGBoost-模型表现"><a href="#2-XGBoost-模型表现" class="headerlink" title="2. XGBoost 模型表现"></a>2. XGBoost 模型表现</h3><p>XGBoost 在分类和回归预测建模问题上支配结构化或表格数据集。</p>
-<p>有证据表明，它是 Kaggle 竞争数据科学平台竞赛获胜者的首选算法。</p>
-<p>例如，有一个不完整的第一，第二和第三名比赛获胜者名单，标题为： <a href="https://github.com/dmlc/xgboost/tree/master/demo#machine-learning-challenge-winning-solutions" target="_blank" rel="noopener">XGBoost：机器学习挑战获胜解决方案</a>。</p>
-<p>为了使这一点更加切实，下面是来自 Kaggle 比赛获胜者的一些有见地的引用：</p>
-<blockquote>
-<p>作为越来越多的 Kaggle 比赛的赢家，XGBoost 再次向我们展示了一个值得在您的工具箱中使用的全面算法。</p>
-</blockquote>
-<ul>
-<li><a href="http://blog.kaggle.com/2015/12/03/dato-winners-interview-1st-place-mad-professors/" target="_blank" rel="noopener">拿督获奖者专访：第一名，疯狂教授</a></li>
-</ul>
-<blockquote>
-<p>如有疑问，请使用 xgboost。</p>
-</blockquote>
-<ul>
-<li><a href="http://blog.kaggle.com/2015/08/26/avito-winners-interview-1st-place-owen-zhang/" target="_blank" rel="noopener">Avito Winner 的访谈：第一名，Owen Zhang</a></li>
-</ul>
-<blockquote>
-<p>我喜欢单人模特做得很好，我最好的单人模特是 XGBoost，可以自己获得第 10 名。</p>
-</blockquote>
-<ul>
-<li><a href="http://blog.kaggle.com/2015/09/22/caterpillar-winners-interview-1st-place-gilberto-josef-leustagos-mario/" target="_blank" rel="noopener">卡特彼勒获奖者专访：第一名</a></li>
-</ul>
-<blockquote>
-<p>我只用过 XGBoost。</p>
-</blockquote>
-<ul>
-<li><a href="http://blog.kaggle.com/2015/09/28/liberty-mutual-property-inspection-winners-interview-qingchen-wang/" target="_blank" rel="noopener">Liberty Mutual Property Inspection，获奖者专访：第一名，王清晨</a></li>
-</ul>
-<blockquote>
-<p>我使用的唯一监督学习方法是梯度提升，在优秀的 xgboost 包中实现。</p>
-</blockquote>
-<ul>
-<li><a href="http://blog.kaggle.com/2015/10/21/recruit-coupon-purchase-winners-interview-2nd-place-halla-yang/" target="_blank" rel="noopener">招募优惠券购买获奖者专访：第二名，Halla Yang</a></li>
-</ul>
-<h2 id="XGBoost-使用什么算法？"><a href="#XGBoost-使用什么算法？" class="headerlink" title="XGBoost 使用什么算法？"></a>XGBoost 使用什么算法？</h2><p>XGBoost 库实现<a href="https://en.wikipedia.org/wiki/Gradient_boosting" target="_blank" rel="noopener">梯度提升决策树算法</a>。</p>
-<p>该算法有许多不同的名称，例如梯度提升，多重加性回归树，随机梯度提升或梯度提升机器。</p>
-<p>Boosting 是一种集合技术，其中添加了新模型以纠正现有模型所产生的错误。依次添加模型，直到不能进一步改进。一个流行的例子是 <a href="http://machinelearningmastery.com/boosting-and-adaboost-for-machine-learning/" target="_blank" rel="noopener">AdaBoost 算法</a>，它对很难预测的数据点进行加权。</p>
-<p>梯度提升是一种方法，其中创建新模型以预测先前模型的残差或误差，然后将其加在一起以进行最终预测。它被称为梯度提升，因为它使用梯度下降算法来最小化添加新模型时的损失。</p>
-<p>该方法支持回归和分类预测建模问题。</p>
-<p>有关增强和梯度提升的更多信息，请参阅 Trevor Hastie 关于<a href="https://www.youtube.com/watch?v=wPqtzj5VZus" target="_blank" rel="noopener">梯度提升机器学习</a>的演讲。</p>
-<iframe allowfullscreen frameborder="0" height="281" src="https://www.youtube.com/embed/wPqtzj5VZus?feature=oembed" width="500"></iframe>
-
-<h2 id="官方-XGBoost-资源"><a href="#官方-XGBoost-资源" class="headerlink" title="官方 XGBoost 资源"></a>官方 XGBoost 资源</h2><p>关于 XGBoost 的最佳信息来源是项目的<a href="https://github.com/dmlc/xgboost" target="_blank" rel="noopener">官方 GitHub 存储库。</a></p>
-<p>从那里，您可以访问<a href="https://github.com/dmlc/xgboost/issues" target="_blank" rel="noopener">问题跟踪器</a>和<a href="https://groups.google.com/forum/#!forum/xgboost-user/" target="_blank" rel="noopener">用户组</a>，可用于提问和报告错误。</p>
-<p><a href="https://github.com/dmlc/xgboost/tree/master/demo" target="_blank" rel="noopener">Awesome XGBoost 页面</a>是一个很好的链接，带有示例代码和帮助。</p>
-<p>还有一个<a href="https://xgboost.readthedocs.io/en/latest/" target="_blank" rel="noopener">官方文档页面</a>，其中包含一系列不同语言的入门指南，教程，操作指南等。</p>
-<p>关于 XGBoost 的一些更正式的论文值得阅读，以获得更多关于图书馆的背景知识：</p>
-<ul>
-<li><a href="http://jmlr.org/proceedings/papers/v42/chen14.pdf" target="_blank" rel="noopener">Higgs Boson Discovery with Boosted Trees</a> ，2014。</li>
-<li><a href="http://arxiv.org/abs/1603.02754" target="_blank" rel="noopener">XGBoost：可扩展的树木升压系统</a>，2016。</li>
-</ul>
-<h2 id="谈谈-XGBoost"><a href="#谈谈-XGBoost" class="headerlink" title="谈谈 XGBoost"></a>谈谈 XGBoost</h2><p>当开始使用像 XGBoost 这样的新工具时，在深入研究代码之前，先回顾一下有关该主题的一些讨论会很有帮助。</p>
-<h3 id="XGBoost：可扩展的树提升系统"><a href="#XGBoost：可扩展的树提升系统" class="headerlink" title="XGBoost：可扩展的树提升系统"></a>XGBoost：可扩展的树提升系统</h3><p>图书馆的创建者田天琪于 2016 年 6 月与洛杉矶数据科学小组进行了一次题为“ <a href="https://www.youtube.com/watch?v=Vly8xGnNiWs" target="_blank" rel="noopener">XGBoost：可扩展的树木增强系统</a>”的讨论。</p>
-<iframe allowfullscreen frameborder="0" height="281" src="https://www.youtube.com/embed/Vly8xGnNiWs?feature=oembed" width="500"></iframe>
-
-<p>您可以在此处查看他演讲中的幻灯片：</p>
-<iframe allowfullscreen="true" allowtransparency="true" frameborder="0" height="345" id="talk_frame_345261" mozallowfullscreen="true" src="//speakerdeck.com/player/5c6dab45648344208185d2b1ab4fdc95" style="border:0; padding:0; margin:0; background:transparent;" webkitallowfullscreen="true" width="500"></iframe>
-
-<p>有关 <a href="http://datascience.la/xgboost-workshop-and-meetup-talk-with-tianqi-chen/" target="_blank" rel="noopener">DataScience LA 博客</a>的更多信息。</p>
-<h3 id="XGBoost：eXtreme-Gradient-Boosting"><a href="#XGBoost：eXtreme-Gradient-Boosting" class="headerlink" title="XGBoost：eXtreme Gradient Boosting"></a>XGBoost：eXtreme Gradient Boosting</h3><p>2015 年 12 月在纽约数据科学学院举办的题为“ <a href="https://www.youtube.com/watch?v=ufHo8vbk6g4" target="_blank" rel="noopener">XGBoost：极限梯度提升</a>”的纽约数据科学学院发表演讲。</p>
-<iframe allowfullscreen frameborder="0" height="281" src="https://www.youtube.com/embed/ufHo8vbk6g4?feature=oembed" width="500"></iframe>
-
-<p>You can review the slides from his talk here:</p>
-<iframe allowfullscreen frameborder="0" height="356" marginheight="0" marginwidth="0" scrolling="no" src="https://www.slideshare.net/slideshow/embed_code/key/lhcV8LfZ8RfrG" style="border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;" width="427"></iframe>
-
-<p><strong><a href="https://www.slideshare.net/ShangxuanZhang/xgboost-55872323" title="Xgboost" target="_blank" rel="noopener">Xgboost</a></strong> from <strong><a href="http://www.slideshare.net/ShangxuanZhang" target="_blank" rel="noopener">Vivian Shangxuan Zhang</a></strong></p>
-<p>有关此演讲的更多信息，请访问<a href="http://blog.nycdatascience.com/faculty/kaggle-winning-solution-xgboost-algorithm-let-us-learn-from-its-author-3/" target="_blank" rel="noopener">纽约数据科学学院博客</a>。</p>
-<h2 id="安装-XGBoost"><a href="#安装-XGBoost" class="headerlink" title="安装 XGBoost"></a>安装 XGBoost</h2><p><a href="http://xgboost.readthedocs.io/en/latest/build.html" target="_blank" rel="noopener">XGBoost 文档网站</a>上有一个全面的安装指南。</p>
-<p>它涵盖了 Linux，Mac OS X 和 Windows 的安装。</p>
-<p>它还包括在 R 和 Python 等平台上的安装。</p>
-<h3 id="R-中的-XGBoost"><a href="#R-中的-XGBoost" class="headerlink" title="R 中的 XGBoost"></a>R 中的 XGBoost</h3><p>如果您是 R 用户，最好的入门地点是 xgboost 包的 <a href="https://cran.r-project.org/web/packages/xgboost/index.html" target="_blank" rel="noopener">CRAN 页面。</a></p>
-<p>在此页面中，您可以访问 <a href="https://cran.r-project.org/web/packages/xgboost/xgboost.pdf" target="_blank" rel="noopener">R vignette Package’xgboost’</a> [pdf]。</p>
-<p>此页面还链接了一些优秀的 R 教程，以帮助您入门：</p>
-<ul>
-<li><a href="https://cran.r-project.org/web/packages/xgboost/vignettes/discoverYourData.html" target="_blank" rel="noopener">发现您的数据</a></li>
-<li><a href="https://cran.r-project.org/web/packages/xgboost/vignettes/xgboostPresentation.html" target="_blank" rel="noopener">XGBoost 演示文稿</a></li>
-<li><a href="https://cran.r-project.org/web/packages/xgboost/vignettes/xgboost.pdf" target="_blank" rel="noopener">xgboost：eXtreme Gradient Boosting</a> [pdf]</li>
-</ul>
-<p>还有官方的 <a href="http://xgboost.readthedocs.io/en/latest/R-package/xgboostPresentation.html" target="_blank" rel="noopener">XGBoost R 教程</a>和<a href="http://xgboost.readthedocs.io/en/latest/R-package/discoverYourData.html" target="_blank" rel="noopener">用 XGBoost</a> 教程了解你的数据集。</p>
-<h3 id="Python-中的-XGBoost"><a href="#Python-中的-XGBoost" class="headerlink" title="Python 中的 XGBoost"></a>Python 中的 XGBoost</h3><p>安装说明可在 XGBoost 安装指南的 <a href="https://github.com/dmlc/xgboost/blob/master/doc/build.md#python-package-installation" target="_blank" rel="noopener">Python 部分找到。</a></p>
-<p>官方 <a href="http://xgboost.readthedocs.io/en/latest/python/python_intro.html" target="_blank" rel="noopener">Python 包简介</a>是在 Python 中使用 XGBoost 时最好的起点。</p>
-<p>要快速入门，您可以输入：</p>
-<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo pip install xgboost</span><br></pre></td></tr></table></figure>
-<p>在 <a href="https://github.com/tqchen/xgboost/tree/master/demo/guide-python" target="_blank" rel="noopener">XGBoost Python 功能演练</a>中，Python 中还有一个很好的示例源代码列表。</p>
-<h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><p>在这篇文章中，您发现了应用机器学习的 XGBoost 算法。</p>
-<p>你了解到：</p>
-<ul>
-<li>XGBoost 是一个用于开发快速和高表现梯度提升树模型的库。</li>
-<li>XGBoost 在一系列困难的机器学习任务中实现了最佳表现。</li>
-<li>您可以从命令行，Python 和 R 使用此库以及如何开始使用。</li>
-</ul>
-<p>你用过 XGBoost 吗？在下面的评论中分享您的经验。</p>
-<p>您对 XGBoost 或该帖子有任何疑问吗？在下面的评论中提出您的问题，我会尽力回答。</p>
-
+<p>XGBoost 是为速度和表现而设计的梯度提升决策树的实现。<br>
+        
+          <a class="article-more-a" href="/2019/04/26/yuque/应用机器学习的 XGBoost 简介/#more">more >></a>
+        
       
 
       
-    </div>
+    </p></div>
     <div class="article-info article-info-index">
       
       
@@ -396,218 +239,19 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="浅谈机器学习的梯度提升算法"><a href="#浅谈机器学习的梯度提升算法" class="headerlink" title="浅谈机器学习的梯度提升算法"></a>浅谈机器学习的梯度提升算法</h1><blockquote>
+        <p><a href></a><br><a name="06084c14"></a></p>
+<h1 id="浅谈机器学习的梯度提升算法"><a href="#浅谈机器学习的梯度提升算法" class="headerlink" title="浅谈机器学习的梯度提升算法"></a>浅谈机器学习的梯度提升算法</h1><blockquote>
 <p>原文： <a href="https://machinelearningmastery.com/gentle-introduction-gradient-boosting-algorithm-machine-learning/" target="_blank" rel="noopener">https://machinelearningmastery.com/gentle-introduction-gradient-boosting-algorithm-machine-learning/</a></p>
 </blockquote>
 <p>梯度提升是构建预测模型的最强大技术之一。</p>
-<p>在这篇文章中，您将发现梯度提升机器学习算法，并轻松介绍它的来源和工作原理。</p>
-<p>阅读这篇文章后，你会知道：</p>
-<ul>
-<li>从学习理论和 AdaBoost 推动的起源。</li>
-<li>梯度提升的工作原理包括损失函数，弱学习器和加法模型。</li>
-<li>如何通过各种正则化方案提高基本算法的表现</li>
-</ul>
-<p>让我们开始吧。</p>
-<p><img src="img/3dde9db909245469cc477e5f07363bbe.jpg" alt="A Gentle Introduction to the Gradient Boosting Algorithm for Machine Learning"></p>
-<p>机器学习梯度提升算法的温和介绍<br><a href="https://www.flickr.com/photos/bpprice/12298787813/" target="_blank" rel="noopener">brando.n</a> 的照片，保留一些权利。</p>
-<h2 id="提升的起源"><a href="#提升的起源" class="headerlink" title="提升的起源"></a>提升的起源</h2><p>提升的想法来自于弱学习器是否可以被修改为变得更好的想法。</p>
-<p>Michael Kearns 将目标阐述为“_ 假设推进问题 _”从实际角度阐述了目标：</p>
-<blockquote>
-<p>…一种将相对较差的假设转换为非常好的假设的有效算法</p>
-</blockquote>
-<ul>
-<li><a href="https://www.cis.upenn.edu/~mkearns/papers/boostnote.pdf" target="_blank" rel="noopener">关于假设提升的思考</a> [PDF]，1988</li>
-</ul>
-<p>弱假设或弱学习器被定义为其表现至少略好于随机机会的假设。</p>
-<p>这些想法建立在 Leslie Valiant 关于免费分发或<a href="https://en.wikipedia.org/wiki/Probably_approximately_correct_learning" target="_blank" rel="noopener">概率近似正确</a>（PAC）学习的工作之上，这是一个研究机器学习问题复杂性的框架。</p>
-<p>假设提升是过滤观察的想法，留下弱学习器可以处理的观察，并专注于开发新的弱学习以处理剩余的困难观察。</p>
-<blockquote>
-<p>我们的想法是多次使用弱学习方法来得到一系列假设，每一个假设都重新聚焦于前面发现的困难和错误分类的例子。 …但是，请注意，如何做到这一点并不明显</p>
-</blockquote>
-<ul>
-<li><a href="http://www.amazon.com/dp/0465060722?tag=inspiredalgor-20" target="_blank" rel="noopener">大概正确：大自然在复杂世界中学习和繁荣的算法</a>，第 152 页，2013</li>
-</ul>
-<h3 id="AdaBoost-第一个提升算法"><a href="#AdaBoost-第一个提升算法" class="headerlink" title="AdaBoost 第一个提升算法"></a>AdaBoost 第一个提升算法</h3><p>在应用中取得巨大成功的第一个实现提升的是 <a href="http://machinelearningmastery.com/boosting-and-adaboost-for-machine-learning/" target="_blank" rel="noopener">Adaptive Boosting 或 AdaBoost</a> 。</p>
-<blockquote>
-<p>提升是指通过组合粗略和中度不准确的经验法则来产生非常准确的预测规则的一般问题。</p>
-</blockquote>
-<ul>
-<li><a href="http://www.face-rec.org/algorithms/Boosting-Ensemble/decision-theoretic_generalization.pdf" target="_blank" rel="noopener">在线学习的决策理论推广及其应用</a> [PDF]，1995</li>
-</ul>
-<p>AdaBoost 中的弱学习器是决策树，只有一个分裂，称为决策树桩的短缺。</p>
-<p>AdaBoost 通过对观察结果进行加权，更加重视难以分类的实例，而不是那些已经处理好的实例。新的弱学习器按顺序添加，将他们的训练集中在更难的模式上。</p>
-<blockquote>
-<p>这意味着难以分类的样本会获得越来越大的权重，直到算法识别出正确分类这些样本的模型</p>
-</blockquote>
-<ul>
-<li><a href="http://www.amazon.com/dp/1461468485?tag=inspiredalgor-20" target="_blank" rel="noopener">Applied Predictive Modeling</a> ，2013</li>
-</ul>
-<p>通过对弱学习器预测的多数投票进行预测，并根据他们的个人准确性进行加权。 AdaBoost 算法最成功的形式是二进制分类问题，称为 AdaBoost.M1。</p>
-<p>您可以在帖子中了解有关 AdaBoost 算法的更多信息：</p>
-<ul>
-<li><a href="http://machinelearningmastery.com/boosting-and-adaboost-for-machine-learning/" target="_blank" rel="noopener">Boosting 和 AdaBoost 机器学习</a>。</li>
-</ul>
-<h3 id="AdaBoost-作为梯度提升的推广"><a href="#AdaBoost-作为梯度提升的推广" class="headerlink" title="AdaBoost 作为梯度提升的推广"></a>AdaBoost 作为梯度提升的推广</h3><p>AdaBoost 和相关算法首先由 Breiman 称之为 ARCing 算法的统计框架重铸。</p>
-<blockquote>
-<p>Arcing 是 Adaptive Reweighting and Combining 的首字母缩写。电弧放电算法中的每个步骤都包括加权最小化，然后重新计算[分类器]和[加权输入]。</p>
-</blockquote>
-<ul>
-<li><a href="https://www.stat.berkeley.edu/~breiman/games.pdf" target="_blank" rel="noopener">预测游戏和拱形算法</a> [PDF]，1997</li>
-</ul>
-<p>这个框架由 Friedman 进一步开发，称为 Gradient Boosting Machines。后来称为梯度提升或梯度树增强。</p>
-<p>统计框架将推进作为一个数值优化问题，其目标是通过使用梯度下降类似过程添加弱学习器来最小化模型的损失。</p>
-<p>这类算法被描述为阶段性加法模型。这是因为一次添加一个新的弱学习器，并且模型中现有的弱学习器被冻结并保持不变。</p>
-<blockquote>
-<p>请注意，此阶段策略与逐步方法不同，后者在添加新的时重新调整先前输入的术语。</p>
-</blockquote>
-<ul>
-<li><a href="https://statweb.stanford.edu/~jhf/ftp/trebst.pdf" target="_blank" rel="noopener">贪婪函数逼近：梯度增压机</a> [PDF]，1999</li>
-</ul>
-<p>泛化允许使用任意可微分损失函数，将技术扩展到二元分类问题之外，以支持回归，多类分类等。</p>
-<h2 id="梯度提升的工作原理"><a href="#梯度提升的工作原理" class="headerlink" title="梯度提升的工作原理"></a>梯度提升的工作原理</h2><p>梯度提升涉及三个要素：</p>
-<ol>
-<li>要优化的损失函数。</li>
-<li>做出预测的弱学习器。</li>
-<li>添加模型，添加弱学习器以最小化损失函数。</li>
-</ol>
-<h3 id="1-损失功能"><a href="#1-损失功能" class="headerlink" title="1.损失功能"></a>1.损失功能</h3><p>使用的损失函数取决于要解决的问题类型。</p>
-<p>它必须是可区分的，但支持许多标准丢失函数，您可以定义自己的函数。</p>
-<p>例如，回归可能使用平方误差，分类可能使用对数损失。</p>
-<p>梯度提升框架的一个好处是不必为可能想要使用的每个损失函数导出新的增强算法，相反，它是足够通用的框架，可以使用任何可微分损失函数。</p>
-<h3 id="2-弱小的学习器"><a href="#2-弱小的学习器" class="headerlink" title="2.弱小的学习器"></a>2.弱小的学习器</h3><p>决策树被用作梯度提升中的弱学习器。</p>
-<p>特别是使用回归树，其输出分裂的实际值并且其输出可以被加在一起，允许添加后续模型输出并“校正”预测中的残差。</p>
-<p>树木以贪婪的方式构建，根据基尼等纯度分数选择最佳分割点，或尽量减少损失。</p>
-<p>最初，例如在 AdaBoost 的情况下，使用非常短的决策树，其仅具有单个分割，称为决策残余。较大的树木通常可以使用 4 到 8 级。</p>
-<p>通常以特定方式约束弱学习器，例如最大层数，节点，分裂或叶节点。</p>
-<p>这是为了确保学习器保持弱势，但仍然可以贪婪地构建。</p>
-<h3 id="3-添加剂模型"><a href="#3-添加剂模型" class="headerlink" title="3.添加剂模型"></a>3.添加剂模型</h3><p>树一次添加一个树，模型中的现有树不会更改。</p>
-<p>梯度下降程序用于最小化添加树木时的损失。</p>
-<p>传统上，梯度下降用于最小化一组参数，例如回归方程中的系数或神经网络中的权重。在计算错误或丢失之后，更新权重以最小化该错误。</p>
-<p>我们有弱学习器子模型或更具体的决策树，而不是参数。在计算损失之后，为了执行梯度下降过程，我们必须向模型添加树以减少损失（即遵循梯度）。我们通过参数化树来完成此操作，然后修改树的参数并向右移动（减少剩余损失。</p>
-<p>通常，这种方法称为功能梯度下降或具有功能的梯度下降。</p>
-<blockquote>
-<p>产生优化[成本]的分类器的加权组合的一种方法是通过函数空间中的梯度下降</p>
-</blockquote>
-<ul>
-<li><a href="http://papers.nips.cc/paper/1766-boosting-algorithms-as-gradient-descent.pdf" target="_blank" rel="noopener">在函数空间中提升算法作为梯度下降</a> [PDF]，1999</li>
-</ul>
-<p>然后将新树的输出添加到现有树序列的输出中，以便纠正或改进模型的最终输出。</p>
-<p>一旦损失达到可接受的水平或在外部验证数据集上不再改进，则添加固定数量的树或训练停止。</p>
-<h2 id="基本梯度提升的改进"><a href="#基本梯度提升的改进" class="headerlink" title="基本梯度提升的改进"></a>基本梯度提升的改进</h2><p>梯度提升是一种贪婪算法，可以快速过度训练数据集。</p>
-<p>它可以受益于惩罚算法的各个部分的正则化方法，并且通常通过减少过度拟合来改善算法的表现。</p>
-<p>在本节中，我们将介绍基本梯度提升的 4 个增强功能：</p>
-<ol>
-<li>树约束</li>
-<li>收缩</li>
-<li>随机抽样</li>
-<li>惩罚学习</li>
-</ol>
-<h3 id="1-树约束"><a href="#1-树约束" class="headerlink" title="1.树约束"></a>1.树约束</h3><p>重要的是弱势学习器有技巧但仍然很弱。</p>
-<p>树可以通过多种方式进行约束。</p>
-<p>一个好的通用启发式方法是，树的创建越多，模型中需要的树就越多，反之，在不受约束的单个树中，所需的树就越少。</p>
-<p>以下是可以对决策树构造施加的一些约束：</p>
-<ul>
-<li><strong>树木数量</strong>，通常会为模型添加更多树木，过度拟合可能会非常缓慢。建议继续添加树木，直至观察不到进一步的改善。</li>
-<li><strong>树深</strong>，更深的树木更复杂的树木和更短的树木是首选。通常，4-8 级可以看到更好的结果。</li>
-<li><strong>节点数或叶数</strong>，如深度，这可以约束树的大小，但如果使用其他约束，则不限于对称结构。</li>
-<li><strong>每次分割的观察次数</strong>对训练节点的训练数据量施加最小约束，然后才能考虑分割</li>
-<li><strong>最小化损失</strong>是对添加到树中的任何拆分的改进的约束。</li>
-</ul>
-<h3 id="2-加权更新"><a href="#2-加权更新" class="headerlink" title="2.加权更新"></a>2.加权更新</h3><p>每棵树的预测按顺序加在一起。</p>
-<p>可以对每个树对该总和的贡献进行加权以减慢算法的学习。这种加权称为收缩或学习率。</p>
-<blockquote>
-<p>每个更新只是通过“学习速率参数 v”的值进行缩放</p>
-</blockquote>
-<p>— <a href="https://statweb.stanford.edu/~jhf/ftp/trebst.pdf" target="_blank" rel="noopener">Greedy Function Approximation: A Gradient Boosting Machine</a> [PDF], 1999</p>
-<p>结果是学习速度变慢，反过来需要将更多树木添加到模型中，反过来需要更长的时间来训练，提供树木数量和学习率之间的配置权衡。</p>
-<blockquote>
-<p>减小 v [学习率]的值会增加 M [树的数量]的最佳值。</p>
-</blockquote>
-<p>— <a href="https://statweb.stanford.edu/~jhf/ftp/trebst.pdf" target="_blank" rel="noopener">Greedy Function Approximation: A Gradient Boosting Machine</a> [PDF], 1999</p>
-<p>通常具有 0.1 至 0.3 范围内的小值，以及小于 0.1 的值。</p>
-<blockquote>
-<p>与随机优化中的学习速率类似，收缩减少了每棵树的影响，并为将来的树木留出了空间来改进模型。</p>
-</blockquote>
-<ul>
-<li><a href="https://statweb.stanford.edu/~jhf/ftp/stobst.pdf" target="_blank" rel="noopener">随机梯度提升</a> [PDF]，1999</li>
-</ul>
-<h3 id="3-随机梯度提升"><a href="#3-随机梯度提升" class="headerlink" title="3.随机梯度提升"></a>3.随机梯度提升</h3><p>对装袋合奏和随机森林的深入了解允许从训练数据集的子样本中贪婪地创建树。</p>
-<p>可以使用相同的益处来减少梯度提升模型中序列中的树之间的相关性。</p>
-<p>这种增强的变化称为随机梯度提升。</p>
-<blockquote>
-<p>在每次迭代中，从完整训练数据集中随机（无替换）绘制训练数据的子样本。然后使用随机选择的子样本而不是完整样本来适合基础学习器。</p>
-</blockquote>
-<p>— <a href="https://statweb.stanford.edu/~jhf/ftp/stobst.pdf" target="_blank" rel="noopener">Stochastic Gradient Boosting</a> [PDF], 1999</p>
-<p>可以使用的一些随机增压变体：</p>
-<ul>
-<li>在创建每个树之前的子样本行。</li>
-<li>创建每个树之前的子样本列</li>
-<li>在考虑每个拆分之前的子采样列。</li>
-</ul>
-<p>通常，积极的子采样（例如仅选择 50％的数据）已被证明是有益的。</p>
-<blockquote>
-<p>根据用户反馈，使用列子采样可以比传统的行子采样更加防止过度拟合</p>
-</blockquote>
-<ul>
-<li><a href="https://arxiv.org/abs/1603.02754" target="_blank" rel="noopener">XGBoost：可扩展的树升压系统</a>，2016</li>
-</ul>
-<h3 id="4-Penalized-Gradient-Boosting"><a href="#4-Penalized-Gradient-Boosting" class="headerlink" title="4. Penalized Gradient Boosting"></a>4. Penalized Gradient Boosting</h3><p>除了它们的结构之外，还可以对参数化树施加附加约束。</p>
-<p>像 CART 这样的经典决策树不被用作弱学习器，而是使用称为回归树的修改形式，其在叶节点（也称为终端节点）中具有数值。在一些文献中，树叶中的值可以称为权重。</p>
-<p>因此，可以使用流行的正则化函数来规范树的叶权值，例如：</p>
-<ul>
-<li>L1 权重的正则化。</li>
-<li>权重的 L2 正则化。</li>
-</ul>
-<blockquote>
-<p>额外的正则化项有助于平滑最终学习的权重以避免过度拟合。直观地，正则化目标将倾向于选择采用简单和预测函数的模型。</p>
-</blockquote>
-<p>— <a href="https://arxiv.org/abs/1603.02754" target="_blank" rel="noopener">XGBoost: A Scalable Tree Boosting System</a>, 2016</p>
-<h2 id="梯度提升资源"><a href="#梯度提升资源" class="headerlink" title="梯度提升资源"></a>梯度提升资源</h2><p>梯度提升是一种迷人的算法，我相信你想要更深入。</p>
-<p>本节列出了可用于了解梯度提升算法的更多信息。</p>
-<h3 id="梯度提升视频"><a href="#梯度提升视频" class="headerlink" title="梯度提升视频"></a>梯度提升视频</h3><ul>
-<li><a href="https://www.youtube.com/watch?v=wPqtzj5VZus" target="_blank" rel="noopener">Gradient Boosting Machine Learning</a> ，Trevor Hastie，2014</li>
-<li><a href="https://www.youtube.com/watch?v=sRktKszFmSk" target="_blank" rel="noopener">Gradient Boosting</a> ，Alexander Ihler，2012</li>
-<li><a href="https://www.youtube.com/watch?v=WZvPUGNJg18" target="_blank" rel="noopener">GBM</a> ，John Mount，2015 年</li>
-<li><a href="https://www.youtube.com/watch?v=UHBmv7qCey4" target="_blank" rel="noopener">学习：提升</a>，麻省理工学院 6.034 人工智能，2010</li>
-<li><a href="https://www.youtube.com/watch?v=0IhraqUVJ_E" target="_blank" rel="noopener">xgboost：用于快速准确梯度提升的 R 包</a>，2016</li>
-<li><a href="https://www.youtube.com/watch?v=Vly8xGnNiWs" target="_blank" rel="noopener">XGBoost：可扩展的树木升压系统</a>，陈天琪，2016</li>
-</ul>
-<h3 id="教科书中的梯度提升"><a href="#教科书中的梯度提升" class="headerlink" title="教科书中的梯度提升"></a>教科书中的梯度提升</h3><ul>
-<li>第 8.2.3 节 Boosting，第 321 页，<a href="http://www.amazon.com/dp/1461471370?tag=inspiredalgor-20" target="_blank" rel="noopener">统计学习简介：在 R</a> 中的应用。</li>
-<li>第 8.6 节 Boosting，第 203 页，<a href="http://www.amazon.com/dp/1461468485?tag=inspiredalgor-20" target="_blank" rel="noopener">应用预测建模</a>。</li>
-<li>第 14.5 节“随机梯度提升”，第 390 页，<a href="http://www.amazon.com/dp/1461468485?tag=inspiredalgor-20" target="_blank" rel="noopener">应用预测建模</a>。</li>
-<li>第 16.4 节 Boosting，第 556 页，<a href="http://www.amazon.com/dp/0262018020?tag=inspiredalgor-20" target="_blank" rel="noopener">机器学习：概率视角</a></li>
-<li>第 10 章 Boosting 和 Additive 树，第 337 页，<a href="http://www.amazon.com/dp/0387848576?tag=inspiredalgor-20" target="_blank" rel="noopener">统计学习的要素：数据挖掘，推理和预测</a></li>
-</ul>
-<h3 id="Gradient-Boosting-Papers"><a href="#Gradient-Boosting-Papers" class="headerlink" title="Gradient Boosting Papers"></a>Gradient Boosting Papers</h3><ul>
-<li><a href="http://www.cis.upenn.edu/~mkearns/papers/boostnote.pdf" target="_blank" rel="noopener">关于假设提升的思考</a> [PDF]，Michael Kearns，1988</li>
-<li><a href="http://cns.bu.edu/~gsc/CN710/FreundSc95.pdf" target="_blank" rel="noopener">在线学习的决策理论推广及其应用</a> [PDF]，1995</li>
-<li><a href="http://statistics.berkeley.edu/sites/default/files/tech-reports/486.pdf" target="_blank" rel="noopener">弧形边缘</a> [PDF]，1998</li>
-<li><a href="https://statweb.stanford.edu/~jhf/ftp/stobst.pdf" target="_blank" rel="noopener">随机梯度提升</a> [PDF]，1999</li>
-<li><a href="http://maths.dur.ac.uk/~dma6kp/pdf/face_recognition/Boosting/Mason99AnyboostLong.pdf" target="_blank" rel="noopener">在函数空间中提升算法作为梯度下降</a> [PDF]，1999</li>
-</ul>
-<h3 id="梯度提升幻灯片"><a href="#梯度提升幻灯片" class="headerlink" title="梯度提升幻灯片"></a>梯度提升幻灯片</h3><ul>
-<li><a href="http://homes.cs.washington.edu/~tqchen/pdf/BoostedTree.pdf" target="_blank" rel="noopener">Boosted Trees 简介</a>，2014</li>
-<li><a href="http://www.chengli.io/tutorials/gradient_boosting.pdf" target="_blank" rel="noopener">一个温和的梯度提升介绍</a>，程力</li>
-</ul>
-<h3 id="梯度提升网页"><a href="#梯度提升网页" class="headerlink" title="梯度提升网页"></a>梯度提升网页</h3><ul>
-<li><a href="https://en.wikipedia.org/wiki/Boosting_(machine_learning" target="_blank" rel="noopener">提升（机器学习）</a>)</li>
-<li><a href="https://en.wikipedia.org/wiki/Gradient_boosting" target="_blank" rel="noopener">梯度提升</a></li>
-<li><a href="http://scikit-learn.org/stable/modules/ensemble.html#gradient-tree-boosting" target="_blank" rel="noopener">在 scikit-learn</a> 中提升梯度树</li>
-</ul>
-<h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><p>在这篇文章中，您发现了用于机器学习中预测建模的梯度提升算法。</p>
-<p>具体来说，你学到了：</p>
-<ul>
-<li>提升学习理论和 AdaBoost 的历史。</li>
-<li>梯度提升算法如何与损失函数，弱学习器和附加模型一起工作。</li>
-<li>如何通过正则化提高梯度提升的表现。</li>
-</ul>
-<p>您对梯度提升算法或此帖有任何疑问吗？在评论中提出您的问题，我会尽力回答。</p>
-
+<p>在这篇文章中，您将发现梯度提升机器学习算法，并轻松介绍它的来源和工作原理。<br>
+        
+          <a class="article-more-a" href="/2019/04/26/yuque/浅谈机器学习的梯度提升算法/#more">more >></a>
+        
       
 
       
-    </div>
+    </p></div>
     <div class="article-info article-info-index">
       
       
@@ -665,83 +309,19 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="在-Python-中使用-XGBoost-的特征重要性和特征选择"><a href="#在-Python-中使用-XGBoost-的特征重要性和特征选择" class="headerlink" title="在 Python 中使用 XGBoost 的特征重要性和特征选择"></a>在 Python 中使用 XGBoost 的特征重要性和特征选择</h1><blockquote>
+        <p><a href></a><br><a name="4a3ecc2a"></a></p>
+<h1 id="在-Python-中使用-XGBoost-的特征重要性和特征选择"><a href="#在-Python-中使用-XGBoost-的特征重要性和特征选择" class="headerlink" title="在 Python 中使用 XGBoost 的特征重要性和特征选择"></a>在 Python 中使用 XGBoost 的特征重要性和特征选择</h1><blockquote>
 <p>原文： <a href="https://machinelearningmastery.com/feature-importance-and-feature-selection-with-xgboost-in-python/" target="_blank" rel="noopener">https://machinelearningmastery.com/feature-importance-and-feature-selection-with-xgboost-in-python/</a></p>
 </blockquote>
 <p>使用诸如梯度提升之类的决策树方法的集合的好处是它们可以从训练的预测模型自动提供特征重要性的估计。</p>
-<p>在本文中，您将了解如何使用 Python 中的 XGBoost 库来估计功能对预测建模问题的重要性。</p>
-<p>阅读这篇文章后你会知道：</p>
-<ul>
-<li>如何使用梯度提升算法计算特征重要性。</li>
-<li>如何在 XGBoost 模型计算的 Python 中绘制要素重要性。</li>
-<li>如何使用 XGBoost 计算的要素重要性来执行要素选择。</li>
-</ul>
-<p>让我们开始吧。</p>
-<ul>
-<li><strong>2017 年 1 月更新</strong>：已更新，以反映 scikit-learn API 版本 0.18.1 中的更改​​。</li>
-<li><strong>更新 March / 2018</strong> ：添加了备用链接以下载数据集，因为原始图像已被删除。</li>
-</ul>
-<p><img src="img/5a184d41ab4a4455f4f46aae43b17958.jpg" alt="Feature Importance and Feature Selection With XGBoost in Python"></p>
-<p>功能重要性和功能选择使用 Python 中的 XGBoost<br>照片由 <a href="https://www.flickr.com/photos/keithroper/15476027141/" target="_blank" rel="noopener">Keith Roper</a> ，保留一些权利。</p>
-<h2 id="梯度提升中的特征重要性"><a href="#梯度提升中的特征重要性" class="headerlink" title="梯度提升中的特征重要性"></a>梯度提升中的特征重要性</h2><p>使用梯度提升的好处是，在构建增强树之后，检索每个属性的重要性分数是相对简单的。</p>
-<p>通常，重要性提供分数，该分数指示每个特征在模型内的增强决策树的构造中的有用性或有价值。使用决策树做出关键决策的属性越多，其相对重要性就越高。</p>
-<p>对于数据集中的每个属性，明确计算此重要性，允许对属性进行排名并相互比较。</p>
-<p>通过每个属性分割点改进表现度量的量来计算单个决策树的重要性，并由节点负责的观察数量加权。表现度量可以是用于选择分裂点的纯度（基尼指数）或另一个更具体的误差函数。</p>
-<p>然后，在模型中的所有决策树中对要素重要性进行平均。</p>
-<p>有关如何在提升的决策树中计算特征重要性的更多技术信息，请参阅本书<a href="http://www.amazon.com/dp/0387848576?tag=inspiredalgor-20" target="_blank" rel="noopener">统计学习要素：数据挖掘，推理，第 10.53.1 节“_ 预测变量的相对重要性 _”。和预测</a>，第 367 页。</p>
-<p>另外，请参阅 Matthew Drury 对 StackOverflow 问题的回答“ <a href="http://stats.stackexchange.com/questions/162162/relative-variable-importance-for-boosting" target="_blank" rel="noopener">Boosting</a> 的相对变量重要性”，他提供了非常详细和实用的答案。</p>
-<h2 id="手动绘制功能重要性"><a href="#手动绘制功能重要性" class="headerlink" title="手动绘制功能重要性"></a>手动绘制功能重要性</h2><p>经过训练的 XGBoost 模型可自动计算预测建模问题的特征重要性。</p>
-<p>这些重要性分数可在训练模型的 <strong>feature_importances_</strong> 成员变量中找到。例如，它们可以直接打印如下：</p>
-<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print(model.feature_importances_)</span><br></pre></td></tr></table></figure>
-<p>我们可以直接在条形图上绘制这些分数，以直观地显示数据集中每个要素的相对重要性。例如：</p>
-<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># plot</span></span><br><span class="line">pyplot.bar(range(len(model.feature_importances_)), model.feature_importances_)</span><br><span class="line">pyplot.show()</span><br></pre></td></tr></table></figure>
-<p>我们可以通过在 <a href="https://archive.ics.uci.edu/ml/datasets/Pima+Indians+Diabetes" target="_blank" rel="noopener">Pima 印第安人糖尿病数据集</a>上训练 XGBoost 模型并根据计算的特征重要性创建条形图来证明这一点（更新：<a href="https://raw.githubusercontent.com/jbrownlee/Datasets/master/pima-indians-diabetes.data.csv" target="_blank" rel="noopener">从这里下载</a>）。</p>
-<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># plot feature importance manually</span></span><br><span class="line"><span class="keyword">from</span> numpy <span class="keyword">import</span> loadtxt</span><br><span class="line"><span class="keyword">from</span> xgboost <span class="keyword">import</span> XGBClassifier</span><br><span class="line"><span class="keyword">from</span> matplotlib <span class="keyword">import</span> pyplot</span><br><span class="line"><span class="comment"># load data</span></span><br><span class="line">dataset = loadtxt(<span class="string">'pima-indians-diabetes.csv'</span>, delimiter=<span class="string">","</span>)</span><br><span class="line"><span class="comment"># split data into X and y</span></span><br><span class="line">X = dataset[:,<span class="number">0</span>:<span class="number">8</span>]</span><br><span class="line">y = dataset[:,<span class="number">8</span>]</span><br><span class="line"><span class="comment"># fit model no training data</span></span><br><span class="line">model = XGBClassifier()</span><br><span class="line">model.fit(X, y)</span><br><span class="line"><span class="comment"># feature importance</span></span><br><span class="line">print(model.feature_importances_)</span><br><span class="line"><span class="comment"># plot</span></span><br><span class="line">pyplot.bar(range(len(model.feature_importances_)), model.feature_importances_)</span><br><span class="line">pyplot.show()</span><br></pre></td></tr></table></figure>
-<p>运行此示例首先输出重要性分数：</p>
-<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[ <span class="number">0.089701</span>    <span class="number">0.17109634</span>  <span class="number">0.08139535</span>  <span class="number">0.04651163</span>  <span class="number">0.10465116</span>  <span class="number">0.2026578</span> <span class="number">0.1627907</span>   <span class="number">0.14119601</span>]</span><br></pre></td></tr></table></figure>
-<p>我们还得到了相对重要性的条形图。</p>
-<p><img src="img/745045b3bf82c5128eae73f2ebbfe78e.jpg" alt="Manual Bar Chart of XGBoost Feature Importance"></p>
-<p>XGBoost 功能重要性的手动条形图</p>
-<p>这个图的缺点是功能按输入索引而不是它们的重要性排序。我们可以在绘图之前对功能进行排序。</p>
-<p>值得庆幸的是，有一个内置的绘图功能来帮助我们。</p>
-<h2 id="使用内置的-XGBoost-功能重要性图"><a href="#使用内置的-XGBoost-功能重要性图" class="headerlink" title="使用内置的 XGBoost 功能重要性图"></a>使用内置的 XGBoost 功能重要性图</h2><p>XGBoost 库提供了一个内置函数来绘制按其重要性排序的特征。</p>
-<p>该函数称为 <strong>plot_importance（）</strong>，可以按如下方式使用：</p>
-<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># plot feature importance</span></span><br><span class="line">plot_importance(model)</span><br><span class="line">pyplot.show()</span><br></pre></td></tr></table></figure>
-<p>例如，下面是一个完整的代码清单，使用内置的 <strong>plot_importance（）</strong>函数绘制 Pima Indians 数据集的特征重要性。</p>
-<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># plot feature importance using built-in function</span></span><br><span class="line"><span class="keyword">from</span> numpy <span class="keyword">import</span> loadtxt</span><br><span class="line"><span class="keyword">from</span> xgboost <span class="keyword">import</span> XGBClassifier</span><br><span class="line"><span class="keyword">from</span> xgboost <span class="keyword">import</span> plot_importance</span><br><span class="line"><span class="keyword">from</span> matplotlib <span class="keyword">import</span> pyplot</span><br><span class="line"><span class="comment"># load data</span></span><br><span class="line">dataset = loadtxt(<span class="string">'pima-indians-diabetes.csv'</span>, delimiter=<span class="string">","</span>)</span><br><span class="line"><span class="comment"># split data into X and y</span></span><br><span class="line">X = dataset[:,<span class="number">0</span>:<span class="number">8</span>]</span><br><span class="line">y = dataset[:,<span class="number">8</span>]</span><br><span class="line"><span class="comment"># fit model no training data</span></span><br><span class="line">model = XGBClassifier()</span><br><span class="line">model.fit(X, y)</span><br><span class="line"><span class="comment"># plot feature importance</span></span><br><span class="line">plot_importance(model)</span><br><span class="line">pyplot.show()</span><br></pre></td></tr></table></figure>
-<p>运行该示例为我们提供了更有用的条形图。</p>
-<p><img src="img/5f9e25575188c1f1ca109d5a47b9bc13.jpg" alt="XGBoost Feature Importance Bar Chart"></p>
-<p>XGBoost 功能重要性条形图</p>
-<p>您可以看到功能是根据它们在 F0 到 F7 的输入数组（X）中的索引自动命名的。</p>
-<p>在问题描述中手动将这些指数映射到<a href="https://github.com/jbrownlee/Datasets/blob/master/pima-indians-diabetes.names" target="_blank" rel="noopener">名称，我们可以看到该图显示 F5（体重指数）具有最高重要性，F3（皮肤折叠厚度）具有最低重要性。</a></p>
-<h2 id="使用-XGBoost-功能重要性分数进行特征选择"><a href="#使用-XGBoost-功能重要性分数进行特征选择" class="headerlink" title="使用 XGBoost 功能重要性分数进行特征选择"></a>使用 XGBoost 功能重要性分数进行特征选择</h2><p>特征重要性分数可用于 scikit-learn 中的特征选择。</p>
-<p>这是使用 <a href="http://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.SelectFromModel.html" target="_blank" rel="noopener">SelectFromModel</a> 类完成的，该类采用模型并可以将数据集转换为具有所选特征的子集。</p>
-<p>该课程可以采用预训练的模型，例如在整个训练数据集上训练的模型。然后，它可以使用阈值来决定选择哪些功能。当您在 <strong>SelectFromModel</strong> 实例上调用 <strong>transform（）</strong>方法以在训练数据集和测试数据集上始终选择相同的特征时，将使用此阈值。</p>
-<p>在下面的示例中，我们首先分别训练并评估整个训练数据集和测试数据集上的 XGBoost 模型。</p>
-<p>使用从训练数据集计算的要素重要性，然后我们将模型包装在 SelectFromModel 实例中。我们使用它来选择训练数据集上的特征，从所选特征子集训练模型，然后根据相同的特征选择方案评估测试集上的模型。</p>
-<p>例如：</p>
-<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># select features using threshold</span></span><br><span class="line">selection = SelectFromModel(model, threshold=thresh, prefit=<span class="literal">True</span>)</span><br><span class="line">select_X_train = selection.transform(X_train)</span><br><span class="line"><span class="comment"># train model</span></span><br><span class="line">selection_model = XGBClassifier()</span><br><span class="line">selection_model.fit(select_X_train, y_train)</span><br><span class="line"><span class="comment"># eval model</span></span><br><span class="line">select_X_test = selection.transform(X_test)</span><br><span class="line">y_pred = selection_model.predict(select_X_test)</span><br></pre></td></tr></table></figure>
-<p>为了兴趣，我们可以测试多个阈值，以按功能重要性选择要素。具体而言，每个输入变量的特征重要性，基本上允许我们按重要性测试每个特征子集，从所有特征开始，以具有最重要特征的子集结束。</p>
-<p>完整的代码清单如下。</p>
-<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># use feature importance for feature selection</span></span><br><span class="line"><span class="keyword">from</span> numpy <span class="keyword">import</span> loadtxt</span><br><span class="line"><span class="keyword">from</span> numpy <span class="keyword">import</span> sort</span><br><span class="line"><span class="keyword">from</span> xgboost <span class="keyword">import</span> XGBClassifier</span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split</span><br><span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> accuracy_score</span><br><span class="line"><span class="keyword">from</span> sklearn.feature_selection <span class="keyword">import</span> SelectFromModel</span><br><span class="line"><span class="comment"># load data</span></span><br><span class="line">dataset = loadtxt(<span class="string">'pima-indians-diabetes.csv'</span>, delimiter=<span class="string">","</span>)</span><br><span class="line"><span class="comment"># split data into X and y</span></span><br><span class="line">X = dataset[:,<span class="number">0</span>:<span class="number">8</span>]</span><br><span class="line">Y = dataset[:,<span class="number">8</span>]</span><br><span class="line"><span class="comment"># split data into train and test sets</span></span><br><span class="line">X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=<span class="number">0.33</span>, random_state=<span class="number">7</span>)</span><br><span class="line"><span class="comment"># fit model on all training data</span></span><br><span class="line">model = XGBClassifier()</span><br><span class="line">model.fit(X_train, y_train)</span><br><span class="line"><span class="comment"># make predictions for test data and evaluate</span></span><br><span class="line">y_pred = model.predict(X_test)</span><br><span class="line">predictions = [round(value) <span class="keyword">for</span> value <span class="keyword">in</span> y_pred]</span><br><span class="line">accuracy = accuracy_score(y_test, predictions)</span><br><span class="line">print(<span class="string">"Accuracy: %.2f%%"</span> % (accuracy * <span class="number">100.0</span>))</span><br><span class="line"><span class="comment"># Fit model using each importance as a threshold</span></span><br><span class="line">thresholds = sort(model.feature_importances_)</span><br><span class="line"><span class="keyword">for</span> thresh <span class="keyword">in</span> thresholds:</span><br><span class="line">	<span class="comment"># select features using threshold</span></span><br><span class="line">	selection = SelectFromModel(model, threshold=thresh, prefit=<span class="literal">True</span>)</span><br><span class="line">	select_X_train = selection.transform(X_train)</span><br><span class="line">	<span class="comment"># train model</span></span><br><span class="line">	selection_model = XGBClassifier()</span><br><span class="line">	selection_model.fit(select_X_train, y_train)</span><br><span class="line">	<span class="comment"># eval model</span></span><br><span class="line">	select_X_test = selection.transform(X_test)</span><br><span class="line">	y_pred = selection_model.predict(select_X_test)</span><br><span class="line">	predictions = [round(value) <span class="keyword">for</span> value <span class="keyword">in</span> y_pred]</span><br><span class="line">	accuracy = accuracy_score(y_test, predictions)</span><br><span class="line">	print(<span class="string">"Thresh=%.3f, n=%d, Accuracy: %.2f%%"</span> % (thresh, select_X_train.shape[<span class="number">1</span>], accuracy*<span class="number">100.0</span>))</span><br></pre></td></tr></table></figure>
-<p>运行此示例将输出以下输出：</p>
-<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Accuracy: <span class="number">77.95</span>%</span><br><span class="line">Thresh=<span class="number">0.071</span>, n=<span class="number">8</span>, Accuracy: <span class="number">77.95</span>%</span><br><span class="line">Thresh=<span class="number">0.073</span>, n=<span class="number">7</span>, Accuracy: <span class="number">76.38</span>%</span><br><span class="line">Thresh=<span class="number">0.084</span>, n=<span class="number">6</span>, Accuracy: <span class="number">77.56</span>%</span><br><span class="line">Thresh=<span class="number">0.090</span>, n=<span class="number">5</span>, Accuracy: <span class="number">76.38</span>%</span><br><span class="line">Thresh=<span class="number">0.128</span>, n=<span class="number">4</span>, Accuracy: <span class="number">76.38</span>%</span><br><span class="line">Thresh=<span class="number">0.160</span>, n=<span class="number">3</span>, Accuracy: <span class="number">74.80</span>%</span><br><span class="line">Thresh=<span class="number">0.186</span>, n=<span class="number">2</span>, Accuracy: <span class="number">71.65</span>%</span><br><span class="line">Thresh=<span class="number">0.208</span>, n=<span class="number">1</span>, Accuracy: <span class="number">63.78</span>%</span><br></pre></td></tr></table></figure>
-<p>我们可以看到模型的表现通常随着所选特征的数量而减少。</p>
-<p>在这个问题上，需要权衡测试集合精度的特征，我们可以决定采用较不复杂的模型（较少的属性，如 n = 4），并接受估计精度的适度降低，从 77.95％降至 76.38％。</p>
-<p>这可能是对这么小的数据集的一种洗涤，但对于更大的数据集并且使用交叉验证作为模型评估方案可能是更有用的策略。</p>
-<h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><p>在这篇文章中，您发现了如何在训练有素的 XGBoost 梯度提升模型中访问特征和使用重要性。</p>
-<p>具体来说，你学到了：</p>
-<ul>
-<li>重要的是什么，一般如何在 XGBoost 中计算。</li>
-<li>如何从 XGBoost 模型访问和绘制要素重要性分数。</li>
-<li>如何使用 XGBoost 模型中的要素重要性来选择要素。</li>
-</ul>
-<p>您对 XGBoost 或此帖中的功能重要性有任何疑问吗？在评论中提出您的问题，我会尽力回答。</p>
-
+<p>在本文中，您将了解如何使用 Python 中的 XGBoost 库来估计功能对预测建模问题的重要性。<br>
+        
+          <a class="article-more-a" href="/2019/04/26/yuque/在 Python 中使用 XGBoost 的特征重要性和特征选择/#more">more >></a>
+        
       
 
       
-    </div>
+    </p></div>
     <div class="article-info article-info-index">
       
       
@@ -1283,7 +863,7 @@
   
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
+      <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
     </nav>
   
 

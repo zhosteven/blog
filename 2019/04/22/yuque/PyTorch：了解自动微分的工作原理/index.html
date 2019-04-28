@@ -8,12 +8,12 @@
   <link rel="dns-prefetch" href="http://zhos.me">
   <title>PyTorch：了解自动微分的工作原理 | A+</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="当我开始编码神经网络时，我最终使用了我周围的其他人正在使用的东西。TensorFlow。但最近，PyTorch已成为成为深度学习框架之王的主要竞争者。它真正引诱的是它的动态计算图范式。不要担心最后一行现在对你没有意义。到这篇文章结束时，它会。但请相信，它使调试神经网络更容易。">
+  <meta name="description" content="当我开始编码神经网络时，我最终使用了我周围的其他人正在使用的东西。TensorFlow。但最近，PyTorch已成为成为深度学习框架之王的主要竞争者。它真正引诱的是它的动态计算图范式。不要担心最后一行现在对你没有意义。到这篇文章结束时，它会。但请相信，它使调试神经网络更容易。&amp;amp;lt;!--mo...">
 <meta property="og:type" content="article">
 <meta property="og:title" content="PyTorch：了解自动微分的工作原理">
 <meta property="og:url" content="http://zhos.me/2019/04/22/yuque/PyTorch：了解自动微分的工作原理/index.html">
 <meta property="og:site_name" content="A+">
-<meta property="og:description" content="当我开始编码神经网络时，我最终使用了我周围的其他人正在使用的东西。TensorFlow。但最近，PyTorch已成为成为深度学习框架之王的主要竞争者。它真正引诱的是它的动态计算图范式。不要担心最后一行现在对你没有意义。到这篇文章结束时，它会。但请相信，它使调试神经网络更容易。">
+<meta property="og:description" content="当我开始编码神经网络时，我最终使用了我周围的其他人正在使用的东西。TensorFlow。但最近，PyTorch已成为成为深度学习框架之王的主要竞争者。它真正引诱的是它的动态计算图范式。不要担心最后一行现在对你没有意义。到这篇文章结束时，它会。但请相信，它使调试神经网络更容易。&amp;amp;lt;!--mo...">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1555920137341-eb761ea4-b722-4bc9-b5e8-4de781000e2d.png#align=left&display=inline&height=510&name=1_FDL9Se9otGzz83F3rofQuA.png&originHeight=576&originWidth=842&size=45311&status=done&width=746">
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1555920175058-b7d0bdbb-756b-4787-a6a7-42f8ce33ace0.png#align=left&display=inline&height=510&name=1_EWpoG5KayZSqkWmwM_wMFQ.png&originHeight=576&originWidth=842&size=57231&status=done&width=746">
@@ -21,10 +21,10 @@
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1555920385685-828685e2-cdc2-45d6-89bc-409484df1967.png#align=left&display=inline&height=404&name=1_40LF-3EKdsZsbTP5JmzVjQ.png&originHeight=542&originWidth=1000&size=64547&status=done&width=746">
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1555920456695-4e37b295-db3d-4299-9df8-75fee4812697.png#align=left&display=inline&height=440&name=1_aEo6hqBUhN-_2YmIBETB-w.png&originHeight=586&originWidth=994&size=52201&status=done&width=746">
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1555920489734-6f1d991c-9a75-4594-9091-6dfa424c7a34.png#align=left&display=inline&height=508&name=1_gR7elwFSFrnvvao0d1XmGw.png&originHeight=573&originWidth=842&size=36767&status=done&width=746">
-<meta property="og:updated_time" content="2019-04-26T03:23:11.227Z">
+<meta property="og:updated_time" content="2019-04-28T01:30:08.051Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="PyTorch：了解自动微分的工作原理">
-<meta name="twitter:description" content="当我开始编码神经网络时，我最终使用了我周围的其他人正在使用的东西。TensorFlow。但最近，PyTorch已成为成为深度学习框架之王的主要竞争者。它真正引诱的是它的动态计算图范式。不要担心最后一行现在对你没有意义。到这篇文章结束时，它会。但请相信，它使调试神经网络更容易。">
+<meta name="twitter:description" content="当我开始编码神经网络时，我最终使用了我周围的其他人正在使用的东西。TensorFlow。但最近，PyTorch已成为成为深度学习框架之王的主要竞争者。它真正引诱的是它的动态计算图范式。不要担心最后一行现在对你没有意义。到这篇文章结束时，它会。但请相信，它使调试神经网络更容易。&amp;amp;lt;!--mo...">
 <meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1555920137341-eb761ea4-b722-4bc9-b5e8-4de781000e2d.png#align=left&display=inline&height=510&name=1_FDL9Se9otGzz83F3rofQuA.png&originHeight=576&originWidth=842&size=45311&status=done&width=746">
   
     <link rel="alternative" href="/atom.xml" title="A+" type="application/atom+xml">

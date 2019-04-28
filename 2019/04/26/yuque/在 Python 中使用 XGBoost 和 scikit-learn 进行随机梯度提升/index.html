@@ -8,22 +8,22 @@
   <link rel="dns-prefetch" href="http://zhos.me">
   <title>在 Python 中使用 XGBoost 和 scikit-learn 进行随机梯度提升 | A+</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="在 Python 中使用 XGBoost 和 scikit-learn 进行随机梯度提升 原文： https://machinelearningmastery.com/stochastic-gradient-boosting-xgboost-scikit-learn-python/  用于集合决策树的简单技术涉及在训练数据集的子样本上训练树。 可以采用训练数据中的行的子集来训练称为装袋的单个树。当">
+  <meta name="description" content="在 Python 中使用 XGBoost 和 scikit-learn 进行随机梯度提升原文： https://machinelearningmastery.com/stochastic-gradient-boosting-xgboost-scikit-learn-python/用于集合决策树...">
 <meta property="og:type" content="article">
 <meta property="og:title" content="在 Python 中使用 XGBoost 和 scikit-learn 进行随机梯度提升">
 <meta property="og:url" content="http://zhos.me/2019/04/26/yuque/在 Python 中使用 XGBoost 和 scikit-learn 进行随机梯度提升/index.html">
 <meta property="og:site_name" content="A+">
-<meta property="og:description" content="在 Python 中使用 XGBoost 和 scikit-learn 进行随机梯度提升 原文： https://machinelearningmastery.com/stochastic-gradient-boosting-xgboost-scikit-learn-python/  用于集合决策树的简单技术涉及在训练数据集的子样本上训练树。 可以采用训练数据中的行的子集来训练称为装袋的单个树。当">
+<meta property="og:description" content="在 Python 中使用 XGBoost 和 scikit-learn 进行随机梯度提升原文： https://machinelearningmastery.com/stochastic-gradient-boosting-xgboost-scikit-learn-python/用于集合决策树...">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://zhos.me/2019/04/26/yuque/在%20Python%20中使用%20XGBoost%20和%20scikit-learn%20进行随机梯度提升/img/fbab4c6af48b765581a028db9e675246.jpg">
-<meta property="og:image" content="http://zhos.me/2019/04/26/yuque/在%20Python%20中使用%20XGBoost%20和%20scikit-learn%20进行随机梯度提升/img/8656295302bbaecbeb416213b9a54cde.jpg">
-<meta property="og:image" content="http://zhos.me/2019/04/26/yuque/在%20Python%20中使用%20XGBoost%20和%20scikit-learn%20进行随机梯度提升/img/25700c450ba1f3aa55ec915c531c8140.jpg">
-<meta property="og:image" content="http://zhos.me/2019/04/26/yuque/在%20Python%20中使用%20XGBoost%20和%20scikit-learn%20进行随机梯度提升/img/f8330b8c24fa2c6b765dafcc072cc850.jpg">
-<meta property="og:updated_time" content="2019-04-26T03:24:22.423Z">
+<meta property="og:image" content="http://zhos.me/2019/04/26/yuque/在%20Python%20中使用%20XGBoost%20和%20scikit-learn%20进行随机梯度提升/img/fbab4c6af48b765581a028db9e675246.jpg#alt=Stochastic%20Gradient%20Boosting%20with%20XGBoost%20and%20scikit-learn%20in%20Python">
+<meta property="og:image" content="http://zhos.me/2019/04/26/yuque/在%20Python%20中使用%20XGBoost%20和%20scikit-learn%20进行随机梯度提升/img/8656295302bbaecbeb416213b9a54cde.jpg#alt=Plot%20of%20Tuning%20Row%20Sample%20Rate%20in%20XGBoost">
+<meta property="og:image" content="http://zhos.me/2019/04/26/yuque/在%20Python%20中使用%20XGBoost%20和%20scikit-learn%20进行随机梯度提升/img/25700c450ba1f3aa55ec915c531c8140.jpg#alt=Plot%20of%20Tuning%20Per-Tree%20Column%20Sampling%20in%20XGBoost">
+<meta property="og:image" content="http://zhos.me/2019/04/26/yuque/在%20Python%20中使用%20XGBoost%20和%20scikit-learn%20进行随机梯度提升/img/f8330b8c24fa2c6b765dafcc072cc850.jpg#alt=Plot%20of%20Tuning%20Per-Split%20Column%20Sampling%20in%20XGBoost">
+<meta property="og:updated_time" content="2019-04-28T01:30:08.003Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="在 Python 中使用 XGBoost 和 scikit-learn 进行随机梯度提升">
-<meta name="twitter:description" content="在 Python 中使用 XGBoost 和 scikit-learn 进行随机梯度提升 原文： https://machinelearningmastery.com/stochastic-gradient-boosting-xgboost-scikit-learn-python/  用于集合决策树的简单技术涉及在训练数据集的子样本上训练树。 可以采用训练数据中的行的子集来训练称为装袋的单个树。当">
-<meta name="twitter:image" content="http://zhos.me/2019/04/26/yuque/在%20Python%20中使用%20XGBoost%20和%20scikit-learn%20进行随机梯度提升/img/fbab4c6af48b765581a028db9e675246.jpg">
+<meta name="twitter:description" content="在 Python 中使用 XGBoost 和 scikit-learn 进行随机梯度提升原文： https://machinelearningmastery.com/stochastic-gradient-boosting-xgboost-scikit-learn-python/用于集合决策树...">
+<meta name="twitter:image" content="http://zhos.me/2019/04/26/yuque/在%20Python%20中使用%20XGBoost%20和%20scikit-learn%20进行随机梯度提升/img/fbab4c6af48b765581a028db9e675246.jpg#alt=Stochastic%20Gradient%20Boosting%20with%20XGBoost%20and%20scikit-learn%20in%20Python">
   
     <link rel="alternative" href="/atom.xml" title="A+" type="application/atom+xml">
   
@@ -173,11 +173,11 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="在-Python-中使用-XGBoost-和-scikit-learn-进行随机梯度提升"><a href="#在-Python-中使用-XGBoost-和-scikit-learn-进行随机梯度提升" class="headerlink" title="在 Python 中使用 XGBoost 和 scikit-learn 进行随机梯度提升"></a>在 Python 中使用 XGBoost 和 scikit-learn 进行随机梯度提升</h1><blockquote>
+        <p><a href></a><br><a name="72a7b719"></a></p>
+<h1 id="在-Python-中使用-XGBoost-和-scikit-learn-进行随机梯度提升"><a href="#在-Python-中使用-XGBoost-和-scikit-learn-进行随机梯度提升" class="headerlink" title="在 Python 中使用 XGBoost 和 scikit-learn 进行随机梯度提升"></a>在 Python 中使用 XGBoost 和 scikit-learn 进行随机梯度提升</h1><blockquote>
 <p>原文： <a href="https://machinelearningmastery.com/stochastic-gradient-boosting-xgboost-scikit-learn-python/" target="_blank" rel="noopener">https://machinelearningmastery.com/stochastic-gradient-boosting-xgboost-scikit-learn-python/</a></p>
 </blockquote>
-<p>用于集合决策树的简单技术涉及在训练数据集的子样本上训练树。</p>
-<p>可以采用训练数据中的行的子集来训练称为装袋的单个树。当在计算每个分裂点时也获取训练数据的行的子集时，这被称为随机森林。</p>
+<p>用于集合决策树的简单技术涉及在训练数据集的子样本上训练树。<br><a id="more"></a><br>可以采用训练数据中的行的子集来训练称为装袋的单个树。当在计算每个分裂点时也获取训练数据的行的子集时，这被称为随机森林。</p>
 <p>这些技术也可以在称为随机梯度提升的技术中用于梯度树增强模型。</p>
 <p>在这篇文章中，您将发现随机梯度提升以及如何使用 XGBoost 和 Python 中的 scikit-learn 来调整采样参数。</p>
 <p>阅读这篇文章后你会知道：</p>
@@ -188,10 +188,11 @@
 </ul>
 <p>让我们开始吧。</p>
 <ul>
-<li><strong>2017 年 1 月更新</strong>：已更新，以反映 scikit-learn API 版本 0.18.1 中的更改​​。</li>
+<li><strong>2017 年 1 月更新</strong>：已更新，以反映 scikit-learn API 版本 0.18.1 中的更改。</li>
 </ul>
-<p><img src="img/fbab4c6af48b765581a028db9e675246.jpg" alt="Stochastic Gradient Boosting with XGBoost and scikit-learn in Python"></p>
-<p>随机梯度提升 XGBoost 和 scikit-Python<br>摄影：<a href="https://www.flickr.com/photos/photohenning/379603235/" target="_blank" rel="noopener">HenningKlokkeråsen</a>，保留一些权利。</p>
+<p><img src="img/fbab4c6af48b765581a028db9e675246.jpg#alt=Stochastic%20Gradient%20Boosting%20with%20XGBoost%20and%20scikit-learn%20in%20Python" alt></p>
+<p>随机梯度提升 XGBoost 和 scikit-Python<br><br>摄影：<a href="https://www.flickr.com/photos/photohenning/379603235/" target="_blank" rel="noopener">HenningKlokkeråsen</a>，保留一些权利。</p>
+<p><a href></a><br><a name="b46c00b1"></a></p>
 <h2 id="随机梯度提升"><a href="#随机梯度提升" class="headerlink" title="随机梯度提升"></a>随机梯度提升</h2><p>梯度提升是一个贪婪的程序。</p>
 <p>将新决策树添加到模型中以校正现有模型的残差。</p>
 <p>使用贪婪搜索过程创建每个决策树，以选择最佳地最小化目标函数的分割点。这可能导致树一次又一次地使用相同的属性甚至相同的分裂点。</p>
@@ -199,18 +200,21 @@
 <p>通过允许在选择分割点时对特征（列）进行二次采样，随机森林更进一步，向树集合添加进一步的方差。</p>
 <p>这些相同的技术可用于在称为随机梯度提升的变化中的梯度提升中的决策树的构造中。</p>
 <p>通常使用训练数据的积极子样本，例如 40％至 80％。</p>
+<p><a href></a><br><a name="9ae756a7"></a></p>
 <h2 id="教程概述"><a href="#教程概述" class="headerlink" title="教程概述"></a>教程概述</h2><p>在本教程中，我们将研究不同子采样技术在梯度提升中的效果。</p>
 <p>我们将调整 Python 中 XGBoost 库支持的三种不同风格的随机梯度提升，具体来说：</p>
 <ol>
 <li>在创建每个树时，对数据集中的行进行子采样。</li>
-<li>在创建每个树时对数据集中的列进行子采​​样。</li>
-<li>在创建每个树时，对数据集中每个拆分的列进行子采​​样。</li>
+<li>在创建每个树时对数据集中的列进行子采样。</li>
+<li>在创建每个树时，对数据集中每个拆分的列进行子采样。</li>
 </ol>
+<p><a href></a><br><a name="6efbeb5d"></a></p>
 <h2 id="问题描述：Otto-Dataset"><a href="#问题描述：Otto-Dataset" class="headerlink" title="问题描述：Otto Dataset"></a>问题描述：Otto Dataset</h2><p>在本教程中，我们将使用 <a href="https://www.kaggle.com/c/otto-group-product-classification-challenge" target="_blank" rel="noopener">Otto Group 产品分类挑战</a>数据集。</p>
 <p>此数据集可从 Kaggle 免费获得（您需要注册 Kaggle 才能下载此数据集）。您可以从<a href="https://www.kaggle.com/c/otto-group-product-classification-challenge/data" target="_blank" rel="noopener">数据页面</a>下载训练数据集 <strong>train.csv.zip</strong> ，并将解压缩的 <strong>train.csv</strong> 文件放入您的工作目录。</p>
 <p>该数据集描述了超过 61,000 种产品的 93 个模糊细节，这些产品分为 10 个产品类别（例如时装，电子产品等）。输入属性是某种不同事件的计数。</p>
 <p>目标是对新产品进行预测，因为 10 个类别中的每个类别都有一组概率，并且使用多类对数损失（也称为交叉熵）来评估模型。</p>
 <p>这个竞赛在 2015 年 5 月完成，这个数据集对 XGBoost 来说是一个很好的挑战，因为它有很多例子，问题的难度以及需要很少数据准备的事实（除了将字符串类变量编码为整数）。</p>
+<p><a href></a><br><a name="e1aa31a0"></a></p>
 <h2 id="在-XGBoost-中调整行子采样"><a href="#在-XGBoost-中调整行子采样" class="headerlink" title="在 XGBoost 中调整行子采样"></a>在 XGBoost 中调整行子采样</h2><p>行子采样涉及选择训练数据集的随机样本而无需替换。</p>
 <p>行子采样可以在<strong>子样本</strong>参数中的 XGBoost 类的 scikit-learn 包装器中指定。默认值为 1.0，不进行子采样。</p>
 <p>我们可以使用 scikit-learn 内置的网格搜索功能来评估 Otto 数据集中 0.1 到 1.0 的不同子样本值的影响。</p>
@@ -222,10 +226,11 @@
 <p>我们可以看到，获得的最佳结果是 0.3，或使用 30％的训练数据集样本训练树。</p>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Best: <span class="number">-0.000647</span> using &#123;<span class="string">'subsample'</span>: <span class="number">0.3</span>&#125;</span><br><span class="line"><span class="number">-0.001156</span> (<span class="number">0.000286</span>) <span class="keyword">with</span>: &#123;<span class="string">'subsample'</span>: <span class="number">0.1</span>&#125;</span><br><span class="line"><span class="number">-0.000765</span> (<span class="number">0.000430</span>) <span class="keyword">with</span>: &#123;<span class="string">'subsample'</span>: <span class="number">0.2</span>&#125;</span><br><span class="line"><span class="number">-0.000647</span> (<span class="number">0.000471</span>) <span class="keyword">with</span>: &#123;<span class="string">'subsample'</span>: <span class="number">0.3</span>&#125;</span><br><span class="line"><span class="number">-0.000659</span> (<span class="number">0.000635</span>) <span class="keyword">with</span>: &#123;<span class="string">'subsample'</span>: <span class="number">0.4</span>&#125;</span><br><span class="line"><span class="number">-0.000717</span> (<span class="number">0.000849</span>) <span class="keyword">with</span>: &#123;<span class="string">'subsample'</span>: <span class="number">0.5</span>&#125;</span><br><span class="line"><span class="number">-0.000773</span> (<span class="number">0.000998</span>) <span class="keyword">with</span>: &#123;<span class="string">'subsample'</span>: <span class="number">0.6</span>&#125;</span><br><span class="line"><span class="number">-0.000877</span> (<span class="number">0.001179</span>) <span class="keyword">with</span>: &#123;<span class="string">'subsample'</span>: <span class="number">0.7</span>&#125;</span><br><span class="line"><span class="number">-0.001007</span> (<span class="number">0.001371</span>) <span class="keyword">with</span>: &#123;<span class="string">'subsample'</span>: <span class="number">0.8</span>&#125;</span><br><span class="line"><span class="number">-0.001239</span> (<span class="number">0.001730</span>) <span class="keyword">with</span>: &#123;<span class="string">'subsample'</span>: <span class="number">1.0</span>&#125;</span><br></pre></td></tr></table></figure>
 <p>我们可以绘制这些平均值和标准差对数损失值，以更好地理解表现如何随子采样值变化。</p>
-<p><img src="img/8656295302bbaecbeb416213b9a54cde.jpg" alt="Plot of Tuning Row Sample Rate in XGBoost"></p>
+<p><img src="img/8656295302bbaecbeb416213b9a54cde.jpg#alt=Plot%20of%20Tuning%20Row%20Sample%20Rate%20in%20XGBoost" alt></p>
 <p>XGBoost 中调整行采样率的图</p>
 <p>我们可以看到确实有 30％的人具有最佳的平均表现，但我们也可以看到，随着比率的增加，表现的差异也会显着增加。</p>
 <p>值得注意的是，所有<strong>子样本</strong>值的平均表现优于没有子采样的平均表现（<strong>子样本= 1.0</strong> ）。</p>
+<p><a href></a><br><a name="db91fb1c"></a></p>
 <h2 id="按树在-XGBoost-中调整列子采样"><a href="#按树在-XGBoost-中调整列子采样" class="headerlink" title="按树在 XGBoost 中调整列子采样"></a>按树在 XGBoost 中调整列子采样</h2><p>我们还可以在增强模型中创建每个决策树之前创建要使用的特征（或列）的随机样本。</p>
 <p>在用于 scikit-learn 的 XGBoost 包装器中，这由 <strong>colsample_bytree</strong> 参数控制。</p>
 <p>默认值为 1.0，表示在每个决策树中使用所有列。我们可以评估 <strong>colsample_bytree</strong> 的值在 0.1 和 1.0 之间递增 0.1。</p>
@@ -236,8 +241,9 @@
 <p>我们可以看到该模型的最佳表现是 <strong>colsample_bytree = 1.0</strong> 。这表明对此问题的子采样列不会增加价值。</p>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Best: <span class="number">-0.001239</span> using &#123;<span class="string">'colsample_bytree'</span>: <span class="number">1.0</span>&#125;</span><br><span class="line"><span class="number">-0.298955</span> (<span class="number">0.002177</span>) <span class="keyword">with</span>: &#123;<span class="string">'colsample_bytree'</span>: <span class="number">0.1</span>&#125;</span><br><span class="line"><span class="number">-0.092441</span> (<span class="number">0.000798</span>) <span class="keyword">with</span>: &#123;<span class="string">'colsample_bytree'</span>: <span class="number">0.2</span>&#125;</span><br><span class="line"><span class="number">-0.029993</span> (<span class="number">0.000459</span>) <span class="keyword">with</span>: &#123;<span class="string">'colsample_bytree'</span>: <span class="number">0.3</span>&#125;</span><br><span class="line"><span class="number">-0.010435</span> (<span class="number">0.000669</span>) <span class="keyword">with</span>: &#123;<span class="string">'colsample_bytree'</span>: <span class="number">0.4</span>&#125;</span><br><span class="line"><span class="number">-0.004176</span> (<span class="number">0.000916</span>) <span class="keyword">with</span>: &#123;<span class="string">'colsample_bytree'</span>: <span class="number">0.5</span>&#125;</span><br><span class="line"><span class="number">-0.002614</span> (<span class="number">0.001062</span>) <span class="keyword">with</span>: &#123;<span class="string">'colsample_bytree'</span>: <span class="number">0.6</span>&#125;</span><br><span class="line"><span class="number">-0.001694</span> (<span class="number">0.001221</span>) <span class="keyword">with</span>: &#123;<span class="string">'colsample_bytree'</span>: <span class="number">0.7</span>&#125;</span><br><span class="line"><span class="number">-0.001306</span> (<span class="number">0.001435</span>) <span class="keyword">with</span>: &#123;<span class="string">'colsample_bytree'</span>: <span class="number">0.8</span>&#125;</span><br><span class="line"><span class="number">-0.001239</span> (<span class="number">0.001730</span>) <span class="keyword">with</span>: &#123;<span class="string">'colsample_bytree'</span>: <span class="number">1.0</span>&#125;</span><br></pre></td></tr></table></figure>
 <p>绘制结果，我们可以看到模型平台的表现（至少在这个尺度上），其值在 0.5 到 1.0 之间。</p>
-<p><img src="img/25700c450ba1f3aa55ec915c531c8140.jpg" alt="Plot of Tuning Per-Tree Column Sampling in XGBoost"></p>
+<p><img src="img/25700c450ba1f3aa55ec915c531c8140.jpg#alt=Plot%20of%20Tuning%20Per-Tree%20Column%20Sampling%20in%20XGBoost" alt></p>
 <p>在 XGBoost 中调整每树列采样的图</p>
+<p><a href></a><br><a name="84a308b5"></a></p>
 <h2 id="通过拆分调整-XGBoost-中的列子采样"><a href="#通过拆分调整-XGBoost-中的列子采样" class="headerlink" title="通过拆分调整 XGBoost 中的列子采样"></a>通过拆分调整 XGBoost 中的列子采样</h2><p>我们可以在决策树中的每个拆分中对它们进行二次采样，而不是对每个树进行一次子采样。原则上，这是随机森林中使用的方法。</p>
 <p>我们可以在 XGBoost 包装器类的 <strong>colsample_bylevel</strong> 参数中为 scikit-learn 设置每个拆分使用的列样本的大小。</p>
 <p>和以前一样，我们将比例从 10％变为默认的 100％。</p>
@@ -248,8 +254,9 @@
 <p>如果每个树的结果建议使用 100％的列，那么建议不要放弃列子采样，而是尝试按每个拆分列子采样。</p>
 <figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Best: <span class="number">-0.001062</span> using &#123;<span class="string">'colsample_bylevel'</span>: <span class="number">0.7</span>&#125;</span><br><span class="line"><span class="number">-0.159455</span> (<span class="number">0.007028</span>) <span class="keyword">with</span>: &#123;<span class="string">'colsample_bylevel'</span>: <span class="number">0.1</span>&#125;</span><br><span class="line"><span class="number">-0.034391</span> (<span class="number">0.003533</span>) <span class="keyword">with</span>: &#123;<span class="string">'colsample_bylevel'</span>: <span class="number">0.2</span>&#125;</span><br><span class="line"><span class="number">-0.007619</span> (<span class="number">0.000451</span>) <span class="keyword">with</span>: &#123;<span class="string">'colsample_bylevel'</span>: <span class="number">0.3</span>&#125;</span><br><span class="line"><span class="number">-0.002982</span> (<span class="number">0.000726</span>) <span class="keyword">with</span>: &#123;<span class="string">'colsample_bylevel'</span>: <span class="number">0.4</span>&#125;</span><br><span class="line"><span class="number">-0.001410</span> (<span class="number">0.000946</span>) <span class="keyword">with</span>: &#123;<span class="string">'colsample_bylevel'</span>: <span class="number">0.5</span>&#125;</span><br><span class="line"><span class="number">-0.001182</span> (<span class="number">0.001144</span>) <span class="keyword">with</span>: &#123;<span class="string">'colsample_bylevel'</span>: <span class="number">0.6</span>&#125;</span><br><span class="line"><span class="number">-0.001062</span> (<span class="number">0.001221</span>) <span class="keyword">with</span>: &#123;<span class="string">'colsample_bylevel'</span>: <span class="number">0.7</span>&#125;</span><br><span class="line"><span class="number">-0.001071</span> (<span class="number">0.001427</span>) <span class="keyword">with</span>: &#123;<span class="string">'colsample_bylevel'</span>: <span class="number">0.8</span>&#125;</span><br><span class="line"><span class="number">-0.001239</span> (<span class="number">0.001730</span>) <span class="keyword">with</span>: &#123;<span class="string">'colsample_bylevel'</span>: <span class="number">1.0</span>&#125;</span><br></pre></td></tr></table></figure>
 <p>我们可以绘制每个 <strong>colsample_bylevel</strong> 变体的表现。结果显示相对较低的方差，并且在此规模的值为 0.3 之后，表现似乎是表现的平台。</p>
-<p><img src="img/f8330b8c24fa2c6b765dafcc072cc850.jpg" alt="Plot of Tuning Per-Split Column Sampling in XGBoost"></p>
+<p><img src="img/f8330b8c24fa2c6b765dafcc072cc850.jpg#alt=Plot%20of%20Tuning%20Per-Split%20Column%20Sampling%20in%20XGBoost" alt></p>
 <p>在 XGBoost 中调整每分割列采样的图</p>
+<p><a href></a><br><a name="3ae14696"></a></p>
 <h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><p>在这篇文章中，您发现了使用 Python 中的 XGBoost 进行随机梯度提升。</p>
 <p>具体来说，你学到了：</p>
 <ul>
