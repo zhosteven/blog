@@ -6,18 +6,26 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://zhos.me">
-  <title>Archives: 2019 | A+</title>
+  <title>选择XGBoost模型训练的最优参数 | A+</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="研究性材料(算法)">
-<meta property="og:type" content="website">
-<meta property="og:title" content="A+">
-<meta property="og:url" content="http://zhos.me/archives/2019/page/3/index.html">
+  <meta name="description" content="所描述的方法有助于找到一种为XGBoost选择机器学习模型训练参数的方法选择机器学习模型培训的参数时，总会有一些运气。最近，我特别使用渐变增强树和XGBoost。我们在企业中使用XGBoost来自动执行重复的人工任务。在使用XGBoost训练ML模型时，我创建了一个选择参数的模式，这有助于我更...">
+<meta property="og:type" content="article">
+<meta property="og:title" content="选择XGBoost模型训练的最优参数">
+<meta property="og:url" content="http://zhos.me/2019/04/28/yuque/选择XGBoost模型训练的最优参数/index.html">
 <meta property="og:site_name" content="A+">
-<meta property="og:description" content="研究性材料(算法)">
+<meta property="og:description" content="所描述的方法有助于找到一种为XGBoost选择机器学习模型训练参数的方法选择机器学习模型培训的参数时，总会有一些运气。最近，我特别使用渐变增强树和XGBoost。我们在企业中使用XGBoost来自动执行重复的人工任务。在使用XGBoost训练ML模型时，我创建了一个选择参数的模式，这有助于我更...">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1556432133363-8a2cf9b4-4a54-435a-9a30-b5b236cc7857.png#align=left&display=inline&height=500&name=1_N3f1dzDCYpP2zjbWkucfyQ.png&originHeight=500&originWidth=1500&size=187663&status=done&width=1500">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1556432691481-05874737-936b-4b6c-a61e-f42ec01618a2.png#align=left&display=inline&height=264&name=%E4%B8%8B%E8%BD%BD.png&originHeight=264&originWidth=395&size=15591&status=done&width=395">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1556432819271-b0a20188-f7b4-4db3-a4d9-4ae77844989d.png#align=left&display=inline&height=1068&name=1_MsDX97KNIR21uULTbEHP8w.png&originHeight=1068&originWidth=902&size=138579&status=done&width=902">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1556433447932-cbb7e4c2-d4d0-4cce-9089-cda8f2654845.png#align=left&display=inline&height=1072&name=1_ixsnSWf--HyLP5yMfhLIYA.png&originHeight=1072&originWidth=900&size=132755&status=done&width=900">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1556433477133-5fc0cf09-701d-4b9f-95ea-1ffc70400b56.png#align=left&display=inline&height=1072&name=1_ixsnSWf--HyLP5yMfhLIYA.png&originHeight=1072&originWidth=900&size=132755&status=done&width=900">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1556433504312-7f425285-1093-4d0b-b27a-937905f6e9d0.png#align=left&display=inline&height=1080&name=1_WxpfnYRt_oVIeePW9N7wwQ.png&originHeight=1080&originWidth=890&size=139929&status=done&width=890">
+<meta property="og:updated_time" content="2019-04-28T06:50:57.213Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="A+">
-<meta name="twitter:description" content="研究性材料(算法)">
+<meta name="twitter:title" content="选择XGBoost模型训练的最优参数">
+<meta name="twitter:description" content="所描述的方法有助于找到一种为XGBoost选择机器学习模型训练参数的方法选择机器学习模型培训的参数时，总会有一些运气。最近，我特别使用渐变增强树和XGBoost。我们在企业中使用XGBoost来自动执行重复的人工任务。在使用XGBoost训练ML模型时，我创建了一个选择参数的模式，这有助于我更...">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1556432133363-8a2cf9b4-4a54-435a-9a30-b5b236cc7857.png#align=left&display=inline&height=500&name=1_N3f1dzDCYpP2zjbWkucfyQ.png&originHeight=500&originWidth=1500&size=187663&status=done&width=1500">
   
     <link rel="alternative" href="/atom.xml" title="A+" type="application/atom+xml">
   
@@ -147,295 +155,227 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-yuque/选择XGBoost模型训练的最优参数" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      选择XGBoost模型训练的最优参数
+    </h1>
+  
+
+        
+        <a href="/2019/04/28/yuque/选择XGBoost模型训练的最优参数/" class="archive-article-date">
+  	<time datetime="2019-04-28T06:14:42.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-28</time>
+</a>
+        
+      </header>
     
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><a name="ce78"></a></p>
+<h2 id="所描述的方法有助于找到一种为XGBoost选择机器学习模型训练参数的方法"><a href="#所描述的方法有助于找到一种为XGBoost选择机器学习模型训练参数的方法" class="headerlink" title="所描述的方法有助于找到一种为XGBoost选择机器学习模型训练参数的方法"></a>所描述的方法有助于找到一种为XGBoost选择机器学习模型训练参数的方法</h2><p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1556432133363-8a2cf9b4-4a54-435a-9a30-b5b236cc7857.png#align=left&amp;display=inline&amp;height=500&amp;name=1_N3f1dzDCYpP2zjbWkucfyQ.png&amp;originHeight=500&amp;originWidth=1500&amp;size=187663&amp;status=done&amp;width=1500" alt="1_N3f1dzDCYpP2zjbWkucfyQ.png"><br>选择机器学习模型培训的参数时，总会有一些运气。最近，我特别使用渐变增强树和XGBoost。我们在企业中使用XGBoost来自动执行重复的人工任务。在使用XGBoost训练ML模型时，我创建了一个选择参数的模式，这有助于我更快地构建新模型。我将在这篇文章中分享它，希望你会发现它也很有用。<br><a id="more"></a><br><!--more--><br>我正在使用<a href="https://raw.githubusercontent.com/jbrownlee/Datasets/master/pima-indians-diabetes.names" target="_blank" rel="noopener">皮马印第安人糖尿病数据库</a>进行培训，可以从<a href="https://raw.githubusercontent.com/jbrownlee/Datasets/master/pima-indians-diabetes.data.csv" target="_blank" rel="noopener">这里</a>下载CSV数据。<br>这是运行XGBoost训练步骤并构建模型的Python代码。通过传递成对的训练/测试数据来执行训练，这有助于在模型构建期间临时评估训练质量：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">%%time</span><br><span class="line"></span><br><span class="line">model = xgb.XGBClassifier(max_depth=<span class="number">12</span>,</span><br><span class="line">                        subsample=<span class="number">0.33</span>,</span><br><span class="line">                        objective=<span class="string">'binary:logistic'</span>,</span><br><span class="line">                        n_estimators=<span class="number">300</span>,</span><br><span class="line">                        learning_rate = <span class="number">0.01</span>)</span><br><span class="line">eval_set = [(train_X, train_Y), (test_X, test_Y)]</span><br><span class="line">model.fit(train_X, train_Y.values.ravel(), early_stopping_rounds=<span class="number">15</span>, eval_metric=[<span class="string">"error"</span>, <span class="string">"logloss"</span>], eval_set=eval_set, verbose=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">validation_0-error:0.231518	validation_0-logloss:0.688982	validation_1-error:0.30315	validation_1-logloss:0.689593</span><br><span class="line">Multiple eval metrics have been passed: &apos;validation_1-logloss&apos; will be used for early stopping.</span><br><span class="line"></span><br><span class="line">Will train until validation_1-logloss hasn&apos;t improved in 15 rounds.</span><br><span class="line">[1]	validation_0-error:0.206226	validation_0-logloss:0.685218	validation_1-error:0.216535	validation_1-logloss:0.686122</span><br><span class="line">[2]	validation_0-error:0.196498	validation_0-logloss:0.681505	validation_1-error:0.220472	validation_1-logloss:0.682881</span><br><span class="line">[3]	validation_0-error:0.196498	validation_0-logloss:0.67797	validation_1-error:0.220472	validation_1-logloss:0.679601</span><br><span class="line">[4]	validation_0-error:0.180934	validation_0-logloss:0.674278	validation_1-error:0.208661	validation_1-logloss:0.676067</span><br><span class="line">[5]	validation_0-error:0.177043	validation_0-logloss:0.670627	validation_1-error:0.212598	validation_1-logloss:0.673761</span><br><span class="line">[6]	validation_0-error:0.175097	validation_0-logloss:0.667069	validation_1-error:0.216535	validation_1-logloss:0.671441</span><br><span class="line">[7]	validation_0-error:0.18677	validation_0-logloss:0.663582	validation_1-error:0.212598	validation_1-logloss:0.668586</span><br><span class="line">[8]	validation_0-error:0.180934	validation_0-logloss:0.660353	validation_1-error:0.23622	validation_1-logloss:0.665983</span><br><span class="line">[9]	validation_0-error:0.161479	validation_0-logloss:0.656739	validation_1-error:0.228346	validation_1-logloss:0.662987</span><br><span class="line">[10]	validation_0-error:0.167315	validation_0-logloss:0.653582	validation_1-error:0.228346	validation_1-logloss:0.660091</span><br><span class="line">[259]	validation_0-error:0.122568	validation_0-logloss:0.34313	validation_1-error:0.220472	validation_1-logloss:0.475866</span><br><span class="line">[260]	validation_0-error:0.124514	validation_0-logloss:0.34261	validation_1-error:0.220472	validation_1-logloss:0.476068</span><br><span class="line">[261]	validation_0-error:0.120623	validation_0-logloss:0.342156	validation_1-error:0.216535	validation_1-logloss:0.476165</span><br><span class="line">[262]	validation_0-error:0.120623	validation_0-logloss:0.341714	validation_1-error:0.216535	validation_1-logloss:0.476143</span><br><span class="line">[263]	validation_0-error:0.124514	validation_0-logloss:0.341209	validation_1-error:0.216535	validation_1-logloss:0.476063</span><br><span class="line">[264]	validation_0-error:0.120623	validation_0-logloss:0.340779	validation_1-error:0.220472	validation_1-logloss:0.47595</span><br><span class="line">[265]	validation_0-error:0.120623	validation_0-logloss:0.340297	validation_1-error:0.212598	validation_1-logloss:0.475858</span><br><span class="line">[266]	validation_0-error:0.120623	validation_0-logloss:0.339908	validation_1-error:0.212598	validation_1-logloss:0.476057</span><br><span class="line">[267]	validation_0-error:0.120623	validation_0-logloss:0.339312	validation_1-error:0.220472	validation_1-logloss:0.476228</span><br><span class="line">[268]	validation_0-error:0.120623	validation_0-logloss:0.338874	validation_1-error:0.216535	validation_1-logloss:0.476266</span><br><span class="line">[269]	validation_0-error:0.120623	validation_0-logloss:0.338543	validation_1-error:0.216535	validation_1-logloss:0.476202</span><br><span class="line">[270]	validation_0-error:0.120623	validation_0-logloss:0.33821	validation_1-error:0.216535	validation_1-logloss:0.47607</span><br><span class="line">[271]	validation_0-error:0.120623	validation_0-logloss:0.337716	validation_1-error:0.212598	validation_1-logloss:0.476229</span><br><span class="line">[272]	validation_0-error:0.118677	validation_0-logloss:0.337295	validation_1-error:0.212598	validation_1-logloss:0.47612</span><br><span class="line">[273]	validation_0-error:0.118677	validation_0-logloss:0.336927	validation_1-error:0.212598	validation_1-logloss:0.476152</span><br><span class="line">[274]	validation_0-error:0.118677	validation_0-logloss:0.33651	validation_1-error:0.212598	validation_1-logloss:0.476127</span><br><span class="line">[275]	validation_0-error:0.120623	validation_0-logloss:0.336017	validation_1-error:0.216535	validation_1-logloss:0.476117</span><br><span class="line">[276]	validation_0-error:0.120623	validation_0-logloss:0.335497	validation_1-error:0.212598	validation_1-logloss:0.476063</span><br><span class="line">[277]	validation_0-error:0.116732	validation_0-logloss:0.335159	validation_1-error:0.216535	validation_1-logloss:0.476113</span><br><span class="line">[278]	validation_0-error:0.114786	validation_0-logloss:0.334812	validation_1-error:0.216535	validation_1-logloss:0.476143</span><br><span class="line">[279]	validation_0-error:0.114786	validation_0-logloss:0.334481	validation_1-error:0.216535	validation_1-logloss:0.476163</span><br><span class="line">[280]	validation_0-error:0.116732	validation_0-logloss:0.333843	validation_1-error:0.216535	validation_1-logloss:0.476359</span><br><span class="line">Stopping. Best iteration:</span><br><span class="line">[265]	validation_0-error:0.120623	validation_0-logloss:0.340297	validation_1-error:0.212598	validation_1-logloss:0.475858</span><br><span class="line"></span><br><span class="line">CPU times: user 690 ms, sys: 310 ms, total: 1 s</span><br><span class="line">Wall time: 799 ms</span><br></pre></td></tr></table></figure>
+<p>假设您已经选择了max_depth（更复杂的分类任务，更深的树），子样本（等于评估数据百分比），目标（分类算法）：XGBoost中的关键参数（会大大影响模型质量的那些）</p>
+<ul>
+<li>_n_estimators_  - XGBoost将尝试学习的运行次数</li>
+<li>_learning_rate_  - 学习速度</li>
+<li>_early_stopping_rounds_  - 过度预防，如果学习没有改善就提前停止</li>
+</ul>
+<p>当使用verbose = True执行<em>model.fit时</em>，您将看到打印出的每个训练运行评估质量。在日志的末尾，您应该看到哪个迭代被选为最佳迭代。可能是训练轮的数量不足以检测最佳迭代，然后XGBoost将选择最后一次迭代来构建模型。<br>使用<em>matpotlib</em>库，我们可以绘制每次运行的训练结果（来自XGBoost输出）。这有助于理解为构建模型而选择的迭代是否是最好的。在这里，我们使用<em>sklearn</em>库来评估模型的准确性，然后用<em>matpotlib</em>绘制训练结果：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># make predictions for test data</span></span><br><span class="line">y_pred = model.predict(test_X)</span><br><span class="line">predictions = [round(value) <span class="keyword">for</span> value <span class="keyword">in</span> y_pred]</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># evaluate predictions</span></span><br><span class="line">accuracy = accuracy_score(test_Y, predictions)</span><br><span class="line">print(<span class="string">"Accuracy: %.2f%%"</span> % (accuracy * <span class="number">100.0</span>))</span><br></pre></td></tr></table></figure>
+<p>Accuracy: 78.74%</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># retrieve performance metrics</span></span><br><span class="line">results = model.evals_result()</span><br><span class="line">epochs = len(results[<span class="string">'validation_0'</span>][<span class="string">'error'</span>])</span><br><span class="line">x_axis = range(<span class="number">0</span>, epochs)</span><br><span class="line"><span class="comment"># plot log loss</span></span><br><span class="line">fig, ax = pyplot.subplots()</span><br><span class="line">ax.plot(x_axis, results[<span class="string">'validation_0'</span>][<span class="string">'logloss'</span>], label=<span class="string">'Train'</span>)</span><br><span class="line">ax.plot(x_axis, results[<span class="string">'validation_1'</span>][<span class="string">'logloss'</span>], label=<span class="string">'Test'</span>)</span><br><span class="line">ax.legend()</span><br><span class="line">pyplot.ylabel(<span class="string">'Log Loss'</span>)</span><br><span class="line">pyplot.title(<span class="string">'XGBoost Log Loss'</span>)</span><br><span class="line">pyplot.show()</span><br><span class="line"><span class="comment"># plot classification error</span></span><br><span class="line">fig, ax = pyplot.subplots()</span><br><span class="line">ax.plot(x_axis, results[<span class="string">'validation_0'</span>][<span class="string">'error'</span>], label=<span class="string">'Train'</span>)</span><br><span class="line">ax.plot(x_axis, results[<span class="string">'validation_1'</span>][<span class="string">'error'</span>], label=<span class="string">'Test'</span>)</span><br><span class="line">ax.legend()</span><br><span class="line">pyplot.ylabel(<span class="string">'Classification Error'</span>)</span><br><span class="line">pyplot.title(<span class="string">'XGBoost Classification Error'</span>)</span><br><span class="line">pyplot.show()</span><br></pre></td></tr></table></figure>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1556432691481-05874737-936b-4b6c-a61e-f42ec01618a2.png#align=left&amp;display=inline&amp;height=264&amp;name=%E4%B8%8B%E8%BD%BD.png&amp;originHeight=264&amp;originWidth=395&amp;size=15591&amp;status=done&amp;width=395" alt="下载.png"><br>让我们描述我为XGBoost训练选择参数（_n_estimators_，_learning_rate_，_early_stopping_rounds_）的方法。<br><strong>第1步</strong>。从您的经验或有意义的开始，您感觉最好</p>
+<ul>
+<li>_n_estimators_ = 300</li>
+<li>_learning_rate_ = 0.01</li>
+<li>_early_stopping_rounds_ = 10</li>
+</ul>
+<p>结果：</p>
+<ul>
+<li>停止迭代= 237</li>
+<li>准确度= 78.35％</li>
+</ul>
+<p>结果图：<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1556432819271-b0a20188-f7b4-4db3-a4d9-4ae77844989d.png#align=left&amp;display=inline&amp;height=1068&amp;name=1_MsDX97KNIR21uULTbEHP8w.png&amp;originHeight=1068&amp;originWidth=902&amp;size=138579&amp;status=done&amp;width=902" alt="1_MsDX97KNIR21uULTbEHP8w.png"><br>通过第一次尝试，我们已经为Pima Indians Diabetes数据集获得了良好的结果。在迭代237停止训练。分类错误图显示迭代237周围的较低错误率。这意味着学习率0.01适合于该数据集并且提前停止10次迭代（如果结果在接下来的10次迭代中没有改善） 。<br><strong>第2步</strong>。尝试学习率，尝试设置较小的学习率参数并增加学习迭代次数</p>
+<ul>
+<li>_n_estimators_ = 500</li>
+<li>_learning_rate_ = 0.001</li>
+<li>_early_stopping_rounds_ = 10</li>
+</ul>
+<p>结果：</p>
+<ul>
+<li>停止迭代=没有停止，花了所有500次迭代</li>
+<li>准确度= 77.56％</li>
+</ul>
+<p>结果图：<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1556433447932-cbb7e4c2-d4d0-4cce-9089-cda8f2654845.png#align=left&amp;display=inline&amp;height=1072&amp;name=1_ixsnSWf--HyLP5yMfhLIYA.png&amp;originHeight=1072&amp;originWidth=900&amp;size=132755&amp;status=done&amp;width=900" alt="1_ixsnSWf--HyLP5yMfhLIYA.png"><br>较小的学习率对此数据集无效。分类错误几乎不会改变，即使500次迭代，XGBoost日志丢失也不会稳定。<br><strong>第3步</strong>。尽量提高学习率。</p>
+<ul>
+<li>_n_estimators_ = 300</li>
+<li>_learning_rate_ = 0.1</li>
+<li>_early_stopping_rounds_ = 10</li>
+</ul>
+<p>结果：</p>
+<ul>
+<li>停止迭代= 27</li>
+<li>准确度= 76.77％</li>
+</ul>
+<p>结果图：<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1556433477133-5fc0cf09-701d-4b9f-95ea-1ffc70400b56.png#align=left&amp;display=inline&amp;height=1072&amp;name=1_ixsnSWf--HyLP5yMfhLIYA.png&amp;originHeight=1072&amp;originWidth=900&amp;size=132755&amp;status=done&amp;width=900" alt="1_ixsnSWf--HyLP5yMfhLIYA.png"><br>随着学习速度的提高，算法学得更快，在迭代次数Nr时就停止了。27. XGBoost日志丢失错误正在稳定，但整体分类精度并不理想。<br><strong>第4步</strong>。从第一步中选择最佳学习率并增加早期停止（以使算法有更多机会找到更好的结果）。</p>
+<ul>
+<li>_n_estimators_ = 300</li>
+<li>_learning_rate_ = 0.01</li>
+<li>_early_stopping_rounds_ = 15</li>
+</ul>
+<p>结果：</p>
+<ul>
+<li>停止迭代= 265</li>
+<li>准确度= 78.74％</li>
+</ul>
+<p>结果图：<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1556433504312-7f425285-1093-4d0b-b27a-937905f6e9d0.png#align=left&amp;display=inline&amp;height=1080&amp;name=1_WxpfnYRt_oVIeePW9N7wwQ.png&amp;originHeight=1080&amp;originWidth=890&amp;size=139929&amp;status=done&amp;width=890" alt="1_WxpfnYRt_oVIeePW9N7wwQ.png"><br>产生稍好的结果，准确度为78.74％ - 这在分类误差图中可见。<br>资源：<br><a href="https://github.com/abaranovskis-redsamurai/automation-repo/blob/master/diabetes_redsamurai_db.ipynb" target="_blank" rel="noopener">GitHub上的</a> Jupyter笔记本<a href="https://github.com/abaranovskis-redsamurai/automation-repo/blob/master/diabetes_redsamurai_db.ipynb" target="_blank" rel="noopener"></a><br>博客文章 -  <a href="https://bit.ly/2I7VKhr" target="_blank" rel="noopener">Jupyter Notebook - 忘记CSV，用Python从DB获取数据</a><br>博客文章 -  <a href="https://machinelearningmastery.com/avoid-overfitting-by-early-stopping-with-xgboost-in-python/" target="_blank" rel="noopener">通过Python中的XGBoost提前停止来避免过度拟合</a></p>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
       
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2019" class="archive-year">2019</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/04/25/yuque/时间序列分类实践介绍（使用Python代码）/" class="archive-article-date">
-  	<time datetime="2019-04-25T09:48:43.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-25</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/04/25/yuque/时间序列分类实践介绍（使用Python代码）/">时间序列分类实践介绍（使用Python代码）</a>
-    </h1>
-  
+      
 
-        <div class="article-info info-on-right">
-          
-          
+      
 
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://zhos.me/2019/04/28/yuque/选择XGBoost模型训练的最优参数/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/04/25/yuque/通过AdaBoost和Gradient Boosting提升/" class="archive-article-date">
-  	<time datetime="2019-04-25T08:34:43.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-25</time>
-</a>
+<nav id="article-nav">
+  
+  
+    <a href="/2019/04/26/yuque/在 Python 中开始使用 XGBoost 的 7 步迷你课程/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">在 Python 中开始使用 XGBoost 的 7 步迷你课程</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/04/25/yuque/通过AdaBoost和Gradient Boosting提升/">通过AdaBoost和Gradient Boosting提升</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
+        
+        
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#所描述的方法有助于找到一种为XGBoost选择机器学习模型训练参数的方法"><span class="toc-number">1.</span> <span class="toc-text">所描述的方法有助于找到一种为XGBoost选择机器学习模型训练参数的方法</span></a></li></ol>
+                    </div>
+                </span>
+            </div>
         </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
+        
+    </div>
+</aside>
+
+
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/04/24/yuque/K均值聚类的剖析/" class="archive-article-date">
-  	<time datetime="2019-04-24T02:23:42.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-24</time>
-</a>
-        </div>
-    	 
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/04/24/yuque/K均值聚类的剖析/">K均值聚类的剖析</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/04/24/yuque/大数据和Hadoop时代的维度建模和Kimball数据集市/" class="archive-article-date">
-  	<time datetime="2019-04-24T02:07:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-24</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/04/24/yuque/大数据和Hadoop时代的维度建模和Kimball数据集市/">大数据和Hadoop时代的维度建模和Kimball数据集市</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/04/24/yuque/三种流行的聚类方法以及何时使用每种方法/" class="archive-article-date">
-  	<time datetime="2019-04-24T01:51:30.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-24</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/04/24/yuque/三种流行的聚类方法以及何时使用每种方法/">三种流行的聚类方法以及何时使用每种方法</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/04/23/yuque/Apache Kafka 和Spark的实时数据管道/" class="archive-article-date">
-  	<time datetime="2019-04-23T09:41:58.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-23</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/04/23/yuque/Apache Kafka 和Spark的实时数据管道/">Apache Kafka 和Spark的实时数据管道</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/04/23/yuque/转移学习:重新启动Inception V3以进行自定义图像分类/" class="archive-article-date">
-  	<time datetime="2019-04-23T08:27:37.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-23</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/04/23/yuque/转移学习:重新启动Inception V3以进行自定义图像分类/">转移学习:重新启动Inception V3以进行自定义图像分类</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/04/23/yuque/建立你的第一个语音助手/" class="archive-article-date">
-  	<time datetime="2019-04-23T08:26:18.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-23</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/04/23/yuque/建立你的第一个语音助手/">建立你的第一个语音助手</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/04/23/yuque/XGBoost算法:长期可能在位！/" class="archive-article-date">
-  	<time datetime="2019-04-23T08:22:24.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-23</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/04/23/yuque/XGBoost算法:长期可能在位！/">XGBoost算法:长期可能在位！</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/04/23/yuque/Pytorch:如何以及何时使用Module，Sequential，ModuleList和ModuleDict/" class="archive-article-date">
-  	<time datetime="2019-04-23T08:16:33.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-23</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/04/23/yuque/Pytorch:如何以及何时使用Module，Sequential，ModuleList和ModuleDict/">Pytorch:如何以及何时使用Module，Sequential，ModuleList和ModuleDict</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
-
-    
-    <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/archives/2019/page/2/">&laquo; Prev</a><a class="page-number" href="/archives/2019/">1</a><a class="page-number" href="/archives/2019/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/archives/2019/page/4/">4</a><a class="page-number" href="/archives/2019/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/archives/2019/page/7/">7</a><a class="extend next" rel="next" href="/archives/2019/page/4/">Next &raquo;</a>
-    </nav>
   
 
 
@@ -459,8 +399,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
