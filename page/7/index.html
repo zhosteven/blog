@@ -149,6 +149,87 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-yuque/如何（以及为什么）创建一个好的验证集" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/03/18/yuque/如何（以及为什么）创建一个好的验证集/">如何（以及为什么）创建一个好的验证集</a>
+    </h1>
+  
+
+        
+        <a href="/2019/03/18/yuque/如何（以及为什么）创建一个好的验证集/" class="archive-article-date">
+  	<time datetime="2019-03-18T04:19:06.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-18</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><a name="d41d8cd9"></a></p>
+<p>#<br>撰稿：2017年11月13日由<strong>Rachel Thomas</strong>撰写<br>一个非常常见的场景：看似令人印象深刻的机器学习模型在生产中实施时是完全失败的。这些影响包括那些现在对机器学习持怀疑态度且不愿意再次尝试的领导者。怎么会发生这种情况？<br>对于开发结果与生产结果之间的这种脱节的最可能的罪魁祸首之一是选择不当的验证集（或者更糟糕的是，根本没有验证集）。根据数据的性质，选择验证集可能是最重要的一步。尽管sklearn提供了一种<a href="http://scikit-learn.org/stable/modules/generated/sklearn.model_selection.train_test_split.html" target="_blank" rel="noopener"></a><a href="http://scikit-learn.org/stable/modules/generated/sklearn.model_selection.train_test_split.html" target="_blank" rel="noopener">train_test_split</a><a href="http://scikit-learn.org/stable/modules/generated/sklearn.model_selection.train_test_split.html" target="_blank" rel="noopener">方法</a>，但该方法采用了数据的随机子集，这对于许多现实问题来说是一个糟糕的选择。<br><strong>培训</strong>，<strong>验证</strong>和<strong>测试</strong>集的定义可能相当细微，有时不一致地使用这些术语。在深度学习社区中，“测试时间推断”通常用于指对生产中的数据进行评估，这不是测试集的技术定义。如上所述，sklearn有一种train_test_split方法，但没有train_validation_test_split。Kaggle只提供培训和测试集，但要做得好，您需要将他们的训练集分成您自己的验证和训练集。而且，事实证明Kaggle的测试集实际上被细分为两组。很多初学者可能会感到困惑，这并不奇怪！我将在下面解决这些微妙之处。<br><a name="e7a3668b"></a></p>
+<h2 id="首先，什么是“验证集”？"><a href="#首先，什么是“验证集”？" class="headerlink" title="首先，什么是“验证集”？"></a><strong>首先，什么是“验证集”？</strong></h2><p>在创建机器学习模型时，最终目标是使其准确处理新数据，而不仅仅是用于构建数据的数据。考虑下面一组数据的3种不同模型的例子：<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1552882770075-60b15664-d2d8-4359-9920-d9d56d8a789b.png#align=left&amp;display=inline&amp;height=281&amp;name=image.png&amp;originHeight=294&amp;originWidth=781&amp;size=83649&amp;status=done&amp;width=746" alt="image.png"><br>资料来源：Andrew Ng的机器学习课程<br>对于最右侧的模型，图示数据点的误差最小（蓝色曲线几乎完美地穿过红点），但它不是最佳选择。这是为什么？如果你要收集一些新的数据点，它们很可能不在右边图表中的那条曲线上，而是更接近中间图形中的曲线。<br>根本的想法是：</p>
+<ul>
+<li>训练集用于训练给定的模型<br></li>
+<li>验证集用于在模型之间进行选择（例如，随机森林或神经网络是否更适合您的问题？您想要一个有40棵树或50棵树的随机森林吗？）<br></li>
+<li>测试集告诉你你是怎么做的。如果您已经尝试了很多不同的模型，那么您可能只是偶然得到一个在验证集上表现良好的模型，并且拥有测试集有助于确保不是这种情况。<br></li>
+</ul>
+<p>验证和测试集的一个关键属性是它们必须代表<strong><strong>您将来会看到</strong></strong>的<strong><strong>新数据</strong></strong>。这可能听起来像一个不可能的命令！根据定义，您还没有看到这些数据。但是你仍然知道一些事情。<br><a name="7086b6ec"></a></p>
+<h2 id="什么时候随机子集不够好？"><a href="#什么时候随机子集不够好？" class="headerlink" title="什么时候随机子集不够好？"></a><strong>什么时候随机子集不够好？</strong></h2><p>看一些例子是有益的。虽然这些例子中有很多来自Kaggle比赛，但它们代表了您在工作场所会遇到的问题。<br><a name="cc464807"></a></p>
+<h3 id="时间序列"><a href="#时间序列" class="headerlink" title="时间序列"></a><strong>时间序列</strong></h3><p>如果您的数据是时间序列，那么选择数据的随机子集将非常简单（您可以在您尝试预测的日期之前和之后查看数据）并且不代表大多数业务用例（您在哪里）正在使用历史数据来构建将来使用的模型。如果您的数据包含日期并且您要构建将来使用的模型，则需要选择具有最新日期的连续部分作为验证集（例如，可用数据的最后两周或上个月） 。<br>假设您要将下面的时间序列数据拆分为训练和验证集：<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1552882770129-8cad81d5-fbe9-4945-baca-d69af4bf8853.png#align=left&amp;display=inline&amp;height=492&amp;name=image.png&amp;originHeight=492&amp;originWidth=617&amp;size=31169&amp;status=done&amp;width=617" alt="image.png"><br><em>时间序列数据</em><br>随机子集是一个糟糕的选择（太容易填补空白，并不表示您在生产中需要什么）：<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1552882770176-99c4e0dd-3800-454b-bf9d-b9b73bfe4f44.png#align=left&amp;display=inline&amp;height=492&amp;name=image.png&amp;originHeight=492&amp;originWidth=617&amp;size=27107&amp;status=done&amp;width=617" alt="image.png"><br><em>训练集的选择不佳</em><br>使用较早的数据作为训练集（以及验证集的后续数据）：<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1552882770243-648aea97-36ed-4e23-a69e-ec2dcbf32598.png#align=left&amp;display=inline&amp;height=492&amp;name=image.png&amp;originHeight=492&amp;originWidth=617&amp;size=26915&amp;status=done&amp;width=617" alt="image.png"><br><em>为您的训练集提供更好的选择</em><br>Kaggle目前正在竞争<a href="https://www.kaggle.com/c/favorita-grocery-sales-forecasting" target="_blank" rel="noopener"></a><a href="https://www.kaggle.com/c/favorita-grocery-sales-forecasting" target="_blank" rel="noopener">预测一系列厄瓜多尔杂货店的销售情况</a>。Kaggle的“培训数据”从2013年1月1日至2017年8月15日运行，测试数据跨越2017年8月16日至2017年8月31日。一个好方法是使用2017年8月1日至8月15日作为验证集，以及所有早期数据作为你的训练集。<br><a name="574cf8ad"></a></p>
+<h3 id="新人，新船，新…"><a href="#新人，新船，新…" class="headerlink" title="新人，新船，新…"></a><strong>新人，新船，新…</strong></h3><p>您还需要考虑在生产中进行预测的数据可能与您训练模型所需的数据<strong>有何不同</strong>。<br>在Kaggle <a href="https://www.kaggle.com/c/state-farm-distracted-driver-detection" target="_blank" rel="noopener"></a><a href="https://www.kaggle.com/c/state-farm-distracted-driver-detection" target="_blank" rel="noopener">分心驾驶员竞赛中</a>，独立数据是汽车驾驶员的照片，因变量是一个类别，如发短信，吃饭或安全向前看。如果您是从这些数据构建模型的保险公司，请注意您最感兴趣的是模型在您之前没有见过的驱动程序上的表现（因为您可能只为一小部分人提供培训数据）。对于Kaggle比赛也是如此：测试数据由未在训练集中使用的人组成。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1552882770581-4e7e5ff9-8b12-415e-8197-bc32f52b5957.png#align=left&amp;display=inline&amp;height=354&amp;name=image.png&amp;originHeight=354&amp;originWidth=469&amp;size=208442&amp;status=done&amp;width=469" alt="image.png"><br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1552882770937-9c3f6222-3e65-46e1-a25d-3a7c7241b3bf.png#align=left&amp;display=inline&amp;height=359&amp;name=image.png&amp;originHeight=359&amp;originWidth=467&amp;size=208605&amp;status=done&amp;width=467" alt="image.png"><br><em>同一个人驾驶时在电话上交谈的两个图像。</em><br>如果您将上述图像之一放入训练集中，并将其中一个放在验证集中，那么您的模型似乎表现得比新人更好。另一个观点是，如果你使用所有人来训练你的模型，你的模型可能过分适应那些特定人的特殊性，而不仅仅是学习状态（发短信，吃饭等）。<br>在<a href="https://www.kaggle.com/c/the-nature-conservancy-fisheries-monitoring" target="_blank" rel="noopener"></a><a href="https://www.kaggle.com/c/the-nature-conservancy-fisheries-monitoring" target="_blank" rel="noopener">Kaggle渔业竞赛中也</a>有类似的动态，以确定渔船捕获的鱼类种类，以减少非法捕捞濒危种群。测试集由未出现在训练数据中的船组成。这意味着您希望验证集包含不在训练集中的船只。<br>有时可能不清楚您的测试数据会有何不同。例如，对于使用卫星图像的问题，您需要收集有关训练集是否仅包含某些地理位置的更多信息，或者是否来自地理位置分散的数据。<br><a name="af629453"></a></p>
+<h2 id="交叉验证的危险"><a href="#交叉验证的危险" class="headerlink" title="交叉验证的危险"></a><strong>交叉验证的危险</strong></h2><p>sklearn没有train_validation_test拆分的原因是假设您经常使用<strong><strong>交叉验证</strong></strong>，其中训练集的不同子集用作验证集。例如，对于3倍交叉验证，数据被分为3组：A，B和C.首先训练模型A和B组合作为训练集，并在验证集C上进行评估。 ，将模型训练为A和C组合作为训练集，并在验证集B上进行评估。依此类推，最终将3倍的模型性能平均化。<br>但是，交叉验证的问题在于，由于上述各节中描述的所有原因，它很少适用于现实世界的问题。交叉验证仅适用于您可以随机调整数据以选择验证集的相同情况。<br><a name="5c6fff0d"></a></p>
+<h2 id="Kaggle的“训练集”-你的训练-验证集"><a href="#Kaggle的“训练集”-你的训练-验证集" class="headerlink" title="Kaggle的“训练集”=你的训练+验证集"></a><strong>Kaggle的“训练集”=你的训练+验证集</strong></h2><p>Kaggle比赛的一个好处是它们会迫使你更严格地考虑验证集（为了做得好）。对于那些刚接触Kaggle的人来说，它是一个举办机器学习比赛的平台。Kaggle通常会将数据分为两组，您可以下载：</p>
+<ol>
+<li>一个<strong><strong>训练集</strong></strong>，其中包括<strong>独立的变量</strong>，以及对<strong>因变量</strong>（你正在尝试预测）。对于试图预测销售的厄瓜多尔杂货店的例子，自变量包括商店ID，商品ID和日期; 因变量是销售数量。对于尝试确定驾驶员是否在车轮后面进行危险行为的示例，自变量可以是驾驶员的图片，并且因变量是类别（例如发短信，吃饭或安全地向前看）。<br></li>
+<li>一个<strong><strong>测试集</strong></strong>，它只有自变量。您将对测试集进行预测，您可以将其提交给Kaggle，并获得您的评分。<br></li>
+</ol>
+<p>这是开始机器学习所需的基本思想，但要做得好，理解起来要复杂一些。您将需要创建自己的培训和验证集（通过拆分Kaggle“培训”数据）。您将使用较小的训练集（Kaggle训练数据的子集）来构建模型，并且在提交给Kaggle之前，您可以在验证集（也是Kaggle的训练数据的子集）上对其进行评估。<br>最重要的原因是Kaggle将测试数据分为两组：公共和私人排行榜。您在公共排行榜上看到的分数仅适用于您预测的一部分（您不知道哪个子集！）。您的预测在私人排行榜上的表现将不会在比赛结束前公布。这一点很重要的原因是你最终可能会过度适应公共排行榜，直到最后你在私人排行榜上做得不好时才会意识到这一点。使用良好的验证集可以防止这种情况。您可以通过查看您的模型是否具有与Kaggle测试集相比较的相似分数来检查您的验证集是否有用。<br>创建自己的验证集很重要的另一个原因是Kaggle限制您每天提交两次，并且您可能希望尝试更多。第三，确切地看到你在验证集上出错的地方是有益的，而且Kaggle没有告诉你测试集的正确答案，甚至没有告诉你哪些数据点你的错误，只是你的整体得分。<br>理解这些区别不仅对Kaggle有用。在任何预测性机器学习项目中，您希望模型能够在新数据上表现良好。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/03/18/yuque/如何（以及为什么）创建一个好的验证集/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-yuque/如何使用良好的软件工程实践设置PySpark环境以进行开发" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1148,118 +1229,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2019/03/15/yuque/Mlflow介绍/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/我们从基于区域的物体探测器（更快的R-CNN，R-FCN，FPN）中学到了什么？" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/01/31/yuque/我们从基于区域的物体探测器（更快的R-CNN，R-FCN，FPN）中学到了什么？/">我们从基于区域的物体探测器（更快的R-CNN，R-FCN，FPN）中学到了什么？</a>
-    </h1>
-  
-
-        
-        <a href="/2019/01/31/yuque/我们从基于区域的物体探测器（更快的R-CNN，R-FCN，FPN）中学到了什么？/" class="archive-article-date">
-  	<time datetime="2019-01-31T10:12:24.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-01-31</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><a name="b4699b6e"></a></p>
-<h1 id="我们从基于区域的物体探测器（更快的R-CNN，R-FCN，FPN）中学到了什么？"><a href="#我们从基于区域的物体探测器（更快的R-CNN，R-FCN，FPN）中学到了什么？" class="headerlink" title="我们从基于区域的物体探测器（更快的R-CNN，R-FCN，FPN）中学到了什么？"></a>我们从基于区域的物体探测器（更快的R-CNN，R-FCN，FPN）中学到了什么？</h1><p><a href="https://medium.com/@jonathan_hui" target="_blank" rel="noopener">乔纳森惠</a>以下<br>2018年3月28日<br>在本系列中，我们将全面介绍物体检测。在这里的第1部分中，我们介绍了基于区域的物体探测器，包括快速R-CNN，更快的R-CNN，R-FCN和FPN。在第2部分中，我们将研究单射击探测器。在第3部分中，我们将介绍性能和一些实现问题。通过在一个环境中研究它们，我们研究什么是有效的，什么是重要的，哪些可以改进。希望通过研究我们如何到达这里，它将为我们提供更多关于我们前进方向的见解。<br><a href="https://medium.com/@jonathan_hui/what-do-we-learn-from-region-based-object-detectors-faster-r-cnn-r-fcn-fpn-7e354377a7c9" target="_blank" rel="noopener">第1部分</a>：我们从基于区域的物体探测器（更快的R-CNN，R-FCN，FPN）中学到了什么？<br><a href="https://medium.com/@jonathan_hui/what-do-we-learn-from-single-shot-object-detectors-ssd-yolo-fpn-focal-loss-3888677c5f4d" target="_blank" rel="noopener">第2部分</a>：我们从单发物体探测器（SSD，YOLO），FPN和焦点损耗中学到了什么？<br><a href="https://medium.com/@jonathan_hui/design-choices-lessons-learned-and-trends-for-object-detections-4f48b59ec5ff" target="_blank" rel="noopener">第3部分</a>：设计选择，经验教训和对象检测趋势？<br><a name="43bb065b"></a></p>
-<h3 id="滑动窗口探测器"><a href="#滑动窗口探测器" class="headerlink" title="滑动窗口探测器"></a><strong>滑动窗口探测器</strong></h3><p>自AlexNet赢得2012年ILSVRC挑战以来，使用CNN进行分类已经占据了该领域的主导地位。用于物体检测的一种蛮力方法是从左侧和右侧以及从上到下滑动窗口以使用分类来识别物体。为了在不同的观察距离检测不同的物体类型，我们使用不同尺寸和纵横比的窗户。</p>
-<p>滑动窗（从右到左，上下）<br>我们根据滑动窗口从图片中剪切出补丁。由于许多分类器仅采用固定大小的图像，因此修补程序会发生扭曲。然而，这不应该影响分类准确性，因为分类器被训练以处理变形图像。</p>
-<p>将图像变形为固定大小的图像。<br>将扭曲的图像块馈送到CNN分类器中以提取4096个特征。然后我们应用SVM分类器来识别类和边界框的另一个线性回归量。</p>
-<p>滑动窗检测器的系统流程。<br>下面是伪代码。我们创建了许多窗口来检测不同位置的不同对象形状。为了提高性能，一个明显的解决方案是减少_窗口_数量。<br>窗口中的窗口<br>    patch = get_patch（图像，窗口）<br>    结果=检测器（补丁）<a name="68696ce0"></a></p>
-<h3 id="选择性搜索"><a href="#选择性搜索" class="headerlink" title="选择性搜索"></a>选择性搜索</h3><p>我们使用区域提议方法来创建用于对象检测的<strong>感兴趣区域（ROI）</strong>，而不是强力方法。在<strong>选择性搜索</strong>（<strong>SS</strong>）中，我们从每个单独的像素开始作为其自己的组。接下来，我们计算每个组的纹理，并组合两个最接近的组。但是为了避免单个区域吞噬其他区域，我们更喜欢先将较小的组分组。我们继续合并区域，直到所有内容组合在一起。在下面的第一行中，我们展示了如何增长区域，第二行中的蓝色矩形显示了我们在合并期间可能实现的ROI。</p>
-<p>（图片来源：van de Sande等，ICCV’11）<br><a name="R-CNN"></a></p>
-<h3 id="R-CNN"><a href="#R-CNN" class="headerlink" title="R-CNN"></a>R-CNN</h3><p>R-CNN利用区域提议方法来创建大约2000个<strong>ROI</strong>（<strong>感兴趣</strong>的区域）。区域被扭曲成固定大小的图像并单独馈送到CNN网络。然后是完全连接的层，以对对象进行分类并细化边界框。</p>
-<p>使用区域提议，CNN，仿射层来定位对象。<br>这是系统流程。</p>
-<p>R-CNN的系统流程<br>R-CNN的投资回报率低得多但质量更高，比滑动窗更快，更准确。<br>投资回报率= <br>ROI中投资回报率的区域提示（图像）<br>    补丁= get_patch（图像，投资回报率）<br>    结果=检测器（补丁）<a name="9d7dcb56"></a></p>
-<h4 id="边界框回归量"><a href="#边界框回归量" class="headerlink" title="边界框回归量"></a>边界框回归量</h4><p>区域提案方法计算密集。为了加快这一过程，我们经常选择一种较便宜的区域建议方法来创建ROI，然后使用线性回归量（使用完全连接的层）进一步细化边界框。</p>
-<p>使用回归将原始ROI从蓝色细化为红色。<br><a name="02b68898"></a></p>
-<h3 id="快速R-CNN"><a href="#快速R-CNN" class="headerlink" title="快速R-CNN"></a>快速R-CNN</h3><p>R-CNN需要许多提议准确并且许多区域彼此重叠。<strong>R-CNN的训练和推理速度很慢。</strong>如果我们有2,000个提案，则每个提案都由CNN单独处理，即我们针对不同的投资回报率重复提取2000次特征。<br>我们不是从头开始为每个图像补丁提取特征，而是使用<strong>特征提取器</strong>（CNN）首先提取整个图像的特征。我们还使用外部区域提议方法（如选择性搜索）来创建ROI，后者与相应的要素图组合以形成用于对象检测的补丁。我们使用<strong>ROI池</strong>将贴片扭曲到固定大小，并将它们馈送到完全连接的层以进行分类和<strong>定位</strong>（检测对象的位置）。通过不重复特征提取，Fast R-CNN显着缩短了处理时间。</p>
-<p>在要素图上应用区域建议，并使用ROI池形成固定大小的修补程序。<br>这是网络流程：</p>
-<p>在下面的伪代码中，昂贵的特征提取正在逐渐退出for循环，这是因为它针对所有2000个ROI执行而显着提高了速度。快速R-CNN在训练中比R-CNN快10倍，在推理中快150倍。<br>feature_maps = process（image）<br>ROI = <br>ROI中ROI的region_proposal（image）<br>    补丁= roi_pooling（feature_maps，ROI）<br>    结果= detector2（补丁）Fast R-CNN的一个主要特点是整个网络（特征提取器，分类器和边界框回归器）可以通过<strong>多任务损失</strong>（分类丢失和本地化丢失）进行端到端训练。这提高了准确性。<br><strong>投资回报率</strong><br>由于Fast R-CNN使用完全连接的层，因此我们应用<strong>ROI池</strong>来将可变大小的ROI扭曲成预定义的大小形状。<br>让我们通过将8×8特征映射转换为预定义的2×2形状来简化讨论。</p>
-<ul>
-<li>左下方：我们的功能图。</li>
-<li>右上角：我们将ROI（蓝色）与要素图重叠。</li>
-<li>左下图：我们将ROI分成目标维度。例如，对于我们的2×2目标，我们将ROI分成4个具有相似或相同大小的部分。</li>
-<li>右下角：找到每个部分的最大值，结果是我们的变形特征映射。</li>
-</ul>
-<p>输入要素图（左上），输出要素图（右下），蓝框是ROI（右上）。<br>因此，我们得到一个2×2特征补丁，我们可以将其输入分类器和盒子回归器。<br><a name="1f096ba3"></a></p>
-<h3 id="更快的R-CNN"><a href="#更快的R-CNN" class="headerlink" title="更快的R-CNN"></a>更快的R-CNN</h3><p>快速R-CNN依赖于外部区域提议方法，如选择性搜索。但是，这些算法在CPU上运行并且速度很慢。在测试中，快速R-CNN花费2.3秒进行预测，其中2秒用于生成2000个ROI。<br>feature_maps = process（image）<br>ROIs = region_proposal（image）＃贵！<br>投资回报率中的ROI <br>    补丁= roi_pooling（feature_maps，ROI）<br>    结果= detector2（补丁）更快的R-CNN采用与快速R-CNN类似的设计，除了它用内部深度网络替换区域提议方法，而ROI则来自特征映射。新区域提案网络（<strong>RPN</strong>）更高效，并且在生成ROI时每个映像运行10毫秒。</p>
-<p>网络流量与Fast R-CNN相同。<br>网络流程类似，但区域提案现在由卷积网络（RPN）取代。</p>
-<p>外部区域提议由内部深层网络取代。<br><strong>区域提案网络</strong><br>区域提议网络（<strong>RPN</strong>）将来自第一个卷积网络的输出特征映射作为输入。它在特征映射上滑动3×3过滤器，以使用像ZF网络这样的卷积网络（下面）进行类别无关区域提议。其他深度网络如VGG或ResNet可用于以速度为代价进行更全面的特征提取。ZF网络输出256个值，这些值被馈送到2个单独的完全连接的层中以预测边界框和2个对象性得分。该<strong>对象性</strong>测量框是否包含对象。我们可以使用回归量来计算单个对象度得分但是为了简单起见，更快的R-CNN使用具有2个可能类的分类器：一个用于“具有对象”类别而一个用于没有（即背景类别）。</p>
-<p>对于要素图中的每个位置，RPN进行<strong>k</strong>猜测。因此，RPN每个位置输出4×k坐标和2×k分数。下图显示了具有3×3滤波器的8×8特征图，并且它输出总共8×8×3个ROI（对于k = 3）。右侧图表显示了单个位置提出的3个提案。</p>
-<p>在这里，我们得到3个猜测，我们稍后会改进我们的猜测。由于我们只需要一个正确的，如果我们的初步猜测有不同的形状和大小，我们会更好。因此，更快的R-CNN不会提出随机边界框提议。相反，它预测像δx，δy这样的偏移相对于一些称为<strong>锚点的</strong>参考框的左上角。我们限制了那些偏移的值，所以我们的猜测仍然类似于锚点。</p>
-<p>为了对每个位置进行k个预测，我们需要以每个位置为中心的k个锚点。每个预测与特定锚相关联，但不同位置共享相同的锚形状。</p>
-<p>这些锚是经过精心预先选择的，因此它们是多样的，能够很好地覆盖不同尺度和纵横比的真实物体。这可以通过更好的猜测指导初始训练，并允许每个预测专注于某种形状。这种策略使早期训练更加稳定和轻松。<br>更快的R-CNN使用更多的锚点。它配置了9个锚箱：3种不同的比例，3种不同的宽高比。每个位置使用9个锚点，每个位置生成2×9个对象度分数和4×9个坐标。</p>
-<p><a href="https://arxiv.org/pdf/1506.01497.pdf" target="_blank" rel="noopener">资源</a></p>
-<blockquote>
-<p><strong>锚</strong>在不同的论文中也称为&gt; <strong>先验</strong>或&gt; <strong>默认边界框</strong>。<br><a name="89dc102d"></a></p>
-</blockquote>
-<h3 id="R-CNN方法的性能"><a href="#R-CNN方法的性能" class="headerlink" title="R-CNN方法的性能"></a>R-CNN方法的性能</h3><p>如下图所示，更快的R-CNN甚至更快。</p>
-<p><a name="1c4a83c6"></a></p>
-<h3 id="基于区域的完全卷积网络（R-FCN）"><a href="#基于区域的完全卷积网络（R-FCN）" class="headerlink" title="基于区域的完全卷积网络（R-FCN）"></a>基于区域的完全卷积网络（R-FCN）</h3><p>假设我们只有一个特征图检测到脸部的右眼。我们可以用它来定位一张脸吗？这应该。由于右眼应位于面部图片的左上角，我们可以使用它来定位面部。</p>
-<p>如果我们有专门检测左眼，鼻子或嘴巴的其他特征图，我们可以将结果组合在一起以更好地定位脸部。<br>那么我们为什么要经历所有麻烦呢。在更快的R-CNN中，<em>探测器</em>应用多个完全连接的层来进行预测。拥有2,000个投资回报率，价格昂贵。<br>feature_maps =处理（图像）<br>的ROI = region_proposal（feature_maps）<br>用于在感兴趣区ROI <br>    补丁= roi_pooling（feature_maps，ROI）<br>    class_scores，盒=检测器（贴片）＃昂贵！<br>    class_probabilities = softmax（class_scores）R-FCN通过减少每个ROI所需的工作量来提高速度。上面的基于区域的特征图与ROI无关，并且可以在每个ROI之外计算。剩下的工作要简单得多，因此R-FCN比快速R-CNN更快。<br>feature_maps = process（image）<br>ROIs = region_proposal（feature_maps）          <br>score_maps = compute_score_map（feature_maps）<br>ROI中的ROI <br>    V = region_roi_pool（score_maps，ROI）      <br>    class_scores，box = average（V）＃更简单！<br>    class_probabilities = softmax（class_scores）让我们考虑一个5×5的特征映射<strong>M</strong>，里面有一个蓝色方形对象。我们将方形对象平均分成3×3个区域。现在，我们从M创建一个新的特征图，仅检测正方形的左上角（TL）。新功能图看起来像右下方的那个。仅激活黄色<strong>网格单元</strong> [2,2]。</p>
-<p>从左侧创建新的要素图以检测对象的左上角。<br>由于我们将正方形划分为9个部分，我们可以创建9个特征映射，每个特征映射检测对象的相应区域。这些特征图称为<strong>位置敏感分数图，</strong>因为每个图检测（分数）对象的子区域。</p>
-<p>生成9个得分图<br>假设下面的虚线红色矩形是建议的ROI。我们将其划分为3×3个区域，并询问每个区域包含对象的相应部分的可能性。例如，左上角ROI区域包含左眼的可能性有多大。我们将结果存储在右图中的3×3投票数组中。例如，vote_array [0] [0]包含关于我们是否找到方形对象的左上角区域的分数。</p>
-<p>将ROI应用于要素图以输出3 x 3阵列。<br>将得分图和ROI映射到投票数组的过程称为<strong>位置敏感的</strong> <strong>ROI池</strong>。这个过程非常接近我们之前讨论过的ROI池。我们不会进一步介绍它，但您可以参考未来的阅读部分以获取更多信息。</p>
-<p>将ROI的一部分叠加到相应的得分图上以计算V [i] [j]<br>计算位置敏感ROI池的所有值后，类别分数是其所有元素的平均值。</p>
-<p>投资回报率池<br>假设我们有<strong>C</strong>类要检测。我们将它扩展为C + 1类，因此我们为背景（非对象）添加了一个新类。每个班级都有自己的3×3分数图，因此总共有（C + 1）×3×3分数图。使用自己的一组得分图，我们预测每个班级的班级得分。然后我们在这些分数上应用softmax来计算每个类的概率。<br>以下是数据流。对于我们的例子，我们下面有k = 3。</p>
-<p><a name="f64e8873"></a></p>
-<h3 id="我们的旅程到目前为止"><a href="#我们的旅程到目前为止" class="headerlink" title="我们的旅程到目前为止"></a>我们的旅程到目前为止</h3><p>我们从基本的滑动窗口算法开始。<br>窗口中的窗口<br>    patch = get_patch（图像，窗口）<br>    结果=检测器（补丁）然后我们尝试减少窗口的数量，并在for循环之外移动尽可能多的工作。<br>投资回报率= <br>ROI中投资回报率的区域提示（图像）<br>    补丁= get_patch（图像，投资回报率）<br>    结果=检测器（补丁）在<a href="https://medium.com/@jonathan_hui/what-do-we-learn-from-single-shot-object-detectors-ssd-yolo-fpn-focal-loss-3888677c5f4d" target="_blank" rel="noopener">第2部分中</a>，我们进一步完全删除了for循环。单发探测器可在单次射击中进行物体探测，无需单独的区域建议步骤。<br><a name="b4412bfb"></a></p>
-<h3 id="进一步阅读FPN，R-FCN和Mask-R-CNN"><a href="#进一步阅读FPN，R-FCN和Mask-R-CNN" class="headerlink" title="进一步阅读FPN，R-FCN和Mask R-CNN"></a>进一步阅读FPN，R-FCN和Mask R-CNN</h3><p>FPN和R-FCN都比我们在此描述的更复杂。如需进一步研究，请参阅：</p>
-<ul>
-<li><a href="https://medium.com/@jonathan_hui/understanding-feature-pyramid-networks-for-object-detection-fpn-45b227b9106c" target="_blank" rel="noopener">用于对象检测的特征金字塔网络（FPN）。</a></li>
-<li><a href="https://medium.com/@jonathan_hui/understanding-region-based-fully-convolutional-networks-r-fcn-for-object-detection-828316f07c99" target="_blank" rel="noopener">基于区域的完全卷积网络（R-FCN）</a>。</li>
-</ul>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/01/31/yuque/我们从基于区域的物体探测器（更快的R-CNN，R-FCN，FPN）中学到了什么？/">展开全文 >></a>
         </p>
       
 

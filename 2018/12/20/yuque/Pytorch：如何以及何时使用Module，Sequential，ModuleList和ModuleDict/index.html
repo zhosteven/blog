@@ -15,7 +15,7 @@
 <meta property="og:site_name" content="A+">
 <meta property="og:description" content="分享，重用和分解模型复杂性的有效方法更新到 Pytorch 4.1版本你可以找到代码 herePytorch是一个开源的深度学习框架，提供了创建ML模型的智能方法。 即使文档制作完好，我仍然发现大多数人仍然能够编写错误的而不是有组织的PyTorch代码。今天，我们将看到如何使用PyTorch的...">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-04-28T06:50:57.281Z">
+<meta property="og:updated_time" content="2019-04-28T07:09:52.973Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Pytorch：如何以及何时使用Module，Sequential，ModuleList和ModuleDict">
 <meta name="twitter:description" content="分享，重用和分解模型复杂性的有效方法更新到 Pytorch 4.1版本你可以找到代码 herePytorch是一个开源的深度学习框架，提供了创建ML模型的智能方法。 即使文档制作完好，我仍然发现大多数人仍然能够编写错误的而不是有组织的PyTorch代码。今天，我们将看到如何使用PyTorch的...">
@@ -243,8 +243,17 @@
 <p><a name="8gyuvn"></a></p>
 <h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a><a href="#8gyuvn"></a>Conclusion</h2><p>So, in summary.</p>
 <ul>
-<li>Use <code>Module</code> when you have a big block compose of multiple smaller blo</li>
+<li><p>Use <code>Module</code> when you have a big block compose of multiple smaller blocks</p>
+</li>
+<li><p>Use <code>Sequential</code> when you want to create a small block from layers</p>
+</li>
+<li><p>Use <code>ModuleList</code> when you need to iterate through some layers or building blocks and do something</p>
+</li>
+<li><p>Use <code>ModuleDict</code> when you need to parametise some blocks of your model, for example an activation function</p>
+</li>
 </ul>
+<p>That’s all folks!</p>
+<p>Thank you for reading</p>
 
       
 

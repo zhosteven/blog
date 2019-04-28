@@ -149,6 +149,118 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-yuque/我们从基于区域的物体探测器（更快的R-CNN，R-FCN，FPN）中学到了什么？" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/01/31/yuque/我们从基于区域的物体探测器（更快的R-CNN，R-FCN，FPN）中学到了什么？/">我们从基于区域的物体探测器（更快的R-CNN，R-FCN，FPN）中学到了什么？</a>
+    </h1>
+  
+
+        
+        <a href="/2019/01/31/yuque/我们从基于区域的物体探测器（更快的R-CNN，R-FCN，FPN）中学到了什么？/" class="archive-article-date">
+  	<time datetime="2019-01-31T10:12:24.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-01-31</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><a name="b4699b6e"></a></p>
+<h1 id="我们从基于区域的物体探测器（更快的R-CNN，R-FCN，FPN）中学到了什么？"><a href="#我们从基于区域的物体探测器（更快的R-CNN，R-FCN，FPN）中学到了什么？" class="headerlink" title="我们从基于区域的物体探测器（更快的R-CNN，R-FCN，FPN）中学到了什么？"></a>我们从基于区域的物体探测器（更快的R-CNN，R-FCN，FPN）中学到了什么？</h1><p><a href="https://medium.com/@jonathan_hui" target="_blank" rel="noopener">乔纳森惠</a>以下<br>2018年3月28日<br>在本系列中，我们将全面介绍物体检测。在这里的第1部分中，我们介绍了基于区域的物体探测器，包括快速R-CNN，更快的R-CNN，R-FCN和FPN。在第2部分中，我们将研究单射击探测器。在第3部分中，我们将介绍性能和一些实现问题。通过在一个环境中研究它们，我们研究什么是有效的，什么是重要的，哪些可以改进。希望通过研究我们如何到达这里，它将为我们提供更多关于我们前进方向的见解。<br><a href="https://medium.com/@jonathan_hui/what-do-we-learn-from-region-based-object-detectors-faster-r-cnn-r-fcn-fpn-7e354377a7c9" target="_blank" rel="noopener">第1部分</a>：我们从基于区域的物体探测器（更快的R-CNN，R-FCN，FPN）中学到了什么？<br><a href="https://medium.com/@jonathan_hui/what-do-we-learn-from-single-shot-object-detectors-ssd-yolo-fpn-focal-loss-3888677c5f4d" target="_blank" rel="noopener">第2部分</a>：我们从单发物体探测器（SSD，YOLO），FPN和焦点损耗中学到了什么？<br><a href="https://medium.com/@jonathan_hui/design-choices-lessons-learned-and-trends-for-object-detections-4f48b59ec5ff" target="_blank" rel="noopener">第3部分</a>：设计选择，经验教训和对象检测趋势？<br><a name="43bb065b"></a></p>
+<h3 id="滑动窗口探测器"><a href="#滑动窗口探测器" class="headerlink" title="滑动窗口探测器"></a><strong>滑动窗口探测器</strong></h3><p>自AlexNet赢得2012年ILSVRC挑战以来，使用CNN进行分类已经占据了该领域的主导地位。用于物体检测的一种蛮力方法是从左侧和右侧以及从上到下滑动窗口以使用分类来识别物体。为了在不同的观察距离检测不同的物体类型，我们使用不同尺寸和纵横比的窗户。</p>
+<p>滑动窗（从右到左，上下）<br>我们根据滑动窗口从图片中剪切出补丁。由于许多分类器仅采用固定大小的图像，因此修补程序会发生扭曲。然而，这不应该影响分类准确性，因为分类器被训练以处理变形图像。</p>
+<p>将图像变形为固定大小的图像。<br>将扭曲的图像块馈送到CNN分类器中以提取4096个特征。然后我们应用SVM分类器来识别类和边界框的另一个线性回归量。</p>
+<p>滑动窗检测器的系统流程。<br>下面是伪代码。我们创建了许多窗口来检测不同位置的不同对象形状。为了提高性能，一个明显的解决方案是减少_窗口_数量。<br>窗口中的窗口<br>    patch = get_patch（图像，窗口）<br>    结果=检测器（补丁）<a name="68696ce0"></a></p>
+<h3 id="选择性搜索"><a href="#选择性搜索" class="headerlink" title="选择性搜索"></a>选择性搜索</h3><p>我们使用区域提议方法来创建用于对象检测的<strong>感兴趣区域（ROI）</strong>，而不是强力方法。在<strong>选择性搜索</strong>（<strong>SS</strong>）中，我们从每个单独的像素开始作为其自己的组。接下来，我们计算每个组的纹理，并组合两个最接近的组。但是为了避免单个区域吞噬其他区域，我们更喜欢先将较小的组分组。我们继续合并区域，直到所有内容组合在一起。在下面的第一行中，我们展示了如何增长区域，第二行中的蓝色矩形显示了我们在合并期间可能实现的ROI。</p>
+<p>（图片来源：van de Sande等，ICCV’11）<br><a name="R-CNN"></a></p>
+<h3 id="R-CNN"><a href="#R-CNN" class="headerlink" title="R-CNN"></a>R-CNN</h3><p>R-CNN利用区域提议方法来创建大约2000个<strong>ROI</strong>（<strong>感兴趣</strong>的区域）。区域被扭曲成固定大小的图像并单独馈送到CNN网络。然后是完全连接的层，以对对象进行分类并细化边界框。</p>
+<p>使用区域提议，CNN，仿射层来定位对象。<br>这是系统流程。</p>
+<p>R-CNN的系统流程<br>R-CNN的投资回报率低得多但质量更高，比滑动窗更快，更准确。<br>投资回报率= <br>ROI中投资回报率的区域提示（图像）<br>    补丁= get_patch（图像，投资回报率）<br>    结果=检测器（补丁）<a name="9d7dcb56"></a></p>
+<h4 id="边界框回归量"><a href="#边界框回归量" class="headerlink" title="边界框回归量"></a>边界框回归量</h4><p>区域提案方法计算密集。为了加快这一过程，我们经常选择一种较便宜的区域建议方法来创建ROI，然后使用线性回归量（使用完全连接的层）进一步细化边界框。</p>
+<p>使用回归将原始ROI从蓝色细化为红色。<br><a name="02b68898"></a></p>
+<h3 id="快速R-CNN"><a href="#快速R-CNN" class="headerlink" title="快速R-CNN"></a>快速R-CNN</h3><p>R-CNN需要许多提议准确并且许多区域彼此重叠。<strong>R-CNN的训练和推理速度很慢。</strong>如果我们有2,000个提案，则每个提案都由CNN单独处理，即我们针对不同的投资回报率重复提取2000次特征。<br>我们不是从头开始为每个图像补丁提取特征，而是使用<strong>特征提取器</strong>（CNN）首先提取整个图像的特征。我们还使用外部区域提议方法（如选择性搜索）来创建ROI，后者与相应的要素图组合以形成用于对象检测的补丁。我们使用<strong>ROI池</strong>将贴片扭曲到固定大小，并将它们馈送到完全连接的层以进行分类和<strong>定位</strong>（检测对象的位置）。通过不重复特征提取，Fast R-CNN显着缩短了处理时间。</p>
+<p>在要素图上应用区域建议，并使用ROI池形成固定大小的修补程序。<br>这是网络流程：</p>
+<p>在下面的伪代码中，昂贵的特征提取正在逐渐退出for循环，这是因为它针对所有2000个ROI执行而显着提高了速度。快速R-CNN在训练中比R-CNN快10倍，在推理中快150倍。<br>feature_maps = process（image）<br>ROI = <br>ROI中ROI的region_proposal（image）<br>    补丁= roi_pooling（feature_maps，ROI）<br>    结果= detector2（补丁）Fast R-CNN的一个主要特点是整个网络（特征提取器，分类器和边界框回归器）可以通过<strong>多任务损失</strong>（分类丢失和本地化丢失）进行端到端训练。这提高了准确性。<br><strong>投资回报率</strong><br>由于Fast R-CNN使用完全连接的层，因此我们应用<strong>ROI池</strong>来将可变大小的ROI扭曲成预定义的大小形状。<br>让我们通过将8×8特征映射转换为预定义的2×2形状来简化讨论。</p>
+<ul>
+<li>左下方：我们的功能图。</li>
+<li>右上角：我们将ROI（蓝色）与要素图重叠。</li>
+<li>左下图：我们将ROI分成目标维度。例如，对于我们的2×2目标，我们将ROI分成4个具有相似或相同大小的部分。</li>
+<li>右下角：找到每个部分的最大值，结果是我们的变形特征映射。</li>
+</ul>
+<p>输入要素图（左上），输出要素图（右下），蓝框是ROI（右上）。<br>因此，我们得到一个2×2特征补丁，我们可以将其输入分类器和盒子回归器。<br><a name="1f096ba3"></a></p>
+<h3 id="更快的R-CNN"><a href="#更快的R-CNN" class="headerlink" title="更快的R-CNN"></a>更快的R-CNN</h3><p>快速R-CNN依赖于外部区域提议方法，如选择性搜索。但是，这些算法在CPU上运行并且速度很慢。在测试中，快速R-CNN花费2.3秒进行预测，其中2秒用于生成2000个ROI。<br>feature_maps = process（image）<br>ROIs = region_proposal（image）＃贵！<br>投资回报率中的ROI <br>    补丁= roi_pooling（feature_maps，ROI）<br>    结果= detector2（补丁）更快的R-CNN采用与快速R-CNN类似的设计，除了它用内部深度网络替换区域提议方法，而ROI则来自特征映射。新区域提案网络（<strong>RPN</strong>）更高效，并且在生成ROI时每个映像运行10毫秒。</p>
+<p>网络流量与Fast R-CNN相同。<br>网络流程类似，但区域提案现在由卷积网络（RPN）取代。</p>
+<p>外部区域提议由内部深层网络取代。<br><strong>区域提案网络</strong><br>区域提议网络（<strong>RPN</strong>）将来自第一个卷积网络的输出特征映射作为输入。它在特征映射上滑动3×3过滤器，以使用像ZF网络这样的卷积网络（下面）进行类别无关区域提议。其他深度网络如VGG或ResNet可用于以速度为代价进行更全面的特征提取。ZF网络输出256个值，这些值被馈送到2个单独的完全连接的层中以预测边界框和2个对象性得分。该<strong>对象性</strong>测量框是否包含对象。我们可以使用回归量来计算单个对象度得分但是为了简单起见，更快的R-CNN使用具有2个可能类的分类器：一个用于“具有对象”类别而一个用于没有（即背景类别）。</p>
+<p>对于要素图中的每个位置，RPN进行<strong>k</strong>猜测。因此，RPN每个位置输出4×k坐标和2×k分数。下图显示了具有3×3滤波器的8×8特征图，并且它输出总共8×8×3个ROI（对于k = 3）。右侧图表显示了单个位置提出的3个提案。</p>
+<p>在这里，我们得到3个猜测，我们稍后会改进我们的猜测。由于我们只需要一个正确的，如果我们的初步猜测有不同的形状和大小，我们会更好。因此，更快的R-CNN不会提出随机边界框提议。相反，它预测像δx，δy这样的偏移相对于一些称为<strong>锚点的</strong>参考框的左上角。我们限制了那些偏移的值，所以我们的猜测仍然类似于锚点。</p>
+<p>为了对每个位置进行k个预测，我们需要以每个位置为中心的k个锚点。每个预测与特定锚相关联，但不同位置共享相同的锚形状。</p>
+<p>这些锚是经过精心预先选择的，因此它们是多样的，能够很好地覆盖不同尺度和纵横比的真实物体。这可以通过更好的猜测指导初始训练，并允许每个预测专注于某种形状。这种策略使早期训练更加稳定和轻松。<br>更快的R-CNN使用更多的锚点。它配置了9个锚箱：3种不同的比例，3种不同的宽高比。每个位置使用9个锚点，每个位置生成2×9个对象度分数和4×9个坐标。</p>
+<p><a href="https://arxiv.org/pdf/1506.01497.pdf" target="_blank" rel="noopener">资源</a></p>
+<blockquote>
+<p><strong>锚</strong>在不同的论文中也称为&gt; <strong>先验</strong>或&gt; <strong>默认边界框</strong>。<br><a name="89dc102d"></a></p>
+</blockquote>
+<h3 id="R-CNN方法的性能"><a href="#R-CNN方法的性能" class="headerlink" title="R-CNN方法的性能"></a>R-CNN方法的性能</h3><p>如下图所示，更快的R-CNN甚至更快。</p>
+<p><a name="1c4a83c6"></a></p>
+<h3 id="基于区域的完全卷积网络（R-FCN）"><a href="#基于区域的完全卷积网络（R-FCN）" class="headerlink" title="基于区域的完全卷积网络（R-FCN）"></a>基于区域的完全卷积网络（R-FCN）</h3><p>假设我们只有一个特征图检测到脸部的右眼。我们可以用它来定位一张脸吗？这应该。由于右眼应位于面部图片的左上角，我们可以使用它来定位面部。</p>
+<p>如果我们有专门检测左眼，鼻子或嘴巴的其他特征图，我们可以将结果组合在一起以更好地定位脸部。<br>那么我们为什么要经历所有麻烦呢。在更快的R-CNN中，<em>探测器</em>应用多个完全连接的层来进行预测。拥有2,000个投资回报率，价格昂贵。<br>feature_maps =处理（图像）<br>的ROI = region_proposal（feature_maps）<br>用于在感兴趣区ROI <br>    补丁= roi_pooling（feature_maps，ROI）<br>    class_scores，盒=检测器（贴片）＃昂贵！<br>    class_probabilities = softmax（class_scores）R-FCN通过减少每个ROI所需的工作量来提高速度。上面的基于区域的特征图与ROI无关，并且可以在每个ROI之外计算。剩下的工作要简单得多，因此R-FCN比快速R-CNN更快。<br>feature_maps = process（image）<br>ROIs = region_proposal（feature_maps）          <br>score_maps = compute_score_map（feature_maps）<br>ROI中的ROI <br>    V = region_roi_pool（score_maps，ROI）      <br>    class_scores，box = average（V）＃更简单！<br>    class_probabilities = softmax（class_scores）让我们考虑一个5×5的特征映射<strong>M</strong>，里面有一个蓝色方形对象。我们将方形对象平均分成3×3个区域。现在，我们从M创建一个新的特征图，仅检测正方形的左上角（TL）。新功能图看起来像右下方的那个。仅激活黄色<strong>网格单元</strong> [2,2]。</p>
+<p>从左侧创建新的要素图以检测对象的左上角。<br>由于我们将正方形划分为9个部分，我们可以创建9个特征映射，每个特征映射检测对象的相应区域。这些特征图称为<strong>位置敏感分数图，</strong>因为每个图检测（分数）对象的子区域。</p>
+<p>生成9个得分图<br>假设下面的虚线红色矩形是建议的ROI。我们将其划分为3×3个区域，并询问每个区域包含对象的相应部分的可能性。例如，左上角ROI区域包含左眼的可能性有多大。我们将结果存储在右图中的3×3投票数组中。例如，vote_array [0] [0]包含关于我们是否找到方形对象的左上角区域的分数。</p>
+<p>将ROI应用于要素图以输出3 x 3阵列。<br>将得分图和ROI映射到投票数组的过程称为<strong>位置敏感的</strong> <strong>ROI池</strong>。这个过程非常接近我们之前讨论过的ROI池。我们不会进一步介绍它，但您可以参考未来的阅读部分以获取更多信息。</p>
+<p>将ROI的一部分叠加到相应的得分图上以计算V [i] [j]<br>计算位置敏感ROI池的所有值后，类别分数是其所有元素的平均值。</p>
+<p>投资回报率池<br>假设我们有<strong>C</strong>类要检测。我们将它扩展为C + 1类，因此我们为背景（非对象）添加了一个新类。每个班级都有自己的3×3分数图，因此总共有（C + 1）×3×3分数图。使用自己的一组得分图，我们预测每个班级的班级得分。然后我们在这些分数上应用softmax来计算每个类的概率。<br>以下是数据流。对于我们的例子，我们下面有k = 3。</p>
+<p><a name="f64e8873"></a></p>
+<h3 id="我们的旅程到目前为止"><a href="#我们的旅程到目前为止" class="headerlink" title="我们的旅程到目前为止"></a>我们的旅程到目前为止</h3><p>我们从基本的滑动窗口算法开始。<br>窗口中的窗口<br>    patch = get_patch（图像，窗口）<br>    结果=检测器（补丁）然后我们尝试减少窗口的数量，并在for循环之外移动尽可能多的工作。<br>投资回报率= <br>ROI中投资回报率的区域提示（图像）<br>    补丁= get_patch（图像，投资回报率）<br>    结果=检测器（补丁）在<a href="https://medium.com/@jonathan_hui/what-do-we-learn-from-single-shot-object-detectors-ssd-yolo-fpn-focal-loss-3888677c5f4d" target="_blank" rel="noopener">第2部分中</a>，我们进一步完全删除了for循环。单发探测器可在单次射击中进行物体探测，无需单独的区域建议步骤。<br><a name="b4412bfb"></a></p>
+<h3 id="进一步阅读FPN，R-FCN和Mask-R-CNN"><a href="#进一步阅读FPN，R-FCN和Mask-R-CNN" class="headerlink" title="进一步阅读FPN，R-FCN和Mask R-CNN"></a>进一步阅读FPN，R-FCN和Mask R-CNN</h3><p>FPN和R-FCN都比我们在此描述的更复杂。如需进一步研究，请参阅：</p>
+<ul>
+<li><a href="https://medium.com/@jonathan_hui/understanding-feature-pyramid-networks-for-object-detection-fpn-45b227b9106c" target="_blank" rel="noopener">用于对象检测的特征金字塔网络（FPN）。</a></li>
+<li><a href="https://medium.com/@jonathan_hui/understanding-region-based-fully-convolutional-networks-r-fcn-for-object-detection-828316f07c99" target="_blank" rel="noopener">基于区域的完全卷积网络（R-FCN）</a>。</li>
+</ul>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/01/31/yuque/我们从基于区域的物体探测器（更快的R-CNN，R-FCN，FPN）中学到了什么？/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-yuque/Kaggle＃1获胜图像分类挑战方法" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -602,8 +714,17 @@
 <p><a name="8gyuvn"></a></p>
 <h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a><a href="#8gyuvn"></a>Conclusion</h2><p>So, in summary.</p>
 <ul>
-<li>Use <code>Module</code> when you have a big block compose of multiple smaller blo</li>
+<li><p>Use <code>Module</code> when you have a big block compose of multiple smaller blocks</p>
+</li>
+<li><p>Use <code>Sequential</code> when you want to create a small block from layers</p>
+</li>
+<li><p>Use <code>ModuleList</code> when you need to iterate through some layers or building blocks and do something</p>
+</li>
+<li><p>Use <code>ModuleDict</code> when you need to parametise some blocks of your model, for example an activation function</p>
+</li>
 </ul>
+<p>That’s all folks!</p>
+<p>Thank you for reading</p>
 
       
 
@@ -1117,112 +1238,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2018/12/19/yuque/目标检测和定位算法的演变/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/评论：U-Net（生物医学图像分割）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/12/19/yuque/评论：U-Net（生物医学图像分割）/">评论：U-Net（生物医学图像分割）</a>
-    </h1>
-  
-
-        
-        <a href="/2018/12/19/yuque/评论：U-Net（生物医学图像分割）/" class="archive-article-date">
-  	<time datetime="2018-12-19T05:38:12.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-19</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><a href="https://towardsdatascience.com/review-u-net-biomedical-image-segmentation-d02bf06ca760" target="_blank" rel="noopener">链接</a><br>在这个U-Net评论中。 U-Net是生物医学图像分割领域着名的全卷积网络（FCN）之一，它在2015年MICCAI上发表，在我写这篇故事时引用了3000多篇。 （SH Tsang @ Medium）<br>在生物医学图像标注领域，我们总是需要获得相关知识的专家来标注每个图像。 而且他们也会花费大量时间来标注。 如果标注过程变为自动，则可以实现较少的人力和较低的成本。 或者它可以作为减少人为错误的辅助角色。</p>
-<blockquote>
-<p>您可能会问：“阅读有关生物医学图像分割的内容是否过于狭窄？”<br>但是，我们可能会学习它的技术，并将其应用于不同的行业。 比如说，在施工/制造/制造过程中的质量控制/自动检查/自动机器人，或者我们可能想到的任何其他东西。 这些活动涉及定量诊断。 如果我们可以自动化，则可以以更高的精度节省成本。</p>
-</blockquote>
-<p>在本文中，他们分割/标注电子显微镜（EM）图像。 他们还对网络进行了一些修改，以便在2015 ISBI中一下子对X射线图像进行分段/标注。<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545198583802-f9cc7158-6135-46a5-b544-1978e1871a3f.png#align=left&amp;display=inline&amp;height=354&amp;originHeight=256&amp;originWidth=512&amp;status=done&amp;width=708" alt><br><a name="6f31bc1f"></a></p>
-<h2 id="什么是涵盖的"><a href="#什么是涵盖的" class="headerlink" title="什么是涵盖的"></a><a href="#w9n2hv"></a>什么是涵盖的</h2><ol>
-<li>A. EM图像分割</li>
-<li>U-Net网络架构</li>
-<li>重叠平铺策略</li>
-<li>数据增强的弹性变形</li>
-<li>触摸物体的分离</li>
-<li><p>结果<br><a name="583d02e2"></a></p>
-<h2 id="B-牙科X射线图像分割"><a href="#B-牙科X射线图像分割" class="headerlink" title="B.牙科X射线图像分割"></a><a href="#vs2glw"></a>B.牙科X射线图像分割</h2></li>
-<li><p>U-Net的一些修改</p>
-</li>
-<li><p>结果<br><a name="1f5abe88"></a></p>
-<h2 id="A-1-U-net网络架构"><a href="#A-1-U-net网络架构" class="headerlink" title="A.1 U-net网络架构"></a><a href="#iuwfgw"></a>A.1 U-net网络架构</h2><p><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545199231926-18020858-3aa4-47c6-b68c-3b9f477175f6.png#align=left&amp;display=inline&amp;height=574&amp;originHeight=627&amp;originWidth=902&amp;status=done&amp;width=826" alt><br>U-net架构如上所示。 它由收缩路径和扩展路径组成。<br><a name="464297ce"></a></p>
-<h4 id="收缩路径"><a href="#收缩路径" class="headerlink" title="收缩路径"></a><a href="#8nvimi"></a>收缩路径</h4><p>连续两次3×3转换和2×2最大合并完成。 这有助于提取更多高级功能，但也会减少功能图的大小。<br><a name="e0ad13ea"></a></p>
-<h4 id="扩张路径"><a href="#扩张路径" class="headerlink" title="扩张路径"></a><a href="#9scaye"></a>扩张路径</h4></li>
-<li><p>连续执行2×2 Up-conv和2×3×3 Conv以恢复分割图的大小。 但是，上述过程虽然增加了“什么”，但减少了“哪里”。 这意味着，我们可以获得高级功能，但我们也会丢失本地化信息。</p>
-</li>
-<li>因此，在每个up-conv之后，我们还具有相同级别的特征映射（灰色箭头）的串联。 这有助于将收缩路径的本地化信息提供给扩展路径。</li>
-<li><p>最后，1×1转换将特征映射大小从64映射到2，因为输出特征映射只有2个类，单元格和膜。<br><a name="b359c062"></a></p>
-<h2 id="A-2-重叠平铺策略"><a href="#A-2-重叠平铺策略" class="headerlink" title="A.2 重叠平铺策略"></a><a href="#uqa0mk"></a>A.2 重叠平铺策略</h2><p><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545199376322-d00ca454-7b16-4c02-bb99-ebef49b086d1.png#align=left&amp;display=inline&amp;height=267&amp;originHeight=267&amp;originWidth=557&amp;status=done&amp;width=557" alt><br>由于使用了无填充卷积，因此输出大小小于输入大小。 不是在网络之前缩小尺寸而是在网络之后进行上采样，而是使用重叠切片策略。 由此，如上图所示，逐个部分地预测整个图像。 使用蓝色区域预测图像中的黄色区域。 在图像边界处，通过镜像外推图像。<br><a name="ff8a9392"></a></p>
-<h2 id="A-3数据增强的弹性变形"><a href="#A-3数据增强的弹性变形" class="headerlink" title="A.3数据增强的弹性变形"></a><a href="#t1qdkv"></a>A.3数据增强的弹性变形</h2><p><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545199438382-5e3f4be0-d382-4924-a7d8-19a220a66152.png#align=left&amp;display=inline&amp;height=473&amp;originHeight=473&amp;originWidth=488&amp;status=done&amp;width=488" alt><br>由于训练集只能由专家标注，因此训练集很小。 为了增加训练集的大小，通过随机变形输入图像和输出分割图来完成数据增加。<br><a name="ad98132d"></a></p>
-<h2 id="A-4接触目标的分离"><a href="#A-4接触目标的分离" class="headerlink" title="A.4接触目标的分离"></a><a href="#6xmasa"></a>A.4接触目标的分离</h2><p><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545199528214-e934fe93-dcae-42bf-81db-1289452fbe16.png#align=left&amp;display=inline&amp;height=278&amp;originHeight=278&amp;originWidth=503&amp;status=done&amp;width=503" alt><br>由于触摸物体彼此紧密放置，它们很容易被网络合并，将它们分开，重量图被应用于网络的输出。<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545199557533-ba5e366c-233e-468f-89a7-ca7cbe75af22.png#align=left&amp;display=inline&amp;height=78&amp;originHeight=77&amp;originWidth=439&amp;status=done&amp;width=444" alt><br>为了如上计算权重图，d1(x)是到位置x处最近的单元边界的距离，d2(x)是到第二个最近的单元边界的距离。 因此，在边界处，重量如图中高得多。<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545199618197-57bfbffa-b257-4989-a971-882147af45b5.png#align=left&amp;display=inline&amp;height=118&amp;originHeight=118&amp;originWidth=423&amp;status=done&amp;width=423" alt><br>因此，交叉熵函数在权重图处在每个位置处罚。 它有助于迫使网络学习触摸细胞之间的小分离边界。<br><a name="d5f7fde3"></a></p>
-<h3 id="A-5-结果"><a href="#A-5-结果" class="headerlink" title="A.5. 结果"></a><a href="#7761"></a>A.5. 结果</h3><p><a name="3e377a66"></a></p>
-<h4 id="A-5-1-ISBI-2012-Challenge"><a href="#A-5-1-ISBI-2012-Challenge" class="headerlink" title="A.5.1. ISBI 2012 Challenge"></a><a href="#b2c8"></a>A.5.1. ISBI 2012 Challenge</h4><p><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545199702716-70057810-8bc6-46ca-8dc2-70a1e6e63c40.png#align=left&amp;display=inline&amp;height=267&amp;originHeight=267&amp;originWidth=774&amp;status=done&amp;width=774" alt><br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545199710221-c1e90900-ada5-4943-966f-35894c3de37a.png#align=left&amp;display=inline&amp;height=222&amp;originHeight=222&amp;originWidth=567&amp;status=done&amp;width=567" alt></p>
-</li>
-<li><p>变形误差：一种惩罚拓扑分歧的分段指标。</p>
-</li>
-<li>Rand Error：两个聚类或分段之间相似性的度量。</li>
-<li>像素错误：标准像素错误。</li>
-<li>训练时间：10小时</li>
-<li>测试速度：每张图像约1秒<br><a name="52ed776c"></a><h4 id="A-5-2-PhC-U373-and-DIC-HeLa-数据集"><a href="#A-5-2-PhC-U373-and-DIC-HeLa-数据集" class="headerlink" title="A.5.2. PhC-U373 and DIC-HeLa 数据集"></a><a href="#89a2"></a><strong>A.5.2. PhC-U373 and DIC-HeLa 数据集</strong></h4><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545199768149-5b434356-9e41-4638-a066-09b9d8a5df2e.png#align=left&amp;display=inline&amp;height=317&amp;originHeight=340&amp;originWidth=886&amp;status=done&amp;width=826" alt><br><a name="530d6eee"></a><h3 id="B-1-U-Net的一些修改"><a href="#B-1-U-Net的一些修改" class="headerlink" title="B.1. U-Net的一些修改"></a><a href="#7dbc"></a>B.1. U-Net的一些修改</h3><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545199805742-7dc888f5-e4f3-4d3f-83db-dbec0df55e50.png#align=left&amp;display=inline&amp;height=193&amp;originHeight=234&amp;originWidth=1000&amp;status=done&amp;width=826" alt><br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545199816881-16840727-0a97-47a5-9e45-4a30f0e54fa7.png#align=left&amp;display=inline&amp;height=535&amp;originHeight=535&amp;originWidth=770&amp;status=done&amp;width=770" alt><br>这次，使用4×4 Up-conv，并使用1×1 Conv将特征映射从64映射到7，因为每个位置的输出有7个类。<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545199843951-b3dd1726-e02f-46fb-9016-0951ea0be26e.png#align=left&amp;display=inline&amp;height=276&amp;originHeight=276&amp;originWidth=728&amp;status=done&amp;width=728" alt><br>在重叠平铺策略中，使用零填充而不是在图像边界处镜像。 因为镜像对牙齿没有任何意义。<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545199870989-cf53104b-0645-4518-9319-f0726d67e413.png#align=left&amp;display=inline&amp;height=371&amp;originHeight=371&amp;originWidth=733&amp;status=done&amp;width=733" alt><br>使用softmax损失的低分辨率特征图还有额外的损耗层，以指导深层直接学习分段类。<br><a name="7785671a"></a><h3 id="B-2-结果"><a href="#B-2-结果" class="headerlink" title="B.2. 结果"></a><a href="#d538"></a>B.2. 结果</h3><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545199907301-15f83213-8564-4f2b-964b-2eb02f92eafe.png#align=left&amp;display=inline&amp;height=561&amp;originHeight=561&amp;originWidth=633&amp;status=done&amp;width=633" alt><br>I have also reviewed <a href="https://medium.com/datadriveninvestor/review-cumedvision1-fully-convolutional-network-biomedical-image-segmentation-5434280d6e6" target="_blank" rel="noopener">CUMedVision1</a> and <a href="https://medium.com/datadriveninvestor/review-cumedvision2-dcan-winner-of-2015-miccai-gland-segmentation-challenge-contest-biomedical-878b5a443560" target="_blank" rel="noopener">CUMedVision2</a>. Please feel free to visit if interested.<br><a name="References"></a><h3 id="References"><a href="#References" class="headerlink" title="References"></a><a href="#76be"></a>References</h3></li>
-</ol>
-<ul>
-<li><p>[2015] [MICCAI]<br><a href="https://arxiv.org/abs/1505.04597" target="_blank" rel="noopener">U-Net: Convolutional Networks for Biomedical Image Segmentation</a></p>
-</li>
-<li><p>[2015] [ISBI]<br><a href="http://www-o.ntust.edu.tw/~cweiwang/ISBI2015/challenge2/isbi2015_Ronneberger.pdf" target="_blank" rel="noopener">Dental X-ray Image Segmentation using a U-shaped Deep Convolutional Network</a></p>
-</li>
-</ul>
-<p><a name="3416b5da"></a></p>
-<h3 id="My-Related-Reviews"><a href="#My-Related-Reviews" class="headerlink" title="My Related Reviews"></a><a href="#2785"></a>My Related Reviews</h3><p>[<a href="https://medium.com/datadriveninvestor/review-cumedvision1-fully-convolutional-network-biomedical-image-segmentation-5434280d6e6" target="_blank" rel="noopener">CUMedVision1</a>] [<a href="https://medium.com/datadriveninvestor/review-cumedvision2-dcan-winner-of-2015-miccai-gland-segmentation-challenge-contest-biomedical-878b5a443560" target="_blank" rel="noopener">CUMedVision2</a>] [<a href="https://towardsdatascience.com/review-fcn-semantic-segmentation-eb8c9b50d2d1" target="_blank" rel="noopener">FCN</a>] [<a href="https://towardsdatascience.com/review-deconvnet-unpooling-layer-semantic-segmentation-55cf8a6e380e" target="_blank" rel="noopener">DeconvNet</a>]</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/12/19/yuque/评论：U-Net（生物医学图像分割）/">展开全文 >></a>
         </p>
       
 
