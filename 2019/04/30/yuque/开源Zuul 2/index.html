@@ -6,18 +6,21 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://www.zhos.me">
-  <title>Archives: 2019 | A+</title>
+  <title>开源Zuul 2 | A+</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="研究性材料(算法)">
-<meta property="og:type" content="website">
-<meta property="og:title" content="A+">
-<meta property="og:url" content="http://www.zhos.me/archives/2019/page/2/index.html">
+  <meta name="description" content="我们很高兴地宣布Netflix的云网关Zuul 2的开源。我们在Netflix使用Zuul 2作为进入Netflix云基础架构的所有请求的前门。Zuul 2显着改进了架构和功能，使我们的网关能够处理，路由和保护Netflix的云系统，并有助于为1.25亿会员提供最佳体验。Netflix的Clo...">
+<meta property="og:type" content="article">
+<meta property="og:title" content="开源Zuul 2">
+<meta property="og:url" content="http://www.zhos.me/2019/04/30/yuque/开源Zuul 2/index.html">
 <meta property="og:site_name" content="A+">
-<meta property="og:description" content="研究性材料(算法)">
+<meta property="og:description" content="我们很高兴地宣布Netflix的云网关Zuul 2的开源。我们在Netflix使用Zuul 2作为进入Netflix云基础架构的所有请求的前门。Zuul 2显着改进了架构和功能，使我们的网关能够处理，路由和保护Netflix的云系统，并有助于为1.25亿会员提供最佳体验。Netflix的Clo...">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1556592815234-ba20f053-6747-4847-b274-85bfb2247fcd.png#align=left&display=inline&height=721&name=0_ycjEWsSKCaPemEg3_.png&originHeight=721&originWidth=872&size=33160&status=done&width=872">
+<meta property="og:updated_time" content="2019-04-30T02:54:37.454Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="A+">
-<meta name="twitter:description" content="研究性材料(算法)">
+<meta name="twitter:title" content="开源Zuul 2">
+<meta name="twitter:description" content="我们很高兴地宣布Netflix的云网关Zuul 2的开源。我们在Netflix使用Zuul 2作为进入Netflix云基础架构的所有请求的前门。Zuul 2显着改进了架构和功能，使我们的网关能够处理，路由和保护Netflix的云系统，并有助于为1.25亿会员提供最佳体验。Netflix的Clo...">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1556592815234-ba20f053-6747-4847-b274-85bfb2247fcd.png#align=left&display=inline&height=721&name=0_ycjEWsSKCaPemEg3_.png&originHeight=721&originWidth=872&size=33160&status=done&width=872">
   
     <link rel="alternative" href="/atom.xml" title="A+" type="application/atom+xml">
   
@@ -147,295 +150,208 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-yuque/开源Zuul 2" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      开源Zuul 2
+    </h1>
+  
+
+        
+        <a href="/2019/04/30/yuque/开源Zuul 2/" class="archive-article-date">
+  	<time datetime="2019-04-30T02:52:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-30</time>
+</a>
+        
+      </header>
     
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>我们很高兴地宣布Netflix的云网关<a href="https://github.com/netflix/zuul/" target="_blank" rel="noopener">Zuul 2</a>的开源。我们在Netflix使用Zuul 2作为进入Netflix云基础架构的所有请求的前门。Zuul 2显着改进了架构和功能，使我们的网关能够处理，路由和保护Netflix的云系统，并有助于为1.25亿会员提供最佳体验。Netflix的Cloud Gateway团队运行和运营超过80个Zuul 2集群，向大约100个（并且不断增长的）后端服务集群发送流量，每秒超过100万个请求。几乎所有这些流量都来自客户设备和浏览器，可以实现您可能熟悉的发现和回放体验。<br>这篇文章将概述Zuul 2，提供我们今天发布的一些有趣功能的详细信息，并讨论我们用Zuul 2构建的其他一些项目。<br><a id="more"></a><br><!--more--><br><a name="a31c"></a></p>
+<h3 id="Zuul-2如何运作"><a href="#Zuul-2如何运作" class="headerlink" title="Zuul 2如何运作"></a>Zuul 2如何运作</h3><p>对于上下文，这是Zuul 2架构的高级图：<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1556592815234-ba20f053-6747-4847-b274-85bfb2247fcd.png#align=left&amp;display=inline&amp;height=721&amp;name=0_ycjEWsSKCaPemEg3_.png&amp;originHeight=721&amp;originWidth=872&amp;size=33160&amp;status=done&amp;width=872" alt="0_ycjEWsSKCaPemEg3_.png"><br>过滤器正面和背面的Netty处理程序主要负责处理网络协议，Web服务器，连接管理和代理工作。随着那些内部工作被抽象掉，过滤器完成了所有繁重的工作。入站过滤器在代理请求之前运行，可用于身份验证，路由或装饰请求。端点过滤器可以用于返回静态响应，也可以将请求代理到后端服务（或者我们称之为源）。出站过滤器在返回响应后运行，可用于gzipping，metrics或添加/删除自定义标头等内容。<br>Zuul的功能几乎完全取决于您在每个过滤器中添加的逻辑。这意味着您可以在多个上下文中部署它，并根据其运行的配置和过滤器解决不同的问题。<br>我们在所有外部流量的入口点使用Zuul进入Netflix的云服务，我们也开始使用它来路由内部流量。我们部署相同的核心，但功能大幅减少（即更少的过滤器）。这使我们能够利用内部流量的负载平衡，自助服务路由和弹性功能。<br><a name="1a1f"></a></p>
+<h3 id="开源"><a href="#开源" class="headerlink" title="开源"></a>开源</h3><p>今天运行的Zuul代码是Zuul最稳定和最具弹性的版本。进化和重构代码库的各个阶段都带来了好处，我们很高兴与您分享。<br>今天我们发布了许多<a href="https://github.com/Netflix/zuul/wiki/Core-Features" target="_blank" rel="noopener">核心功能</a>。以下是我们最为兴奋的事情：<br><a name="aa63"></a></p>
+<h4 id="服务器协议"><a href="#服务器协议" class="headerlink" title="服务器协议"></a>服务器协议</h4><ul>
+<li><strong>HTTP / 2</strong>  - 对入站HTTP / 2连接的完整服务器支持</li>
+<li><p><strong>相互TLS</strong>  - 允许在更安全的场景中运行Zuul<br><a name="09c6"></a></p>
+<h4 id="弹性特征"><a href="#弹性特征" class="headerlink" title="弹性特征"></a>弹性特征</h4></li>
+<li><p><strong>自适应重试</strong>  - 我们在Netflix上使用的核心重试逻辑，以提高我们的弹性和可用性</p>
+</li>
+<li><p><strong>Origin Concurrency Protection </strong> - 可配置的并发限制，以保护您的起源免于过载并保护Zuul背后的其他来源<br><a name="2890"></a></p>
+<h4 id="运营特色"><a href="#运营特色" class="headerlink" title="运营特色"></a>运营特色</h4></li>
+<li><p><strong>请求Passport </strong> - 跟踪每个请求的所有生命周期事件，这对于调试异步请求非常有用</p>
+</li>
+<li><strong>状态类别</strong>  - 对比HTTP状态代码更精细的请求的可能成功和失败状态的枚举</li>
+<li><strong>请求尝试</strong>  - 跟踪代理尝试和每个的状态，对于调试重试和路由特别有用</li>
+</ul>
+<p>我们还在研究<a href="https://github.com/Netflix/zuul/wiki/Coming-Soon" target="_blank" rel="noopener">即将推出的</a>一些功能，包括：</p>
+<ul>
+<li><strong>Websocket / SSE </strong> - 支持旁道推送通知</li>
+<li><strong>限制和速率限制</strong>  - 防止恶意客户端连接和请求，帮助抵御容量攻击</li>
+<li><strong>掉电滤波器</strong>  - 用于在Zuul过载时禁用某些CPU密集型功能</li>
+<li><strong>可配置路由</strong>  - 基于文件的路由配置，而不必在Zuul中创建路由过滤器</li>
+</ul>
+<p>我们很乐意听取您的意见，并了解Zuul的所有新的和有趣的应用。有关入门的说明，请访问我们的<a href="https://github.com/Netflix/zuul/wiki/Getting-Started-2.0" target="_blank" rel="noopener">维基页面</a>。<br><a name="7a19"></a></p>
+<h3 id="在Netflix上利用Zuul-2"><a href="#在Netflix上利用Zuul-2" class="headerlink" title="在Netflix上利用Zuul 2"></a>在Netflix上利用Zuul 2</h3><p>在内部，有几个主要功能我们一直在努力，但还没有开源。每个人都应该拥有自己的博客文章，但让我们简要介绍一下。<br><a name="b950"></a></p>
+<h3 id="自助服务路由"><a href="#自助服务路由" class="headerlink" title="自助服务路由"></a>自助服务路由</h3><p>我们的合作伙伴使用最广泛的功能是自助服务路由。我们为用户提供应用程序和API，以根据请求URL，路径，查询参数或标头中的任何条件创建路由规则。然后，我们将这些路由规则发布到所有Zuul实例。<br>主要用例是将流量路由到特定测试或临时群集。但是，实际生产流量有很多用例。例如：</p>
+<ul>
+<li>需要对其流量进行分片的服务会创建将某些路径或前缀映射到不同来源的路由规则</li>
+<li>开发人员通过创建将新主机名映射到其新源的路由来加载新服务</li>
+<li>开发人员通过将一定百分比的现有流量路由到一个小型集群来运行负载测试，并确保应用程序在负载下正常降级</li>
+<li>通过创建逐步映射流量的规则（一次一条路径），重构应用程序的团队可以缓慢地迁移到新的原点</li>
+<li>团队通过将一小部分流量发送到运行新构建的检测集群来测试更改（金丝雀测试）</li>
+<li>如果团队需要测试需要在其新构建上连续多次请求的更改，他们会运行粘性金丝雀测试，将相同的用户路由到他们的新构建中很短的时间</li>
+<li>安全团队根据所有Zuul集群中的路径或标头规则创建拒绝“错误”请求的规则</li>
+</ul>
+<p>正如您所看到的，我们广泛使用自助服务路由，并且正在增加路由的可定制性和范围，以允许更多用例。<br><a name="6210"></a></p>
+<h3 id="负载均衡以实现弹性"><a href="#负载均衡以实现弹性" class="headerlink" title="负载均衡以实现弹性"></a>负载均衡以实现弹性</h3><p>我们所做的另一个主要功能是使源的负载平衡更加智能化。我们能够绕过故障，缓慢，GC问题以及在运行大量节点时经常出现的各种其他事情。这项工作的目标是提高所有Netflix服务的弹性，可用性和服务质量。<br>我们处理了几个案例：<br><a name="6a30"></a></p>
+<h4 id="冷实例"><a href="#冷实例" class="headerlink" title="冷实例"></a>冷实例</h4><p>当新的原始实例启动时，我们会在一段时间内向他们发送减少的流量，直到它们被预热为止。这是我们在具有大型代码库和巨大的元空间使用的应用程序中观察到的问题。这些应用程序需要花费大量时间来编写代码并准备好处理大量流量。<br>我们通常还会将流量偏向于较旧的实例，如果我们碰巧遇到了节流的冷实例，我们总是可以在温暖的情况下重试。这使我们的可用性提高了一个数量级。<br><a name="1b1a"></a></p>
+<h4 id="高错误率"><a href="#高错误率" class="headerlink" title="高错误率"></a>高错误率</h4><p>错误始终发生并且由于各种原因，无论是由于代码中的错误，错误的实例还是设置的无效配置属性。幸运的是，作为代理，我们可以可靠地检测错误 - 我们得到5xx错误或者服务存在连接问题。<br>我们跟踪每个来源的错误率，如果错误率足够高，则意味着整个服务都有问题。我们限制从设备重试并禁用内部重试以允许服务恢复。此外，我们还会跟踪每个实例的连续故障，并在一段时间内将不良故障列入黑名单。<br><a name="f3dc"></a></p>
+<h4 id="重载的实例"><a href="#重载的实例" class="headerlink" title="重载的实例"></a>重载的实例</h4><p>通过上述方法，我们可以减少群集中限制或拒绝连接的服务器的流量，并通过在其他服务器上重试这些失败的请求来减轻影响。<br>我们现在推出了另一种方法，我们的目标是避免首先使服务器过载。这是通过允许来源向Zuul发信号通知其当前利用率来实现的，Zuul随后将其用作其负载平衡选择中的一个因素 - 从而降低错误率，重试和延迟。<br>起源为所有响应添加标题，说明它们的利用率百分比，以及它们希望在整个群集中具有的目标利用率。计算百分比完全取决于每个应用程序，工程师可以使用最适合他们的任何度量标准。与我们试图提出一种通用的方法相比，这允许一般的解决方案。<br>有了这个功能，我们为每个实例分配一个分数（实例利用率和上面的其他因素的组合），并选择两个负载均衡选择。<br><a name="3d5f"></a></p>
+<h3 id="异常检测和上下文警报"><a href="#异常检测和上下文警报" class="headerlink" title="异常检测和上下文警报"></a>异常检测和上下文警报</h3><p>随着我们从少数几个起源发展到一个新的世界，任何人都可以快速启动集装箱集群并将其置于Zuul之后，我们发现需要自动检测并查明原点故障。<br>在<a href="https://medium.com/netflix-techblog/stream-processing-with-mantis-78af913f51a6" target="_blank" rel="noopener">Mantis实时事件流</a>的帮助下，我们构建了一个异常检测器，可以汇总每个服务的错误率，并在服务出现问题时实时通知我们。它会占用给定时间窗口中的所有异常，并创建所有起源的时间表。然后，我们创建一个上下文警报电子邮件，其中包含受影响事件和服务的时间表。这允许操作员快速关联这些事件并定位自己以调试特定的应用程序或功能，并最终找到根本原因。<br>实际上，我们扩展它以向原始团队自己发送通知非常有用。除了Zuul之外，我们还添加了更多内部应用程序，并且可以构建更广泛的事件时间表。这在生产事故期间提供了巨大的帮助，并帮助操作员在问题进入大规模停电之前快速检测并修复问题。<br>我们希望尽可能多地开源上述功能。继续观看科技博客，了解更多信息。如果您想帮助我们解决这些问题，请查看我们的<a href="https://jobs.netflix.com/teams/engineering?team=Product%20Engineering&amp;organization=Engineering" target="_blank" rel="noopener">工作网站</a>。</p>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
       
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2019" class="archive-year">2019</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/04/26/yuque/在 Python 中使用 XGBoost 和 scikit-learn 进行随机梯度提升/" class="archive-article-date">
-  	<time datetime="2019-04-26T03:18:58.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-26</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/04/26/yuque/在 Python 中使用 XGBoost 和 scikit-learn 进行随机梯度提升/">在 Python 中使用 XGBoost 和 scikit-learn 进行随机梯度提升</a>
-    </h1>
-  
+      
 
-        <div class="article-info info-on-right">
-          
-          
+      
 
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://www.zhos.me/2019/04/30/yuque/开源Zuul 2/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/04/26/yuque/从梯度提升开始，比较 165 个数据集上的 13 种算法/" class="archive-article-date">
-  	<time datetime="2019-04-26T03:18:38.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-26</time>
-</a>
+<nav id="article-nav">
+  
+  
+    <a href="/2019/04/28/yuque/Leon架构/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Leon架构</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/04/26/yuque/从梯度提升开始，比较 165 个数据集上的 13 种算法/">从梯度提升开始，比较 165 个数据集上的 13 种算法</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
+        
+        
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Zuul-2如何运作"><span class="toc-number">1.</span> <span class="toc-text">Zuul 2如何运作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#开源"><span class="toc-number">2.</span> <span class="toc-text">开源</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#服务器协议"><span class="toc-number">2.1.</span> <span class="toc-text">服务器协议</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#弹性特征"><span class="toc-number">2.2.</span> <span class="toc-text">弹性特征</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#运营特色"><span class="toc-number">2.3.</span> <span class="toc-text">运营特色</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#在Netflix上利用Zuul-2"><span class="toc-number">3.</span> <span class="toc-text">在Netflix上利用Zuul 2</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#自助服务路由"><span class="toc-number">4.</span> <span class="toc-text">自助服务路由</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#负载均衡以实现弹性"><span class="toc-number">5.</span> <span class="toc-text">负载均衡以实现弹性</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#冷实例"><span class="toc-number">5.1.</span> <span class="toc-text">冷实例</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#高错误率"><span class="toc-number">5.2.</span> <span class="toc-text">高错误率</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#重载的实例"><span class="toc-number">5.3.</span> <span class="toc-text">重载的实例</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#异常检测和上下文警报"><span class="toc-number">6.</span> <span class="toc-text">异常检测和上下文警报</span></a></li></ol>
+                    </div>
+                </span>
+            </div>
         </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
+        
+    </div>
+</aside>
+
+
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/04/26/yuque/如何在 Python 中使用 XGBoost 保存梯度提升模型/" class="archive-article-date">
-  	<time datetime="2019-04-26T03:18:18.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-26</time>
-</a>
-        </div>
-    	 
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/04/26/yuque/如何在 Python 中使用 XGBoost 保存梯度提升模型/">如何在 Python 中使用 XGBoost 保存梯度提升模型</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/04/26/yuque/如何在 macOS 上为 Python 安装 XGBoost/" class="archive-article-date">
-  	<time datetime="2019-04-26T03:17:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-26</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/04/26/yuque/如何在 macOS 上为 Python 安装 XGBoost/">如何在 macOS 上为 Python 安装 XGBoost</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/04/26/yuque/应用机器学习的 XGBoost 简介/" class="archive-article-date">
-  	<time datetime="2019-04-26T03:17:39.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-26</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/04/26/yuque/应用机器学习的 XGBoost 简介/">应用机器学习的 XGBoost 简介</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/04/26/yuque/浅谈机器学习的梯度提升算法/" class="archive-article-date">
-  	<time datetime="2019-04-26T03:17:20.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-26</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/04/26/yuque/浅谈机器学习的梯度提升算法/">浅谈机器学习的梯度提升算法</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/04/26/yuque/在 Python 中使用 XGBoost 的特征重要性和特征选择/" class="archive-article-date">
-  	<time datetime="2019-04-26T03:17:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-26</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/04/26/yuque/在 Python 中使用 XGBoost 的特征重要性和特征选择/">在 Python 中使用 XGBoost 的特征重要性和特征选择</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/04/26/yuque/如何在 Python 中使用 XGBoost 评估梯度提升模型/" class="archive-article-date">
-  	<time datetime="2019-04-26T03:16:40.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-26</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/04/26/yuque/如何在 Python 中使用 XGBoost 评估梯度提升模型/">如何在 Python 中使用 XGBoost 评估梯度提升模型</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/04/26/yuque/如何使用 scikit-learn 在 Python 中开发您的第一个 XGBoost 模型/" class="archive-article-date">
-  	<time datetime="2019-04-26T03:16:21.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-26</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/04/26/yuque/如何使用 scikit-learn 在 Python 中开发您的第一个 XGBoost 模型/">如何使用 scikit-learn 在 Python 中开发您的第一个 XGBoost 模型</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/04/26/yuque/在 Python 中使用 XGBoost 进行梯度提升的数据准备/" class="archive-article-date">
-  	<time datetime="2019-04-26T03:16:01.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-26</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/04/26/yuque/在 Python 中使用 XGBoost 进行梯度提升的数据准备/">在 Python 中使用 XGBoost 进行梯度提升的数据准备</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
-
-    
-    <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/archives/2019/">&laquo; Prev</a><a class="page-number" href="/archives/2019/">1</a><span class="page-number current">2</span><a class="page-number" href="/archives/2019/page/3/">3</a><a class="page-number" href="/archives/2019/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/archives/2019/page/8/">8</a><a class="extend next" rel="next" href="/archives/2019/page/3/">Next &raquo;</a>
-    </nav>
   
 
 
@@ -471,8 +387,8 @@
 	var yiliaConfig = {
 		mathjax: true,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
