@@ -5,24 +5,24 @@
   
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <link rel="dns-prefetch" href="http://zhos.me">
+  <link rel="dns-prefetch" href="http://www.zhos.me">
   <title>如何在 Python 中使用 XGBoost 可视化梯度提升决策树 | A+</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="如何在 Python 中使用 XGBoost 可视化梯度提升决策树原文： https://machinelearningmastery.com/visualize-gradient-boosting-decision-trees-xgboost-python/绘制单个决策树可以提供对给定数据集...">
 <meta property="og:type" content="article">
 <meta property="og:title" content="如何在 Python 中使用 XGBoost 可视化梯度提升决策树">
-<meta property="og:url" content="http://zhos.me/2019/04/26/yuque/如何在 Python 中使用 XGBoost 可视化梯度提升决策树/index.html">
+<meta property="og:url" content="http://www.zhos.me/2019/04/26/yuque/如何在 Python 中使用 XGBoost 可视化梯度提升决策树/index.html">
 <meta property="og:site_name" content="A+">
 <meta property="og:description" content="如何在 Python 中使用 XGBoost 可视化梯度提升决策树原文： https://machinelearningmastery.com/visualize-gradient-boosting-decision-trees-xgboost-python/绘制单个决策树可以提供对给定数据集...">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://zhos.me/2019/04/26/yuque/如何在%20Python%20中使用%20XGBoost%20可视化梯度提升决策树/img/53f3758154f3614de9c05883ac908246.jpg#alt=How%20to%20Visualize%20Gradient%20Boosting%20Decision%20Trees%20With%20XGBoost%20in%20Python">
-<meta property="og:image" content="http://zhos.me/2019/04/26/yuque/如何在%20Python%20中使用%20XGBoost%20可视化梯度提升决策树/img/b689361fa203cc95ba7173bb475cc1dc.jpg#alt=XGBoost%20Plot%20of%20Single%20Decision%20Tree">
-<meta property="og:image" content="http://zhos.me/2019/04/26/yuque/如何在%20Python%20中使用%20XGBoost%20可视化梯度提升决策树/img/896ab7f2c02bde2ade456f409a97f693.jpg#alt=XGBoost%20Plot%20of%20Single%20Decision%20Tree%20Left-To-Right">
-<meta property="og:updated_time" content="2019-04-28T10:24:54.231Z">
+<meta property="og:image" content="http://www.zhos.me/2019/04/26/yuque/如何在%20Python%20中使用%20XGBoost%20可视化梯度提升决策树/img/53f3758154f3614de9c05883ac908246.jpg#alt=How%20to%20Visualize%20Gradient%20Boosting%20Decision%20Trees%20With%20XGBoost%20in%20Python">
+<meta property="og:image" content="http://www.zhos.me/2019/04/26/yuque/如何在%20Python%20中使用%20XGBoost%20可视化梯度提升决策树/img/b689361fa203cc95ba7173bb475cc1dc.jpg#alt=XGBoost%20Plot%20of%20Single%20Decision%20Tree">
+<meta property="og:image" content="http://www.zhos.me/2019/04/26/yuque/如何在%20Python%20中使用%20XGBoost%20可视化梯度提升决策树/img/896ab7f2c02bde2ade456f409a97f693.jpg#alt=XGBoost%20Plot%20of%20Single%20Decision%20Tree%20Left-To-Right">
+<meta property="og:updated_time" content="2019-04-30T01:59:22.500Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="如何在 Python 中使用 XGBoost 可视化梯度提升决策树">
 <meta name="twitter:description" content="如何在 Python 中使用 XGBoost 可视化梯度提升决策树原文： https://machinelearningmastery.com/visualize-gradient-boosting-decision-trees-xgboost-python/绘制单个决策树可以提供对给定数据集...">
-<meta name="twitter:image" content="http://zhos.me/2019/04/26/yuque/如何在%20Python%20中使用%20XGBoost%20可视化梯度提升决策树/img/53f3758154f3614de9c05883ac908246.jpg#alt=How%20to%20Visualize%20Gradient%20Boosting%20Decision%20Trees%20With%20XGBoost%20in%20Python">
+<meta name="twitter:image" content="http://www.zhos.me/2019/04/26/yuque/如何在%20Python%20中使用%20XGBoost%20可视化梯度提升决策树/img/53f3758154f3614de9c05883ac908246.jpg#alt=How%20to%20Visualize%20Gradient%20Boosting%20Decision%20Trees%20With%20XGBoost%20in%20Python">
   
     <link rel="alternative" href="/atom.xml" title="A+" type="application/atom+xml">
   
@@ -286,7 +286,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://zhos.me/2019/04/26/yuque/如何在 Python 中使用 XGBoost 可视化梯度提升决策树/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://www.zhos.me/2019/04/26/yuque/如何在 Python 中使用 XGBoost 可视化梯度提升决策树/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -374,6 +374,16 @@
       	</div>
     </div>
   </div>
+
+        <!-- 不蒜子统计 -->
+        <span id="busuanzi_container_site_pv">
+                本站总访问量<span id="busuanzi_value_site_pv"></span>次
+        </span>
+        <span class="post-meta-divider">|</span>
+        <span id="busuanzi_container_site_uv" style="display:none">
+                本站访客数<span id="busuanzi_value_site_uv"></span>人
+        </span>
+        <script async src="/busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
 </footer>
 

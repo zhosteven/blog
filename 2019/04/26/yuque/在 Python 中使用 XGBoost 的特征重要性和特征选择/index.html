@@ -5,24 +5,24 @@
   
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <link rel="dns-prefetch" href="http://zhos.me">
+  <link rel="dns-prefetch" href="http://www.zhos.me">
   <title>在 Python 中使用 XGBoost 的特征重要性和特征选择 | A+</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="在 Python 中使用 XGBoost 的特征重要性和特征选择原文： https://machinelearningmastery.com/feature-importance-and-feature-selection-with-xgboost-in-python/使用诸如梯度提升之类的决...">
 <meta property="og:type" content="article">
 <meta property="og:title" content="在 Python 中使用 XGBoost 的特征重要性和特征选择">
-<meta property="og:url" content="http://zhos.me/2019/04/26/yuque/在 Python 中使用 XGBoost 的特征重要性和特征选择/index.html">
+<meta property="og:url" content="http://www.zhos.me/2019/04/26/yuque/在 Python 中使用 XGBoost 的特征重要性和特征选择/index.html">
 <meta property="og:site_name" content="A+">
 <meta property="og:description" content="在 Python 中使用 XGBoost 的特征重要性和特征选择原文： https://machinelearningmastery.com/feature-importance-and-feature-selection-with-xgboost-in-python/使用诸如梯度提升之类的决...">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://zhos.me/2019/04/26/yuque/在%20Python%20中使用%20XGBoost%20的特征重要性和特征选择/img/5a184d41ab4a4455f4f46aae43b17958.jpg#alt=Feature%20Importance%20and%20Feature%20Selection%20With%20XGBoost%20in%20Python">
-<meta property="og:image" content="http://zhos.me/2019/04/26/yuque/在%20Python%20中使用%20XGBoost%20的特征重要性和特征选择/img/745045b3bf82c5128eae73f2ebbfe78e.jpg#alt=Manual%20Bar%20Chart%20of%20XGBoost%20Feature%20Importance">
-<meta property="og:image" content="http://zhos.me/2019/04/26/yuque/在%20Python%20中使用%20XGBoost%20的特征重要性和特征选择/img/5f9e25575188c1f1ca109d5a47b9bc13.jpg#alt=XGBoost%20Feature%20Importance%20Bar%20Chart">
-<meta property="og:updated_time" content="2019-04-28T10:24:54.239Z">
+<meta property="og:image" content="http://www.zhos.me/2019/04/26/yuque/在%20Python%20中使用%20XGBoost%20的特征重要性和特征选择/img/5a184d41ab4a4455f4f46aae43b17958.jpg#alt=Feature%20Importance%20and%20Feature%20Selection%20With%20XGBoost%20in%20Python">
+<meta property="og:image" content="http://www.zhos.me/2019/04/26/yuque/在%20Python%20中使用%20XGBoost%20的特征重要性和特征选择/img/745045b3bf82c5128eae73f2ebbfe78e.jpg#alt=Manual%20Bar%20Chart%20of%20XGBoost%20Feature%20Importance">
+<meta property="og:image" content="http://www.zhos.me/2019/04/26/yuque/在%20Python%20中使用%20XGBoost%20的特征重要性和特征选择/img/5f9e25575188c1f1ca109d5a47b9bc13.jpg#alt=XGBoost%20Feature%20Importance%20Bar%20Chart">
+<meta property="og:updated_time" content="2019-04-30T01:59:22.508Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="在 Python 中使用 XGBoost 的特征重要性和特征选择">
 <meta name="twitter:description" content="在 Python 中使用 XGBoost 的特征重要性和特征选择原文： https://machinelearningmastery.com/feature-importance-and-feature-selection-with-xgboost-in-python/使用诸如梯度提升之类的决...">
-<meta name="twitter:image" content="http://zhos.me/2019/04/26/yuque/在%20Python%20中使用%20XGBoost%20的特征重要性和特征选择/img/5a184d41ab4a4455f4f46aae43b17958.jpg#alt=Feature%20Importance%20and%20Feature%20Selection%20With%20XGBoost%20in%20Python">
+<meta name="twitter:image" content="http://www.zhos.me/2019/04/26/yuque/在%20Python%20中使用%20XGBoost%20的特征重要性和特征选择/img/5a184d41ab4a4455f4f46aae43b17958.jpg#alt=Feature%20Importance%20and%20Feature%20Selection%20With%20XGBoost%20in%20Python">
   
     <link rel="alternative" href="/atom.xml" title="A+" type="application/atom+xml">
   
@@ -328,7 +328,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://zhos.me/2019/04/26/yuque/在 Python 中使用 XGBoost 的特征重要性和特征选择/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://www.zhos.me/2019/04/26/yuque/在 Python 中使用 XGBoost 的特征重要性和特征选择/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -416,6 +416,16 @@
       	</div>
     </div>
   </div>
+
+        <!-- 不蒜子统计 -->
+        <span id="busuanzi_container_site_pv">
+                本站总访问量<span id="busuanzi_value_site_pv"></span>次
+        </span>
+        <span class="post-meta-divider">|</span>
+        <span id="busuanzi_container_site_uv" style="display:none">
+                本站访客数<span id="busuanzi_value_site_uv"></span>人
+        </span>
+        <script async src="/busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
 </footer>
 

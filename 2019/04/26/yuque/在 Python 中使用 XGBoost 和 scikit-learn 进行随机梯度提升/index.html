@@ -5,25 +5,25 @@
   
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <link rel="dns-prefetch" href="http://zhos.me">
+  <link rel="dns-prefetch" href="http://www.zhos.me">
   <title>在 Python 中使用 XGBoost 和 scikit-learn 进行随机梯度提升 | A+</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="在 Python 中使用 XGBoost 和 scikit-learn 进行随机梯度提升原文： https://machinelearningmastery.com/stochastic-gradient-boosting-xgboost-scikit-learn-python/用于集合决策树...">
 <meta property="og:type" content="article">
 <meta property="og:title" content="在 Python 中使用 XGBoost 和 scikit-learn 进行随机梯度提升">
-<meta property="og:url" content="http://zhos.me/2019/04/26/yuque/在 Python 中使用 XGBoost 和 scikit-learn 进行随机梯度提升/index.html">
+<meta property="og:url" content="http://www.zhos.me/2019/04/26/yuque/在 Python 中使用 XGBoost 和 scikit-learn 进行随机梯度提升/index.html">
 <meta property="og:site_name" content="A+">
 <meta property="og:description" content="在 Python 中使用 XGBoost 和 scikit-learn 进行随机梯度提升原文： https://machinelearningmastery.com/stochastic-gradient-boosting-xgboost-scikit-learn-python/用于集合决策树...">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://zhos.me/2019/04/26/yuque/在%20Python%20中使用%20XGBoost%20和%20scikit-learn%20进行随机梯度提升/img/fbab4c6af48b765581a028db9e675246.jpg#alt=Stochastic%20Gradient%20Boosting%20with%20XGBoost%20and%20scikit-learn%20in%20Python">
-<meta property="og:image" content="http://zhos.me/2019/04/26/yuque/在%20Python%20中使用%20XGBoost%20和%20scikit-learn%20进行随机梯度提升/img/8656295302bbaecbeb416213b9a54cde.jpg#alt=Plot%20of%20Tuning%20Row%20Sample%20Rate%20in%20XGBoost">
-<meta property="og:image" content="http://zhos.me/2019/04/26/yuque/在%20Python%20中使用%20XGBoost%20和%20scikit-learn%20进行随机梯度提升/img/25700c450ba1f3aa55ec915c531c8140.jpg#alt=Plot%20of%20Tuning%20Per-Tree%20Column%20Sampling%20in%20XGBoost">
-<meta property="og:image" content="http://zhos.me/2019/04/26/yuque/在%20Python%20中使用%20XGBoost%20和%20scikit-learn%20进行随机梯度提升/img/f8330b8c24fa2c6b765dafcc072cc850.jpg#alt=Plot%20of%20Tuning%20Per-Split%20Column%20Sampling%20in%20XGBoost">
-<meta property="og:updated_time" content="2019-04-28T10:24:54.235Z">
+<meta property="og:image" content="http://www.zhos.me/2019/04/26/yuque/在%20Python%20中使用%20XGBoost%20和%20scikit-learn%20进行随机梯度提升/img/fbab4c6af48b765581a028db9e675246.jpg#alt=Stochastic%20Gradient%20Boosting%20with%20XGBoost%20and%20scikit-learn%20in%20Python">
+<meta property="og:image" content="http://www.zhos.me/2019/04/26/yuque/在%20Python%20中使用%20XGBoost%20和%20scikit-learn%20进行随机梯度提升/img/8656295302bbaecbeb416213b9a54cde.jpg#alt=Plot%20of%20Tuning%20Row%20Sample%20Rate%20in%20XGBoost">
+<meta property="og:image" content="http://www.zhos.me/2019/04/26/yuque/在%20Python%20中使用%20XGBoost%20和%20scikit-learn%20进行随机梯度提升/img/25700c450ba1f3aa55ec915c531c8140.jpg#alt=Plot%20of%20Tuning%20Per-Tree%20Column%20Sampling%20in%20XGBoost">
+<meta property="og:image" content="http://www.zhos.me/2019/04/26/yuque/在%20Python%20中使用%20XGBoost%20和%20scikit-learn%20进行随机梯度提升/img/f8330b8c24fa2c6b765dafcc072cc850.jpg#alt=Plot%20of%20Tuning%20Per-Split%20Column%20Sampling%20in%20XGBoost">
+<meta property="og:updated_time" content="2019-04-30T01:59:22.504Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="在 Python 中使用 XGBoost 和 scikit-learn 进行随机梯度提升">
 <meta name="twitter:description" content="在 Python 中使用 XGBoost 和 scikit-learn 进行随机梯度提升原文： https://machinelearningmastery.com/stochastic-gradient-boosting-xgboost-scikit-learn-python/用于集合决策树...">
-<meta name="twitter:image" content="http://zhos.me/2019/04/26/yuque/在%20Python%20中使用%20XGBoost%20和%20scikit-learn%20进行随机梯度提升/img/fbab4c6af48b765581a028db9e675246.jpg#alt=Stochastic%20Gradient%20Boosting%20with%20XGBoost%20and%20scikit-learn%20in%20Python">
+<meta name="twitter:image" content="http://www.zhos.me/2019/04/26/yuque/在%20Python%20中使用%20XGBoost%20和%20scikit-learn%20进行随机梯度提升/img/fbab4c6af48b765581a028db9e675246.jpg#alt=Stochastic%20Gradient%20Boosting%20with%20XGBoost%20and%20scikit-learn%20in%20Python">
   
     <link rel="alternative" href="/atom.xml" title="A+" type="application/atom+xml">
   
@@ -344,7 +344,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://zhos.me/2019/04/26/yuque/在 Python 中使用 XGBoost 和 scikit-learn 进行随机梯度提升/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://www.zhos.me/2019/04/26/yuque/在 Python 中使用 XGBoost 和 scikit-learn 进行随机梯度提升/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -432,6 +432,16 @@
       	</div>
     </div>
   </div>
+
+        <!-- 不蒜子统计 -->
+        <span id="busuanzi_container_site_pv">
+                本站总访问量<span id="busuanzi_value_site_pv"></span>次
+        </span>
+        <span class="post-meta-divider">|</span>
+        <span id="busuanzi_container_site_uv" style="display:none">
+                本站访客数<span id="busuanzi_value_site_uv"></span>人
+        </span>
+        <script async src="/busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
 </footer>
 
