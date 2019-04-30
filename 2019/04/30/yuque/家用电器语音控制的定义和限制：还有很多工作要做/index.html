@@ -6,27 +6,21 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://www.zhos.me">
-  <title>时间序列分类实践介绍（使用Python代码） | A+</title>
+  <title>家用电器语音控制的定义和限制：还有很多工作要做 | A+</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="介绍分类时间序列数据？这真的有可能吗？可能有什么用呢？这些只是您阅读本文标题时必须具备的一些问题。这是公平的 - 当我第一次遇到这个概念时，我有完全相同的想法！我们大多数人的时间序列数据主要涉及产生预测的交易。无论是预测产品的需求还是销售额，航空公司的乘客数量或特定股票的收盘价，我们都习惯于利...">
+  <meta name="description" content="语音助理和智能扬声器：为智能家居而战&amp;amp;lt;!--more--&amp;amp;gt;似乎没有语音助手和智能扬声器的逃脱。一些预测预测市场的增长从2.7 B i n 2018 t o2018年9月，18％的美国成年人每月使用一个智能扬声器，预计到2018年底，将近30％的美国成年人可以使用智能扬声器，其中80...">
 <meta property="og:type" content="article">
-<meta property="og:title" content="时间序列分类实践介绍（使用Python代码）">
-<meta property="og:url" content="http://www.zhos.me/2019/04/25/yuque/时间序列分类实践介绍（使用Python代码）/index.html">
+<meta property="og:title" content="家用电器语音控制的定义和限制：还有很多工作要做">
+<meta property="og:url" content="http://www.zhos.me/2019/04/30/yuque/家用电器语音控制的定义和限制：还有很多工作要做/index.html">
 <meta property="og:site_name" content="A+">
-<meta property="og:description" content="介绍分类时间序列数据？这真的有可能吗？可能有什么用呢？这些只是您阅读本文标题时必须具备的一些问题。这是公平的 - 当我第一次遇到这个概念时，我有完全相同的想法！我们大多数人的时间序列数据主要涉及产生预测的交易。无论是预测产品的需求还是销售额，航空公司的乘客数量或特定股票的收盘价，我们都习惯于利...">
+<meta property="og:description" content="语音助理和智能扬声器：为智能家居而战&amp;amp;lt;!--more--&amp;amp;gt;似乎没有语音助手和智能扬声器的逃脱。一些预测预测市场的增长从2.7 B i n 2018 t o2018年9月，18％的美国成年人每月使用一个智能扬声器，预计到2018年底，将近30％的美国成年人可以使用智能扬声器，其中80...">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1556185921707-66d9bdc3-0973-4b8a-bac2-9d55f161b0d1.jpeg#align=left&display=inline&height=370&name=time-series-.jpg&originHeight=370&originWidth=500&size=129532&status=done&width=500">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1556186576907-27f3e67d-80ed-447d-bc59-34a85df70470.png#align=left&display=inline&height=184&name=ECG.png&originHeight=184&originWidth=319&size=140783&status=done&width=319">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1556185959108-02f6758d-7a1e-4a66-bcb8-9b350c822268.jpeg#align=left&display=inline&height=386&name=MovementAAL.jpg&originHeight=490&originWidth=946&size=59610&status=done&width=746">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1556186076246-1031ed5c-9c2a-471b-9a1e-4a1267c5e0ff.png#align=left&display=inline&height=174&name=tsc1.png&originHeight=174&originWidth=406&size=9919&status=done&width=406">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1556186109119-e65e46b1-1776-4ae0-a97b-65b23c599fb9.png#align=left&display=inline&height=175&name=tsc2.png&originHeight=175&originWidth=402&size=9416&status=done&width=402">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1556186209162-23360e28-e86a-4979-b92e-629e5eb2fed2.png#align=left&display=inline&height=466&name=tsc3.png&originHeight=466&originWidth=438&size=18098&status=done&width=438">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1556186397482-3f2d9b5b-e07c-4c63-9da9-b34539c067b7.png#align=left&display=inline&height=189&name=tsc4.png&originHeight=189&originWidth=544&size=10318&status=done&width=544">
-<meta property="og:updated_time" content="2019-04-30T04:08:20.057Z">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1556598474585-3827999e-a03c-4c83-ad48-683cf0e4b095.jpeg#align=left&display=inline&height=1473&name=image.jpeg&originHeight=1473&originWidth=2048&size=205510&status=done&width=2048">
+<meta property="og:updated_time" content="2019-04-30T04:29:44.821Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="时间序列分类实践介绍（使用Python代码）">
-<meta name="twitter:description" content="介绍分类时间序列数据？这真的有可能吗？可能有什么用呢？这些只是您阅读本文标题时必须具备的一些问题。这是公平的 - 当我第一次遇到这个概念时，我有完全相同的想法！我们大多数人的时间序列数据主要涉及产生预测的交易。无论是预测产品的需求还是销售额，航空公司的乘客数量或特定股票的收盘价，我们都习惯于利...">
-<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1556185921707-66d9bdc3-0973-4b8a-bac2-9d55f161b0d1.jpeg#align=left&display=inline&height=370&name=time-series-.jpg&originHeight=370&originWidth=500&size=129532&status=done&width=500">
+<meta name="twitter:title" content="家用电器语音控制的定义和限制：还有很多工作要做">
+<meta name="twitter:description" content="语音助理和智能扬声器：为智能家居而战&amp;amp;lt;!--more--&amp;amp;gt;似乎没有语音助手和智能扬声器的逃脱。一些预测预测市场的增长从2.7 B i n 2018 t o2018年9月，18％的美国成年人每月使用一个智能扬声器，预计到2018年底，将近30％的美国成年人可以使用智能扬声器，其中80...">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1556598474585-3827999e-a03c-4c83-ad48-683cf0e4b095.jpeg#align=left&display=inline&height=1473&name=image.jpeg&originHeight=1473&originWidth=2048&size=205510&status=done&width=2048">
   
     <link rel="alternative" href="/atom.xml" title="A+" type="application/atom+xml">
   
@@ -156,113 +150,48 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-yuque/时间序列分类实践介绍（使用Python代码）" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-yuque/家用电器语音控制的定义和限制：还有很多工作要做" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      时间序列分类实践介绍（使用Python代码）
+      家用电器语音控制的定义和限制：还有很多工作要做
     </h1>
   
 
         
-        <a href="/2019/04/25/yuque/时间序列分类实践介绍（使用Python代码）/" class="archive-article-date">
-  	<time datetime="2019-04-25T09:48:43.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-25</time>
+        <a href="/2019/04/30/yuque/家用电器语音控制的定义和限制：还有很多工作要做/" class="archive-article-date">
+  	<time datetime="2019-04-30T04:26:20.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-30</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p><a href></a><br><a name="61a3ec66"></a></p>
-<h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>分类时间序列数据？这真的有可能吗？可能有什么用呢？这些只是您阅读本文标题时必须具备的一些问题。这是公平的 - 当我第一次遇到这个概念时，我有完全相同的想法！</p>
-<p>我们大多数人的时间序列数据主要涉及产生预测的交易。无论是预测产品的需求还是销售额，航空公司的乘客数量或特定股票的收盘价，我们都习惯于利用久经考验的时间序列技术来预测需求。</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1556185921707-66d9bdc3-0973-4b8a-bac2-9d55f161b0d1.jpeg#align=left&amp;display=inline&amp;height=370&amp;name=time-series-.jpg&amp;originHeight=370&amp;originWidth=500&amp;size=129532&amp;status=done&amp;width=500" alt="time-series-.jpg"></p>
-<p>但随着生成的数据量呈指数增长，尝试新想法和算法的机会也随之增加。使用复杂的时间序列数据集仍然是一个利基领域，扩展您的保留曲目以包含新想法总是有帮助的。</p>
-<p>这就是我在文章中的目的，向您介绍时间序列分类的新概念。我们将首先了解这个主题的含义以及它在行业中的应用。但是我们不会停留在理论部分 - 我们将通过处理时间序列数据集并执行二进制时间序列分类来解决问题。边做边学 - 这将有助于您以实际的方式理解这个概念。</p>
-<p>如果您之前没有处理过时间序列问题，我强烈建议您先从一些基本预测开始。您可以通过以下文章了解初学者：</p>
+        <p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1556598474585-3827999e-a03c-4c83-ad48-683cf0e4b095.jpeg#align=left&amp;display=inline&amp;height=1473&amp;name=image.jpeg&amp;originHeight=1473&amp;originWidth=2048&amp;size=205510&amp;status=done&amp;width=2048" alt="image.jpeg"><br><a name="c957"></a></p>
+<h4 id="语音助理和智能扬声器：为智能家居而战"><a href="#语音助理和智能扬声器：为智能家居而战" class="headerlink" title="语音助理和智能扬声器：为智能家居而战"></a>语音助理和智能扬声器：为智能家居而战</h4><p><a id="more"></a><br>似乎没有语音助手和智能扬声器的逃脱。一些预测预测<a href="https://www.prnewswire.com/news-releases/118-billion-global-smart-speaker-market-forecasts-to-2023---issues-related-to-connectivity-range-compatibility-and-power-300587621.html" target="_blank" rel="noopener">市场的增长</a>从2.7 _B i n _2018 _t o_2018年9月，18％的美国成年人每月使用一个智能扬声器，<a href="https://voicebot.ai/" target="_blank" rel="noopener">预计到2018年底</a>，将近30％的美国成年人可以使用智能扬声器，其中80％的人使用智能扬声器。每月使用该服务。<br><strong><em>语音助理</em></strong>_ <em>是云服务，它接收来自**</em>智能扬声器<em>**和其他设备的语音命令</em>，_将语音转换为文本，解释结果语言，检测命令的意图，并使用“技能”来确定和执行适当的动作; 通过智能扬声器，或通过家庭中连接到互联网的其他设备的动作。<br>目前亚马逊Alexa拥有语音助理<a href="https://voicebot.ai/2018/06/03/u-s-smart-speaker-market-share-apple-debuts-at-4-1-amazon-falls-10-points-and-google-rises/" target="_blank" rel="noopener">市场领导地位</a>，Google智能助理迅速赶超，Apple Siri也在不断扩大。虽然每个助手都依赖于发言人，但他们所传达的服务对于公司的商业模式来说是真正的价值。亚马逊支持从他们的商业服务购买，谷歌倾向于访问他们的服务并使用这些数据进行广告，而Apple使用Siri来支持他们的硬件和服务生态系统。<br>此外，第三方扬声器供应商，例如B＆O，Sonos和Harman Kardon，正在使用由三位市场领导者提供的语音助理服务提供他们自己的智能扬声器。<br>三大语音助理提供商中的每一个都希望通过语音助手连接到由连接设备构成的大型生态系统。其中一些<a href="https://www.washingtonpost.com/technology/2018/11/21/i-live-with-alexa-google-assistant-siri-heres-which-you-should-pick" target="_blank" rel="noopener">生态系统</a>迅速扩大。<a href="https://www.theverge.com/2019/1/4/18168565/amazon-alexa-devices-how-many-sold-number-100-million-dave-limp" target="_blank" rel="noopener">亚马逊拥有超过28,000个与超过4,500家不同制造商生产的Alexa合作的智能家居设备，以及超过70,000个Alexa技能。</a> <a href="https://www.digitaltrends.com/home/google-assistant-announcements-at-ces-2019/" target="_blank" rel="noopener">Google智能助理声称拥有来自1,600个品牌的超过10,000台设备</a>。<br>消费者面临的一个重要问题是他们应该订阅<a href="https://www.washingtonpost.com/technology/2018/11/21/i-live-with-alexa-google-assistant-siri-heres-which-you-should-pick" target="_blank" rel="noopener">哪个语音助理生态系统</a>。虽然亚马逊Alexa和Google智能助理在基于智能扬声器的语音助手方面处于领先地位，但Apple的Siri在智能手机，平板电脑和计算机上得到广泛应用。<br><a name="66ba"></a></p>
+<h3 id="但人们是否使用它们来控制智能家电？"><a href="#但人们是否使用它们来控制智能家电？" class="headerlink" title="但人们是否使用它们来控制智能家电？"></a>但人们是否使用它们来控制智能家电？</h3><p>到目前为止，消费者似乎主要使用他们的智能扬声器用于娱乐和信息服务，相关智能扬声器传达的响应。智能家居设备的控制似乎<a href="https://musically.com/2018/08/06/smart-speaker-sales-forecasts-market-share-amazon-google-apple/" target="_blank" rel="noopener">还不是</a>语音助理使用<a href="https://musically.com/2018/08/06/smart-speaker-sales-forecasts-market-share-amazon-google-apple/" target="_blank" rel="noopener">的主要因素</a>。<br>事实上，根据一些调查，使用大型家电的语音助手<a href="https://www.geekwire.com/2018/smart-speaker-sales-take-off-globally-consumer-appetite-novel-uses-fickle" target="_blank" rel="noopener">似乎在下降</a>。<br>虽然使用率可能会放慢，但智能扬声器的采用却没有。这意味着家电制造商现在必须支持所有主要的语音助理，或冒险不考虑其品牌的人。为了简化其设备的使用，一些制造商希望使用内置麦克风和扬声器将它们直接连接到云中的语音助理服务，从而无需使用智能扬声器。然而，根据分析机构组织VoiceBot的说法，这种趋势尚未成熟，尚无大量用途。（1）<br>然而，elimnate扬声器的设计有其自身的挑战 - 如果家电设计师使用专用的语音芯片用于家用电器，例如<a href="https://www.forbes.com/sites/aarontilley/2016/12/08/amazon-partners-with-chipmakers-to-push-alexa-voice-assistant-into-more-devices/#1a9db853e141" target="_blank" rel="noopener">亚马逊Alexa</a>或<a href="https://www.forbes.com/sites/johnkoetsier/2018/01/08/it-now-costs-just-14-to-add-voice-assistant-technology-to-your-consumer-device/#619bbe517f32" target="_blank" rel="noopener">Google智能助理</a>，那么制造商是否需要为他们想要使用的每个VA使用一个？<br>当语音助理与消费者设备一起使用时，简单的单动作命令是最受欢迎的。例如，改变联排别墅中的温度，其中几个楼层上的恒温器可以响应单个语音命令，从而使用户上下楼梯。这显然是一种便利。<br><a name="0bfa"></a></p>
+<h3 id="控制大型电器有何不同？"><a href="#控制大型电器有何不同？" class="headerlink" title="控制大型电器有何不同？"></a>控制大型电器有何不同？</h3><p>除了不起眼的恒温器，制造商正在连接厨房的平衡 - 从冰箱到具有互联网连接的系列。然而，我们的非正式调查显示，只有一小部分消费者实际上将他们的可连接设备连接到互联网。更少的人仍然支持语音助手。连接没有直接的消费者价值。控制范围作为烹饪餐的一部分需要比用单一命令设定室温要复杂得多的相互作用。<br>IBM商业价值研究院明确了消费者想要的内容与制造商认为他们想要的相关体验之间的脱节。他们对制造商的管理人员和消费者进行了一项调查，<a href="https://www-935.ibm.com/services/us/gbs/thoughtleadership/custexperience/cx-disappointment/" target="_blank" rel="noopener">对数字消费者体验</a>的<a href="https://www-935.ibm.com/services/us/gbs/thoughtleadership/custexperience/cx-disappointment/" target="_blank" rel="noopener">动机进行了</a>排名。<br>管理人员可能会抽出时间重新考虑他们提供客户真正想要的东西：更多时间，更多便利，更快速的结果和更简单的流程。扬声器 - 或声音命令在哪里适合？如何 - 以及 - 它有什么帮助？<br><a name="7af4"></a></p>
+<h3 id="语音助理有一些固有的局限性"><a href="#语音助理有一些固有的局限性" class="headerlink" title="语音助理有一些固有的局限性"></a>语音助理有一些固有的局限性</h3><p>在许多方面，语音助手只需用语音命令替换按钮。消费者仍需要考虑行动的背景。当多个设备参与实现诸如烹饪餐食之类的高级目标时，用户必须彼此协调设备动作，以及实现目标所需的其他活动。助手并不聪明，而且告诉扬声器提高烤箱温度是否过分有用是有争议的。考虑这些要点</p>
 <ul>
-<li><a href="https://www.analyticsvidhya.com/blog/2016/02/time-series-forecasting-codes-python/" target="_blank" rel="noopener">全面的初学者指南，用于创建时间序列预测（使用Python中的代码）</a></li>
+<li>语音助理使用单个命令。目前，这些主要包括固定短语。实际上，他们按下一个按钮或设置一个拨盘。</li>
+<li>随着更灵活的自然语言理解技术的出现，语音命令的解释可能变得模糊不清。由于命令导致行动，误解可能是有风险的。我真的想将烤箱设置为600度吗？我们需要“护栏”吗？</li>
+<li>语音助理仅支持单向“对话”。这些设备无法回复，要求澄清意图。建立对云中执行的技能的检查并不能完全解决这个问题。</li>
+<li>命令独立于设备的状态。用户必须知道烤箱是否打开，何时应该降低热量等。</li>
+<li>语音命令的无状态方面还限制了支持动作序列的能力，如果这些动作取决于设备的状态。在打开炉子上的燃烧器之前，我是否打开了排气装置？</li>
+<li>器具通常不能通过说例如洗衣机已完成，或者炉顶上的锅沸腾而发出对话或发出警报。</li>
+<li>在许多情况下，只能通过语音助手访问设备功能的一部分。这可能是出于安全原因。只有当有人在厨房时才应打开炉顶燃烧器。或者它可能是因为功能很复杂并且取决于器具的状态，例如将水煮沸，并将面食煮至嫩。</li>
+<li>语音助理无法整合上下文数据，例如谁在厨房？冰箱里有牛奶吗？</li>
+<li>他们通常不记得历史 - 我们最后一次如何做到这一点？</li>
+<li>它们依赖于互联网连接，以及它在每个家庭中可能使其不可靠的障碍。</li>
 </ul>
-<a id="more"></a><br><!--more-->
-<p><a name="767fa455"></a></p>
-<h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ol>
-<li>时间序列分类简介</li>
-<li>心电图信号</li>
-<li>图像数据</li>
-<li>传感器</li>
-<li>设置问题陈述</li>
-<li>阅读和理解数据</li>
-<li>预处理</li>
-<li>建立我们的时间序列分类模型</li>
-</ol>
-<p><a href></a><br><a name="dc895ad5"></a></p>
-<h2 id="时间序列分类简介"><a href="#时间序列分类简介" class="headerlink" title="时间序列分类简介"></a>时间序列分类简介</h2><p>时间序列分类实际上已经存在了一段时间。但到目前为止，它主要限于研究实验室，而不是行业应用。但是有很多研究正在进行，正在创建新的数据集并提出了许多新的算法。当我第一次看到这个时间序列分类概念时，我最初的想法是 - 我们如何对时间序列进行分类以及时间序列分类数据是什么样的？我相信你一定想知道同样的事情。</p>
-<p>可以想象，时间序列分类数据与常规分类问题不同，因为属性具有有序序列。让我们来看看一些时间序列分类用例，以了解这种差异。</p>
-<p><a href></a><br><a name="29695081"></a></p>
-<h3 id="1）对ECG-EEG信号进行分类"><a href="#1）对ECG-EEG信号进行分类" class="headerlink" title="1）对ECG / EEG信号进行分类"></a>1）对ECG / EEG信号进行分类</h3><p>心电图或心电图记录心脏的电活动，广泛用于诊断各种心脏问题。使用外部电极捕获这些ECG信号。</p>
-<p>例如，考虑以下信号样本，它代表一个心跳的电活动。左侧的图像表示正常心跳，而与其相邻的图像表示心肌梗塞。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1556186576907-27f3e67d-80ed-447d-bc59-34a85df70470.png#align=left&amp;display=inline&amp;height=184&amp;name=ECG.png&amp;originHeight=184&amp;originWidth=319&amp;size=140783&amp;status=done&amp;width=319" alt="ECG.png"><br>从电极捕获的数据将是时间序列形式，并且信号可以分类为不同的类别。我们还可以对记录大脑电活动的脑电信号进行分类。</p>
-<p><a href></a><br><a name="e8f02c7a"></a></p>
-<h3 id="2）图像分类"><a href="#2）图像分类" class="headerlink" title="2）图像分类"></a>2）图像分类</h3><p>图像也可以是顺序的时间相关格式。请考虑以下情形：</p>
-<p>根据天气条件，土壤肥力，水的可用性和其他外部因素，农作物在特定的田地中生长。该字段的图片每天拍摄5年，并标记在该字段上种植的作物的名称。你知道我要去哪儿吗？数据集中的图像是在固定的时间间隔之后拍摄的，并且具有定义的序列，这可能是对图像进行分类的重要因素。</p>
-<p><a href></a><br><a name="185e2e5f"></a></p>
-<h3 id="3）分类运动传感器数据"><a href="#3）分类运动传感器数据" class="headerlink" title="3）分类运动传感器数据"></a>3）分类运动传感器数据</h3><p>传感器生成高频数据，可以识别其范围内物体的移动。通过设置多个无线传感器并观察传感器中信号强度的变化，我们可以识别物体的运动方向。</p>
-<p>您还可以考虑哪些其他应用可以应用时间序列分类？请在文章下方的评论部分告诉我。</p>
-<p><a href></a><br><a name="15369121"></a></p>
-<h2 id="设置问题陈述"><a href="#设置问题陈述" class="headerlink" title="设置问题陈述"></a>设置问题陈述</h2><p>我们将致力于“ <em>室内用户运动预测</em> ”问题。在该挑战中，多个运动传感器被放置在不同的房间中，并且目标是基于从这些运动传感器捕获的频率数据来识别个体是否已经移动穿过房间。</p>
-<p>两个房间有四个运动传感器（A1，A2，A3，A4）。请看下面的图像，其中说明了传感器在每个房间中的位置。这两个房间的设置是在3对不同的房间（group1，group2，group3）中创建的。<br><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1556185959108-02f6758d-7a1e-4a66-bcb8-9b350c822268.jpeg#align=left&amp;display=inline&amp;height=386&amp;name=MovementAAL.jpg&amp;originHeight=490&amp;originWidth=946&amp;size=59610&amp;status=done&amp;width=746" alt="MovementAAL.jpg"><br>一个人可以沿着上图中所示的六个预定义路径中的任何一个移动。如果一个人走在路径2,3,4或6上，他会在房间内移动。另一方面，如果一个人沿着路径1或路径5行进，我们可以说该人已经在房间之间移动。<br>传感器读数可用于识别人在给定时间点的位置。当人在房间或房间内移动时，传感器中的读数会发生变化。此更改可用于标识人员的路径。<br>现在问题陈述已经清楚了，现在是时候开始编码了！在下一节中，我们将查看问题的数据集，这有助于消除您在此声明中可能存在的任何遗留问题。您可以从以下链接下载数据集：**<a href="https://archive.ics.uci.edu/ml/datasets/Indoor+User+Movement+Prediction+from+RSS+data" target="_blank" rel="noopener">室内用户移动预测</a>。[<br><br><a name="4CsoO"></a></p>
-<h2 id="阅读和理解数据"><a href="#阅读和理解数据" class="headerlink" title="阅读和理解数据"></a>阅读和理解数据</h2><p>我们的数据集包含316个文件：</p>
-<ul>
-<li>314 <em><strong>MovementAAL</strong></em> csv文件，包含放置在环境中的运动传感器的读数</li>
-<li>一个<em><strong>目标</strong></em>包含每个MovementAAL文件的目标变量csv文件</li>
-<li>一个<em><strong>Group Data</strong></em> csv文件，用于标识哪个MovementAAL文件属于哪个安装组</li>
-<li>该<em><strong>路径</strong></em>包含该对象所采取的方法csv文件</li>
-</ul>
-<p>我们来看看数据集。我们将从导入必要的库开始。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">%matplotlib inline</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">from</span> os <span class="keyword">import</span> listdir</span><br><span class="line"><span class="keyword">from</span> keras.preprocessing <span class="keyword">import</span> sequence</span><br><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">from</span> keras.models <span class="keyword">import</span> Sequential</span><br><span class="line"><span class="keyword">from</span> keras.layers <span class="keyword">import</span> Dense</span><br><span class="line"><span class="keyword">from</span> keras.layers <span class="keyword">import</span> LSTM</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> keras.optimizers <span class="keyword">import</span> Adam</span><br><span class="line"><span class="keyword">from</span> keras.models <span class="keyword">import</span> load_model</span><br><span class="line"><span class="keyword">from</span> keras.callbacks <span class="keyword">import</span> ModelCheckpoint</span><br></pre></td></tr></table></figure>
-<p>在加载所有文件之前，让我们快速了解一下我们要处理的数据。从移动数据中读取前两个文件：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">df1 = pd.read_csv(‘/MovementAAL/dataset/MovementAAL_RSS_1.csv&apos;)</span><br><span class="line">df2 = pd.read_csv(&apos;/MovementAAL/dataset/MovementAAL_RSS_2.csv&apos;)</span><br><span class="line">df1.head()</span><br></pre></td></tr></table></figure>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1556186076246-1031ed5c-9c2a-471b-9a1e-4a1267c5e0ff.png#align=left&amp;display=inline&amp;height=174&amp;name=tsc1.png&amp;originHeight=174&amp;originWidth=406&amp;size=9919&amp;status=done&amp;width=406" alt="tsc1.png"></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df2.head()</span><br></pre></td></tr></table></figure>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1556186109119-e65e46b1-1776-4ae0-a97b-65b23c599fb9.png#align=left&amp;display=inline&amp;height=175&amp;name=tsc2.png&amp;originHeight=175&amp;originWidth=402&amp;size=9416&amp;status=done&amp;width=402" alt="tsc2.png"></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">df1.shape, df2.shape</span><br><span class="line">((27, 4), (26, 4))</span><br></pre></td></tr></table></figure>
-<p>这些文件包含来自四个传感器的标准化数据 - A1，A2，A3，A4。csv文件的长度（行数）不同，因为对应于每个csv的数据的持续时间不同。为简化起见，我们假设每秒都会收集传感器数据。第一次读数持续27秒（所以27行），而另一次读数持续26秒（所以26行）。<br>在构建模型之前，我们必须处理这种不同的长度。现在，我们将使用以下代码块读取传感器中的值并将其存储在列表中：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">path = <span class="string">'MovementAAL/dataset/MovementAAL_RSS_'</span></span><br><span class="line">sequences = list()</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>,<span class="number">315</span>):</span><br><span class="line">    file_path = path + str(i) + <span class="string">'.csv'</span></span><br><span class="line">    print(file_path)</span><br><span class="line">    df = pd.read_csv(file_path, header=<span class="number">0</span>)</span><br><span class="line">    values = df.values</span><br><span class="line">    sequences.append(values)</span><br><span class="line"></span><br><span class="line">targets = pd.read_csv(<span class="string">'MovementAAL/dataset/MovementAAL_target.csv'</span>)</span><br><span class="line">targets = targets.values[:,<span class="number">1</span>]</span><br></pre></td></tr></table></figure>
-<p>我们现在有一个列表<em>‘序列</em> ‘，其中包含来自运动传感器的数据和’目标’，其中包含csv文件的标签。当我们打印<em>序列[0]时</em>，我们从第一个csv文件中获取传感器的值：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sequences[0]</span><br></pre></td></tr></table></figure>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1556186209162-23360e28-e86a-4979-b92e-629e5eb2fed2.png#align=left&amp;display=inline&amp;height=466&amp;name=tsc3.png&amp;originHeight=466&amp;originWidth=438&amp;size=18098&amp;status=done&amp;width=438" alt="tsc3.png"><br>如前所述，数据集是在三对不同的房间中收集的 - 因此有三组。此信息可用于将数据集划分为训练集，测试集和验证集。我们现在将加载<strong><em>DatasetGroup</em></strong> csv文件：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">groups = pd.read_csv(<span class="string">'MovementAAL/groups/MovementAAL_DatasetGroup.csv'</span>, header=<span class="number">0</span>)</span><br><span class="line">groups = groups.values[:,<span class="number">1</span>]</span><br></pre></td></tr></table></figure>
-<p>我们将前两组的数据用于培训目的，第三组用于测试。<br><br><a name="JCNNx"></a></p>
-<h2 id="预处理步骤"><a href="#预处理步骤" class="headerlink" title="预处理步骤"></a>预处理步骤</h2><p>由于时间序列数据的长度不同，我们无法直接在此数据集上构建模型。那么我们怎样才能决定一个系列的理想长度呢？我们可以通过多种方式处理它，这里有一些想法（我很乐意在评论部分听到您的建议）：</p>
-<ul>
-<li>用零填充较短的序列以使所有序列的长度相等。在这种情况下，我们将向模型提供不正确的数据</li>
-<li>找到系列的最大长度，并使用最后一行中的数据填充序列</li>
-<li>确定数据集中序列的最小长度，并将所有其他序列截断为该长度。但是，这将导致数据的巨大损失</li>
-<li>取所有长度的平均值，截断较长的系列，并填充比平均长度短的系列</li>
-</ul>
-<p>让我们找出最小，最大和平均长度：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">len_sequences = []</span><br><span class="line"><span class="keyword">for</span> one_seq <span class="keyword">in</span> sequences:</span><br><span class="line">    len_sequences.append(len(one_seq))</span><br><span class="line">pd.Series(len_sequences).describe()</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">count    314.000000</span><br><span class="line">mean      42.028662</span><br><span class="line">std       16.185303</span><br><span class="line">min       19.000000</span><br><span class="line">25%       26.000000</span><br><span class="line">50%       41.000000</span><br><span class="line">75%       56.000000</span><br><span class="line">max      129.000000</span><br><span class="line">dtype: float64</span><br></pre></td></tr></table></figure>
-<p>大多数文件的长度在40到60之间。只有3个文件的长度超过100个。因此，采用最小或最大长度没有多大意义。第90个四分位数为60，这被视为数据序列的长度。我们来编代码：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#Padding the sequence with the values in last row to max length</span></span><br><span class="line">to_pad = <span class="number">129</span></span><br><span class="line">new_seq = []</span><br><span class="line"><span class="keyword">for</span> one_seq <span class="keyword">in</span> sequences:</span><br><span class="line">    len_one_seq = len(one_seq)</span><br><span class="line">    last_val = one_seq[<span class="number">-1</span>]</span><br><span class="line">    n = to_pad - len_one_seq</span><br><span class="line">   </span><br><span class="line">    to_concat = np.repeat(one_seq[<span class="number">-1</span>], n).reshape(<span class="number">4</span>, n).transpose()</span><br><span class="line">    new_one_seq = np.concatenate([one_seq, to_concat])</span><br><span class="line">    new_seq.append(new_one_seq)</span><br><span class="line">final_seq = np.stack(new_seq)</span><br><span class="line"></span><br><span class="line"><span class="comment">#truncate the sequence to length 60</span></span><br><span class="line"><span class="keyword">from</span> keras.preprocessing <span class="keyword">import</span> sequence</span><br><span class="line">seq_len = <span class="number">60</span></span><br><span class="line">final_seq=sequence.pad_sequences(final_seq, maxlen=seq_len, padding=<span class="string">'post'</span>, dtype=<span class="string">'float'</span>, truncating=<span class="string">'post'</span>)</span><br></pre></td></tr></table></figure>
-<p>现在已准备好数据集，我们将根据组将其分开。准备火车，验证和测试集：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">train = [final_seq[i] <span class="keyword">for</span> i <span class="keyword">in</span> range(len(groups)) <span class="keyword">if</span> (groups[i]==<span class="number">2</span>)]</span><br><span class="line">validation = [final_seq[i] <span class="keyword">for</span> i <span class="keyword">in</span> range(len(groups)) <span class="keyword">if</span> groups[i]==<span class="number">1</span>]</span><br><span class="line">test = [final_seq[i] <span class="keyword">for</span> i <span class="keyword">in</span> range(len(groups)) <span class="keyword">if</span> groups[i]==<span class="number">3</span>]</span><br><span class="line"></span><br><span class="line">train_target = [targets[i] <span class="keyword">for</span> i <span class="keyword">in</span> range(len(groups)) <span class="keyword">if</span> (groups[i]==<span class="number">2</span>)]</span><br><span class="line">validation_target = [targets[i] <span class="keyword">for</span> i <span class="keyword">in</span> range(len(groups)) <span class="keyword">if</span> groups[i]==<span class="number">1</span>]</span><br><span class="line">test_target = [targets[i] <span class="keyword">for</span> i <span class="keyword">in</span> range(len(groups)) <span class="keyword">if</span> groups[i]==<span class="number">3</span>]</span><br></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">train = np.array(train)</span><br><span class="line">validation = np.array(validation)</span><br><span class="line">test = np.array(test)</span><br><span class="line"></span><br><span class="line">train_target = np.array(train_target)</span><br><span class="line">train_target = (train_target+<span class="number">1</span>)/<span class="number">2</span></span><br><span class="line"></span><br><span class="line">validation_target = np.array(validation_target)</span><br><span class="line">validation_target = (validation_target+<span class="number">1</span>)/<span class="number">2</span></span><br><span class="line"></span><br><span class="line">test_target = np.array(test_target)</span><br><span class="line">test_target = (test_target+<span class="number">1</span>)/<span class="number">2</span></span><br></pre></td></tr></table></figure>
-<p><a name="60E3n"></a></p>
-<h2 id="建立时间序列分类模型"><a href="#建立时间序列分类模型" class="headerlink" title="建立时间序列分类模型"></a>建立时间序列分类模型</h2><p>我们准备了用于LSTM（长短期记忆）模型的数据。我们处理了可变长度序列并创建了训练，验证和测试集。让我们构建一个单层LSTM网络。<br><em>注意：您可以在这个<a href="https://www.analyticsvidhya.com/blog/2017/12/fundamentals-of-deep-learning-introduction-to-lstm/" target="_blank" rel="noopener">精彩解释的教程中</a>熟悉LSTM 。我会建议你先完成它，因为它可以帮助你理解下面代码的工作原理。</em></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">model = Sequential()</span><br><span class="line">model.add(LSTM(<span class="number">256</span>, input_shape=(seq_len, <span class="number">4</span>)))</span><br><span class="line">model.add(Dense(<span class="number">1</span>, activation=<span class="string">'sigmoid'</span>))</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">model.summary()</span><br></pre></td></tr></table></figure>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1556186397482-3f2d9b5b-e07c-4c63-9da9-b34539c067b7.png#align=left&amp;display=inline&amp;height=189&amp;name=tsc4.png&amp;originHeight=189&amp;originWidth=544&amp;size=10318&amp;status=done&amp;width=544" alt="tsc4.png"><br>我们现在将训练模型并监控验证的准确性：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">adam = Adam(lr=<span class="number">0.001</span>)</span><br><span class="line">chk = ModelCheckpoint(<span class="string">'best_model.pkl'</span>, monitor=<span class="string">'val_acc'</span>, save_best_only=<span class="literal">True</span>, mode=<span class="string">'max'</span>, verbose=<span class="number">1</span>)</span><br><span class="line">model.compile(loss=<span class="string">'binary_crossentropy'</span>, optimizer=adam, metrics=[<span class="string">'accuracy'</span>])</span><br><span class="line">model.fit(train, train_target, epochs=<span class="number">200</span>, batch_size=<span class="number">128</span>, callbacks=[chk], validation_data=(validation,validation_target))</span><br></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#loading the model and checking accuracy on the test data</span></span><br><span class="line">model = load_model(<span class="string">'best_model.pkl'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> accuracy_score</span><br><span class="line">test_preds = model.predict_classes(test)</span><br><span class="line">accuracy_score(test_target, test_preds)</span><br></pre></td></tr></table></figure>
-<p>我的准确度得分为0.78846153846153844。这是一个非常有希望的开始，但我们肯定可以通过使用超参数，改变学习速度和/或时代数来改善LSTM模型的性能。<br><br><a name="a5xQA"></a></p>
-<h2 id="结束笔记"><a href="#结束笔记" class="headerlink" title="结束笔记"></a>结束笔记</h2><p>这将我们带到本教程的结尾。写下来的想法是以实用的方式向您介绍时间序列谱中的一个全新世界。<br>就个人而言，我发现预处理步骤是我们所涉及的所有部分中最复杂的部分。然而，它也是最重要的一个（否则整个时间序列数据将会失败！）。在处理此类挑战时，向模型提供正确的数据同样重要。<br>这是一个非常酷的时间序列分类资源，我提到并发现最有帮助的：</p>
-<ul>
-<li>关于“通过油藏计算预测异构室内环境中用户移动”的论文</li>
-</ul>
-<p>我很乐意在下面的评论部分听到您的想法和建议。</p>
+<p>这些缺点限制了语音助理将其状态从交易提升到真正有用。他们需要语义级别的交互来支持更复杂的活动。语音助理操作无法定制以处理家庭中的特定情况，例如考虑谁是家庭晚餐，或手头有什么成分。缺乏历史会抑制了解消费者偏好的能力。并且它阻止了动作的自动化，使得它们根本不需要语音输入或其他输入 - 使它们更加通用。管理灯光或温度可以通过人的存在完全自动化，没有一个单词说出/听到/听错/误解。<br><a name="c284"></a></p>
+<h3 id="还必须考虑安全性，安全性和隐私性！"><a href="#还必须考虑安全性，安全性和隐私性！" class="headerlink" title="还必须考虑安全性，安全性和隐私性！"></a>还必须考虑安全性，安全性和隐私性！</h3><p>隐私方面的考虑越来越成为消费者采用语音助理的障碍。语音数据被传输到云以进行分析，通常无限期地保留在那里，永久存储。<br>虽然一般情况下，只有在唤醒字发送到云端后发出的语音命令，但一些<a href="https://www.darkreading.com/threat-intelligence/alexa-mishap-hints-at-potential-enterprise-security-risk/d/d-id/1331919" target="_blank" rel="noopener">不幸事件</a>表明存在严重风险。相关软件本质上是复杂的，偶尔会出现故障。然而，即使没有软件故障，语音助理数据，特别是与其他数据结合时，也会产生潜在的严重隐私泄露; 这是对人们家庭生活的非常详细的看法，正如<a href="https://www.gearbrain.com/alexa-google-assistant-ai-privacy-2524884961.html" target="_blank" rel="noopener">这里</a>所解释的，<a href="https://www.ksl.com/?sid=44924184&amp;nid=148" target="_blank" rel="noopener">在这里</a>和<a href="https://bdtechtalks.com/2018/06/05/google-home-amazon-echo-privacy-security-risks/" target="_blank" rel="noopener">这里</a>。关于不在社交媒体上播放脏衣服的说法; 然而，语音助手可能更具侵入性。这可能导致使用连接设备的反弹。<br>目前，我们正处于降低隐私风险之旅的开端。语音助理隐私风险只是关于消费者隐私的大型公众对话的一部分，似乎正在积聚动力。该解决方案的很大一部分必须来自欧洲的GDPR法规等法规。<a href="https://www.theverge.com/2019/1/21/18191591/google-gdpr-fine-50-million-euros-data-consent-cnil" target="_blank" rel="noopener">罚款开始被征收，谷歌是第一个也是最大的</a>。但是，也可以采用技术解决方案来降低风险并让消费者更好地控制其数据。最近<a href="https://www.forbes.com/sites/rachelwolfson/2018/09/14/blockchain-based-ai-voice-assistant-brings-data-privacy-to-smart-homes/#275974f16b50" target="_blank" rel="noopener">一项</a>使用区块链技术来保护消费者数据的<a href="https://www.forbes.com/sites/rachelwolfson/2018/09/14/blockchain-based-ai-voice-assistant-brings-data-privacy-to-smart-homes/#275974f16b50" target="_blank" rel="noopener">提案</a>就是一个例子。<br>还要考虑最后一点。对设备的语音命令通常是“物理”请求……启动设备或打开门。除了隐私之外，这还可能带来严重的安全和安全风险。虽然家庭使用中的潜在损害仅限于家庭，但这些风险是与物联网相关的更广泛风险的一部分。<br><a name="298a"></a></p>
+<h3 id="真正的进步需要整合上下文"><a href="#真正的进步需要整合上下文" class="headerlink" title="真正的进步需要整合上下文"></a>真正的进步需要整合上下文</h3><p>随着设备中的计算能力增加并且同时变得更便宜，今天在云中执行的大部分语音助理功能可以内置到设备中。这将提高可靠性和隐私性。它还将为消费者提供更多控制，并支持个性化和定制到特定环境。<br>为了提供真正的便利性和易用性，我们必须将语音控制与其他传感器输入和外部数据源结合使用。最好通过可访问大量数据的应用程序来实现：设备状态，所有设备功能，环境中的传感器，相关设备和外部数据源。这些应用程序还可以开发和利用个人配置文件和历史记录。保持本地数据可以改善隐私。<br>然而，真正的进步不是通过简单地将按钮按钮和旋钮转换成语音命令而发生的。我们需要使用人工智能来提高交互的语义级别，重点关注活动的高级目标，而不是单个操作行为。这将焦点从设备转移到使用它们的生活目的。我们需要首先重新思考如何实现目标，例如做饭，保持干净的衣服，节约能源或保持家庭安全。然后，我们可以确定哪种设备可以最好地支持这些目标，以及如何在个性化环境中使用它们。我们看到一些制造商朝着这个方向前进。一个关键的挑战是将语音助理集成到这些更广泛，功能更强大的平台中。<br>这种焦点的转变将有助于我们实现智能家居的承诺。我们的下一篇博客将探讨如何实现这一目标！</p>
+<hr>
+<p>Martin G. Kienzle是IBM Research的电子行业领导者。他的兴趣是物联网（IoT）技术和商业趋势，物联网服务和商业模式。在Twitter上关注他@mg_kienzle，获取智能家居新闻和观点。如果你已经走到这一步，你肯定应该与&gt; <a href="https://www.linkedin.com/in/martinkienzle/" target="_blank" rel="noopener">马丁联系</a>查看他&gt; <a href="https://ibm.co/5gelectronics" target="_blank" rel="noopener">在5G上的</a>最新&gt; <a href="https://ibm.co/5gelectronics" target="_blank" rel="noopener">思想领导力合作</a>参见Martin关于&gt; <a href="http://www-935.ibm.com/services/us/gbs/thoughtleadership/cloudcontinuum/" target="_blank" rel="noopener">混合云</a>使用案例的工作，关于8月份&gt; <a href="https://medium.com/the-future-of-electronics/life-in-the-ai-age-d20e4fe4d36d" target="_blank" rel="noopener">人工智能时代的生活</a>关于&gt; <a href="https://medium.com/the-future-of-electronics/living-on-the-edge-can-autonomy-at-the-edge-drive-an-explosion-of-iot-services-db074b7781d5" target="_blank" rel="noopener">边缘计算</a>，在电子期刊的春季版中结束说明：<br>1 &gt;&gt; voicebot.ai的语音助手 - 消费者采用 - 报告-2018- <a href="http://www.voicebot.ai/" target="_blank" rel="noopener">voicebot.pdf</a></p>
 
       
 
@@ -342,7 +271,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://www.zhos.me/2019/04/25/yuque/时间序列分类实践介绍（使用Python代码）/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://www.zhos.me/2019/04/30/yuque/家用电器语音控制的定义和限制：还有很多工作要做/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -356,18 +285,9 @@
   
 <nav id="article-nav">
   
-    <a href="/2019/04/26/yuque/通过在 Python 中使用 XGBoost 提前停止来避免过度拟合/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          通过在 Python 中使用 XGBoost 提前停止来避免过度拟合
-        
-      </div>
-    </a>
   
-  
-    <a href="/2019/04/25/yuque/通过AdaBoost和Gradient Boosting提升/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">通过AdaBoost和Gradient Boosting提升</div>
+    <a href="/2019/04/30/yuque/Metacat：在Netflix上使大数据可被发现和有意义/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Metacat：在Netflix上使大数据可被发现和有意义</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -394,8 +314,8 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#介绍"><span class="toc-number">1.</span> <span class="toc-text">介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#目录"><span class="toc-number">2.</span> <span class="toc-text">目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#时间序列分类简介"><span class="toc-number">3.</span> <span class="toc-text">时间序列分类简介</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1）对ECG-EEG信号进行分类"><span class="toc-number">3.1.</span> <span class="toc-text">1）对ECG / EEG信号进行分类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2）图像分类"><span class="toc-number">3.2.</span> <span class="toc-text">2）图像分类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3）分类运动传感器数据"><span class="toc-number">3.3.</span> <span class="toc-text">3）分类运动传感器数据</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#设置问题陈述"><span class="toc-number">4.</span> <span class="toc-text">设置问题陈述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#阅读和理解数据"><span class="toc-number">5.</span> <span class="toc-text">阅读和理解数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#预处理步骤"><span class="toc-number">6.</span> <span class="toc-text">预处理步骤</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#建立时间序列分类模型"><span class="toc-number">7.</span> <span class="toc-text">建立时间序列分类模型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结束笔记"><span class="toc-number">8.</span> <span class="toc-text">结束笔记</span></a></li></ol>
-                    </div>
+                    <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#语音助理和智能扬声器：为智能家居而战"><span class="toc-number">1.</span> <span class="toc-text">语音助理和智能扬声器：为智能家居而战</span></a></li></ol><li class="toc-item toc-level-3"><a class="toc-link" href="#但人们是否使用它们来控制智能家电？"><span class="toc-number"></span> <span class="toc-text">但人们是否使用它们来控制智能家电？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#控制大型电器有何不同？"><span class="toc-number"></span> <span class="toc-text">控制大型电器有何不同？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#语音助理有一些固有的局限性"><span class="toc-number"></span> <span class="toc-text">语音助理有一些固有的局限性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#还必须考虑安全性，安全性和隐私性！"><span class="toc-number"></span> <span class="toc-text">还必须考虑安全性，安全性和隐私性！</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#真正的进步需要整合上下文"><span class="toc-number"></span> <span class="toc-text">真正的进步需要整合上下文</span></a>
+                    </li></div>
                 </span>
             </div>
         </div>
