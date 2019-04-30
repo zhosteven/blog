@@ -149,6 +149,98 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-yuque/Metacat：在Netflix上使大数据可被发现和有意义" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/04/30/yuque/Metacat：在Netflix上使大数据可被发现和有意义/">Metacat：在Netflix上使大数据可被发现和有意义</a>
+    </h1>
+  
+
+        
+        <a href="/2019/04/30/yuque/Metacat：在Netflix上使大数据可被发现和有意义/" class="archive-article-date">
+  	<time datetime="2019-04-30T02:54:49.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-30</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><em>作者：</em> <a href="https://www.linkedin.com/in/ajoymajumdar/" target="_blank" rel="noopener">Ajoy Majumdar</a>，<a href="https://www.linkedin.com/in/zhljen/" target="_blank" rel="noopener">Zhen Li</a><br>大多数大公司拥有大量具有不同数据格式和大量数据的数据源。这些数据存储由整个企业中的许多人访问和分析。在Netflix，我们的<a href="https://www.youtube.com/channel/UC00QATOrSH4K2uOljTnnaKw" target="_blank" rel="noopener">数据仓库</a>包含大量存储在Amazon S3（通过Hive），Druid，Elasticsearch，Redshift，Snowflake和MySql的数据集。我们的平台支持Spark，Presto，Pig和Hive，用于消费，处理和生成数据集。鉴于数据源的多样性，并确保我们的数据平台可以作为一个“单一”数据仓库在这些数据集之间进行互操作，我们构建了Metacat。在本博客中，我们将讨论构建Metacat的动机，Metacat是一种元数据服务，可以使数据易于发现，处理和管理。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1556592925024-cd1b2991-4eaf-4ef7-ad82-eb053adab964.png#align=left&amp;display=inline&amp;height=587&amp;name=1_Nz8bc62eRDxegVkzJr_HrQ.png&amp;originHeight=587&amp;originWidth=1000&amp;size=134997&amp;status=done&amp;width=1000" alt="1_Nz8bc62eRDxegVkzJr_HrQ.png"><br><a name="9b9c"></a></p>
+<h3 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h3><p>Netflix大数据平台的核心架构涉及三项关键服务。这些是执行服务（<a href="https://medium.com/netflix-techblog/evolving-the-netflix-data-platform-with-genie-3-598021604dda" target="_blank" rel="noopener">Genie</a>），元数据服务和事件服务。这些想法并非Netflix所独有，而是我们认为构建系统所必需的架构的反映，不仅是为了现在，而且是为了我们数据基础架构的未来规模。<br>许多年前，当我们开始构建平台时，我们采用Pig作为我们的ETL语言，Hive作为我们的临时查询语言。由于Pig本身没有元数据系统，因此构建一个可以在两者之间进行互操作的人似乎是理想的。<br>因此，Metacat诞生了，这个系统充当我们支持的所有数据存储的联合元数据访问层。我们的各种计算引擎可用于访问不同数据集的集中服务。总的来说，Metacat有三个主要目标：</p>
+<ul>
+<li>元数据系统的联合视图</li>
+<li>有关数据集的元数据的统一API</li>
+<li>数据集的任意业务和用户元数据存储</li>
+</ul>
+<p>值得注意的是，拥有大型分布式数据集的其他公司也面临着类似的挑战。Apache <a href="https://atlas.apache.org/" target="_blank" rel="noopener">Atlas</a>，Twitter的<a href="https://blog.twitter.com/2016/discovery-and-consumption-of-analytics-data-at-twitter" target="_blank" rel="noopener">数据抽象层</a>和Linkedin的<a href="https://github.com/linkedin/WhereHows" target="_blank" rel="noopener">WhereHows</a>（在Linkedin的数据发现），仅举几例，旨在解决类似的问题，但是在公司各自的架构选择的背景下。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1556592959662-3b0cc67e-9a2f-46f6-a51c-f47af9c48b11.png#align=left&amp;display=inline&amp;height=579&amp;name=1__NswFCCPE-o-NaxXmk8EUg.png&amp;originHeight=579&amp;originWidth=1000&amp;size=100702&amp;status=done&amp;width=1000" alt="1__NswFCCPE-o-NaxXmk8EUg.png"><br><a name="7ceb"></a></p>
+<h3 id="Metacat"><a href="#Metacat" class="headerlink" title="Metacat"></a>Metacat</h3><p><a href="https://github.com/Netflix/metacat" target="_blank" rel="noopener">Metacat</a>是一种联合服务，提供统一的REST / Thrift接口，用于访问各种数据存储的元数据。相应的元数据存储仍然是模式元数据的真实来源，因此Metacat不会在其存储中实现它。它仅直接存储有关数据集的业务和用户定义的元数据。它还向Elasticsearch发布有关数据集的所有信息，以进行全文搜索和发现。<br>在更高级别，Metacat功能可分为以下几类：</p>
+<ul>
+<li>数据抽象和互操作性</li>
+<li>业务和用户定义的元数据存储</li>
+<li>数据发现</li>
+<li>数据更改审核和通知</li>
+<li>Hive Metastore优化</li>
+</ul>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1556592993539-802e1f69-17b1-46bd-86f4-209245a061c6.png#align=left&amp;display=inline&amp;height=573&amp;name=1_tuI7GBjM0txWHnZkIZFBgA.png&amp;originHeight=573&amp;originWidth=1000&amp;size=92918&amp;status=done&amp;width=1000" alt="1_tuI7GBjM0txWHnZkIZFBgA.png"><br><a name="cc13"></a></p>
+<h3 id="数据抽象和互操作性"><a href="#数据抽象和互操作性" class="headerlink" title="数据抽象和互操作性"></a>数据抽象和互操作性</h3><p>Netflix使用Pig，Spark，Presto和Hive等多个查询引擎来处理和使用数据。通过引入共同的抽象层，数据集可以由不同的引擎互换地访问。例如：从Hive读取数据的Pig脚本将能够在Pig类型中读取具有Hive列类型的表。对于从一个数据存储区到另一个数据存储区的数据移动，Metacat通过使用目标表数据类型帮助在目标数据存储中创建新表来简化该过程。Metacat具有受支持的规范数据类型的已定义列表，并且具有从这些类型到每个相应数据存储类型的映射。例如，我们的数据移动工具使用上述功能将数据从Hive移动到Redshift或Snowflake。<br>Metacat thrift服务支持Hive thrift接口，可轻松与Spark和Presto集成。这使我们能够通过一个系统汇集所有元数据更改，这进一步使我们能够发布有关这些更改的通知，以启用数据驱动的ETL。当新数据到达时，Metacat可以通知相关作业启动。<br><a name="1475"></a></p>
+<h3 id="业务和用户定义的元数据"><a href="#业务和用户定义的元数据" class="headerlink" title="业务和用户定义的元数据"></a>业务和用户定义的元数据</h3><p>Metacat在其存储中存储有关数据集的其他业务和用户定义的元数据。我们目前使用业务元数据来存储连接信息（例如，对于RDS数据源），配置信息，度量（Hive / S3分区和表）以及表TTL（生存时间）以及其他用例。顾名思义，用户定义的元数据是一种自由格式元数据，可由用户根据自己的用途进行设置。<br>业务元数据还可以大致分为逻辑和物理元数据。关于诸如表的逻辑构造的业务元数据被视为逻辑元数据。我们使用元数据进行数据分类并标准化ETL处理。表所有者可以提供有关业务元数据中的表的审计信息。它们还可以提供列默认值和验证规则，以用于写入表中。<br>关于存储在表或分区中的实际数据的元数据被视为物理元数据。我们的ETL处理存储有关作业完成时数据的指标，稍后将用于验证。可以使用相同的度量来分析数据的成本+空间。鉴于两个表可以指向相同的位置（如在Hive中），因此必须区分逻辑元素和物理元数据，因为两个表可以具有相同的物理元数据但具有不同的逻辑元数据。<br><a name="ef8d"></a></p>
+<h3 id="数据发现"><a href="#数据发现" class="headerlink" title="数据发现"></a>数据发现</h3><p>作为数据的消费者，我们应该能够轻松浏览和发现各种数据集。Metacat向Elasticsearch发布模式元数据和业务/用户定义的元数据，有助于全文搜索数据仓库中的信息。这也可以在我们的大数据门户SQL编辑器中自动建议和自动完成SQL。将数据集组织为目录有助于消费者浏览信息。标签用于根据组织和主题区域对数据进行分类。我们还使用标签来标识数据生命周期管理的表。<br><a name="57ed"></a></p>
+<h3 id="数据变更通知和审计"><a href="#数据变更通知和审计" class="headerlink" title="数据变更通知和审计"></a>数据变更通知和审计</h3><p>Metacat是数据存储的中央门户，可捕获任何元数据更改和数据更新。我们还围绕表和分区更改构建了推送通知系统。目前，我们正在使用此机制将事件发布到我们自己的数据管道（<a href="https://medium.com/netflix-techblog/kafka-inside-keystone-pipeline-dd5aeabaf6bb" target="_blank" rel="noopener">Keystone</a>）以进行分析，以便更好地了解我们的数据使用情况和趋势。我们还发布到Amazon SNS。我们正在将我们的数据平台架构发展为事件驱动架构。将事件发布到SNS允许我们的数据平台中的其他系统相应地“响应”这些元数据或数据更改。例如，当删除表时，我们的S3仓库管理员服务可以订阅此事件并适当地清理S3上的数据。<br><a name="a4f0"></a></p>
+<h3 id="Hive-Metastore优化"><a href="#Hive-Metastore优化" class="headerlink" title="Hive Metastore优化"></a>Hive Metastore优化</h3><p>由RDS支持的Hive Metastore在高负载下表现不佳。我们已经注意到使用metatore API编写和读取分区的许多问题。鉴于此，我们不再使用这些API。我们对Hive连接器进行了改进，该连接器直接与支持的RDS进行通信，以便读写分区。之前，Hive Metastore调用添加几千个分区通常会超时，但是通过我们的实现，这不再是一个问题。<br><a name="b240"></a></p>
+<h3 id="下一步"><a href="#下一步" class="headerlink" title="下一步"></a>下一步</h3><p>我们在构建Metacat方面取得了很大进展，但我们还远未完成。以下是我们仍需要处理的一些其他功能，以增强我们的数据仓库体验。</p>
+<ul>
+<li>用于提供表的历史记录的架构和元数据版本控制。例如，跟踪特定列的元数据更改或能够随时查看表大小趋势非常有用。能够询问过去某个元数据的外观对于审计，调试很重要，对于重新处理和回滚用例也很有用。</li>
+<li>提供有关数据沿袭表的上下文信息。例如，表访问频率等元数据可以在Metacat中聚合并发布到数据沿袭服务，以用于对表的关键性进行排序。</li>
+<li>添加对Elasticsearch和Kafka等数据存储的支持。</li>
+<li>可插入元数据验证。由于业务和用户定义的元数据是自由格式，为了保持元数据的完整性，我们需要进行验证。Metacat应具有可插入的体系结构，以包含可在存储元数据之前执行的验证策略。</li>
+</ul>
+<p>随着我们不断开发功能以支持我们的用例，我们始终乐于接受社区的反馈和贡献。您可以通过<a href="https://github.com/Netflix/metacat" target="_blank" rel="noopener">Github</a>与我们联系，或通过我们的<a href="https://groups.google.com/forum/#!forum/metacatoss" target="_blank" rel="noopener">Google</a>网上论坛向我们发送消息。我们希望在今年晚些时候分享我们的团队正在进行的工作！<br>如果您对这样的大数据挑战感兴趣，我们一直在寻找我们团队的重要补充。您可以<a href="https://jobs.netflix.com/teams/data#data-engineering-and-infrastructure" target="_blank" rel="noopener">在此处</a>查看我们所有的开放数据平台角色。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/04/30/yuque/Metacat：在Netflix上使大数据可被发现和有意义/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-yuque/开源Zuul 2" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -747,88 +839,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2019/04/26/yuque/如何使用 Amazon Web Services 在云中训练 XGBoost 模型/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/SUMMARY" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/26/yuque/SUMMARY/">SUMMARY</a>
-    </h1>
-  
-
-        
-        <a href="/2019/04/26/yuque/SUMMARY/" class="archive-article-date">
-  	<time datetime="2019-04-26T03:19:17.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-26</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <ul>
-<li><a href="avoid-overfitting-by-early-stopping-with-xgboost-in-python.md">通过在 Python 中使用 XGBoost 提前停止来避免过度拟合</a></li>
-<li><a href="best-tune-multithreading-support-xgboost-python.md">如何在 Python 中调优 XGBoost 的多线程支持</a></li>
-<li><a href="configure-gradient-boosting-algorithm.md">如何配置梯度提升算法</a></li>
-<li><a href="data-preparation-gradient-boosting-xgboost-python.md">在 Python 中使用 XGBoost 进行梯度提升的数据准备</a></li>
-<li><a href="develop-first-xgboost-model-python-scikit-learn.md">如何使用 scikit-learn 在 Python 中开发您的第一个 XGBoost 模型</a></li>
-<li><a href="evaluate-gradient-boosting-models-xgboost-python.md">如何在 Python 中使用 XGBoost 评估梯度提升模型</a></li>
-<li><a href="feature-importance-and-feature-selection-with-xgboost-in-python.md">在 Python 中使用 XGBoost 的特征重要性和特征选择</a></li>
-<li><a href="gentle-introduction-gradient-boosting-algorithm-machine-learning.md">浅谈机器学习的梯度提升算法</a></li>
-<li><a href="gentle-introduction-xgboost-applied-machine-learnin.md">应用机器学习的 XGBoost 简介</a></li>
-<li><a href="install-xgboost-python-macos.md">如何在 macOS 上为 Python 安装 XGBoost</a></li>
-<li><a href="save-gradient-boosting-models-xgboost-python.md">如何在 Python 中使用 XGBoost 保存梯度提升模型</a></li>
-<li><a href="start-with-gradient-boosting.md">从梯度提升开始，比较 165 个数据集上的 13 种算法</a></li>
-<li><a href="stochastic-gradient-boosting-xgboost-scikit-learn-python.md">在 Python 中使用 XGBoost 和 scikit-learn 进行随机梯度提升</a></li>
-<li><a href="train-xgboost-models-cloud-amazon-web-services.md">如何使用 Amazon Web Services 在云中训练 XGBoost 模型</a></li>
-<li><a href="tune-learning-rate-for-gradient-boosting-with-xgboost-in-python.md">在 Python 中使用 XGBoost 调整梯度提升的学习率</a></li>
-<li><a href="tune-number-size-decision-trees-xgboost-python.md">如何在 Python 中使用 XGBoost 调整决策树的数量和大小</a></li>
-<li><a href="visualize-gradient-boosting-decision-trees-xgboost-python.md">如何在 Python 中使用 XGBoost 可视化梯度提升决策树</a></li>
-<li><a href="xgboost-python-mini-course.md">在 Python 中开始使用 XGBoost 的 7 步迷你课程</a></li>
-</ul>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/04/26/yuque/SUMMARY/">展开全文 >></a>
         </p>
       
 

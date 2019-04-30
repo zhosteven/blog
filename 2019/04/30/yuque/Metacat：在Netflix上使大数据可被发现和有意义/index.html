@@ -6,27 +6,23 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://www.zhos.me">
-  <title>时间序列分类实践介绍（使用Python代码） | A+</title>
+  <title>Metacat：在Netflix上使大数据可被发现和有意义 | A+</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="介绍分类时间序列数据？这真的有可能吗？可能有什么用呢？这些只是您阅读本文标题时必须具备的一些问题。这是公平的 - 当我第一次遇到这个概念时，我有完全相同的想法！我们大多数人的时间序列数据主要涉及产生预测的交易。无论是预测产品的需求还是销售额，航空公司的乘客数量或特定股票的收盘价，我们都习惯于利...">
+  <meta name="description" content="作者： Ajoy Majumdar，Zhen Li大多数大公司拥有大量具有不同数据格式和大量数据的数据源。这些数据存储由整个企业中的许多人访问和分析。在Netflix，我们的数据仓库包含大量存储在Amazon S3（通过Hive），Druid，Elasticsearch，Redshift，Sn...">
 <meta property="og:type" content="article">
-<meta property="og:title" content="时间序列分类实践介绍（使用Python代码）">
-<meta property="og:url" content="http://www.zhos.me/2019/04/25/yuque/时间序列分类实践介绍（使用Python代码）/index.html">
+<meta property="og:title" content="Metacat：在Netflix上使大数据可被发现和有意义">
+<meta property="og:url" content="http://www.zhos.me/2019/04/30/yuque/Metacat：在Netflix上使大数据可被发现和有意义/index.html">
 <meta property="og:site_name" content="A+">
-<meta property="og:description" content="介绍分类时间序列数据？这真的有可能吗？可能有什么用呢？这些只是您阅读本文标题时必须具备的一些问题。这是公平的 - 当我第一次遇到这个概念时，我有完全相同的想法！我们大多数人的时间序列数据主要涉及产生预测的交易。无论是预测产品的需求还是销售额，航空公司的乘客数量或特定股票的收盘价，我们都习惯于利...">
+<meta property="og:description" content="作者： Ajoy Majumdar，Zhen Li大多数大公司拥有大量具有不同数据格式和大量数据的数据源。这些数据存储由整个企业中的许多人访问和分析。在Netflix，我们的数据仓库包含大量存储在Amazon S3（通过Hive），Druid，Elasticsearch，Redshift，Sn...">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1556185921707-66d9bdc3-0973-4b8a-bac2-9d55f161b0d1.jpeg#align=left&display=inline&height=370&name=time-series-.jpg&originHeight=370&originWidth=500&size=129532&status=done&width=500">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1556186576907-27f3e67d-80ed-447d-bc59-34a85df70470.png#align=left&display=inline&height=184&name=ECG.png&originHeight=184&originWidth=319&size=140783&status=done&width=319">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1556185959108-02f6758d-7a1e-4a66-bcb8-9b350c822268.jpeg#align=left&display=inline&height=386&name=MovementAAL.jpg&originHeight=490&originWidth=946&size=59610&status=done&width=746">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1556186076246-1031ed5c-9c2a-471b-9a1e-4a1267c5e0ff.png#align=left&display=inline&height=174&name=tsc1.png&originHeight=174&originWidth=406&size=9919&status=done&width=406">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1556186109119-e65e46b1-1776-4ae0-a97b-65b23c599fb9.png#align=left&display=inline&height=175&name=tsc2.png&originHeight=175&originWidth=402&size=9416&status=done&width=402">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1556186209162-23360e28-e86a-4979-b92e-629e5eb2fed2.png#align=left&display=inline&height=466&name=tsc3.png&originHeight=466&originWidth=438&size=18098&status=done&width=438">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1556186397482-3f2d9b5b-e07c-4c63-9da9-b34539c067b7.png#align=left&display=inline&height=189&name=tsc4.png&originHeight=189&originWidth=544&size=10318&status=done&width=544">
-<meta property="og:updated_time" content="2019-04-30T02:54:37.466Z">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1556592925024-cd1b2991-4eaf-4ef7-ad82-eb053adab964.png#align=left&display=inline&height=587&name=1_Nz8bc62eRDxegVkzJr_HrQ.png&originHeight=587&originWidth=1000&size=134997&status=done&width=1000">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1556592959662-3b0cc67e-9a2f-46f6-a51c-f47af9c48b11.png#align=left&display=inline&height=579&name=1__NswFCCPE-o-NaxXmk8EUg.png&originHeight=579&originWidth=1000&size=100702&status=done&width=1000">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1556592993539-802e1f69-17b1-46bd-86f4-209245a061c6.png#align=left&display=inline&height=573&name=1_tuI7GBjM0txWHnZkIZFBgA.png&originHeight=573&originWidth=1000&size=92918&status=done&width=1000">
+<meta property="og:updated_time" content="2019-04-30T02:57:13.094Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="时间序列分类实践介绍（使用Python代码）">
-<meta name="twitter:description" content="介绍分类时间序列数据？这真的有可能吗？可能有什么用呢？这些只是您阅读本文标题时必须具备的一些问题。这是公平的 - 当我第一次遇到这个概念时，我有完全相同的想法！我们大多数人的时间序列数据主要涉及产生预测的交易。无论是预测产品的需求还是销售额，航空公司的乘客数量或特定股票的收盘价，我们都习惯于利...">
-<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1556185921707-66d9bdc3-0973-4b8a-bac2-9d55f161b0d1.jpeg#align=left&display=inline&height=370&name=time-series-.jpg&originHeight=370&originWidth=500&size=129532&status=done&width=500">
+<meta name="twitter:title" content="Metacat：在Netflix上使大数据可被发现和有意义">
+<meta name="twitter:description" content="作者： Ajoy Majumdar，Zhen Li大多数大公司拥有大量具有不同数据格式和大量数据的数据源。这些数据存储由整个企业中的许多人访问和分析。在Netflix，我们的数据仓库包含大量存储在Amazon S3（通过Hive），Druid，Elasticsearch，Redshift，Sn...">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1556592925024-cd1b2991-4eaf-4ef7-ad82-eb053adab964.png#align=left&display=inline&height=587&name=1_Nz8bc62eRDxegVkzJr_HrQ.png&originHeight=587&originWidth=1000&size=134997&status=done&width=1000">
   
     <link rel="alternative" href="/atom.xml" title="A+" type="application/atom+xml">
   
@@ -156,113 +152,56 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-yuque/时间序列分类实践介绍（使用Python代码）" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-yuque/Metacat：在Netflix上使大数据可被发现和有意义" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      时间序列分类实践介绍（使用Python代码）
+      Metacat：在Netflix上使大数据可被发现和有意义
     </h1>
   
 
         
-        <a href="/2019/04/25/yuque/时间序列分类实践介绍（使用Python代码）/" class="archive-article-date">
-  	<time datetime="2019-04-25T09:48:43.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-25</time>
+        <a href="/2019/04/30/yuque/Metacat：在Netflix上使大数据可被发现和有意义/" class="archive-article-date">
+  	<time datetime="2019-04-30T02:54:49.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-30</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p><a href></a><br><a name="61a3ec66"></a></p>
-<h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>分类时间序列数据？这真的有可能吗？可能有什么用呢？这些只是您阅读本文标题时必须具备的一些问题。这是公平的 - 当我第一次遇到这个概念时，我有完全相同的想法！</p>
-<p>我们大多数人的时间序列数据主要涉及产生预测的交易。无论是预测产品的需求还是销售额，航空公司的乘客数量或特定股票的收盘价，我们都习惯于利用久经考验的时间序列技术来预测需求。</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1556185921707-66d9bdc3-0973-4b8a-bac2-9d55f161b0d1.jpeg#align=left&amp;display=inline&amp;height=370&amp;name=time-series-.jpg&amp;originHeight=370&amp;originWidth=500&amp;size=129532&amp;status=done&amp;width=500" alt="time-series-.jpg"></p>
-<p>但随着生成的数据量呈指数增长，尝试新想法和算法的机会也随之增加。使用复杂的时间序列数据集仍然是一个利基领域，扩展您的保留曲目以包含新想法总是有帮助的。</p>
-<p>这就是我在文章中的目的，向您介绍时间序列分类的新概念。我们将首先了解这个主题的含义以及它在行业中的应用。但是我们不会停留在理论部分 - 我们将通过处理时间序列数据集并执行二进制时间序列分类来解决问题。边做边学 - 这将有助于您以实际的方式理解这个概念。</p>
-<p>如果您之前没有处理过时间序列问题，我强烈建议您先从一些基本预测开始。您可以通过以下文章了解初学者：</p>
+        <p><em>作者：</em> <a href="https://www.linkedin.com/in/ajoymajumdar/" target="_blank" rel="noopener">Ajoy Majumdar</a>，<a href="https://www.linkedin.com/in/zhljen/" target="_blank" rel="noopener">Zhen Li</a><br>大多数大公司拥有大量具有不同数据格式和大量数据的数据源。这些数据存储由整个企业中的许多人访问和分析。在Netflix，我们的<a href="https://www.youtube.com/channel/UC00QATOrSH4K2uOljTnnaKw" target="_blank" rel="noopener">数据仓库</a>包含大量存储在Amazon S3（通过Hive），Druid，Elasticsearch，Redshift，Snowflake和MySql的数据集。我们的平台支持Spark，Presto，Pig和Hive，用于消费，处理和生成数据集。鉴于数据源的多样性，并确保我们的数据平台可以作为一个“单一”数据仓库在这些数据集之间进行互操作，我们构建了Metacat。在本博客中，我们将讨论构建Metacat的动机，Metacat是一种元数据服务，可以使数据易于发现，处理和管理。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1556592925024-cd1b2991-4eaf-4ef7-ad82-eb053adab964.png#align=left&amp;display=inline&amp;height=587&amp;name=1_Nz8bc62eRDxegVkzJr_HrQ.png&amp;originHeight=587&amp;originWidth=1000&amp;size=134997&amp;status=done&amp;width=1000" alt="1_Nz8bc62eRDxegVkzJr_HrQ.png"><br><a name="9b9c"></a></p>
+<h3 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h3><p>Netflix大数据平台的核心架构涉及三项关键服务。这些是执行服务（<a href="https://medium.com/netflix-techblog/evolving-the-netflix-data-platform-with-genie-3-598021604dda" target="_blank" rel="noopener">Genie</a>），元数据服务和事件服务。这些想法并非Netflix所独有，而是我们认为构建系统所必需的架构的反映，不仅是为了现在，而且是为了我们数据基础架构的未来规模。<br>许多年前，当我们开始构建平台时，我们采用Pig作为我们的ETL语言，Hive作为我们的临时查询语言。由于Pig本身没有元数据系统，因此构建一个可以在两者之间进行互操作的人似乎是理想的。<br>因此，Metacat诞生了，这个系统充当我们支持的所有数据存储的联合元数据访问层。我们的各种计算引擎可用于访问不同数据集的集中服务。总的来说，Metacat有三个主要目标：</p>
 <ul>
-<li><a href="https://www.analyticsvidhya.com/blog/2016/02/time-series-forecasting-codes-python/" target="_blank" rel="noopener">全面的初学者指南，用于创建时间序列预测（使用Python中的代码）</a></li>
+<li>元数据系统的联合视图</li>
+<li>有关数据集的元数据的统一API</li>
+<li>数据集的任意业务和用户元数据存储</li>
 </ul>
-<a id="more"></a><br><!--more-->
-<p><a name="767fa455"></a></p>
-<h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ol>
-<li>时间序列分类简介</li>
-<li>心电图信号</li>
-<li>图像数据</li>
-<li>传感器</li>
-<li>设置问题陈述</li>
-<li>阅读和理解数据</li>
-<li>预处理</li>
-<li>建立我们的时间序列分类模型</li>
-</ol>
-<p><a href></a><br><a name="dc895ad5"></a></p>
-<h2 id="时间序列分类简介"><a href="#时间序列分类简介" class="headerlink" title="时间序列分类简介"></a>时间序列分类简介</h2><p>时间序列分类实际上已经存在了一段时间。但到目前为止，它主要限于研究实验室，而不是行业应用。但是有很多研究正在进行，正在创建新的数据集并提出了许多新的算法。当我第一次看到这个时间序列分类概念时，我最初的想法是 - 我们如何对时间序列进行分类以及时间序列分类数据是什么样的？我相信你一定想知道同样的事情。</p>
-<p>可以想象，时间序列分类数据与常规分类问题不同，因为属性具有有序序列。让我们来看看一些时间序列分类用例，以了解这种差异。</p>
-<p><a href></a><br><a name="29695081"></a></p>
-<h3 id="1）对ECG-EEG信号进行分类"><a href="#1）对ECG-EEG信号进行分类" class="headerlink" title="1）对ECG / EEG信号进行分类"></a>1）对ECG / EEG信号进行分类</h3><p>心电图或心电图记录心脏的电活动，广泛用于诊断各种心脏问题。使用外部电极捕获这些ECG信号。</p>
-<p>例如，考虑以下信号样本，它代表一个心跳的电活动。左侧的图像表示正常心跳，而与其相邻的图像表示心肌梗塞。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1556186576907-27f3e67d-80ed-447d-bc59-34a85df70470.png#align=left&amp;display=inline&amp;height=184&amp;name=ECG.png&amp;originHeight=184&amp;originWidth=319&amp;size=140783&amp;status=done&amp;width=319" alt="ECG.png"><br>从电极捕获的数据将是时间序列形式，并且信号可以分类为不同的类别。我们还可以对记录大脑电活动的脑电信号进行分类。</p>
-<p><a href></a><br><a name="e8f02c7a"></a></p>
-<h3 id="2）图像分类"><a href="#2）图像分类" class="headerlink" title="2）图像分类"></a>2）图像分类</h3><p>图像也可以是顺序的时间相关格式。请考虑以下情形：</p>
-<p>根据天气条件，土壤肥力，水的可用性和其他外部因素，农作物在特定的田地中生长。该字段的图片每天拍摄5年，并标记在该字段上种植的作物的名称。你知道我要去哪儿吗？数据集中的图像是在固定的时间间隔之后拍摄的，并且具有定义的序列，这可能是对图像进行分类的重要因素。</p>
-<p><a href></a><br><a name="185e2e5f"></a></p>
-<h3 id="3）分类运动传感器数据"><a href="#3）分类运动传感器数据" class="headerlink" title="3）分类运动传感器数据"></a>3）分类运动传感器数据</h3><p>传感器生成高频数据，可以识别其范围内物体的移动。通过设置多个无线传感器并观察传感器中信号强度的变化，我们可以识别物体的运动方向。</p>
-<p>您还可以考虑哪些其他应用可以应用时间序列分类？请在文章下方的评论部分告诉我。</p>
-<p><a href></a><br><a name="15369121"></a></p>
-<h2 id="设置问题陈述"><a href="#设置问题陈述" class="headerlink" title="设置问题陈述"></a>设置问题陈述</h2><p>我们将致力于“ <em>室内用户运动预测</em> ”问题。在该挑战中，多个运动传感器被放置在不同的房间中，并且目标是基于从这些运动传感器捕获的频率数据来识别个体是否已经移动穿过房间。</p>
-<p>两个房间有四个运动传感器（A1，A2，A3，A4）。请看下面的图像，其中说明了传感器在每个房间中的位置。这两个房间的设置是在3对不同的房间（group1，group2，group3）中创建的。<br><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1556185959108-02f6758d-7a1e-4a66-bcb8-9b350c822268.jpeg#align=left&amp;display=inline&amp;height=386&amp;name=MovementAAL.jpg&amp;originHeight=490&amp;originWidth=946&amp;size=59610&amp;status=done&amp;width=746" alt="MovementAAL.jpg"><br>一个人可以沿着上图中所示的六个预定义路径中的任何一个移动。如果一个人走在路径2,3,4或6上，他会在房间内移动。另一方面，如果一个人沿着路径1或路径5行进，我们可以说该人已经在房间之间移动。<br>传感器读数可用于识别人在给定时间点的位置。当人在房间或房间内移动时，传感器中的读数会发生变化。此更改可用于标识人员的路径。<br>现在问题陈述已经清楚了，现在是时候开始编码了！在下一节中，我们将查看问题的数据集，这有助于消除您在此声明中可能存在的任何遗留问题。您可以从以下链接下载数据集：**<a href="https://archive.ics.uci.edu/ml/datasets/Indoor+User+Movement+Prediction+from+RSS+data" target="_blank" rel="noopener">室内用户移动预测</a>。[<br><br><a name="4CsoO"></a></p>
-<h2 id="阅读和理解数据"><a href="#阅读和理解数据" class="headerlink" title="阅读和理解数据"></a>阅读和理解数据</h2><p>我们的数据集包含316个文件：</p>
+<p>值得注意的是，拥有大型分布式数据集的其他公司也面临着类似的挑战。Apache <a href="https://atlas.apache.org/" target="_blank" rel="noopener">Atlas</a>，Twitter的<a href="https://blog.twitter.com/2016/discovery-and-consumption-of-analytics-data-at-twitter" target="_blank" rel="noopener">数据抽象层</a>和Linkedin的<a href="https://github.com/linkedin/WhereHows" target="_blank" rel="noopener">WhereHows</a>（在Linkedin的数据发现），仅举几例，旨在解决类似的问题，但是在公司各自的架构选择的背景下。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1556592959662-3b0cc67e-9a2f-46f6-a51c-f47af9c48b11.png#align=left&amp;display=inline&amp;height=579&amp;name=1__NswFCCPE-o-NaxXmk8EUg.png&amp;originHeight=579&amp;originWidth=1000&amp;size=100702&amp;status=done&amp;width=1000" alt="1__NswFCCPE-o-NaxXmk8EUg.png"><br><a name="7ceb"></a></p>
+<h3 id="Metacat"><a href="#Metacat" class="headerlink" title="Metacat"></a>Metacat</h3><p><a href="https://github.com/Netflix/metacat" target="_blank" rel="noopener">Metacat</a>是一种联合服务，提供统一的REST / Thrift接口，用于访问各种数据存储的元数据。相应的元数据存储仍然是模式元数据的真实来源，因此Metacat不会在其存储中实现它。它仅直接存储有关数据集的业务和用户定义的元数据。它还向Elasticsearch发布有关数据集的所有信息，以进行全文搜索和发现。<br>在更高级别，Metacat功能可分为以下几类：</p>
 <ul>
-<li>314 <em><strong>MovementAAL</strong></em> csv文件，包含放置在环境中的运动传感器的读数</li>
-<li>一个<em><strong>目标</strong></em>包含每个MovementAAL文件的目标变量csv文件</li>
-<li>一个<em><strong>Group Data</strong></em> csv文件，用于标识哪个MovementAAL文件属于哪个安装组</li>
-<li>该<em><strong>路径</strong></em>包含该对象所采取的方法csv文件</li>
+<li>数据抽象和互操作性</li>
+<li>业务和用户定义的元数据存储</li>
+<li>数据发现</li>
+<li>数据更改审核和通知</li>
+<li>Hive Metastore优化</li>
 </ul>
-<p>我们来看看数据集。我们将从导入必要的库开始。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">%matplotlib inline</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">from</span> os <span class="keyword">import</span> listdir</span><br><span class="line"><span class="keyword">from</span> keras.preprocessing <span class="keyword">import</span> sequence</span><br><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">from</span> keras.models <span class="keyword">import</span> Sequential</span><br><span class="line"><span class="keyword">from</span> keras.layers <span class="keyword">import</span> Dense</span><br><span class="line"><span class="keyword">from</span> keras.layers <span class="keyword">import</span> LSTM</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> keras.optimizers <span class="keyword">import</span> Adam</span><br><span class="line"><span class="keyword">from</span> keras.models <span class="keyword">import</span> load_model</span><br><span class="line"><span class="keyword">from</span> keras.callbacks <span class="keyword">import</span> ModelCheckpoint</span><br></pre></td></tr></table></figure>
-<p>在加载所有文件之前，让我们快速了解一下我们要处理的数据。从移动数据中读取前两个文件：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">df1 = pd.read_csv(‘/MovementAAL/dataset/MovementAAL_RSS_1.csv&apos;)</span><br><span class="line">df2 = pd.read_csv(&apos;/MovementAAL/dataset/MovementAAL_RSS_2.csv&apos;)</span><br><span class="line">df1.head()</span><br></pre></td></tr></table></figure>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1556186076246-1031ed5c-9c2a-471b-9a1e-4a1267c5e0ff.png#align=left&amp;display=inline&amp;height=174&amp;name=tsc1.png&amp;originHeight=174&amp;originWidth=406&amp;size=9919&amp;status=done&amp;width=406" alt="tsc1.png"></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df2.head()</span><br></pre></td></tr></table></figure>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1556186109119-e65e46b1-1776-4ae0-a97b-65b23c599fb9.png#align=left&amp;display=inline&amp;height=175&amp;name=tsc2.png&amp;originHeight=175&amp;originWidth=402&amp;size=9416&amp;status=done&amp;width=402" alt="tsc2.png"></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">df1.shape, df2.shape</span><br><span class="line">((27, 4), (26, 4))</span><br></pre></td></tr></table></figure>
-<p>这些文件包含来自四个传感器的标准化数据 - A1，A2，A3，A4。csv文件的长度（行数）不同，因为对应于每个csv的数据的持续时间不同。为简化起见，我们假设每秒都会收集传感器数据。第一次读数持续27秒（所以27行），而另一次读数持续26秒（所以26行）。<br>在构建模型之前，我们必须处理这种不同的长度。现在，我们将使用以下代码块读取传感器中的值并将其存储在列表中：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">path = <span class="string">'MovementAAL/dataset/MovementAAL_RSS_'</span></span><br><span class="line">sequences = list()</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>,<span class="number">315</span>):</span><br><span class="line">    file_path = path + str(i) + <span class="string">'.csv'</span></span><br><span class="line">    print(file_path)</span><br><span class="line">    df = pd.read_csv(file_path, header=<span class="number">0</span>)</span><br><span class="line">    values = df.values</span><br><span class="line">    sequences.append(values)</span><br><span class="line"></span><br><span class="line">targets = pd.read_csv(<span class="string">'MovementAAL/dataset/MovementAAL_target.csv'</span>)</span><br><span class="line">targets = targets.values[:,<span class="number">1</span>]</span><br></pre></td></tr></table></figure>
-<p>我们现在有一个列表<em>‘序列</em> ‘，其中包含来自运动传感器的数据和’目标’，其中包含csv文件的标签。当我们打印<em>序列[0]时</em>，我们从第一个csv文件中获取传感器的值：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sequences[0]</span><br></pre></td></tr></table></figure>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1556186209162-23360e28-e86a-4979-b92e-629e5eb2fed2.png#align=left&amp;display=inline&amp;height=466&amp;name=tsc3.png&amp;originHeight=466&amp;originWidth=438&amp;size=18098&amp;status=done&amp;width=438" alt="tsc3.png"><br>如前所述，数据集是在三对不同的房间中收集的 - 因此有三组。此信息可用于将数据集划分为训练集，测试集和验证集。我们现在将加载<strong><em>DatasetGroup</em></strong> csv文件：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">groups = pd.read_csv(<span class="string">'MovementAAL/groups/MovementAAL_DatasetGroup.csv'</span>, header=<span class="number">0</span>)</span><br><span class="line">groups = groups.values[:,<span class="number">1</span>]</span><br></pre></td></tr></table></figure>
-<p>我们将前两组的数据用于培训目的，第三组用于测试。<br><br><a name="JCNNx"></a></p>
-<h2 id="预处理步骤"><a href="#预处理步骤" class="headerlink" title="预处理步骤"></a>预处理步骤</h2><p>由于时间序列数据的长度不同，我们无法直接在此数据集上构建模型。那么我们怎样才能决定一个系列的理想长度呢？我们可以通过多种方式处理它，这里有一些想法（我很乐意在评论部分听到您的建议）：</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1556592993539-802e1f69-17b1-46bd-86f4-209245a061c6.png#align=left&amp;display=inline&amp;height=573&amp;name=1_tuI7GBjM0txWHnZkIZFBgA.png&amp;originHeight=573&amp;originWidth=1000&amp;size=92918&amp;status=done&amp;width=1000" alt="1_tuI7GBjM0txWHnZkIZFBgA.png"><br><a name="cc13"></a></p>
+<h3 id="数据抽象和互操作性"><a href="#数据抽象和互操作性" class="headerlink" title="数据抽象和互操作性"></a>数据抽象和互操作性</h3><p>Netflix使用Pig，Spark，Presto和Hive等多个查询引擎来处理和使用数据。通过引入共同的抽象层，数据集可以由不同的引擎互换地访问。例如：从Hive读取数据的Pig脚本将能够在Pig类型中读取具有Hive列类型的表。对于从一个数据存储区到另一个数据存储区的数据移动，Metacat通过使用目标表数据类型帮助在目标数据存储中创建新表来简化该过程。Metacat具有受支持的规范数据类型的已定义列表，并且具有从这些类型到每个相应数据存储类型的映射。例如，我们的数据移动工具使用上述功能将数据从Hive移动到Redshift或Snowflake。<br>Metacat thrift服务支持Hive thrift接口，可轻松与Spark和Presto集成。这使我们能够通过一个系统汇集所有元数据更改，这进一步使我们能够发布有关这些更改的通知，以启用数据驱动的ETL。当新数据到达时，Metacat可以通知相关作业启动。<br><a name="1475"></a></p>
+<h3 id="业务和用户定义的元数据"><a href="#业务和用户定义的元数据" class="headerlink" title="业务和用户定义的元数据"></a>业务和用户定义的元数据</h3><p>Metacat在其存储中存储有关数据集的其他业务和用户定义的元数据。我们目前使用业务元数据来存储连接信息（例如，对于RDS数据源），配置信息，度量（Hive / S3分区和表）以及表TTL（生存时间）以及其他用例。顾名思义，用户定义的元数据是一种自由格式元数据，可由用户根据自己的用途进行设置。<br>业务元数据还可以大致分为逻辑和物理元数据。关于诸如表的逻辑构造的业务元数据被视为逻辑元数据。我们使用元数据进行数据分类并标准化ETL处理。表所有者可以提供有关业务元数据中的表的审计信息。它们还可以提供列默认值和验证规则，以用于写入表中。<br>关于存储在表或分区中的实际数据的元数据被视为物理元数据。我们的ETL处理存储有关作业完成时数据的指标，稍后将用于验证。可以使用相同的度量来分析数据的成本+空间。鉴于两个表可以指向相同的位置（如在Hive中），因此必须区分逻辑元素和物理元数据，因为两个表可以具有相同的物理元数据但具有不同的逻辑元数据。<br><a name="ef8d"></a></p>
+<h3 id="数据发现"><a href="#数据发现" class="headerlink" title="数据发现"></a>数据发现</h3><p>作为数据的消费者，我们应该能够轻松浏览和发现各种数据集。Metacat向Elasticsearch发布模式元数据和业务/用户定义的元数据，有助于全文搜索数据仓库中的信息。这也可以在我们的大数据门户SQL编辑器中自动建议和自动完成SQL。将数据集组织为目录有助于消费者浏览信息。标签用于根据组织和主题区域对数据进行分类。我们还使用标签来标识数据生命周期管理的表。<br><a name="57ed"></a></p>
+<h3 id="数据变更通知和审计"><a href="#数据变更通知和审计" class="headerlink" title="数据变更通知和审计"></a>数据变更通知和审计</h3><p>Metacat是数据存储的中央门户，可捕获任何元数据更改和数据更新。我们还围绕表和分区更改构建了推送通知系统。目前，我们正在使用此机制将事件发布到我们自己的数据管道（<a href="https://medium.com/netflix-techblog/kafka-inside-keystone-pipeline-dd5aeabaf6bb" target="_blank" rel="noopener">Keystone</a>）以进行分析，以便更好地了解我们的数据使用情况和趋势。我们还发布到Amazon SNS。我们正在将我们的数据平台架构发展为事件驱动架构。将事件发布到SNS允许我们的数据平台中的其他系统相应地“响应”这些元数据或数据更改。例如，当删除表时，我们的S3仓库管理员服务可以订阅此事件并适当地清理S3上的数据。<br><a name="a4f0"></a></p>
+<h3 id="Hive-Metastore优化"><a href="#Hive-Metastore优化" class="headerlink" title="Hive Metastore优化"></a>Hive Metastore优化</h3><p>由RDS支持的Hive Metastore在高负载下表现不佳。我们已经注意到使用metatore API编写和读取分区的许多问题。鉴于此，我们不再使用这些API。我们对Hive连接器进行了改进，该连接器直接与支持的RDS进行通信，以便读写分区。之前，Hive Metastore调用添加几千个分区通常会超时，但是通过我们的实现，这不再是一个问题。<br><a name="b240"></a></p>
+<h3 id="下一步"><a href="#下一步" class="headerlink" title="下一步"></a>下一步</h3><p>我们在构建Metacat方面取得了很大进展，但我们还远未完成。以下是我们仍需要处理的一些其他功能，以增强我们的数据仓库体验。</p>
 <ul>
-<li>用零填充较短的序列以使所有序列的长度相等。在这种情况下，我们将向模型提供不正确的数据</li>
-<li>找到系列的最大长度，并使用最后一行中的数据填充序列</li>
-<li>确定数据集中序列的最小长度，并将所有其他序列截断为该长度。但是，这将导致数据的巨大损失</li>
-<li>取所有长度的平均值，截断较长的系列，并填充比平均长度短的系列</li>
+<li>用于提供表的历史记录的架构和元数据版本控制。例如，跟踪特定列的元数据更改或能够随时查看表大小趋势非常有用。能够询问过去某个元数据的外观对于审计，调试很重要，对于重新处理和回滚用例也很有用。</li>
+<li>提供有关数据沿袭表的上下文信息。例如，表访问频率等元数据可以在Metacat中聚合并发布到数据沿袭服务，以用于对表的关键性进行排序。</li>
+<li>添加对Elasticsearch和Kafka等数据存储的支持。</li>
+<li>可插入元数据验证。由于业务和用户定义的元数据是自由格式，为了保持元数据的完整性，我们需要进行验证。Metacat应具有可插入的体系结构，以包含可在存储元数据之前执行的验证策略。</li>
 </ul>
-<p>让我们找出最小，最大和平均长度：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">len_sequences = []</span><br><span class="line"><span class="keyword">for</span> one_seq <span class="keyword">in</span> sequences:</span><br><span class="line">    len_sequences.append(len(one_seq))</span><br><span class="line">pd.Series(len_sequences).describe()</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">count    314.000000</span><br><span class="line">mean      42.028662</span><br><span class="line">std       16.185303</span><br><span class="line">min       19.000000</span><br><span class="line">25%       26.000000</span><br><span class="line">50%       41.000000</span><br><span class="line">75%       56.000000</span><br><span class="line">max      129.000000</span><br><span class="line">dtype: float64</span><br></pre></td></tr></table></figure>
-<p>大多数文件的长度在40到60之间。只有3个文件的长度超过100个。因此，采用最小或最大长度没有多大意义。第90个四分位数为60，这被视为数据序列的长度。我们来编代码：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#Padding the sequence with the values in last row to max length</span></span><br><span class="line">to_pad = <span class="number">129</span></span><br><span class="line">new_seq = []</span><br><span class="line"><span class="keyword">for</span> one_seq <span class="keyword">in</span> sequences:</span><br><span class="line">    len_one_seq = len(one_seq)</span><br><span class="line">    last_val = one_seq[<span class="number">-1</span>]</span><br><span class="line">    n = to_pad - len_one_seq</span><br><span class="line">   </span><br><span class="line">    to_concat = np.repeat(one_seq[<span class="number">-1</span>], n).reshape(<span class="number">4</span>, n).transpose()</span><br><span class="line">    new_one_seq = np.concatenate([one_seq, to_concat])</span><br><span class="line">    new_seq.append(new_one_seq)</span><br><span class="line">final_seq = np.stack(new_seq)</span><br><span class="line"></span><br><span class="line"><span class="comment">#truncate the sequence to length 60</span></span><br><span class="line"><span class="keyword">from</span> keras.preprocessing <span class="keyword">import</span> sequence</span><br><span class="line">seq_len = <span class="number">60</span></span><br><span class="line">final_seq=sequence.pad_sequences(final_seq, maxlen=seq_len, padding=<span class="string">'post'</span>, dtype=<span class="string">'float'</span>, truncating=<span class="string">'post'</span>)</span><br></pre></td></tr></table></figure>
-<p>现在已准备好数据集，我们将根据组将其分开。准备火车，验证和测试集：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">train = [final_seq[i] <span class="keyword">for</span> i <span class="keyword">in</span> range(len(groups)) <span class="keyword">if</span> (groups[i]==<span class="number">2</span>)]</span><br><span class="line">validation = [final_seq[i] <span class="keyword">for</span> i <span class="keyword">in</span> range(len(groups)) <span class="keyword">if</span> groups[i]==<span class="number">1</span>]</span><br><span class="line">test = [final_seq[i] <span class="keyword">for</span> i <span class="keyword">in</span> range(len(groups)) <span class="keyword">if</span> groups[i]==<span class="number">3</span>]</span><br><span class="line"></span><br><span class="line">train_target = [targets[i] <span class="keyword">for</span> i <span class="keyword">in</span> range(len(groups)) <span class="keyword">if</span> (groups[i]==<span class="number">2</span>)]</span><br><span class="line">validation_target = [targets[i] <span class="keyword">for</span> i <span class="keyword">in</span> range(len(groups)) <span class="keyword">if</span> groups[i]==<span class="number">1</span>]</span><br><span class="line">test_target = [targets[i] <span class="keyword">for</span> i <span class="keyword">in</span> range(len(groups)) <span class="keyword">if</span> groups[i]==<span class="number">3</span>]</span><br></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">train = np.array(train)</span><br><span class="line">validation = np.array(validation)</span><br><span class="line">test = np.array(test)</span><br><span class="line"></span><br><span class="line">train_target = np.array(train_target)</span><br><span class="line">train_target = (train_target+<span class="number">1</span>)/<span class="number">2</span></span><br><span class="line"></span><br><span class="line">validation_target = np.array(validation_target)</span><br><span class="line">validation_target = (validation_target+<span class="number">1</span>)/<span class="number">2</span></span><br><span class="line"></span><br><span class="line">test_target = np.array(test_target)</span><br><span class="line">test_target = (test_target+<span class="number">1</span>)/<span class="number">2</span></span><br></pre></td></tr></table></figure>
-<p><a name="60E3n"></a></p>
-<h2 id="建立时间序列分类模型"><a href="#建立时间序列分类模型" class="headerlink" title="建立时间序列分类模型"></a>建立时间序列分类模型</h2><p>我们准备了用于LSTM（长短期记忆）模型的数据。我们处理了可变长度序列并创建了训练，验证和测试集。让我们构建一个单层LSTM网络。<br><em>注意：您可以在这个<a href="https://www.analyticsvidhya.com/blog/2017/12/fundamentals-of-deep-learning-introduction-to-lstm/" target="_blank" rel="noopener">精彩解释的教程中</a>熟悉LSTM 。我会建议你先完成它，因为它可以帮助你理解下面代码的工作原理。</em></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">model = Sequential()</span><br><span class="line">model.add(LSTM(<span class="number">256</span>, input_shape=(seq_len, <span class="number">4</span>)))</span><br><span class="line">model.add(Dense(<span class="number">1</span>, activation=<span class="string">'sigmoid'</span>))</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">model.summary()</span><br></pre></td></tr></table></figure>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1556186397482-3f2d9b5b-e07c-4c63-9da9-b34539c067b7.png#align=left&amp;display=inline&amp;height=189&amp;name=tsc4.png&amp;originHeight=189&amp;originWidth=544&amp;size=10318&amp;status=done&amp;width=544" alt="tsc4.png"><br>我们现在将训练模型并监控验证的准确性：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">adam = Adam(lr=<span class="number">0.001</span>)</span><br><span class="line">chk = ModelCheckpoint(<span class="string">'best_model.pkl'</span>, monitor=<span class="string">'val_acc'</span>, save_best_only=<span class="literal">True</span>, mode=<span class="string">'max'</span>, verbose=<span class="number">1</span>)</span><br><span class="line">model.compile(loss=<span class="string">'binary_crossentropy'</span>, optimizer=adam, metrics=[<span class="string">'accuracy'</span>])</span><br><span class="line">model.fit(train, train_target, epochs=<span class="number">200</span>, batch_size=<span class="number">128</span>, callbacks=[chk], validation_data=(validation,validation_target))</span><br></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#loading the model and checking accuracy on the test data</span></span><br><span class="line">model = load_model(<span class="string">'best_model.pkl'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> accuracy_score</span><br><span class="line">test_preds = model.predict_classes(test)</span><br><span class="line">accuracy_score(test_target, test_preds)</span><br></pre></td></tr></table></figure>
-<p>我的准确度得分为0.78846153846153844。这是一个非常有希望的开始，但我们肯定可以通过使用超参数，改变学习速度和/或时代数来改善LSTM模型的性能。<br><br><a name="a5xQA"></a></p>
-<h2 id="结束笔记"><a href="#结束笔记" class="headerlink" title="结束笔记"></a>结束笔记</h2><p>这将我们带到本教程的结尾。写下来的想法是以实用的方式向您介绍时间序列谱中的一个全新世界。<br>就个人而言，我发现预处理步骤是我们所涉及的所有部分中最复杂的部分。然而，它也是最重要的一个（否则整个时间序列数据将会失败！）。在处理此类挑战时，向模型提供正确的数据同样重要。<br>这是一个非常酷的时间序列分类资源，我提到并发现最有帮助的：</p>
-<ul>
-<li>关于“通过油藏计算预测异构室内环境中用户移动”的论文</li>
-</ul>
-<p>我很乐意在下面的评论部分听到您的想法和建议。</p>
+<p>随着我们不断开发功能以支持我们的用例，我们始终乐于接受社区的反馈和贡献。您可以通过<a href="https://github.com/Netflix/metacat" target="_blank" rel="noopener">Github</a>与我们联系，或通过我们的<a href="https://groups.google.com/forum/#!forum/metacatoss" target="_blank" rel="noopener">Google</a>网上论坛向我们发送消息。我们希望在今年晚些时候分享我们的团队正在进行的工作！<br>如果您对这样的大数据挑战感兴趣，我们一直在寻找我们团队的重要补充。您可以<a href="https://jobs.netflix.com/teams/data#data-engineering-and-infrastructure" target="_blank" rel="noopener">在此处</a>查看我们所有的开放数据平台角色。</p>
 
       
 
@@ -342,7 +281,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://www.zhos.me/2019/04/25/yuque/时间序列分类实践介绍（使用Python代码）/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://www.zhos.me/2019/04/30/yuque/Metacat：在Netflix上使大数据可被发现和有意义/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -356,18 +295,9 @@
   
 <nav id="article-nav">
   
-    <a href="/2019/04/26/yuque/通过在 Python 中使用 XGBoost 提前停止来避免过度拟合/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          通过在 Python 中使用 XGBoost 提前停止来避免过度拟合
-        
-      </div>
-    </a>
   
-  
-    <a href="/2019/04/25/yuque/通过AdaBoost和Gradient Boosting提升/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">通过AdaBoost和Gradient Boosting提升</div>
+    <a href="/2019/04/30/yuque/开源Zuul 2/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">开源Zuul 2</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -394,7 +324,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#介绍"><span class="toc-number">1.</span> <span class="toc-text">介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#目录"><span class="toc-number">2.</span> <span class="toc-text">目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#时间序列分类简介"><span class="toc-number">3.</span> <span class="toc-text">时间序列分类简介</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1）对ECG-EEG信号进行分类"><span class="toc-number">3.1.</span> <span class="toc-text">1）对ECG / EEG信号进行分类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2）图像分类"><span class="toc-number">3.2.</span> <span class="toc-text">2）图像分类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3）分类运动传感器数据"><span class="toc-number">3.3.</span> <span class="toc-text">3）分类运动传感器数据</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#设置问题陈述"><span class="toc-number">4.</span> <span class="toc-text">设置问题陈述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#阅读和理解数据"><span class="toc-number">5.</span> <span class="toc-text">阅读和理解数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#预处理步骤"><span class="toc-number">6.</span> <span class="toc-text">预处理步骤</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#建立时间序列分类模型"><span class="toc-number">7.</span> <span class="toc-text">建立时间序列分类模型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结束笔记"><span class="toc-number">8.</span> <span class="toc-text">结束笔记</span></a></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#目标"><span class="toc-number">1.</span> <span class="toc-text">目标</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Metacat"><span class="toc-number">2.</span> <span class="toc-text">Metacat</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#数据抽象和互操作性"><span class="toc-number">3.</span> <span class="toc-text">数据抽象和互操作性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#业务和用户定义的元数据"><span class="toc-number">4.</span> <span class="toc-text">业务和用户定义的元数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#数据发现"><span class="toc-number">5.</span> <span class="toc-text">数据发现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#数据变更通知和审计"><span class="toc-number">6.</span> <span class="toc-text">数据变更通知和审计</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Hive-Metastore优化"><span class="toc-number">7.</span> <span class="toc-text">Hive Metastore优化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#下一步"><span class="toc-number">8.</span> <span class="toc-text">下一步</span></a></li></ol>
                     </div>
                 </span>
             </div>
