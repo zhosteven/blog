@@ -196,7 +196,7 @@
 </tr>
 </tbody>
 </table>
-<p>This paper presents the machine learning architecture of the Snips Voice Platform, a software solution to perform Spoken Language Understanding on microprocessors typical of IoT devices. The embedded inference is fast and accurate while enforcing privacy by design, as no personal user data is ever collected. Focusing on Automatic Speech Recognition and Natural Language Understanding, we detail our approach to training high-performance Machine Learning models that are small enough to run in real-time on small devices. Additionally, we describe a data generation procedure that provides sufficient, high-quality training data without compromising user privacy.<br>&lt;! –more– &gt;<br><a name="aaa303dc"></a></p>
+<p>This paper presents the machine learning architecture of the Snips Voice Platform, a software solution to perform Spoken Language Understanding on microprocessors typical of IoT devices. The embedded inference is fast and accurate while enforcing privacy by design, as no personal user data is ever collected. Focusing on Automatic Speech Recognition and Natural Language Understanding, we detail our approach to training high-performance Machine Learning models that are small enough to run in real-time on small devices. Additionally, we describe a data generation procedure that provides sufficient, high-quality training data without compromising user privacy.<br>&lt;! –more– &gt;<br>&lt;! –more– &gt;<br><a name="aaa303dc"></a></p>
 <h1 id="1-Introduction"><a href="#1-Introduction" class="headerlink" title="1    Introduction"></a>1    Introduction</h1><p>Over the last years, thanks in part to steady improvements brought by deep learning approaches to speech recognition [33, 17, 14, 5], voice interfaces have greatly evolved from spotting limited and predetermined keywords to understanding arbitrary formulations of a given intention. They also became much more reliable, with state-of-the-art speech recognition engines reaching human level in English [56]. This achievement unlocked many practical applications of voice assistants which are now used in many fields from customer support [6, 47], to autonomous cars [41], or smart homes [16, 26]. In particular, smart speaker adoption by the public is on the rise, with a recent study showing that nearly 20% of U.S. adults reported having a smart speaker at home<a href="#footnote-1">[1]</a>.<br>These recent developments however raise questions about user privacy – especially since unique speaker identification is an active field of research using voice as a sensitive biometric feature [58]. The CNIL (French Data Protection Authority)<a href="#footnote-2">[2]</a>advises owners of connected speakers to switch off the microphone when possible and to warn guests of the presence of such a device in their home. The General Data Protection Regulation which harmonizes data privacy laws across the European Union<a href="#footnote-3">[3]</a>indeed requires companies to ask for explicit consent before collecting user data.<br>Some of the most popular commercial solutions for voice assistants include Microsoft’s <em>Cortana</em>, Google’s <em>DialogFlow</em>, IBM’s <em>Watson</em>, or Amazon _Alexa _[23]. In this paper, we introduce a competing solution, the Snips Voice Platform which, unlike the previous ones, is completely cloud independent and runs offline on typical IoT microprocessors, thus guaranteeing privacy by design, with no user data ever collected nor stored. The Natural Language Understanding component of the platform is already open source [50], while the other components will be opensourced in the future.<br>The aim of this paper is to contribute to the collective effort towards ever more private and efficient cloud-independent voice interfaces. To this end, we devote this introduction to a brief description of the Snips Ecosystem and of some of the design principles behind the Snips Voice Platform.<br><a name="3d824936"></a></p>
 <h2 id="1-1-The-Snips-Ecosystem"><a href="#1-1-The-Snips-Ecosystem" class="headerlink" title="1.1    The Snips Ecosystem"></a>1.1    The Snips Ecosystem</h2><p>The Snips ecosystem comprises a web console<a href="#footnote-4">[4]</a>to build voice assistants and train the corresponding Spoken Language Understanding (SLU) engine, made of an Automatic Speech Recognition (ASR) engine and a Natural Language Understanding (NLU) engine. The console can be used as a selfservice development environment by businesses or individuals, or through professional services. The Snips Voice Platform is free for non-commercial use. Since its launch in Summer 2017, over 23,000 Snips voice assistants have been created by over 13,000 developers. The languages currently supported by the Snips platform are English, French and German, with additional NLU support for Spanish and Korean. More languages are added regularly.<br>An _assistant _is composed of a set of _skills _– e.g. SmartLights, SmartThermostat, or SmartOven skills for a SmartHome assistant – that may be either selected from preexisting ones in a _skill store _or created from scratch on the web console. A given skill may contain several <em>intents</em>, or user intention – e.g. SwitchLightOn and SwitchLightOff for a SmartLights skill. Finally, a given intent is bound to a list of _entities _that must be extracted from the user’s query – e.g. room for the SwitchLightOn intent. We call _slot _the particular value of an entity in a query – e.g. kitchen for the entity room. When a user speaks to the assistant, the SLU engine trained on the different skills will handle the request by successively converting speech into text, classifying the user’s intent, and extracting the relevant slots.<br>Once the user’s request has been processed and based on the information that has been extracted from the query and fed to the device, a dialog management component is responsible for providing a feedback to the user, or performing an <em>action</em>. It may take multiple forms, such as an audio response via speech synthesis or a direct action on a connected device – e.g. actually turning on the lights for a SmartLights skill. Figure 1 illustrates the typical interaction flow.<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1557131401331-22d48c33-b5cb-48ae-b0ee-733a8b71bada.png#align=left&amp;display=inline&amp;height=210&amp;originHeight=437&amp;originWidth=1443&amp;status=done&amp;width=693" alt><br>Figure 1: Interaction flow<br><a name="15ac08c6"></a></p>
 <h2 id="1-2-A-private-by-design-embedded-platform"><a href="#1-2-A-private-by-design-embedded-platform" class="headerlink" title="1.2    A private-by-design embedded platform"></a>1.2    A private-by-design embedded platform</h2><p>The _Privacy by Design _[10, 25] principle sets privacy as the default standard in the design and engineering of a system. In the context of voice assistants, that can be deployed anywhere including users’ homes, this principle calls for a strong interpretation to protect users against any future misuse of their private data. In the following, we call _private-by-design _a system that does not transfer user data to any remote location, such as cloud servers.<br>Within the Snips ecosystem, the SLU components are trained on servers, but the inference happens directly on the device once the assistant has been deployed - no data from the user is ever collected nor stored. This design choice adds engineering complexity as most IoT devices run on specific hardware with limited memory and computing power. Cross-platform support is also a requirement in the IoT industry, since IoT devices are powered by many different hardware boards, with sustained innovation in that field.<br>For these reasons, the Snips Voice Platform has been built with portability and footprint in mind. Its embedded inference runs on common IoT hardware as light as the Raspberry Pi 3 (CPU with 1.4 GHz and 1GB of RAM), a popular choice among developers and therefore our reference hardware setting throughout this paper. Other Linux boards are also supported, such as IMX.7D, i.MX8M, DragonBoard 410c, and Jetson TX2. The Snips SDK for Android works with devices with Android 5 and ARM CPU, while the iOS SDK targets iOS 11 and newer. For efficiency and portability reasons, the algorithms have been re-implemented whenever needed in Rust [29] – a modern programming language offering high performance, low memory overhead, and cross-compilation.<br>SLU engines are usually broken down into two parts: Automatic Speech Recognition (ASR) and Natural Language Understanding (NLU). The ASR engine translates a spoken utterance into text through an acoustic model, mapping raw audio to a phonetic representation, and a Language Model (LM), mapping this phonetic representation to text. The NLU then extracts intent and slots from the decoded query. As discussed in section 3, LM and NLU have to be mutually consistent in order to optimize the accuracy of the SLU engine. It is therefore useful to introduce a _language modeling _component composed of the LM and NLU. Figure 2 describes the building blocks of the SLU pipeline.<br> <br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1557131401388-139799fa-c523-4f9f-8ac1-e921b097abb6.png#align=left&amp;display=inline&amp;height=300&amp;originHeight=300&amp;originWidth=620&amp;status=done&amp;width=620" alt><br>Figure 2: Spoken Language Understanding pipeline<br>As stated above, ASR engines relying on large deep learning models have improved drastically over the past few years. Yet, they still have a major drawback today. For example, the model achieving human parity in [56] is a combination of several neural networks, each containing several hundreds of millions of parameters, and large-vocabulary language models made of several millions of n-grams. The size of these models, along with the computational resources necessary to run them in real-time, make them unfit for deployment on small devices, so that solutions implementing them are bound to rely on the cloud for speech recognition.<br>Enforcing privacy by design therefore implies developing new tools to build reliable SLU engines that are constrained in size and computational requirements, which we detail in this paper. In section 2, we describe strategies to obtain small (10MB) and robust acoustic models trained on general speech corpora of a few hundred to a few thousand hours. Section 3 is devoted to a description of the language modeling approach of the Snips SLU engine. Notably, we show how to ensure consistency between the language model of the ASR engine and the NLU engine while specializing them to a particular use case. The resulting SLU engine is lightweight and fast to execute, making it fit for deployment on small devices and the NLU component is open source [50]. In section 4, we illustrate the high generalization accuracy of the SLU engine in the context of real-word voice assistants. Finally, we discuss in section 9 a data generation procedure to automatically create training sets replacing user data.<br><a name="ac99357e"></a></p>
@@ -1744,53 +1744,6 @@
 
 
   
-    <article id="post-yuque/Glossary" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/05/05/yuque/Glossary/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
     <article id="post-yuque/家用电器语音控制的定义和限制：还有很多工作要做" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -2303,6 +2256,83 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2019/04/26/yuque/如何在 Python 中使用 XGBoost 可视化梯度提升决策树/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/如何在 Python 中使用 XGBoost 调整决策树的数量和大小" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/04/26/yuque/如何在 Python 中使用 XGBoost 调整决策树的数量和大小/">如何在 Python 中使用 XGBoost 调整决策树的数量和大小</a>
+    </h1>
+  
+
+        
+        <a href="/2019/04/26/yuque/如何在 Python 中使用 XGBoost 调整决策树的数量和大小/" class="archive-article-date">
+  	<time datetime="2019-04-26T03:20:20.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-26</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><a href></a><br><a name="0a4ed112"></a></p>
+<h1 id="如何在-Python-中使用-XGBoost-调整决策树的数量和大小"><a href="#如何在-Python-中使用-XGBoost-调整决策树的数量和大小" class="headerlink" title="如何在 Python 中使用 XGBoost 调整决策树的数量和大小"></a>如何在 Python 中使用 XGBoost 调整决策树的数量和大小</h1><blockquote>
+<p>原文： <a href="https://machinelearningmastery.com/tune-number-size-decision-trees-xgboost-python/" target="_blank" rel="noopener">https://machinelearningmastery.com/tune-number-size-decision-trees-xgboost-python/</a></p>
+</blockquote>
+<p>梯度提升包括顺序创建和添加决策树，每个尝试纠正前面的学习器的错误。</p>
+<p>这提出了一个问题：在梯度提升模型中要配置多少树（弱学习器或估计者）以及每棵树应该有多大。</p>
+<p>在这篇文章中，您将了解如何设计系统实验来选择决策树的数量和大小以用于您的问题。</p>
+<p>阅读这篇文章后你会知道：</p>
+<ul>
+<li>如何评估向 XGBoost 模型添加更多决策树的效果。</li>
+<li>如何评估为 XGBoost 模型创建更大的决策树的效果。</li>
+<li>如何调查问题树的数量和深度之间的关系。</li>
+</ul>
+        
+          <a class="article-more-a" href="/2019/04/26/yuque/如何在 Python 中使用 XGBoost 调整决策树的数量和大小/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/04/26/yuque/如何在 Python 中使用 XGBoost 调整决策树的数量和大小/">展开全文 >></a>
         </p>
       
 
