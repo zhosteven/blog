@@ -149,6 +149,145 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-yuque/制作智能音箱" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/05/08/yuque/制作智能音箱/">制作智能音箱</a>
+    </h1>
+  
+
+        
+        <a href="/2019/05/08/yuque/制作智能音箱/" class="archive-article-date">
+  	<time datetime="2019-05-08T09:59:22.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-05-08</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><a href="https://github.com/voice-engine/make-a-smart-speaker" target="_blank" rel="noopener">&gt;&gt; Github</a><br>以下是制作智能扬声器的资源集合。希望有一天我们可以制作一个日常使用的开源软件。<br>智能扬声器的简化流程图如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">+---+   +----------------+   +---+   +---+   +---+</span><br><span class="line">|Mic|--&gt;|Audio Processing|--&gt;|KWS|--&gt;|STT|--&gt;|NLU|</span><br><span class="line">+---+   +----------------+   +---+   +---+   +-+-+</span><br><span class="line">                                               |</span><br><span class="line">                                               |</span><br><span class="line">+-------+   +---+   +----------------------+   |</span><br><span class="line">|Speaker|&lt;--|TTS|&lt;--|Knowledge/Skill/Action|&lt;--+</span><br><span class="line">+-------+   +---+   +----------------------+</span><br></pre></td></tr></table></figure>
+<ul>
+<li>音频处理包括声学回声消除（AEC），波束成形，噪声抑制（NS）等。</li>
+<li>关键字定位（KWS）会检测关键字（例如OK Google，Hey Siri）以开始对话。</li>
+<li>语音到文本（STT）</li>
+<li>自然语言理解（NLU）将原始文本转换为结构化数据。</li>
+<li>知识/技能/行动 - 知识库和插件（Alexa Skill，Google Action）提供答案。</li>
+<li>文字转语音</li>
+</ul>
+<p>&lt;! –more–&gt;<br>&lt;! –more–&gt;</p>
+<hr>
+<p><a name="kws-stt-nlu-skill-tts"></a></p>
+<h3 id="KWS-STT-NLU-技能-TTS"><a href="#KWS-STT-NLU-技能-TTS" class="headerlink" title="KWS + STT + NLU +技能+ TTS"></a>KWS + STT + NLU +技能+ TTS</h3><p><a name="active-open-source-projects"></a></p>
+<h4 id="活跃的开源项目"><a href="#活跃的开源项目" class="headerlink" title="活跃的开源项目"></a>活跃的开源项目</h4><ul>
+<li><a href="https://github.com/MycroftAI/mycroft-core" target="_blank" rel="noopener">Mycroft</a> - 一个可以攻击的开源语音助手</li>
+<li><p><a href="https://github.com/dingdang-robot/dingdang-robot" target="_blank" rel="noopener">dingdang robot</a> - 一款基于<a href="https://github.com/jasperproject/jasper-client" target="_blank" rel="noopener">Jasper</a>的中文语音交互机器人，采用覆盆子pi构建<br><a name="sdk"></a></p>
+<h4 id="SDK"><a href="#SDK" class="headerlink" title="SDK"></a>SDK</h4></li>
+<li><p>亚马逊Alexa语音服务 - 是使用最广泛的语音助手<br></p>
+</li>
+<li><a href="https://github.com/alexa/avs-device-sdk" target="_blank" rel="noopener">C ++ SDK</a><br></li>
+<li><a href="https://github.com/alexa/alexa-avs-sample-app" target="_blank" rel="noopener">Java客户端</a></li>
+<li><a href="https://github.com/respeaker/avs" target="_blank" rel="noopener">Python客户端</a><br></li>
+<li><a href="https://github.com/googlesamples/assistant-sdk-python" target="_blank" rel="noopener">Google智能助理SDK</a><br></li>
+</ul>
+<p>它具有最聪明的大脑，其扩展名为Google Action，可以通过digitalflow.ai创建几个步骤，其Device Action非常适合家庭智能设备。</p>
+<ul>
+<li><p><a href="https://github.com/dueros" target="_blank" rel="noopener">百度DuerOS</a><br><a name="kws"></a></p>
+<h3 id="KWS"><a href="#KWS" class="headerlink" title="KWS"></a>KWS</h3></li>
+<li><p><a href="https://github.com/MycroftAI/mycroft-precise" target="_blank" rel="noopener">Mycroft Precise</a> - 一款轻巧，易于使用的RNN唤醒词听众</p>
+</li>
+<li><a href="https://github.com/Kitt-AI/snowboy" target="_blank" rel="noopener">Snowboy</a> - 基于DNN的热门词和唤醒词检测工具包</li>
+<li><a href="https://github.com/castorini/honk" target="_blank" rel="noopener">Honk</a> - PyTorch重新实现Google的TensorFlow CNN用于关键字定位</li>
+<li><p><a href="https://github.com/ARM-software/ML-KWS-for-MCU" target="_blank" rel="noopener">ML-KWS-For-MCU</a> - 可能是资源受限设备（如ARM Cortex M7微控制器）的最大承诺<br><a name="stt"></a></p>
+<h3 id="STT"><a href="#STT" class="headerlink" title="STT"></a>STT</h3></li>
+<li><p><a href="https://github.com/mozilla/DeepSpeech" target="_blank" rel="noopener">Mozilla DeepSpeech</a> - 百度DeepSpeech架构的TensorFlow实现</p>
+</li>
+<li><a href="https://github.com/kaldi-asr/kaldi" target="_blank" rel="noopener">Kaldi</a></li>
+<li><p><a href="https://github.com/cmusphinx/pocketsphinx" target="_blank" rel="noopener">PocketSphinx</a> - 使用HMM + GMM的轻量级语音识别引擎<br><a name="nlu"></a></p>
+<h3 id="NLU"><a href="#NLU" class="headerlink" title="NLU"></a>NLU</h3></li>
+<li><p><a href="https://github.com/RasaHQ/rasa_nlu" target="_blank" rel="noopener">Rasa NLU</a><br></p>
+</li>
+<li><a href="https://github.com/crownpku/Rasa_NLU_Chi" target="_blank" rel="noopener">Rasa NLU中文版</a><br></li>
+<li><p><a href="https://github.com/snipsco/snips-nlu" target="_blank" rel="noopener">Snips NLU</a> - 一个Python库，允许解析用自然语言编写的句子并提取结构化信息。<br><br><a name="tts"></a></p>
+<h3 id="TTS"><a href="#TTS" class="headerlink" title="TTS"></a>TTS</h3></li>
+<li><p><a href="https://github.com/MycroftAI/mimic" target="_blank" rel="noopener">Mimic</a> - Mycroft的TTS引擎，基于CMU的Flite（Festival Lite）</p>
+</li>
+<li><a href="https://github.com/marytts/marytts" target="_blank" rel="noopener">manytts</a> - 一个用纯java编写的开源，多语言文本到语音合成系统</li>
+<li><a href="https://github.com/espeak-ng/espeak-ng" target="_blank" rel="noopener">espeak-ng</a> - 一种支持99种语言和口音的开源语音合成器。</li>
+<li><a href="https://github.com/hgneng/ekho" target="_blank" rel="noopener">ekho</a> - 中文文本转语音引擎</li>
+<li><p>WaveNet，Tacotron 2<br><a name="audio-processing"></a></p>
+<h3 id="音频处理"><a href="#音频处理" class="headerlink" title="音频处理"></a>音频处理</h3></li>
+<li><p>声学回声消除<br></p>
+</li>
+<li><a href="https://github.com/xiph/speexdsp" target="_blank" rel="noopener">SpeexDSP</a>，它的python绑定<a href="https://respeaker.io/github.com/xiongyihui/speexdsp-python" target="_blank" rel="noopener">speexdsp-python</a><br></li>
+<li><a href="https://github.com/voice-engine/ec" target="_blank" rel="noopener">EC</a> - Echo Cancelation Daemon基于SpeexDSP AEC，用于Raspberry Pi或运行Linux的其他设备。<br></li>
+<li>到达方向（DOA） - 最常用的DOA算法是GCC-PHAT<br></li>
+<li><a href="https://github.com/xiongyihui/tdoa" target="_blank" rel="noopener">TDOA</a><br></li>
+<li><a href="https://github.com/introlab/odas" target="_blank" rel="noopener">odas</a> - ODAS代表Open embeddeD Audition System。这是一个专门用于执行声源定位，跟踪，分离和后置过滤的库。ODAS完全采用C编码，具有更高的可移植性，并经过优化，可在低成本嵌入式硬件上轻松运行。ODAS是免费和开源的。<br></li>
+<li><a href="https://github.com/search?utf8=%E2%9C%93&amp;q=beamforming&amp;type=" target="_blank" rel="noopener">波束成形</a><br></li>
+<li><a href="https://github.com/xanguera/BeamformIt" target="_blank" rel="noopener">BeamformIt</a> - 滤波和求和波束形成<br></li>
+<li>CGMM Beamforming - <a href="https://github.com/funcwj/CGMM-MVDR" target="_blank" rel="noopener">参考实现</a></li>
+<li>MVDR波束成形</li>
+<li>GSC波束成形<br></li>
+<li>语音活动检测<br></li>
+<li>WebRTC VAD，<a href="https://github.com/wiseman/py-webrtcvad" target="_blank" rel="noopener">py-webrtcvad</a><br></li>
+<li>DNN VAD<br></li>
+<li>噪音抑制<br></li>
+<li><p>NS的WebRTC音频处理，<a href="https://github.com/xiongyihui/python-webrtc-audio-processing" target="_blank" rel="noopener">python-webrtc-音频处理</a><br><br><a name="audio-io"></a></p>
+<h3 id="音频I-O"><a href="#音频I-O" class="headerlink" title="音频I / O."></a>音频I / O.</h3></li>
+<li><p>PortAudio，pyaudio</p>
+</li>
+<li><a href="https://github.com/andrewrk/libsoundio" target="_blank" rel="noopener">libsoundio</a></li>
+<li>ALSA</li>
+<li>的PulseAudio</li>
+<li><a href="https://github.com/PipeWire/pipewire" target="_blank" rel="noopener">Pipewire</a></li>
+</ul>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/05/08/yuque/制作智能音箱/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-yuque/Snips Voice Platform" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -753,83 +892,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2019/04/26/yuque/如何在 Python 中使用 XGBoost 可视化梯度提升决策树/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/如何在 Python 中使用 XGBoost 调整决策树的数量和大小" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/26/yuque/如何在 Python 中使用 XGBoost 调整决策树的数量和大小/">如何在 Python 中使用 XGBoost 调整决策树的数量和大小</a>
-    </h1>
-  
-
-        
-        <a href="/2019/04/26/yuque/如何在 Python 中使用 XGBoost 调整决策树的数量和大小/" class="archive-article-date">
-  	<time datetime="2019-04-26T03:20:20.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-26</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><a href></a><br><a name="0a4ed112"></a></p>
-<h1 id="如何在-Python-中使用-XGBoost-调整决策树的数量和大小"><a href="#如何在-Python-中使用-XGBoost-调整决策树的数量和大小" class="headerlink" title="如何在 Python 中使用 XGBoost 调整决策树的数量和大小"></a>如何在 Python 中使用 XGBoost 调整决策树的数量和大小</h1><blockquote>
-<p>原文： <a href="https://machinelearningmastery.com/tune-number-size-decision-trees-xgboost-python/" target="_blank" rel="noopener">https://machinelearningmastery.com/tune-number-size-decision-trees-xgboost-python/</a></p>
-</blockquote>
-<p>梯度提升包括顺序创建和添加决策树，每个尝试纠正前面的学习器的错误。</p>
-<p>这提出了一个问题：在梯度提升模型中要配置多少树（弱学习器或估计者）以及每棵树应该有多大。</p>
-<p>在这篇文章中，您将了解如何设计系统实验来选择决策树的数量和大小以用于您的问题。</p>
-<p>阅读这篇文章后你会知道：</p>
-<ul>
-<li>如何评估向 XGBoost 模型添加更多决策树的效果。</li>
-<li>如何评估为 XGBoost 模型创建更大的决策树的效果。</li>
-<li>如何调查问题树的数量和深度之间的关系。</li>
-</ul>
-        
-          <a class="article-more-a" href="/2019/04/26/yuque/如何在 Python 中使用 XGBoost 调整决策树的数量和大小/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/04/26/yuque/如何在 Python 中使用 XGBoost 调整决策树的数量和大小/">展开全文 >></a>
         </p>
       
 
