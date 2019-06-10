@@ -18,7 +18,7 @@
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1552902588026-b01dacd8-8d16-4298-b2d9-9237f34d8543.png#align=left&display=inline&height=462&name=1_HcQRb-GgmYnWRF15yobCOw.png&originHeight=619&originWidth=1000&size=293525&status=done&width=746">
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1552902767067-19085e70-7bf9-4058-84d8-cc174302f2af.png#align=left&display=inline&height=304&name=1_l-aJ47luaPs9wpj_FTlMSQ.png&originHeight=408&originWidth=1000&size=413381&status=done&width=746">
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1552902810496-c3ddc7d0-c9e2-4e34-823f-54fbc0e9966f.png#align=left&display=inline&height=512&name=1_zcpriTNz1FM6kWUpQNr_RA.png&originHeight=686&originWidth=1000&size=282197&status=done&width=746">
-<meta property="og:updated_time" content="2019-05-15T04:03:36.269Z">
+<meta property="og:updated_time" content="2019-06-10T10:23:33.534Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spark上的实际Python工作负载：独立群集">
 <meta name="twitter:description" content="关于在Spark上运行Python有无数文章和论坛帖子，但大多数人认为要提交的工作包含在一个.py文件中：spark-submit wordcount.py - 完成！如果你的Python程序不仅仅是一个脚本怎么办？也许它为Spark生成动态SQL来执行，或使用Spark的输出刷新模型。随着您...">
@@ -199,8 +199,8 @@
 <h4 id="spark-submit，客户端和集群模式"><a href="#spark-submit，客户端和集群模式" class="headerlink" title="spark-submit，客户端和集群模式"></a>spark-submit，客户端和集群模式</h4><ul>
 <li>Spark支持各种<a href="https://spark.apache.org/docs/latest/cluster-overview.html#cluster-manager-types" target="_blank" rel="noopener">集群管理器</a>：独立（即内置于Spark），Hadoop的YARN，Mesos，Kubernetes，所有这些都控制着工作负载在一组资源上的运行方式。</li>
 <li><code>spark-submit</code>是唯一与所有集群管理器一致的接口。对于Python应用程序，<code>spark-submit</code>可以在需要时上载和暂存您提供的所有依赖项，如.py，.zip或.egg文件。</li>
-<li>在<strong><em>客户端</em></strong><em>模式下</em>驱动程序_）将在运行的同一主机上<code>spark-submit</code>运行。确保此类主机靠近工作节点以减少网络延迟符合您的最佳利益。</li>
-<li>在<strong>_集群_</strong><em>模式下</em>驱动程序_某个_工作节点并从其运行。从远程主机提交作业时，这很有用。从Spark 2.4独立开始，Spark 2.4.0集群模式不是一个选项。</li>
+<li>在<strong><em>客户端</em></strong><em>模式下</em>，您的Python程序（即<em>驱动程序</em>）将在运行的同一主机上<code>spark-submit</code>运行。确保此类主机靠近工作节点以减少网络延迟符合您的最佳利益。</li>
+<li>在<strong>_集群_</strong><em>模式下</em>，您的Python程序（即<em>驱动程序</em>）和依赖项将上载到_某个_工作节点并从其运行。从远程主机提交作业时，这很有用。从Spark 2.4独立开始，Spark 2.4.0集群模式不是一个选项。</li>
 <li>或者，可以<code>spark-submit</code>通过<code>SparkSession</code>在Python应用程序中配置连接到群集来绕过。这需要正确的配置和匹配的PySpark二进制文件。您的Python应用程序将在<em>客户端模式下</em>有效运行：它将从您启动它的主机上运行。</li>
 </ul>
 <p>以下部分描述了几种部署方案，以及每种方案中需要的配置。</p>

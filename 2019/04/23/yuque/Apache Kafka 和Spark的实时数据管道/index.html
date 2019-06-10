@@ -23,7 +23,7 @@
 <meta property="og:image" content="https://www.keisan.io/knowledgebase/real-time-data-pipeline-flume-kafka-spark/kafka-overview.png#align=left&display=inline&height=450&originHeight=450&originWidth=535&status=done&width=535">
 <meta property="og:image" content="https://www.keisan.io/knowledgebase/real-time-data-pipeline-flume-kafka-spark/spark-cluster-overview.png#align=left&display=inline&height=286&originHeight=286&originWidth=596&status=done&width=596">
 <meta property="og:image" content="https://www.keisan.io/knowledgebase/real-time-data-pipeline-flume-kafka-spark/spark-streaming-flow.png#align=left&display=inline&height=168&originHeight=239&originWidth=1071&status=done&width=752">
-<meta property="og:updated_time" content="2019-05-15T04:03:36.225Z">
+<meta property="og:updated_time" content="2019-06-10T10:23:33.474Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Apache Kafka 和Spark的实时数据管道">
 <meta name="twitter:description" content="Apache Kafka和Spark的实时数据管道平台工程Jillur Quddus 2017年6月7日如何构建数据管道以实时处理基于事件的数据&amp;amp;lt;!--more--&amp;amp;gt;&amp;amp;lt;!--more--&amp;amp;gt;2012年，我第一次听到“Hadoop”和“大数据”这两个词。当时，这两个词几乎是...">
@@ -217,7 +217,7 @@
 <p><strong>Apache Spark</strong><br>我们现在已经设置了一个Flume Agent来使用我们的Twitter应用程序收集推文，将这些推文发布到Kafka主题，最后使用来自Kafka频道的推文并将它们下载到Logger或HDFS。本文的最后一部分将介绍如何使用Spark Streaming API将Apache Spark连接到Kafka以使用Kafka的推文。（我的下一篇文章将描述我们如何使用Apache Spark执行一些分析并使用我们的实时推文流构建预测模型！）<br><a href="https://spark.apache.org/" target="_blank" rel="noopener">Apache Spark</a>是一个大数据处理引擎和集群计算框架，能够批量和实时地执行大规模数据处理和分析，包括机器学习。<a href="https://spark.apache.org/streaming/" target="_blank" rel="noopener">Spark Streaming</a>扩展了核心Spark API，允许我们在实时流数据流上重复使用相同的代码进行批处理，从而允许我们执行实时数据处理和分析。与往常一样，<a href="https://spark.apache.org/docs/latest/programming-guide.html" target="_blank" rel="noopener">Apache Spark</a>官方<a href="https://spark.apache.org/docs/latest/programming-guide.html" target="_blank" rel="noopener">文档</a>是开始熟悉Apache Spark的最佳场所。</p>
 <p><img src="https://www.keisan.io/knowledgebase/real-time-data-pipeline-flume-kafka-spark/spark-cluster-overview.png#align=left&amp;display=inline&amp;height=286&amp;originHeight=286&amp;originWidth=596&amp;status=done&amp;width=596" alt></p>
 <ul>
-<li><strong>弹性分布式数据集</strong> - 弹性分布式数据集（RDR）是Spark中基本的内存数据结构 - 它们是一个不可变的分布式对象集合，分为跨集群中节点的逻辑分区。Spark隐藏了底层分区，因此可以暴露更高级别的API，开发人员可以使用Java，Scala或Python对RDD（如地图和过滤）执行典型操作，而无需担心（过多！）底层框架。RDD存储在内存中并且是不可变的 - RDD上的_转换_操作<em>懒惰的</em>意味着结果不是立即计算的，仅在需要操作时计算。RDD也是可缓存的，这意味着数据可以持久保存到其他介质（例如磁盘），并且记录在Spark集群中进行分区和分布。RDD的设计部分是为了有效地运行迭代算法，例如机器学习和图算法，以及数据挖掘。</li>
+<li><strong>弹性分布式数据集</strong> - 弹性分布式数据集（RDR）是Spark中基本的内存数据结构 - 它们是一个不可变的分布式对象集合，分为跨集群中节点的逻辑分区。Spark隐藏了底层分区，因此可以暴露更高级别的API，开发人员可以使用Java，Scala或Python对RDD（如地图和过滤）执行典型操作，而无需担心（过多！）底层框架。RDD存储在内存中并且是不可变的 - RDD上的_转换<em>（例如地图）从现有数据集创建新数据集，并且</em>操作<em>返回值。所有变换都是</em>懒惰的_意味着结果不是立即计算的，仅在需要操作时计算。RDD也是可缓存的，这意味着数据可以持久保存到其他介质（例如磁盘），并且记录在Spark集群中进行分区和分布。RDD的设计部分是为了有效地运行迭代算法，例如机器学习和图算法，以及数据挖掘。</li>
 <li><strong>Spark上下文</strong> - Spark上下文是Spark应用程序的核心，允许它通过资源管理器（如Mesos，YARN或Apache Spark自己的集群管理器）访问Spark集群。</li>
 <li><strong>驱动程序</strong> - Spark Driver是一个程序，它声明了对RDD数据进行的一系列转换和操作，并为Spark应用程序托管Spark上下文。驱动程序将Spark应用程序拆分为任务，然后由驱动程序调度和协调。</li>
 <li><strong>Workers</strong> - Workers / Slaves是Spark实例，它执行线程池中驱动程序安排的任务。</li>
