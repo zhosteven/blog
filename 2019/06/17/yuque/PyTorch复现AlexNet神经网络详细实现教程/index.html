@@ -6,18 +6,21 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://www.zhos.me">
-  <title>Archives: 2019 | A+</title>
+  <title>PyTorch复现AlexNet神经网络详细实现教程 | A+</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="研究性材料(算法)">
-<meta property="og:type" content="website">
-<meta property="og:title" content="A+">
-<meta property="og:url" content="http://www.zhos.me/archives/2019/page/4/index.html">
+  <meta name="description" content="前言AlexNet是由Alex Krizhevsky等人于2012年提出的一个开创性的卷积神经网络。本文参考Alex的两篇论文ImageNet Classification with Deep Convolutional以及One weird trick for parallelizing c...">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PyTorch复现AlexNet神经网络详细实现教程">
+<meta property="og:url" content="http://www.zhos.me/2019/06/17/yuque/PyTorch复现AlexNet神经网络详细实现教程/index.html">
 <meta property="og:site_name" content="A+">
-<meta property="og:description" content="研究性材料(算法)">
+<meta property="og:description" content="前言AlexNet是由Alex Krizhevsky等人于2012年提出的一个开创性的卷积神经网络。本文参考Alex的两篇论文ImageNet Classification with Deep Convolutional以及One weird trick for parallelizing c...">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1560759120175-5b8a9a7f-27de-4036-92a2-a0489c43ee00.png#align=left&display=inline&height=530&name=1_qyc21qM0oxWEuRaj-XJKcw.png&originHeight=530&originWidth=1536&size=77988&status=done&width=1536">
+<meta property="og:updated_time" content="2019-06-17T08:16:08.218Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="A+">
-<meta name="twitter:description" content="研究性材料(算法)">
+<meta name="twitter:title" content="PyTorch复现AlexNet神经网络详细实现教程">
+<meta name="twitter:description" content="前言AlexNet是由Alex Krizhevsky等人于2012年提出的一个开创性的卷积神经网络。本文参考Alex的两篇论文ImageNet Classification with Deep Convolutional以及One weird trick for parallelizing c...">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1560759120175-5b8a9a7f-27de-4036-92a2-a0489c43ee00.png#align=left&display=inline&height=530&name=1_qyc21qM0oxWEuRaj-XJKcw.png&originHeight=530&originWidth=1536&size=77988&status=done&width=1536">
   
     <link rel="alternative" href="/atom.xml" title="A+" type="application/atom+xml">
   
@@ -147,295 +150,192 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-yuque/PyTorch复现AlexNet神经网络详细实现教程" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      PyTorch复现AlexNet神经网络详细实现教程
+    </h1>
+  
+
+        
+        <a href="/2019/06/17/yuque/PyTorch复现AlexNet神经网络详细实现教程/" class="archive-article-date">
+  	<time datetime="2019-06-17T08:11:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-06-17</time>
+</a>
+        
+      </header>
     
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><a name="YFzJM"></a></p>
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>AlexNet是由Alex Krizhevsky等人于2012年提出的一个开创性的卷积神经网络。本文参考Alex的两篇论文<a href="https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf" target="_blank" rel="noopener">ImageNet Classification with Deep Convolutional</a>以及<a href="https://arxiv.org/abs/1404.5997" target="_blank" rel="noopener">One weird trick for parallelizing convolutional neural networks</a>，详细介绍了模型了复现步骤和其PyTorch的实现代码。这里前者我将其称为AlextNetV1, 后者称为AlexNetV2。<br><a id="more"></a><br><!--more--><br><a name="c00xD"></a></p>
+<h1 id="完整代码"><a href="#完整代码" class="headerlink" title="完整代码"></a>完整代码</h1><p>完整代码，训练日志和模型文件请参考：<br><a href="https://github.com/ethanyanjiali/deep-vision/tree/master/CNNs/imagenet-2012/pytorch/#alexnet" target="_blank" rel="noopener">https://github.com/ethanyanjiali/deep-vision/tree/master/CNNs/imagenet-2012/pytorch#alexnet</a><br><a name="GernJ"></a></p>
+<h1 id="网络结构"><a href="#网络结构" class="headerlink" title="网络结构"></a>网络结构</h1><p><a name="HmEf5"></a></p>
+<h2 id="AlexNetV1"><a href="#AlexNetV1" class="headerlink" title="AlexNetV1"></a>AlexNetV1</h2><p>由于当年GPU资源不足，V1采取了双塔的方案。具体双塔的意思是将一张图像分割为两部分，并使用两组GPU分别对其不同部分提取特征，然后再将结果整合起来。不过由于目前单个GPU的容量完全足以支撑起整个模型，本文采取了单塔方案进行复现，并因此将参数提高了一倍。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1560759120175-5b8a9a7f-27de-4036-92a2-a0489c43ee00.png#align=left&amp;display=inline&amp;height=530&amp;name=1_qyc21qM0oxWEuRaj-XJKcw.png&amp;originHeight=530&amp;originWidth=1536&amp;size=77988&amp;status=done&amp;width=1536" alt="1_qyc21qM0oxWEuRaj-XJKcw.png"><br>AlexNet1的结构可谓是教科书一般的卷积深度神经网络：卷积层，激活层，正则化层加上池化层四层一组构成一个特征提取单元，多个特征提取单元的串联构成一个特征提取器，或者叫做编码器（Encoder）。该特征提取器的目标就是将原始的RGB数据提取成一个特征向量。在特征提取器之后，由多层全连接层（Fully Conntected Layer, Dense Layer)配合随机选择层（Dropout）又构成一个分类单元，多个分类单元又可以组成一个分类器。分类器的作用是将特征向量最终映射到目标训练值上。这奠定了之后很多神经网络的基础结构。虽然不同的网络会对某一层稍有不同的改动，比如改用Batch Normalization或者Average Pooling，但是万变不离其宗。下面贴出完整的网络结构代码，然后我再对每一部分详细解释：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># coding: utf-8</span></span><br><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br><span class="line"></span><br><span class="line"><span class="comment"># [1] ImageNet Classification with Deep Convolutional Neural Networks</span></span><br><span class="line"><span class="comment"># https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf</span></span><br><span class="line"><span class="comment"># [2] http://cs231n.github.io/convolutional-networks</span></span><br><span class="line"><span class="comment"># [3] https://prateekvjoshi.com/2016/04/05/what-is-local-response-normalization-in-convolutional-neural-networks/</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">AlexNetV1</span><span class="params">(nn.Module)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        super(AlexNetV1, self).__init__()</span><br><span class="line">        <span class="comment"># formula</span></span><br><span class="line">        <span class="comment"># [conv layer]</span></span><br><span class="line">        <span class="comment"># output_size = (input_size - kernel_size + 2 * padding) / stride + 1</span></span><br><span class="line">        <span class="comment"># padding = ((output_size - 1) * stride) + kernel_size - input_size) / 2</span></span><br><span class="line">        <span class="comment"># [pooling layer]</span></span><br><span class="line">        <span class="comment"># output_size = (input_size - kernel_size) / stride + 1</span></span><br><span class="line">        <span class="comment"># where input_size and output_size are the square image side length</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        self.features = nn.Sequential(</span><br><span class="line">            <span class="comment"># "The first convolutional layer filters the 224×224×3 input image with</span></span><br><span class="line">            <span class="comment"># 96 kernels of size 11×11×3 with a stride of 4 pixels."[1]</span></span><br><span class="line">            <span class="comment"># Also from [1]Fig.2, next layer is 55x55x48, output channels is 48. (I use 96=2x48 here)</span></span><br><span class="line">            <span class="comment"># hence padding = ((55 - 1) * 4 + 11 - 224) / 2 = 2</span></span><br><span class="line">            <span class="comment"># to verify, output = (224 - 11 + 2 * 2) / 4 + 1 = 55</span></span><br><span class="line">            nn.Conv2d(<span class="number">3</span>, <span class="number">96</span>, <span class="number">11</span>, stride=<span class="number">4</span>, padding=<span class="number">2</span>),</span><br><span class="line"></span><br><span class="line">            <span class="comment"># The ReLU non-linearity is applied to the output of every convolutional</span></span><br><span class="line">            <span class="comment"># and fully-connected layer.</span></span><br><span class="line">            nn.ReLU(inplace=<span class="literal">True</span>),</span><br><span class="line"></span><br><span class="line">            <span class="comment"># "The second convolutional layer takes as input the (response-normalized</span></span><br><span class="line">            <span class="comment"># and pooled) output of the first convolutional layer"</span></span><br><span class="line">            nn.LocalResponseNorm(<span class="number">96</span>),</span><br><span class="line"></span><br><span class="line">            <span class="comment"># From Fig.2 in [1], there's a maxpooling layer after first conv layer</span></span><br><span class="line">            <span class="comment"># Also from Fig.2 in [1], the pooling reduces dimension from 55x55 to 27x27</span></span><br><span class="line">            <span class="comment"># hence it's likely that they uses overlapping pooling kernel=3, stride=2</span></span><br><span class="line">            <span class="comment"># to verify, output_size = (55 - 3) / 2 + 1 = 27</span></span><br><span class="line">            nn.MaxPool2d(<span class="number">3</span>, <span class="number">2</span>),</span><br><span class="line"></span><br><span class="line">            <span class="comment"># "The second convolutional layer takes ... with 256 kernels of size 5 × 5 × 48."[1]</span></span><br><span class="line">            <span class="comment"># From Fig.2 in [1], output channels is 128. (I use 256=2x128 here)</span></span><br><span class="line">            <span class="comment"># To keep dimension same as 27, we can infer that stride = 2, padding = 1</span></span><br><span class="line">            <span class="comment"># output_size = (27 - 5 + 2 * 2) / 1 + 1 = 27</span></span><br><span class="line">            nn.Conv2d(<span class="number">96</span>, <span class="number">256</span>, <span class="number">5</span>, stride=<span class="number">1</span>, padding=<span class="number">2</span>),</span><br><span class="line">            nn.ReLU(inplace=<span class="literal">True</span>),</span><br><span class="line"></span><br><span class="line">            <span class="comment"># "The third convolutional layer has 384 kernels of size 3 × 3 ×</span></span><br><span class="line">            <span class="comment"># 256 connected to the (normalized, pooled) outputs of the second convolutional layer"[1]</span></span><br><span class="line">            <span class="comment"># Since the output of second layer is 256, the normalized layer input should be 256 here as well</span></span><br><span class="line">            nn.LocalResponseNorm(<span class="number">256</span>),</span><br><span class="line"></span><br><span class="line">            <span class="comment"># From Fig.2 in [1], there's a maxpooling layer after second conv layer</span></span><br><span class="line">            <span class="comment"># Also from Fig.2 in [1], the pooling reduces dimension from 27x27 to 13x13</span></span><br><span class="line">            <span class="comment"># similar to last one, output_size = (27 - 3) / 2 + 1 = 13</span></span><br><span class="line">            nn.MaxPool2d(<span class="number">3</span>, <span class="number">2</span>),</span><br><span class="line"></span><br><span class="line">            <span class="comment"># "The third, fourth, and fifth convolutional layers are connected to one another</span></span><br><span class="line">            <span class="comment"># without any intervening pooling or normalization layers"[1]</span></span><br><span class="line">            <span class="comment"># Also from Fig.2 in [1], next layer is 13x13x192, and it uses a kernel size of 3.</span></span><br><span class="line">            <span class="comment"># (I use 384=2x192 here)</span></span><br><span class="line">            <span class="comment"># to keep dimension same as 13, we can infer that stride = 1, padding = 1</span></span><br><span class="line">            <span class="comment"># output_size = (13 - 3 + 2 * 1) / 1 + 1 = 13</span></span><br><span class="line">            nn.Conv2d(<span class="number">256</span>, <span class="number">384</span>, <span class="number">3</span>, stride=<span class="number">1</span>, padding=<span class="number">1</span>),</span><br><span class="line">            nn.ReLU(inplace=<span class="literal">True</span>),</span><br><span class="line"></span><br><span class="line">            <span class="comment"># same as last conv layer</span></span><br><span class="line">            <span class="comment"># output_size = (13 - 3 + 2 * 1) / 1 + 1 = 13</span></span><br><span class="line">            <span class="comment"># (I use 384=2x192 here)</span></span><br><span class="line">            nn.Conv2d(<span class="number">384</span>, <span class="number">384</span>, <span class="number">3</span>, stride=<span class="number">1</span>, padding=<span class="number">1</span>),</span><br><span class="line">            nn.ReLU(inplace=<span class="literal">True</span>),</span><br><span class="line"></span><br><span class="line">            <span class="comment"># From Fig.2 in [1], the output channels drop to 128</span></span><br><span class="line">            <span class="comment"># (I use 256=2x128 here)</span></span><br><span class="line">            <span class="comment"># output_size = (13 - 3 + 2 * 1) / 1 + 1 = 13</span></span><br><span class="line">            nn.Conv2d(<span class="number">384</span>, <span class="number">256</span>, <span class="number">3</span>, stride=<span class="number">1</span>, padding=<span class="number">1</span>),</span><br><span class="line">            nn.ReLU(inplace=<span class="literal">True</span>),</span><br><span class="line"></span><br><span class="line">            <span class="comment"># there's another pooling layer after 5th conv layer from Fig.2 in [1]</span></span><br><span class="line">            <span class="comment"># output_size = (13 - 3) / 2 + 1 = 6</span></span><br><span class="line">            nn.MaxPool2d(<span class="number">3</span>, <span class="number">2</span>),</span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line">        self.classifier = nn.Sequential(</span><br><span class="line">            <span class="comment"># "We use dropout in the first two fully-connected layers of Figure 2.</span></span><br><span class="line">            <span class="comment"># Without dropout, our network exhibits substantial overfitting.</span></span><br><span class="line">            <span class="comment"># Dropout roughly doubles the number of iterations required to converge."[1]</span></span><br><span class="line">            <span class="comment"># "...consists of setting to zero the output of each hidden neuron with probability 0.5"[1]</span></span><br><span class="line">            nn.Dropout(p=<span class="number">0.5</span>),</span><br><span class="line"></span><br><span class="line">            <span class="comment"># From Fig.2 in [1], the frist FC layer has 4096 (2x2048) activations</span></span><br><span class="line">            nn.Linear(<span class="number">6</span> * <span class="number">6</span> * <span class="number">256</span>, <span class="number">4096</span>),</span><br><span class="line">            nn.ReLU(inplace=<span class="literal">True</span>),</span><br><span class="line"></span><br><span class="line">            nn.Dropout(p=<span class="number">0.5</span>),</span><br><span class="line"></span><br><span class="line">            <span class="comment"># From Fig.2 in [1], the second FC layer also has 4096 activations</span></span><br><span class="line">            nn.Linear(<span class="number">4096</span>, <span class="number">4096</span>),</span><br><span class="line">            nn.ReLU(inplace=<span class="literal">True</span>),</span><br><span class="line"></span><br><span class="line">            <span class="comment"># "The output of the last fully-connected layer is fed to a 1000-way softmax which produces</span></span><br><span class="line">            <span class="comment"># a distribution over the 1000 class labels."[1]</span></span><br><span class="line">            nn.Linear(<span class="number">4096</span>, <span class="number">1000</span>),</span><br><span class="line">            <span class="comment"># There's no softmax here because we use CrossEntropyLoss which already includes Softmax</span></span><br><span class="line">            <span class="comment"># https://discuss.pytorch.org/t/vgg-output-layer-no-softmax/9273/5</span></span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span><span class="params">(self, x)</span>:</span></span><br><span class="line">        x = self.features(x)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># flatten the output from conv layers, but keep batch size</span></span><br><span class="line">        x = x.view(x.size(<span class="number">0</span>), <span class="number">6</span> * <span class="number">6</span> * <span class="number">256</span>)</span><br><span class="line"></span><br><span class="line">        x = self.classifier(x)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> x</span><br></pre></td></tr></table></figure>
+<p>在<code>init</code>函数中，我们定好需要使用的网络模块，然后再在<code>forward</code>函数中定义他们的调用顺序。PyTorch通过python的执行顺序来动态定义图，相比TensorFlow简单了许多。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">self.features = nn.Sequential(</span><br><span class="line">    nn.Conv2d(<span class="number">3</span>, <span class="number">96</span>, <span class="number">11</span>, stride=<span class="number">4</span>, padding=<span class="number">2</span>),</span><br><span class="line">    nn.ReLU(inplace=<span class="literal">True</span>),</span><br><span class="line">    nn.LocalResponseNorm(<span class="number">96</span>),</span><br><span class="line">    nn.MaxPool2d(<span class="number">3</span>, <span class="number">2</span>),</span><br><span class="line">    nn.Conv2d(<span class="number">96</span>, <span class="number">256</span>, <span class="number">5</span>, stride=<span class="number">1</span>, padding=<span class="number">2</span>),</span><br><span class="line">    nn.ReLU(inplace=<span class="literal">True</span>),</span><br><span class="line">    nn.LocalResponseNorm(<span class="number">256</span>),</span><br><span class="line">    nn.MaxPool2d(<span class="number">3</span>, <span class="number">2</span>),</span><br><span class="line">    nn.Conv2d(<span class="number">256</span>, <span class="number">384</span>, <span class="number">3</span>, stride=<span class="number">1</span>, padding=<span class="number">1</span>),</span><br><span class="line">    nn.ReLU(inplace=<span class="literal">True</span>),</span><br><span class="line">    nn.Conv2d(<span class="number">384</span>, <span class="number">384</span>, <span class="number">3</span>, stride=<span class="number">1</span>, padding=<span class="number">1</span>),</span><br><span class="line">    nn.ReLU(inplace=<span class="literal">True</span>),</span><br><span class="line">    nn.Conv2d(<span class="number">384</span>, <span class="number">256</span>, <span class="number">3</span>, stride=<span class="number">1</span>, padding=<span class="number">1</span>),</span><br><span class="line">    nn.ReLU(inplace=<span class="literal">True</span>),</span><br><span class="line">    nn.MaxPool2d(<span class="number">3</span>, <span class="number">2</span>),</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>这里我们可以清晰的看见，整个网络有两大部分，<code>features</code>就是特征提取器，<code>classifier</code>就是分类器。这里参数的定义都是按照文中所给参数x2 （由于双塔变单塔）。如上，在features部分，参考论文中图2的展示，每一个卷积层后都使用ReLu非线性函数。按照作者的意思，前两个卷积层后还附带LRN以提高网络性能。该网络先由一个11×11的卷积层开始，接着一个池化层降低维数，再用一个5×5的卷积层和一个池化层。之后，接上三个过滤器为3×3的小卷积层，并再次池化，特征提取部分便完成了。这里基本的思路是底层卷积层用大卷积核提取更广阔的范围，高层卷积层用小卷积核来保证细节的提取。然而在后世的网络中我们发现，小卷积核其实更有效率。AlexNet相比之后的各类神经网络全是不能算是深度神经网络，但启发了之后VGG和GoogLeNet团队继续加深网络的想法。<br>特征提取完毕后，我们使用提取的特征输入全连接层进行分类</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">self.classifier = nn.Sequential(</span><br><span class="line">    nn.Dropout(p=<span class="number">0.5</span>),</span><br><span class="line">    nn.Linear(<span class="number">6</span> * <span class="number">6</span> * <span class="number">256</span>, <span class="number">4096</span>),</span><br><span class="line">    nn.ReLU(inplace=<span class="literal">True</span>),</span><br><span class="line">    nn.Dropout(p=<span class="number">0.5</span>),</span><br><span class="line">    nn.Linear(<span class="number">4096</span>, <span class="number">4096</span>),</span><br><span class="line">    nn.ReLU(inplace=<span class="literal">True</span>),</span><br><span class="line">    nn.Linear(<span class="number">4096</span>, <span class="number">1000</span>),</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>这里作者在每个线性层之前都加入了Dropout层，通过随机关闭一些Activation通道，来达到regularization降低过度拟合的风险。第一个线性层的输入是上面我们特征提取的输出，而之后都是4096。最后一个线性层输出1000个分类。这里并没有加入Softmax，因为之后我们的Optimizer将添加这一部分。<br>前向传播部分就非常简单了，将我们之前定义好的特征提取和分类器连接起来就好了，只是中间需要将特征提取的输出展开铺平，方便线性层使用。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">forward</span><span class="params">(self, x)</span>:</span></span><br><span class="line">    x = self.features(x)</span><br><span class="line">    x = x.view(x.size(<span class="number">0</span>), <span class="number">6</span> * <span class="number">6</span> * <span class="number">256</span>)</span><br><span class="line">    x = self.classifier(x)</span><br><span class="line">    <span class="keyword">return</span> x</span><br></pre></td></tr></table></figure>
+<p><a name="6JJVq"></a></p>
+<h2 id="AlexNetV2"><a href="#AlexNetV2" class="headerlink" title="AlexNetV2"></a>AlexNetV2</h2><p>在V1出世不久，Alex又提出了一个改进版网络，改进版同样取消了双塔的操作，合并到单塔，同时调整了一些参数以提高单GPU下网络的性能。这里我将其叫做AlexNetV2.<br>首先贴出完整网络结构代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># coding: utf-8</span></span><br><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br><span class="line"><span class="keyword">import</span> torch.nn.functional <span class="keyword">as</span> Func</span><br><span class="line"><span class="comment"># can use the below import should you choose to initialize the weights of your Net</span></span><br><span class="line"><span class="keyword">import</span> torch.nn.init <span class="keyword">as</span> Init</span><br><span class="line"></span><br><span class="line"><span class="comment"># [1] One weird trick for parallelizing convolutional neural networks https://arxiv.org/pdf/1404.5997.pdf</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">AlexNetV2</span><span class="params">(nn.Module)</span>:</span></span><br><span class="line">    <span class="string">'''</span></span><br><span class="line"><span class="string">    This implements the network from the second version of AlexNet</span></span><br><span class="line"><span class="string">    '''</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        super(AlexNetV2, self).__init__()</span><br><span class="line">        <span class="comment"># "In detail, the single-column model has 64, 192, 384, 384, 256 filters</span></span><br><span class="line">        <span class="comment"># in the five convolutional layers, respectivel"[1]</span></span><br><span class="line">        <span class="comment"># "It has the same number of layers as the two-tower model, and the</span></span><br><span class="line">        <span class="comment"># (x, y) map dimensions in each layer are equivalent to</span></span><br><span class="line">        <span class="comment"># the (x, y) map dimensions in the two-tower model.</span></span><br><span class="line">        <span class="comment"># The minor difference in parameters and connections</span></span><br><span class="line">        <span class="comment"># arises from a necessary adjustment in the number of</span></span><br><span class="line">        <span class="comment"># kernels in the convolutional layers, due to the unrestricted</span></span><br><span class="line">        <span class="comment"># layer-to-layer connectivity in the single-tower model."[1]</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># According to the above, I just need to change the # of output channels</span></span><br><span class="line">        <span class="comment"># Please refer to ./alexnet1 for detailed calculation</span></span><br><span class="line">        self.features = nn.Sequential(</span><br><span class="line">            nn.Conv2d(<span class="number">3</span>, <span class="number">64</span>, <span class="number">11</span>, stride=<span class="number">4</span>, padding=<span class="number">2</span>),</span><br><span class="line">            nn.ReLU(inplace=<span class="literal">True</span>),</span><br><span class="line">            <span class="comment"># Later in the VGG paper, it demonstrated that LRN is not necessary</span></span><br><span class="line">            <span class="comment"># Hence most of AlexNet implementation doesn't include LRN</span></span><br><span class="line">            <span class="comment"># However, for study purpose, I still added this layer</span></span><br><span class="line">            nn.LocalResponseNorm(<span class="number">64</span>),</span><br><span class="line">            nn.MaxPool2d(<span class="number">3</span>, <span class="number">2</span>),</span><br><span class="line">            nn.Conv2d(<span class="number">64</span>, <span class="number">192</span>, <span class="number">5</span>, stride=<span class="number">1</span>, padding=<span class="number">2</span>),</span><br><span class="line">            nn.ReLU(inplace=<span class="literal">True</span>),</span><br><span class="line">            nn.LocalResponseNorm(<span class="number">192</span>),</span><br><span class="line">            nn.MaxPool2d(<span class="number">3</span>, <span class="number">2</span>),</span><br><span class="line">            nn.Conv2d(<span class="number">192</span>, <span class="number">384</span>, <span class="number">3</span>, stride=<span class="number">1</span>, padding=<span class="number">1</span>),</span><br><span class="line">            nn.ReLU(inplace=<span class="literal">True</span>),</span><br><span class="line">            nn.Conv2d(<span class="number">384</span>, <span class="number">384</span>, <span class="number">3</span>, stride=<span class="number">1</span>, padding=<span class="number">1</span>),</span><br><span class="line">            nn.ReLU(inplace=<span class="literal">True</span>),</span><br><span class="line">            nn.Conv2d(<span class="number">384</span>, <span class="number">256</span>, <span class="number">3</span>, stride=<span class="number">1</span>, padding=<span class="number">1</span>),</span><br><span class="line">            nn.ReLU(inplace=<span class="literal">True</span>),</span><br><span class="line">            nn.MaxPool2d(<span class="number">3</span>, <span class="number">2</span>),</span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line">        self.classifier = nn.Sequential(</span><br><span class="line">            <span class="comment"># This part is same with ./alexnet 1 as mentioned above</span></span><br><span class="line">            nn.Dropout(p=<span class="number">0.5</span>),</span><br><span class="line">            nn.Linear(<span class="number">6</span> * <span class="number">6</span> * <span class="number">256</span>, <span class="number">4096</span>),</span><br><span class="line">            nn.ReLU(inplace=<span class="literal">True</span>),</span><br><span class="line">            nn.Dropout(p=<span class="number">0.5</span>),</span><br><span class="line">            nn.Linear(<span class="number">4096</span>, <span class="number">4096</span>),</span><br><span class="line">            nn.ReLU(inplace=<span class="literal">True</span>),</span><br><span class="line">            nn.Linear(<span class="number">4096</span>, <span class="number">1000</span>),</span><br><span class="line">            <span class="comment"># "Another difference is that instead of a softmax</span></span><br><span class="line">            <span class="comment"># final layer with multinomial logistic regression</span></span><br><span class="line">            <span class="comment"># cost, this model’s final layer has 1000 independent logistic</span></span><br><span class="line">            <span class="comment"># units, trained to minimize cross-entropy"[1]</span></span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span><span class="params">(self, x)</span>:</span></span><br><span class="line">        x = self.features(x)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># flatten the output from conv layers, but keep b∏atch size</span></span><br><span class="line">        x = x.view(x.size(<span class="number">0</span>), <span class="number">6</span> * <span class="number">6</span> * <span class="number">256</span>)</span><br><span class="line"></span><br><span class="line">        x = self.classifier(x)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> x</span><br></pre></td></tr></table></figure>
+<p>可以看出，基本的网络结构是和V1非常相似的，同样是5个卷积层和相应的一些LRN及Maxpooling池化层。在权重初始化部分也同样有相同的限制。<br><a name="67BRk"></a></p>
+<h1 id="训练代码"><a href="#训练代码" class="headerlink" title="训练代码"></a>训练代码</h1><p>这里贴出训练代码中关键部分，完整训练代码请参考文首的Github Repo中<code>train.py</code>。<br><a href="https://github.com/ethanyanjiali/deep-vision/tree/master/CNNs/imagenet-2012/pytorch#alexnet" target="_blank" rel="noopener">https://github.com/ethanyanjiali/deep-vision/tree/master/CNNs/imagenet-2012/pytorch#alexnet</a><br><a href="https://github.com/ethanyanjiali/deep-vision/tree/master/CNNs/imagenet-2012/pytorch/train.py#L26" target="_blank" rel="noopener">https://github.com/ethanyanjiali/deep-vision/tree/master/CNNs/imagenet-2012/pytorch/train.py#L26</a></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">transform = transforms.Compose([</span><br><span class="line">    <span class="comment"># "Therefore, we down-sampled the images to a fixed resolution of 256 × 256" alexnet1.[1]</span></span><br><span class="line">    Rescale(<span class="number">256</span>),</span><br><span class="line">    RandomHorizontalFlip(<span class="number">0.5</span>),</span><br><span class="line">    RandomCrop(<span class="number">224</span>),</span><br><span class="line">    ToTensor(),</span><br><span class="line">])</span><br><span class="line">batch_size = <span class="number">128</span></span><br><span class="line"><span class="comment"># instantiate the neural network</span></span><br><span class="line">net = AlexNetV1()</span><br><span class="line"><span class="comment"># define the loss function using CrossEntropyLoss</span></span><br><span class="line">criterion = nn.CrossEntropyLoss()</span><br><span class="line"><span class="comment"># define the params updating function using SGD</span></span><br><span class="line">optimizer = optim.SGD(</span><br><span class="line">    net.parameters(),</span><br><span class="line">    lr=<span class="number">0.01</span>,</span><br><span class="line">    momentum=<span class="number">0.9</span>,</span><br><span class="line">    weight_decay=<span class="number">0.0005</span>,</span><br><span class="line">)</span><br><span class="line">scheduler = optim.lr_scheduler.ReduceLROnPlateau(</span><br><span class="line">    optimizer,</span><br><span class="line">    factor=<span class="number">0.1</span>,</span><br><span class="line">    mode=<span class="string">"max"</span>,</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>在数据预处理<code>transform</code>部分，我首先将图片缩放到256的正方形，然后做了一些数据提升（Data augmentation）的处理，比如将图片随机水平方向翻转，并且在256的区域中随机取得大小为224×224的子区域用作训练。最后一步是将numpy数据转成PyTorch所要求的Tensor数据结构。数据提升看似简单，但实际训练中对训练效果有这至关重要的影响。<br>训练时，采用了mini-batch方式。batch大小我选了128，如果你不是使用16G GPU的话，需要加大或者减小这个数字，防止内存不够的情况。损失函数就是PyTorch自带的CrossEntropy，注意该函数已经包含了Softmax，所以不要在网络中重复添加，否则无法计算正确的loss。优化器部分就是经典的stochastic gradient descent，这里参数的定义也是按照论文中所述。学习率调整器（learing rate scheduler）部分是我后面加入的，一开始我是手动调整的，之后我使用了平原下降策略（ReduceLROnPlateau），在top1准确率10个epoch还未提升的情况下降学习率降为10%。<br><a name="7O2OQ"></a></p>
+<h1 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h1><p>AlexNet虽然在性能和体积上都不占优势，在实际生产环境中也很少使用，但其奠定了很多深度神经网络的经典结构，通过对AlexNet的学习，我们能够一瞥CNN历史的进程，对之后学习其他网络打下良好的基础。AlexNet中很多参数的选择也都是经验得来，并无太多理论支持，但是往往一个参数的不同就会导致结果大相径庭。比如网络结构中卷积核的大小，或者训练时学习率，这也体现了深度神经网络调参的重要性。</p>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/img/qrcode.png">
+                      <span class="reward-type">微信</span>
+                    </div>
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
       
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2019" class="archive-year">2019</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/04/26/yuque/通过在 Python 中使用 XGBoost 提前停止来避免过度拟合/" class="archive-article-date">
-  	<time datetime="2019-04-26T03:15:01.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-26</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/04/26/yuque/通过在 Python 中使用 XGBoost 提前停止来避免过度拟合/">通过在 Python 中使用 XGBoost 提前停止来避免过度拟合</a>
-    </h1>
-  
+      
 
-        <div class="article-info info-on-right">
-          
-          
+      
 
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://www.zhos.me/2019/06/17/yuque/PyTorch复现AlexNet神经网络详细实现教程/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/04/25/yuque/时间序列分类实践介绍（使用Python代码）/" class="archive-article-date">
-  	<time datetime="2019-04-25T09:48:43.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-25</time>
-</a>
+<nav id="article-nav">
+  
+  
+    <a href="/2019/06/10/yuque/在PyTorch中构建Faster RCNN的指南/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">在PyTorch中构建Faster RCNN的指南</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/04/25/yuque/时间序列分类实践介绍（使用Python代码）/">时间序列分类实践介绍（使用Python代码）</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
+        
+        
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#完整代码"><span class="toc-number">2.</span> <span class="toc-text">完整代码</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#网络结构"><span class="toc-number">3.</span> <span class="toc-text">网络结构</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#AlexNetV1"><span class="toc-number">3.1.</span> <span class="toc-text">AlexNetV1</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#AlexNetV2"><span class="toc-number">3.2.</span> <span class="toc-text">AlexNetV2</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#训练代码"><span class="toc-number">4.</span> <span class="toc-text">训练代码</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#结论"><span class="toc-number">5.</span> <span class="toc-text">结论</span></a></li></ol>
+                    </div>
+                </span>
+            </div>
         </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
+        
+    </div>
+</aside>
+
+
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/04/25/yuque/通过AdaBoost和Gradient Boosting提升/" class="archive-article-date">
-  	<time datetime="2019-04-25T08:34:43.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-25</time>
-</a>
-        </div>
-    	 
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/04/25/yuque/通过AdaBoost和Gradient Boosting提升/">通过AdaBoost和Gradient Boosting提升</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/04/24/yuque/K均值聚类的剖析/" class="archive-article-date">
-  	<time datetime="2019-04-24T02:23:42.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-24</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/04/24/yuque/K均值聚类的剖析/">K均值聚类的剖析</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/04/24/yuque/大数据和Hadoop时代的维度建模和Kimball数据集市/" class="archive-article-date">
-  	<time datetime="2019-04-24T02:07:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-24</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/04/24/yuque/大数据和Hadoop时代的维度建模和Kimball数据集市/">大数据和Hadoop时代的维度建模和Kimball数据集市</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/04/24/yuque/三种流行的聚类方法以及何时使用每种方法/" class="archive-article-date">
-  	<time datetime="2019-04-24T01:51:30.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-24</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/04/24/yuque/三种流行的聚类方法以及何时使用每种方法/">三种流行的聚类方法以及何时使用每种方法</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/04/23/yuque/Apache Kafka 和Spark的实时数据管道/" class="archive-article-date">
-  	<time datetime="2019-04-23T09:41:58.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-23</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/04/23/yuque/Apache Kafka 和Spark的实时数据管道/">Apache Kafka 和Spark的实时数据管道</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/04/23/yuque/转移学习:重新启动Inception V3以进行自定义图像分类/" class="archive-article-date">
-  	<time datetime="2019-04-23T08:27:37.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-23</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/04/23/yuque/转移学习:重新启动Inception V3以进行自定义图像分类/">转移学习:重新启动Inception V3以进行自定义图像分类</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/04/23/yuque/XGBoost算法:长期可能在位！/" class="archive-article-date">
-  	<time datetime="2019-04-23T08:22:24.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-23</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/04/23/yuque/XGBoost算法:长期可能在位！/">XGBoost算法:长期可能在位！</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/04/23/yuque/Pytorch:如何以及何时使用Module，Sequential，ModuleList和ModuleDict/" class="archive-article-date">
-  	<time datetime="2019-04-23T08:16:33.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-23</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/04/23/yuque/Pytorch:如何以及何时使用Module，Sequential，ModuleList和ModuleDict/">Pytorch:如何以及何时使用Module，Sequential，ModuleList和ModuleDict</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
-
-    
-    <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/archives/2019/page/3/">&laquo; Prev</a><a class="page-number" href="/archives/2019/">1</a><a class="page-number" href="/archives/2019/page/2/">2</a><a class="page-number" href="/archives/2019/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/archives/2019/page/5/">5</a><a class="page-number" href="/archives/2019/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/archives/2019/page/8/">8</a><a class="extend next" rel="next" href="/archives/2019/page/5/">Next &raquo;</a>
-    </nav>
   
 
 
@@ -471,8 +371,8 @@
 	var yiliaConfig = {
 		mathjax: true,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
