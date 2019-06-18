@@ -6,19 +6,26 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://www.zhos.me">
-  <title>MLlib管道和结构化流媒体 | A+</title>
+  <title>机器学习算法之Catboost | A+</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="此示例显示如何训练MLlib管道以生成可应用于转换流式DataFrame的PipelineModel。在创建旨在用于转换流数据的管道时，我们还将记住几点。首先，让我们考虑信用卡公司的情况，该公司希望尽快识别潜在的欺诈性交易，以便他们跟进客户以确认交易是否实际上是欺诈性的。这个假设的信用卡公司有...">
+  <meta name="description" content="CatBoost是俄罗斯的搜索巨头Yandex在2017年开源的机器学习库，是Gradient Boosting(梯度提升) + Categorical Features(类别型特征)，也是基于梯度提升决策树的机器学习框架。   CatBoost简介 CatBoost这个名字来自两个词“Cat...">
 <meta property="og:type" content="article">
-<meta property="og:title" content="MLlib管道和结构化流媒体">
-<meta property="og:url" content="http://www.zhos.me/2019/04/19/yuque/MLlib管道和结构化流媒体/index.html">
+<meta property="og:title" content="机器学习算法之Catboost">
+<meta property="og:url" content="http://www.zhos.me/2019/04/23/yuque/机器学习算法之Catboost/index.html">
 <meta property="og:site_name" content="A+">
-<meta property="og:description" content="此示例显示如何训练MLlib管道以生成可应用于转换流式DataFrame的PipelineModel。在创建旨在用于转换流数据的管道时，我们还将记住几点。首先，让我们考虑信用卡公司的情况，该公司希望尽快识别潜在的欺诈性交易，以便他们跟进客户以确认交易是否实际上是欺诈性的。这个假设的信用卡公司有...">
+<meta property="og:description" content="CatBoost是俄罗斯的搜索巨头Yandex在2017年开源的机器学习库，是Gradient Boosting(梯度提升) + Categorical Features(类别型特征)，也是基于梯度提升决策树的机器学习框架。   CatBoost简介 CatBoost这个名字来自两个词“Cat...">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-06-17T09:44:22.235Z">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1554780685041-cccb6511-f5e8-4e1d-b834-a99e090d020b.png#align=left&display=inline&height=245&name=catboost.png&originHeight=245&originWidth=491&size=39577&status=done&width=491">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1554781065147-b2e5138a-e954-4a75-a459-8292d8818f5b.png#align=left&display=inline&height=651&name=image.png&originHeight=814&originWidth=936&size=95050&status=done&width=749">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/svg/219582/1554781113803-911de10c-eccb-49ef-9ddd-29a62dec0c48.svg#align=left&display=inline&height=40&name=quicklatex.com-cfe915cb8b597a87984ce7c36de4fbc5_l3.svg&originHeight=40&originWidth=168&size=13958&status=done&width=168">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/svg/219582/1554781155389-93a7215e-d007-4830-920f-142037a32da3.svg#align=left&display=inline&height=45&name=quicklatex.com-ee1016d396b7f2e9bf0c56da53622a6d_l3.svg&originHeight=45&originWidth=228&size=21085&status=done&width=228">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/svg/219582/1554781177243-b8740f17-a6b4-4ee0-9a1e-c55b07a97263.svg#align=left&display=inline&height=21&originHeight=13&originWidth=13&size=0&status=done&width=21">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/svg/219582/1554781202962-c55dfd4f-061f-4a87-93bf-f8efa8c27511.svg#align=left&display=inline&height=43&name=quicklatex.com-8bd8af636423556804d679d48898e880_l3.svg&originHeight=43&originWidth=122&size=14909&status=done&width=122">
+<meta property="og:updated_time" content="2019-06-17T09:44:22.199Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="MLlib管道和结构化流媒体">
-<meta name="twitter:description" content="此示例显示如何训练MLlib管道以生成可应用于转换流式DataFrame的PipelineModel。在创建旨在用于转换流数据的管道时，我们还将记住几点。首先，让我们考虑信用卡公司的情况，该公司希望尽快识别潜在的欺诈性交易，以便他们跟进客户以确认交易是否实际上是欺诈性的。这个假设的信用卡公司有...">
+<meta name="twitter:title" content="机器学习算法之Catboost">
+<meta name="twitter:description" content="CatBoost是俄罗斯的搜索巨头Yandex在2017年开源的机器学习库，是Gradient Boosting(梯度提升) + Categorical Features(类别型特征)，也是基于梯度提升决策树的机器学习框架。   CatBoost简介 CatBoost这个名字来自两个词“Cat...">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1554780685041-cccb6511-f5e8-4e1d-b834-a99e090d020b.png#align=left&display=inline&height=245&name=catboost.png&originHeight=245&originWidth=491&size=39577&status=done&width=491">
   
     <link rel="alternative" href="/atom.xml" title="A+" type="application/atom+xml">
   
@@ -148,54 +155,147 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-yuque/MLlib管道和结构化流媒体" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-yuque/机器学习算法之Catboost" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      MLlib管道和结构化流媒体
+      机器学习算法之Catboost
     </h1>
   
 
         
-        <a href="/2019/04/19/yuque/MLlib管道和结构化流媒体/" class="archive-article-date">
-  	<time datetime="2019-04-19T03:31:44.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-19</time>
+        <a href="/2019/04/23/yuque/机器学习算法之Catboost/" class="archive-article-date">
+  	<time datetime="2019-04-23T08:19:07.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-23</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>此示例显示如何训练MLlib管道以生成可应用于转换流式DataFrame的PipelineModel。在创建旨在用于转换流数据的管道时，我们还将记住几点。<br>首先，让我们考虑信用卡公司的情况，该公司希望尽快识别潜在的欺诈性交易，以便他们跟进客户以确认交易是否实际上是欺诈性的。这个假设的信用卡公司有关于交易的历史数据，以及哪些交易被客户报告为欺诈。我们想要根据这些历史数据训练分类器。一旦我们训练了分类器，我们就会将它应用于一系列交易。<br>此示例需要Databricks Runtime 4.0或更高版本。<br><a id="more"></a><br>对于此示例，我们将使用在Worldline和ULB（UniversitéLibrede Bruxelles）的机器学习小组（<a href="http://mlg.ulb.ac.be/" target="_blank" rel="noopener">http://mlg.ulb.ac.be</a>）进行大数据挖掘和研究合作期间收集和分析的数据集。欺诈检测[1]。有关相关主题的当前和过去项目的更多详细信息，请访问<a href="http://mlg.ulb.ac.be/BruFence" target="_blank" rel="noopener">http://mlg.ulb.ac.be/BruFence</a>和<a href="http://mlg.ulb.ac.be/ARTML" target="_blank" rel="noopener">http://mlg.ulb.ac.be/ARTML</a>。<br>首先阅读数据并检查模式。</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> data = spark.read.parquet(<span class="string">"/databricks-datasets/credit-card-fraud/data"</span>)</span><br><span class="line">data.printSchema()</span><br><span class="line">root</span><br><span class="line"> |-- time: integer (nullable = <span class="literal">true</span>)</span><br><span class="line"> |-- amountRange: integer (nullable = <span class="literal">true</span>)</span><br><span class="line"> |-- label: integer (nullable = <span class="literal">true</span>)</span><br><span class="line"> |-- pcaVector: vector (nullable = <span class="literal">true</span>)</span><br><span class="line"></span><br><span class="line">data: org.apache.spark.sql.<span class="type">DataFrame</span> = [time: int, amountRange: int ... <span class="number">2</span> more fields]</span><br></pre></td></tr></table></figure>
-<p>我们将使用此数据集的3列：</p>
+        <p>CatBoost是俄罗斯的搜索巨头Yandex在2017年开源的机器学习库，是Gradient Boosting(梯度提升) + Categorical Features(类别型特征)，也是基于梯度提升决策树的机器学习框架。<br><a id="more"></a><br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1554780685041-cccb6511-f5e8-4e1d-b834-a99e090d020b.png#align=left&amp;display=inline&amp;height=245&amp;name=catboost.png&amp;originHeight=245&amp;originWidth=491&amp;size=39577&amp;status=done&amp;width=491" alt="catboost.png"><br><a name="da28ba8f"></a></p>
+<h2 id="CatBoost简介"><a href="#CatBoost简介" class="headerlink" title="CatBoost简介"></a><strong>CatBoost简介</strong></h2><p>CatBoost这个名字来自两个词“Category”和“<a href="https://www.biaodianfu.com/boosting.html" target="_blank" rel="noopener">Boosting</a>”。如前所述，该库可以很好地处理各种类别型数据，是一种能够很好地处理类别型特征的梯度提升算法库。<br><strong>CatBoost的优点</strong></p>
 <ul>
-<li><code>pcaVector</code>：原始交易数据的PCA转换。对于这个例子，我们假设这个PCA转换在数据到达我们之前作为某个数据管道的一部分发生。</li>
-<li><code>amountRange</code>：介于0和7之间的值。大致的交易金额。值对应于0-1,1-5,5-10,10-20,20-50,50-100,100-200和200+美元。</li>
-<li><code>label</code>：0或1.表示交易是否是欺诈性的。</li>
+<li>性能卓越：在性能方面可以匹敌任何先进的机器学习算法</li>
+<li>鲁棒性/强健性：它减少了对很多超参数调优的需求，并降低了过度拟合的机会，这也使得模型变得更加具有通用性</li>
+<li>易于使用：提供与scikit集成的Python接口，以及R和命令行界面</li>
+<li>实用：可以处理类别型、数值型特征</li>
+<li>可扩展：支持自定义损失函数</li>
 </ul>
-<p>我们想要构建一个使用<code>pcaVector</code>和<code>amountRange</code>数据预测标签的模型。我们将通过使用3阶段的管道来实现这一目标。</p>
-<ol>
-<li>A <code>OneHotEncoderEstimator</code>从<code>amountRange</code>列构建向量。</li>
-<li>一个<code>Vector</code>汇编程序将我们的合并<code>pcaVector</code>和<code>amountRange</code>矢量到我们的<code>features</code>载体。</li>
-<li>A <code>GBTClassifier</code>到服务器作为我们的<code>Estimator</code>。</li>
-</ol>
-<p>让我们从创建代表这些阶段的对象开始。</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.apache.spark.ml.feature.&#123;<span class="type">OneHotEncoderEstimator</span>, <span class="type">VectorAssembler</span>&#125;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.ml.classification.<span class="type">GBTClassifier</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">val</span> oneHot = <span class="keyword">new</span> <span class="type">OneHotEncoderEstimator</span>()</span><br><span class="line">  .setInputCols(<span class="type">Array</span>(<span class="string">"amountRange"</span>))</span><br><span class="line">  .setOutputCols(<span class="type">Array</span>(<span class="string">"amountVect"</span>))</span><br><span class="line"></span><br><span class="line"><span class="keyword">val</span> vectorAssembler = <span class="keyword">new</span> <span class="type">VectorAssembler</span>()</span><br><span class="line">  .setInputCols(<span class="type">Array</span>(<span class="string">"amountVect"</span>, <span class="string">"pcaVector"</span>))</span><br><span class="line">  .setOutputCol(<span class="string">"features"</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">val</span> estimator = <span class="keyword">new</span> <span class="type">GBTClassifier</span>()</span><br><span class="line">  .setLabelCol(<span class="string">"label"</span>)</span><br><span class="line">  .setFeaturesCol(<span class="string">"features"</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.spark.ml.feature.&#123;<span class="type">OneHotEncoderEstimator</span>, <span class="type">VectorAssembler</span>&#125;</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.ml.classification.<span class="type">GBTClassifier</span></span><br><span class="line">oneHot: org.apache.spark.ml.feature.<span class="type">OneHotEncoderEstimator</span> = oneHotEncoder_d08ee1823dc0</span><br><span class="line">vectorAssembler: org.apache.spark.ml.feature.<span class="type">VectorAssembler</span> = vecAssembler_1f1b468a900e</span><br><span class="line">estimator: org.apache.spark.ml.classification.<span class="type">GBTClassifier</span> = gbtc_5215e2e5d504</span><br></pre></td></tr></table></figure>
-<p>到目前为止，对于使用过MLlib管道的人来说，这应该是熟悉的，但是因为我们打算在流式上下文中使用这个模型，所以我们应该注意一些事情。<br>首先你可能会注意到我们使用的<code>OneHotEncoderEstimator</code>是Spark 2.3.0中新增的，而不是a <code>OneHotEncoder</code>，现在已经弃用了。这个新的估算工具修复了与之相关的几个问题，<code>OneHotEncoder</code>并且还允许您将一个热编码应用于流式DataFrame。<br>使用MLlib和Structured Streaming时要注意的第二件事是<code>VectorAssembler</code>在流式上下文中有一些限制。具体来说，<code>VectorAssembler</code>只能在已知大小的Vector列上工作。这不是批处理DataFrames的问题，因为我们可以简单地检查数据帧的内容以确定向量的大小。<br>如果我们打算使用我们的管道来转换流式DataFrame，我们可以通过<code>VectorSizeHint</code>在管道中包含一个阶段来明确指定pcaVector列的大小。我们<code>VectorAssembler</code>阶段的另一个输入<code>amountVect</code>也是一个向量列，但由于此列是MLlib转换器的输出，因此它已包含适当的大小信息，因此我们不需要为此列执行任何其他操作。</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.apache.spark.ml.feature.<span class="type">VectorSizeHint</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">val</span> vectorSizeHint = <span class="keyword">new</span> <span class="type">VectorSizeHint</span>()</span><br><span class="line">  .setInputCol(<span class="string">"pcaVector"</span>)</span><br><span class="line">  .setSize(<span class="number">28</span>)</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.ml.feature.<span class="type">VectorSizeHint</span></span><br><span class="line">vectorSizeHint: org.apache.spark.ml.feature.<span class="type">VectorSizeHint</span> = vectSizeHint_1409512da3d9</span><br></pre></td></tr></table></figure>
-<p><a href></a><br>在我们拟合模型之前，让我们将数据集分成两部分进行训练和验证。</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> <span class="type">Array</span>(train, test) = data.randomSplit(weights=<span class="type">Array</span>(<span class="number">.8</span>, <span class="number">.2</span>))</span><br><span class="line">train: org.apache.spark.sql.<span class="type">Dataset</span>[org.apache.spark.sql.<span class="type">Row</span>] = [time: int, amountRange: int ... <span class="number">2</span> more fields]</span><br><span class="line">test: org.apache.spark.sql.<span class="type">Dataset</span>[org.apache.spark.sql.<span class="type">Row</span>] = [time: int, amountRange: int ... <span class="number">2</span> more fields]</span><br></pre></td></tr></table></figure>
-<p>现在我们已经准备好构建一个管道并适应它。</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.apache.spark.ml.<span class="type">Pipeline</span></span><br><span class="line"><span class="keyword">import</span> org.apache.spark.sql.functions.col</span><br><span class="line"></span><br><span class="line"><span class="keyword">val</span> pipeline = <span class="keyword">new</span> <span class="type">Pipeline</span>()</span><br><span class="line">  .setStages(<span class="type">Array</span>(oneHot, vectorSizeHint, vectorAssembler, estimator))</span><br><span class="line"></span><br><span class="line"><span class="keyword">val</span> pipelineModel = pipeline.fit(train)</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.ml.<span class="type">Pipeline</span></span><br><span class="line"><span class="keyword">import</span> org.apache.spark.sql.functions.col</span><br><span class="line">pipeline: org.apache.spark.ml.<span class="type">Pipeline</span> = pipeline_04b363362758</span><br><span class="line">pipelineModel: org.apache.spark.ml.<span class="type">PipelineModel</span> = pipeline_04b363362758</span><br></pre></td></tr></table></figure>
-<p>由于我们没有可读取的实际流，因此我们可以通过保存测试数据然后使用Spark将其作为流来读取来模拟流。我们将使用此模拟流对模型进行一些验证。为了验证模型，我们将混淆矩阵写入表中，但由于我们正在使用Spark Structured Streaming，因此当从流中读取更多数据时，该表将实时更新。</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">val</span> testDataPath = <span class="string">"/tmp/credit-card-frauld-test-data"</span></span><br><span class="line"></span><br><span class="line">test.repartition(<span class="number">20</span>).write</span><br><span class="line">  .mode(<span class="string">"overwrite"</span>)</span><br><span class="line">  .parquet(testDataPath)</span><br><span class="line">testDataPath: <span class="type">String</span> = /tmp/credit-card-frauld-test-data</span><br></pre></td></tr></table></figure>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.apache.spark.sql.types._</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.ml.linalg.<span class="type">SQLDataTypes</span>.<span class="type">VectorType</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">val</span> schema = <span class="keyword">new</span> <span class="type">StructType</span>()</span><br><span class="line">  .add(<span class="type">StructField</span>(<span class="string">"time"</span>, <span class="type">IntegerType</span>))</span><br><span class="line">  .add(<span class="type">StructField</span>(<span class="string">"amountRange"</span>, <span class="type">IntegerType</span>))</span><br><span class="line">  .add(<span class="type">StructField</span>(<span class="string">"label"</span>, <span class="type">IntegerType</span>))</span><br><span class="line">  .add(<span class="type">StructField</span>(<span class="string">"pcaVector"</span>, <span class="type">VectorType</span>))</span><br><span class="line"></span><br><span class="line"><span class="keyword">val</span> streamingData = sqlContext.readStream</span><br><span class="line">  .schema(schema)</span><br><span class="line">  .option(<span class="string">"maxFilesPerTrigger"</span>, <span class="number">1</span>)</span><br><span class="line">  .parquet(testDataPath)</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.spark.sql.types._</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.ml.linalg.<span class="type">SQLDataTypes</span>.<span class="type">VectorType</span></span><br><span class="line">schema: org.apache.spark.sql.types.<span class="type">StructType</span> = <span class="type">StructType</span>(<span class="type">StructField</span>(time,<span class="type">IntegerType</span>,<span class="literal">true</span>), <span class="type">StructField</span>(amountRange,<span class="type">IntegerType</span>,<span class="literal">true</span>), <span class="type">StructField</span>(label,<span class="type">IntegerType</span>,<span class="literal">true</span>), <span class="type">StructField</span>(pcaVector,org.apache.spark.ml.linalg.<span class="type">VectorUDT</span>@<span class="number">3</span>bfc3ba7,<span class="literal">true</span>))</span><br><span class="line">streamingData: org.apache.spark.sql.<span class="type">DataFrame</span> = [time: int, amountRange: int ... <span class="number">2</span> more fields]</span><br></pre></td></tr></table></figure>
-<p>为了验证我们的模型，让我们分别计算验证数据的真阳性和真阳性率，通常分别称为敏感性和特异性。因为我们将验证数据集作为流读取，所以当我们从流中读取更多事务时，这些值将更新。</p>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.spark.sql.functions.&#123;count, sum, when&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">val</span> streamingRates = pipelineModel.transform(streamingData)</span><br><span class="line">  .groupBy(<span class="symbol">'label</span>)</span><br><span class="line">  .agg(</span><br><span class="line">    (sum(when(<span class="symbol">'prediction</span> === <span class="symbol">'label</span>, <span class="number">1</span>)) / count(<span class="symbol">'label</span>)).alias(<span class="string">"true prediction rate"</span>),</span><br><span class="line">    count(<span class="symbol">'label</span>).alias(<span class="string">"count"</span>)</span><br><span class="line">  )</span><br><span class="line"></span><br><span class="line">display(streamingRates)</span><br></pre></td></tr></table></figure>
-<p><a href></a><br>此示例显示如何训练MLlib管道以生成可应用于转换流式DataFrame的PipelineModel。在创建旨在用于转换流数据的管道时，我们还将记住几点。<br>首先，让我们考虑信用卡公司的情况，该公司希望尽快识别潜在的欺诈性交易，以便他们跟进客户以确认交易是否实际上是欺诈性的。这个假设的信用卡公司有关于交易的历史数据，以及哪些交易被客户报告为欺诈。我们想要根据这些历史数据训练分类器。一旦我们训练了分类器，我们就会将它应用于一系列交易。<br>此示例需要Databricks Runtime 4.0或更高版本。<br><a href></a><br><a href></a><br>对于此示例，我们将使用在Worldline和ULB（UniversitéLibrede Bruxelles）的机器学习小组（<a href="http://mlg.ulb.ac.be/" target="_blank" rel="noopener">http://mlg.ulb.ac.be</a>）进行大数据挖掘和研究合作期间收集和分析的数据集。欺诈检测[1]。有关相关主题的当前和过去项目的更多详细信息，请访问<a href="http://mlg.ulb.ac.be/BruFence" target="_blank" rel="noopener">http://mlg.ulb.ac.be/BruFence</a>和<a href="http://mlg.ulb.ac.be/ARTML" target="_blank" rel="noopener">http://mlg.ulb.ac.be/ARTML</a>。<br>首先阅读数据并检查模式。<br><a href></a><br><a href></a></p>
+<p><strong>与其他提升（Boosting）算法相比，CatBoost怎么样？</strong><br>CatBoost的开发人员将其性能与标准ML数据集的竞争对手进行了比较:<br><br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1554781065147-b2e5138a-e954-4a75-a459-8292d8818f5b.png#align=left&amp;display=inline&amp;height=651&amp;name=image.png&amp;originHeight=814&amp;originWidth=936&amp;size=95050&amp;status=done&amp;width=749" alt="image.png"><br>上面的比较显示了测试数据的对数损失（log-loss）值，在CatBoost的大多数情况下，它是最低的。图中清楚地表明了CatBoost对调优和默认模型的性能都更好。<br><a name="e2bd024d"></a></p>
+<h2 id="CatBoost技术介绍"><a href="#CatBoost技术介绍" class="headerlink" title="CatBoost技术介绍"></a>CatBoost技术介绍</h2><p><a name="0a8d737b"></a></p>
+<h3 id="类别型特征"><a href="#类别型特征" class="headerlink" title="类别型特征"></a>类别型特征</h3><p>CatBoost 算法的设计初衷是为了更好的处理 GBDT 特征中的 categorical features 。在处理 GBDT 特征中的 categorical features 的时候，最简单的方法是用 categorical feature 对应的标签的平均值来替换。在决策树中，标签平均值将作为节点分裂的标准。这种方法被称为 Greedy Target-based Statistics , 简称 Greedy TBS，用公式来表达就是：<br><img src="https://cdn.nlark.com/yuque/0/2019/svg/219582/1554781113803-911de10c-eccb-49ef-9ddd-29a62dec0c48.svg#align=left&amp;display=inline&amp;height=40&amp;name=quicklatex.com-cfe915cb8b597a87984ce7c36de4fbc5_l3.svg&amp;originHeight=40&amp;originWidth=168&amp;size=13958&amp;status=done&amp;width=168" alt="quicklatex.com-cfe915cb8b597a87984ce7c36de4fbc5_l3.svg"><br>这种方法有一个显而易见的缺陷，就是通常特征比标签包含更多的信息，如果强行用标签的平均值来表示特征的话，当训练数据集和测试数据集数据结构和分布不一样的时候会出问题（条件偏移问题）。<br>一个标准的改进 Greedy TBS的方式是添加先验分布项，这样可以减少噪声和低频率数据对于数据分布的影响：<br><img src="https://cdn.nlark.com/yuque/0/2019/svg/219582/1554781155389-93a7215e-d007-4830-920f-142037a32da3.svg#align=left&amp;display=inline&amp;height=45&amp;name=quicklatex.com-ee1016d396b7f2e9bf0c56da53622a6d_l3.svg&amp;originHeight=45&amp;originWidth=228&amp;size=21085&amp;status=done&amp;width=228" alt="quicklatex.com-ee1016d396b7f2e9bf0c56da53622a6d_l3.svg"><br>其中 P 是添加的先验项，a 通常是大于 0 的权重系数。添加先验项是一个普遍做法，针对类别数较少的特征，它可以减少噪音数据。对于回归问题，一般情况下，先验项可取数据集的均值。对于二分类，先验项是正例的先验概率。利用多个数据集排列也是有效的，但是，如果直接计算可能导致过拟合。CatBoost利用了一个比较新颖的计算叶子节点值的方法，这种方式可以避免多个数据集排列中直接计算会出现过拟合的问题。<br><strong>特征组合</strong><br>值得注意的是几个类别型特征的任意组合都可视为新的特征。例如，在音乐推荐应用中，我们有两个类别型特征：用户ID和音乐流派。如果有些用户更喜欢摇滚乐，将用户ID和音乐流派转换为数字特征时，根据上述这些信息就会丢失。结合这两个特征就可以解决这个问题，并且可以得到一个新的强大的特征。然而，组合的数量会随着数据集中类别型特征的数量成指数增长，因此不可能在算法中考虑所有组合。为当前树构造新的分割点时，CatBoost会采用贪婪的策略考虑组合。对于树的第一次分割，不考虑任何组合。对于下一个分割，CatBoost将当前树的所有组合、类别型特征与数据集中的所有类别型特征相结合。组合被动态地转换为数字。CatBoost还通过以下方式生成数值型特征和类别型特征的组合：树选择的所有分割点都被视为具有两个值的类别型特征，并且组合方式和类别型特征一样。<br><strong>重要的实现细节</strong><br>用数字代替类别值的另一种方法是计算该类别值在数据集特征中出现的次数。这是一种简单但强大的技术，在CatBoost也有实现。这种统计量也适用于特征组合。<br>CatBoost算法为了在每个步骤中拟合最优的先验条件，我们考虑多个先验条件，为每个先验条件构造一个特征，这在质量上比提到的标准技术更有效。<br><a name="c7b4cdab"></a></p>
+<h3 id="克服梯度偏差"><a href="#克服梯度偏差" class="headerlink" title="克服梯度偏差"></a>克服梯度偏差</h3><p>CatBoost，和所有标准梯度提升算法一样，都是通过构建新树来拟合当前模型的梯度。然而，所有经典的提升算法都存在由有偏的点态梯度估计引起的过拟合问题。在每个步骤中使用的梯度都使用当前模型中的相同的数据点来估计，这导致估计梯度在特征空间的任何域中的分布与该域中梯度的真实分布相比发生了偏移，从而导致过拟合。<br>许多利用GBDT技术的算法（例如，<a href="https://www.biaodianfu.com/xgboost.html" target="_blank" rel="noopener">XGBoost</a>、<a href="https://www.biaodianfu.com/lightgbm.html" target="_blank" rel="noopener">LightGBM</a>），构建一棵树分为两个阶段：选择树结构和在树结构固定后计算叶子节点的值。为了选择最佳的树结构，算法通过枚举不同的分割，用这些分割构建树，对得到的叶子节点中计算值，然后对得到的树计算评分，最后选择最佳的分割。两个阶段叶子节点的值都是被当做梯度或牛顿步长的近似值来计算。CatBoost第一阶段采用梯度步长的无偏估计，第二阶段使用传统的GBDT方案执行。<br><a name="252f77f9"></a></p>
+<h3 id="快速评分"><a href="#快速评分" class="headerlink" title="快速评分"></a>快速评分</h3><p>CatBoost使用oblivious树作为基本预测器。在这类树中，相同的分割准则在树的整个级别上使用。这种树是平衡的，不太容易过拟合。梯度提升oblivious树被成功地用于各种学习任务。在oblivious树中，每个叶子节点的索引可以被编码为长度等于树深度的二进制向量。这在CatBoost模型评估器中得到了广泛的应用：我们首先将所有浮点特征、统计信息和独热编码特征进行二值化，然后使用二进制特征来计算模型预测值。<br>所有样本的所有二进制特征值都存储在连续向量B中。叶子节点的值存储在大小为<img src="https://cdn.nlark.com/yuque/0/2019/svg/219582/1554781177243-b8740f17-a6b4-4ee0-9a1e-c55b07a97263.svg#align=left&amp;display=inline&amp;height=21&amp;originHeight=13&amp;originWidth=13&amp;size=0&amp;status=done&amp;width=21" alt>的浮点数向量中，其中d是树的深度。为了计算第t棵树的叶子节点的索引，对于样本x，我们建立了一个二进制向量：<br><img src="https://cdn.nlark.com/yuque/0/2019/svg/219582/1554781202962-c55dfd4f-061f-4a87-93bf-f8efa8c27511.svg#align=left&amp;display=inline&amp;height=43&amp;name=quicklatex.com-8bd8af636423556804d679d48898e880_l3.svg&amp;originHeight=43&amp;originWidth=122&amp;size=14909&amp;status=done&amp;width=122" alt="quicklatex.com-8bd8af636423556804d679d48898e880_l3.svg"><br>其中B(x,f)是从向量B读取的样本x上的二进制特征f的值，而f(t,i)是从深度i上的第t棵树中的二进制特征的数目。这些向量可以以数据并行的方式构建，这种方式可以实现高达3倍的加速。<br><a name="7c47c2ae"></a></p>
+<h3 id="基于GPU实现快速学习"><a href="#基于GPU实现快速学习" class="headerlink" title="基于GPU实现快速学习"></a>基于GPU实现快速学习</h3><p><strong>密集的数值特征</strong><br>对于任何GBDT算法而言，最大的难点之一就是搜索最佳分割。尤其是对于密集的数值特征数据集来说，该步骤是建立决策树时的主要计算负担。CatBoost使oblivious 决策树作为基础模型，并将特征离散化到固定数量的箱子中以减少内存使用。箱子的数量是算法的参数。因此，可以使用基于直方图的方法来搜索最佳分割。我们利用一个32位整数将多个数值型特征打包，规则：</p>
+<ul>
+<li>存储二进制特征用1位，每个整数包括32个特征</li>
+<li>存储不超过15个值的特征用4位，每个整数包括8个特征</li>
+<li>存储其他特征用8位（不同值的个数最大是255），每个整数包括4个特征</li>
+</ul>
+<p>就GPU内存使用而言，CatBoost至少与LightGBM一样有效。主要不同是利用一种不同的直方图计算方法。LightGBM和XGBoost的算法有一个主要缺点：它们依赖于原子操作。这种技术在内存上很容易处理，但是在性能好的GPU上，它会比较慢。事实上直方图可以在不涉及原子操作的情况下更有效地计算。<br><strong>类别型特征</strong><br>CatBoost实现了多种处理类别型特征的方法。对于独热编码特征，我们不需要任何特殊处理，基于直方图的分割搜索方法可以很容易地处理这种情况。在数据预处理阶段，就可以对单个类别型特征进行统计计算。CatBoost还对特征组合使用统计信息。处理它们是算法中速度最慢、消耗内存最多的部分。<br>CatBoost使用完美哈希来存储类别特征的值，以减少内存使用。由于GPU内存的限制，我们在CPU RAM中存储按位压缩的完美哈希，以及要求的数据流、重叠计算和内存等操作。动态地构造特征组合要求我们为这个新特征动态地构建（完美）哈希函数，并为哈希的每个唯一值计算关于某些排列的统计数据。CatBoost使用基数排序来构建完美的哈希，并通过哈希来分组观察。在每个组中，需要计算一些统计量的前缀和。该统计量的计算使用分段扫描GPU图元进行（CatBoost分段扫描实现通过算子变换完成，并且基于CUB中扫描图元的高效实现）。<br><strong>多GPU支持</strong><br>CatBoost中的GPU实现可支持多个GPU。分布式树学习可以通过数据或特征进行并行化。CatBoost采用多个学习数据集排列的计算方案，在训练期间计算分类特征的统计数据。<br><a name="d836bc98"></a></p>
+<h2 id="CatBoost的安装与使用"><a href="#CatBoost的安装与使用" class="headerlink" title="CatBoost的安装与使用"></a>CatBoost的安装与使用</h2><p>CatBoost的安装非常的简单，只需执行pip install catboost即可。<br><a name="0ae9abe9"></a></p>
+<h3 id="CatBoost使用示例"><a href="#CatBoost使用示例" class="headerlink" title="CatBoost使用示例"></a>CatBoost使用示例</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> catboost <span class="keyword">as</span> cb</span><br><span class="line"> </span><br><span class="line">train_data = np.random.randint(<span class="number">0</span>, <span class="number">100</span>, size=(<span class="number">100</span>, <span class="number">10</span>))</span><br><span class="line">train_label = np.random.randint(<span class="number">0</span>, <span class="number">2</span>, size=(<span class="number">100</span>))</span><br><span class="line">test_data = np.random.randint(<span class="number">0</span>,<span class="number">100</span>, size=(<span class="number">50</span>,<span class="number">10</span>))</span><br><span class="line"> </span><br><span class="line">model = cb.CatBoostClassifier(iterations=<span class="number">2</span>, depth=<span class="number">2</span>, learning_rate=<span class="number">0.5</span>, loss_function=<span class="string">'Logloss'</span>,</span><br><span class="line">                              logging_level=<span class="string">'Verbose'</span>)</span><br><span class="line">model.fit(train_data, train_label, cat_features=[<span class="number">0</span>,<span class="number">2</span>,<span class="number">5</span>])</span><br><span class="line">preds_class = model.predict(test_data)</span><br><span class="line">preds_probs = model.predict_proba(test_data)</span><br><span class="line">print(<span class="string">'class = '</span>,preds_class)</span><br><span class="line">print(<span class="string">'proba = '</span>,preds_probs)</span><br></pre></td></tr></table></figure>
+<p>方法(method):</p>
+<ul>
+<li>Fit<ul>
+<li>X: 输入数据数据类型可以是，list; pandas.DataFrame; pandas.Series</li>
+<li>y=None</li>
+<li>cat_features=None: 拿来做处理的类别特征</li>
+<li>sample_weight=None: 输入数据的样本权重</li>
+<li>logging_level=None: 控制是否输出日志信息，或者何种信息</li>
+<li>plot=False: 训练过程中，绘制，度量值，所用时间等</li>
+<li>eval_set=None: 验证集合，数据类型list(X, y)tuples</li>
+<li>baseline=None</li>
+<li>use_best_model=None</li>
+<li>verbose=None</li>
+</ul>
+</li>
+<li>predict 返回验证样本所属类别，数据类型为array</li>
+<li>predict_proba 返回验证样本所属类别的概率，数据类型为array</li>
+<li>get_feature_importance</li>
+<li>eval_metrics</li>
+<li>save_model</li>
+<li>load_model</li>
+<li>get_params</li>
+<li>score</li>
+</ul>
+<p>属性(attribute)：</p>
+<ul>
+<li>is_fitted_</li>
+<li>tree_count_</li>
+<li>feature_importances_</li>
+<li>random_seed_<br><a name="c74cf90e"></a><h3 id="CatBoost参数详解"><a href="#CatBoost参数详解" class="headerlink" title="CatBoost参数详解"></a>CatBoost参数详解</h3>通用参数：</li>
+<li>loss_function 损失函数，支持的有RMSE, Logloss, MAE, CrossEntropy, Quantile, LogLinQuantile, Multiclass, MultiClassOneVsAll, MAPE, Poisson。默认RMSE。</li>
+<li>custom_metric 训练过程中输出的度量值。这些功能未经优化，仅出于信息目的显示。默认None。</li>
+<li>eval_metric 用于过拟合检验（设置True）和最佳模型选择（设置True）的loss function，用于优化。</li>
+<li>iterations 最大树数。默认1000。</li>
+<li>learning_rate 学习率。默认03。</li>
+<li>random_seed 训练时候的随机种子</li>
+<li>l2_leaf_reg L2正则参数。默认3</li>
+<li>bootstrap_type 定义权重计算逻辑，可选参数：Poisson (supported for GPU only)/Bayesian/Bernoulli/No，默认为Bayesian</li>
+<li>bagging_temperature 贝叶斯套袋控制强度，区间[0, 1]。默认1。</li>
+<li>subsample 设置样本率，当bootstrap_type为Poisson或Bernoulli时使用，默认66</li>
+<li>sampling_frequency 设置创建树时的采样频率，可选值PerTree/PerTreeLevel，默认为PerTreeLevel</li>
+<li>random_strength 分数标准差乘数。默认1。</li>
+<li>use_best_model 设置此参数时，需要提供测试数据，树的个数通过训练参数和优化loss function获得。默认False。</li>
+<li>best_model_min_trees 最佳模型应该具有的树的最小数目。</li>
+<li>depth 树深，最大16，建议在1到10之间。默认6。</li>
+<li>ignored_features 忽略数据集中的某些特征。默认None。</li>
+<li>one_hot_max_size 如果feature包含的不同值的数目超过了指定值，将feature转化为float。默认False</li>
+<li>has_time 在将categorical features转化为numerical features和选择树结构时，顺序选择输入数据。默认False（随机）</li>
+<li>rsm 随机子空间（Random subspace method）。默认1。</li>
+<li>nan_mode 处理输入数据中缺失值的方法，包括Forbidden(禁止存在缺失)，Min(用最小值补)，Max(用最大值补)。默认Min。</li>
+<li>fold_permutation_block_size 数据集中的对象在随机排列之前按块分组。此参数定义块的大小。值越小，训练越慢。较大的值可能导致质量下降。</li>
+<li>leaf_estimation_method 计算叶子值的方法，Newton/ Gradient。默认Gradient。</li>
+<li>leaf_estimation_iterations 计算叶子值时梯度步数。</li>
+<li>leaf_estimation_backtracking 在梯度下降期间要使用的回溯类型。</li>
+<li>fold_len_multiplier folds长度系数。设置大于1的参数，在参数较小时获得最佳结果。默认2。</li>
+<li>approx_on_full_history 计算近似值，False：使用1／fold_len_multiplier计算；True：使用fold中前面所有行计算。默认False。</li>
+<li>class_weights 类别的权重。默认None。</li>
+<li>scale_pos_weight 二进制分类中class 1的权重。该值用作class 1中对象权重的乘数。</li>
+<li>boosting_type 增压方案</li>
+<li>allow_const_label 使用它为所有对象训练具有相同标签值的数据集的模型。默认为False</li>
+</ul>
+<p>CatBoost默认参数：</p>
+<ul>
+<li>‘iterations’: 1000,</li>
+<li>‘learning_rate’:0.03,</li>
+<li>‘l2_leaf_reg’:3,</li>
+<li>‘bagging_temperature’:1,</li>
+<li>‘subsample’:0.66,</li>
+<li>‘random_strength’:1,</li>
+<li>‘depth’:6,</li>
+<li>‘rsm’:1,</li>
+<li>‘one_hot_max_size’:2</li>
+<li>‘leaf_estimation_method’:’Gradient’,</li>
+<li>‘fold_len_multiplier’:2,</li>
+<li>‘border_count’:128,</li>
+</ul>
+<p>CatBoost参数取值范围：</p>
+<ul>
+<li>‘learning_rate’:Log-uniform distribution [e^{-7}, 1]</li>
+<li>‘random_strength’:Discrete uniform distribution over a set {1, 20}</li>
+<li>‘one_hot_max_size’:Discrete uniform distribution over a set {0, 25}</li>
+<li>‘l2_leaf_reg’:Log-uniform distribution [1, 10]</li>
+<li>‘bagging_temperature’:Uniform [0, 1]</li>
+<li>‘gradient_iterations’:Discrete uniform distribution over a set {1, 10}‘</li>
+</ul>
+<p>其他参考：</p>
+<ul>
+<li><a href="https://tech.yandex.com/catboost/doc/dg/concepts/python-reference_parameters-list-docpage/#python-reference_parameters-list" target="_blank" rel="noopener">https://tech.yandex.com/catboost/doc/dg/concepts/python-reference_parameters-list-docpage/#python-reference_parameters-list</a></li>
+</ul>
+<p><a name="318e4d95"></a></p>
+<h3 id="CatBoost参数调优"><a href="#CatBoost参数调优" class="headerlink" title="CatBoost参数调优"></a>CatBoost参数调优</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> catboost <span class="keyword">import</span> CatBoostRegressor</span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> GridSearchCV</span><br><span class="line"> </span><br><span class="line"><span class="comment">#指定category类型的列，可以是索引，也可以是列名</span></span><br><span class="line">cat_features = [<span class="number">0</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>,<span class="number">10</span>,<span class="number">11</span>,<span class="number">12</span>,<span class="number">13</span>]</span><br><span class="line"> </span><br><span class="line">X = df_ios_droped.iloc[:,:<span class="number">-1</span>]</span><br><span class="line">y = df_ios_droped.iloc[:,<span class="number">-1</span>]</span><br><span class="line"> </span><br><span class="line">cv_params = &#123;<span class="string">'iterations'</span>: [<span class="number">500</span>,<span class="number">600</span>,<span class="number">700</span>,<span class="number">800</span>]&#125;</span><br><span class="line">other_params = &#123;</span><br><span class="line">    <span class="string">'iterations'</span>: <span class="number">1000</span>,</span><br><span class="line">    <span class="string">'learning_rate'</span>:<span class="number">0.03</span>,</span><br><span class="line">    <span class="string">'l2_leaf_reg'</span>:<span class="number">3</span>,</span><br><span class="line">    <span class="string">'bagging_temperature'</span>:<span class="number">1</span>,</span><br><span class="line">    <span class="string">'random_strength'</span>:<span class="number">1</span>,</span><br><span class="line">    <span class="string">'depth'</span>:<span class="number">6</span>,</span><br><span class="line">    <span class="string">'rsm'</span>:<span class="number">1</span>,</span><br><span class="line">    <span class="string">'one_hot_max_size'</span>:<span class="number">2</span>,</span><br><span class="line">    <span class="string">'leaf_estimation_method'</span>:<span class="string">'Gradient'</span>,</span><br><span class="line">    <span class="string">'fold_len_multiplier'</span>:<span class="number">2</span>,</span><br><span class="line">    <span class="string">'border_count'</span>:<span class="number">128</span>,</span><br><span class="line">&#125;</span><br><span class="line">model_cb = CatBoostRegressor(**other_params)</span><br><span class="line">optimized_cb = GridSearchCV(estimator=model_cb, param_grid=cv_params, scoring=<span class="string">'r2'</span>, cv=<span class="number">5</span>, verbose=<span class="number">1</span>, n_jobs=<span class="number">2</span>)</span><br><span class="line">optimized_cb.fit(X,y,cat_features =category_features)</span><br><span class="line">print(<span class="string">'参数的最佳取值：&#123;0&#125;'</span>.format(optimized_cb.best_params_))</span><br><span class="line">print(<span class="string">'最佳模型得分:&#123;0&#125;'</span>.format(optimized_cb.best_score_))</span><br><span class="line">print(optimized_cb.cv_results_[<span class="string">'mean_test_score'</span>])</span><br><span class="line">print(optimized_cb.cv_results_[<span class="string">'params'</span>])</span><br><span class="line"> </span><br><span class="line"><span class="comment"># params = &#123;'depth':[3,4,5,7,8,9,10],</span></span><br><span class="line"><span class="comment">#           'iterations':[100,250,500,1000],</span></span><br><span class="line"><span class="comment">#           'learning_rate':[0.001,0.01,0.003,0.1,0.2,0.3], </span></span><br><span class="line"><span class="comment">#           'l2_leaf_reg':[1,3,5,10,100],</span></span><br><span class="line"><span class="comment">#           'border_count':[2,4,8,16,32,64,128,256]&#125;</span></span><br></pre></td></tr></table></figure>
+<p>其他参考：<a href="https://effectiveml.com/using-grid-search-to-optimise-catboost-parameters.html" target="_blank" rel="noopener">https://effectiveml.com/using-grid-search-to-optimise-catboost-parameters.html</a><br>相关链接：</p>
+<ul>
+<li>官方地址：<a href="https://tech.yandex.com/CatBoost/" target="_blank" rel="noopener">https://tech.yandex.com/CatBoost/</a></li>
+<li>项目地址：<a href="https://github.com/catboost/catboost" target="_blank" rel="noopener">https://github.com/catboost/catboost</a></li>
+<li>论文地址：<a href="https://arxiv.org/abs/1706.09516" target="_blank" rel="noopener">https://arxiv.org/abs/1706.09516</a></li>
+<li>文档地址：<a href="https://tech.yandex.com/catboost/doc/dg/concepts/about-docpage/" target="_blank" rel="noopener">https://tech.yandex.com/catboost/doc/dg/concepts/about-docpage/</a></li>
+</ul>
 
       
 
@@ -280,7 +380,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://www.zhos.me/2019/04/19/yuque/MLlib管道和结构化流媒体/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://www.zhos.me/2019/04/23/yuque/机器学习算法之Catboost/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -294,18 +394,18 @@
   
 <nav id="article-nav">
   
-    <a href="/2019/04/19/yuque/使用Apache Spark的实时机器学习管道/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2019/04/23/yuque/XGBoost算法:长期可能在位！/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          使用Apache Spark的实时机器学习管道
+          XGBoost算法:长期可能在位！
         
       </div>
     </a>
   
   
-    <a href="/2019/04/17/yuque/如何使您的MLflow项目易于共享和协作/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">如何使您的MLflow项目易于共享和协作</div>
+    <a href="/2019/04/23/yuque/Pytorch:如何以及何时使用Module，Sequential，ModuleList和ModuleDict/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Pytorch:如何以及何时使用Module，Sequential，ModuleList和ModuleDict</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -332,7 +432,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    目录，不存在的…
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#CatBoost简介"><span class="toc-number">1.</span> <span class="toc-text">CatBoost简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CatBoost技术介绍"><span class="toc-number">2.</span> <span class="toc-text">CatBoost技术介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#类别型特征"><span class="toc-number">2.1.</span> <span class="toc-text">类别型特征</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#克服梯度偏差"><span class="toc-number">2.2.</span> <span class="toc-text">克服梯度偏差</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#快速评分"><span class="toc-number">2.3.</span> <span class="toc-text">快速评分</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#基于GPU实现快速学习"><span class="toc-number">2.4.</span> <span class="toc-text">基于GPU实现快速学习</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CatBoost的安装与使用"><span class="toc-number">3.</span> <span class="toc-text">CatBoost的安装与使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#CatBoost使用示例"><span class="toc-number">3.1.</span> <span class="toc-text">CatBoost使用示例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CatBoost参数详解"><span class="toc-number">3.2.</span> <span class="toc-text">CatBoost参数详解</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CatBoost参数调优"><span class="toc-number">3.3.</span> <span class="toc-text">CatBoost参数调优</span></a></li></ol></li></ol>
                     </div>
                 </span>
             </div>
