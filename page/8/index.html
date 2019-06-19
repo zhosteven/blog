@@ -149,209 +149,6 @@
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-yuque/webhook实现服务器自动部署" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/04/yuque/webhook实现服务器自动部署/">webhook实现服务器自动部署</a>
-    </h1>
-  
-
-        
-        <a href="/2019/04/04/yuque/webhook实现服务器自动部署/" class="archive-article-date">
-  	<time datetime="2019-04-04T14:50:24.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-04</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><code>Webhook</code>是一种通过自定义回调函数来增加或更改網頁表现的方法。这些回调可被可能与原始网站或应用相关的第三方用户及开发者保存、修改与管理。术语“网络钩子”由杰夫·林德塞（Jeff Lindsay）于2007年通过给计算机编程术语“钩子”（Hook）加上前缀得。<br>网络钩子是“用户定义的HTTP回调”。网络钩子通常被某些事件激活，比如将代码推送到源[3]或评论博客。.[4]当此事件发生时，原网站将向为网络钩子配置的URL发送HTTP请求。用户可配置它们引发网页上的事件以调用另一个网站的行为。此操作可为任何事件。<br>本片博客介绍一个简单的<code>github</code>中的<code>webhook</code>自动部署<code>hexo</code>博客。<br><a name="c4e6712f"></a></p>
-<h3 id="服务器安装依赖git，hexo，node，npm"><a href="#服务器安装依赖git，hexo，node，npm" class="headerlink" title="服务器安装依赖git，hexo，node，npm"></a>服务器安装依赖git，hexo，node，npm</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">apt install git</span><br><span class="line">apt install nodejs</span><br><span class="line">apt install npm</span><br><span class="line">npm i -g hexo</span><br></pre></td></tr></table></figure>
-<p><a name="712b29e8"></a></p>
-<h3 id="创建一个webhook-js"><a href="#创建一个webhook-js" class="headerlink" title="创建一个webhook.js"></a>创建一个webhook.js</h3><figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">var http = <span class="keyword">require</span>(<span class="string">'http'</span>);</span><br><span class="line">var exec = <span class="keyword">require</span>(<span class="string">'child_process'</span>).exec;</span><br><span class="line"></span><br><span class="line">http.createServer(function (req, res) &#123;</span><br><span class="line">    <span class="keyword">if</span>(req.url === <span class="string">'/webhooks/push/1'</span>) &#123; <span class="regexp">//</span>定义webhook地址</span><br><span class="line">        exec(<span class="string">'sh ./webhook.sh'</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    res.<span class="keyword">end</span>();</span><br><span class="line">&#125;).listen(<span class="number">9999</span>)</span><br><span class="line">console.log(<span class="string">'we are in 9999'</span>);</span><br></pre></td></tr></table></figure>
-<p><a name="e57a0d46"></a></p>
-<h3 id="创建webhook-sh脚本，执行pull，编译等操作"><a href="#创建webhook-sh脚本，执行pull，编译等操作" class="headerlink" title="创建webhook.sh脚本，执行pull，编译等操作"></a>创建webhook.sh脚本，执行pull，编译等操作</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">'begin'</span> &gt; ../1.txt</span><br><span class="line"><span class="built_in">cd</span> /usr/share/nginx/blog</span><br><span class="line">git pull</span><br><span class="line">npm run hook</span><br><span class="line">cp -r /usr/share/nginx/blog/public/* /usr/share/nginx/ninesix.cc/</span><br><span class="line"><span class="built_in">echo</span> <span class="string">'end'</span> &gt;&gt; ../1.txt</span><br></pre></td></tr></table></figure>
-<p><a name="a165d47a"></a></p>
-<h3 id="使用pm2启动webhook服务"><a href="#使用pm2启动webhook服务" class="headerlink" title="使用pm2启动webhook服务"></a>使用pm2启动webhook服务</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">npm i -g pm2</span><br><span class="line">pm2 start webhook.js</span><br></pre></td></tr></table></figure>
-<p><a name="dd496f4d"></a></p>
-<h3 id="把webhook地址写到github的项目设置中"><a href="#把webhook地址写到github的项目设置中" class="headerlink" title="把webhook地址写到github的项目设置中"></a>把webhook地址写到github的项目设置中</h3><p><code>http://ip:9999/webhooks/push/1</code><br>github会测试发送，成功之后会显示绿色对勾.<br><a name="912951c4"></a></p>
-<h4 id="https-www-yuque-com-yuque-developer-doc-webhook"><a href="#https-www-yuque-com-yuque-developer-doc-webhook" class="headerlink" title="https://www.yuque.com/yuque/developer/doc-webhook"></a><a href="https://www.yuque.com/yuque/developer/doc-webhook" target="_blank" rel="noopener">https://www.yuque.com/yuque/developer/doc-webhook</a></h4><p>apt install git<br>apt install nodejs<br>apt install npm<br>npm i -g hexo</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/04/04/yuque/webhook实现服务器自动部署/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/12产品管理的行为数据类型" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/04/yuque/12产品管理的行为数据类型/">12产品管理的行为数据类型</a>
-    </h1>
-  
-
-        
-        <a href="/2019/04/04/yuque/12产品管理的行为数据类型/" class="archive-article-date">
-  	<time datetime="2019-04-04T10:09:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-04</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>行为数据，描述观察到的用户或客户行为的数据，可以让您真正了解人们如何或将来可能使用您的产品。听到人们说他们想要的东西是一回事，但看看他们的实际表现会更好。<br>获得比您想象的行为数据更容易。无论您是在进行研究，运行实验来验证假设或功能，还是您刚刚发布了一项功能，行为数据都是您最好的，可以说是最有信息量的朋友。<br>本文旨在通过向您提供产品团队可用的所有类型的行为数据列表来帮助您。希望它提供了一些新的选项，如果您尝试使用数据来推动团队的决策，您可以考虑这些选项。<br>
-        
-          <a class="article-more-a" href="/2019/04/04/yuque/12产品管理的行为数据类型/#more">more >></a>
-        
-      
-
-      
-    </p></div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/04/04/yuque/12产品管理的行为数据类型/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/从Alexa的错误中学习" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/04/yuque/从Alexa的错误中学习/">从Alexa的错误中学习</a>
-    </h1>
-  
-
-        
-        <a href="/2019/04/04/yuque/从Alexa的错误中学习/" class="archive-article-date">
-  	<time datetime="2019-04-04T09:08:29.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-04</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><em>虽然亚马逊的“唤醒词”功能可以改善隐私，但它提出了自己的挑战，例如Alexa录制私人谈话并未经同意将其发送出去。</em><br>通过<a href="https://www.pcmag.com/author-bio/ben-dickson" target="_blank" rel="noopener">本迪克森</a><br>Amazon Echo设备最近<a href="https://www.pcmag.com/news/361405/amazon-alexa-sends-familys-private-conversation-to-contact" target="_blank" rel="noopener">记录</a>了用户<a href="https://www.pcmag.com/news/361405/amazon-alexa-sends-familys-private-conversation-to-contact" target="_blank" rel="noopener">的私人谈话</a>，并在未经他们知情和同意的情况下将其发送给他们的一个联系人。这（再次）引起了对<a href="https://bdtechtalks.com/2018/06/05/google-home-amazon-echo-privacy-security-risks/" target="_blank" rel="noopener">智能扬声器</a>的<a href="https://bdtechtalks.com/2018/06/05/google-home-amazon-echo-privacy-security-risks/" target="_blank" rel="noopener">安全性和隐私性的</a>担忧。然而，后来变得明显，Alexa的奇怪行为并不是一个险恶的间谍情节的一部分 - 相反，它是由于智能扬声器的工作方式导致的一系列相关故障引起的。<br>根据亚马逊提供的一个<a href="https://www.theverge.com/2018/5/24/17391898/amazon-alexa-private-conversation-recording-explanation" target="_blank" rel="noopener">帐户</a>：“由于背景对话中的一个词听起来像’Alexa’，Echo醒了。然后，随后的对话被听作是“发送消息”请求。在这一点上，Alexa大声说’给谁？’ 此时，后台会话被解释为客户联系人列表中的名称。然后Alexa大声问道，’[联系人姓名]，对吗？Alexa然后将背景对话解释为“正确”。尽管这一系列事件不太可能，我们正在评估使这种情况更不可能的选择。“<br>该场景是一个边缘案例，很少发生的事件。但它也是人工智能技术极限的一项有趣研究，它为<a href="https://www.pcmag.com/review/356920/amazon-echo-2017" target="_blank" rel="noopener">Echo</a>和其他所谓的“智能”设备提供动力。<br>
-        
-          <a class="article-more-a" href="/2019/04/04/yuque/从Alexa的错误中学习/#more">more >></a>
-        
-      
-
-      
-    </p></div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/04/04/yuque/从Alexa的错误中学习/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
     <article id="post-yuque/语音助理在手机上被浪费了" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -666,6 +463,127 @@
 
 
   
+    <article id="post-yuque/如何使用良好的软件工程实践设置PySpark环境以进行开发" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/03/18/yuque/如何使用良好的软件工程实践设置PySpark环境以进行开发/">如何使用良好的软件工程实践设置PySpark环境以进行开发</a>
+    </h1>
+  
+
+        
+        <a href="/2019/03/18/yuque/如何使用良好的软件工程实践设置PySpark环境以进行开发/" class="archive-article-date">
+  	<time datetime="2019-03-18T03:16:24.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-18</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在本文中，我们将讨论如何设置我们的开发环境以创建高质量的python代码以及如何自动执行一些繁琐的任务来加速部署。<br>我们将介绍以下步骤：</p>
+<ul>
+<li>使用<a href="https://pipenv.readthedocs.io/en/latest/" target="_blank" rel="noopener"><strong>pipenv</strong></a>在隔离的虚拟环境中设置我们的依赖<a href="https://pipenv.readthedocs.io/en/latest/" target="_blank" rel="noopener"><strong>项</strong></a></li>
+<li>如何为多个作业设置项目结构</li>
+<li>如何运行pyspark工作</li>
+<li>如何使用<a href="https://opensource.com/article/18/8/what-how-makefile" target="_blank" rel="noopener"><strong>Makefile</strong></a><strong> </strong>自动执行开发步骤</li>
+<li>如何使用<a href="http://flake8.pycqa.org/en/latest/" target="_blank" rel="noopener"><strong>flake8</strong></a>测试代码的质量<a href="http://flake8.pycqa.org/en/latest/" target="_blank" rel="noopener"></a></li>
+<li>如何使用<a href="https://pypi.org/project/pytest-spark/" target="_blank" rel="noopener"><strong>pytest-spark</strong></a>为PySpark应用程序运行单元测试<a href="https://pypi.org/project/pytest-spark/" target="_blank" rel="noopener"></a></li>
+<li>运行测试覆盖率，看看我们是否使用<a href="https://pypi.org/project/pytest-cov/" target="_blank" rel="noopener"><strong>pytest-cov</strong></a>创建了足够的单元测试<a href="https://pypi.org/project/pytest-cov/" target="_blank" rel="noopener"></a><br><a name="54e5af6c"></a><h3 id="第1步：设置虚拟环境"><a href="#第1步：设置虚拟环境" class="headerlink" title="第1步：设置虚拟环境"></a>第1步：设置虚拟环境</h3>虚拟环境有助于我们将特定应用程序的依赖关系与系统的整体依赖关系隔离开来。这很好，因为我们不会涉及现有库的依赖性问题，并且在单独的系统（例如docker容器或服务器）上安装或卸载它们更容易。对于此任务，我们将使用<strong>pipenv。</strong><br>要在mac os系统上安装它，例如运行：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install pipenv</span><br></pre></td></tr></table></figure>
+<p>要为应用程序声明我们的依赖项（库），我们需要在项目的路径路径中创建一个<strong>Pipfile</strong>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[[source]]</span><br><span class="line">url = &apos;https://pypi.python.org/simple&apos;</span><br><span class="line">verify_ssl = true</span><br><span class="line">name = &apos;pypi&apos;</span><br><span class="line">[requires]</span><br><span class="line">python_version = &quot;3.6&quot;</span><br><span class="line">[packages]</span><br><span class="line">flake8 = &quot;*&quot;</span><br><span class="line">pytest-spark = &quot;&gt;=0.4.4&quot;</span><br><span class="line">pyspark = &quot;&gt;=2.4.0&quot;</span><br><span class="line">pytest-cov = &quot;*&quot;</span><br></pre></td></tr></table></figure>
+<p>这里有三个组件。在<strong>[[source]]</strong>标签中，我们声明了下载所有软件包的<strong>url</strong>，在<strong>[requires]中</strong>我们定义了python版本，最后在<strong>[packages]</strong>中声明了我们需要的依赖项。我们可以将依赖项绑定到某个版本，或者使用<strong>“*”</strong>符号来获取最新版本。<br>要创建虚拟环境并激活它，我们需要在终端中运行两个命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pipenv --three install</span><br><span class="line">pipenv shell</span><br></pre></td></tr></table></figure>
+<p>一旦完成这一步，你应该看到你在一个新的venv中，让项目的名字出现在命令行的终端中（默认情况下，env采用项目的名称）：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(pyspark-project-template) host:project$</span><br></pre></td></tr></table></figure>
+<p>现在，您可以使用两个命令进出。<br>停用env并返回标准环境：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">deactivate</span><br></pre></td></tr></table></figure>
+<p>再次激活虚拟环境（您需要位于项目的根目录中）：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">source `pipenv --venv`/bin/activate</span><br></pre></td></tr></table></figure></p>
+<p><a name="bb546939"></a></p>
+<h3 id="第2步：项目结构"><a href="#第2步：项目结构" class="headerlink" title="第2步：项目结构"></a>第2步：项目结构</h3><p>该项目可以具有以下结构：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">pyspark-project-template</span><br><span class="line">    src/</span><br><span class="line">        jobs/   </span><br><span class="line">            pi/</span><br><span class="line">                __init__.py</span><br><span class="line">                resources/</span><br><span class="line">                    args.json</span><br><span class="line">            word_count/</span><br><span class="line">                __init__.py</span><br><span class="line">                resources/</span><br><span class="line">                    args.json</span><br><span class="line">                    word_count.csv</span><br><span class="line">        main.py</span><br><span class="line">    test/</span><br><span class="line">        jobs/</span><br><span class="line">            pi/</span><br><span class="line">                test_pi.py</span><br><span class="line">            word_count/</span><br><span class="line">                test_word_count.py</span><br></pre></td></tr></table></figure>
+<p>排除一些<strong>init</strong>.py文件以简化操作，但您可以在本教程末尾的github上找到完整项目的链接。我们基本上有源代码和测试。每个作业都分成一个文件夹，每个作业都有一个资源文件夹，我们在其中添加该作业所需的额外文件和配置。<br>在本教程中，我使用了两个经典示例 -  <strong>pi</strong>，生成最多小数的pi数和<strong>字数</strong>，以计算csv文件中的单词数。<br><a name="1b6fecdc"></a></p>
+<h3 id="第3步：使用spark-submit运行作业"><a href="#第3步：使用spark-submit运行作业" class="headerlink" title="第3步：使用spark-submit运行作业"></a>第3步：使用spark-submit运行作业</h3><p>我们先来看看<strong>main.py</strong>文件的样子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">if __name__ == &apos;__main__&apos;:</span><br><span class="line"></span><br><span class="line">    parser = argparse.ArgumentParser(description=&apos;My pyspark job arguments&apos;)</span><br><span class="line">    parser.add_argument(&apos;--job&apos;, type=str, required=True, dest=&apos;job_name&apos;,</span><br><span class="line">                        help=&apos;The name of the spark job you want to run&apos;)</span><br><span class="line">    parser.add_argument(&apos;--res-path&apos;, type=str, required=True, dest=&apos;res_path&apos;,</span><br><span class="line">                        help=&apos;Path to the jobs resurces&apos;)</span><br><span class="line"></span><br><span class="line">    args = parser.parse_args()</span><br><span class="line"></span><br><span class="line">    spark = SparkSession\</span><br><span class="line">        .builder\</span><br><span class="line">        .appName(args.job_name)\</span><br><span class="line">        .getOrCreate()</span><br><span class="line"></span><br><span class="line">    job_module = importlib.import_module(&apos;jobs.%s&apos; % args.job_name)</span><br><span class="line">    res = job_module.run(spark, get_config(args.res_path, args.job_name))</span><br><span class="line"></span><br><span class="line">    print(&apos;[JOB &#123;job&#125; RESULT]: &#123;result&#125;&apos;.format(job=args.job_name, result=res))</span><br></pre></td></tr></table></figure>
+<p>当我们运行我们的工作时，我们需要两个命令行参数：  <strong>- job</strong>，是我们想要运行的作业的名称（在例外pi或word_count中）和  <strong>- res-path</strong>，是作业的相对路径。我们需要第二个参数，因为spark需要知道我们资源的完整路径。在生产环境中，我们将代码部署在集群上，我们将资源转移到HDFS或S3，我们将使用该路径。<br>在进一步解释代码之前，我们需要提一下，我们必须压缩<strong>作业</strong>文件夹并将其传递给<strong>spark-submit</strong>语句<strong>。</strong>假设我们在项目的根目录中：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd src/ </span><br><span class="line">zip -r ../jobs.zip jobs/</span><br></pre></td></tr></table></figure>
+<p>这将使代码在我们的应用程序中作为模块提供。基本上在<strong>第16行的main.py中，</strong>我们以编程方式导入<strong>作业</strong>模块。<br>我们的作业<strong>pi</strong>和<strong>word_count</strong>都有一个<strong>run</strong>函数，所以我们只需要运行这个函数来启动这个作业（<strong>main.py中的第17行）。</strong>我们还在那里传递了工作的配置。<br>让我们看一下<strong>word_count</strong>作业，进一步了解这个例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">from operator import add</span><br><span class="line"></span><br><span class="line">def get_keyval(row):</span><br><span class="line">    words = filter(lambda r: r is not None, row)</span><br><span class="line">    return [[w.strip().lower(), 1] for w in words]</span><br><span class="line"></span><br><span class="line">def run(spark, config):</span><br><span class="line">    df = spark.read.csv(config[&apos;relative_path&apos;] + config[&apos;words_file_path&apos;])</span><br><span class="line">    mapped_rdd = df.rdd.flatMap(lambda row: get_keyval(row))</span><br><span class="line">    counts_rdd = mapped_rdd.reduceByKey(add)</span><br><span class="line">    return counts_rdd.collect()</span><br></pre></td></tr></table></figure>
+<p>此代码在<strong>word_count</strong>文件夹的<strong><strong>init</strong>.py</strong>文件中定义。我们在这里可以看到，我们使用两个配置参数来读取资源文件夹中的csv文件：相对路径和csv文件的位置。其余的代码只计算单词，所以我们不会在这里详细介绍。值得一提的是，每个作业在resources文件夹中都有一个<strong>args.json</strong>文件。这里我们实际定义了传递给作业的配置。这是<strong>word_count</strong>作业的配置文件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;words_file_path&quot;: &quot;/word_count/resources/word_count.csv&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>所以我们现在有了所有细节来运行我们的<strong>spark-submit</strong>命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">spark-submit --py-files jobs.zip src/main.py --job word_count --res-path /your/path/pyspark-project-template/src/jobs</span><br></pre></td></tr></table></figure>
+<p>要运行另一个作业<strong>pi，</strong>我们只需要更改<strong>- job</strong>标志的参数  。<br><a name="b336e1a0"></a></p>
+<h3 id="第4步：编写单元测试，并使用覆盖率运行它们"><a href="#第4步：编写单元测试，并使用覆盖率运行它们" class="headerlink" title="第4步：编写单元测试，并使用覆盖率运行它们"></a>第4步：编写单元测试，并使用覆盖率运行它们</h3><p>要为pyspark应用程序编写测试，我们使用<strong>pytest-spark</strong>，一个非常易于使用的模块。<br>该<strong>WORD_COUNT</strong>工作单元测试：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">from src.jobs.word_count import get_keyval, run</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def test_get_keyval():</span><br><span class="line">    words=[&apos;this&apos;, &apos;are&apos;, &apos;words&apos;, &apos;words&apos;]</span><br><span class="line">    expected_results=[[&apos;this&apos;, 1], [&apos;are&apos;, 1], [&apos;words&apos;, 1], [&apos;words&apos;, 1]]</span><br><span class="line"></span><br><span class="line">    assert expected_results == get_keyval(words)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def test_word_count_run(spark_session):</span><br><span class="line">    expected_results = [(&apos;one&apos;, 1), (&apos;two&apos;, 1), (&apos;three&apos;, 2), (&apos;four&apos;, 2), (&apos;test&apos;, 1)]</span><br><span class="line">    conf = &#123;</span><br><span class="line">        &apos;relative_path&apos;: &apos;/your/path/pyspark-project-template/src/jobs&apos;,</span><br><span class="line">        &apos;words_file_path&apos;: &apos;/word_count/resources/word_count.csv&apos;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    assert expected_results == run(spark_session, conf)</span><br></pre></td></tr></table></figure>
+<p>我们需要从<strong>src</strong>模块导入我们想要测试的函数。这里更有趣的部分是我们如何进行<strong>test_word_count_run。</strong>我们可以看到没有初始化的spark会话，我们只是在测试中将其作为参数接收。这要归功于<strong>pytest-spark</strong>模块，因此我们可以专注于编写测试，而不是编写样板代码。<br>接下来让我们讨论一下代码覆盖率。我们怎么知道我们是否编写了足够的单元测试？很简单，我们运行测试覆盖工具，告诉我们尚未测试的代码。对于python，我们可以使用<strong>pytest-cov</strong>模块。要使用代码覆盖率运行所有测试，我们必须运行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pytest --cov=src test/jobs/</span><br></pre></td></tr></table></figure>
+<p>where  <strong>- cov</strong> flag告诉pytest在哪里检查覆盖范围。<br>测试覆盖率结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">---------- coverage: platform darwin, python 3.7.2-final-0 -----------</span><br><span class="line">Name                              Stmts   Miss  Cover</span><br><span class="line">-----------------------------------------------------</span><br><span class="line">src/__init__.py                       0      0   100%</span><br><span class="line">src/jobs/__init__.py                  0      0   100%</span><br><span class="line">src/jobs/pi/__init__.py              11      0   100%</span><br><span class="line">src/jobs/word_count/__init__.py       9      0   100%</span><br><span class="line">-----------------------------------------------------</span><br><span class="line">TOTAL                                20      0   100%</span><br></pre></td></tr></table></figure>
+<p>我们的测试覆盖率是100％，但是等一下，缺少一个文件！为什么<strong>main.py</strong>没有在那里列出？<br>如果我们认为我们有不需要测试的python代码，我们可以将它从报告中排除。为此，我们需要在项目的根目录中创建一个  <strong>.coveragerc</strong>文件。对于此示例，它看起来像这样：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[run]</span><br><span class="line">omit = src/main.py</span><br></pre></td></tr></table></figure>
+<p><a name="3760f981"></a></p>
+<h3 id="第5步：运行静态代码分析"><a href="#第5步：运行静态代码分析" class="headerlink" title="第5步：运行静态代码分析"></a>第5步：运行静态代码分析</h3><p>很好，我们有一些代码，我们可以运行它，我们有良好的覆盖率的单元测试。我们做对了吗？还没！我们还需要确保按照python最佳实践编写易于阅读的代码。为此，我们必须使用名为<strong>flake8</strong>的python模块检查我们的代码<strong>。</strong><br>要运行它：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flake8 ./src</span><br></pre></td></tr></table></figure>
+<p>它将分析<strong>src</strong>文件夹。如果我们有干净的代码，我们就不应该收到任何警告。但不，我们有一些问题：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">flake8 ./src</span><br><span class="line">./src/jobs/pi/__init__.py:13:1: E302 expected 2 blank lines, found 1</span><br><span class="line">./src/jobs/pi/__init__.py:15:73: E231 missing whitespace after &apos;,&apos;</span><br><span class="line">./src/jobs/pi/__init__.py:15:80: E501 line too long (113 &gt; 79 characters)</span><br></pre></td></tr></table></figure>
+<p>我们来看看代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">from random import random</span><br><span class="line">from operator import add</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">NUMBER_OF_STEPS_FACTOR = 100000</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def f(_):</span><br><span class="line">    x = random() * 2 - 1</span><br><span class="line">    y = random() * 2 - 1</span><br><span class="line">    return 1 if x ** 2 + y ** 2 &lt;= 1 else 0</span><br><span class="line"></span><br><span class="line">def run(spark, config):</span><br><span class="line">    number_of_steps = config[&apos;partitions&apos;] * NUMBER_OF_STEPS_FACTOR</span><br><span class="line">    count = spark.sparkContext.parallelize(range(1, number_of_steps + 1),config[&apos;partitions&apos;]).map(f).reduce(add)</span><br><span class="line">    return 4.0 * count / number_of_steps</span><br></pre></td></tr></table></figure>
+<p>我们可以看到在第<strong>13</strong>行我们有一个<strong>E302</strong>警告<strong>。</strong>这意味着我们需要在两种方法之间增加一条线。然后是第<strong>15</strong>行的<strong>E231</strong>和<strong>E501</strong>。这一行的第一个警告告诉我们，我们需要在和之间留出一个额外的空间，第二个警告通知我们线路太长，而且很难读（我们可以’甚至在要点中完整地看到它！）。<code>**range(1, number_of_steps +1),**</code><strong> </strong><code>**config[**</code><strong> </strong><br>解决所有警告后，代码看起来更容易阅读：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">from random import random</span><br><span class="line">from operator import add</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">NUMBER_OF_STEPS_FACTOR = 100000</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def f(_):</span><br><span class="line">    x = random() * 2 - 1</span><br><span class="line">    y = random() * 2 - 1</span><br><span class="line">    return 1 if x ** 2 + y ** 2 &lt;= 1 else 0</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def run(spark, config):</span><br><span class="line">    number_of_steps = config[&apos;partitions&apos;] * NUMBER_OF_STEPS_FACTOR</span><br><span class="line">    count = spark.sparkContext\</span><br><span class="line">        .parallelize(range(1, number_of_steps + 1),</span><br><span class="line">                     config[&apos;partitions&apos;]).map(f).reduce(add)</span><br><span class="line">    return 4.0 * count / number_of_steps</span><br></pre></td></tr></table></figure>
+<p><a name="a448168b"></a></p>
+<h3 id="第6步：将所有内容与Makefile放在一起"><a href="#第6步：将所有内容与Makefile放在一起" class="headerlink" title="第6步：将所有内容与Makefile放在一起"></a>第6步：将所有内容与Makefile放在一起</h3><p>因为我们在终端中运行了一堆命令，所以在最后一步中我们将研究如何简化和自动执行此任务。<br>我们可以在项目的根目录中创建一个<strong>Makefile</strong>，如下所示：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">.DEFAULT_GOAL := run</span><br><span class="line">init:</span><br><span class="line"> pipenv --three install</span><br><span class="line"> pipenv shell</span><br><span class="line">analyze:</span><br><span class="line"> flake8 ./src</span><br><span class="line">run_tests:</span><br><span class="line"> pytest --cov=src test/jobs/</span><br><span class="line">run:</span><br><span class="line"> find . -name &apos;__pycache__&apos; | xargs rm -rf</span><br><span class="line"> rm -f jobs.zip</span><br><span class="line"> cd src/ &amp;&amp; zip -r ../jobs.zip jobs/</span><br><span class="line"> spark-submit --py-files jobs.zip src/main.py --job $(JOB_NAME) --res-path $(CONF_PATH)</span><br></pre></td></tr></table></figure></p>
+<p>如果我们想要使用coverage运行测试，我们只需输入：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make run_tests</span><br></pre></td></tr></table></figure>
+<p>如果我们想要运行<strong>pi</strong>工作：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make run JOB_NAME=pi CONF_PATH=/your/path/pyspark-project-template/src/jobs</span><br></pre></td></tr></table></figure>
+<p>这就是所有人！希望这个对你有帮助。<br>一如既往，代码存储在<a href="https://github.com/BogdanCojocar/medium-articles/tree/master/pyspark-project-template" target="_blank" rel="noopener">github上</a>。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/03/18/yuque/如何使用良好的软件工程实践设置PySpark环境以进行开发/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-yuque/使用Spark Structured Streaming，XGBoost和Scala进行实时预测" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -901,6 +819,303 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2019/03/15/yuque/将ML投入生产：在Python中使用Apache Kafka/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/使用MLflow赋予Spark功能" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/03/15/yuque/使用MLflow赋予Spark功能/">使用MLflow赋予Spark功能</a>
+    </h1>
+  
+
+        
+        <a href="/2019/03/15/yuque/使用MLflow赋予Spark功能/" class="archive-article-date">
+  	<time datetime="2019-03-15T08:33:35.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-15</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>这篇文章旨在介绍我们使用<a href="https://mlflow.org/" target="_blank" rel="noopener"><strong>MLflow</strong></a>的初步经验。<br>我们将通过记录所有探索性迭代，开始使用自己的<a href="https://mlflow.org/docs/latest/tracking.html" target="_blank" rel="noopener">跟踪服务器</a>发现MLflow 。然后，我们将展示使用UDF将Spark与MLflow相关联的经验。<br><a name="50f198f0"></a></p>
+<h4 id="上下文"><a href="#上下文" class="headerlink" title="上下文"></a>上下文</h4><p>我们利用机器学习和人工智能的力量，使人们能够控制自己的健康和福祉。机器学习模型因此是我们正在开发的数据产品的核心，这就是为什么MLFLow，一个涵盖ML生命周期所有方面的开源平台引起了我们的注意。<br><a name="MLflow"></a></p>
+<h3 id="MLflow"><a href="#MLflow" class="headerlink" title="MLflow"></a>MLflow</h3><p>MLflow的主要目标是在ML之上提供额外的层，允许数据科学家与几乎任何机器学习库（<a href="https://github.com/h2oai" target="_blank" rel="noopener"><em>h2o，</em></a><a href="https://keras.io/" target="_blank" rel="noopener"><em>keras，</em></a><a href="http://mleap-docs.combust.ml/" target="_blank" rel="noopener"><em>mleap，</em></a><a href="https://pytorch.org/" target="_blank" rel="noopener"><em>pytorch，</em></a><a href="http://scikit-learn.org/stable/" target="_blank" rel="noopener"><em>sklearn和</em></a><a href="https://www.tensorflow.org/" target="_blank" rel="noopener"><em>tensorflow</em></a>）一起工作，同时，它将他们的工作带到另一个层次。<br>MLflow提供三个组件：</p>
+<ul>
+<li><a href="https://mlflow.org/docs/latest/tracking.html" target="_blank" rel="noopener"><strong>跟踪</strong></a>  - 记录和查询实验：代码，数据，配置和结果。跟踪建模进度非常有用。</li>
+<li><a href="https://mlflow.org/docs/latest/projects.html" target="_blank" rel="noopener"><strong>项目</strong></a>  - 在任何平台（<strong>_即_</strong> <a href="https://aws.amazon.com/sagemaker" target="_blank" rel="noopener"><em>Sagemaker</em></a>）上可重复运行的包装格式。</li>
+<li><a href="https://mlflow.org/docs/latest/models.html" target="_blank" rel="noopener"><strong>模型</strong></a>  - 将模型发送到各种部署工具的通用格式。<blockquote>
+<p><strong>MLflow</strong>（目前处于alpha版本）是一个管理ML生命周期的开源平台，包括实验，可重复性和部署。<br><a name="181d871e"></a></p>
+</blockquote>
+<h4 id="设置MLflow"><a href="#设置MLflow" class="headerlink" title="设置MLflow"></a>设置MLflow</h4>为了使用MLflow，我们首先需要设置所有Python环境以使用MLflow，我们将使用<a href="https://github.com/pyenv/pyenv" target="_blank" rel="noopener">PyEnv </a>_（_<a href="https://gist.github.com/chris-zen/9e61db6924bd37fbe414f648614ca4c5" target="_blank" rel="noopener"><em>在Mac中</em></a><strong>_设置_</strong>_ → _<a href="https://gist.github.com/chris-zen/9e61db6924bd37fbe414f648614ca4c5" target="_blank" rel="noopener"><em>Python）</em></a>。这将提供一个虚拟环境，我们可以在其中安装运行它所需的所有库。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">pyenv install 3.7.0</span><br><span class="line">pyenv global 3.7.0 # Use Python 3.7</span><br><span class="line">mkvirtualenv mlflow # Create a Virtual Env with Python 3.7</span><br><span class="line">workon mlflow</span><br></pre></td></tr></table></figure>
+<p>安装所需的库</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">pip install mlflow==0.7.0 \</span><br><span class="line">            Cython==0.29 \ </span><br><span class="line">            numpy==1.14.5 \</span><br><span class="line">            pandas==0.23.4 \</span><br><span class="line">            pyarrow==0.11.0</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><strong>注意：</strong>我们使用PyArrow将模型作为UDF启动。PyArrow和Numpy版本需要修复，因为最新的版本之间存在一些冲突。</p>
+</blockquote>
+<p><a name="9a02c96e"></a></p>
+<h4 id="启动跟踪UI"><a href="#启动跟踪UI" class="headerlink" title="启动跟踪UI"></a>启动跟踪UI</h4><p>MLflow Tracking允许我们使用<a href="https://mlflow.org/docs/latest/python_api/index.html#python-api" target="_blank" rel="noopener">Python</a>和<a href="https://mlflow.org/docs/latest/rest-api.html#rest-api" target="_blank" rel="noopener">REST</a> API 记录和查询实验。此外，还可以定义我们将存储模型工件的位置（<em>Localhost，</em><a href="https://mlflow.org/docs/latest/tracking.html#amazon-s3" target="_blank" rel="noopener"><em>Amazon S3</em></a>_，_<a href="https://mlflow.org/docs/latest/tracking.html#azure-blob-storage" target="_blank" rel="noopener"><em>Azure Blob存储</em></a>_，_<a href="https://mlflow.org/docs/latest/tracking.html#google-cloud-storage" target="_blank" rel="noopener"><em>Google云存储</em></a>_或_<a href="https://mlflow.org/docs/latest/tracking.html#sftp-server" target="_blank" rel="noopener"><em>SFTP服务器</em></a>）。由于我们使用AWS ，因此我们将尝试将<strong>S3</strong>作为工件存储。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># Running a Tracking Server</span><br><span class="line">mlflow server \</span><br><span class="line">    --file-store /tmp/mlflow/fileStore \</span><br><span class="line">    --default-artifact-root s3://&lt;bucket&gt;/mlflow/artifacts/ \</span><br><span class="line">    --host localhost</span><br><span class="line">    --port 5000</span><br></pre></td></tr></table></figure>
+<p>MLflow建议使用<strong>持久性文件存储</strong>。这<code>file-store</code>是服务器存储运行和实验元数据的位置。因此，在运行服务器时，请确保这指向持久文件系统位置。在这里，我们只是<code>/tmp</code>用于实验。<br>请记住，如果我们想使用mlflow服务器运行旧实验，它们必须存在于文件存储中。但是，如果没有它们，我们仍然可以在UDF中使用它们，因为只需要模型路径。</p>
+<blockquote>
+<p><strong><em>注意：</em></strong>请记住跟踪UI，模型客户端必须能够访问工件位置。这意味着，无论跟踪UI是否在EC2实例上，如果我们在本地运行MLflow，我们的机器应该可以直接访问S3来编写工件模型。</p>
+</blockquote>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1552639247139-4605b9cb-f981-43fc-a969-9a2155d75965.png#align=left&amp;display=inline&amp;height=239&amp;name=1_z6iObWdxXOtcIj_cUk2gag.png&amp;originHeight=642&amp;originWidth=2000&amp;size=114273&amp;status=done&amp;width=746" alt="1_z6iObWdxXOtcIj_cUk2gag.png"><br><a name="7d519d5b"></a></p>
+<h4 id="运行模型"><a href="#运行模型" class="headerlink" title="运行模型"></a>运行模型</h4><p>跟踪服务器运行后，我们可以开始训练我们的模型。<br>作为一个例子，我们将使用<a href="https://github.com/mlflow/mlflow/blob/master/examples/sklearn_elasticnet_wine/train.py" target="_blank" rel="noopener"><strong><em>MLflow Sklearn示例中</em></strong></a>提供的wine示例的修改。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">MLFLOW_TRACKING_URI=http://localhost:5000 python wine_quality.py \</span><br><span class="line">  --alpha 0.9</span><br><span class="line">  --l1_ration 0.5</span><br><span class="line">  --wine_file ./data/winequality-red.csv</span><br></pre></td></tr></table></figure>
+<p>如前所述，MLflow允许记录模型的参数，度量和工件，因此我们可以跟踪这些在不同迭代中如何演变。此功能非常有用，因为我们可以通过检查Tracking Server来重现我们的最佳模型，或者验证哪些代码正在执行所需的迭代，因为<strong>它记录</strong><em>（免费）</em><strong>git哈希提交</strong>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">with mlflow.start_run():</span><br><span class="line"></span><br><span class="line">    ... model ...</span><br><span class="line"></span><br><span class="line">    mlflow.log_param(&quot;source&quot;, wine_path)</span><br><span class="line">    mlflow.log_param(&quot;alpha&quot;, alpha)</span><br><span class="line">    mlflow.log_param(&quot;l1_ratio&quot;, l1_ratio)</span><br><span class="line"></span><br><span class="line">    mlflow.log_metric(&quot;rmse&quot;, rmse)</span><br><span class="line">    mlflow.log_metric(&quot;r2&quot;, r2)</span><br><span class="line">    mlflow.log_metric(&quot;mae&quot;, mae)</span><br><span class="line"></span><br><span class="line">    mlflow.set_tag(&apos;domain&apos;, &apos;wine&apos;)</span><br><span class="line">    mlflow.set_tag(&apos;predict&apos;, &apos;quality&apos;)</span><br><span class="line">    mlflow.sklearn.log_model(lr, &quot;model&quot;)</span><br></pre></td></tr></table></figure>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1552639366867-dba4caa9-6ea2-4ca8-b59a-737bbfa774fc.png#align=left&amp;display=inline&amp;height=365&amp;name=1_3soEGGuFumQXV5LSZNCnrA.png&amp;originHeight=489&amp;originWidth=1000&amp;size=130330&amp;status=done&amp;width=746" alt="1_3soEGGuFumQXV5LSZNCnrA.png"><br><a name="146d11ee"></a></p>
+<h4 id="服务模型"><a href="#服务模型" class="headerlink" title="服务模型"></a>服务模型</h4><p> 使用“ &gt; <strong><em>mlflow服务器</em></strong>&gt; _ ”_启动的&gt; <strong>MLflow跟踪服务器</strong>还托管REST API，用于跟踪运行并将数据写入本地文件系统。您可以使用“ &gt; <strong>_MLFLOW_TRACKING_URI_</strong>&gt; _”<em>环境变量指定跟踪服务器URI，MLflow跟踪API会自动与该URI处的跟踪服务器通信，以创建/获取运行信息，记录指标等。<br>**</em>参考：<em>**[</em>文档//运行跟踪服务器<em>](<a href="https://mlflow.org/docs/latest/tracking.html#running-a-tracking-server" target="_blank" rel="noopener">https://mlflow.org/docs/latest/tracking.html#running-a-tracking-server</a>)<br>为了提供模型，我们只需要运行一个<strong>跟踪服务器</strong>（**</em>参见_<strong><em>启动UI</em>）和一个</strong>模型运行ID**。<br><br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1552639490766-7db77f84-79f9-486e-963c-c574d85d438e.png#align=left&amp;display=inline&amp;height=120&amp;name=1_vBVbyT3F_YFjjfJuSDVrUA.png&amp;originHeight=161&amp;originWidth=1000&amp;size=81585&amp;status=done&amp;width=746" alt="1_vBVbyT3F_YFjjfJuSDVrUA.png"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"># Serve a sklearn model through 127.0.0.0:5005</span><br><span class="line">MLFLOW_TRACKING_URI=http://0.0.0.0:5000 mlflow sklearn serve \</span><br><span class="line">  --port 5005  \</span><br><span class="line">  --run_id 0f8691808e914d1087cf097a08730f17 \</span><br><span class="line">  --model-path model</span><br></pre></td></tr></table></figure>
+<p>要使用<strong>MLflow服务功能</strong>为模型提供<strong>服务，</strong>我们需要访问跟踪UI，因此只需指定即可检索模型信息<code>--run_id</code> 。<br>一旦跟踪服务器为模型提供服务，我们就可以查询新的模型端点。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"># Query Tracking Server Endpoint</span><br><span class="line">curl -X POST \</span><br><span class="line">  http://127.0.0.1:5005/invocations \</span><br><span class="line">  -H &apos;Content-Type: application/json&apos; \</span><br><span class="line">  -d &apos;[</span><br><span class="line">	&#123;</span><br><span class="line">		&quot;fixed acidity&quot;: 3.42, </span><br><span class="line">		&quot;volatile acidity&quot;: 1.66, </span><br><span class="line">		&quot;citric acid&quot;: 0.48, </span><br><span class="line">		&quot;residual sugar&quot;: 4.2, </span><br><span class="line">		&quot;chloridessssss&quot;: 0.229, </span><br><span class="line">		&quot;free sulfur dsioxide&quot;: 19, </span><br><span class="line">		&quot;total sulfur dioxide&quot;: 25, </span><br><span class="line">		&quot;density&quot;: 1.98, </span><br><span class="line">		&quot;pH&quot;: 5.33, </span><br><span class="line">		&quot;sulphates&quot;: 4.39, </span><br><span class="line">		&quot;alcohol&quot;: 10.8</span><br><span class="line">	&#125;</span><br><span class="line">]&apos;</span><br><span class="line"></span><br><span class="line">&gt; &#123;&quot;predictions&quot;: [5.825055635303461]&#125;</span><br></pre></td></tr></table></figure>
+<p><a name="e475db1c"></a></p>
+<h3 id="从Spark运行模型"><a href="#从Spark运行模型" class="headerlink" title="从Spark运行模型"></a>从Spark运行模型</h3><p>虽然通过训练模型和使用服务功能（<strong><em>ref：</em></strong><a href="https://mlflow.org/docs/latest/models.html#local" target="_blank" rel="noopener"><em>mlflow // docs // models #local）</em></a>实时为模型提供服务非常强大，但使用Spark（批量或流式传输）应用模型更是如此强大，因为它加入了分配力量。<a href="https://mlflow.org/docs/latest/models.html#local" target="_blank" rel="noopener"></a><br>想象一下，进行离线训练，然后以更简单的方式将输出模型应用于所有数据。这就是Spark和MLflow共同完美的地方。<br><a name="92cfd913"></a></p>
+<h4 id="安装PySpark-Jupyter-Spark"><a href="#安装PySpark-Jupyter-Spark" class="headerlink" title="安装PySpark + Jupyter + Spark"></a>安装PySpark + Jupyter + Spark</h4><p><strong><em>参考：</em></strong><a href="https://blog.sicara.com/get-started-pyspark-jupyter-guide-tutorial-ae2fe84f594f" target="_blank" rel="noopener"><em>PySpark开始 - Jupyter</em></a><br>展示我们如何将MLflow模型应用于Spark数据帧。我们需要使用PySpark设置Jupyter笔记本。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">首先下载最新的稳定Apache Spark（当前版本2.3.2）。</span><br><span class="line"></span><br><span class="line">cd ~/Downloads/</span><br><span class="line">tar -xzf spark-2.3.2-bin-hadoop2.7.tgz</span><br><span class="line">mv ~/Downloads/spark-2.3.2-bin-hadoop2.7 ~/</span><br><span class="line">ln -s ~/spark-2.3.2-bin-hadoop2.7 ~/spark̀</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">在我们的virtualEnv中安装PySpark和Jupyter</span><br><span class="line"></span><br><span class="line">pip install pyspark jupyter</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">设置Environmnet变量</span><br><span class="line"></span><br><span class="line">export SPARK_HOME=~/spark</span><br><span class="line">export PATH=$SPARK_HOME/bin:$PATH</span><br><span class="line">export PYSPARK_DRIVER_PYTHON=jupyter</span><br><span class="line">export PYSPARK_DRIVER_PYTHON_OPTS=&quot;notebook --notebook-dir=$&#123;HOME&#125;/Projects/notebooks&quot;</span><br><span class="line">通过定义notebook-dir，我们将能够将我们的笔记本存储和保存在所需的文件夹中。</span><br></pre></td></tr></table></figure>
+<p><a name="f6e12a2e"></a></p>
+<h4 id="从PySpark启动Jupyter"><a href="#从PySpark启动Jupyter" class="headerlink" title="从PySpark启动Jupyter"></a>从PySpark启动Jupyter</h4><p>由于我们将Jupyter配置为<strong><em>PySpark驱动程序</em></strong>，现在我们可以使用附加到我们笔记本的PySpark上下文启动Jupyter。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">(mlflow) afranzi:~$ pyspark</span><br><span class="line">[I 19:05:01.572 NotebookApp] sparkmagic extension enabled!</span><br><span class="line">[I 19:05:01.573 NotebookApp] Serving notebooks from local directory: /Users/afranzi/Projects/notebooks</span><br><span class="line">[I 19:05:01.573 NotebookApp] The Jupyter Notebook is running at:</span><br><span class="line">[I 19:05:01.573 NotebookApp] http://localhost:8888/?token=c06252daa6a12cfdd33c1d2e96c8d3b19d90e9f6fc171745</span><br><span class="line">[I 19:05:01.573 NotebookApp] Use Control-C to stop this server and shut down all kernels (twice to skip confirmation).</span><br><span class="line">[C 19:05:01.574 NotebookApp]</span><br><span class="line"></span><br><span class="line">    Copy/paste this URL into your browser when you connect for the first time,</span><br><span class="line">    to login with a token:</span><br><span class="line">        http://localhost:8888/?token=c06252daa6a12cfdd33c1d2e96c8d3b19d90e9f6fc171745</span><br></pre></td></tr></table></figure>
+<p>如上所示，MLflow提供了将模型工件记录到S3的功能。因此，一旦我们选择了一个模型，我们就可以使用该<code>mlflow.pyfunc</code>模块将其作为UDF导入。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">import mlflow.pyfunc</span><br><span class="line"></span><br><span class="line">model_path = &apos;s3://&lt;bucket&gt;/mlflow/artifacts/1/0f8691808e914d1087cf097a08730f17/artifacts/model&apos;</span><br><span class="line">wine_path = &apos;/Users/afranzi/Projects/data/winequality-red.csv&apos;</span><br><span class="line">wine_udf = mlflow.pyfunc.spark_udf(spark, model_path)</span><br><span class="line"></span><br><span class="line">df = spark.read.format(&quot;csv&quot;).option(&quot;header&quot;, &quot;true&quot;).option(&apos;delimiter&apos;, &apos;;&apos;).load(wine_path)</span><br><span class="line">columns = [ &quot;fixed acidity&quot;, &quot;volatile acidity&quot;, &quot;citric acid&quot;,</span><br><span class="line">            &quot;residual sugar&quot;, &quot;chlorides&quot;, &quot;free sulfur dioxide&quot;,</span><br><span class="line">            &quot;total sulfur dioxide&quot;, &quot;density&quot;, &quot;pH&quot;,</span><br><span class="line">            &quot;sulphates&quot;, &quot;alcohol&quot;</span><br><span class="line">          ]</span><br><span class="line">          </span><br><span class="line">df.withColumn(&apos;prediction&apos;, wine_udf(*columns)).show(100, False)</span><br></pre></td></tr></table></figure>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1552639783096-5f2fa010-2bff-4b1f-a478-ec4bde5b218d.png#align=left&amp;display=inline&amp;height=250&amp;name=1_hqSqC1493Tmu5-OHNcKhRg.png&amp;originHeight=335&amp;originWidth=1000&amp;size=196030&amp;status=done&amp;width=746" alt="1_hqSqC1493Tmu5-OHNcKhRg.png"><br>到目前为止，我们已经展示了如何通过在我们所有的葡萄酒数据集中运行葡萄酒质量预测来将PySpark与MLflow结合使用。但是当您需要使用Scala Spark的Python MLflow模块时会发生什么？<br>我们还设法通过在Scala和Python之间共享Spark Context来测试它。这意味着我们注册的MLflow UDF在Python，然后从斯卡拉用它（<em>叶氏，不是一个很好的解决方案，但至少它的东西</em><strong>🍭</strong>）。<br><a name="9f923831"></a></p>
+<h4 id="Scala-Spark-MLflow"><a href="#Scala-Spark-MLflow" class="headerlink" title="Scala Spark + MLflow"></a>Scala Spark + MLflow</h4><p>对于此示例，我们将Toree <a href="https://toree.apache.org/" target="_blank" rel="noopener"><strong>内核</strong></a>添加到现有的Jupyter中。<br>安装Spark + Toree + Jupyter</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">pip install toree</span><br><span class="line">jupyter toree install --spark_home=/Users/afranzi/spark --sys-prefix</span><br><span class="line">jupyter kernelspec list</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Available kernels:</span><br><span class="line">  apache_toree_scala    /Users/afranzi/.virtualenvs/mlflow/share/jupyter/kernels/apache_toree_scala</span><br><span class="line">  python3               /Users/afranzi/.virtualenvs/mlflow/share/jupyter/kernels/python3</span><br></pre></td></tr></table></figure>
+<p>正如您在附带的笔记本中看到的，UDF在Spark和PySpark之间共享。我们希望这最后一部分对那些喜欢Scala并且必须将ML模型投入生产的团队有所帮助。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">1</span>]:</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.sql.functions.col</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.sql.types.StructType</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.sql.&#123;Column, DataFrame&#125;</span><br><span class="line"><span class="keyword">import</span> scala.util.matching.Regex</span><br><span class="line"></span><br><span class="line">val FirstAtRe: Regex = <span class="string">"^_"</span>.r</span><br><span class="line">val AliasRe: Regex = <span class="string">"[\\s_.:@]+"</span>.r</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getFieldAlias</span><span class="params">(field_name: String)</span>:</span> String = &#123;</span><br><span class="line">    FirstAtRe.replaceAllIn(AliasRe.replaceAllIn(field_name, <span class="string">"_"</span>), <span class="string">""</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">selectFieldsNormalized</span><span class="params">(columns: List[String])</span><span class="params">(df: DataFrame)</span>:</span> DataFrame = &#123;</span><br><span class="line">    val fieldsToSelect: List[Column] = columns.map(field =&gt;</span><br><span class="line">        col(field).<span class="keyword">as</span>(getFieldAlias(field))</span><br><span class="line">    )</span><br><span class="line">    df.select(fieldsToSelect: _*)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">normalizeSchema</span><span class="params">(df: DataFrame)</span>:</span> DataFrame = &#123;</span><br><span class="line">    val schema = df.columns.toList</span><br><span class="line">    df.transform(selectFieldsNormalized(schema))</span><br><span class="line">&#125;</span><br><span class="line">FirstAtRe = ^_</span><br><span class="line">AliasRe = [\s_.:@]+</span><br><span class="line">getFieldAlias: (field_name: String)String</span><br><span class="line">selectFieldsNormalized: (columns: List[String])(df: org.apache.spark.sql.DataFrame)org.apache.spark.sql.DataFrame</span><br><span class="line">normalizeSchema: (df: org.apache.spark.sql.DataFrame)org.apache.spark.sql.DataFrame</span><br><span class="line">Out[<span class="number">1</span>]:</span><br><span class="line">[\s_.:@]+</span><br><span class="line">In [<span class="number">2</span>]:</span><br><span class="line">val winePath = <span class="string">"~/Research/mlflow-workshop/examples/wine_quality/data/winequality-red.csv"</span></span><br><span class="line">val modelPath = <span class="string">"/tmp/mlflow/artifactStore/0/96cba14c6e4b452e937eb5072467bf79/artifacts/model"</span></span><br><span class="line">winePath = ~/Research/mlflow-workshop/examples/wine_quality/data/winequality-red.csv</span><br><span class="line">modelPath = /tmp/mlflow/artifactStore/<span class="number">0</span>/<span class="number">96</span>cba14c6e4b452e937eb5072467bf79/artifacts/model</span><br><span class="line">Out[<span class="number">2</span>]:</span><br><span class="line">/tmp/mlflow/artifactStore/<span class="number">0</span>/<span class="number">96</span>cba14c6e4b452e937eb5072467bf79/artifacts/model</span><br><span class="line">In [<span class="number">3</span>]:</span><br><span class="line">val df = spark.read</span><br><span class="line">              .format(<span class="string">"csv"</span>)</span><br><span class="line">              .option(<span class="string">"header"</span>, <span class="string">"true"</span>)</span><br><span class="line">              .option(<span class="string">"delimiter"</span>, <span class="string">";"</span>)</span><br><span class="line">              .load(winePath)</span><br><span class="line">              .transform(normalizeSchema)</span><br><span class="line">df = [fixed_acidity: string, volatile_acidity: string ... <span class="number">10</span> more fields]</span><br><span class="line">Out[<span class="number">3</span>]:</span><br><span class="line">[fixed_acidity: string, volatile_acidity: string ... <span class="number">10</span> more fields]</span><br><span class="line">In [<span class="number">4</span>]:</span><br><span class="line">%%PySpark</span><br><span class="line"><span class="keyword">import</span> mlflow</span><br><span class="line"><span class="keyword">from</span> mlflow <span class="keyword">import</span> pyfunc</span><br><span class="line"></span><br><span class="line">model_path = <span class="string">"/tmp/mlflow/artifactStore/0/96cba14c6e4b452e937eb5072467bf79/artifacts/model"</span></span><br><span class="line">wine_quality_udf = mlflow.pyfunc.spark_udf(spark, model_path)</span><br><span class="line"></span><br><span class="line">spark.udf.register(<span class="string">"wineQuality"</span>, wine_quality_udf)</span><br><span class="line">Out[<span class="number">4</span>]:</span><br><span class="line">&lt;function spark_udf.&lt;locals&gt;.predict at <span class="number">0x1116a98c8</span>&gt;</span><br><span class="line">In [<span class="number">6</span>]:</span><br><span class="line">df.createOrReplaceTempView(<span class="string">"wines"</span>)</span><br><span class="line">In [<span class="number">10</span>]:</span><br><span class="line">%%SQL</span><br><span class="line">SELECT </span><br><span class="line">    quality,</span><br><span class="line">    wineQuality(</span><br><span class="line">        fixed_acidity,</span><br><span class="line">        volatile_acidity,</span><br><span class="line">        citric_acid,</span><br><span class="line">        residual_sugar,</span><br><span class="line">        chlorides,</span><br><span class="line">        free_sulfur_dioxide,</span><br><span class="line">        total_sulfur_dioxide,</span><br><span class="line">        density,</span><br><span class="line">        pH,</span><br><span class="line">        sulphates,</span><br><span class="line">        alcohol</span><br><span class="line">    ) AS prediction</span><br><span class="line">FROM wines</span><br><span class="line">LIMIT <span class="number">10</span></span><br><span class="line">Out[<span class="number">10</span>]:</span><br><span class="line">+-------+------------------+</span><br><span class="line">|quality|        prediction|</span><br><span class="line">+-------+------------------+</span><br><span class="line">|      <span class="number">5</span>| <span class="number">5.576883967129615</span>|</span><br><span class="line">|      <span class="number">5</span>|  <span class="number">5.50664776916154</span>|</span><br><span class="line">|      <span class="number">5</span>| <span class="number">5.525504822954496</span>|</span><br><span class="line">|      <span class="number">6</span>| <span class="number">5.504311247097457</span>|</span><br><span class="line">|      <span class="number">5</span>| <span class="number">5.576883967129615</span>|</span><br><span class="line">|      <span class="number">5</span>|<span class="number">5.5556903912725755</span>|</span><br><span class="line">|      <span class="number">5</span>| <span class="number">5.467882654744997</span>|</span><br><span class="line">|      <span class="number">7</span>| <span class="number">5.710602976324739</span>|</span><br><span class="line">|      <span class="number">7</span>| <span class="number">5.657319539336507</span>|</span><br><span class="line">|      <span class="number">5</span>| <span class="number">5.345098606538708</span>|</span><br><span class="line">+-------+------------------+</span><br><span class="line"></span><br><span class="line">In [<span class="number">17</span>]:</span><br><span class="line">spark.catalog.listFunctions.filter(<span class="string">'name like "%wineQuality%").show(20, false)</span></span><br><span class="line"><span class="string">+-----------+--------+-----------+---------+-----------+</span></span><br><span class="line"><span class="string">|name       |database|description|className|isTemporary|</span></span><br><span class="line"><span class="string">+-----------+--------+-----------+---------+-----------+</span></span><br><span class="line"><span class="string">|wineQuality|null    |null       |null     |true       |</span></span><br><span class="line"><span class="string">+-----------+--------+-----------+---------+-----------+</span></span><br></pre></td></tr></table></figure>
+<p><a name="38ce27d8"></a></p>
+<h4 id="下一步"><a href="#下一步" class="headerlink" title="下一步"></a>下一步</h4><p>尽管MLflow目前处于Alpha（🥁），但它看起来很有希望。只需能够运行多个机器学习框架并从同一端点使用它们，它就能将所有推荐系统提升到新的水平。<br>此外，MLflow 通过在它们之间建立公共层，使&gt; <strong>数据工程师</strong>和数据科学家&gt; <strong>更加接近</strong> 。&gt;<br>在对MLflow进行这项研究之后，我们确信我们将进一步研究它并开始在Spark管道和我们的推荐系统中使用它。<br>让文件存储与数据库同步而不是使用FS会很好。这应该允许多个端点使用相同的文件存储。就像使用相同的<a href="https://aws.amazon.com/glue/" target="_blank" rel="noopener">Glue Metastore</a>有多个<a href="https://prestodb.io/" target="_blank" rel="noopener">Presto</a>和<a href="https://aws.amazon.com/athena/" target="_blank" rel="noopener">Athena</a>实例一样。<a href="https://aws.amazon.com/glue/" target="_blank" rel="noopener"></a><br>最后，感谢MLflow背后的所有社区，使其成为可能，让我们的数据更有趣。<br>如果您正在玩MLflow，请<strong>随时联系我们</strong>并提供有关您如何使用它的一些反馈！更重要的是，如果您在生产中使用MLflow。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/03/15/yuque/使用MLflow赋予Spark功能/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/MLflow模型" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/03/15/yuque/MLflow模型/">MLflow模型</a>
+    </h1>
+  
+
+        
+        <a href="/2019/03/15/yuque/MLflow模型/" class="archive-article-date">
+  	<time datetime="2019-03-15T07:28:46.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-15</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><a name="e2cd7971"></a></p>
+<h1 id="MLflow模型"><a href="#MLflow模型" class="headerlink" title="MLflow模型"></a>MLflow模型<a href="https://mlflow.org/docs/latest/models.html#mlflow-models" target="_blank" rel="noopener"></a></h1><p>MLflow模型是用于打包机器学习模型的标准格式，可用于各种下游工具 - 例如，通过REST API实时提供服务或在Apache Spark上进行批量推理。该格式定义了一种约定，允许您以不同的“风格”保存模型，这些“风味”可以被不同的下游工具理解。</p>
+<p>目录</p>
+<ul>
+<li><a href="https://mlflow.org/docs/latest/models.html#storage-format" target="_blank" rel="noopener">存储格式</a></li>
+<li><a href="https://mlflow.org/docs/latest/models.html#model-api" target="_blank" rel="noopener">模型API</a></li>
+<li><a href="https://mlflow.org/docs/latest/models.html#built-in-model-flavors" target="_blank" rel="noopener">内置型号口味</a></li>
+<li><a href="https://mlflow.org/docs/latest/models.html#custom-flavors" target="_blank" rel="noopener">自定义口味</a></li>
+<li><a href="https://mlflow.org/docs/latest/models.html#built-in-deployment-tools" target="_blank" rel="noopener">内置部署工具</a><br><a name="2dd6d735"></a><h2 id="存储格式"><a href="#存储格式" class="headerlink" title="存储格式"></a><a href="https://mlflow.org/docs/latest/models.html#id2" target="_blank" rel="noopener">存储格式</a></h2>每个MLflow模型都是一个包含任意文件<code>MLmodel</code> 的目录，以及目录根目录中的一个文件，该文件可以定义可以查看模型的多种_风格_。<br>使MLflow模型功能强大的关键概念：它们是部署工具可用于理解模型的约定，这使得编写可与任何ML库中的模型一起使用的工具成为可能，而无需将每个工具与每个库集成。MLflow定义了所有内置部署工具支持的几种“标准”风格，例如描述如何将模型作为Python函数运行的“Python函数”风格。但是，库也可以定义和使用其他类型。例如，MLflow的<a href="https://mlflow.org/docs/latest/python_api/mlflow.sklearn.html#module-mlflow.sklearn" target="_blank" rel="noopener"><code>mlflow.sklearn</code></a>库允许将模型加载为scikit-learn <code>Pipeline</code>对象，以便在知道scikit-learn的代码中使用，或者作为通用Python函数用于仅需要应用模型的工具（例如，工具）用于将模型部署到Amazon SageMaker）。<br>特定模型支持的所有风格都<code>MLmodel</code>以YAML格式在其文件中定义。例如，<a href="https://mlflow.org/docs/latest/python_api/mlflow.sklearn.html#module-mlflow.sklearn" target="_blank" rel="noopener"><code>mlflow.sklearn</code></a>输出模型如下：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># Directory written by mlflow.sklearn.save_model(model, &quot;my_model&quot;)</span><br><span class="line">my_model/</span><br><span class="line">├── MLmodel</span><br><span class="line">└── model.pkl</span><br></pre></td></tr></table></figure>
+<p>它的<code>MLmodel</code>文件描述了两种风格：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">time_created:</span> <span class="number">2018</span><span class="bullet">-05</span><span class="bullet">-25</span><span class="attr">T17:28:53.35</span></span><br><span class="line"></span><br><span class="line"><span class="attr">flavors:</span></span><br><span class="line"><span class="attr">  sklearn:</span></span><br><span class="line"><span class="attr">    sklearn_version:</span> <span class="number">0.19</span><span class="number">.1</span></span><br><span class="line"><span class="attr">    pickled_model:</span> <span class="string">model.pkl</span></span><br><span class="line"><span class="attr">  python_function:</span></span><br><span class="line"><span class="attr">    loader_module:</span> <span class="string">mlflow.sklearn</span></span><br></pre></td></tr></table></figure>
+<p>该模型然后可以与任何支持工具中使用_任一_的<code>sklearn</code>或 <code>python_function</code>模型的味道。例如，该命令可以为具有flavor 的模型提供服务：<code>mlflow sklearn`</code>sklearn`</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mlflow sklearn serve my_model</span><br></pre></td></tr></table></figure>
+<p>此外，命令行工具可以将模型打包并部署到AWS SageMaker，只要它们支持这种风格：<code>mlflow sagemaker`</code>python_function`</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mlflow sagemaker deploy -m my_model [other options]</span><br></pre></td></tr></table></figure>
+<p><a name="ce13267d"></a></p>
+<h3 id="MLmodel格式的字段"><a href="#MLmodel格式的字段" class="headerlink" title="MLmodel格式的字段"></a>MLmodel格式的字段<a href="https://mlflow.org/docs/latest/models.html#fields-in-the-mlmodel-format" target="_blank" rel="noopener"></a></h3><p>除了从<strong>口味</strong>场列出了模型的口味，在MLmodel YAML格式可以包含以下字段：<br><a name="TIME_CREATED"></a></p>
+<h4 id="TIME-CREATED"><a href="#TIME-CREATED" class="headerlink" title="TIME_CREATED"></a>TIME_CREATED</h4><p>创建模型的日期和时间，采用UTC ISO 8601格式。<br><a name="run_id"></a></p>
+<h4 id="run-id"><a href="#run-id" class="headerlink" title="run_id"></a>run_id</h4><p>如果使用<a href="https://mlflow.org/docs/latest/tracking.html#tracking" target="_blank" rel="noopener">MLflow Tracking</a>保存模型，则创建模型的运行的ID 。<br><a name="9f4e50f6"></a></p>
+<h2 id="模型API"><a href="#模型API" class="headerlink" title="模型API"></a><a href="https://mlflow.org/docs/latest/models.html#id3" target="_blank" rel="noopener">模型API</a><a href="https://mlflow.org/docs/latest/models.html#model-api" target="_blank" rel="noopener"></a></h2><p>您可以通过多种方式保存和加载MLflow模型。首先，MLflow包括与几个公共库的集成。例如，scikit-learn模型的<code>[mlflow.sklearn](https://mlflow.org/docs/latest/python_api/mlflow.sklearn.html#module-mlflow.sklearn)包括</code><a href="https://mlflow.org/docs/latest/python_api/mlflow.sklearn.html#mlflow.sklearn.save_model" target="_blank" rel="noopener"><code>save_model</code></a>，<a href="https://mlflow.org/docs/latest/python_api/mlflow.sklearn.html#mlflow.sklearn.log_model" target="_blank" rel="noopener"><code>log_model</code></a>和<a href="https://mlflow.org/docs/latest/python_api/mlflow.sklearn.html#mlflow.sklearn.load_model" target="_blank" rel="noopener"><code>load_model</code></a>函数。其次，您可以使用<a href="https://mlflow.org/docs/latest/python_api/mlflow.models.html#mlflow.models.Model" target="_blank" rel="noopener"><code>mlflow.models.Model</code></a>该类来创建和编写模型。这个类有四个关键功能：</p>
+<ul>
+<li><a href="https://mlflow.org/docs/latest/python_api/mlflow.models.html#mlflow.models.Model.add_flavor" target="_blank" rel="noopener"><code>add_flavor</code></a>为模型添加味道。每个flavor都有一个字符串名称和一个键值属性字典，其中值可以是任何可以序列化为YAML的对象。</li>
+<li><a href="https://mlflow.org/docs/latest/python_api/mlflow.models.html#mlflow.models.Model.save" target="_blank" rel="noopener"><code>save</code></a> 将模型保存到本地目录。</li>
+<li><a href="https://mlflow.org/docs/latest/python_api/mlflow.models.html#mlflow.models.Model.log" target="_blank" rel="noopener"><code>log</code></a> 使用MLflow Tracking将模型记录为当前运行中的工件。</li>
+<li><a href="https://mlflow.org/docs/latest/python_api/mlflow.models.html#mlflow.models.Model.load" target="_blank" rel="noopener"><code>load</code></a> 从本地目录或先前运行中的工件加载模型。<br><a name="5e2a9075"></a><h2 id="内置型号口味"><a href="#内置型号口味" class="headerlink" title="内置型号口味"></a><a href="https://mlflow.org/docs/latest/models.html#id4" target="_blank" rel="noopener">内置型号口味</a><a href="https://mlflow.org/docs/latest/models.html#built-in-model-flavors" target="_blank" rel="noopener"></a></h2>MLflow提供了几种可能在您的应用程序中有用的标准风格。具体来说，它的许多部署工具都支持这些风格，因此您可以将这些风格导出自己的模型，以便从所有这些工具中受益。<br><a name="19753d27"></a><h3 id="Python函数（python-function）"><a href="#Python函数（python-function）" class="headerlink" title="Python函数（python_function）"></a>Python函数（<code>python_function</code>）<a href="https://mlflow.org/docs/latest/models.html#python-function-python-function" target="_blank" rel="noopener"></a></h3>该<code>python_function</code>模型的味道定义了一个通用的文件系统格式为Python模型和保存和加载模型，并从该格式提供了工具。该格式是自包含的，因为它包含加载和使用模型所需的所有信息。依赖关系直接存储在模型中或通过Conda环境引用。<br><code>python_function</code>模型的约定是具有<code>predict</code>以下签名的方法或函数：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">predict(data: pandas.DataFrame) -&gt; [pandas.DataFrame | numpy.array]</span><br></pre></td></tr></table></figure>
+<p>其他MLflow组件期望<code>python_function</code>模型遵循此约定。<br>该<code>python_function</code>模型格式定义为包含所有所需的数据的目录结构，代码和配置：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">./dst-path/</span><br><span class="line">        ./MLmodel: configuration</span><br><span class="line">        &lt;code&gt;: code packaged with the model (specified in the MLmodel file)</span><br><span class="line">        &lt;data&gt;: data packaged with the model (specified in the MLmodel file)</span><br><span class="line">        &lt;env&gt;: Conda environment definition (specified in the MLmodel file)</span><br></pre></td></tr></table></figure>
+<p>一个<code>python_function</code>模式目录必须包含<code>MLmodel</code>在其与“python_function”格式和下列参数的根文件：<br><a name="a437d5e1"></a></p>
+<h4 id="loader-module-required"><a href="#loader-module-required" class="headerlink" title="loader_module [required]:"></a>loader_module [required]:</h4><p>可以加载模型的Python模块。期望是<code>mlflow.sklearn</code>可导入的模块标识符（例如）<code>importlib.import_module</code>。导入的模块必须包含具有以下签名的函数：<br>&gt; _load_pyfunc（path：string） - &gt; <pyfunc model></pyfunc></p>
+<p>path参数由<code>data</code>参数指定，可以引用文件或目录。<br><a name="00d57722"></a></p>
+<h4 id="code-optional"><a href="#code-optional" class="headerlink" title="code [optional]:"></a>code [optional]:</h4><p>包含此模型打包的代码的目录的相对路径。在导入模型加载器之前，此目录中的所有文件和目录都将添加到Python路径中。<br><a name="b1b6f654"></a></p>
+<h4 id="data-optional"><a href="#data-optional" class="headerlink" title="data [optional]:"></a>data [optional]:</h4><p>包含模型数据的文件或目录的相对路径。路径传递给模型加载器。<br><a name="6bbe3903"></a></p>
+<h4 id="env-可选-："><a href="#env-可选-：" class="headerlink" title="env [可选]："></a>env [可选]：</h4><p>导出的Conda环境的相对路径。如果存在，则在运行模型之前激活此环境。<br><a name="cf3e2664"></a></p>
+<h4 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tree example/sklearn_iris/mlruns/run1/outputs/linear-lr</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">├── MLmodel</span><br><span class="line">├── code</span><br><span class="line">│   ├── sklearn_iris.py</span><br><span class="line">│</span><br><span class="line">├── data</span><br><span class="line">│   └── model.pkl</span><br><span class="line">└── mlflow_env.yml</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat example/sklearn_iris/mlruns/run1/outputs/linear-lr/MLmodel</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">python_function:</span><br><span class="line">  code: code</span><br><span class="line">  data: data/model.pkl</span><br><span class="line">  loader_module: mlflow.sklearn</span><br><span class="line">  env: mlflow_env.yml</span><br><span class="line">  main: sklearn_iris</span><br></pre></td></tr></table></figure>
+<p>有关更多信息，请参阅<a href="https://mlflow.org/docs/latest/python_api/mlflow.pyfunc.html#module-mlflow.pyfunc" target="_blank" rel="noopener"><code>mlflow.pyfunc</code></a>。<br><a name="b099026c"></a></p>
+<h3 id="H-O（h2o）"><a href="#H-O（h2o）" class="headerlink" title="H  O（h2o）"></a>H  O（<code>h2o</code>）<a href="https://mlflow.org/docs/latest/models.html#h2o-h2o" target="_blank" rel="noopener"></a></h3><p>H2O模型风味可以记录和加载H2O模型。这些模型将通过使用保存<a href="https://mlflow.org/docs/latest/python_api/mlflow.h2o.html#mlflow.h2o.save_model" target="_blank" rel="noopener"><code>mlflow.h2o.save_model</code></a>。使用<a href="https://mlflow.org/docs/latest/python_api/mlflow.h2o.html#mlflow.h2o.log_model" target="_blank" rel="noopener"><code>mlflow.h2o.log_model</code></a>也将启用有效的味道。<code>Python Function</code><br>将H2O模型作为PyFunc模型加载时，<code>h2o.init(...)</code>将调用。因此，正确版本的h2o（-py）必须在环境中。给出的参数<code>h2o.init(...)</code>可以<code>model.h2o/h2o.yaml</code>在键下定制<code>init</code>。有关更多信息，请参阅<a href="https://mlflow.org/docs/latest/python_api/mlflow.h2o.html#module-mlflow.h2o" target="_blank" rel="noopener"><code>mlflow.h2o</code></a>。<br><a name="778f4101"></a></p>
+<h3 id="Keras（keras）"><a href="#Keras（keras）" class="headerlink" title="Keras（keras）"></a>Keras（<code>keras</code>）</h3><p>该<code>keras</code>模型味道启用日志记录和装载Keras模型。该模型将通过Keras提供的model_save功能以HDF5文件格式保存。此外，模型可以加载为。有关更多信息，请参阅。<code>Python Function</code><a href="https://mlflow.org/docs/latest/python_api/mlflow.keras.html#module-mlflow.keras" target="_blank" rel="noopener"><code>mlflow.keras</code></a><br><a name="bc0099ae"></a></p>
+<h3 id="MLeap（mleap）"><a href="#MLeap（mleap）" class="headerlink" title="MLeap（mleap）"></a>MLeap（<code>mleap</code>）</h3><p>该<code>mleap</code>模型风味支持使用MLeap持久性机制保存模型。该<code>mlflow/java</code>软件包中提供了一个用于加载具有MLeap风格格式的MLflow模型的配套模块。有关更多信息，请参阅<a href="https://mlflow.org/docs/latest/python_api/mlflow.mleap.html#module-mlflow.mleap" target="_blank" rel="noopener"><code>mlflow.mleap</code></a>。<br><a name="cf77fb8a"></a></p>
+<h3 id="PyTorch（pytorch）"><a href="#PyTorch（pytorch）" class="headerlink" title="PyTorch（pytorch）"></a>PyTorch（<code>pytorch</code>）</h3><p>该<code>pytorch</code>模型味道启用日志记录和装载PyTorch模型。模型使用torch.save（模型）方法以.pth格式完全存储。给定包含已保存模型的目录，您可以将模型记录到MLflow via 。然后可以加载保存的模型以进行推理。有关更多信息，请参阅。<code>log_saved_model`</code>mlflow.pyfunc.load_pyfunc()<code>[</code>mlflow.pytorch`](<a href="https://mlflow.org/docs/latest/python_api/mlflow.pytorch.html#module-mlflow.pytorch" target="_blank" rel="noopener">https://mlflow.org/docs/latest/python_api/mlflow.pytorch.html#module-mlflow.pytorch</a>)<br><a name="0fdc419b"></a></p>
+<h3 id="Scikit-learn（sklearn）"><a href="#Scikit-learn（sklearn）" class="headerlink" title="Scikit-learn（sklearn）"></a>Scikit-learn（<code>sklearn</code>）</h3><p>该<code>sklearn</code>模型的味道提供了一个简单易用的界面来处理scikit学习模式，没有外部的依赖关系。它使用Python的pickle模块保存和加载模型，并生成有效的 <code>python_function</code>flavor模型。有关更多信息，请参阅<a href="https://mlflow.org/docs/latest/python_api/mlflow.sklearn.html#module-mlflow.sklearn" target="_blank" rel="noopener"><code>mlflow.sklearn</code></a>。<br><a name="cddd0a6a"></a></p>
+<h3 id="Spark-MLlib（spark）"><a href="#Spark-MLlib（spark）" class="headerlink" title="Spark MLlib（spark）"></a>Spark MLlib（<code>spark</code>）</h3><p>该<code>spark</code>模型的味道能使出口星火MLlib模型作为MLflow模型。导出的模型使用Spark MLLib的本机序列化进行保存，然后可以作为MLlib模型加载回来或作为<code>python_function</code>模型进行部署。当部署为a时<code>python_function</code>，模型会创建自己的SparkContext，并在评分之前将pandas DataFrame输入转换为Spark DataFrame。虽然这不是最有效的解决方案，尤其是对于实时评分，但它使您能够轻松地将任何MLlib PipelineModel（只要PipelineModel没有外部JAR依赖性）部署到MLflow支持的任何端点。有关更多信息，请参阅<a href="https://mlflow.org/docs/latest/python_api/mlflow.spark.html#module-mlflow.spark" target="_blank" rel="noopener"><code>mlflow.spark</code></a>。<br><a name="2e423970"></a></p>
+<h3 id="TensorFlow（tensorflow）"><a href="#TensorFlow（tensorflow）" class="headerlink" title="TensorFlow（tensorflow）"></a>TensorFlow（<code>tensorflow</code>）</h3><p>该<code>tensorflow</code>模型的味道使记录TensorFlow 并加载它们早在模型上大熊猫DataFrames推断。给定包含已保存模型的目录，您可以将模型记录到MLflow ，然后使用加载保存的模型进行推理。有关更多信息，请参阅。<code>Saved Models`</code>Python Function<code>log_saved_model</code>mlflow.pyfunc.load_pyfunc<code>[</code>mlflow.tensorflow`](<a href="https://mlflow.org/docs/latest/python_api/mlflow.tensorflow.html#module-mlflow.tensorflow" target="_blank" rel="noopener">https://mlflow.org/docs/latest/python_api/mlflow.tensorflow.html#module-mlflow.tensorflow</a>)<br><a name="e070d9ab"></a></p>
+<h2 id="自定义口味"><a href="#自定义口味" class="headerlink" title="自定义口味"></a><a href="https://mlflow.org/docs/latest/models.html#id5" target="_blank" rel="noopener">自定义口味</a><a href="https://mlflow.org/docs/latest/models.html#custom-flavors" target="_blank" rel="noopener"></a></h2><p>您可以在MLmodel文件中添加一种风格，可以通过直接编写或使用<a href="https://mlflow.org/docs/latest/python_api/mlflow.models.html#mlflow.models.Model" target="_blank" rel="noopener"><code>mlflow.models.Model</code></a>类构建它。为您的风味选择一个任意的字符串名称。MLflow工具忽略他们不理解的MLmodel文件中的风格。<br><a name="197ccaae"></a></p>
+<h2 id="内置部署工具"><a href="#内置部署工具" class="headerlink" title="内置部署工具"></a><a href="https://mlflow.org/docs/latest/models.html#id6" target="_blank" rel="noopener">内置部署工具</a></h2><p>MLflow提供了在本地计算机和多个生产环境中部署模型的工具。并非所有部署方法都适用于所有型号的风格。Python函数格式和所有兼容格式支持部署。</p>
+<ul>
+<li><a href="https://mlflow.org/docs/latest/models.html#deploy-a-python-function-model-as-a-local-rest-api-endpoint" target="_blank" rel="noopener">将<code>python_function</code>模型部署为本地REST API端点</a></li>
+<li><a href="https://mlflow.org/docs/latest/models.html#deploy-a-python-function-model-on-microsoft-azure-ml" target="_blank" rel="noopener"><code>python_function</code>在Microsoft Azure ML上部署模型</a></li>
+<li><a href="https://mlflow.org/docs/latest/models.html#deploy-a-python-function-model-on-amazon-sagemaker" target="_blank" rel="noopener"><code>python_function</code>在Amazon SageMaker上部署模型</a></li>
+<li><a href="https://mlflow.org/docs/latest/models.html#export-a-python-function-model-as-an-apache-spark-udf" target="_blank" rel="noopener">将<code>python_function</code>模型导出为Apache Spark UDF</a><br><a name="14f802bf"></a><h3 id="将python-function模型部署为本地REST-API端点"><a href="#将python-function模型部署为本地REST-API端点" class="headerlink" title="将python_function模型部署为本地REST API端点"></a><a href="https://mlflow.org/docs/latest/models.html#id7" target="_blank" rel="noopener">将<code>python_function</code>模型部署为本地REST API端点</a><a href="https://mlflow.org/docs/latest/models.html#deploy-a-python-function-model-as-a-local-rest-api-endpoint" target="_blank" rel="noopener"></a></h3>MLflow可以在本地部署模型作为本地REST API端点，或直接对CSV文件进行评分。在部署到远程模型服务器之前，此功能是测试模型的便捷方式。您可以使用CLI界面在本地部署Python函数flavor到<a href="https://mlflow.org/docs/latest/python_api/mlflow.pyfunc.html#module-mlflow.pyfunc" target="_blank" rel="noopener"><code>mlflow.pyfunc</code></a>模块。本地REST API服务器接受以下数据格式作为输入：<blockquote>
+<ul>
+<li>JSON序列化的pandas DataFrames的<code>split</code>方向。例如， 。使用 请求标头值指定此格式。从MLflow 0.9.0开始，如果是（即没有格式规范），这将是默认格式。<code>data = pandas_df.to_json(orient=&#39;split&#39;)`</code>Content-Type<code>application/json; format=pandas-split</code>Content-Type<code></code>application/json`</li>
+<li>JSON序列化的pandas DataFrames的<code>records</code>方向。<em>我们不建议使用此格式，因为无法保证保留列顺序。</em>目前，使用 或的<code>Content-Type</code>请求标头值 指定此格式。从MLflow 0.9.0开始，将参考 格式。为了向前兼容，我们建议使用格式或指定内容类型。<code>application/json; format=pandas-records`</code>application/json<code>application/json</code>split<code>split</code>application/json; format=pandas-records`</li>
+<li>CSV序列化的pandas DataFrames。例如，。使用请求标头值指定此格式。<code>data = pandas_df.to_csv()`</code>Content-Type<code></code>text/csv`</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+<p>有关序列化pandas DataFrames的更多信息，请参阅 <a href="https://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.to_json.html" target="_blank" rel="noopener">pandas.DataFrame.to_json</a>。<br><a name="ddf7d2a5"></a></p>
+<h4 id="命令"><a href="#命令" class="headerlink" title="命令"></a>命令<a href="https://mlflow.org/docs/latest/models.html#commands" target="_blank" rel="noopener"></a></h4><ul>
+<li><code>serve</code> 将模型部署为本地REST API服务器。</li>
+<li><code>predict</code> 使用该模型生成本地CSV文件的预测。</li>
+</ul>
+<p>有关详细信息，请参阅：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mlflow  pyfunc  - help </span><br><span class="line">mlflow  pyfunc  serve  - help </span><br><span class="line">mlflow  pyfunc  predict  - help</span><br></pre></td></tr></table></figure>
+<p><a name="3aa45b7d"></a></p>
+<h3 id="python-function在Microsoft-Azure-ML上部署模型"><a href="#python-function在Microsoft-Azure-ML上部署模型" class="headerlink" title="python_function在Microsoft Azure ML上部署模型"></a><a href="https://mlflow.org/docs/latest/models.html#id8" target="_blank" rel="noopener"><code>python_function</code>在Microsoft Azure ML上部署模型</a><a href="https://mlflow.org/docs/latest/models.html#deploy-a-python-function-model-on-microsoft-azure-ml" target="_blank" rel="noopener"></a></h3><p>该<a href="https://mlflow.org/docs/latest/python_api/mlflow.azureml.html#module-mlflow.azureml" target="_blank" rel="noopener"><code>mlflow.azureml</code></a>模块可以将<code>python_function</code>模型打包到Azure ML容器映像中。这些映像可以部署到Azure Kubernetes服务（AKS）和Azure容器实例（ACI）平台，以实现实时服务。生成的Azure ML ContainerImage包含一个Web服务器，它接受以下数据格式作为输入：</p>
+<blockquote>
+<ul>
+<li>JSON序列化的pandas DataFrames的<code>split</code>方向。例如，。使用请求标头值指定此格式。<code>data = pandas_df.to_json(orient=&#39;split&#39;)`</code>Content-Type<code></code>application/json`</li>
+<li><a href="https://mlflow.org/docs/latest/python_api/mlflow.azureml.html#mlflow.azureml.build_image" target="_blank" rel="noopener"><code>build_image</code></a>向现有Azure ML工作区注册MLflow模型，并构建Azure ML容器映像以部署到AKS和ACI。在<a href="https://docs.microsoft.com/en-us/python/api/overview/azure/ml/intro?view=azure-ml-py" target="_blank" rel="noopener">Azure的ML SDK</a>要求才能使用此功能。<em>Azure ML SDK需要Python 3.它不能与早期版本的Python一起安装。</em></li>
+</ul>
+</blockquote>
+<p><a name="b88cb25c"></a></p>
+<h4 id="使用Python-API的示例工作流程"><a href="#使用Python-API的示例工作流程" class="headerlink" title="使用Python API的示例工作流程"></a>使用Python API的示例工作流程</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> mlflow.azureml</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> azureml.core <span class="keyword">import</span> Workspace</span><br><span class="line"><span class="keyword">from</span> azureml.core.webservice <span class="keyword">import</span> AciWebservice, Webservice</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># Create or load an existing Azure ML workspace. You can also load an existing workspace using</span></span><br><span class="line"><span class="comment"># Workspace.get(name="&lt;workspace_name&gt;")</span></span><br><span class="line">workspace_name = <span class="string">"&lt;Name of your Azure ML workspace&gt;"</span></span><br><span class="line">subscription_id = <span class="string">"&lt;Your Azure subscription ID&gt;"</span></span><br><span class="line">resource_group = <span class="string">"&lt;Name of the Azure resource group in which to create Azure ML resources&gt;"</span></span><br><span class="line">location = <span class="string">"&lt;Name of the Azure location (region) in which to create Azure ML resources&gt;"</span></span><br><span class="line">azure_workspace = Workspace.create(name=workspace_name,</span><br><span class="line">                                   subscription_id=subscription_id,</span><br><span class="line">                                   resource_group=resource_group,</span><br><span class="line">                                   location=location,</span><br><span class="line">                                   create_resource_group=<span class="literal">True</span>,</span><br><span class="line">                                   exist_okay=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Build an Azure ML container image for deployment</span></span><br><span class="line">azure_image, azure_model = mlflow.azureml.build_image(model_path=<span class="string">"&lt;path-to-model&gt;"</span>,</span><br><span class="line">                                                      workspace=azure_workspace,</span><br><span class="line">                                                      description=<span class="string">"Wine regression model 1"</span>,</span><br><span class="line">                                                      synchronous=<span class="literal">True</span>)</span><br><span class="line"><span class="comment"># If your image build failed, you can access build logs at the following URI:</span></span><br><span class="line">print(<span class="string">"Access the following URI for build logs: &#123;&#125;"</span>.format(azure_image.image_build_log_uri))</span><br><span class="line"></span><br><span class="line"><span class="comment"># Deploy the container image to ACI</span></span><br><span class="line">webservice_deployment_config = AciWebservice.deploy_configuration()</span><br><span class="line">webservice = Webservice.deploy_from_image(</span><br><span class="line">                    image=azure_image, workspace=azure_workspace, name=<span class="string">"&lt;deployment-name&gt;"</span>)</span><br><span class="line">webservice.wait_for_deployment()</span><br><span class="line"></span><br><span class="line"><span class="comment"># After the image deployment completes, requests can be posted via HTTP to the new ACI</span></span><br><span class="line"><span class="comment"># webservice's scoring URI. The following example posts a sample input from the wine dataset</span></span><br><span class="line"><span class="comment"># used in the MLflow ElasticNet example:</span></span><br><span class="line"><span class="comment"># https://github.com/mlflow/mlflow/tree/master/examples/sklearn_elasticnet_wine</span></span><br><span class="line">print(<span class="string">"Scoring URI is: %s"</span>, webservice.scoring_uri)</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"></span><br><span class="line"><span class="comment"># `sample_input` is a JSON-serialized pandas DataFrame with the `split` orientation</span></span><br><span class="line">sample_input = &#123;</span><br><span class="line">    <span class="string">"columns"</span>: [</span><br><span class="line">        <span class="string">"alcohol"</span>,</span><br><span class="line">        <span class="string">"chlorides"</span>,</span><br><span class="line">        <span class="string">"citric acid"</span>,</span><br><span class="line">        <span class="string">"density"</span>,</span><br><span class="line">        <span class="string">"fixed acidity"</span>,</span><br><span class="line">        <span class="string">"free sulfur dioxide"</span>,</span><br><span class="line">        <span class="string">"pH"</span>,</span><br><span class="line">        <span class="string">"residual sugar"</span>,</span><br><span class="line">        <span class="string">"sulphates"</span>,</span><br><span class="line">        <span class="string">"total sulfur dioxide"</span>,</span><br><span class="line">        <span class="string">"volatile acidity"</span></span><br><span class="line">    ],</span><br><span class="line">    <span class="string">"data"</span>: [</span><br><span class="line">        [<span class="number">8.8</span>, <span class="number">0.045</span>, <span class="number">0.36</span>, <span class="number">1.001</span>, <span class="number">7</span>, <span class="number">45</span>, <span class="number">3</span>, <span class="number">20.7</span>, <span class="number">0.45</span>, <span class="number">170</span>, <span class="number">0.27</span>]</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br><span class="line">response = requests.post(</span><br><span class="line">              url=webservice.scoring_uri, data=json.dumps(sample_input),</span><br><span class="line">              headers=&#123;<span class="string">"Content-type"</span>: <span class="string">"application/json"</span>&#125;)</span><br><span class="line">response_json = json.loads(response.text)</span><br><span class="line">print(response_json)</span><br></pre></td></tr></table></figure>
+<p><a name="35118db0"></a></p>
+<h4 id="Example-workflow-using-the-MLflow-CLI"><a href="#Example-workflow-using-the-MLflow-CLI" class="headerlink" title="Example workflow using the MLflow CLI"></a>Example workflow using the MLflow CLI</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">mlflow azureml build-image -w &lt;workspace-name&gt; -m &lt;model-path&gt; -d <span class="string">"Wine regression model 1"</span></span><br><span class="line"></span><br><span class="line">az ml service create aci -n &lt;deployment-name&gt; --image-id &lt;image-name&gt;:&lt;image-version&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment"># After the image deployment completes, requests can be posted via HTTP to the new ACI</span></span><br><span class="line"><span class="comment"># webservice's scoring URI. The following example posts a sample input from the wine dataset</span></span><br><span class="line"><span class="comment"># used in the MLflow ElasticNet example:</span></span><br><span class="line"><span class="comment"># https://github.com/mlflow/mlflow/tree/master/examples/sklearn_elasticnet_wine</span></span><br><span class="line"></span><br><span class="line">scoring_uri=$(az ml service show --name &lt;deployment-name&gt; -v | jq -r <span class="string">".scoringUri"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># `sample_input` is a JSON-serialized pandas DataFrame with the `split` orientation</span></span><br><span class="line">sample_input=<span class="string">'</span></span><br><span class="line"><span class="string">&#123;</span></span><br><span class="line"><span class="string">    "columns": [</span></span><br><span class="line"><span class="string">        "alcohol",</span></span><br><span class="line"><span class="string">        "chlorides",</span></span><br><span class="line"><span class="string">        "citric acid",</span></span><br><span class="line"><span class="string">        "density",</span></span><br><span class="line"><span class="string">        "fixed acidity",</span></span><br><span class="line"><span class="string">        "free sulfur dioxide",</span></span><br><span class="line"><span class="string">        "pH",</span></span><br><span class="line"><span class="string">        "residual sugar",</span></span><br><span class="line"><span class="string">        "sulphates",</span></span><br><span class="line"><span class="string">        "total sulfur dioxide",</span></span><br><span class="line"><span class="string">        "volatile acidity"</span></span><br><span class="line"><span class="string">    ],</span></span><br><span class="line"><span class="string">    "data": [</span></span><br><span class="line"><span class="string">        [8.8, 0.045, 0.36, 1.001, 7, 45, 3, 20.7, 0.45, 170, 0.27]</span></span><br><span class="line"><span class="string">    ]</span></span><br><span class="line"><span class="string">&#125;'</span></span><br><span class="line"></span><br><span class="line">echo $sample_input | curl -s -X POST $scoring_uri\</span><br><span class="line">-H <span class="string">'Cache-Control: no-cache'</span>\</span><br><span class="line">-H <span class="string">'Content-Type: application/json'</span>\</span><br><span class="line">-d @-</span><br></pre></td></tr></table></figure>
+<p>For more info, see:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mlflow azureml --<span class="built_in">help</span></span><br><span class="line">mlflow azureml build-image --<span class="built_in">help</span></span><br></pre></td></tr></table></figure>
+<p><a name="753d81d7"></a></p>
+<h3 id="python-function在Amazon-SageMaker上部署模型"><a href="#python-function在Amazon-SageMaker上部署模型" class="headerlink" title="python_function在Amazon SageMaker上部署模型"></a><a href="https://mlflow.org/docs/latest/models.html#id9" target="_blank" rel="noopener"><code>python_function</code>在Amazon SageMaker上部署模型</a><a href="https://mlflow.org/docs/latest/models.html#deploy-a-python-function-model-on-amazon-sagemaker" target="_blank" rel="noopener"></a></h3><p>该<a href="https://mlflow.org/docs/latest/python_api/mlflow.sagemaker.html#module-mlflow.sagemaker" target="_blank" rel="noopener"><code>mlflow.sagemaker</code></a>模块可以<code>python_function</code>在具有SageMaker兼容环境的Docker容器中本地部署模型，并在SageMaker上远程部署模型。要远程部署到SageMaker，您需要设置环境和用户帐户。要将自定义模型导出到SageMaker，您需要在Amazon ECR上提供与MLflow兼容的Docker镜像。MLflow提供默认的Docker镜像定义; 但是，由您来构建映像并将其上载到ECR。MLflow包括<code>build_and_push_container</code>执行此步骤的效用函数。构建和上传后，您可以将MLflow容器用于所有MLflow模型。使用该<a href="https://mlflow.org/docs/latest/python_api/mlflow.sagemaker.html#module-mlflow.sagemaker" target="_blank" rel="noopener"><code>mlflow.sagemaker</code></a> 模块部署的模型Web服务器接受以下数据格式作为输入，具体取决于部署风格：</p>
+<blockquote>
+<ul>
+<li><code>python_function</code>：对于此部署风格，端点接受与pyfunc服务器相同的格式。<a href="https://mlflow.org/docs/latest/models.html#pyfunc-deployment" target="_blank" rel="noopener">pyfunc部署文档</a>中描述了这些格式 。</li>
+<li><code>mleap</code>：对于此部署风格，端点仅接受<code>split</code>方向上的 JSON序列化pandas DataFrame 。例如， 。使用 请求标头值指定此格式。<code>data = pandas_df.to_json(orient=&#39;split&#39;)`</code>Content-Type<code></code>application/json`</li>
+</ul>
+</blockquote>
+<p><a name="ddf7d2a5-1"></a></p>
+<h4 id="命令-1"><a href="#命令-1" class="headerlink" title="命令"></a>命令</h4><ul>
+<li><a href="https://mlflow.org/docs/latest/python_api/mlflow.sagemaker.html#mlflow.sagemaker.run_local" target="_blank" rel="noopener"><code>run-local</code></a>在Docker容器中本地部署模型。图像和环境应与模型远程运行的方式相同，因此在部署之前测试模型非常有用。</li>
+<li>该<code>build-and-push-container</code>CLI命令构建一个MLfLow多克尔图像并上传到ECR。调用者必须设置正确的权限。图像是本地构建的，并且需要Docker存在于执行此步骤的计算机上。</li>
+<li><a href="https://mlflow.org/docs/latest/python_api/mlflow.sagemaker.html#mlflow.sagemaker.deploy" target="_blank" rel="noopener"><code>deploy</code></a>在Amazon SageMaker上部署模型。MLflow将Python Function模型上传到S3并启动为该模型提供服务的Amazon SageMaker端点。</li>
+</ul>
+<p>使用MLflow CLI的示例工作流程</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mlflow sagemaker build-and-push-container  - build the container (only needs to be called once)</span><br><span class="line">mlflow sagemaker run-local -m &lt;path-to-model&gt;  -    </span><br><span class="line">        remotely</span><br></pre></td></tr></table></figure>
+<p>For more info, see:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mlflow sagemaker --help</span><br><span class="line">mlflow sagemaker build-and-push-container --help</span><br><span class="line">mlflow sagemaker run-local --help</span><br><span class="line">mlflow sagemaker deploy --help</span><br></pre></td></tr></table></figure>
+<p><a name="f943a389"></a></p>
+<h3 id="将python-function模型导出为Apache-Spark-UDF"><a href="#将python-function模型导出为Apache-Spark-UDF" class="headerlink" title="将python_function模型导出为Apache Spark UDF"></a><a href="https://mlflow.org/docs/latest/models.html#id10" target="_blank" rel="noopener">将<code>python_function</code>模型导出为Apache Spark UDF</a><a href="https://mlflow.org/docs/latest/models.html#export-a-python-function-model-as-an-apache-spark-udf" target="_blank" rel="noopener"></a></h3><p>您可以将<code>python_function</code>模型输出为Apache Spark UDF，可以将其上载到Spark群集并用于对模型进行评分。<br>例</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pyfunc_udf = mlflow.pyfunc.spark_udf(&lt;path-to-model&gt;)</span><br><span class="line">df = spark_df.withColumn(&quot;prediction&quot;, pyfunc_udf(&lt;features&gt;))</span><br></pre></td></tr></table></figure>
+<p>生成的UDF基于Spark的Pandas UDF，目前仅限于为每个观察生成单个值或相同类型的值数组。默认情况下，我们将第一个数字列作为double返回。您可以通过提供<code>result_type</code> 参数来控制返回的结果。支持以下值：</p>
+<blockquote>
+<ul>
+<li><code>&#39;int&#39;</code>或<a href="https://spark.apache.org/docs/latest/api/python/pyspark.sql.html#pyspark.sql.types.IntegerType" target="_blank" rel="noopener">IntegerType</a>：<code>int32</code>返回可以适合结果的最左边的整数， 如果没有，则引发异常。</li>
+<li><code>&#39;long&#39;</code>或<a href="https://spark.apache.org/docs/latest/api/python/pyspark.sql.html#pyspark.sql.types.LongType" target="_blank" rel="noopener">LongType</a>：<code>int64</code> 返回可以适合结果的最左边的长整数，如果没有则引发异常。</li>
+<li><a href="https://spark.apache.org/docs/latest/api/python/pyspark.sql.html#pyspark.sql.types.ArrayType" target="_blank" rel="noopener">数组类型</a>（<a href="https://spark.apache.org/docs/latest/api/python/pyspark.sql.html#pyspark.sql.types.IntegerType" target="_blank" rel="noopener">IntegerType</a> | <a href="https://spark.apache.org/docs/latest/api/python/pyspark.sql.html#pyspark.sql.types.LongType" target="_blank" rel="noopener">LongType</a>）：返回一个可以放入所需尺寸的所有整数列。</li>
+<li><code>&#39;float&#39;</code>或<a href="https://spark.apache.org/docs/latest/api/python/pyspark.sql.html#pyspark.sql.types.FloatType" target="_blank" rel="noopener">FloatType</a>：<code>float32</code>如果没有数字列，则返回最左边的数字结果转换 为或引发异常。</li>
+<li><code>&#39;double&#39;</code>或<a href="https://spark.apache.org/docs/latest/api/python/pyspark.sql.html#pyspark.sql.types.DoubleType" target="_blank" rel="noopener">DoubleType</a>：<code>double</code>如果没有数字列，则返回最左边的数字结果转换 为或引发异常。</li>
+<li><a href="https://spark.apache.org/docs/latest/api/python/pyspark.sql.html#pyspark.sql.types.ArrayType" target="_blank" rel="noopener">ArrayType</a>（<a href="https://spark.apache.org/docs/latest/api/python/pyspark.sql.html#pyspark.sql.types.FloatType" target="_blank" rel="noopener">FloatType</a> | <a href="https://spark.apache.org/docs/latest/api/python/pyspark.sql.html#pyspark.sql.types.DoubleType" target="_blank" rel="noopener">DoubleType</a>）：返回<a href="https://spark.apache.org/docs/latest/api/python/pyspark.sql.html#pyspark.sql.types.DoubleType" target="_blank" rel="noopener">强制</a>转换为请求的所有数字列。类型。如果存在数字列，则会引发异常。</li>
+<li><code>&#39;string&#39;</code>或<a href="https://spark.apache.org/docs/latest/api/python/pyspark.sql.html#pyspark.sql.types.StringType" target="_blank" rel="noopener">StringType</a>：Result是最左边的列转换为字符串。</li>
+<li><a href="https://spark.apache.org/docs/latest/api/python/pyspark.sql.html#pyspark.sql.types.ArrayType" target="_blank" rel="noopener">ArrayType</a>（<a href="https://spark.apache.org/docs/latest/api/python/pyspark.sql.html#pyspark.sql.types.StringType" target="_blank" rel="noopener">StringType</a>）：返回转换为字符串的所有列。</li>
+</ul>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">from pyspark.sql.types import ArrayType, FloatType</span><br><span class="line">pyfunc_udf = mlflow.pyfunc.spark_udf(&lt;path-to-model&gt;, result_type=ArrayType(FloatType()))</span><br><span class="line"># The prediction column will contain all the numeric columns returned by the model as floats</span><br><span class="line">df = spark_df.withColumn(&quot;prediction&quot;, pyfunc_udf(&lt;features&gt;))</span><br></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/03/15/yuque/MLflow模型/">展开全文 >></a>
         </p>
       
 
