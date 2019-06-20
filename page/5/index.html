@@ -149,6 +149,71 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-yuque/通过AdaBoost和Gradient Boosting提升" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/04/25/yuque/通过AdaBoost和Gradient Boosting提升/">通过AdaBoost和Gradient Boosting提升</a>
+    </h1>
+  
+
+        
+        <a href="/2019/04/25/yuque/通过AdaBoost和Gradient Boosting提升/" class="archive-article-date">
+  	<time datetime="2019-04-25T08:34:43.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-25</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1556181495601-e7ce3139-8ef5-414d-9a5e-1be09f839b1c.jpeg#align=left&amp;display=inline&amp;height=389&amp;name=image.jpeg&amp;originHeight=522&amp;originWidth=1000&amp;size=40393&amp;status=done&amp;width=746" alt="image.jpeg"><em>你有过或曾经参加过Kaggle比赛吗？大多数获奖者通过使用助推算法来做到这一点。为什么AdaBoost，GBM和XGBoost是冠军的首选算法？</em><br>首先，如果您从未听说过Ensemble Learning或Boosting，请查看我的帖子<a href="https://medium.com/diogo-menezes-borges/ensemble-learning-when-everybody-takes-a-guess-i-guess-ec35f6cb4600" target="_blank" rel="noopener"><em>“Ensemble Learning：当每个人都猜测……我猜！”</em></a>这样您就可以更好地理解这些算法了。<br>更有见识？好，我们开始吧！<br>因此，提升任何其他整体算法的想法是将几个弱学习者组合成一个更强大的学习者。Boosting算法的一般思想是按顺序尝试预测器，其中每个后续模型都试图修复其前任的错误。<br>
+        
+          <a class="article-more-a" href="/2019/04/25/yuque/通过AdaBoost和Gradient Boosting提升/#more">more >></a>
+        
+      
+
+      
+    </p></div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/04/25/yuque/通过AdaBoost和Gradient Boosting提升/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-yuque/K均值聚类的剖析" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -715,71 +780,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2019/04/23/yuque/热衷最近邻算法的10个理由/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/Spark上的实际Python工作负载:独立群集" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/23/yuque/Spark上的实际Python工作负载:独立群集/">Spark上的实际Python工作负载:独立群集</a>
-    </h1>
-  
-
-        
-        <a href="/2019/04/23/yuque/Spark上的实际Python工作负载:独立群集/" class="archive-article-date">
-  	<time datetime="2019-04-23T08:13:19.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-23</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>关于在Spark上运行Python有无数文章和论坛帖子，但大多数人认为要提交的工作包含在一个.py文件中：<code>spark-submit wordcount.py</code> - 完成！<br>如果你的Python程序不仅仅是一个脚本怎么办？也许它为Spark生成动态SQL来执行，或使用Spark的输出刷新模型。随着您的Python代码变得更像一个应用程序（具有目录结构，配置文件和库依赖项），将其提交给Spark需要更多考虑。<br>以下是我最近考虑使用Spark 2.3将一个这样的Python应用程序用于生产时的替代方案。第一篇文章重点介绍Spark独立集群。另一篇文章介绍了EMR Spark（YARN）。<br>我远不是Spark的权威，更不用说Python了。我的决定试图平衡正确性和易于部署，以及应用程序对群集的限制。让我知道你的想法。<br>
-        
-          <a class="article-more-a" href="/2019/04/23/yuque/Spark上的实际Python工作负载:独立群集/#more">more >></a>
-        
-      
-
-      
-    </p></div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/04/23/yuque/Spark上的实际Python工作负载:独立群集/">展开全文 >></a>
         </p>
       
 
