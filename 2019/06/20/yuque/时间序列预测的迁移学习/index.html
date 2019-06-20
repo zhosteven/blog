@@ -6,19 +6,33 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://www.zhos.me">
-  <title>webhook实现服务器自动部署 | A+</title>
+  <title>时间序列预测的迁移学习 | A+</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Webhook是一种通过自定义回调函数来增加或更改網頁表现的方法。这些回调可被可能与原始网站或应用相关的第三方用户及开发者保存、修改与管理。术语“网络钩子”由杰夫·林德塞（Jeff Lindsay）于2007年通过给计算机编程术语“钩子”（Hook）加上前缀得。网络钩子是“用户定义的HTTP回...">
+  <meta name="description" content="LSTM回归神经网络是时间序列预测任务的理想选择，但算法依赖于我们有足够的训练和测试数据来自同一分布的假设。挑战在于时间序列数据通常表现出时变特征，这可能导致旧数据和新数据之间的广泛变化。在这篇博客中，我们想测试迁移学习和模型的一般领域培训在多大程度上有助于解决上述问题。迁移学习是通过从已经学...">
 <meta property="og:type" content="article">
-<meta property="og:title" content="webhook实现服务器自动部署">
-<meta property="og:url" content="http://www.zhos.me/2019/04/04/yuque/webhook实现服务器自动部署/index.html">
+<meta property="og:title" content="时间序列预测的迁移学习">
+<meta property="og:url" content="http://www.zhos.me/2019/06/20/yuque/时间序列预测的迁移学习/index.html">
 <meta property="og:site_name" content="A+">
-<meta property="og:description" content="Webhook是一种通过自定义回调函数来增加或更改網頁表现的方法。这些回调可被可能与原始网站或应用相关的第三方用户及开发者保存、修改与管理。术语“网络钩子”由杰夫·林德塞（Jeff Lindsay）于2007年通过给计算机编程术语“钩子”（Hook）加上前缀得。网络钩子是“用户定义的HTTP回...">
+<meta property="og:description" content="LSTM回归神经网络是时间序列预测任务的理想选择，但算法依赖于我们有足够的训练和测试数据来自同一分布的假设。挑战在于时间序列数据通常表现出时变特征，这可能导致旧数据和新数据之间的广泛变化。在这篇博客中，我们想测试迁移学习和模型的一般领域培训在多大程度上有助于解决上述问题。迁移学习是通过从已经学...">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-06-20T01:39:39.027Z">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1560995065184-0bb55d20-e80f-47d0-8698-8d36c7ce75df.jpeg#align=left&display=inline&height=389&name=1_HQ1F6hlk-aAjTUCiNiOsSA.jpeg&originHeight=389&originWidth=1500&size=58980&status=done&width=1500">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1560995382846-3df4c103-ed67-427d-96b9-73e52433689b.jpeg#align=left&display=inline&height=562&name=1_A5OwgU0RcrBBXu8JoV5SkA.jpeg&originHeight=562&originWidth=1000&size=132103&status=done&width=1000">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1560995417091-f3ee437d-fa76-4c7c-b392-80653281b64f.jpeg#align=left&display=inline&height=311&name=1_LO4eJZoed-mINR3uroZJzQ.jpeg&originHeight=311&originWidth=1000&size=47107&status=done&width=1000">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1560995449616-c8a8ac12-9782-4921-a0fc-be34ed4256c1.jpeg#align=left&display=inline&height=530&name=1_lFyQSB5pXi45tXFzBufwEQ.jpeg&originHeight=530&originWidth=880&size=51904&status=done&width=880">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1560995480305-0bbf6270-2ecb-4d24-9f8a-0360baa31286.png#align=left&display=inline&height=288&name=1_0SPV61GdIBEzjD05OU5rXA.png&originHeight=288&originWidth=432&size=13834&status=done&width=432">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1560995512345-15790ddb-3424-4b07-8023-eecce4503cba.png#align=left&display=inline&height=355&name=1_pYGDpo9d0kqSZlTa09ShRA.png&originHeight=355&originWidth=520&size=24017&status=done&width=520">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1560995521948-963eb394-eaa5-4879-a00a-9ccaa13cb61b.png#align=left&display=inline&height=288&name=1_cE1kCa7iPmb_guY9TF6m5w.png&originHeight=288&originWidth=576&size=33134&status=done&width=576">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1560995563762-3fe5523b-d929-4c04-a2da-b10e36e3e71d.jpeg#align=left&display=inline&height=236&name=1_PT9iwEUGgQqLKbr8nHcg0g.jpeg&originHeight=236&originWidth=959&size=54917&status=done&width=959">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1560995625453-87ed3019-1081-42e7-bc83-3230ebed203d.jpeg#align=left&display=inline&height=562&name=1_G5hlcfR3EVNLYU2KpQCI3g.jpeg&originHeight=562&originWidth=1000&size=113785&status=done&width=1000">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1560995625687-96272ed2-03d4-4f5d-929c-85b154c858ec.jpeg#align=left&display=inline&height=529&name=1_cVxslliTHEzJ94OpyrKgOQ.jpeg&originHeight=529&originWidth=1000&size=104964&status=done&width=1000">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1560995660896-25d04d8a-9065-4df5-8ea0-5c208d4f7c98.jpeg#align=left&display=inline&height=302&name=1_Zt9g42rPUpNmPhRpsa-NLA.jpeg&originHeight=302&originWidth=956&size=65749&status=done&width=956">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1560995702225-5b1beb55-97ff-4a9e-899f-c3e8785765a1.jpeg#align=left&display=inline&height=525&name=1_LumA8v_8ZZHppRZGIpxdXg.jpeg&originHeight=525&originWidth=1000&size=55920&status=done&width=1000">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1560995702429-dcd57074-8dbb-4878-926d-19f90794f2db.jpeg#align=left&display=inline&height=525&name=1_NoNHcjDxz91cML7djTEnDw.jpeg&originHeight=525&originWidth=1000&size=66182&status=done&width=1000">
+<meta property="og:updated_time" content="2019-06-20T01:56:44.675Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="webhook实现服务器自动部署">
-<meta name="twitter:description" content="Webhook是一种通过自定义回调函数来增加或更改網頁表现的方法。这些回调可被可能与原始网站或应用相关的第三方用户及开发者保存、修改与管理。术语“网络钩子”由杰夫·林德塞（Jeff Lindsay）于2007年通过给计算机编程术语“钩子”（Hook）加上前缀得。网络钩子是“用户定义的HTTP回...">
+<meta name="twitter:title" content="时间序列预测的迁移学习">
+<meta name="twitter:description" content="LSTM回归神经网络是时间序列预测任务的理想选择，但算法依赖于我们有足够的训练和测试数据来自同一分布的假设。挑战在于时间序列数据通常表现出时变特征，这可能导致旧数据和新数据之间的广泛变化。在这篇博客中，我们想测试迁移学习和模型的一般领域培训在多大程度上有助于解决上述问题。迁移学习是通过从已经学...">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1560995065184-0bb55d20-e80f-47d0-8698-8d36c7ce75df.jpeg#align=left&display=inline&height=389&name=1_HQ1F6hlk-aAjTUCiNiOsSA.jpeg&originHeight=389&originWidth=1500&size=58980&status=done&width=1500">
   
     <link rel="alternative" href="/atom.xml" title="A+" type="application/atom+xml">
   
@@ -148,37 +162,49 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-yuque/webhook实现服务器自动部署" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-yuque/时间序列预测的迁移学习" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      webhook实现服务器自动部署
+      时间序列预测的迁移学习
     </h1>
   
 
         
-        <a href="/2019/04/04/yuque/webhook实现服务器自动部署/" class="archive-article-date">
-  	<time datetime="2019-04-04T14:50:24.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-04</time>
+        <a href="/2019/06/20/yuque/时间序列预测的迁移学习/" class="archive-article-date">
+  	<time datetime="2019-06-20T01:43:29.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-06-20</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p><code>Webhook</code>是一种通过自定义回调函数来增加或更改網頁表现的方法。这些回调可被可能与原始网站或应用相关的第三方用户及开发者保存、修改与管理。术语“网络钩子”由杰夫·林德塞（Jeff Lindsay）于2007年通过给计算机编程术语“钩子”（Hook）加上前缀得。<br>网络钩子是“用户定义的HTTP回调”。网络钩子通常被某些事件激活，比如将代码推送到源[3]或评论博客。.[4]当此事件发生时，原网站将向为网络钩子配置的URL发送HTTP请求。用户可配置它们引发网页上的事件以调用另一个网站的行为。此操作可为任何事件。<br>本片博客介绍一个简单的<code>github</code>中的<code>webhook</code>自动部署<code>hexo</code>博客。<br><a name="c4e6712f"></a></p>
-<h3 id="服务器安装依赖git，hexo，node，npm"><a href="#服务器安装依赖git，hexo，node，npm" class="headerlink" title="服务器安装依赖git，hexo，node，npm"></a>服务器安装依赖git，hexo，node，npm</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">apt install git</span><br><span class="line">apt install nodejs</span><br><span class="line">apt install npm</span><br><span class="line">npm i -g hexo</span><br></pre></td></tr></table></figure>
-<p><a name="712b29e8"></a></p>
-<h3 id="创建一个webhook-js"><a href="#创建一个webhook-js" class="headerlink" title="创建一个webhook.js"></a>创建一个webhook.js</h3><figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">var http = <span class="keyword">require</span>(<span class="string">'http'</span>);</span><br><span class="line">var exec = <span class="keyword">require</span>(<span class="string">'child_process'</span>).exec;</span><br><span class="line"></span><br><span class="line">http.createServer(function (req, res) &#123;</span><br><span class="line">    <span class="keyword">if</span>(req.url === <span class="string">'/webhooks/push/1'</span>) &#123; <span class="regexp">//</span>定义webhook地址</span><br><span class="line">        exec(<span class="string">'sh ./webhook.sh'</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    res.<span class="keyword">end</span>();</span><br><span class="line">&#125;).listen(<span class="number">9999</span>)</span><br><span class="line">console.log(<span class="string">'we are in 9999'</span>);</span><br></pre></td></tr></table></figure>
-<p><a name="e57a0d46"></a></p>
-<h3 id="创建webhook-sh脚本，执行pull，编译等操作"><a href="#创建webhook-sh脚本，执行pull，编译等操作" class="headerlink" title="创建webhook.sh脚本，执行pull，编译等操作"></a>创建webhook.sh脚本，执行pull，编译等操作</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">'begin'</span> &gt; ../1.txt</span><br><span class="line"><span class="built_in">cd</span> /usr/share/nginx/blog</span><br><span class="line">git pull</span><br><span class="line">npm run hook</span><br><span class="line">cp -r /usr/share/nginx/blog/public/* /usr/share/nginx/ninesix.cc/</span><br><span class="line"><span class="built_in">echo</span> <span class="string">'end'</span> &gt;&gt; ../1.txt</span><br></pre></td></tr></table></figure>
-<p><a name="a165d47a"></a></p>
-<h3 id="使用pm2启动webhook服务"><a href="#使用pm2启动webhook服务" class="headerlink" title="使用pm2启动webhook服务"></a>使用pm2启动webhook服务</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">npm i -g pm2</span><br><span class="line">pm2 start webhook.js</span><br></pre></td></tr></table></figure>
-<p><a name="dd496f4d"></a></p>
-<h3 id="把webhook地址写到github的项目设置中"><a href="#把webhook地址写到github的项目设置中" class="headerlink" title="把webhook地址写到github的项目设置中"></a>把webhook地址写到github的项目设置中</h3><p><code>http://ip:9999/webhooks/push/1</code><br>github会测试发送，成功之后会显示绿色对勾.<br><a name="912951c4"></a></p>
-<h4 id="https-www-yuque-com-yuque-developer-doc-webhook"><a href="#https-www-yuque-com-yuque-developer-doc-webhook" class="headerlink" title="https://www.yuque.com/yuque/developer/doc-webhook"></a><a href="https://www.yuque.com/yuque/developer/doc-webhook" target="_blank" rel="noopener">https://www.yuque.com/yuque/developer/doc-webhook</a></h4><p>apt install git<br>apt install nodejs<br>apt install npm<br>npm i -g hexo</p>
+        <p><strong>LSTM</strong>回归神经网络是时间序列预测任务的理想选择，但算法依赖于我们有足够的训练和测试数据来自同一分布的假设。挑战在于时间序列数据通常表现出时变特征，这可能导致旧数据和新数据之间的广泛变化。在这篇博客中，我们想测试<strong>迁移学习</strong>和模型的一般领域培训在多大程度上有助于解决上述问题。<br><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1560995065184-0bb55d20-e80f-47d0-8698-8d36c7ce75df.jpeg#align=left&amp;display=inline&amp;height=389&amp;name=1_HQ1F6hlk-aAjTUCiNiOsSA.jpeg&amp;originHeight=389&amp;originWidth=1500&amp;size=58980&amp;status=done&amp;width=1500" alt="1_HQ1F6hlk-aAjTUCiNiOsSA.jpeg"></p>
+<blockquote>
+<p><em>迁移学习是通过从已经学习的相关任务转移知识来改进新任务中的学习。</em> &gt; <a href>第11章：迁移学习</a>，&gt; <a href="http://amzn.to/2fgeVro" target="_blank" rel="noopener">机器学习应用研究手册</a>，2009年。<br>有几种迁移学习的方法，它们的区别在于可转移的知识。在本博客中，我们将使用<em>参数传输</em>方法：</p>
+</blockquote>
+<ol>
+<li>我们将在基线数据集（作为源域）上构建模型，然后传输经过训练的权重，作为要在目标域上训练的模型的初始化（标准迁移学习）。</li>
+<li>我们将建立一个模型，将来自2个源（源域和目标域）的时间序列数据组合成一个通用域，在一般域数据上“预训练”模型，仅在一个目标域上调整模型，将后一个模型的性能与其他2个模型进行比较，这些模型仅针对通用域和目标数据进行了训练。</li>
+</ol>
+<p>这是<a href="https://github.com/NshanPotikyan/TransferLearningTimeSeries.git" target="_blank" rel="noopener">指向</a>项目存储库的<a href="https://github.com/NshanPotikyan/TransferLearningTimeSeries.git" target="_blank" rel="noopener">GitHub链接</a>。<br>我们生成6个合成时间序列，下面显示随机噪声。<br><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1560995382846-3df4c103-ed67-427d-96b9-73e52433689b.jpeg#align=left&amp;display=inline&amp;height=562&amp;name=1_A5OwgU0RcrBBXu8JoV5SkA.jpeg&amp;originHeight=562&amp;originWidth=1000&amp;size=132103&amp;status=done&amp;width=1000" alt="1_A5OwgU0RcrBBXu8JoV5SkA.jpeg"><br>现在我们有了实验时间序列，让我们在第一个模型上训练一个模型并将其视为源任务。这是表示模型拟合和评估的流程图。<br><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1560995417091-f3ee437d-fa76-4c7c-b392-80653281b64f.jpeg#align=left&amp;display=inline&amp;height=311&amp;name=1_LO4eJZoed-mINR3uroZJzQ.jpeg&amp;originHeight=311&amp;originWidth=1000&amp;size=47107&amp;status=done&amp;width=1000" alt="1_LO4eJZoed-mINR3uroZJzQ.jpeg"><br>由于LSTM网络需要输入/输出序列，因此在阶段2中，我们按以下方式将缩放系列转换为X（输入）和Y（输出）序列：<br><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1560995449616-c8a8ac12-9782-4921-a0fc-be34ed4256c1.jpeg#align=left&amp;display=inline&amp;height=530&amp;name=1_lFyQSB5pXi45tXFzBufwEQ.jpeg&amp;originHeight=530&amp;originWidth=880&amp;size=51904&amp;status=done&amp;width=880" alt="1_lFyQSB5pXi45tXFzBufwEQ.jpeg"></p>
+<p>为了找到模型的合适架构和超参数值，已经完成了网格搜索，从而产生了具有以下配置的模型：<br><strong>2个具有100和50个神经元的LSTM层（无丢失）</strong><br><strong>Adam Optimizer学习率= 0.00004</strong><br>借助于自相关图（相关图）确定输入序列的长度，因为它显示了相对于时间滞后的系列中的重复模式。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1560995480305-0bbf6270-2ecb-4d24-9f8a-0360baa31286.png#align=left&amp;display=inline&amp;height=288&amp;name=1_0SPV61GdIBEzjD05OU5rXA.png&amp;originHeight=288&amp;originWidth=432&amp;size=13834&amp;status=done&amp;width=432" alt="1_0SPV61GdIBEzjD05OU5rXA.png"><br>在生成的正弦波的情况下，期望的输入（滚动窗口）大小约为70（因为模式从那里重复），并且通过对一些其他候选值的网格搜索运行也证明了这种选择。以下是模型培训和评估结果：<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1560995512345-15790ddb-3424-4b07-8023-eecce4503cba.png#align=left&amp;display=inline&amp;height=355&amp;name=1_pYGDpo9d0kqSZlTa09ShRA.png&amp;originHeight=355&amp;originWidth=520&amp;size=24017&amp;status=done&amp;width=520" alt="1_pYGDpo9d0kqSZlTa09ShRA.png"><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1560995521948-963eb394-eaa5-4879-a00a-9ccaa13cb61b.png#align=left&amp;display=inline&amp;height=288&amp;name=1_cE1kCa7iPmb_guY9TF6m5w.png&amp;originHeight=288&amp;originWidth=576&amp;size=33134&amp;status=done&amp;width=576" alt="1_cE1kCa7iPmb_guY9TF6m5w.png"><br>MSE = 0.1<br>对图的预测对应于模型提前预测的50倍，这已经迭代地完成，如下所示：</p>
+<ol>
+<li>X_test中的第一个可用序列（用于测试的输入数据集）用于预测序列的下一个值，例如f（x1，… x10）= x11</li>
+<li>将预测值x11附加到x2，…，x9序列以形成新序列，并且我们使用x2，…，x11预测x12。</li>
+<li>第二步由用户定义的数字（n_ahead-1）重复<br><a name="910e"></a><h4 id="迁移学习"><a href="#迁移学习" class="headerlink" title="迁移学习"></a>迁移学习</h4>现在我们已经有一个训练有素的模型，我们可以开始尝试知识转移是否有助于在目标域上获得更好的表现模型（除了Sine之外的所有其他系列）。我们进行了2次单独的试验：<br>1）在目标系列的最后100个数据点上训练2个模型（有和没有迁移学习）并预测10个前进值<br>2）在目标系列的整个数据集上训练2个模型（2000个点）并预测50个前方值。<br>这背后的直觉是看迁移学习是否有助于数据稀缺的情况。<br>以下是实验的RMSE结果：<br><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1560995563762-3fe5523b-d929-4c04-a2da-b10e36e3e71d.jpeg#align=left&amp;display=inline&amp;height=236&amp;name=1_PT9iwEUGgQqLKbr8nHcg0g.jpeg&amp;originHeight=236&amp;originWidth=959&amp;size=54917&amp;status=done&amp;width=959" alt="1_PT9iwEUGgQqLKbr8nHcg0g.jpeg"><br>以下是结果的一些可视化。<br><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1560995625453-87ed3019-1081-42e7-bc83-3230ebed203d.jpeg#align=left&amp;display=inline&amp;height=562&amp;name=1_G5hlcfR3EVNLYU2KpQCI3g.jpeg&amp;originHeight=562&amp;originWidth=1000&amp;size=113785&amp;status=done&amp;width=1000" alt="1_G5hlcfR3EVNLYU2KpQCI3g.jpeg"><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1560995625687-96272ed2-03d4-4f5d-929c-85b154c858ec.jpeg#align=left&amp;display=inline&amp;height=529&amp;name=1_cVxslliTHEzJ94OpyrKgOQ.jpeg&amp;originHeight=529&amp;originWidth=1000&amp;size=104964&amp;status=done&amp;width=1000" alt="1_cVxslliTHEzJ94OpyrKgOQ.jpeg"></li>
+</ol>
+<p>根据RMSE结果，我们可以得出结论，通常迁移学习有助于改善一半的案例，但是如果仔细观察，我们可以注意到，<strong>当目标域中缺少数据时</strong>，<strong>它有3/5次有用</strong>。<br><a name="92f1"></a></p>
+<h4 id="常规和域内调整"><a href="#常规和域内调整" class="headerlink" title="常规和域内调整"></a>常规和域内调整</h4><p>正如开头所解释的，这里我们将适合3个模型：</p>
+<ol>
+<li>预先调整 - 关于通用域数据</li>
+<li>调整 - 在一般域上，然后传输知识并适合目标域</li>
+<li>仅限目标 - 顾名思义，此目标仅适用于目标域</li>
+</ol>
+<p>时间序列被附加在一起以形成通用域数据集。<br>以下是与上一节类似的实验结果：<br><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1560995660896-25d04d8a-9065-4df5-8ea0-5c208d4f7c98.jpeg#align=left&amp;display=inline&amp;height=302&amp;name=1_Zt9g42rPUpNmPhRpsa-NLA.jpeg&amp;originHeight=302&amp;originWidth=956&amp;size=65749&amp;status=done&amp;width=956" alt="1_Zt9g42rPUpNmPhRpsa-NLA.jpeg"><br>我们可以看到，在“Tuned”情况下，所提出的方法仅改善性能一次。可以预期，目标领域的培训比其他2个案例表现更好，而“预调整”案例的表现优于10个案例中的3个。<br>以下是结果的一些可视化。<br><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1560995702225-5b1beb55-97ff-4a9e-899f-c3e8785765a1.jpeg#align=left&amp;display=inline&amp;height=525&amp;name=1_LumA8v_8ZZHppRZGIpxdXg.jpeg&amp;originHeight=525&amp;originWidth=1000&amp;size=55920&amp;status=done&amp;width=1000" alt="1_LumA8v_8ZZHppRZGIpxdXg.jpeg"><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1560995702429-dcd57074-8dbb-4878-926d-19f90794f2db.jpeg#align=left&amp;display=inline&amp;height=525&amp;name=1_NoNHcjDxz91cML7djTEnDw.jpeg&amp;originHeight=525&amp;originWidth=1000&amp;size=66182&amp;status=done&amp;width=1000" alt="1_NoNHcjDxz91cML7djTEnDw.jpeg"><br><strong>结论</strong><br>基于获得的结果，当时间序列数据不足以及我们对类似任务进行微调模型时，迁移学习似乎很有用。<br>至于模型的一般域调整，需要进一步探索是否有其他组合技术可以改善“调谐”模型的性能。</p>
 
       
 
@@ -263,7 +289,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://www.zhos.me/2019/04/04/yuque/webhook实现服务器自动部署/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://www.zhos.me/2019/06/20/yuque/时间序列预测的迁移学习/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -277,18 +303,9 @@
   
 <nav id="article-nav">
   
-    <a href="/2019/04/05/yuque/我的建立图书推荐系统之旅。。。/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          我的建立图书推荐系统之旅。。。
-        
-      </div>
-    </a>
   
-  
-    <a href="/2019/04/04/yuque/12产品管理的行为数据类型/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">12产品管理的行为数据类型</div>
+    <a href="/2019/06/20/yuque/AlexNet, VGGNet, ResNet, Inception的w3h/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">AlexNet, VGGNet, ResNet, Inception的w3h</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -315,7 +332,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#服务器安装依赖git，hexo，node，npm"><span class="toc-number">1.</span> <span class="toc-text">服务器安装依赖git，hexo，node，npm</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建一个webhook-js"><span class="toc-number">2.</span> <span class="toc-text">创建一个webhook.js</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建webhook-sh脚本，执行pull，编译等操作"><span class="toc-number">3.</span> <span class="toc-text">创建webhook.sh脚本，执行pull，编译等操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用pm2启动webhook服务"><span class="toc-number">4.</span> <span class="toc-text">使用pm2启动webhook服务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#把webhook地址写到github的项目设置中"><span class="toc-number">5.</span> <span class="toc-text">把webhook地址写到github的项目设置中</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#https-www-yuque-com-yuque-developer-doc-webhook"><span class="toc-number">5.1.</span> <span class="toc-text">https://www.yuque.com/yuque/developer/doc-webhook</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#迁移学习"><span class="toc-number">1.</span> <span class="toc-text">迁移学习</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#常规和域内调整"><span class="toc-number">2.</span> <span class="toc-text">常规和域内调整</span></a></li></ol>
                     </div>
                 </span>
             </div>
