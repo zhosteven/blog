@@ -149,6 +149,148 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-yuque/逐步了解LSTM Autoencoder图层" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/06/20/yuque/逐步了解LSTM Autoencoder图层/">逐步了解LSTM Autoencoder图层</a>
+    </h1>
+  
+
+        
+        <a href="/2019/06/20/yuque/逐步了解LSTM Autoencoder图层/" class="archive-article-date">
+  	<time datetime="2019-06-20T02:21:39.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-06-20</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><a name="bc9b"></a></p>
+<h2 id="在这里，我们将分解LSTM自动编码器网络以逐层理解它们。我们将介绍各层之间的输入和输出流，并将LSTM-Autoencoder与常规LSTM网络进行比较"><a href="#在这里，我们将分解LSTM自动编码器网络以逐层理解它们。我们将介绍各层之间的输入和输出流，并将LSTM-Autoencoder与常规LSTM网络进行比较" class="headerlink" title="在这里，我们将分解LSTM自动编码器网络以逐层理解它们。我们将介绍各层之间的输入和输出流，并将LSTM Autoencoder与常规LSTM网络进行比较"></a>在这里，我们将分解LSTM自动编码器网络以逐层理解它们。我们将介绍各层之间的输入和输出流，并将LSTM Autoencoder与常规LSTM网络进行比较</h2><p>在我之前的文章<a href="https://towardsdatascience.com/lstm-autoencoder-for-extreme-rare-event-classification-in-keras-ce209a224cfb" target="_blank" rel="noopener">LSTM Autoencoder for Extreme Rare Event Classification</a> [ <a href="https://towardsdatascience.com/lstm-autoencoder-for-extreme-rare-event-classification-in-keras-ce209a224cfb" target="_blank" rel="noopener">1</a>]中，我们学习了如何为多变量时间序列数据构建LSTM自动编码器。<br>但是，深度学习中的LSTM涉及更多。理解LSTM中间层及其设置并不简单。例如，<code>return_sequences</code>参数<code>RepeatVector</code>和<code>TimeDistributed</code>层的使用可能会令人困惑。<br>LSTM教程已很好地解释的结构和输入/ LSTM细胞的输出，例如[ <a href="https://machinelearningmastery.com/lstm-autoencoders/" target="_blank" rel="noopener">2</a>，<a href="https://medium.com/mlreview/understanding-lstm-and-its-diagrams-37e2f46f1714" target="_blank" rel="noopener">3</a> ]。但尽管有其特殊性，但很少有人能够解释LSTM层在网络中协同工作的机制。<br>在这里，我们将分解LSTM自动编码器网络以逐层理解它们。此外，常用的<strong>seq2seq</strong>网络类似于LSTM Autoencoders。因此，大多数这些解释也适用于seq2seq。<br>在本文中，我们将使用一个简单的玩具示例来学习，</p>
+<ul>
+<li>含义的<code>return_sequences=True</code>，<code>RepeatVector()</code>和<code>TimeDistributed()</code>。</li>
+<li>了解每个LSTM网络层的输入和输出。</li>
+<li>常规LSTM网络和LSTM自动编码器之间的差异。<br><a name="0446"></a><h3 id="理解模型架构"><a href="#理解模型架构" class="headerlink" title="理解模型架构"></a>理解模型架构</h3>首先进口我们的必需品。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># lstm autoencoder to recreate a timeseries</span></span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> keras.models <span class="keyword">import</span> Sequential</span><br><span class="line"><span class="keyword">from</span> keras.layers <span class="keyword">import</span> LSTM</span><br><span class="line"><span class="keyword">from</span> keras.layers <span class="keyword">import</span> Dense</span><br><span class="line"><span class="keyword">from</span> keras.layers <span class="keyword">import</span> RepeatVector</span><br><span class="line"><span class="keyword">from</span> keras.layers <span class="keyword">import</span> TimeDistributed</span><br><span class="line"><span class="string">'''</span></span><br><span class="line"><span class="string">A UDF to convert input data into 3-D</span></span><br><span class="line"><span class="string">array as required for LSTM network.</span></span><br><span class="line"><span class="string">'''</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">temporalize</span><span class="params">(X, y, lookback)</span>:</span></span><br><span class="line">    output_X = []</span><br><span class="line">    output_y = []</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(len(X)-lookback<span class="number">-1</span>):</span><br><span class="line">        t = []</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">1</span>,lookback+<span class="number">1</span>):</span><br><span class="line">            <span class="comment"># Gather past records upto the lookback period</span></span><br><span class="line">            t.append(X[[(i+j+<span class="number">1</span>)], :])</span><br><span class="line">        output_X.append(t)</span><br><span class="line">        output_y.append(y[i+lookback+<span class="number">1</span>])</span><br><span class="line">    <span class="keyword">return</span> output_X, output_y</span><br></pre></td></tr></table></figure>
+<p><a name="01f0"></a></p>
+<h4 id="创建示例数据"><a href="#创建示例数据" class="headerlink" title="创建示例数据"></a>创建示例数据</h4><p>我们将创建一个多变量时间序列数据的玩具示例。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># define input timeseries</span></span><br><span class="line">timeseries = np.array([[<span class="number">0.1</span>, <span class="number">0.2</span>, <span class="number">0.3</span>, <span class="number">0.4</span>, <span class="number">0.5</span>, <span class="number">0.6</span>, <span class="number">0.7</span>, <span class="number">0.8</span>, <span class="number">0.9</span>],</span><br><span class="line">                       [<span class="number">0.1</span>**<span class="number">3</span>, <span class="number">0.2</span>**<span class="number">3</span>, <span class="number">0.3</span>**<span class="number">3</span>, <span class="number">0.4</span>**<span class="number">3</span>, <span class="number">0.5</span>**<span class="number">3</span>, <span class="number">0.6</span>**<span class="number">3</span>, <span class="number">0.7</span>**<span class="number">3</span>, <span class="number">0.8</span>**<span class="number">3</span>, <span class="number">0.9</span>**<span class="number">3</span>]]).transpose()</span><br><span class="line"></span><br><span class="line">timesteps = timeseries.shape[<span class="number">0</span>]</span><br><span class="line">n_features = timeseries.shape[<span class="number">1</span>]</span><br><span class="line">timeseries</span><br></pre></td></tr></table></figure>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1560997424385-3ff3ee13-52d8-4363-b1dc-46df80314c62.jpeg#align=left&amp;display=inline&amp;height=222&amp;name=1_DChcLUlEAB3ZsCWJ-wTblg%402x.jpeg&amp;originHeight=222&amp;originWidth=1000&amp;size=17382&amp;status=done&amp;width=1000" alt="1_DChcLUlEAB3ZsCWJ-wTblg@2x.jpeg"><br>根据LSTM网络的要求，我们需要将输入数据重新_整形_为_n_samples_ x <em>timesteps</em> x _n_features_。在这个例子中，<code>n_features</code>_ _是2.我们将做<code>timesteps = 3</code>。由此，结果<code>n_samples</code>为5（因为输入数据具有9行）。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">timesteps = <span class="number">3</span></span><br><span class="line">X, y = temporalize(X = timeseries, y = np.zeros(len(timeseries)), lookback = timesteps)</span><br><span class="line"></span><br><span class="line">n_features = <span class="number">2</span></span><br><span class="line">X = np.array(X)</span><br><span class="line">X = X.reshape(X.shape[<span class="number">0</span>], timesteps, n_features)</span><br><span class="line"></span><br><span class="line">X</span><br></pre></td></tr></table></figure>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1560997475260-d05ac925-1685-453c-998c-e1faadef39de.png#align=left&amp;display=inline&amp;height=427&amp;name=1_VZs92u0uL2wsvJkX6L1LcQ.png&amp;originHeight=427&amp;originWidth=1000&amp;size=78839&amp;status=done&amp;width=1000" alt="1_VZs92u0uL2wsvJkX6L1LcQ.png"><br><a name="b26c"></a></p>
+<h4 id="了解LSTM自动编码器结构"><a href="#了解LSTM自动编码器结构" class="headerlink" title="了解LSTM自动编码器结构"></a>了解LSTM自动编码器结构</h4><p>在本节中，我们将构建一个LSTM Autoencoder网络，并可视化其架构和数据流。我们还将研究常规LSTM网络，以便与Autoencoder进行比较和对比。<br>定义LSTM自动编码器。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># define model</span></span><br><span class="line">model = Sequential()</span><br><span class="line">model.add(LSTM(<span class="number">128</span>, activation=<span class="string">'relu'</span>, input_shape=(timesteps,n_features), return_sequences=<span class="literal">True</span>))</span><br><span class="line">model.add(LSTM(<span class="number">64</span>, activation=<span class="string">'relu'</span>, return_sequences=<span class="literal">False</span>))</span><br><span class="line">model.add(RepeatVector(timesteps))</span><br><span class="line">model.add(LSTM(<span class="number">64</span>, activation=<span class="string">'relu'</span>, return_sequences=<span class="literal">True</span>))</span><br><span class="line">model.add(LSTM(<span class="number">128</span>, activation=<span class="string">'relu'</span>, return_sequences=<span class="literal">True</span>))</span><br><span class="line">model.add(TimeDistributed(Dense(n_features)))</span><br><span class="line">model.compile(optimizer=<span class="string">'adam'</span>, loss=<span class="string">'mse'</span>)</span><br><span class="line">model.summary()</span><br></pre></td></tr></table></figure>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1560997535199-388a3c02-c7bd-4309-aa33-fca80c9d4605.png#align=left&amp;display=inline&amp;height=363&amp;name=1_duhC2qlIlGX3mc4CNt_aFA.png&amp;originHeight=363&amp;originWidth=1000&amp;size=81352&amp;status=done&amp;width=1000" alt="1_duhC2qlIlGX3mc4CNt_aFA.png"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># fit model</span></span><br><span class="line">model.fit(X, X, epochs=<span class="number">300</span>, batch_size=<span class="number">5</span>, verbose=<span class="number">0</span>)</span><br><span class="line"><span class="comment"># demonstrate reconstruction</span></span><br><span class="line">yhat = model.predict(X, verbose=<span class="number">0</span>)</span><br><span class="line">print(<span class="string">'---Predicted---'</span>)</span><br><span class="line">print(np.round(yhat,<span class="number">3</span>))</span><br><span class="line">print(<span class="string">'---Actual---'</span>)</span><br><span class="line">print(np.round(X, <span class="number">3</span>))</span><br></pre></td></tr></table></figure>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1560997616618-19ba4d3e-a9dd-4b2e-bfbc-aa8983a1df25.png#align=left&amp;display=inline&amp;height=992&amp;name=1_0yLySRMJDbaBWTdkxbJVzw.png&amp;originHeight=992&amp;originWidth=1000&amp;size=89919&amp;status=done&amp;width=1000" alt="1_0yLySRMJDbaBWTdkxbJVzw.png"><br>该<code>model.summary()</code>提供的模型架构的摘要。为了更好地理解，让我们在下面的图2.3中可视化它。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1560997655393-ca9b89f1-fc63-4be3-85ea-28e994d346f3.png#align=left&amp;display=inline&amp;height=785&amp;name=1_sWc8g2yiQrOzntbVeGzbEQ.png&amp;originHeight=785&amp;originWidth=1000&amp;size=186769&amp;status=done&amp;width=1000" alt="1_sWc8g2yiQrOzntbVeGzbEQ.png"><br>该图说明了通过LSTM自动编码器网络层的数据流，用于一个数据样本。数据样本是数据集中的一个实例。在我们的示例中，一个示例是图1.2中大小为3x2的子数组。<br>从这个图中，我们学习</p>
+<ul>
+<li>LSTM网络将2D阵列作为输入。</li>
+<li>一层LSTM具有与时间步长一样多的单元。</li>
+<li>设置<code>return_sequences=True</code>每个时间步长的每个单元格发出一个信号。</li>
+<li>这在图2.4中变得更清楚，其显示了<code>return_sequences</code>as <code>True</code>（图2.4a）与<code>False</code>（图2.4b）之间的差异。</li>
+</ul>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1560997696527-71317a02-3814-49b2-8cbb-63d725a73e06.png#align=left&amp;display=inline&amp;height=383&amp;name=1_K5FAZ2au0WEh8y9x78Z8xQ.png&amp;originHeight=383&amp;originWidth=1000&amp;size=59801&amp;status=done&amp;width=1000" alt="1_K5FAZ2au0WEh8y9x78Z8xQ.png"></p>
+<ul>
+<li>在图2.4a中，来自一层中的时间步进单元的信号由后续层中相同时间步长的单元接收。</li>
+<li>在LSTM自动编码器中的编码器和解码器模块中，重要的是在连续LSTM层中的各个时间步长单元之间具有直接连接，如图2.4a所示。</li>
+<li>在图2.4b中，只有最后一个时间步长单元发出信号。因此，输出是<strong>矢量</strong>。</li>
+<li>如图2.4b所示，如果后续层是LSTM，我们使用复制此向量<code>RepeatVector(timesteps)</code>来获取下一层的2D数组。</li>
+<li>如果后续层是<code>Dense</code>（因为<code>Dense</code>图层需要向量作为输入），则不需要转换。</li>
+</ul>
+<p>回到图2.3中的LSTM Autoencoder。</p>
+<ul>
+<li>输入数据有3个时间步长和2个功能。</li>
+<li>第1层，LSTM（128），读取输入数据并输出128个特征，每个特征为3个时间步长，因为<code>return_sequences=True</code>。</li>
+<li>第2层，LSTM（64），从第1层获取3x128输入，并将特征尺寸减小到64.因为<code>return_sequences=False</code>，它输出大小为1x64的特征向量。</li>
+<li>该层的输出是输入数据的<strong>编码特征向量</strong>。</li>
+<li>这个编码的特征向量可以被提取并用作数据压缩，或用于任何其他有监督或无监督学习的特征（在下一篇文章中，我们将看到如何提取它）。</li>
+<li>第3层，RepeatVector（3），复制特征向量3次。</li>
+<li>RepeatVector层充当编码器和解码器模块之间的桥梁。</li>
+<li>它为解码器中的第一个LSTM层准备2D数组输入。</li>
+<li>解码器层旨在展开<em>编码。</em></li>
+<li>因此，解码器层以与编码器相反的顺序堆叠。</li>
+<li>第4层，LSTM（64）和第5层，LSTM（128）分别是第2层和第1层的镜像。</li>
+<li>最后添加第6层TimeDistributed（Dense（2））以获得输出，其中“2”是输入数据中的要素数。</li>
+<li>TimeDistributed层创建一个长度等于从前一层输出的要素数的向量。在该网络中，第5层输出128个功能。因此，TimeDistributed层创建一个128长的向量并复制它2（= n_features）次。</li>
+<li>第5层的输出是3x128阵列，我们将其表示为U，而第6层中的TimeDistributed的输出是128x2阵列，表示为V. U和V之间的矩阵乘法产生3x2输出。</li>
+<li>拟合网络的目的是使该输出接近输入。请注意，此网络本身可确保输入和输出尺寸匹配。<br><a name="7873"></a><h4 id="将LSTM-Autoencoder与常规LSTM网络进行比较"><a href="#将LSTM-Autoencoder与常规LSTM网络进行比较" class="headerlink" title="将LSTM Autoencoder与常规LSTM网络进行比较"></a>将LSTM Autoencoder与常规LSTM网络进行比较</h4>当我们将它与为重建输入而构建的常规LSTM网络进行比较时，上述理解会变得更加清晰。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># define model</span></span><br><span class="line">model = Sequential()</span><br><span class="line">model.add(LSTM(<span class="number">128</span>, activation=<span class="string">'relu'</span>, input_shape=(timesteps,n_features), return_sequences=<span class="literal">True</span>))</span><br><span class="line">model.add(LSTM(<span class="number">64</span>, activation=<span class="string">'relu'</span>, return_sequences=<span class="literal">True</span>))</span><br><span class="line">model.add(LSTM(<span class="number">64</span>, activation=<span class="string">'relu'</span>, return_sequences=<span class="literal">True</span>))</span><br><span class="line">model.add(LSTM(<span class="number">128</span>, activation=<span class="string">'relu'</span>, return_sequences=<span class="literal">True</span>))</span><br><span class="line">model.add(TimeDistributed(Dense(n_features)))</span><br><span class="line">model.compile(optimizer=<span class="string">'adam'</span>, loss=<span class="string">'mse'</span>)</span><br><span class="line">model.summary()</span><br></pre></td></tr></table></figure>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1560997760113-a2501c22-91ee-42f7-98e9-229a6615fab0.png#align=left&amp;display=inline&amp;height=336&amp;name=1_ZltEfO7HvvV8XoiEWdC8DA.png&amp;originHeight=336&amp;originWidth=1000&amp;size=75442&amp;status=done&amp;width=1000" alt="1_ZltEfO7HvvV8XoiEWdC8DA.png"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># fit model</span></span><br><span class="line">model.fit(X, X, epochs=<span class="number">300</span>, batch_size=<span class="number">5</span>, verbose=<span class="number">0</span>)</span><br><span class="line"><span class="comment"># demonstrate reconstruction</span></span><br><span class="line">yhat = model.predict(X, verbose=<span class="number">0</span>)</span><br><span class="line">print(<span class="string">'---Predicted---'</span>)</span><br><span class="line">print(np.round(yhat,<span class="number">3</span>))</span><br><span class="line">print(<span class="string">'---Actual---'</span>)</span><br><span class="line">print(np.round(X, <span class="number">3</span>))</span><br></pre></td></tr></table></figure>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1560997799168-285cd729-90cd-4b0b-be2e-af2437121ad7.png#align=left&amp;display=inline&amp;height=941&amp;name=1_i5O5sOwhNH7CzfnzF-xYEg.png&amp;originHeight=941&amp;originWidth=1000&amp;size=81701&amp;status=done&amp;width=1000" alt="1_i5O5sOwhNH7CzfnzF-xYEg.png"><br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1560997823183-9313fae8-2530-4622-806f-91f67e842fd3.png#align=left&amp;display=inline&amp;height=349&amp;name=1_uAzPMNGegqV0DXZhYprIUw.png&amp;originHeight=349&amp;originWidth=1000&amp;size=106585&amp;status=done&amp;width=1000" alt="1_uAzPMNGegqV0DXZhYprIUw.png"><br><strong>常规LSTM网络和LSTM自动编码器之间的差异</strong></p>
+<ul>
+<li>我们<code>return_sequences=True</code>在所有LSTM层中使用。</li>
+<li>这意味着，每个层都输出一个包含每个时间步长的2D数组。</li>
+<li>因此，没有一维编码特征向量作为任何中间层的输出。因此，不会将样本编码为特征向量。</li>
+<li><strong>缺少该编码</strong>向量区分用于重建的常规LSTM网络与LSTM自动编码器。</li>
+<li>但请注意，自动编码器（图2.1）和常规网络（图3.1）中的参数数量相同。</li>
+<li>这是因为，<code>RepeatVector</code>Autoencoder中的额外层没有任何附加参数。</li>
+<li><p>最重要的是，<strong>两个网络的重建精度都相似</strong>。<br><a name="d5d8"></a></p>
+<h3 id="值得深思"><a href="#值得深思" class="headerlink" title="值得深思"></a>值得深思</h3><p>使用<a href="https://towardsdatascience.com/lstm-autoencoder-for-extreme-rare-event-classification-in-keras-ce209a224cfb" target="_blank" rel="noopener">LSTM Autoencoder中针对稀有事件分类</a> [ <a href="https://towardsdatascience.com/lstm-autoencoder-for-extreme-rare-event-classification-in-keras-ce209a224cfb" target="_blank" rel="noopener">1</a> ] 讨论的异常检测方法<a href="https://towardsdatascience.com/lstm-autoencoder-for-extreme-rare-event-classification-in-keras-ce209a224cfb" target="_blank" rel="noopener">的稀有事件分类</a>是训练LSTM自动编码器来检测罕见事件。[ <a href="https://towardsdatascience.com/lstm-autoencoder-for-extreme-rare-event-classification-in-keras-ce209a224cfb" target="_blank" rel="noopener">1</a> ]中自动编码器网络的目标是重建输入并将重建不良的样本分类为罕见事件。<br>既然如此，我们还可以建立一个常规的LSTM网络来重建时间序列数据，如图3.3所示，这<strong>会改善结果吗？</strong><br>这背后的假设是，<br>由于缺少编码层，在某些情况下重建的准确性可能更好（因为尺寸时间维度没有减小）。除非编码矢量是任何其他分析所必需的，否则尝试常规LSTM网络值得尝试进行罕见事件分类。<br><a name="5ee0"></a></p>
+<h4 id="Github存储库"><a href="#Github存储库" class="headerlink" title="Github存储库"></a><a href="https://github.com/cran2367/understanding-lstm-autoencoder/blob/master/understanding-lstm-autoencoder.ipynb" target="_blank" rel="noopener">Github存储库</a></h4><p>完整的代码可以在<a href="https://github.com/cran2367/understanding-lstm-autoencoder/blob/master/understanding-lstm-autoencoder.ipynb" target="_blank" rel="noopener">这里</a>找到。<br><a href="https://github.com/cran2367/understanding-lstm-autoencoder/blob/master/understanding-lstm-autoencoder.ipynb" target="_blank" rel="noopener"><strong>cran2367 / understanding-lstm-autoencoder</strong><br><em>了解LSTM</em><strong>Autoencoder</strong>_。通过创建…<em>github.com，</em>为cran2367 / understanding-lstm-autoencoder开发_做出贡献</a><a href="https://github.com/cran2367/understanding-lstm-autoencoder/blob/master/understanding-lstm-autoencoder.ipynb" target="_blank" rel="noopener"></a><br><a name="1f3f"></a></p>
+<h3 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h3><p>在这篇文章中，我们</p>
+</li>
+<li><p>与玩具示例合作，逐层理解LSTM网络。</p>
+</li>
+<li>理解每层的输入和输出流量。</li>
+<li>理解的含义<code>return_sequences</code> ，<code>RepeatVector()</code> 和<code>TimeDistributed()</code>。</li>
+<li>将LSTM Autoencoder与常规LSTM网络进行比较和对比。</li>
+</ul>
+<hr>
+<p>在下一篇文章中，我们将了解如何优化网络：<strong><em>如何决定添加新图层及其大小</em></strong>？<br><a name="4033"></a></p>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><ol>
+<li><a href="https://towardsdatascience.com/lstm-autoencoder-for-extreme-rare-event-classification-in-keras-ce209a224cfb" target="_blank" rel="noopener">用于Keras极端罕见事件分类的LSTM自动编码器</a></li>
+<li><a href="https://machinelearningmastery.com/lstm-autoencoders/" target="_blank" rel="noopener">LSTM自动编码器的温和介绍</a></li>
+<li><a href="https://medium.com/mlreview/understanding-lstm-and-its-diagrams-37e2f46f1714" target="_blank" rel="noopener">了解LSTM及其图表</a></li>
+</ol>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/06/20/yuque/逐步了解LSTM Autoencoder图层/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-yuque/用于图像分割的U-Net和Res-Net简介" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -321,20 +463,20 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>本教程中，我将通过解释他们的W3H（时间，原因，内容和方式）快速浏览四个着名的CNN架构的细节以及它们之间的区别。<br><a name="8df6"></a></p>
+        <p>本教程中，我将通过解释他们的W3H(时间，原因，内容和方式)快速浏览四个着名的CNN架构的细节以及它们之间的区别。<br><a name="8df6"></a></p>
 <h3 id="AlexNet"><a href="#AlexNet" class="headerlink" title="AlexNet"></a>AlexNet</h3><p>W<strong>hen？</strong></p>
 <ul>
 <li>阿兰图灵年</li>
 <li>人人享有可持续能源的一年</li>
 <li>伦敦奥运会</li>
 </ul>
-<p>W<strong>hy？</strong><br>AlexNet的诞生是为了改善ImageNet挑战的结果。这是第一个在2012年ImageNet LSVRC-2012挑战中获得相当准确度的<strong>_深度_</strong>卷积网络之一，精度为84.7％，而第二个精度为73.8％。使用卷积层和感受域来探索图像帧中的空间相关性的想法。<br>W<strong>hat?</strong><br>**该网络包括5个卷积（CONV）层和3个完全连接（FC）层。使用的激活是整流线性单元（ReLU）。网络中每层的结构细节可以在下表中找到。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1560993933551-4cf60db8-51e4-4d2c-9c2a-ad0b2c195deb.png#align=left&amp;display=inline&amp;height=382&amp;name=1_bD_DMBtKwveuzIkQTwjKQQ.png&amp;originHeight=382&amp;originWidth=1000&amp;size=75039&amp;status=done&amp;width=1000" alt="1_bD_DMBtKwveuzIkQTwjKQQ.png"><br>Alexnet Block Diagram（来源：oreilly.com）</p>
+<p>W<strong>hy？</strong><br>AlexNet的诞生是为了改善ImageNet挑战的结果。这是第一个在2012年ImageNet LSVRC-2012挑战中获得相当准确度的<strong>_深度_</strong>卷积网络之一，精度为84.7％，而第二个精度为73.8％。使用卷积层和感受域来探索图像帧中的空间相关性的想法。<br>W<strong>hat?</strong><br>该网络包括5个卷积(CONV)层和3个完全连接(FC)层。使用的激活是整流线性单元(ReLU)。网络中每层的结构细节可以在下表中找到。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1560993933551-4cf60db8-51e4-4d2c-9c2a-ad0b2c195deb.png#align=left&amp;display=inline&amp;height=382&amp;name=1_bD_DMBtKwveuzIkQTwjKQQ.png&amp;originHeight=382&amp;originWidth=1000&amp;size=75039&amp;status=done&amp;width=1000" alt="1_bD_DMBtKwveuzIkQTwjKQQ.png"><br>Alexnet Block Diagram(来源：oreilly.com)</p>
 <p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1560993966273-16713f3a-a6cd-4c0d-b63c-72d4064b580c.png#align=left&amp;display=inline&amp;height=426&amp;name=1_vXBvV_Unz3JAxytc5iSeoQ.png&amp;originHeight=426&amp;originWidth=1000&amp;size=195921&amp;status=done&amp;width=1000" alt="1_vXBvV_Unz3JAxytc5iSeoQ.png"><br>该网络共有6200万个可训练变量<br>H<strong>ow？</strong></p>
 <ul>
 <li>网络的输入是一批大小为227x227x3的RGB图像，并输出对应于每个类的1000x1概率向量。</li>
 <li>执行数据增加以减少过度拟合。此数据增强包括镜像和裁剪图像以增加训练数据集的变化。网络在第一，第二和第五CONV层之后使用重叠的最大化层。重叠的maxpool图层就是大小小于窗口大小的maxpool图层。使用3x3 maxpool图层，步长为2，从而创建重叠的感知字段。这种重叠分别将top-1和top-5误差分别提高了0.4％和0.3％。</li>
-<li>在AlexNet之前，最常用的激活函数是<em>sigmoid</em>和<em>tanh。</em>由于这些功能的饱和性，它们遭受消失梯度（VG）问题并且使得网络难以训练。AlexNet使用<em>ReLU</em>激活功能，不会受到VG问题的影响。原始论文表明，具有<em>ReLU</em>的网络实现了25％的错误率，比具有<em>tanh</em>非线性的同一网络快6倍。</li>
-<li>虽然ReLU有助于解决消失的梯度问题，但由于其无限的性质，学习的变量可能变得不必要地高。为了防止这种情况，AlexNet引入了本地响应规范化（LRN）。LRN背后的想法是在像素附近进行归一化，放大激发的神经元，同时抑制周围的神经元。</li>
+<li>在AlexNet之前，最常用的激活函数是<em>sigmoid</em>和<em>tanh。</em>由于这些功能的饱和性，它们遭受消失梯度(VG)问题并且使得网络难以训练。AlexNet使用<em>ReLU</em>激活功能，不会受到VG问题的影响。原始论文表明，具有<em>ReLU</em>的网络实现了25％的错误率，比具有<em>tanh</em>非线性的同一网络快6倍。</li>
+<li>虽然ReLU有助于解决消失的梯度问题，但由于其无限的性质，学习的变量可能变得不必要地高。为了防止这种情况，AlexNet引入了本地响应规范化(LRN)。LRN背后的想法是在像素附近进行归一化，放大激发的神经元，同时抑制周围的神经元。</li>
 <li><p>AlexNet还通过使用丢弃层来解决过度拟合问题，其中在训练期间以概率p = 0.5丢弃连接。虽然这可以避免网络过度拟合，帮助它摆脱糟糕的局部最小值，但收敛所需的迭代次数也增加了一倍。<br><a name="8c2b"></a></p>
 <h3 id="VGGNet"><a href="#VGGNet" class="headerlink" title="VGGNet"></a>VGGNet</h3><p>W<strong>hen?</strong></p>
 </li>
@@ -343,8 +485,7 @@
 <li>彗星首次机器人着陆</li>
 <li>罗宾威廉姆斯去世的那一年</li>
 </ul>
-<p>W<strong>hy? </strong><br>VGGNet的诞生是因为需要减少CONV层中的参数数量并改善培训时间。<br>W<strong>hat? </strong><br>**VGGNet有多种变体（VGG16，VGG19等），它们的区别仅在于网络中的总层数。VGG16网络的结构细节如下所示。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1560994342276-e8428f6a-f2fa-4b21-9248-0ed5b36d8fa8.png#align=left&amp;display=inline&amp;height=507&amp;name=1_HzxRI1qHXjiVXla-_NiMBA.png&amp;originHeight=507&amp;originWidth=900&amp;size=156275&amp;status=done&amp;width=900" alt="1_HzxRI1qHXjiVXla-_NiMBA.png"><br>VGG16框图（来源：neurohive.io）<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1560994375142-b5a7179a-3420-41a1-8a65-4211d7856bbf.png#align=left&amp;display=inline&amp;height=659&amp;name=1_1gA7d9svzp_jRHPsyy63Iw.png&amp;originHeight=659&amp;originWidth=1000&amp;size=364775&amp;status=done&amp;width=1000" alt="1_1gA7d9svzp_jRHPsyy63Iw.png"></p>
-<p>VGG16共有1.38亿个参数。这里要注意的重点是所有conv内核的大小为3x3，maxpool内核的大小为2x2，步长为2。<br>H<strong>ow？</strong><br>具有固定大小内核的想法是，可以通过使用多个3x3内核作为构建块来复制Alexnet（11x11,5x5,3x3）中使用的所有可变大小卷积内核。复制是根据内核所涵盖的感知字段进行的。<br>让我们考虑以下示例。假设我们有一个大小为5x5x1的输入层。实现内核大小为5x5且步长为1的转换层将产生并输出1x1的特征映射。通过实现两个3x3转换层（步长为1）可以获得相同的输出特征映射，如下所示<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1560994421159-825f0649-f8b5-40ae-a663-d2a2b5ba8621.png#align=left&amp;display=inline&amp;height=1185&amp;name=1_C3TmzJI0Nm94NDy9IQg3Qg.png&amp;originHeight=1185&amp;originWidth=1000&amp;size=145616&amp;status=done&amp;width=1000" alt="1_C3TmzJI0Nm94NDy9IQg3Qg.png"><br>现在让我们看一下需要训练的变量数量。对于5x5转换层滤波器，变量的数量为25.另一方面，两个内核大小为3x3的转换层总共具有3x3x2 = 18个变量（减少28％）。<br>类似地，通过实现三（5）个3x3转换层（步长为1），可以实现一个7x7（11x11）转换层的效果。这使可训练变量的数量减少了44.9％（62.8％）。减少可训练变量的数量意味着更快的学习和更强大的过度拟合。<br><a name="6af0"></a></p>
+<p>W<strong>hy? </strong><br>VGGNet的诞生是因为需要减少CONV层中的参数数量并改善培训时间。<br>W<strong>hat? </strong><br>VGGNet有多种变体(VGG16，VGG19等)，它们的区别仅在于网络中的总层数。VGG16网络的结构细节如下所示。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1560994342276-e8428f6a-f2fa-4b21-9248-0ed5b36d8fa8.png#align=left&amp;display=inline&amp;height=507&amp;name=1_HzxRI1qHXjiVXla-_NiMBA.png&amp;originHeight=507&amp;originWidth=900&amp;size=156275&amp;status=done&amp;width=900" alt="1_HzxRI1qHXjiVXla-_NiMBA.png"><br>VGG16框图(来源：neurohive.io)<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1560994375142-b5a7179a-3420-41a1-8a65-4211d7856bbf.png#align=left&amp;display=inline&amp;height=659&amp;name=1_1gA7d9svzp_jRHPsyy63Iw.png&amp;originHeight=659&amp;originWidth=1000&amp;size=364775&amp;status=done&amp;width=1000" alt="1_1gA7d9svzp_jRHPsyy63Iw.png">VGG16共有1.38亿个参数。这里要注意的重点是所有conv内核的大小为3x3，maxpool内核的大小为2x2，步长为2。<br>H<strong>ow？</strong><br>具有固定大小内核的想法是，可以通过使用多个3x3内核作为构建块来复制Alexnet(11x11,5x5,3x3)中使用的所有可变大小卷积内核。复制是根据内核所涵盖的感知字段进行的。<br>让我们考虑以下示例。假设我们有一个大小为5x5x1的输入层。实现内核大小为5x5且步长为1的转换层将产生并输出1x1的特征映射。通过实现两个3x3转换层(步长为1)可以获得相同的输出特征映射，如下所示<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1560994421159-825f0649-f8b5-40ae-a663-d2a2b5ba8621.png#align=left&amp;display=inline&amp;height=1185&amp;name=1_C3TmzJI0Nm94NDy9IQg3Qg.png&amp;originHeight=1185&amp;originWidth=1000&amp;size=145616&amp;status=done&amp;width=1000" alt="1_C3TmzJI0Nm94NDy9IQg3Qg.png"><br>现在让我们看一下需要训练的变量数量。对于5x5转换层滤波器，变量的数量为25.另一方面，两个内核大小为3x3的转换层总共具有3x3x2 = 18个变量(减少28％)。<br>类似地，通过实现三(5)个3x3转换层(步长为1)，可以实现一个7x7(11x11)转换层的效果。这使可训练变量的数量减少了44.9％(62.8％)。减少可训练变量的数量意味着更快的学习和更强大的过度拟合。<br><a name="6af0"></a></p>
 <h3 id="RESNET"><a href="#RESNET" class="headerlink" title="RESNET"></a>RESNET</h3><p>When?</p>
 <ul>
 <li>发现引力波</li>
@@ -355,14 +496,14 @@
 <ul>
 <li>神经网络因存在时无法找到更简单的映射而臭名昭着。</li>
 <li>例如，假设我们有一个完全连接的多层感知器网络，我们希望在输入等于输出的数据集上训练它。解决这个问题的最简单方法是让所有权重等于所有隐藏层的一个和所有偏差零。但是当使用反向传播训练这样的网络时，学习相当复杂的映射，其中权重和偏差具有宽范围的值。</li>
-<li>另一个例子是向现有神经网络添加更多层。假设我们有一个网络<strong><em>f（x）</em></strong>，它在数据集上的准确度达到了_n％_。现在向该网络添加更多层<strong><em>g（f（x））</em></strong>应该至少具有_n％_的精度，即在最坏的情况下<strong><em>g（。）</em></strong>应该是相同的映射，产生与<strong><em>f（x）</em></strong>相同的精度，如果不是更多。但不幸的是情况并非如此。实验表明，通过向网络添加更多层，精度实际上降低了。</li>
+<li>另一个例子是向现有神经网络添加更多层。假设我们有一个网络<strong><em>f(x)</em></strong>，它在数据集上的准确度达到了_n％_。现在向该网络添加更多层<strong><em>g(f(x)</em></strong>应该至少具有_n％_的精度，即在最坏的情况下<strong><em>g(。)</em></strong>应该是相同的映射，产生与<strong><em>f(x)</em></strong>相同的精度，如果不是更多。但不幸的是情况并非如此。实验表明，通过向网络添加更多层，精度实际上降低了。</li>
 <li>由于消失的梯度问题，上述问题发生了。当我们使CNN更深时，向后传播到初始层的导数变得几乎无关紧要。</li>
 </ul>
-<p>ResNet通过引入两种类型的“快捷方式连接”来解决此网络：<em>身份快捷方式</em>和<em>投影快捷方式。</em><br>w ^帽子？ResNetXX架构有多个版本，其中“XX”表示层数。最常用的是ResNet50和ResNet101。由于消失的梯度问题得到了关注（更多关于它如何部分），CNN开始变得越来越深。下面我们介绍ResNet18的结构细节<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1560994516919-567f0e14-68f5-4bce-b21f-dd0154b26c28.png#align=left&amp;display=inline&amp;height=651&amp;name=1_DFDIdrXFYkaJLnefGJ-yKA.png&amp;originHeight=651&amp;originWidth=1000&amp;size=325114&amp;status=done&amp;width=1000" alt="1_DFDIdrXFYkaJLnefGJ-yKA.png"><br>Resnet18拥有大约1,100万个可训练参数。它由CONV层组成，滤波器大小为3x3（就像VGGNet一样）。在整个网络中仅使用两个池化层，一个在网络的开始处，另一个在网络的末端。身份连接位于每两个CONV层之间。实线箭头显示了输入和输出的尺寸相同的标识快捷方式，而虚线箭头显示了尺寸不同的投影连接。<br>How？<br>如前所述，ResNet架构利用快捷连接确实解决了消失的梯度问题。ResNet的基本构建块是一个残留块，它在网络中重复出现。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1560994565850-005bc8c1-8acf-4012-9895-5e102974868d.png#align=left&amp;display=inline&amp;height=329&amp;name=1_6WlIo8W1_Qc01hjWdZy-1Q.png&amp;originHeight=329&amp;originWidth=570&amp;size=28499&amp;status=done&amp;width=570" alt="1_6WlIo8W1_Qc01hjWdZy-1Q.png"><br>网络不是从x→F（x）学习映射，而是从x→F（x）+ G（x）学习映射。当输入x和输出F（x）的维数相同时，函数G（x）= x是一个标识函数，快捷方式连接称为标识连接。通过在训练期间将中间层中的权重归零来学习相同的映射，因为它更容易将权重归零而不是将它们推到一个。<br>对于F（x）的尺寸与x不同的情况（由于其间的CONV层中的步幅长度&gt; 1），实现了投影连接而不是Identity连接。函数G（x）将输入x的尺寸改变为输出F（x）的尺寸。原始论文考虑了两种映射。</p>
+<p>ResNet通过引入两种类型的“快捷方式连接”来解决此网络：<em>身份快捷方式</em>和<em>投影快捷方式。</em><br>what？<br>ResNetXX架构有多个版本，其中“XX”表示层数。最常用的是ResNet50和ResNet101。由于消失的梯度问题得到了关注(更多关于它如何部分)，CNN开始变得越来越深。下面我们介绍ResNet18的结构细节<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1560994516919-567f0e14-68f5-4bce-b21f-dd0154b26c28.png#align=left&amp;display=inline&amp;height=651&amp;name=1_DFDIdrXFYkaJLnefGJ-yKA.png&amp;originHeight=651&amp;originWidth=1000&amp;size=325114&amp;status=done&amp;width=1000" alt="1_DFDIdrXFYkaJLnefGJ-yKA.png"><br>Resnet18拥有大约1,100万个可训练参数。它由CONV层组成，滤波器大小为3x3(就像VGGNet一样)。在整个网络中仅使用两个池化层，一个在网络的开始处，另一个在网络的末端。身份连接位于每两个CONV层之间。实线箭头显示了输入和输出的尺寸相同的标识快捷方式，而虚线箭头显示了尺寸不同的投影连接。<br>How？<br>如前所述，ResNet架构利用快捷连接确实解决了消失的梯度问题。ResNet的基本构建块是一个残留块，它在网络中重复出现。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1560994565850-005bc8c1-8acf-4012-9895-5e102974868d.png#align=left&amp;display=inline&amp;height=329&amp;name=1_6WlIo8W1_Qc01hjWdZy-1Q.png&amp;originHeight=329&amp;originWidth=570&amp;size=28499&amp;status=done&amp;width=570" alt="1_6WlIo8W1_Qc01hjWdZy-1Q.png"><br>网络不是从x→F(x)学习映射，而是从x→F(x)+ G(x)学习映射。当输入x和输出F(x)的维数相同时，函数G(x)= x是一个标识函数，快捷方式连接称为标识连接。通过在训练期间将中间层中的权重归零来学习相同的映射，因为它更容易将权重归零而不是将它们推到一个。<br>对于F(x)的尺寸与x不同的情况(由于其间的CONV层中的步幅长度&gt; 1)，实现了投影连接而不是Identity连接。函数G(x)将输入x的尺寸改变为输出F(x)的尺寸。原始论文考虑了两种映射。</p>
 <ul>
-<li><strong>不可训练的映射（填充）：</strong>输入x简单地用零填充以使维度与F（x）的维度匹配</li>
-<li><p><strong>可训练的映射（Conv层）</strong>：1x1 Conv层用于将x映射到G（x）。从上表可以看出，在整个网络中，空间尺寸保持相同或减半，深度保持相同或加倍，每个转换层后的宽度和深度的乘积保持相同，即3584.1x1通过分别使用步长2和多个这样的滤波器，将conv层用于空间维度的一半并使深度加倍。1x1转换层的数量等于F（x）的深度。<br><a name="c58a"></a></p>
-<h3 id="Inception"><a href="#Inception" class="headerlink" title="Inception:"></a>Inception:</h3><p>when？</p>
+<li><strong>不可训练的映射(填充)：</strong>输入x简单地用零填充以使维度与F(x)的维度匹配</li>
+<li><p><strong>可训练的映射(Conv层)</strong>：1x1 Conv层用于将x映射到G(x)。从上表可以看出，在整个网络中，空间尺寸保持相同或减半，深度保持相同或加倍，每个转换层后的宽度和深度的乘积保持相同，即3584.1x1通过分别使用步长2和多个这样的滤波器，将conv层用于空间维度的一半并使深度加倍。1x1转换层的数量等于F(x)的深度。<br><a name="c58a"></a></p>
+<h3 id="Inception"><a href="#Inception" class="headerlink" title="Inception"></a>Inception</h3><p>when？</p>
 </li>
 <li><p>国际家庭农业和晶体学年</p>
 </li>
@@ -376,14 +517,14 @@
 <li>5x5转换层</li>
 <li>最大池</li>
 </ul>
-<p>以黄色显示的1x1转换块用于深度缩减。然后将来自四个并行操作的结果深度连接以形成过滤器连接块（绿色）。有多个版本的Inception，最简单的是GoogLeNet。<br><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1560994706356-6b6131d5-c327-4eb9-b6d1-d90a2bbc7c8f.jpeg#align=left&amp;display=inline&amp;height=2119&amp;name=1_K6jlotOxePRVyREB98HHYg.jpeg&amp;originHeight=2119&amp;originWidth=1000&amp;size=733500&amp;status=done&amp;width=1000" alt="1_K6jlotOxePRVyREB98HHYg.jpeg"><br>How？<br>初始化增加了通过培训选择最佳网络的网络空间。每个初始模块都能够捕获不同级别的显着特征。全局特征由5x5转换层捕获，而3x3转换层易于捕获分布式特征。最大池操作负责捕获邻域中突出的低级特征。在给定级别，所有这些特征在被馈送到下一层之前被提取和连接。我们留下网络/培训来决定哪些功能相应地保留了最多的值和重量。假设数据集中的图像具有丰富的全局特征而没有太低级别的特征，那么与5x5 conv内核相比，经过训练的Inception网络将具有与3x3 conv内核相对应的非常小的权重。</p>
+<p>以黄色显示的1x1转换块用于深度缩减。然后将来自四个并行操作的结果深度连接以形成过滤器连接块(绿色)。有多个版本的Inception，最简单的是GoogLeNet。<br><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1560994706356-6b6131d5-c327-4eb9-b6d1-d90a2bbc7c8f.jpeg#align=left&amp;display=inline&amp;height=2119&amp;name=1_K6jlotOxePRVyREB98HHYg.jpeg&amp;originHeight=2119&amp;originWidth=1000&amp;size=733500&amp;status=done&amp;width=1000" alt="1_K6jlotOxePRVyREB98HHYg.jpeg"><br>How？<br>初始化增加了通过培训选择最佳网络的网络空间。每个初始模块都能够捕获不同级别的显着特征。全局特征由5x5转换层捕获，而3x3转换层易于捕获分布式特征。最大池操作负责捕获邻域中突出的低级特征。在给定级别，所有这些特征在被馈送到下一层之前被提取和连接。我们留下网络/培训来决定哪些功能相应地保留了最多的值和重量。假设数据集中的图像具有丰富的全局特征而没有太低级别的特征，那么与5x5 conv内核相比，经过训练的Inception网络将具有与3x3 conv内核相对应的非常小的权重。</p>
 <hr>
 <p><a name="23c8"></a></p>
-<h3 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h3><p>在下表中，这4个CNN按照Imagenet数据集的前5个精度进行排序。还可以看到正向通过所需的可训练参数的数量和浮点运算（FLOP）。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1560994753593-1495ba6a-09d4-468c-978c-0eda012d05f3.png#align=left&amp;display=inline&amp;height=206&amp;name=1_p-2QjvJ4nDCfn3F5oIxvYA.png&amp;originHeight=206&amp;originWidth=1000&amp;size=97876&amp;status=done&amp;width=1000" alt="1_p-2QjvJ4nDCfn3F5oIxvYA.png"><br>可以进行一些比较：</p>
+<h3 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h3><p>在下表中，这4个CNN按照Imagenet数据集的前5个精度进行排序。还可以看到正向通过所需的可训练参数的数量和浮点运算(FLOP)。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1560994753593-1495ba6a-09d4-468c-978c-0eda012d05f3.png#align=left&amp;display=inline&amp;height=206&amp;name=1_p-2QjvJ4nDCfn3F5oIxvYA.png&amp;originHeight=206&amp;originWidth=1000&amp;size=97876&amp;status=done&amp;width=1000" alt="1_p-2QjvJ4nDCfn3F5oIxvYA.png"><br>可以进行一些比较：</p>
 <ul>
-<li>AlexNet和ResNet-152都有大约60M的参数，但它们的前5个精度差异大约为10％。但是训练ResNet-152需要大量的计算（大约是AlexNet的10倍），这意味着需要更多的训练时间和精力。</li>
+<li>AlexNet和ResNet-152都有大约60M的参数，但它们的前5个精度差异大约为10％。但是训练ResNet-152需要大量的计算(大约是AlexNet的10倍)，这意味着需要更多的训练时间和精力。</li>
 <li>与ResNet-152相比，VGGNet不仅具有更多的参数和FLOP，而且精度也有所降低。训练VGGNet的准确性降低需要更多时间。</li>
-<li>训练AlexNet大致与训练开始时间相同。内存要求低10倍，精度提高（约9％）</li>
+<li>训练AlexNet大致与训练开始时间相同。内存要求低10倍，精度提高(约9％)</li>
 </ul>
 
       
@@ -927,75 +1068,9 @@
 
 
   
-    <article id="post-yuque/在PyTorch中构建Faster RCNN的指南" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/06/10/yuque/在PyTorch中构建Faster RCNN的指南/">在PyTorch中构建Faster RCNN的指南</a>
-    </h1>
-  
-
-        
-        <a href="/2019/06/10/yuque/在PyTorch中构建Faster RCNN的指南/" class="archive-article-date">
-  	<time datetime="2019-06-10T08:24:17.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-06-10</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><a name="c3d9"></a></p>
-<h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>Faster R-CNN是第一个完全适用于深度学习的框架之一。它建立在<strong>Fast RCNN的</strong>基础之上，它确实建立在<strong>RCNN</strong>和<strong>SPP-Net</strong>的思想基础之上。虽然我们在构建<strong>Faster RCNN</strong>框架时带来了一些<strong>Fast RCNN</strong>的想法，但我们不会详细讨论这些框架。其中一个原因是Faster R-CNN表现非常好，并且它不使用传统的计算机视觉技术，如选择性搜索等。在很高的层次上，Fast RCNN和Faster RCNN的工作原理如下面的流程图所示。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1560155404832-04d5944a-cbf5-47f6-b922-48d11d9deea3.png#align=left&amp;display=inline&amp;height=345&amp;name=1_dxnDHyA9srqFKGEKIUdsOA.png&amp;originHeight=345&amp;originWidth=917&amp;size=19634&amp;status=done&amp;width=917" alt="1_dxnDHyA9srqFKGEKIUdsOA.png"><br>我们已经写了一个详细的博客帖子上的物体检测框架<a href="https://medium.com/@fractaldle/brief-overview-on-object-detection-algorithms-ec516929be93" target="_blank" rel="noopener">这里</a>。这将成为那些希望通过自己编码来理解Faster RCNN的人的指南。<br>您可以在上图中看到的唯一区别是，Faster RCNN已经用RPN（区域提议网络）网络取代了选择性搜索。选择性搜索算法使用SIFT和HOG描述符来生成对象提议，并且在CPU上每个图像需要2秒。这是一个昂贵的过程，Fast RCNN总共需要2.3秒才能在一个图像上生成预测，即使使用VGGnet等非常深的图像分类器（现在也使用ResNet和ResNext），Fast RCNN也能以5 FPS（每秒帧数）工作。 ）在后端。<br>
-        
-          <a class="article-more-a" href="/2019/06/10/yuque/在PyTorch中构建Faster RCNN的指南/#more">more >></a>
-        
-      
-
-      
-    </p></div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/06/10/yuque/在PyTorch中构建Faster RCNN的指南/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
     </nav>
   
 
