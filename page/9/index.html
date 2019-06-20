@@ -149,6 +149,100 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-yuque/将ML投入生产：在Python中使用Apache Kafka" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/03/15/yuque/将ML投入生产：在Python中使用Apache Kafka/">将ML投入生产：在Python中使用Apache Kafka</a>
+    </h1>
+  
+
+        
+        <a href="/2019/03/15/yuque/将ML投入生产：在Python中使用Apache Kafka/" class="archive-article-date">
+  	<time datetime="2019-03-15T10:03:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-15</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>我们将说明如何使用一系列工具（即<a href="https://kafka.apache.org/" target="_blank" rel="noopener">Kafka</a>，<a href="https://mlflow.org/" target="_blank" rel="noopener">MLFlow</a>和<a href="https://aws.amazon.com/sagemaker/" target="_blank" rel="noopener">Sagemaker</a>）来帮助生产ML。为此，我们将设置一个简单的场景，我们希望它类似于一些真实用例，然后描述一个潜在的解决方案。可以在<a href="https://github.com/jrzaurin/ml_pipelines" target="_blank" rel="noopener">此处</a>找到包含所有代码的伴随仓库。<br><a name="c931653c"></a></p>
+<h3 id="场景"><a href="#场景" class="headerlink" title="场景"></a><strong>场景</strong></h3><p>公司使用一系列服务收集数据，这些服务在用户/客户与公司的网站或应用程序交互时生成事件。当这些交互发生时，算法需要<strong>实时</strong>运行<strong>，</strong>并且需要根据算法的输出（或预测）采取一些立即行动。最重要的是，经过_ñ<em>相互作用（或意见）的算法需要重新训练<strong>不停止</strong>的</em>预测_ <em>服务，</em>因为用户将保持互动。<br>对于这里的练习，我们使用了<a href="https://archive.ics.uci.edu/ml/datasets/adult" target="_blank" rel="noopener">成人</a>数据集，其目标是根据年龄，原籍国等来预测个人是否获得高于/低于50k的收入。为了使该数据集适应前面描述的情景，可以假设通过在线问卷/表格收集该年龄，本国等，我们需要预测用户是否实时获得高/低收入。如果收入高，那么我们会立即给他们打电话/给他们发电子邮件。然后，在_N个_新观察之后，我们重新训练算法，同时我们继续预测新用户。<br><strong>解决方案</strong><br>图1是潜在解决方案的图示。为了实现这个解决方案，我们使用了<a href="https://github.com/dpkp/kafka-python" target="_blank" rel="noopener">Kafka-Python</a>（可以在<a href="https://github.com/dpkp/kafka-python" target="_blank" rel="noopener">这里</a>找到一个很好的教程），以及<a href="https://lightgbm.readthedocs.io/en/latest/" target="_blank" rel="noopener">LightGBM</a>和<a href="https://github.com/hyperopt/hyperopt" target="_blank" rel="noopener">Hyperopt</a>或<a href="https://github.com/HunterMcGushion/hyperparameter_hunter" target="_blank" rel="noopener">HyperparameterHunter</a>。<br><br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1552644337722-6e53ed5f-2e63-41eb-bddd-1d1968e90f10.png#align=left&amp;display=inline&amp;height=443&amp;name=1___golwnXpxecbplKvGqlPA.png&amp;originHeight=594&amp;originWidth=1000&amp;size=180599&amp;status=done&amp;width=746" alt="1___golwnXpxecbplKvGqlPA.png"><br>图1. <strong>实时预测ML管道</strong>。以下提供完整描述<br>我们将在本练习中使用的唯一Python“局外人”是<a href="https://kafka.apache.org/" target="_blank" rel="noopener">Apache-Kafka</a>（我们将使用python API Kafka-Python，但仍然需要在您的系统中安装Kafka）。如果你在Mac上，只需使用Homebrew：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install kafka</span><br></pre></td></tr></table></figure>
+<p>这也将安装zookeeper依赖项。<br>如前所述，我们使用了Adult数据集。这是因为我们的目的是说明潜在的ML管道并提供有用的代码，同时保持相对简单。但请注意，此处描述的管道原则上与数据无关。当然，预处理将根据数据的性质而改变，但如果不相同，管道组件将保持相似。<br><strong>初始化实验</strong><br>您可以在我们的<a href="https://github.com/jrzaurin/ml_pipelines" target="_blank" rel="noopener">仓库中</a>找到用于此帖子的代码（以及更多）。在那里，有一个名为的脚本<code>initialize.py</code> 。该脚本将下载数据集，设置目录结构，预处理数据，在训练数据集上训练初始模型并优化该模型的超参数。在现实世界中，这将对应于通常的实验阶段和离线训练初始算法的过程。<br>在这篇文章中，我们希望主要关注管道和相应的组件而不是ML。尽管如此，让我们简单地提一下我们在本练习中使用的ML工具。<br>鉴于我们正在使用的数据集，数据预处理非常简单。我们编写了一个名为的自定义类<code>[FeatureTools](https://github.com/jrzaurin/ml_pipelines/blob/master/utils/feature_tools.py)</code>，可以<code>utils</code>在repo 中的模块中找到。这个类有<code>.fit</code>和  <code>.transform</code>方法将标准化/缩放数字特征，编码分类特征并生成我们称之为“交叉列”，这是两个（或更多）分类特征之间的笛卡尔积的结果。<br>处理完数据后，我们使用LightGBM将模型与Hyperopt或HyperparameterHunter相匹配，以执行超参数优化。可以在<code>train</code>模块中找到与此任务相关的代码，其中可以找到两个脚本<code>[train_hyperop](https://github.com/jrzaurin/ml_pipelines/blob/master/train/train_hyperopt.py).py</code>和<code>[train_hyperparameterhunter](https://github.com/jrzaurin/ml_pipelines/blob/master/train/train_hyperparameterhunter.py).py</code> 。<br>我们可能会在python（<a href="https://scikit-optimize.github.io/" target="_blank" rel="noopener">Skopt</a>，Hyperopt和HyperparameterHunder）中编写一个单独的帖子来比较超参数优化包，但是现在，请知道：如果你想要速度，那么使用Hyperopt。如果您不关心速度并且想要详细跟踪优化例程，请使用HyperparameterHunter。用<a href="https://www.linkedin.com/in/huntermcgushion/" target="_blank" rel="noopener">Hunter</a> McGushion 的话来说，包装的创造者：</p>
+<blockquote>
+<p><em>“长期以来，超参数优化一直是一个耗时的过程，只是指向了进一步优化的方向，然后你基本上不得不重新开始。”</em></p>
+</blockquote>
+<p>HyperparameterHunter就是为了解决这个问题，它做得非常好。目前，该软件包是建立在Skopt之上的，这就是为什么它比Hyperopt慢得多。但是，我知道有人努力将Hyperopt作为HyperparameterHunter的另一个后端包含在内。当发生这种情况时，不会有任何争议，HyperparameterHunter应该是您的首选工具。<br>尽管如此，如果有人感兴趣，我在回购中包含了一个<a href="https://github.com/jrzaurin/ml_pipelines/blob/master/notebooks/skopt_vs_hyperopt.ipynb" target="_blank" rel="noopener">笔记本</a>，比较了Skopt和Hyperopt的表现。<br>让我们现在转到管道流程本身。<br><strong>App Messages Producer</strong><br>这意味着生产管道的哪个部分可能看起来相对简单。因此，我们直接使用Adult数据集生成消息（JSON对象）。<br>在现实世界中，人们将拥有许多可以生成事件的服务。从那里，有一个选项。这些事件中的信息可能存储在数据库中，然后通过常规查询进行汇总。从那里，Kafka服务将消息发布到管道中。或者，这些事件中的所有信息可以直接发布到不同的主题中，“聚合服务”可以将所有信息存储在单个消息中，然后将其发布到管道中（当然，也可以组合使用他们俩）。<br>例如，可能允许用户通过Facebook或Google注册，收集他们的姓名和电子邮件地址。然后他们可能会被要求填写调查问卷，我们会继续收集他们进展的事件。在此过程中的某个时刻，所有这些事件将在单个消息中聚合，然后通过Kafka生产者发布。这篇文章中的管道将从聚合了所有相关信息的点开始。我们这里的消息是Adult数据集中的单个观察。下面我们将包含消息内容的示例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">’&#123;“age”:<span class="number">25</span>,”workclass”:”Private”,”fnlwgt”:<span class="number">226802</span>,”education”:”<span class="number">11</span>th”,”marital_status”:”Never-married”,”occupation”:”Machine-op-inspct”,”relationship”:”Own-child”,”race”:”Black”,”gender”:”Male”,”capital_gain”:<span class="number">0</span>,”capital_loss”:<span class="number">0</span>,”hours_per_week”:<span class="number">40</span>,”native_country”:”United-States”,”income_bracket”:”&lt;=<span class="number">50</span>K.”&#125;’</span><br></pre></td></tr></table></figure>
+<p><a href="https://github.com/jrzaurin/ml_pipelines/blob/master/sample_app.py" target="_blank" rel="noopener">App / Service</a>的核心（图1中最灰色，最左边的框）是下面的代码段：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">df_test = pd.read_csv(PATH/<span class="string">'adult.test'</span>)</span><br><span class="line">df_test[<span class="string">'json'</span>] = df_test.apply(<span class="keyword">lambda</span> x: x.to_json(), axis=<span class="number">1</span>)</span><br><span class="line">messages = df_test.json.tolist()</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">start_producing</span><span class="params">()</span>:</span></span><br><span class="line">	producer = KafkaProducer(bootstrap_servers=KAFKA_HOST)</span><br><span class="line">	<span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">200</span>):</span><br><span class="line">		message_id = str(uuid.uuid4())</span><br><span class="line">		message = &#123;<span class="string">'request_id'</span>: message_id, <span class="string">'data'</span>: json.loads(messages[i])&#125;</span><br><span class="line"></span><br><span class="line">		producer.send(<span class="string">'app_messages'</span>, json.dumps(message).encode(<span class="string">'utf-8'</span>))</span><br><span class="line">		producer.flush()</span><br><span class="line"></span><br><span class="line">		print(<span class="string">"\033[1;31;40m -- PRODUCER: Sent message with id &#123;&#125;"</span>.format(message_id))</span><br><span class="line">		sleep(<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">start_consuming</span><span class="params">()</span>:</span></span><br><span class="line">	consumer = KafkaConsumer(<span class="string">'app_messages'</span>, bootstrap_servers=KAFKA_HOST)</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">for</span> msg <span class="keyword">in</span> consumer:</span><br><span class="line">		message = json.loads(msg.value)</span><br><span class="line">		<span class="keyword">if</span> <span class="string">'prediction'</span> <span class="keyword">in</span> message:</span><br><span class="line">			request_id = message[<span class="string">'request_id'</span>]</span><br><span class="line">			print(<span class="string">"\033[1;32;40m ** CONSUMER: Received prediction &#123;&#125; for request id &#123;&#125;"</span>.format(message[<span class="string">'prediction'</span>], request_id))</span><br></pre></td></tr></table></figure>
+<p>请注意，我们使用测试数据集来生成消息。这是因为我们设计了一个尽可能与真实世界相似的场景（在一定限度内）。考虑到这一点，我们使用训练数据集来构建初始<code>model</code>和<code>dataprocessor</code>对象。然后，我们使用测试数据集生成消息，目的是模拟随时间接收新信息的过程。<br>关于上面的代码片段，简单地说，生产者会将消息发布到管道（<code>start_producing()</code>）中并使用带有最终预测（<code>start_consuming()</code>）的消息。与我们在此描述的管道不同的方式不包括流程的开始（事件收集和聚合），我们也跳过最后，即如何处理最终预测。尽管如此，我们还是简要讨论了一些用例，这些用例可能会在帖子结尾处有用，这将说明最后阶段。<br>实际上，除了忽略过程的开始和结束之外，我们认为这条管道在现实世界中可以使用的管道相当好。因此，我们希望我们的仓库中包含的代码对您的某些项目有用。<br><strong>预测者和训练师</strong><br>该实现的主要目标是实时运行算法并在<strong>不</strong>停止预测服务的<strong>情况下</strong>每_N次_观察重新训练它。为此，我们实现了两个组件，<strong>Predictor</strong>（在repo中）和<strong>Trainer</strong>（）。<code>[predictor](https://github.com/jrzaurin/ml_pipelines/blob/master/predictor.py).py`</code><a href="https://github.com/jrzaurin/ml_pipelines/blob/master/trainer.py" target="_blank" rel="noopener">trainer</a>.py<code>&lt;br /&gt;现在让我们逐一描述图1中显示的数字，使用代码片段作为我们的指南。请注意，下面的过程假设有一个运行</code>initialize.py<code>脚本，因此初始文件</code>model.p<code>和</code>dataprocessor.p`文件存在于相应的目录中。另外，请强调下面的代码包含Predictor和Trainer的核心。有关完整代码，请参阅<a href="https://github.com/jrzaurin/ml_pipelines" target="_blank" rel="noopener">回购</a>。<br><strong>预报器</strong><br>Predictor代码的核心如下所示</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">start</span><span class="params">(model_id, messages_count, batch_id)</span>:</span></span><br><span class="line">	<span class="keyword">for</span> msg <span class="keyword">in</span> consumer:</span><br><span class="line">		message = json.loads(msg.value)</span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span> is_retraining_message(msg):</span><br><span class="line">			model_fname = <span class="string">'model_&#123;&#125;_.p'</span>.format(model_id)</span><br><span class="line">			model = reload_model(MODELS_PATH/model_fname)</span><br><span class="line">			print(<span class="string">"NEW MODEL RELOADED &#123;&#125;"</span>.format(model_id))</span><br><span class="line"></span><br><span class="line">		<span class="keyword">elif</span> is_application_message(msg):</span><br><span class="line">			request_id = message[<span class="string">'request_id'</span>]</span><br><span class="line">			pred = predict(message[<span class="string">'data'</span>], column_order)</span><br><span class="line">			publish_prediction(pred, request_id)</span><br><span class="line"></span><br><span class="line">			append_message(message[<span class="string">'data'</span>], MESSAGES_PATH, batch_id)</span><br><span class="line">			messages_count += <span class="number">1</span></span><br><span class="line">			<span class="keyword">if</span> messages_count % RETRAIN_EVERY == <span class="number">0</span>:</span><br><span class="line">				model_id = (model_id + <span class="number">1</span>) % (EXTRA_MODELS_TO_KEEP + <span class="number">1</span>)</span><br><span class="line">				send_retrain_message(model_id, batch_id)</span><br><span class="line">				batch_id += <span class="number">1</span></span><br></pre></td></tr></table></figure>
+<p><strong>（1a）</strong><code>predictor.py</code>片段中的第12行。预测器将从应用程序/服务接收消息，它将进行数据处理并在接收消息时实时运行模型。所有这些都是使用函数中的现有对象<code>dataprocessor</code>和<code>model</code>对象发生的<code>predict</code>。<br><strong>（1b）</strong><code>predictor.py</code>片段中的第13行。一旦我们运行预测，Predictor将发布<code>publish_prediction()</code>最终将由App / Service接收的result（）。<br><strong>（2）</strong><code>predictor.py</code>片段中的第17-20行。每条<code>RETRAIN_EVERY</code>消息，Predictor都会发布一条“ <em>重新训练</em> ”消息（<code>send_retrain_message()</code>），由培训师阅读。<br><strong>训练者</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">start</span><span class="params">()</span>:</span></span><br><span class="line">	consumer = KafkaConsumer(RETRAIN_TOPIC, bootstrap_servers=KAFKA_HOST)</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> msg <span class="keyword">in</span> consumer:</span><br><span class="line">		message = json.loads(msg.value)</span><br><span class="line">		<span class="keyword">if</span> <span class="string">'retrain'</span> <span class="keyword">in</span> message <span class="keyword">and</span> message[<span class="string">'retrain'</span>]:</span><br><span class="line">			model_id = message[<span class="string">'model_id'</span>]</span><br><span class="line">			batch_id = message[<span class="string">'batch_id'</span>]</span><br><span class="line">			message_fname = <span class="string">'messages_&#123;&#125;_.txt'</span>.format(batch_id)</span><br><span class="line">			messages = MESSAGES_PATH/message_fname</span><br><span class="line"></span><br><span class="line">			train(model_id, messages)</span><br><span class="line">			publish_traininig_completed(model_id)</span><br></pre></td></tr></table></figure>
+<p><strong>（3）</strong><code>trainer.py</code>片段中的第12行。培训师将阅读该消息并使用新的累积数据集（<code>train()</code>）触发重新训练过程。<br>这是原始数据集加上<code>RETRAIN_EVERY</code>新的观察结果。列车功能将独立于<strong>1a</strong>和<strong>1b中</strong>描述的过程运行<em>“初始化实验”</em><strong> </strong>部分中描述的整个过程。换句话说，训练者将重新训练模型，而预测器在消息到达时保持预测。<br>在这个阶段值得一提的是，在这里我们发现我们的实现与将在现实世界中使用的实现之间存在进一步的差异。在我们的实现中，一旦处理了<code>RETRAIN_EVERY</code>多个观察结果，就可以重新训练算法。这是因为我们使用Adult测试数据集来生成消息，其中包括目标列（“ _income_braket_ ”）。在真实的单词中，基于算法输出所采取的动作的真实结果通常在算法运行之后不容易访问，但是一段时间之后。在那种情况下，另一个过程应该是收集真实的结果，一旦收集的真实结果的数量等于<code>RETRAIN_EVERY</code>算法将被重新训练。<br>例如，假设此管道实现了电子商务的实时推荐系统。我们已经离线训练了一个推荐算法，目标列是我们的用户喜欢我们建议的分类表示：0,1,2和3对于不喜欢或与项目交互的用户，喜欢该项目（例如点击像按钮），将项目添加到他们的篮子，并分别购买该项目。当系统提供建议时，我们仍然不知道用户最终会做什么。<br>因此，随着用户信息在网站（或应用程序）中导航时收集和存储用户信息，第二个过程应该收集我们建议的最终结果。只有当两个进程都收集了<code>RETRAIN_EVERY</code>消息和结果时，才会对算法进行重新训练。<br><strong>（4）</strong><code>trainer.py</code>片段中的第13行。重新训练完成后，将发布带有相应信息的消息（<code>published_training_completed()</code>）。<br><strong>（5）</strong><code>predictor.py</code>片段中的第5-8行。Predictor的消费者订阅了两个主题：<code>[‘app_messages’, ‘retrain_topic’]</code>。一旦它通过“retrain_topic”接收到重新训练完成的信息，它将加载新模型并像往常一样保持过程，而不会在过程中的任何时间停止。<br><a name="647586e9"></a></p>
+<h3 id="如何运行管道"><a href="#如何运行管道" class="headerlink" title="如何运行管道"></a>如何运行管道</h3><p>在配套仓库中，我们已经包含了如何运行管道（本地）的说明。其实很简单。</p>
+<ol>
+<li>启动zookeper和kafka：</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ brew services start zookeeper</span><br><span class="line">==&gt; Successfully started `zookeeper` (label: homebrew.mxcl.zookeeper)</span><br><span class="line">$ brew services start kafka</span><br><span class="line">==&gt; Successfully started `kafka` (label: homebrew.mxcl.kafka)</span><br></pre></td></tr></table></figure>
+<p>2.运行initialize.py：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python initialize.py</span><br></pre></td></tr></table></figure>
+<p>3.在终端＃1中运行预测器（或训练器）：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python predictor.py</span><br></pre></td></tr></table></figure>
+<p>4.在终端＃2中运行训练器（或预测器）：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python trainer.py</span><br></pre></td></tr></table></figure>
+<p>5.在终端＃3中运行示例应用程序</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python samplea_app.py</span><br></pre></td></tr></table></figure>
+<p>然后，一旦处理了N条消息，您应该看到如下内容：</p>
+<p><strong>右上方终端</strong>：我们重新训练了模型，Hyperopt已经进行了10次评估（在实际练习中，这些应该是几百次）。<strong>左上方终端</strong>：一旦对模型进行了重新训练和优化，我们就会看到预测器如何加载新模型（在新LightGBM版本的恼人警告消息之后）。<strong>底部终端</strong>：服务照常进行。<br><br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1552645079397-f02448b1-2084-4a1b-b5d5-0b51d8af3dc2.png#align=left&amp;display=inline&amp;height=557&amp;name=1_xIT4U_OODiPtDuiPsCbyXw.png&amp;originHeight=746&amp;originWidth=1000&amp;size=347205&amp;status=done&amp;width=746" alt="1_xIT4U_OODiPtDuiPsCbyXw.png"></p>
+<p>一些潜在的用例<br>以下是（很多）其他一些潜在用例。<br>实时调整在线旅程<br>让我们考虑出售一些商品的电子商务。当用户浏览网站时，我们会收集有关其行为信息的活动。我们之前已经培训了一种算法，我们知道在10次交互之后，我们可以很好地了解客户是否最终会购买我们的产品。此外，我们也知道他们可能购买的产品可能会很昂贵。因此，我们希望“在旅途中”定制他们的旅程，以促进他们的购物体验。这里的定制可能意味着什么，从缩短行程到改变页面布局。<br>2. 电子邮件/致电您的客户<br>与之前的用例类似，我们现在假设客户决定停止旅程（无聊，缺乏时间，可能太复杂等）。如果算法预测该客户具有很大的潜力，我们可以立即使用像本文所述的管道，或者使用受控延迟，发送电子邮件或调用它们。<br>下一步<br>记录和监控：在即将发布的帖子中，我们将通过MLFlow在管道记录和监控功能中插入。与HyperparameterHunter一起，该解决方案将自动跟踪模型性能和超参数优化，同时提供可视化监控。<br>流量管理：此处描述的解决方案以及相应的代码已经过设计，因此可以在笔记本电脑中轻松地在本地和手动运行。然而，人们会认为在现实生活中，这将需要大规模运行云，而不是手动（请）。在那个阶段，如果我们可以使用涵盖整个机器学习工作流程的完全托管服务，那将是理想的，因此我们不需要关心维护服务，版本控制等。为此目的，我们将使用Sagemaker，它是构建的正是为了这个目的。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/03/15/yuque/将ML投入生产：在Python中使用Apache Kafka/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-yuque/MLflow模型" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1266,99 +1360,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2018/12/20/yuque/Pytorch：如何以及何时使用Module，Sequential，ModuleList和ModuleDict/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/XGBoost不是黑魔法" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/12/20/yuque/XGBoost不是黑魔法/">XGBoost不是黑魔法</a>
-    </h1>
-  
-
-        
-        <a href="/2018/12/20/yuque/XGBoost不是黑魔法/" class="archive-article-date">
-  	<time datetime="2018-12-20T05:48:34.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-20</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><a href="https://towardsdatascience.com/xgboost-is-not-black-magic-56ca013144b4" target="_blank" rel="noopener">链接</a></p>
-<blockquote>
-<p>而不是对缺失值进行估算并不总是正确的选择</p>
-</blockquote>
-<p><br>现在很容易在数据科学任务中获得不错的结果：只需要对流程有一个大致的了解，Python的基本知识和10分钟的时间来实例化XGBoost并适应模型。好的，如果这是你的第一次，那么你可能会花几分钟通过pip收集所需的包，但就是这样。这种方法的唯一问题是它运作得很好🤷🏻♂️：几年前我在大学竞赛中排名前5位，只是通过一些基本的特征工程将数据集提供给XGBoost，表现优于团队非常复杂的架构和数据管道。 XGBoost最酷的特征之一就是它如何处理缺失值：决定每个样本，这是最好的方法来判断它们。对于我在过去几个月中遇到的许多项目和数据集，此功能非常有用;为了更加值得以我的名义撰写的数据科学家的头衔，我决定深入挖掘，花几个小时阅读原始论文，试图了解XGBoost究竟是什么以及它如何处理它以某种神奇的方式缺少价值。<br><a name="9864342e"></a></p>
-<h4 id="从决策树到XGBoost"><a href="#从决策树到XGBoost" class="headerlink" title="从决策树到XGBoost"></a><a href="#7vdtxk"></a>从决策树到XGBoost</h4><p>决策树可能是机器学习中最简单的算法：树的每个节点都是对特征的测试，每个分支代表测试的结果; leaves包含模型的输出，无论是离散标签还是实数。 决策树可能被描述为一个功能：<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545285357509-9eb19212-1f84-4151-925f-695f322ba1a9.png#align=left&amp;display=inline&amp;height=64&amp;originHeight=78&amp;originWidth=1000&amp;status=done&amp;width=826" alt><br>函数f根据从根到叶子的路径，根据树结构T分配m大小的样本x所遵循的权重w。<br>现在想象一下，不只有一棵决策树而且还有K; 最终产生的输出不再是与叶子相关的权重，而是与每棵树产生的叶子相关的权重之和。<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545285385079-d2797243-1542-4e33-8215-bde9adc10d39.png#align=left&amp;display=inline&amp;height=104&amp;originHeight=126&amp;originWidth=1000&amp;status=done&amp;width=826" alt></p>
-<p>这些结构不是固定的，并且与网络结构不变的经典梯度下降框架中发生的不同，并且在每个步骤更新权重时，在每次迭代时添加新函数（树）以改善模型的性能。 为了避免过度拟合和/或非常复杂的结构，误差由两部分组成：第一部分对在第k次迭代中获得的模型的优度进行评分，第二部分在相关权重的大小中惩罚复杂性。 叶子和发达的树木的深度和结构。<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545285422201-bef8962d-373e-4670-8789-f8fffb46cbc2.png#align=left&amp;display=inline&amp;height=126&amp;originHeight=152&amp;originWidth=1000&amp;status=done&amp;width=826" alt><br>然后使用二阶梯度统计简化该目标函数，并且 - 不输入太多细节 - 可以直接用于以封闭形式计算与固定树结构相关联的最佳叶子权重。 权重可以直接与错误相关联，因此与所使用的固定结构的优点相关联（3）。<br>训练XGBoost是一个迭代过程，它在每个步骤计算第k个树的最佳可能分割，该第k个树枚举路径中该点仍然可用的所有可能结构。 所有可能的分裂的详尽列举非常适合本文的范围，但在实践中是不可行的，并且它被一个近似版本所取代，该版本不会尝试所有可能的分裂，而是根据百分位数列举相关的分裂。 每个功能分布。<br><a name="3ca234a7"></a></p>
-<h3 id="XGBoost和缺失值：魔术发生的地方"><a href="#XGBoost和缺失值：魔术发生的地方" class="headerlink" title="XGBoost和缺失值：魔术发生的地方"></a><a href="#e5q4ag"></a>XGBoost和缺失值：魔术发生的地方</h3><p>一旦树结构被训练，就不难考虑测试集中是否存在缺失值：它足以将默认方向附加到每个决策节点。如果缺少样本的特征并且决策节点在该特征上分裂，则路径采用分支的默认方向并且路径继续。但是为每个分支分配默认方向更复杂，这可能是本文中最有趣的部分。<br>已经解释的拆分查找算法可以稍微调整一下，不仅返回每一步的最佳拆分，而且还返回分配给新插入的决策节点的默认方向。给定一个特征集I，枚举所有可能的分割，但是现在相应的丢失不会被计算一次而是两次，每个默认方向一次丢失该特征的缺失值。两者中最好的是根据特征m的值j进行分割时分配的最佳默认方向。最佳分割仍然是最大化计算分数的分割，但现在我们已经为其附加了默认方向。<br>这种算法被称为稀疏感知的分裂发现，它是XGBoost背后的许多魔力所在。最后不要太复杂。稀疏性感知方法仅保证在已经遍历的分裂的情况下平均采用默认方向导致最佳可能结果，并不保证已经遍历的分裂（可能通过采用默认方向来解决）是最好的考虑整个样本。如果样本中缺失值的百分比增加，则内置策略的性能可能会恶化很多。</p>
-<blockquote>
-<p><em>好的，默认方向是最佳选择，只要它到达当前位置，但考虑到当前样本的所有特征，无法保证当前位置是最佳情况。</em></p>
-</blockquote>
-<p>克服此限制意味着处理同时考虑其所有特征的样本，并直接处理同一实现中可能同时存在多个缺失值。<br><a name="14ec9de9"></a></p>
-<h3 id="改变缺失值并改善表现"><a href="#改变缺失值并改善表现" class="headerlink" title="改变缺失值并改善表现"></a><a href="#z5afml"></a>改变缺失值并改善表现</h3><p>为了击败XGBoost内置策略，我们必须同时考虑样本的所有功能，并以某种方式处理可能存在的缺失值。 这种方法的一个很好的例子是K-Nearest Neighbors（KNN），它具有ad-hoc距离度量以正确处理缺失值。 一般而言，KNN是众所周知的算法，其将K（例如，3,10,50，……）最接近的样本检索到所考虑的样本。 它可以用于对看不见的输入进行分类或者用于估算缺失值，在分配给目标值的情况下，考虑K个最近邻居的均值或中值。 这种方法需要距离度量（或相应地，相似性度量）来实际对训练集中的所有样本进行排序并检索最相似的K.<br>要超越XGBoost内置默认策略，我们需要两件事：</p>
-<ul>
-<li>考虑缺失值的距离指标（感谢AirBnb的这篇<a href="https://medium.com/airbnb-engineering/overcoming-missing-values-in-a-random-forest-classifier-7b1fc1fc03ba" target="_blank" rel="noopener">文章</a>的灵感）</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">dist_with_miss</span><span class="params">(a,b,l=<span class="number">0.0</span>)</span>:</span></span><br><span class="line">    <span class="keyword">if</span>(len(a) != len(b)):</span><br><span class="line">        <span class="keyword">return</span> np.inf</span><br><span class="line">    ls = l * np.ones(len(a))</span><br><span class="line">    msk = ~ (np.isnan(a) | np.isnan(b))</span><br><span class="line">    res = np.sum((np.abs(a-b)[msk]))+np.sum((ls[~msk]))</span><br><span class="line">    <span class="keyword">return</span> res</span><br></pre></td></tr></table></figure>
-<ul>
-<li>规范化数据集以获得有意义的距离，获得了不同域之间特征之间的差异（XGBoost并不严格要求，但KNN估算需要它！）。</li>
-</ul>
-<p>使用K个最接近样本的所述特征的中值来估算特征的缺失值，并且在非特定情况下，在K个检索的邻居中不发现至少一个非缺失值，整个列的中值 用来。<br><a name="cd474133"></a></p>
-<h3 id="实验结果"><a href="#实验结果" class="headerlink" title="实验结果"></a><a href="#kp0eey"></a>实验结果</h3><p>我使用scikit-learn中免费提供的三个众所周知的数据集（两个分类和一个回归）进行了一些测试。 通过k-fold交叉验证比较三种不同的插补策略，测量了性能：</p>
-<ul>
-<li><p>XGBoost算法中内置的默认值</p>
-</li>
-<li><p>一个简单的列中位插值</p>
-</li>
-<li><p>一个KNN，如前一段所述</p>
-</li>
-</ul>
-<p>对于KNN案例，我已经绘制了针对考虑的缺失值百分比获得的最佳性能，其中k与（要考虑的邻居的数量）和λ（当至少一个特征缺失时要添加到距离的常数） 两个样本）。<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545285831963-0ba52730-2b35-4d6a-9581-f84258cd72e8.png#align=left&amp;display=inline&amp;height=206&amp;originHeight=249&amp;originWidth=1000&amp;status=done&amp;width=826" alt><br>使用稀疏性感知KNN来估算缺失值与其他两种方法的表现一致。 差异的程度当然是数据集依赖的。 作为第一个天真的结论：数据集的质量越低，更好的插补策略的影响越大。 如图2所示，内置策略最终具有接近于平凡的列中值插值的性能。<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545285859844-3faa8e2e-ebc5-4521-adb5-28b05b251281.png#align=left&amp;display=inline&amp;height=183&amp;originHeight=222&amp;originWidth=1000&amp;status=done&amp;width=826" alt><br>看看k和λ如何影响最终结果以及如何引入惩罚因素不仅仅是纸上谈兵，这是非常有趣的。 距离度量不仅丢弃缺失值而且还为每一个增加权重对于用该方法获得的性能是至关重要的，即使其值与缺失值的增加百分比不直接相关。<br><img src="https://cdn.nlark.com/yuque/0/2018/png/219582/1545285901042-1590c9c8-9d75-42b3-b76d-3810e74a8f62.png#align=left&amp;display=inline&amp;height=247&amp;originHeight=299&amp;originWidth=1000&amp;status=done&amp;width=826" alt><br>测试表明，根据经验，缺失值的数量越多，为更好的插补而考虑的邻居数量越多。 再次，一个非常直观的结论。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/12/20/yuque/XGBoost不是黑魔法/">展开全文 >></a>
         </p>
       
 
