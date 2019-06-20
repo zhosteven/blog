@@ -149,6 +149,545 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-yuque/PyTorch：了解自动微分的工作原理" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/04/22/yuque/PyTorch：了解自动微分的工作原理/">PyTorch：了解自动微分的工作原理</a>
+    </h1>
+  
+
+        
+        <a href="/2019/04/22/yuque/PyTorch：了解自动微分的工作原理/" class="archive-article-date">
+  	<time datetime="2019-04-22T07:58:48.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-22</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>当我开始编码神经网络时，我最终使用了我周围的其他人正在使用的东西。TensorFlow。<br>但最近，PyTorch已成为成为深度学习框架之王的主要竞争者。它真正引诱的是它的动态计算图范式。不要担心最后一行现在对你没有意义。到这篇文章结束时，它会。但请相信，它使调试神经网络更容易。<br>
+        
+          <a class="article-more-a" href="/2019/04/22/yuque/PyTorch：了解自动微分的工作原理/#more">more >></a>
+        
+      
+
+      
+    </p></div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/04/22/yuque/PyTorch：了解自动微分的工作原理/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/Boosted Trees简介" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/04/22/yuque/Boosted Trees简介/">Boosted Trees简介</a>
+    </h1>
+  
+
+        
+        <a href="/2019/04/22/yuque/Boosted Trees简介/" class="archive-article-date">
+  	<time datetime="2019-04-22T07:34:28.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-22</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>#############################<br>Introduction to Boosted Trees<br>#############################<br>XGBoost stands for “Extreme Gradient Boosting”, where the term “Gradient Boosting” originates from the paper <em>Greedy Function Approximation: A Gradient Boosting Machine</em>, by Friedman.<br>This is a tutorial on gradient boosted trees, and most of the content is based on <code>these slides &lt;http://homes.cs.washington.edu/~tqchen/pdf/BoostedTree.pdf&gt;</code>_ by Tianqi Chen, the original author of XGBoost.</p>
+<p>The <strong>gradient boosted trees</strong> has been around for a while, and there are a lot of materials on the topic.<br>This tutorial will explain boosted trees in a self-contained and principled way using the elements of supervised learning.<br>We think this explanation is cleaner, more formal, and motivates the model formulation used in XGBoost.</p>
+<p><strong><strong><strong><strong><strong><strong><strong>***</strong></strong></strong></strong></strong></strong></strong><br>Elements of Supervised Learning<br><strong><strong><strong><strong><strong><strong><strong>***</strong></strong></strong></strong></strong></strong></strong><br>XGBoost is used for supervised learning problems, where we use the training data (with multiple features) :math:<code>x_i</code> to predict a target variable :math:<code>y_i</code>.<br>Before we learn about trees specifically, let us start by reviewing the basic elements in supervised learning.</p>
+<p>Model and Parameters<br>====================<br>The <strong>model</strong> in supervised learning usually refers to the mathematical structure of by which the prediction :math:<code>y_i</code> is made from the input :math:<code>x_i</code>.<br>A common example is a <em>linear model</em>, where the prediction is given as :math:<code>\hat{y}_i = \sum_j \theta_j x_{ij}</code>, a linear combination of weighted input features.<br>The prediction value can have different interpretations, depending on the task, i.e., regression or classification.<br>For example, it can be logistic transformed to get the probability of positive class in logistic regression, and it can also be used as a ranking score when we want to rank the outputs.</p>
+<p>The <strong>parameters</strong> are the undetermined part that we need to learn from data. In linear regression problems, the parameters are the coefficients :math:<code>\theta</code>.<br>Usually we will use :math:<code>\theta</code> to denote the parameters (there are many parameters in a model, our definition here is sloppy).</p>
+<p>Objective Function: Training Loss + Regularization<br>==================================================<br>With judicious choices for :math:<code>y_i</code>, we may express a variety of tasks, such as regression, classification, and ranking.<br>The task of <strong>training</strong> the model amounts to finding the best parameters :math:<code>\theta</code> that best fit the training data :math:<code>x_i</code> and labels :math:<code>y_i</code>. In order to train the model, we need to define the <strong>objective function</strong><br>to measure how well the model fit the training data.</p>
+<p>A salient characteristic of objective functions is that they consist two parts: <strong>training loss</strong> and <strong>regularization term</strong>:</p>
+<p>.. math::</p>
+<p>  \text{obj}(\theta) = L(\theta) + \Omega(\theta)</p>
+<p>where :math:<code>L</code> is the training loss function, and :math:<code>\Omega</code> is the regularization term. The training loss measures how <em>predictive</em> our model is with respect to the training data.<br>A common choice of :math:<code>L</code> is the <em>mean squared error</em>, which is given by</p>
+<p>.. math::</p>
+<p>  L(\theta) = \sum_i (y_i-\hat{y}_i)^2</p>
+<p>Another commonly used loss function is logistic loss, to be used for logistic regression:</p>
+<p>.. math::</p>
+<p>  L(\theta) = \sum_i[ y_i\ln (1+e^{-\hat{y}_i}) + (1-y_i)\ln (1+e^{\hat{y}_i})]</p>
+<p>The <strong>regularization term</strong> is what people usually forget to add. The regularization term controls the complexity of the model, which helps us to avoid overfitting.<br>This sounds a bit abstract, so let us consider the following problem in the following picture. You are asked to <em>fit</em> visually a step function given the input data points<br>on the upper left corner of the image.<br>Which solution among the three do you think is the best fit?</p>
+<p>.. image:: <a href="https://raw.githubusercontent.com/dmlc/web-data/master/xgboost/model/step_fit.png" target="_blank" rel="noopener">https://raw.githubusercontent.com/dmlc/web-data/master/xgboost/model/step_fit.png</a><br>  :alt: step functions to fit data points, illustrating bias-variance tradeoff</p>
+<p>The correct answer is marked in red. Please consider if this visually seems a reasonable fit to you. The general principle is we want both a <em>simple</em> and <em>predictive</em> model.<br>The tradeoff between the two is also referred as <strong>bias-variance tradeoff</strong> in machine learning.</p>
+<p>Why introduce the general principle?<br>====================================<br>The elements introduced above form the basic elements of supervised learning, and they are natural building blocks of machine learning toolkits.<br>For example, you should be able to describe the differences and commonalities between gradient boosted trees and random forests.<br>Understanding the process in a formalized way also helps us to understand the objective that we are learning and the reason behind the heuristics such as<br>pruning and smoothing.</p>
+<p><strong><strong><strong><strong><strong>***</strong></strong></strong></strong></strong><br>Decision Tree Ensembles<br><strong><strong><strong><strong><strong>***</strong></strong></strong></strong></strong><br>Now that we have introduced the elements of supervised learning, let us get started with real trees.<br>To begin with, let us first learn about the model choice of XGBoost: <strong>decision tree ensembles</strong>.<br>The tree ensemble model consists of a set of classification and regression trees (CART). Here’s a simple example of a CART<br>that classifies whether someone will like computer games.</p>
+<p>.. image:: <a href="https://raw.githubusercontent.com/dmlc/web-data/master/xgboost/model/cart.png" target="_blank" rel="noopener">https://raw.githubusercontent.com/dmlc/web-data/master/xgboost/model/cart.png</a><br>  :width: 100%<br>  :alt: a toy example for CART</p>
+<p>We classify the members of a family into different leaves, and assign them the score on the corresponding leaf.<br>A CART is a bit different from decision trees, in which the leaf only contains decision values. In CART, a real score<br>is associated with each of the leaves, which gives us richer interpretations that go beyond classification.<br>This also allows for a pricipled, unified approach to optimization, as we will see in a later part of this tutorial.</p>
+<p>Usually, a single tree is not strong enough to be used in practice. What is actually used is the ensemble model,<br>which sums the prediction of multiple trees together.</p>
+<p>.. image:: <a href="https://raw.githubusercontent.com/dmlc/web-data/master/xgboost/model/twocart.png" target="_blank" rel="noopener">https://raw.githubusercontent.com/dmlc/web-data/master/xgboost/model/twocart.png</a><br>  :width: 100%<br>  :alt: a toy example for tree ensemble, consisting of two CARTs</p>
+<p>Here is an example of a tree ensemble of two trees. The prediction scores of each individual tree are summed up to get the final score.<br>If you look at the example, an important fact is that the two trees try to <em>complement</em> each other.<br>Mathematically, we can write our model in the form</p>
+<p>.. math::</p>
+<p>  \hat{y}<em>i = \sum</em>{k=1}^K f_k(x_i), f_k \in \mathcal{F}</p>
+<p>where :math:<code>K</code> is the number of trees, :math:<code>f</code> is a function in the functional space :math:<code>\mathcal{F}</code>, and :math:<code>\mathcal{F}</code> is the set of all possible CARTs. The objective function to be optimized is given by</p>
+<p>.. math::</p>
+<p>  \text{obj}(\theta) = \sum_i^n l(y_i, \hat{y}<em>i) + \sum</em>{k=1}^K \Omega(f_k)</p>
+<p>Now here comes a trick question: what is the <em>model</em> used in random forests? Tree ensembles! So random forests and boosted trees are really the same models; the<br>difference arises from how we train them. This means that, if you write a predictive service for tree ensembles, you only need to write one and it should work<br>for both random forests and gradient boosted trees. (See <code>Treelite &lt;http://treelite.io&gt;</code>_ for an actual example.) One example of why elements of supervised learning rock.</p>
+<p><strong><strong><strong>*</strong></strong></strong><br>Tree Boosting<br><strong><strong><strong>*</strong></strong></strong><br>Now that we introduced the model, let us turn to training: How should we learn the trees?<br>The answer is, as is always for all supervised learning models: <em>define an objective function and optimize it</em>!</p>
+<p>Let the following be the objective function (remember it always needs to contain training loss and regularization):</p>
+<p>.. math::</p>
+<p>  \text{obj} = \sum_{i=1}^n l(y_i, \hat{y}<em>i^{(t)}) + \sum</em>{i=1}^t\Omega(f_i)</p>
+<p>Additive Training<br>=================</p>
+<p>The first question we want to ask: what are the <strong>parameters</strong> of trees?<br>You can find that what we need to learn are those functions :math:<code>f_i</code>, each containing the structure<br>of the tree and the leaf scores. Learning tree structure is much harder than traditional optimization problem where you can simply take the gradient.<br>It is intractable to learn all the trees at once.<br>Instead, we use an additive strategy: fix what we have learned, and add one new tree at a time.<br>We write the prediction value at step :math:<code>t</code> as :math:<code>\hat{y}_i^{(t)}</code>. Then we have</p>
+<p>.. math::</p>
+<p>  \hat{y}_i^{(0)} &amp;= 0\<br>  \hat{y}_i^{(1)} &amp;= f_1(x_i) = \hat{y}_i^{(0)} + f_1(x_i)\<br>  \hat{y}_i^{(2)} &amp;= f_1(x_i) + f_2(x_i)= \hat{y}_i^{(1)} + f_2(x_i)\<br>  &amp;\dots\<br>  \hat{y}<em>i^{(t)} &amp;= \sum</em>{k=1}^t f_k(x_i)= \hat{y}_i^{(t-1)} + f_t(x_i)</p>
+<p>It remains to ask: which tree do we want at each step?  A natural thing is to add the one that optimizes our objective.</p>
+<p>.. math::</p>
+<p>  \text{obj}^{(t)} &amp; = \sum_{i=1}^n l(y_i, \hat{y}<em>i^{(t)}) + \sum</em>{i=1}^t\Omega(f_i) \<br>            &amp; = \sum_{i=1}^n l(y_i, \hat{y}_i^{(t-1)} + f_t(x_i)) + \Omega(f_t) + \mathrm{constant}</p>
+<p>If we consider using mean squared error (MSE) as our loss function, the objective becomes</p>
+<p>.. math::</p>
+<p>  \text{obj}^{(t)} &amp; = \sum_{i=1}^n (y_i - (\hat{y}_i^{(t-1)} + f_t(x_i)))^2 + \sum_{i=1}^t\Omega(f_i) \<br>            &amp; = \sum_{i=1}^n [2(\hat{y}_i^{(t-1)} - y_i)f_t(x_i) + f_t(x_i)^2] + \Omega(f_t) + \mathrm{constant}</p>
+<p>The form of MSE is friendly, with a first order term (usually called the residual) and a quadratic term.<br>For other losses of interest (for example, logistic loss), it is not so easy to get such a nice form.<br>So in the general case, we take the <em>Taylor expansion of the loss function up to the second order</em>:</p>
+<p>.. math::</p>
+<p>  \text{obj}^{(t)} = \sum_{i=1}^n [l(y_i, \hat{y}_i^{(t-1)}) + g_i f_t(x_i) + \frac{1}{2} h_i f_t^2(x_i)] + \Omega(f_t) + \mathrm{constant}</p>
+<p>where the :math:<code>g_i</code> and :math:<code>h_i</code> are defined as</p>
+<p>.. math::</p>
+<p>  g_i &amp;= \partial_{\hat{y}_i^{(t-1)}} l(y_i, \hat{y}_i^{(t-1)})\<br>  h_i &amp;= \partial_{\hat{y}_i^{(t-1)}}^2 l(y_i, \hat{y}_i^{(t-1)})</p>
+<p>After we remove all the constants, the specific objective at step :math:<code>t</code> becomes</p>
+<p>.. math::</p>
+<p>  \sum_{i=1}^n [g_i f_t(x_i) + \frac{1}{2} h_i f_t^2(x_i)] + \Omega(f_t)</p>
+<p>This becomes our optimization goal for the new tree. One important advantage of this definition is that<br>the value of the objective function only depends on :math:<code>g_i</code> and :math:<code>h_i</code>. This is how XGBoost supports custom loss functions.<br>We can optimize every loss function, including logistic regression and pairwise ranking, using exactly<br>the same solver that takes :math:<code>g_i</code> and :math:<code>h_i</code> as input!</p>
+<p>Model Complexity<br>================<br>We have introduced the training step, but wait, there is one important thing, the <strong>regularization term</strong>!<br>We need to define the complexity of the tree :math:<code>\Omega(f)</code>. In order to do so, let us first refine the definition of the tree :math:<code>f(x)</code> as</p>
+<p>.. math::</p>
+<p>  f_t(x) = w_{q(x)}, w \in R^T, q:R^d\rightarrow {1,2,\cdots,T} .</p>
+<p>Here :math:<code>w</code> is the vector of scores on leaves, :math:<code>q</code> is a function assigning each data point to the corresponding leaf, and :math:<code>T</code> is the number of leaves.<br>In XGBoost, we define the complexity as</p>
+<p>.. math::</p>
+<p>  \Omega(f) = \gamma T + \frac{1}{2}\lambda \sum_{j=1}^T w_j^2</p>
+<p>Of course, there is more than one way to define the complexity, but this one works well in practice. The regularization is one part most tree packages treat<br>less carefully, or simply ignore. This was because the traditional treatment of tree learning only emphasized improving impurity, while the complexity control was left to heuristics.<br>By defining it formally, we can get a better idea of what we are learning and obtain models that perform well in the wild.</p>
+<p>The Structure Score<br>===================<br>Here is the magical part of the derivation. After re-formulating the tree model, we can write the objective value with the :math:<code>t</code>-th tree as:</p>
+<p>.. math::</p>
+<p>  \text{obj}^{(t)} &amp;\approx \sum_{i=1}^n [g_i w_{q(x_i)} + \frac{1}{2} h_i w_{q(x_i)}^2] + \gamma T + \frac{1}{2}\lambda \sum_{j=1}^T w_j^2\<br>  &amp;= \sum^T_{j=1} [(\sum_{i\in I_j} g_i) w_j + \frac{1}{2} (\sum_{i\in I_j} h_i + \lambda) w_j^2 ] + \gamma T</p>
+<p>where :math:<code>I_j = \{i|q(x_i)=j\}</code> is the set of indices of data points assigned to the :math:<code>j</code>-th leaf.<br>Notice that in the second line we have changed the index of the summation because all the data points on the same leaf get the same score.<br>We could further compress the expression by defining :math:<code>G_j = \sum_{i\in I_j} g_i</code> and :math:<code>H_j = \sum_{i\in I_j} h_i</code>:</p>
+<p>.. math::</p>
+<p>  \text{obj}^{(t)} = \sum^T_{j=1} [G_jw_j + \frac{1}{2} (H_j+\lambda) w_j^2] +\gamma T</p>
+<p>In this equation, :math:<code>w_j</code> are independent with respect to each other, the form :math:<code>G_jw_j+\frac{1}{2}(H_j+\lambda)w_j^2</code> is quadratic and the best :math:<code>w_j</code> for a given structure :math:<code>q(x)</code> and the best objective reduction we can get is:</p>
+<p>.. math::</p>
+<p>  w_j^\ast &amp;= -\frac{G_j}{H_j+\lambda}\<br>  \text{obj}^\ast &amp;= -\frac{1}{2} \sum_{j=1}^T \frac{G_j^2}{H_j+\lambda} + \gamma T</p>
+<p>The last equation measures <em>how good</em> a tree structure :math:<code>q(x)</code> is.</p>
+<p>.. image:: <a href="https://raw.githubusercontent.com/dmlc/web-data/master/xgboost/model/struct_score.png" target="_blank" rel="noopener">https://raw.githubusercontent.com/dmlc/web-data/master/xgboost/model/struct_score.png</a><br>  :width: 100%<br>  :alt: illustration of structure score (fitness)</p>
+<p>If all this sounds a bit complicated, let’s take a look at the picture, and see how the scores can be calculated.<br>Basically, for a given tree structure, we push the statistics :math:<code>g_i</code> and :math:<code>h_i</code> to the leaves they belong to,<br>sum the statistics together, and use the formula to calculate how good the tree is.<br>This score is like the impurity measure in a decision tree, except that it also takes the model complexity into account.</p>
+<p>Learn the tree structure<br>========================<br>Now that we have a way to measure how good a tree is, ideally we would enumerate all possible trees and pick the best one.<br>In practice this is intractable, so we will try to optimize one level of the tree at a time.<br>Specifically we try to split a leaf into two leaves, and the score it gains is</p>
+<p>.. math::<br>  Gain = \frac{1}{2} \left[\frac{G_L^2}{H_L+\lambda}+\frac{G_R^2}{H_R+\lambda}-\frac{(G_L+G_R)^2}{H_L+H_R+\lambda}\right] - \gamma</p>
+<p>This formula can be decomposed as 1) the score on the new left leaf 2) the score on the new right leaf 3) The score on the original leaf 4) regularization on the additional leaf.<br>We can see an important fact here: if the gain is smaller than :math:<code>\gamma</code>, we would do better not to add that branch. This is exactly the <strong>pruning</strong> techniques in tree based<br>models! By using the principles of supervised learning, we can naturally come up with the reason these techniques work :)</p>
+<p>For real valued data, we usually want to search for an optimal split. To efficiently do so, we place all the instances in sorted order, like the following picture.</p>
+<p>.. image:: <a href="https://raw.githubusercontent.com/dmlc/web-data/master/xgboost/model/split_find.png" target="_blank" rel="noopener">https://raw.githubusercontent.com/dmlc/web-data/master/xgboost/model/split_find.png</a><br>  :width: 100%<br>  :alt: Schematic of choosing the best split</p>
+<p>A left to right scan is sufficient to calculate the structure score of all possible split solutions, and we can find the best split efficiently.</p>
+<p>.. note:: Limitation of additive tree learning</p>
+<p>  Since it is intractable to enumerate all possible tree structures, we add one split at a time. This approach works well most of the time, but there are some edge cases that fail due to this approach. For those edge cases, training results in a degenerate model because we consider only one feature dimension at a time. See <code>Can Gradient Boosting Learn Simple Arithmetic? &lt;http://mariofilho.com/can-gradient-boosting-learn-simple-arithmetic/&gt;</code>_ for an example. </p>
+<p><strong><strong><strong><strong><strong>**</strong></strong></strong></strong></strong><br>Final words on XGBoost<br><strong><strong><strong><strong><strong>**</strong></strong></strong></strong></strong><br>Now that you understand what boosted trees are, you may ask, where is the introduction for XGBoost?<br>XGBoost is exactly a tool motivated by the formal principle introduced in this tutorial!<br>More importantly, it is developed with both deep consideration in terms of <strong>systems optimization</strong> and <strong>principles in machine learning</strong>.<br>The goal of this library is to push the extreme of the computation limits of machines to provide a <strong>scalable</strong>, <strong>portable</strong> and <strong>accurate</strong> library.<br>Make sure you try it out, and most importantly, contribute your piece of wisdom (code, examples, tutorials) to the community!</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/04/22/yuque/Boosted Trees简介/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/爱最近邻算法的10个理由" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/04/22/yuque/爱最近邻算法的10个理由/">爱最近邻算法的10个理由</a>
+    </h1>
+  
+
+        
+        <a href="/2019/04/22/yuque/爱最近邻算法的10个理由/" class="archive-article-date">
+  	<time datetime="2019-04-22T05:31:38.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-22</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>我一见钟情就爱上了k-Nearest Neighbors算法，但这不是盲目的爱。我有很多理由对此感到生气。</p>
+        
+          <a class="article-more-a" href="/2019/04/22/yuque/爱最近邻算法的10个理由/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/04/22/yuque/爱最近邻算法的10个理由/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/了解XGBoost背后的数学的端到端指南" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/04/22/yuque/了解XGBoost背后的数学的端到端指南/">了解XGBoost背后的数学的端到端指南</a>
+    </h1>
+  
+
+        
+        <a href="/2019/04/22/yuque/了解XGBoost背后的数学的端到端指南/" class="archive-article-date">
+  	<time datetime="2019-04-22T03:54:55.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-22</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1555905325086-0831bee2-c1df-4c1e-8db7-b5226263f504.jpeg#align=left&amp;display=inline&amp;height=370&amp;name=0_k_mwDVMBdOTeSsJY.jpg&amp;originHeight=370&amp;originWidth=500&amp;size=50726&amp;status=done&amp;width=500" alt="0_k_mwDVMBdOTeSsJY.jpg"><br><br><br>
+        
+          <a class="article-more-a" href="/2019/04/22/yuque/了解XGBoost背后的数学的端到端指南/#more">more >></a>
+        
+      
+
+      
+    </p></div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/04/22/yuque/了解XGBoost背后的数学的端到端指南/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/在机器学习预测中转换分类数据的可用性" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/04/22/yuque/在机器学习预测中转换分类数据的可用性/">在机器学习预测中转换分类数据的可用性</a>
+    </h1>
+  
+
+        
+        <a href="/2019/04/22/yuque/在机器学习预测中转换分类数据的可用性/" class="archive-article-date">
+  	<time datetime="2019-04-22T03:43:14.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-22</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><a name="2365d7f8"></a></p>
+<h2 id="使用邮政编码，纬度和经度的快速示例"><a href="#使用邮政编码，纬度和经度的快速示例" class="headerlink" title="使用邮政编码，纬度和经度的快速示例"></a>使用邮政编码，纬度和经度的快速示例</h2><p><em>作者：Kevin Velasco和Alex Shropshire</em><br>鉴于2014 - 2015年King County，WA House Sales的数据集（<a href="https://www.kaggle.com/harlfoxem/housesalesprediction" target="_blank" rel="noopener">https://www.kaggle.com/harlfoxem/housesalesprediction</a>），我们的任务是创建一个模型来准确预测房屋销售价格。在初步数据探索和清理之后，我们发现了大量可用信息来描述住宅的质量，但没有太多有用的信息来定位。<br>
+        
+          <a class="article-more-a" href="/2019/04/22/yuque/在机器学习预测中转换分类数据的可用性/#more">more >></a>
+        
+      
+
+      
+    </p></div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/04/22/yuque/在机器学习预测中转换分类数据的可用性/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/决策树完整指南" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/04/22/yuque/决策树完整指南/">决策树完整指南</a>
+    </h1>
+  
+
+        
+        <a href="/2019/04/22/yuque/决策树完整指南/" class="archive-article-date">
+  	<time datetime="2019-04-22T03:18:02.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-22</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><a name="277a94b0"></a></p>
+<h2 id="关于机器学习中顶级算法需要了解的一切"><a href="#关于机器学习中顶级算法需要了解的一切" class="headerlink" title="关于机器学习中顶级算法需要了解的一切"></a>关于机器学习中顶级算法需要了解的一切</h2><p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1555903743398-56687233-944c-47b4-b126-72614121f06b.jpeg#align=left&amp;display=inline&amp;height=560&amp;name=0_8k5UmElJ_TyUwAcF.jpg&amp;originHeight=750&amp;originWidth=1000&amp;size=52269&amp;status=done&amp;width=746" alt="0_8k5UmElJ_TyUwAcF.jpg"><br>一开始，学习机器学习（ML）可能是令人生畏的。像“Gradient Descent”，“Latent Dirichlet Allocation”或“Convolutional Layer”这样的术语可能会吓到很多人。但是有一些友好的方式进入该学科，我认为从决策树开始是一个明智的决定。</p>
+<p>
+        
+          <a class="article-more-a" href="/2019/04/22/yuque/决策树完整指南/#more">more >></a>
+        
+      
+
+      
+    </p></div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/04/22/yuque/决策树完整指南/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/使用Apache Spark的实时机器学习管道" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/04/19/yuque/使用Apache Spark的实时机器学习管道/">使用Apache Spark的实时机器学习管道</a>
+    </h1>
+  
+
+        
+        <a href="/2019/04/19/yuque/使用Apache Spark的实时机器学习管道/" class="archive-article-date">
+  	<time datetime="2019-04-19T05:42:50.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-19</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>如何使用Apache Spark中的实时机器学习管道构建预测模型?</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1555652691362-c6b02332-cce0-4d23-ae29-159ea7a10346.jpeg#align=left&amp;display=inline&amp;height=426&amp;name=1-main-image.jpg&amp;originHeight=426&amp;originWidth=640&amp;size=118962&amp;status=done&amp;width=640" alt="1-main-image.jpg"></p>
+        
+          <a class="article-more-a" href="/2019/04/19/yuque/使用Apache Spark的实时机器学习管道/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/04/19/yuque/使用Apache Spark的实时机器学习管道/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-yuque/MLlib管道和结构化流媒体" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -355,475 +894,9 @@
 
 
   
-    <article id="post-yuque/建立你的第一个语音助手" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/10/yuque/建立你的第一个语音助手/">建立你的第一个语音助手</a>
-    </h1>
-  
-
-        
-        <a href="/2019/04/10/yuque/建立你的第一个语音助手/" class="archive-article-date">
-  	<time datetime="2019-04-10T05:38:55.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-10</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>如今，听到某人与不在场的人交谈并不奇怪。我们向Alexa询问天气情况并将恒温器的温度降低。然后，我们问Siri我们当天的日程安排是什么，并打电话给人们。我们现在比以往任何时候都使用语音和语音接口技术。我无法想象再做手动了！这真的是未来。</p>
-<ul>
-<li>福布斯</li>
-</ul>
-</blockquote>
-<p><a name="61a3ec66"></a></p>
-<h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>谁不想拥有一个总是倾听你的电话，预测你的每一个需要，并在必要时采取行动的助手？基于人工智能的语音助手，现在可以享受这种奢侈品。<br>语音助手有一些小包装，可以在听到您的命令后执行各种操作。他们可以打开灯，回答问题，播放音乐，下订单和做各种基于AI的东西。<br>语音助理不要与虚拟助手混淆，虚拟助手是远程工作的人，因此可以处理各种任务。相反，语音助理是基于技术的。随着语音助理变得更加强大，它们在个人和商业领域的实用性也将增长。<br>
-        
-          <a class="article-more-a" href="/2019/04/10/yuque/建立你的第一个语音助手/#more">more >></a>
-        
-      
-
-      
-    </p></div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/04/10/yuque/建立你的第一个语音助手/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/机器学习算法之Catboost" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/09/yuque/机器学习算法之Catboost/">机器学习算法之Catboost</a>
-    </h1>
-  
-
-        
-        <a href="/2019/04/09/yuque/机器学习算法之Catboost/" class="archive-article-date">
-  	<time datetime="2019-04-09T03:29:53.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-09</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>CatBoost是俄罗斯的搜索巨头Yandex在2017年开源的机器学习库，是Gradient Boosting(梯度提升) + Categorical Features(类别型特征)，也是基于梯度提升决策树的机器学习框架。<br>
-        
-          <a class="article-more-a" href="/2019/04/09/yuque/机器学习算法之Catboost/#more">more >></a>
-        
-      
-
-      
-    </p></div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/04/09/yuque/机器学习算法之Catboost/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/Careem的目的地预测服务如何加快您的驾驶速度" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/08/yuque/Careem的目的地预测服务如何加快您的驾驶速度/">Careem的目的地预测服务如何加快您的驾驶速度</a>
-    </h1>
-  
-
-        
-        <a href="/2019/04/08/yuque/Careem的目的地预测服务如何加快您的驾驶速度/" class="archive-article-date">
-  	<time datetime="2019-04-08T09:08:09.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-08</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1554714525242-1c6b8fc2-0280-4910-9a0e-d9d19d733f1e.jpeg#align=left&amp;display=inline&amp;height=263&amp;name=New-Appshot-Dubai-Mall.jpg&amp;originHeight=360&amp;originWidth=1020&amp;size=261162&amp;status=done&amp;width=746" alt="New-Appshot-Dubai-Mall.jpg"><br>在迪拜，有大约8,000家餐厅，世界上最高的建筑，50多个商场，许多海滩，主题公园等等。目的地数量巨大 - 那你下一步去哪儿？<br>你并不是唯一一个试图回答这个问题的人。 <br>Careem一直在努力弄清楚用户下一步会走向何方。不仅在迪拜，而且在我们所在的所有15个国家以及该平台的所有3300万用户中。<br>为什么乘车服务需要答案？ <br>想象一下，我们不是要求用户通过手动输入地址在地图上搜索目的地，而是简单地给他们一个最可能的位置列表供选择。 <br>
-        
-          <a class="article-more-a" href="/2019/04/08/yuque/Careem的目的地预测服务如何加快您的驾驶速度/#more">more >></a>
-        
-      
-
-      
-    </p></div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/04/08/yuque/Careem的目的地预测服务如何加快您的驾驶速度/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/使用分类数据" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/08/yuque/使用分类数据/">使用分类数据</a>
-    </h1>
-  
-
-        
-        <a href="/2019/04/08/yuque/使用分类数据/" class="archive-article-date">
-  	<time datetime="2019-04-08T07:39:26.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-08</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1554709233823-57e9c2f7-90ef-44ea-94bd-fea23e2d2379.jpeg#align=left&amp;display=inline&amp;height=497&amp;name=1_Z4AtdMlAJHI9ad-qv3VufQ.jpeg&amp;originHeight=666&amp;originWidth=1000&amp;size=180607&amp;status=done&amp;width=746" alt="1_Z4AtdMlAJHI9ad-qv3VufQ.jpeg"><br>来自社会科学，我习惯于使用具有几个分类变量的数据集。这些通常是实验条件（控制与干预），性别（女性与男性）或国籍（荷兰与德国对比利时对比其他）。但作为<a href="http://methoddatascience.com/" target="_blank" rel="noopener">方法数据科学社区</a>第2周练习的一部分<a href="http://methoddatascience.com/" target="_blank" rel="noopener">，</a>我的团队正在解决一个带有许多分类变量的Kaggle挑战。由于我的笔记本电脑仍在使用单热编码，因此需要一种不同的解决方案。我的团队成员<a href="https://medium.com/@chris.dinant" target="_blank" rel="noopener">Chris Dinant</a>已经建议将<a href="https://tech.yandex.com/catboost/" target="_blank" rel="noopener">Catboost</a>作为处理分类数据的一种方式。这篇文章将深入研究这种方法，解释可以应用它的情况，以及如何应用它。<br>
-        
-          <a class="article-more-a" href="/2019/04/08/yuque/使用分类数据/#more">more >></a>
-        
-      
-
-      
-    </p></div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/04/08/yuque/使用分类数据/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/CatBoost有什么特别之处？" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/08/yuque/CatBoost有什么特别之处？/">CatBoost有什么特别之处？</a>
-    </h1>
-  
-
-        
-        <a href="/2019/04/08/yuque/CatBoost有什么特别之处？/" class="archive-article-date">
-  	<time datetime="2019-04-08T07:12:11.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-08</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1554707585506-4c6f626f-1c87-4aab-9b37-132a943eb382.png#align=left&amp;display=inline&amp;height=400&amp;name=1_iEO6b3roCesXxI0vkx9IPg.png&amp;originHeight=720&amp;originWidth=1343&amp;size=104681&amp;status=done&amp;width=746" alt="1_iEO6b3roCesXxI0vkx9IPg.png"><br>CatBoost基于梯度增强。Yandex开发的一种新的机器学习技术，优于许多现有的增强算法，如XGBoost，Light GBM。<br>虽然深度学习算法需要大量数据和计算能力，但仍需要增强算法来解决<strong>大多数</strong>业务问题。然而，像XGBoost这样的提升算法需要花费数小时来训练，有时候在调整超参数时你会感到沮丧。<br>另一方面，CatBoost易于实施且<strong>功能强大</strong>。它在首次运行时提供了出色的结果。那么，让我们来看看CatBoost的特别之处。<br>
-        
-          <a class="article-more-a" href="/2019/04/08/yuque/CatBoost有什么特别之处？/#more">more >></a>
-        
-      
-
-      
-    </p></div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/04/08/yuque/CatBoost有什么特别之处？/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/动画RNN，LSTM和GRU" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/08/yuque/动画RNN，LSTM和GRU/">动画RNN，LSTM和GRU</a>
-    </h1>
-  
-
-        
-        <a href="/2019/04/08/yuque/动画RNN，LSTM和GRU/" class="archive-article-date">
-  	<time datetime="2019-04-08T03:35:15.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-08</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><img src="https://cdn.nlark.com/yuque/0/2019/gif/219582/1554694541119-cecb0195-0921-42bb-99c5-76b77aad66d3.gif#align=left&amp;display=inline&amp;height=494&amp;name=1.gif&amp;originHeight=662&amp;originWidth=1000&amp;size=468764&amp;status=done&amp;width=746" alt="1.gif"><br>递归神经网络（RNN）是一类人工神经网络，通常与顺序数据一起使用。3种最常见的递归神经网络类型是</p>
-<ol>
-<li>香草RNN，</li>
-<li>长期短暂记忆（LSTM），由<a href="https://www.researchgate.net/publication/13853244_Long_Short-term_Memory" target="_blank" rel="noopener">Hochreiter和Schmidhuber在1997年提出</a>，和</li>
-<li><a href="https://arxiv.org/abs/1409.1259" target="_blank" rel="noopener">Cho _等人_</a>提出的门控复发单位（GRU）<a href="https://arxiv.org/abs/1409.1259" target="_blank" rel="noopener">_。_</a><a href="https://arxiv.org/abs/1409.1259" target="_blank" rel="noopener">_人_</a><a href="https://arxiv.org/abs/1409.1259" target="_blank" rel="noopener">在2014年</a>。<br>请注意，我将使用“RNN”来统一指代固有循环的神经网络架构，并使用“vanilla RNN”来指代最简单的递归神经网络架构，如图&gt; <a href="https://towardsdatascience.com/animated-rnn-lstm-and-gru-ef124d06cf45#50f0" target="_blank" rel="noopener">1</a>所示。<br>有许多用于递归神经网络的图解图。我最喜欢的是迈克尔·阮（Michael Nguyen）在<a href="https://towardsdatascience.com/illustrated-guide-to-lstms-and-gru-s-a-step-by-step-explanation-44e9eb85bf21" target="_blank" rel="noopener">“</a>走向数据科学”（Towards Data Science）上发表的<a href="https://towardsdatascience.com/illustrated-guide-to-lstms-and-gru-s-a-step-by-step-explanation-44e9eb85bf21" target="_blank" rel="noopener">这篇文章</a>，因为他为我们提供了对这些模型的直觉，更重要的是让我们更容易理解的美丽插图。但我的帖子背后的动机是更好地可视化在这些单元格中发生的事情，以及如何共享节点以及它们如何转换以给出输出节点。我的灵感来自迈克尔的精彩动画。<br>本文探讨了香草RNN，LSTM和GRU细胞。这是一个简短的阅读，适用于那些阅读过这些主题的人。（我建议在阅读这篇文章之前阅读迈克尔的文章。）重要的是要注意以下动画是连续的，以引导人眼，但不反映矢量化机器计算期间的时间顺序。<br>
-        
-          <a class="article-more-a" href="/2019/04/08/yuque/动画RNN，LSTM和GRU/#more">more >></a>
-        
-      
-
-      
-    </li></ol></div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/04/08/yuque/动画RNN，LSTM和GRU/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/XGBoost算法：长期可能在位！" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/08/yuque/XGBoost算法：长期可能在位！/">XGBoost算法：长期可能在位！</a>
-    </h1>
-  
-
-        
-        <a href="/2019/04/08/yuque/XGBoost算法：长期可能在位！/" class="archive-article-date">
-  	<time datetime="2019-04-08T03:02:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-08</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1554692595416-69c4133a-0fb6-4ae5-b308-642403bd2216.png#align=left&amp;display=inline&amp;height=521&amp;name=1.png&amp;originHeight=699&amp;originWidth=1000&amp;size=991609&amp;status=done&amp;width=746" alt="1.png"><br>我还记得十五年前我第一份工作的第一天。我刚完成研究生课程，并以分析师的身份加入了一家全球投资银行。在我的第一天，我一直拉直领带，并试着记住我学过的一切。与此同时，在内心深处，我想知道我是否对企业界足够好。感觉到我的焦虑，我的老板微笑着说：<br><em>“别担心！你唯一需要知道的就是回归建模！“</em><br>我记得自己在想，“我得到了这个！”。我知道回归建模; 线性和逻辑回归。我的老板是对的。在我任职期间，我专门建立了基于回归的统计模型。我并不孤单。事实上，在那个时候，回归建模是无可争议的预测分析女王。快进十五年，回归建模的时代已经结束。老女王已经过去了。新女王的名字很长，名字很久; XGBoost或Extreme Gradient Boosting！<br>
-        
-          <a class="article-more-a" href="/2019/04/08/yuque/XGBoost算法：长期可能在位！/#more">more >></a>
-        
-      
-
-      
-    </p></div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/04/08/yuque/XGBoost算法：长期可能在位！/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/6/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/8/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="/page/6/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/8/">Next &raquo;</a>
     </nav>
   
 

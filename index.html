@@ -149,12 +149,32 @@
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-yuque/如何使用良好的软件工程实践设置PySpark环境以进行开发" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-yuque/用于图像分割的U-Net和Res-Net简介" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/06/20/yuque/用于图像分割的U-Net和Res-Net简介/">用于图像分割的U-Net和Res-Net简介</a>
+    </h1>
+  
+
+        
+        <a href="/2019/06/20/yuque/用于图像分割的U-Net和Res-Net简介/" class="archive-article-date">
+  	<time datetime="2019-06-20T02:07:57.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-06-20</time>
+</a>
+        
+      </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        
+        <p>人类能够通过捕获反射光线来观察图像，这是一项非常复杂的任务。那么如何对机器进行编程以执行类似的任务呢？计算机将图像视为矩阵，需要对其进行处理才能获得意义。<br>图像分割是将图像分割成各个片段的方法，每个片段具有不同的实体。卷积神经网络对于更简单的图像是成功的，但是对于复杂图像没有给出好的结果。这是U-Net和Res-Net等其他算法发挥作用的地方。<br><a name="c863"></a></p>
+<h4 id="背景-卷积神经网络（CNN）"><a href="#背景-卷积神经网络（CNN）" class="headerlink" title="背景 - 卷积神经网络（CNN）"></a>背景 - 卷积神经网络（CNN）</h4><p>CNN类似于具有各种中子的神经网络，具有可学习的重量和偏差。给每个神经元提供多个输入，执行加权和，应用激活函数并给出输出。网络具有丢失功能，用于最小化权重误差。机器将图像看作像素矩阵，图像分辨率为hxwxd，其中h是高度，w是宽度，d是尺寸。d取决于色标，如RGB刻度为3，灰度为1。在CNN中，图像被转换成主要用于分类问题的向量。但是在U-Net中，图像被转换为矢量，然后使用相同的映射将其再次转换为图像。这通过保留图像的原始结构来减少失真。<br>当需要将整个图像分类为类标签时，主要使用CNN。但是许多任务需要对图像的每个像素进行分类。这由U-net和Res-Net解决。<br><a name="0a29"></a></p>
+<h3 id="U-Net架构"><a href="#U-Net架构" class="headerlink" title="U-Net架构"></a>U-Net架构</h3><p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1560996646977-1576f9b6-9210-4671-8877-ab85e503575d.png#align=left&amp;display=inline&amp;height=666&amp;name=1_lvXoKMHoPJMKpKK7keZMEA.png&amp;originHeight=666&amp;originWidth=1000&amp;size=114321&amp;status=done&amp;width=1000" alt="1_lvXoKMHoPJMKpKK7keZMEA.png"><br>U-Net包括卷积操作，最大池，ReLU激活，级联和上采样层以及三个部分：收缩，瓶颈和扩展部分。收缩部分有4个收缩块。每个收缩块获得一个输入，应用两个3X3卷积ReLu层，然后是2X2最大池。每个池层的要素图数量增加一倍。瓶颈层使用两个3X3 Conv层和2X2 up卷积层。扩展部分由几个扩展块组成，每个块将输入传递到两个3X3 Conv层，以及一个2X2上采样层，将特征通道数量减半。它还包括与合同路径中相应裁剪的特征映射的串联。到底，1X1 Conv层用于使要素图的数量与输出中所需的段数相同。U-net对图像的每个像素使用损失函数。这有助于轻松识别分割图中的单个细胞。Softmax应用于每个像素，然后是损失函数。这会将分割问题转换为分类问题，我们需要将每个像素分类到其中一个类。<br><a name="5406"></a></p>
+<h3 id="残差网络（Res-Net）"><a href="#残差网络（Res-Net）" class="headerlink" title="残差网络（Res-Net）"></a>残差网络（Res-Net）</h3><p>在传统的神经网络中，更多的层意味着更好的网络，但由于消失的梯度问题，第一层的权重将不会通过反向传播正确更新。当误差梯度向后传播到较早的层时，重复乘法会使梯度变小。因此，随着网络中更多层，其性能变得饱和并开始迅速减少。Res-Net通过使用单位矩阵解决了这个问题。当通过身份函数完成反向传播时，梯度将仅乘以1.这样可以保留输入并避免信息丢失。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1560996682172-7743d678-726f-41a8-bd3b-b2220b6edea9.png#align=left&amp;display=inline&amp;height=435&amp;name=1_S3TlG0XpQZSIpoDIUCQ0RQ.png&amp;originHeight=435&amp;originWidth=1000&amp;size=168789&amp;status=done&amp;width=1000" alt="1_S3TlG0XpQZSIpoDIUCQ0RQ.png"><br>网络的组件包括3X3滤波器，具有步幅2的CNN下采样层，全局平均汇集层和最终具有softmax的1000路全连接层。<br>ResNet使用跳过连接，其中原始输入也被添加到卷积块的输出。这有助于通过允许梯度的替代路径流过来解决消失梯度的问题。此外，它们使用身份功能，这有助于更高层执行与更低层一样好，而不是更糟。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1560996717825-9a13af03-b973-424e-a846-c4040165976c.png#align=left&amp;display=inline&amp;height=329&amp;name=1_D0F3UitQ2l5Q0Ak-tjEdJg.png&amp;originHeight=329&amp;originWidth=570&amp;size=28499&amp;status=done&amp;width=570" alt="1_D0F3UitQ2l5Q0Ak-tjEdJg.png"><br>在传统的神经网络中，每层都会进入下一层。但是在具有残余块的网络中，每个层都会进入下一层，并直接进入层中的一些跳跃。<br>考虑一个神经网络块，其输入为_x_，我们希望学习真正的分布<em>H（x）</em>。输出和输入之间的残差可以表示为<br>R（x）=输出 - 输入= H（x） -  x<br>传统网络中的层学习真实输出（<em>H（x）</em>），而残余网络中的层学习残差（<em>R（x）</em>）。<br><strong><em>希望这篇文章对Res-Nets和U-Nets有用。谢谢阅读！另外，在评论中添加我应该添加的任何其他要点或概念！</em></strong></p>
+
       
 
       
@@ -166,7 +186,7 @@
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2019/06/20/yuque/如何使用良好的软件工程实践设置PySpark环境以进行开发/">展开全文 >></a>
+          <a class="article-more-a" href="/2019/06/20/yuque/用于图像分割的U-Net和Res-Net简介/">展开全文 >></a>
         </p>
       
 
@@ -975,7 +995,7 @@
   
   
     <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
     </nav>
   
 
