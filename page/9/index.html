@@ -615,121 +615,6 @@
 
 
   
-    <article id="post-yuque/使用MLflow赋予Spark功能" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/15/yuque/使用MLflow赋予Spark功能/">使用MLflow赋予Spark功能</a>
-    </h1>
-  
-
-        
-        <a href="/2019/03/15/yuque/使用MLflow赋予Spark功能/" class="archive-article-date">
-  	<time datetime="2019-03-15T08:33:35.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-15</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>这篇文章旨在介绍我们使用<a href="https://mlflow.org/" target="_blank" rel="noopener"><strong>MLflow</strong></a>的初步经验。<br>我们将通过记录所有探索性迭代，开始使用自己的<a href="https://mlflow.org/docs/latest/tracking.html" target="_blank" rel="noopener">跟踪服务器</a>发现MLflow 。然后，我们将展示使用UDF将Spark与MLflow相关联的经验。<br><a name="50f198f0"></a></p>
-<h4 id="上下文"><a href="#上下文" class="headerlink" title="上下文"></a>上下文</h4><p>我们利用机器学习和人工智能的力量，使人们能够控制自己的健康和福祉。机器学习模型因此是我们正在开发的数据产品的核心，这就是为什么MLFLow，一个涵盖ML生命周期所有方面的开源平台引起了我们的注意。<br><a name="MLflow"></a></p>
-<h3 id="MLflow"><a href="#MLflow" class="headerlink" title="MLflow"></a>MLflow</h3><p>MLflow的主要目标是在ML之上提供额外的层，允许数据科学家与几乎任何机器学习库（<a href="https://github.com/h2oai" target="_blank" rel="noopener"><em>h2o，</em></a><a href="https://keras.io/" target="_blank" rel="noopener"><em>keras，</em></a><a href="http://mleap-docs.combust.ml/" target="_blank" rel="noopener"><em>mleap，</em></a><a href="https://pytorch.org/" target="_blank" rel="noopener"><em>pytorch，</em></a><a href="http://scikit-learn.org/stable/" target="_blank" rel="noopener"><em>sklearn和</em></a><a href="https://www.tensorflow.org/" target="_blank" rel="noopener"><em>tensorflow</em></a>）一起工作，同时，它将他们的工作带到另一个层次。<br>MLflow提供三个组件：</p>
-<ul>
-<li><a href="https://mlflow.org/docs/latest/tracking.html" target="_blank" rel="noopener"><strong>跟踪</strong></a>  - 记录和查询实验：代码，数据，配置和结果。跟踪建模进度非常有用。</li>
-<li><a href="https://mlflow.org/docs/latest/projects.html" target="_blank" rel="noopener"><strong>项目</strong></a>  - 在任何平台（<strong>_即_</strong> <a href="https://aws.amazon.com/sagemaker" target="_blank" rel="noopener"><em>Sagemaker</em></a>）上可重复运行的包装格式。</li>
-<li><a href="https://mlflow.org/docs/latest/models.html" target="_blank" rel="noopener"><strong>模型</strong></a>  - 将模型发送到各种部署工具的通用格式。<blockquote>
-<p><strong>MLflow</strong>（目前处于alpha版本）是一个管理ML生命周期的开源平台，包括实验，可重复性和部署。<br><a name="181d871e"></a></p>
-</blockquote>
-<h4 id="设置MLflow"><a href="#设置MLflow" class="headerlink" title="设置MLflow"></a>设置MLflow</h4>为了使用MLflow，我们首先需要设置所有Python环境以使用MLflow，我们将使用<a href="https://github.com/pyenv/pyenv" target="_blank" rel="noopener">PyEnv </a>_（_<a href="https://gist.github.com/chris-zen/9e61db6924bd37fbe414f648614ca4c5" target="_blank" rel="noopener"><em>在Mac中</em></a><strong>_设置_</strong>_ → _<a href="https://gist.github.com/chris-zen/9e61db6924bd37fbe414f648614ca4c5" target="_blank" rel="noopener"><em>Python）</em></a>。这将提供一个虚拟环境，我们可以在其中安装运行它所需的所有库。</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">pyenv install 3.7.0</span><br><span class="line">pyenv global 3.7.0 # Use Python 3.7</span><br><span class="line">mkvirtualenv mlflow # Create a Virtual Env with Python 3.7</span><br><span class="line">workon mlflow</span><br></pre></td></tr></table></figure>
-<p>安装所需的库</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">pip install mlflow==0.7.0 \</span><br><span class="line">            Cython==0.29 \ </span><br><span class="line">            numpy==1.14.5 \</span><br><span class="line">            pandas==0.23.4 \</span><br><span class="line">            pyarrow==0.11.0</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p><strong>注意：</strong>我们使用PyArrow将模型作为UDF启动。PyArrow和Numpy版本需要修复，因为最新的版本之间存在一些冲突。</p>
-</blockquote>
-<p><a name="9a02c96e"></a></p>
-<h4 id="启动跟踪UI"><a href="#启动跟踪UI" class="headerlink" title="启动跟踪UI"></a>启动跟踪UI</h4><p>MLflow Tracking允许我们使用<a href="https://mlflow.org/docs/latest/python_api/index.html#python-api" target="_blank" rel="noopener">Python</a>和<a href="https://mlflow.org/docs/latest/rest-api.html#rest-api" target="_blank" rel="noopener">REST</a> API 记录和查询实验。此外，还可以定义我们将存储模型工件的位置（<em>Localhost，</em><a href="https://mlflow.org/docs/latest/tracking.html#amazon-s3" target="_blank" rel="noopener"><em>Amazon S3</em></a>_，_<a href="https://mlflow.org/docs/latest/tracking.html#azure-blob-storage" target="_blank" rel="noopener"><em>Azure Blob存储</em></a>_，_<a href="https://mlflow.org/docs/latest/tracking.html#google-cloud-storage" target="_blank" rel="noopener"><em>Google云存储</em></a>_或_<a href="https://mlflow.org/docs/latest/tracking.html#sftp-server" target="_blank" rel="noopener"><em>SFTP服务器</em></a>）。由于我们使用AWS ，因此我们将尝试将<strong>S3</strong>作为工件存储。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># Running a Tracking Server</span><br><span class="line">mlflow server \</span><br><span class="line">    --file-store /tmp/mlflow/fileStore \</span><br><span class="line">    --default-artifact-root s3://&lt;bucket&gt;/mlflow/artifacts/ \</span><br><span class="line">    --host localhost</span><br><span class="line">    --port 5000</span><br></pre></td></tr></table></figure>
-<p>MLflow建议使用<strong>持久性文件存储</strong>。这<code>file-store</code>是服务器存储运行和实验元数据的位置。因此，在运行服务器时，请确保这指向持久文件系统位置。在这里，我们只是<code>/tmp</code>用于实验。<br>请记住，如果我们想使用mlflow服务器运行旧实验，它们必须存在于文件存储中。但是，如果没有它们，我们仍然可以在UDF中使用它们，因为只需要模型路径。</p>
-<blockquote>
-<p><strong><em>注意：</em></strong>请记住跟踪UI，模型客户端必须能够访问工件位置。这意味着，无论跟踪UI是否在EC2实例上，如果我们在本地运行MLflow，我们的机器应该可以直接访问S3来编写工件模型。</p>
-</blockquote>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1552639247139-4605b9cb-f981-43fc-a969-9a2155d75965.png#align=left&amp;display=inline&amp;height=239&amp;name=1_z6iObWdxXOtcIj_cUk2gag.png&amp;originHeight=642&amp;originWidth=2000&amp;size=114273&amp;status=done&amp;width=746" alt="1_z6iObWdxXOtcIj_cUk2gag.png"><br><a name="7d519d5b"></a></p>
-<h4 id="运行模型"><a href="#运行模型" class="headerlink" title="运行模型"></a>运行模型</h4><p>跟踪服务器运行后，我们可以开始训练我们的模型。<br>作为一个例子，我们将使用<a href="https://github.com/mlflow/mlflow/blob/master/examples/sklearn_elasticnet_wine/train.py" target="_blank" rel="noopener"><strong><em>MLflow Sklearn示例中</em></strong></a>提供的wine示例的修改。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">MLFLOW_TRACKING_URI=http://localhost:5000 python wine_quality.py \</span><br><span class="line">  --alpha 0.9</span><br><span class="line">  --l1_ration 0.5</span><br><span class="line">  --wine_file ./data/winequality-red.csv</span><br></pre></td></tr></table></figure>
-<p>如前所述，MLflow允许记录模型的参数，度量和工件，因此我们可以跟踪这些在不同迭代中如何演变。此功能非常有用，因为我们可以通过检查Tracking Server来重现我们的最佳模型，或者验证哪些代码正在执行所需的迭代，因为<strong>它记录</strong><em>（免费）</em><strong>git哈希提交</strong>。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">with mlflow.start_run():</span><br><span class="line"></span><br><span class="line">    ... model ...</span><br><span class="line"></span><br><span class="line">    mlflow.log_param(&quot;source&quot;, wine_path)</span><br><span class="line">    mlflow.log_param(&quot;alpha&quot;, alpha)</span><br><span class="line">    mlflow.log_param(&quot;l1_ratio&quot;, l1_ratio)</span><br><span class="line"></span><br><span class="line">    mlflow.log_metric(&quot;rmse&quot;, rmse)</span><br><span class="line">    mlflow.log_metric(&quot;r2&quot;, r2)</span><br><span class="line">    mlflow.log_metric(&quot;mae&quot;, mae)</span><br><span class="line"></span><br><span class="line">    mlflow.set_tag(&apos;domain&apos;, &apos;wine&apos;)</span><br><span class="line">    mlflow.set_tag(&apos;predict&apos;, &apos;quality&apos;)</span><br><span class="line">    mlflow.sklearn.log_model(lr, &quot;model&quot;)</span><br></pre></td></tr></table></figure>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1552639366867-dba4caa9-6ea2-4ca8-b59a-737bbfa774fc.png#align=left&amp;display=inline&amp;height=365&amp;name=1_3soEGGuFumQXV5LSZNCnrA.png&amp;originHeight=489&amp;originWidth=1000&amp;size=130330&amp;status=done&amp;width=746" alt="1_3soEGGuFumQXV5LSZNCnrA.png"><br><a name="146d11ee"></a></p>
-<h4 id="服务模型"><a href="#服务模型" class="headerlink" title="服务模型"></a>服务模型</h4><p> 使用“ &gt; <strong><em>mlflow服务器</em></strong>&gt; _ ”_启动的&gt; <strong>MLflow跟踪服务器</strong>还托管REST API，用于跟踪运行并将数据写入本地文件系统。您可以使用“ &gt; <strong>_MLFLOW_TRACKING_URI_</strong>&gt; _”<em>环境变量指定跟踪服务器URI，MLflow跟踪API会自动与该URI处的跟踪服务器通信，以创建/获取运行信息，记录指标等。<br>**</em>参考：<em>**[</em>文档//运行跟踪服务器<em>](<a href="https://mlflow.org/docs/latest/tracking.html#running-a-tracking-server" target="_blank" rel="noopener">https://mlflow.org/docs/latest/tracking.html#running-a-tracking-server</a>)<br>为了提供模型，我们只需要运行一个<strong>跟踪服务器</strong>（**</em>参见_<strong><em>启动UI</em>）和一个</strong>模型运行ID**。<br><br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1552639490766-7db77f84-79f9-486e-963c-c574d85d438e.png#align=left&amp;display=inline&amp;height=120&amp;name=1_vBVbyT3F_YFjjfJuSDVrUA.png&amp;originHeight=161&amp;originWidth=1000&amp;size=81585&amp;status=done&amp;width=746" alt="1_vBVbyT3F_YFjjfJuSDVrUA.png"></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"># Serve a sklearn model through 127.0.0.0:5005</span><br><span class="line">MLFLOW_TRACKING_URI=http://0.0.0.0:5000 mlflow sklearn serve \</span><br><span class="line">  --port 5005  \</span><br><span class="line">  --run_id 0f8691808e914d1087cf097a08730f17 \</span><br><span class="line">  --model-path model</span><br></pre></td></tr></table></figure>
-<p>要使用<strong>MLflow服务功能</strong>为模型提供<strong>服务，</strong>我们需要访问跟踪UI，因此只需指定即可检索模型信息<code>--run_id</code> 。<br>一旦跟踪服务器为模型提供服务，我们就可以查询新的模型端点。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"># Query Tracking Server Endpoint</span><br><span class="line">curl -X POST \</span><br><span class="line">  http://127.0.0.1:5005/invocations \</span><br><span class="line">  -H &apos;Content-Type: application/json&apos; \</span><br><span class="line">  -d &apos;[</span><br><span class="line">	&#123;</span><br><span class="line">		&quot;fixed acidity&quot;: 3.42, </span><br><span class="line">		&quot;volatile acidity&quot;: 1.66, </span><br><span class="line">		&quot;citric acid&quot;: 0.48, </span><br><span class="line">		&quot;residual sugar&quot;: 4.2, </span><br><span class="line">		&quot;chloridessssss&quot;: 0.229, </span><br><span class="line">		&quot;free sulfur dsioxide&quot;: 19, </span><br><span class="line">		&quot;total sulfur dioxide&quot;: 25, </span><br><span class="line">		&quot;density&quot;: 1.98, </span><br><span class="line">		&quot;pH&quot;: 5.33, </span><br><span class="line">		&quot;sulphates&quot;: 4.39, </span><br><span class="line">		&quot;alcohol&quot;: 10.8</span><br><span class="line">	&#125;</span><br><span class="line">]&apos;</span><br><span class="line"></span><br><span class="line">&gt; &#123;&quot;predictions&quot;: [5.825055635303461]&#125;</span><br></pre></td></tr></table></figure>
-<p><a name="e475db1c"></a></p>
-<h3 id="从Spark运行模型"><a href="#从Spark运行模型" class="headerlink" title="从Spark运行模型"></a>从Spark运行模型</h3><p>虽然通过训练模型和使用服务功能（<strong><em>ref：</em></strong><a href="https://mlflow.org/docs/latest/models.html#local" target="_blank" rel="noopener"><em>mlflow // docs // models #local）</em></a>实时为模型提供服务非常强大，但使用Spark（批量或流式传输）应用模型更是如此强大，因为它加入了分配力量。<a href="https://mlflow.org/docs/latest/models.html#local" target="_blank" rel="noopener"></a><br>想象一下，进行离线训练，然后以更简单的方式将输出模型应用于所有数据。这就是Spark和MLflow共同完美的地方。<br><a name="92cfd913"></a></p>
-<h4 id="安装PySpark-Jupyter-Spark"><a href="#安装PySpark-Jupyter-Spark" class="headerlink" title="安装PySpark + Jupyter + Spark"></a>安装PySpark + Jupyter + Spark</h4><p><strong><em>参考：</em></strong><a href="https://blog.sicara.com/get-started-pyspark-jupyter-guide-tutorial-ae2fe84f594f" target="_blank" rel="noopener"><em>PySpark开始 - Jupyter</em></a><br>展示我们如何将MLflow模型应用于Spark数据帧。我们需要使用PySpark设置Jupyter笔记本。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">首先下载最新的稳定Apache Spark（当前版本2.3.2）。</span><br><span class="line"></span><br><span class="line">cd ~/Downloads/</span><br><span class="line">tar -xzf spark-2.3.2-bin-hadoop2.7.tgz</span><br><span class="line">mv ~/Downloads/spark-2.3.2-bin-hadoop2.7 ~/</span><br><span class="line">ln -s ~/spark-2.3.2-bin-hadoop2.7 ~/spark̀</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">在我们的virtualEnv中安装PySpark和Jupyter</span><br><span class="line"></span><br><span class="line">pip install pyspark jupyter</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">设置Environmnet变量</span><br><span class="line"></span><br><span class="line">export SPARK_HOME=~/spark</span><br><span class="line">export PATH=$SPARK_HOME/bin:$PATH</span><br><span class="line">export PYSPARK_DRIVER_PYTHON=jupyter</span><br><span class="line">export PYSPARK_DRIVER_PYTHON_OPTS=&quot;notebook --notebook-dir=$&#123;HOME&#125;/Projects/notebooks&quot;</span><br><span class="line">通过定义notebook-dir，我们将能够将我们的笔记本存储和保存在所需的文件夹中。</span><br></pre></td></tr></table></figure>
-<p><a name="f6e12a2e"></a></p>
-<h4 id="从PySpark启动Jupyter"><a href="#从PySpark启动Jupyter" class="headerlink" title="从PySpark启动Jupyter"></a>从PySpark启动Jupyter</h4><p>由于我们将Jupyter配置为<strong><em>PySpark驱动程序</em></strong>，现在我们可以使用附加到我们笔记本的PySpark上下文启动Jupyter。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">(mlflow) afranzi:~$ pyspark</span><br><span class="line">[I 19:05:01.572 NotebookApp] sparkmagic extension enabled!</span><br><span class="line">[I 19:05:01.573 NotebookApp] Serving notebooks from local directory: /Users/afranzi/Projects/notebooks</span><br><span class="line">[I 19:05:01.573 NotebookApp] The Jupyter Notebook is running at:</span><br><span class="line">[I 19:05:01.573 NotebookApp] http://localhost:8888/?token=c06252daa6a12cfdd33c1d2e96c8d3b19d90e9f6fc171745</span><br><span class="line">[I 19:05:01.573 NotebookApp] Use Control-C to stop this server and shut down all kernels (twice to skip confirmation).</span><br><span class="line">[C 19:05:01.574 NotebookApp]</span><br><span class="line"></span><br><span class="line">    Copy/paste this URL into your browser when you connect for the first time,</span><br><span class="line">    to login with a token:</span><br><span class="line">        http://localhost:8888/?token=c06252daa6a12cfdd33c1d2e96c8d3b19d90e9f6fc171745</span><br></pre></td></tr></table></figure>
-<p>如上所示，MLflow提供了将模型工件记录到S3的功能。因此，一旦我们选择了一个模型，我们就可以使用该<code>mlflow.pyfunc</code>模块将其作为UDF导入。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">import mlflow.pyfunc</span><br><span class="line"></span><br><span class="line">model_path = &apos;s3://&lt;bucket&gt;/mlflow/artifacts/1/0f8691808e914d1087cf097a08730f17/artifacts/model&apos;</span><br><span class="line">wine_path = &apos;/Users/afranzi/Projects/data/winequality-red.csv&apos;</span><br><span class="line">wine_udf = mlflow.pyfunc.spark_udf(spark, model_path)</span><br><span class="line"></span><br><span class="line">df = spark.read.format(&quot;csv&quot;).option(&quot;header&quot;, &quot;true&quot;).option(&apos;delimiter&apos;, &apos;;&apos;).load(wine_path)</span><br><span class="line">columns = [ &quot;fixed acidity&quot;, &quot;volatile acidity&quot;, &quot;citric acid&quot;,</span><br><span class="line">            &quot;residual sugar&quot;, &quot;chlorides&quot;, &quot;free sulfur dioxide&quot;,</span><br><span class="line">            &quot;total sulfur dioxide&quot;, &quot;density&quot;, &quot;pH&quot;,</span><br><span class="line">            &quot;sulphates&quot;, &quot;alcohol&quot;</span><br><span class="line">          ]</span><br><span class="line">          </span><br><span class="line">df.withColumn(&apos;prediction&apos;, wine_udf(*columns)).show(100, False)</span><br></pre></td></tr></table></figure>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1552639783096-5f2fa010-2bff-4b1f-a478-ec4bde5b218d.png#align=left&amp;display=inline&amp;height=250&amp;name=1_hqSqC1493Tmu5-OHNcKhRg.png&amp;originHeight=335&amp;originWidth=1000&amp;size=196030&amp;status=done&amp;width=746" alt="1_hqSqC1493Tmu5-OHNcKhRg.png"><br>到目前为止，我们已经展示了如何通过在我们所有的葡萄酒数据集中运行葡萄酒质量预测来将PySpark与MLflow结合使用。但是当您需要使用Scala Spark的Python MLflow模块时会发生什么？<br>我们还设法通过在Scala和Python之间共享Spark Context来测试它。这意味着我们注册的MLflow UDF在Python，然后从斯卡拉用它（<em>叶氏，不是一个很好的解决方案，但至少它的东西</em><strong>🍭</strong>）。<br><a name="9f923831"></a></p>
-<h4 id="Scala-Spark-MLflow"><a href="#Scala-Spark-MLflow" class="headerlink" title="Scala Spark + MLflow"></a>Scala Spark + MLflow</h4><p>对于此示例，我们将Toree <a href="https://toree.apache.org/" target="_blank" rel="noopener"><strong>内核</strong></a>添加到现有的Jupyter中。<br>安装Spark + Toree + Jupyter</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">pip install toree</span><br><span class="line">jupyter toree install --spark_home=/Users/afranzi/spark --sys-prefix</span><br><span class="line">jupyter kernelspec list</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Available kernels:</span><br><span class="line">  apache_toree_scala    /Users/afranzi/.virtualenvs/mlflow/share/jupyter/kernels/apache_toree_scala</span><br><span class="line">  python3               /Users/afranzi/.virtualenvs/mlflow/share/jupyter/kernels/python3</span><br></pre></td></tr></table></figure>
-<p>正如您在附带的笔记本中看到的，UDF在Spark和PySpark之间共享。我们希望这最后一部分对那些喜欢Scala并且必须将ML模型投入生产的团队有所帮助。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br></pre></td><td class="code"><pre><span class="line">In [<span class="number">1</span>]:</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.sql.functions.col</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.sql.types.StructType</span><br><span class="line"><span class="keyword">import</span> org.apache.spark.sql.&#123;Column, DataFrame&#125;</span><br><span class="line"><span class="keyword">import</span> scala.util.matching.Regex</span><br><span class="line"></span><br><span class="line">val FirstAtRe: Regex = <span class="string">"^_"</span>.r</span><br><span class="line">val AliasRe: Regex = <span class="string">"[\\s_.:@]+"</span>.r</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getFieldAlias</span><span class="params">(field_name: String)</span>:</span> String = &#123;</span><br><span class="line">    FirstAtRe.replaceAllIn(AliasRe.replaceAllIn(field_name, <span class="string">"_"</span>), <span class="string">""</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">selectFieldsNormalized</span><span class="params">(columns: List[String])</span><span class="params">(df: DataFrame)</span>:</span> DataFrame = &#123;</span><br><span class="line">    val fieldsToSelect: List[Column] = columns.map(field =&gt;</span><br><span class="line">        col(field).<span class="keyword">as</span>(getFieldAlias(field))</span><br><span class="line">    )</span><br><span class="line">    df.select(fieldsToSelect: _*)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">normalizeSchema</span><span class="params">(df: DataFrame)</span>:</span> DataFrame = &#123;</span><br><span class="line">    val schema = df.columns.toList</span><br><span class="line">    df.transform(selectFieldsNormalized(schema))</span><br><span class="line">&#125;</span><br><span class="line">FirstAtRe = ^_</span><br><span class="line">AliasRe = [\s_.:@]+</span><br><span class="line">getFieldAlias: (field_name: String)String</span><br><span class="line">selectFieldsNormalized: (columns: List[String])(df: org.apache.spark.sql.DataFrame)org.apache.spark.sql.DataFrame</span><br><span class="line">normalizeSchema: (df: org.apache.spark.sql.DataFrame)org.apache.spark.sql.DataFrame</span><br><span class="line">Out[<span class="number">1</span>]:</span><br><span class="line">[\s_.:@]+</span><br><span class="line">In [<span class="number">2</span>]:</span><br><span class="line">val winePath = <span class="string">"~/Research/mlflow-workshop/examples/wine_quality/data/winequality-red.csv"</span></span><br><span class="line">val modelPath = <span class="string">"/tmp/mlflow/artifactStore/0/96cba14c6e4b452e937eb5072467bf79/artifacts/model"</span></span><br><span class="line">winePath = ~/Research/mlflow-workshop/examples/wine_quality/data/winequality-red.csv</span><br><span class="line">modelPath = /tmp/mlflow/artifactStore/<span class="number">0</span>/<span class="number">96</span>cba14c6e4b452e937eb5072467bf79/artifacts/model</span><br><span class="line">Out[<span class="number">2</span>]:</span><br><span class="line">/tmp/mlflow/artifactStore/<span class="number">0</span>/<span class="number">96</span>cba14c6e4b452e937eb5072467bf79/artifacts/model</span><br><span class="line">In [<span class="number">3</span>]:</span><br><span class="line">val df = spark.read</span><br><span class="line">              .format(<span class="string">"csv"</span>)</span><br><span class="line">              .option(<span class="string">"header"</span>, <span class="string">"true"</span>)</span><br><span class="line">              .option(<span class="string">"delimiter"</span>, <span class="string">";"</span>)</span><br><span class="line">              .load(winePath)</span><br><span class="line">              .transform(normalizeSchema)</span><br><span class="line">df = [fixed_acidity: string, volatile_acidity: string ... <span class="number">10</span> more fields]</span><br><span class="line">Out[<span class="number">3</span>]:</span><br><span class="line">[fixed_acidity: string, volatile_acidity: string ... <span class="number">10</span> more fields]</span><br><span class="line">In [<span class="number">4</span>]:</span><br><span class="line">%%PySpark</span><br><span class="line"><span class="keyword">import</span> mlflow</span><br><span class="line"><span class="keyword">from</span> mlflow <span class="keyword">import</span> pyfunc</span><br><span class="line"></span><br><span class="line">model_path = <span class="string">"/tmp/mlflow/artifactStore/0/96cba14c6e4b452e937eb5072467bf79/artifacts/model"</span></span><br><span class="line">wine_quality_udf = mlflow.pyfunc.spark_udf(spark, model_path)</span><br><span class="line"></span><br><span class="line">spark.udf.register(<span class="string">"wineQuality"</span>, wine_quality_udf)</span><br><span class="line">Out[<span class="number">4</span>]:</span><br><span class="line">&lt;function spark_udf.&lt;locals&gt;.predict at <span class="number">0x1116a98c8</span>&gt;</span><br><span class="line">In [<span class="number">6</span>]:</span><br><span class="line">df.createOrReplaceTempView(<span class="string">"wines"</span>)</span><br><span class="line">In [<span class="number">10</span>]:</span><br><span class="line">%%SQL</span><br><span class="line">SELECT </span><br><span class="line">    quality,</span><br><span class="line">    wineQuality(</span><br><span class="line">        fixed_acidity,</span><br><span class="line">        volatile_acidity,</span><br><span class="line">        citric_acid,</span><br><span class="line">        residual_sugar,</span><br><span class="line">        chlorides,</span><br><span class="line">        free_sulfur_dioxide,</span><br><span class="line">        total_sulfur_dioxide,</span><br><span class="line">        density,</span><br><span class="line">        pH,</span><br><span class="line">        sulphates,</span><br><span class="line">        alcohol</span><br><span class="line">    ) AS prediction</span><br><span class="line">FROM wines</span><br><span class="line">LIMIT <span class="number">10</span></span><br><span class="line">Out[<span class="number">10</span>]:</span><br><span class="line">+-------+------------------+</span><br><span class="line">|quality|        prediction|</span><br><span class="line">+-------+------------------+</span><br><span class="line">|      <span class="number">5</span>| <span class="number">5.576883967129615</span>|</span><br><span class="line">|      <span class="number">5</span>|  <span class="number">5.50664776916154</span>|</span><br><span class="line">|      <span class="number">5</span>| <span class="number">5.525504822954496</span>|</span><br><span class="line">|      <span class="number">6</span>| <span class="number">5.504311247097457</span>|</span><br><span class="line">|      <span class="number">5</span>| <span class="number">5.576883967129615</span>|</span><br><span class="line">|      <span class="number">5</span>|<span class="number">5.5556903912725755</span>|</span><br><span class="line">|      <span class="number">5</span>| <span class="number">5.467882654744997</span>|</span><br><span class="line">|      <span class="number">7</span>| <span class="number">5.710602976324739</span>|</span><br><span class="line">|      <span class="number">7</span>| <span class="number">5.657319539336507</span>|</span><br><span class="line">|      <span class="number">5</span>| <span class="number">5.345098606538708</span>|</span><br><span class="line">+-------+------------------+</span><br><span class="line"></span><br><span class="line">In [<span class="number">17</span>]:</span><br><span class="line">spark.catalog.listFunctions.filter(<span class="string">'name like "%wineQuality%").show(20, false)</span></span><br><span class="line"><span class="string">+-----------+--------+-----------+---------+-----------+</span></span><br><span class="line"><span class="string">|name       |database|description|className|isTemporary|</span></span><br><span class="line"><span class="string">+-----------+--------+-----------+---------+-----------+</span></span><br><span class="line"><span class="string">|wineQuality|null    |null       |null     |true       |</span></span><br><span class="line"><span class="string">+-----------+--------+-----------+---------+-----------+</span></span><br></pre></td></tr></table></figure>
-<p><a name="38ce27d8"></a></p>
-<h4 id="下一步"><a href="#下一步" class="headerlink" title="下一步"></a>下一步</h4><p>尽管MLflow目前处于Alpha（🥁），但它看起来很有希望。只需能够运行多个机器学习框架并从同一端点使用它们，它就能将所有推荐系统提升到新的水平。<br>此外，MLflow 通过在它们之间建立公共层，使&gt; <strong>数据工程师</strong>和数据科学家&gt; <strong>更加接近</strong> 。&gt;<br>在对MLflow进行这项研究之后，我们确信我们将进一步研究它并开始在Spark管道和我们的推荐系统中使用它。<br>让文件存储与数据库同步而不是使用FS会很好。这应该允许多个端点使用相同的文件存储。就像使用相同的<a href="https://aws.amazon.com/glue/" target="_blank" rel="noopener">Glue Metastore</a>有多个<a href="https://prestodb.io/" target="_blank" rel="noopener">Presto</a>和<a href="https://aws.amazon.com/athena/" target="_blank" rel="noopener">Athena</a>实例一样。<a href="https://aws.amazon.com/glue/" target="_blank" rel="noopener"></a><br>最后，感谢MLflow背后的所有社区，使其成为可能，让我们的数据更有趣。<br>如果您正在玩MLflow，请<strong>随时联系我们</strong>并提供有关您如何使用它的一些反馈！更重要的是，如果您在生产中使用MLflow。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/03/15/yuque/使用MLflow赋予Spark功能/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
     <article id="post-yuque/MLflow模型" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1229,6 +1114,118 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2019/03/15/yuque/Mlflow介绍/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/我们从基于区域的物体探测器（更快的R-CNN，R-FCN，FPN）中学到了什么？" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/01/31/yuque/我们从基于区域的物体探测器（更快的R-CNN，R-FCN，FPN）中学到了什么？/">我们从基于区域的物体探测器（更快的R-CNN，R-FCN，FPN）中学到了什么？</a>
+    </h1>
+  
+
+        
+        <a href="/2019/01/31/yuque/我们从基于区域的物体探测器（更快的R-CNN，R-FCN，FPN）中学到了什么？/" class="archive-article-date">
+  	<time datetime="2019-01-31T10:12:24.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-01-31</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><a name="b4699b6e"></a></p>
+<h1 id="我们从基于区域的物体探测器（更快的R-CNN，R-FCN，FPN）中学到了什么？"><a href="#我们从基于区域的物体探测器（更快的R-CNN，R-FCN，FPN）中学到了什么？" class="headerlink" title="我们从基于区域的物体探测器（更快的R-CNN，R-FCN，FPN）中学到了什么？"></a>我们从基于区域的物体探测器（更快的R-CNN，R-FCN，FPN）中学到了什么？</h1><p><a href="https://medium.com/@jonathan_hui" target="_blank" rel="noopener">乔纳森惠</a>以下<br>2018年3月28日<br>在本系列中，我们将全面介绍物体检测。在这里的第1部分中，我们介绍了基于区域的物体探测器，包括快速R-CNN，更快的R-CNN，R-FCN和FPN。在第2部分中，我们将研究单射击探测器。在第3部分中，我们将介绍性能和一些实现问题。通过在一个环境中研究它们，我们研究什么是有效的，什么是重要的，哪些可以改进。希望通过研究我们如何到达这里，它将为我们提供更多关于我们前进方向的见解。<br><a href="https://medium.com/@jonathan_hui/what-do-we-learn-from-region-based-object-detectors-faster-r-cnn-r-fcn-fpn-7e354377a7c9" target="_blank" rel="noopener">第1部分</a>：我们从基于区域的物体探测器（更快的R-CNN，R-FCN，FPN）中学到了什么？<br><a href="https://medium.com/@jonathan_hui/what-do-we-learn-from-single-shot-object-detectors-ssd-yolo-fpn-focal-loss-3888677c5f4d" target="_blank" rel="noopener">第2部分</a>：我们从单发物体探测器（SSD，YOLO），FPN和焦点损耗中学到了什么？<br><a href="https://medium.com/@jonathan_hui/design-choices-lessons-learned-and-trends-for-object-detections-4f48b59ec5ff" target="_blank" rel="noopener">第3部分</a>：设计选择，经验教训和对象检测趋势？<br><a name="43bb065b"></a></p>
+<h3 id="滑动窗口探测器"><a href="#滑动窗口探测器" class="headerlink" title="滑动窗口探测器"></a><strong>滑动窗口探测器</strong></h3><p>自AlexNet赢得2012年ILSVRC挑战以来，使用CNN进行分类已经占据了该领域的主导地位。用于物体检测的一种蛮力方法是从左侧和右侧以及从上到下滑动窗口以使用分类来识别物体。为了在不同的观察距离检测不同的物体类型，我们使用不同尺寸和纵横比的窗户。</p>
+<p>滑动窗（从右到左，上下）<br>我们根据滑动窗口从图片中剪切出补丁。由于许多分类器仅采用固定大小的图像，因此修补程序会发生扭曲。然而，这不应该影响分类准确性，因为分类器被训练以处理变形图像。</p>
+<p>将图像变形为固定大小的图像。<br>将扭曲的图像块馈送到CNN分类器中以提取4096个特征。然后我们应用SVM分类器来识别类和边界框的另一个线性回归量。</p>
+<p>滑动窗检测器的系统流程。<br>下面是伪代码。我们创建了许多窗口来检测不同位置的不同对象形状。为了提高性能，一个明显的解决方案是减少_窗口_数量。<br>窗口中的窗口<br>    patch = get_patch（图像，窗口）<br>    结果=检测器（补丁）<a name="68696ce0"></a></p>
+<h3 id="选择性搜索"><a href="#选择性搜索" class="headerlink" title="选择性搜索"></a>选择性搜索</h3><p>我们使用区域提议方法来创建用于对象检测的<strong>感兴趣区域（ROI）</strong>，而不是强力方法。在<strong>选择性搜索</strong>（<strong>SS</strong>）中，我们从每个单独的像素开始作为其自己的组。接下来，我们计算每个组的纹理，并组合两个最接近的组。但是为了避免单个区域吞噬其他区域，我们更喜欢先将较小的组分组。我们继续合并区域，直到所有内容组合在一起。在下面的第一行中，我们展示了如何增长区域，第二行中的蓝色矩形显示了我们在合并期间可能实现的ROI。</p>
+<p>（图片来源：van de Sande等，ICCV’11）<br><a name="R-CNN"></a></p>
+<h3 id="R-CNN"><a href="#R-CNN" class="headerlink" title="R-CNN"></a>R-CNN</h3><p>R-CNN利用区域提议方法来创建大约2000个<strong>ROI</strong>（<strong>感兴趣</strong>的区域）。区域被扭曲成固定大小的图像并单独馈送到CNN网络。然后是完全连接的层，以对对象进行分类并细化边界框。</p>
+<p>使用区域提议，CNN，仿射层来定位对象。<br>这是系统流程。</p>
+<p>R-CNN的系统流程<br>R-CNN的投资回报率低得多但质量更高，比滑动窗更快，更准确。<br>投资回报率= <br>ROI中投资回报率的区域提示（图像）<br>    补丁= get_patch（图像，投资回报率）<br>    结果=检测器（补丁）<a name="9d7dcb56"></a></p>
+<h4 id="边界框回归量"><a href="#边界框回归量" class="headerlink" title="边界框回归量"></a>边界框回归量</h4><p>区域提案方法计算密集。为了加快这一过程，我们经常选择一种较便宜的区域建议方法来创建ROI，然后使用线性回归量（使用完全连接的层）进一步细化边界框。</p>
+<p>使用回归将原始ROI从蓝色细化为红色。<br><a name="02b68898"></a></p>
+<h3 id="快速R-CNN"><a href="#快速R-CNN" class="headerlink" title="快速R-CNN"></a>快速R-CNN</h3><p>R-CNN需要许多提议准确并且许多区域彼此重叠。<strong>R-CNN的训练和推理速度很慢。</strong>如果我们有2,000个提案，则每个提案都由CNN单独处理，即我们针对不同的投资回报率重复提取2000次特征。<br>我们不是从头开始为每个图像补丁提取特征，而是使用<strong>特征提取器</strong>（CNN）首先提取整个图像的特征。我们还使用外部区域提议方法（如选择性搜索）来创建ROI，后者与相应的要素图组合以形成用于对象检测的补丁。我们使用<strong>ROI池</strong>将贴片扭曲到固定大小，并将它们馈送到完全连接的层以进行分类和<strong>定位</strong>（检测对象的位置）。通过不重复特征提取，Fast R-CNN显着缩短了处理时间。</p>
+<p>在要素图上应用区域建议，并使用ROI池形成固定大小的修补程序。<br>这是网络流程：</p>
+<p>在下面的伪代码中，昂贵的特征提取正在逐渐退出for循环，这是因为它针对所有2000个ROI执行而显着提高了速度。快速R-CNN在训练中比R-CNN快10倍，在推理中快150倍。<br>feature_maps = process（image）<br>ROI = <br>ROI中ROI的region_proposal（image）<br>    补丁= roi_pooling（feature_maps，ROI）<br>    结果= detector2（补丁）Fast R-CNN的一个主要特点是整个网络（特征提取器，分类器和边界框回归器）可以通过<strong>多任务损失</strong>（分类丢失和本地化丢失）进行端到端训练。这提高了准确性。<br><strong>投资回报率</strong><br>由于Fast R-CNN使用完全连接的层，因此我们应用<strong>ROI池</strong>来将可变大小的ROI扭曲成预定义的大小形状。<br>让我们通过将8×8特征映射转换为预定义的2×2形状来简化讨论。</p>
+<ul>
+<li>左下方：我们的功能图。</li>
+<li>右上角：我们将ROI（蓝色）与要素图重叠。</li>
+<li>左下图：我们将ROI分成目标维度。例如，对于我们的2×2目标，我们将ROI分成4个具有相似或相同大小的部分。</li>
+<li>右下角：找到每个部分的最大值，结果是我们的变形特征映射。</li>
+</ul>
+<p>输入要素图（左上），输出要素图（右下），蓝框是ROI（右上）。<br>因此，我们得到一个2×2特征补丁，我们可以将其输入分类器和盒子回归器。<br><a name="1f096ba3"></a></p>
+<h3 id="更快的R-CNN"><a href="#更快的R-CNN" class="headerlink" title="更快的R-CNN"></a>更快的R-CNN</h3><p>快速R-CNN依赖于外部区域提议方法，如选择性搜索。但是，这些算法在CPU上运行并且速度很慢。在测试中，快速R-CNN花费2.3秒进行预测，其中2秒用于生成2000个ROI。<br>feature_maps = process（image）<br>ROIs = region_proposal（image）＃贵！<br>投资回报率中的ROI <br>    补丁= roi_pooling（feature_maps，ROI）<br>    结果= detector2（补丁）更快的R-CNN采用与快速R-CNN类似的设计，除了它用内部深度网络替换区域提议方法，而ROI则来自特征映射。新区域提案网络（<strong>RPN</strong>）更高效，并且在生成ROI时每个映像运行10毫秒。</p>
+<p>网络流量与Fast R-CNN相同。<br>网络流程类似，但区域提案现在由卷积网络（RPN）取代。</p>
+<p>外部区域提议由内部深层网络取代。<br><strong>区域提案网络</strong><br>区域提议网络（<strong>RPN</strong>）将来自第一个卷积网络的输出特征映射作为输入。它在特征映射上滑动3×3过滤器，以使用像ZF网络这样的卷积网络（下面）进行类别无关区域提议。其他深度网络如VGG或ResNet可用于以速度为代价进行更全面的特征提取。ZF网络输出256个值，这些值被馈送到2个单独的完全连接的层中以预测边界框和2个对象性得分。该<strong>对象性</strong>测量框是否包含对象。我们可以使用回归量来计算单个对象度得分但是为了简单起见，更快的R-CNN使用具有2个可能类的分类器：一个用于“具有对象”类别而一个用于没有（即背景类别）。</p>
+<p>对于要素图中的每个位置，RPN进行<strong>k</strong>猜测。因此，RPN每个位置输出4×k坐标和2×k分数。下图显示了具有3×3滤波器的8×8特征图，并且它输出总共8×8×3个ROI（对于k = 3）。右侧图表显示了单个位置提出的3个提案。</p>
+<p>在这里，我们得到3个猜测，我们稍后会改进我们的猜测。由于我们只需要一个正确的，如果我们的初步猜测有不同的形状和大小，我们会更好。因此，更快的R-CNN不会提出随机边界框提议。相反，它预测像δx，δy这样的偏移相对于一些称为<strong>锚点的</strong>参考框的左上角。我们限制了那些偏移的值，所以我们的猜测仍然类似于锚点。</p>
+<p>为了对每个位置进行k个预测，我们需要以每个位置为中心的k个锚点。每个预测与特定锚相关联，但不同位置共享相同的锚形状。</p>
+<p>这些锚是经过精心预先选择的，因此它们是多样的，能够很好地覆盖不同尺度和纵横比的真实物体。这可以通过更好的猜测指导初始训练，并允许每个预测专注于某种形状。这种策略使早期训练更加稳定和轻松。<br>更快的R-CNN使用更多的锚点。它配置了9个锚箱：3种不同的比例，3种不同的宽高比。每个位置使用9个锚点，每个位置生成2×9个对象度分数和4×9个坐标。</p>
+<p><a href="https://arxiv.org/pdf/1506.01497.pdf" target="_blank" rel="noopener">资源</a></p>
+<blockquote>
+<p><strong>锚</strong>在不同的论文中也称为&gt; <strong>先验</strong>或&gt; <strong>默认边界框</strong>。<br><a name="89dc102d"></a></p>
+</blockquote>
+<h3 id="R-CNN方法的性能"><a href="#R-CNN方法的性能" class="headerlink" title="R-CNN方法的性能"></a>R-CNN方法的性能</h3><p>如下图所示，更快的R-CNN甚至更快。</p>
+<p><a name="1c4a83c6"></a></p>
+<h3 id="基于区域的完全卷积网络（R-FCN）"><a href="#基于区域的完全卷积网络（R-FCN）" class="headerlink" title="基于区域的完全卷积网络（R-FCN）"></a>基于区域的完全卷积网络（R-FCN）</h3><p>假设我们只有一个特征图检测到脸部的右眼。我们可以用它来定位一张脸吗？这应该。由于右眼应位于面部图片的左上角，我们可以使用它来定位面部。</p>
+<p>如果我们有专门检测左眼，鼻子或嘴巴的其他特征图，我们可以将结果组合在一起以更好地定位脸部。<br>那么我们为什么要经历所有麻烦呢。在更快的R-CNN中，<em>探测器</em>应用多个完全连接的层来进行预测。拥有2,000个投资回报率，价格昂贵。<br>feature_maps =处理（图像）<br>的ROI = region_proposal（feature_maps）<br>用于在感兴趣区ROI <br>    补丁= roi_pooling（feature_maps，ROI）<br>    class_scores，盒=检测器（贴片）＃昂贵！<br>    class_probabilities = softmax（class_scores）R-FCN通过减少每个ROI所需的工作量来提高速度。上面的基于区域的特征图与ROI无关，并且可以在每个ROI之外计算。剩下的工作要简单得多，因此R-FCN比快速R-CNN更快。<br>feature_maps = process（image）<br>ROIs = region_proposal（feature_maps）          <br>score_maps = compute_score_map（feature_maps）<br>ROI中的ROI <br>    V = region_roi_pool（score_maps，ROI）      <br>    class_scores，box = average（V）＃更简单！<br>    class_probabilities = softmax（class_scores）让我们考虑一个5×5的特征映射<strong>M</strong>，里面有一个蓝色方形对象。我们将方形对象平均分成3×3个区域。现在，我们从M创建一个新的特征图，仅检测正方形的左上角（TL）。新功能图看起来像右下方的那个。仅激活黄色<strong>网格单元</strong> [2,2]。</p>
+<p>从左侧创建新的要素图以检测对象的左上角。<br>由于我们将正方形划分为9个部分，我们可以创建9个特征映射，每个特征映射检测对象的相应区域。这些特征图称为<strong>位置敏感分数图，</strong>因为每个图检测（分数）对象的子区域。</p>
+<p>生成9个得分图<br>假设下面的虚线红色矩形是建议的ROI。我们将其划分为3×3个区域，并询问每个区域包含对象的相应部分的可能性。例如，左上角ROI区域包含左眼的可能性有多大。我们将结果存储在右图中的3×3投票数组中。例如，vote_array [0] [0]包含关于我们是否找到方形对象的左上角区域的分数。</p>
+<p>将ROI应用于要素图以输出3 x 3阵列。<br>将得分图和ROI映射到投票数组的过程称为<strong>位置敏感的</strong> <strong>ROI池</strong>。这个过程非常接近我们之前讨论过的ROI池。我们不会进一步介绍它，但您可以参考未来的阅读部分以获取更多信息。</p>
+<p>将ROI的一部分叠加到相应的得分图上以计算V [i] [j]<br>计算位置敏感ROI池的所有值后，类别分数是其所有元素的平均值。</p>
+<p>投资回报率池<br>假设我们有<strong>C</strong>类要检测。我们将它扩展为C + 1类，因此我们为背景（非对象）添加了一个新类。每个班级都有自己的3×3分数图，因此总共有（C + 1）×3×3分数图。使用自己的一组得分图，我们预测每个班级的班级得分。然后我们在这些分数上应用softmax来计算每个类的概率。<br>以下是数据流。对于我们的例子，我们下面有k = 3。</p>
+<p><a name="f64e8873"></a></p>
+<h3 id="我们的旅程到目前为止"><a href="#我们的旅程到目前为止" class="headerlink" title="我们的旅程到目前为止"></a>我们的旅程到目前为止</h3><p>我们从基本的滑动窗口算法开始。<br>窗口中的窗口<br>    patch = get_patch（图像，窗口）<br>    结果=检测器（补丁）然后我们尝试减少窗口的数量，并在for循环之外移动尽可能多的工作。<br>投资回报率= <br>ROI中投资回报率的区域提示（图像）<br>    补丁= get_patch（图像，投资回报率）<br>    结果=检测器（补丁）在<a href="https://medium.com/@jonathan_hui/what-do-we-learn-from-single-shot-object-detectors-ssd-yolo-fpn-focal-loss-3888677c5f4d" target="_blank" rel="noopener">第2部分中</a>，我们进一步完全删除了for循环。单发探测器可在单次射击中进行物体探测，无需单独的区域建议步骤。<br><a name="b4412bfb"></a></p>
+<h3 id="进一步阅读FPN，R-FCN和Mask-R-CNN"><a href="#进一步阅读FPN，R-FCN和Mask-R-CNN" class="headerlink" title="进一步阅读FPN，R-FCN和Mask R-CNN"></a>进一步阅读FPN，R-FCN和Mask R-CNN</h3><p>FPN和R-FCN都比我们在此描述的更复杂。如需进一步研究，请参阅：</p>
+<ul>
+<li><a href="https://medium.com/@jonathan_hui/understanding-feature-pyramid-networks-for-object-detection-fpn-45b227b9106c" target="_blank" rel="noopener">用于对象检测的特征金字塔网络（FPN）。</a></li>
+<li><a href="https://medium.com/@jonathan_hui/understanding-region-based-fully-convolutional-networks-r-fcn-for-object-detection-828316f07c99" target="_blank" rel="noopener">基于区域的完全卷积网络（R-FCN）</a>。</li>
+</ul>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/01/31/yuque/我们从基于区域的物体探测器（更快的R-CNN，R-FCN，FPN）中学到了什么？/">展开全文 >></a>
         </p>
       
 
