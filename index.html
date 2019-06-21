@@ -269,14 +269,14 @@
 <li><p>在GPU上以5 FPS进行推理</p>
 </li>
 <li>使用VGG后端，在ImageNet和COCO上进行预训练，在VOC上Faster RCNN达到了73.2％的mAP。</li>
-<li>在COCO数据集上，Faster R-CNN达到了21.9 mAP(coco类型)。<br><a name="7b52"></a><h3 id="功能金字塔网络"><a href="#功能金字塔网络" class="headerlink" title="功能金字塔网络"></a><a href="https://arxiv.org/abs/1612.03144" target="_blank" rel="noopener">功能金字塔网络</a></h3>在这一行中，研究人员观察到Faster R-CNN存在两个问题。首先它无法检测到小物体，第二类不平衡没有正确聚焦(随机采样256个样本和计算损失不是正确的方法)。因此研究引入了两个新概念</li>
+<li>在COCO数据集上，Faster R-CNN达到了21.9 mAP(coco类型)。<br><a name="7b52"></a><h3 id="金字塔特征网络"><a href="#金字塔特征网络" class="headerlink" title="金字塔特征网络"></a><a href="https://arxiv.org/abs/1612.03144" target="_blank" rel="noopener">金字塔特征网络</a></h3>在这一行中，研究人员观察到Faster R-CNN存在两个问题。首先它无法检测到小物体，第二类不平衡没有正确聚焦(随机采样256个样本和计算损失不是正确的方法)。因此研究引入了两个新概念</li>
 </ul>
 <ol>
-<li>特征金字塔网络(<a href="https://arxiv.org/abs/1612.03144" target="_blank" rel="noopener">FPN</a>)</li>
+<li>金字塔特征网络(<a href="https://arxiv.org/abs/1612.03144" target="_blank" rel="noopener">FPN</a>)</li>
 <li><a href="https://arxiv.org/abs/1708.02002" target="_blank" rel="noopener">焦点损失</a>(针对极端不平衡问题)</li>
 </ol>
 <p>我们将在这里简要讨论这两种技术。<br><a name="789a"></a></p>
-<h4 id="功能金字塔网络-Feature-Pyramid-networks"><a href="#功能金字塔网络-Feature-Pyramid-networks" class="headerlink" title="功能金字塔网络(Feature Pyramid networks)"></a>功能金字塔网络(Feature Pyramid networks)</h4><p>如果你看一下Faster RCNN，它几乎无法捕捉到图像中的小物体。COCO和ILSVRC主要通过大多数获胜团队使用图像金字塔来解决这个问题。下面给出了一个简单的图像金字塔，您可以将图像缩放到不同的大小并将其发送到网络。一旦在每个比例上检测到检测，所有预测都将使用不同的方法进行组合。虽然这种方法有效，但推理是一个代价高昂的过程，因为每个图像应该独立地以各种比例计算。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1561020808974-ef0abca1-b15e-4d65-af23-8d50f74823da.png#align=left&amp;display=inline&amp;height=459&amp;name=1_8PysKHFIl1nII7V-dwTaCQ.png&amp;originHeight=459&amp;originWidth=1500&amp;size=114581&amp;status=done&amp;width=1500" alt="1_8PysKHFIl1nII7V-dwTaCQ.png"><br>深层ConvNet逐层计算特征层次结构，对于子采样层，特征层次结构具有固有的多尺度金字塔形状。此网内特征层次结构生成不同空间分辨率的特征映射。首先让我们看看FPN是如何工作的，之后我们将进入直觉部分。</p>
+<h4 id="金字塔特征网络-Feature-Pyramid-networks"><a href="#金字塔特征网络-Feature-Pyramid-networks" class="headerlink" title="金字塔特征网络(Feature Pyramid networks)"></a>金字塔特征网络(Feature Pyramid networks)</h4><p>如果你看一下Faster RCNN，它几乎无法捕捉到图像中的小物体。COCO和ILSVRC主要通过大多数获胜团队使用图像金字塔来解决这个问题。下面给出了一个简单的图像金字塔，您可以将图像缩放到不同的大小并将其发送到网络。一旦在每个比例上检测到目标，所有预测都将使用不同的方法进行组合。虽然这种方法有效，但推理是一个代价高昂的过程，因为每个图像应该独立地以各种比例计算。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1561020808974-ef0abca1-b15e-4d65-af23-8d50f74823da.png#align=left&amp;display=inline&amp;height=459&amp;name=1_8PysKHFIl1nII7V-dwTaCQ.png&amp;originHeight=459&amp;originWidth=1500&amp;size=114581&amp;status=done&amp;width=1500" alt="1_8PysKHFIl1nII7V-dwTaCQ.png"><br>深层ConvNet逐层计算特征层次结构，对于子采样层，特征层次结构具有固有的多尺度金字塔形状。此网内特征层次结构生成不同空间分辨率的特征映射。首先让我们看看FPN是如何工作的，之后我们将进入直觉部分。</p>
 <ul>
 <li>首先采用标准的resnet架构(Ex ResNet50)。在上面讨论的Faster R-CNN中，我们考虑仅采用子采样率16的特征图来计算区域提议，然后将RPN输出传递给Fast RCNN。这是通过以下方式完成的，</li>
 </ul>
