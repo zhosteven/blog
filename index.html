@@ -190,7 +190,7 @@
 </ul>
 <p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1561010426052-93895676-c858-43d5-ba3f-cc5c92603799.png#align=left&amp;display=inline&amp;height=322&amp;name=1_0S3dZGri0zAbt4tFSn5k0w.png&amp;originHeight=322&amp;originWidth=1000&amp;size=429014&amp;status=done&amp;width=1000" alt="1_0S3dZGri0zAbt4tFSn5k0w.png"></p>
 <ul>
-<li>确保准确提取功能，他们使用这些扭曲的图像训练网络。在培训VOC数据集时，他们在最后放置20 + 1(n_class +背景)层并训练网络。每个批次大小包含32个正面窗口和96个背景窗口。如果地面真值框的IoU≥0.5，则称地区建议为正。通常从2幅图像(批量大小)中获取这128个(32 + 96)个提案。由于每张图像将有~2k个建议，我们分别对正图像和负图像(背景)图像进行采样。我们使用<strong>选择性搜索</strong>来生成这些提议。</li>
+<li>确保准确提取功能，他们使用这些扭曲的图像训练网络。在训练VOC数据集时，他们在最后放置20 + 1(n_class +背景)层并训练网络。每个批次大小包含32个正面窗口和96个背景窗口。如果地面真值框的IoU≥0.5，则称地区建议为正。通常从2幅图像(批量大小)中获取这128个(32 + 96)个提案。由于每张图像将有~2k个建议，我们分别对正图像和负图像(背景)图像进行采样。我们使用<strong>选择性搜索</strong>来生成这些提议。</li>
 <li>在对网络进行微调之后，我们将通过网络发送提议并获得4096 dim矢量。本文的作者对IOU进行了网格搜索以选择正样本，0.3的IOU对他们来说效果很好。</li>
 <li>对于每个目标类，训练SVM(一个与另一个)分类器。您可以使用硬负挖掘来提高分类准确性。</li>
 <li><p>我们还训练了一个边界框回归器，以改善本地化错误。一旦特定于类的SVM分类器对目标进行分类，这将应用于提议。<br><a name="e539"></a></p>
@@ -202,7 +202,7 @@
 <p>这种方法的主要问题是：</p>
 <ul>
 <li>向神经网络发送约2000个提议，从而使GPU上的测试时间达到13秒。</li>
-<li>用于培训和推理的复杂管道。没有端到端的培训渠道。神经网络是单独训练的，SVM分类器是单独训练的(这些在SPP网中稍微克服)<br><a name="f664"></a><h3 id="SPP-net"><a href="#SPP-net" class="headerlink" title="SPP-net"></a><a href="https://arxiv.org/pdf/1406.4729.pdf" target="_blank" rel="noopener">SPP-net</a></h3>R-CNN的主要问题是通过将每个提议分别传递给网络来单独计算〜2000个提案的特征向量。此外，当将图像传递到VGG-net时，我们需要一个固定大小的图像形状(224*224)，为了实现我们要么扭曲或裁剪图像，SPP使用空间金字塔池图层去除这个约束。我们将在本节中研究这两件事。<br><a name="81ca"></a><h4 id="空间金字塔汇集层"><a href="#空间金字塔汇集层" class="headerlink" title="空间金字塔汇集层"></a>空间金字塔汇集层</h4>这不是特定于目标检测，但通常有助于训练任何神经网络。每个CNN都采用固定大小的图像，因为末端FC层需要相同大小的输入。这可以通过以下示例来理解<br>假设输入大小为224图像大小，conv5(最后一个转换层)具有13<em>13特征映射，而另一个输入大小为180，则conv5层的大小现在为10</em>10。如果应用2<em>2的简单池，输出大小将分别为7</em>7和5<em>5，输入大小分别为224和180。转换这将转换网络将给出49</em>256(256个特征映射)和25<em>256大小的层到底。附加到FC层的权重矩阵无法对此起作用，因为它需要固定的特征向量。所以SPP层进入我们的救援阶段，我们使用l级的金字塔池层。<br>假设要素图的大小是</em> a和金字塔等级n*n。步幅是地板(a/n)，窗口大小是ceil(a/n)。对于金字塔等级3，我们有3x3,2x2,1x1的箱子。下图显示了进一步的计算。<br><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1561010486538-ec367dd4-c5b6-4773-ae48-56bde04735a5.jpeg#align=left&amp;display=inline&amp;height=562&amp;name=1_-QaRvqJ9m_Lf00CxxQgbIA.jpeg&amp;originHeight=562&amp;originWidth=1000&amp;size=31951&amp;status=done&amp;width=1000" alt="1_-QaRvqJ9m_Lf00CxxQgbIA.jpeg"><br>出于计算目的，它们仅在每个时期之后改变了大小。虽然SPP很好，但现在这些都已经过时了，全球平均汇集层也占据了一席之地。<br><a name="addd"></a><h4 id="SPP-Net用于目标检测"><a href="#SPP-Net用于目标检测" class="headerlink" title="SPP-Net用于目标检测"></a>SPP-Net用于目标检测</h4>由于特征提取是测试中的主要时间瓶颈，因此在SPP-Net中，作者在整个图像上应用CNN网络并提取特征图(conv5)，输入大小为416x416(他们实际上在训练网络时使用了5个等级)conv5处的特征映射大小为26*26(二次采样为16)。<br>接下来，我们将使用选择性搜索生成约2000个提案。对于每个提议，我们需要从要素图中提取固定长度的要素向量。这通过以下方式应用。</li>
+<li>用于训练和推理的复杂管道。没有端到端的训练渠道。神经网络是单独训练的，SVM分类器是单独训练的(这些在SPP网中稍微克服)<br><a name="f664"></a><h3 id="SPP-net"><a href="#SPP-net" class="headerlink" title="SPP-net"></a><a href="https://arxiv.org/pdf/1406.4729.pdf" target="_blank" rel="noopener">SPP-net</a></h3>R-CNN的主要问题是通过将每个提议分别传递给网络来单独计算〜2000个提案的特征向量。此外，当将图像传递到VGG-net时，我们需要一个固定大小的图像形状(224*224)，为了实现我们要么扭曲或裁剪图像，SPP使用空间金字塔池图层去除这个约束。我们将在本节中研究这两件事。<br><a name="81ca"></a><h4 id="空间金字塔汇集层"><a href="#空间金字塔汇集层" class="headerlink" title="空间金字塔汇集层"></a>空间金字塔汇集层</h4>这不是特定于目标检测，但通常有助于训练任何神经网络。每个CNN都采用固定大小的图像，因为末端FC层需要相同大小的输入。这可以通过以下示例来理解<br>假设输入大小为224图像大小，conv5(最后一个转换层)具有13<em>13特征映射，而另一个输入大小为180，则conv5层的大小现在为10</em>10。如果应用2<em>2的简单池，输出大小将分别为7</em>7和5<em>5，输入大小分别为224和180。转换这将转换网络将给出49</em>256(256个特征映射)和25<em>256大小的层到底。附加到FC层的权重矩阵无法对此起作用，因为它需要固定的特征向量。所以SPP层进入我们的救援阶段，我们使用l级的金字塔池层。<br>假设要素图的大小是</em> a和金字塔等级n*n。步幅是地板(a/n)，窗口大小是ceil(a/n)。对于金字塔等级3，我们有3x3,2x2,1x1的箱子。下图显示了进一步的计算。<br><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1561010486538-ec367dd4-c5b6-4773-ae48-56bde04735a5.jpeg#align=left&amp;display=inline&amp;height=562&amp;name=1_-QaRvqJ9m_Lf00CxxQgbIA.jpeg&amp;originHeight=562&amp;originWidth=1000&amp;size=31951&amp;status=done&amp;width=1000" alt="1_-QaRvqJ9m_Lf00CxxQgbIA.jpeg"><br>出于计算目的，它们仅在每个时期之后改变了大小。虽然SPP很好，但现在这些都已经过时了，全球平均汇集层也占据了一席之地。<br><a name="addd"></a><h4 id="SPP-Net用于目标检测"><a href="#SPP-Net用于目标检测" class="headerlink" title="SPP-Net用于目标检测"></a>SPP-Net用于目标检测</h4>由于特征提取是测试中的主要时间瓶颈，因此在SPP-Net中，作者在整个图像上应用CNN网络并提取特征图(conv5)，输入大小为416x416(他们实际上在训练网络时使用了5个等级)conv5处的特征映射大小为26*26(二次采样为16)。<br>接下来，我们将使用选择性搜索生成约2000个提案。对于每个提议，我们需要从要素图中提取固定长度的要素向量。这通过以下方式应用。</li>
 </ul>
 <p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1561010526695-177077b4-c97d-41c7-bd8c-18d2c281d3c8.jpeg#align=left&amp;display=inline&amp;height=562&amp;name=1_NmF0oY3mtNZi4vIw_HT5BA.jpeg&amp;originHeight=562&amp;originWidth=1000&amp;size=32340&amp;status=done&amp;width=1000" alt="1_NmF0oY3mtNZi4vIw_HT5BA.jpeg"><br>现在，在每个提议获得固定长度的特征向量之后，我们可以使用与R-CNN中相同的技术训练SVM分类器。<br><a name="b017"></a></p>
 <h4 id="结果"><a href="#结果" class="headerlink" title="结果"></a>结果</h4><ul>
@@ -210,7 +210,7 @@
 <li>单一规模的SPP网络推断需要0.053秒，而R-CNN则为14.37秒。在5级，它需要0.29秒，仍然快49倍。<br><a name="c3ed"></a><h3 id="Fast-R-CNN"><a href="#Fast-R-CNN" class="headerlink" title="Fast R-CNN"></a><a href="https://arxiv.org/pdf/1504.08083.pdf" target="_blank" rel="noopener">Fast R-CNN</a></h3>本文提供了突破性的结果，并为随后的接近标准设定了标准。<br><a name="6d98"></a><h4 id="Fast-R-CNN对SPP-Net带来的主要差异是"><a href="#Fast-R-CNN对SPP-Net带来的主要差异是" class="headerlink" title="Fast R-CNN对SPP-Net带来的主要差异是"></a>Fast R-CNN对SPP-Net带来的主要差异是</h4></li>
 </ul>
 <ol>
-<li>删除了SVM分类器并将回归和分类层添加到网络中。从而使其成为单阶段培训和推理网络</li>
+<li>删除了SVM分类器并将回归和分类层添加到网络中。从而使其成为单阶段训练和推理网络</li>
 <li>删除SPP池层并将其与ROI池层连接。</li>
 <li>使用VGGNet作为后端而不是SPP-Net使用的ZFNet。</li>
 <li>建立对异常值不太敏感的新损失函数。<br><a name="04e3"></a><h4 id="Fast-R-CNN网络以下列方式工作"><a href="#Fast-R-CNN网络以下列方式工作" class="headerlink" title="Fast R-CNN网络以下列方式工作"></a>Fast R-CNN网络以下列方式工作</h4></li>
@@ -366,7 +366,7 @@
 <p>\ lambda_coord和\ lambda_noobj分别为5和0.5。<br>根据我的经验，为我自己的数据集正确地获得这种损失功能成了一场噩梦。可能是这些损失函数被调整为适用于此数据集，并且可能适用于具有类似分布的数据集。当您使用其他数据集时，它可能会严重失败。我将在从头开始构建目标检测管道时，就我遇到的问题再做一篇博文。<br><a name="3ebd"></a></p>
 <h4 id="训练-1"><a href="#训练-1" class="headerlink" title="训练"></a>训练</h4><ul>
 <li>DarkNet首先在Imagenet上进行预训练以进行分类。前5名的准确率为88％。由于检测需要细粒度信息，因此他们使用了448x448图像而不是224x224图像。他们发现初始时期的误差很高，并认为可能是因为图像尺寸的变化。所以他们在前几个时期使用448x448再次训练了imagenet上的网络，然后转移到了voc数据集。</li>
-<li>该网络后来接受了关于VOC-2007和2012年数据集的135个时期的培训。在整个训练过程中，他们使用了64的batch_size，0.9的动量和0.0005的衰减。学习速率表如下：对于第一个时期，他们将学习速率从10 ^ -3缓慢提高到10 ^ -2。继续训练10 ^ -2为75个时期，然后10 ^ -3为30个时期，最后为10 ^ -4为30个时期。</li>
+<li>该网络后来接受了关于VOC-2007和2012年数据集的135个时期的训练。在整个训练过程中，他们使用了64的batch_size，0.9的动量和0.0005的衰减。学习速率表如下：对于第一个时期，他们将学习速率从10 ^ -3缓慢提高到10 ^ -2。继续训练10 ^ -2为75个时期，然后10 ^ -3为30个时期，最后为10 ^ -4为30个时期。</li>
 <li>为避免过度拟合，他们使用了丢失和大量数据扩充。在我们的例子中，我们也使用了批量标准化。</li>
 <li><p>对于数据增强，他们使用了最多20％的原始图像大小的随机缩放和翻译。它们还在HSV颜色空间中随机调整图像的曝光和饱和度达1.5倍。<br><a name="ed6d"></a></p>
 <h4 id="结果-4"><a href="#结果-4" class="headerlink" title="结果"></a>结果</h4></li>
@@ -388,7 +388,7 @@
 </ul>
 <p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1561024700090-5bb94140-820b-4b0b-81b5-5332f13e5e1c.png#align=left&amp;display=inline&amp;height=226&amp;name=1_Lyi8hEXHzNciV4mGzHEMOw.png&amp;originHeight=226&amp;originWidth=508&amp;size=21192&amp;status=done&amp;width=508" alt="1_Lyi8hEXHzNciV4mGzHEMOw.png"></p>
 <ul>
-<li><p>多规模培训。而不是修复输入图像大小我们每隔几次迭代就会改变网络。每10批次我们的网络随机选择一个新的图像尺寸大小。由于我们的模型下采样的因子为32，我们从以下的32的倍数中拉出：{320,352，…，608}。因此最小的选项是320×320，最大的是608×608。我们将网络调整到该维度并继续培训。<br><a name="dda4"></a></p>
+<li><p>多规模训练。而不是修复输入图像大小我们每隔几次迭代就会改变网络。每10批次我们的网络随机选择一个新的图像尺寸大小。由于我们的模型下采样的因子为32，我们从以下的32的倍数中拉出：{320,352，…，608}。因此最小的选项是320×320，最大的是608×608。我们将网络调整到该维度并继续训练。<br><a name="dda4"></a></p>
 <h4 id="Yolov3"><a href="#Yolov3" class="headerlink" title="Yolov3"></a><a href="https://arxiv.org/abs/1804.02767" target="_blank" rel="noopener">Yolov3</a></h4><p>Yolov3论文很有趣，我们将在这里重点介绍最重要的内容。</p>
 </li>
 <li><p>Yolov3达到33.4 <a href="mailto:IOU@0.5" target="_blank" rel="noopener">IOU@0.5</a>：0.95 mAP和57.9 <a href="mailto:IOU@0.5" target="_blank" rel="noopener">IOU@0.5</a> mAP。作者深入研究了为什么我们改变了指标并支持<a href="mailto:IOU@0.5" target="_blank" rel="noopener">IOU@0.5</a>(VOC风格)。使用VOC风格的mAP，Yolov3非常强大</p>
