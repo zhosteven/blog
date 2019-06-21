@@ -149,171 +149,29 @@
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-yuque/PySpark ML和XGBoost完全集成在Kaggle Titanic数据集上进行了测试" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-yuque/机器学习算法之Catboost" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/23/yuque/PySpark ML和XGBoost完全集成在Kaggle Titanic数据集上进行了测试/">PySpark ML和XGBoost完全集成在Kaggle Titanic数据集上进行了测试</a>
+      <a class="article-title" href="/2019/04/23/yuque/机器学习算法之Catboost/">机器学习算法之Catboost</a>
     </h1>
   
 
         
-        <a href="/2019/04/23/yuque/PySpark ML和XGBoost完全集成在Kaggle Titanic数据集上进行了测试/" class="archive-article-date">
-  	<time datetime="2019-04-23T08:24:24.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-23</time>
+        <a href="/2019/04/23/yuque/机器学习算法之Catboost/" class="archive-article-date">
+  	<time datetime="2019-04-23T08:19:07.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-23</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>在本教程中，我们将讨论使用标准机器学习管道集成PySpark和XGBoost。我们将使用来自<a href="https://www.kaggle.com/c/titanic/data" target="_blank" rel="noopener">泰坦尼克号的</a>数据<a href="https://www.kaggle.com/c/titanic/data" target="_blank" rel="noopener">：机器学习灾难</a>中的众多Kaggle比赛之一。在开始之前，请知道您应该熟悉<a href="https://spark.apache.org/" target="_blank" rel="noopener">Apache Spark</a>和<a href="http://xgboost.readthedocs.io/en/latest/get_started/" target="_blank" rel="noopener">Xgboost</a>以及Python。本教程中使用的代码可以在<a href="https://github.com/BogdanCojocar/medium-articles/blob/master/titanic_xgboost/titanic_xgboost.ipynb" target="_blank" rel="noopener">github</a>上的Jupyther笔记本中找到。</p>
+        <p>CatBoost是俄罗斯的搜索巨头Yandex在2017年开源的机器学习库，是Gradient Boosting(梯度提升) + Categorical Features(类别型特征)，也是基于梯度提升决策树的机器学习框架。<br>
         
-          <a class="article-more-a" href="/2019/04/23/yuque/PySpark ML和XGBoost完全集成在Kaggle Titanic数据集上进行了测试/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/04/23/yuque/PySpark ML和XGBoost完全集成在Kaggle Titanic数据集上进行了测试/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/使用MLflow赋予Spark功能" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/23/yuque/使用MLflow赋予Spark功能/">使用MLflow赋予Spark功能</a>
-    </h1>
-  
-
-        
-        <a href="/2019/04/23/yuque/使用MLflow赋予Spark功能/" class="archive-article-date">
-  	<time datetime="2019-04-23T08:23:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-23</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>这篇文章旨在介绍我们使用<a href="https://mlflow.org/" target="_blank" rel="noopener"><strong>MLflow</strong></a>的初步经验。<br>我们将通过记录所有探索性迭代，开始使用自己的<a href="https://mlflow.org/docs/latest/tracking.html" target="_blank" rel="noopener">跟踪服务器</a>发现MLflow 。然后，我们将展示使用UDF将Spark与MLflow相关联的经验。<br></p>
-<p><a href></a><br><a name="50f198f0"></a></p>
-<h4 id="上下文"><a href="#上下文" class="headerlink" title="上下文"></a>上下文</h4><p>我们利用机器学习和人工智能的力量，使人们能够控制自己的健康和福祉。机器学习模型因此是我们正在开发的数据产品的核心，这就是为什么MLFLow，一个涵盖ML生命周期所有方面的开源平台引起了我们的注意。<br></p>
-<p><a name="MLflow"></a></p>
-<h3 id="MLflow"><a href="#MLflow" class="headerlink" title="MLflow"></a>MLflow</h3><p>MLflow的主要目标是在ML之上提供额外的层，允许数据科学家与几乎任何机器学习库（<a href="https://github.com/h2oai" target="_blank" rel="noopener"><em>h2o，</em></a><a href="https://keras.io/" target="_blank" rel="noopener"><em>keras，</em></a><a href="http://mleap-docs.combust.ml/" target="_blank" rel="noopener"><em>mleap，</em></a><a href="https://pytorch.org/" target="_blank" rel="noopener"><em>pytorch，</em></a><a href="http://scikit-learn.org/stable/" target="_blank" rel="noopener"><em>sklearn和</em></a><a href="https://www.tensorflow.org/" target="_blank" rel="noopener"><em>tensorflow</em></a>）一起工作，同时，它将他们的工作带到另一个层次。<br>MLflow提供三个组件：</p>
-<ul>
-<li><a href="https://mlflow.org/docs/latest/tracking.html" target="_blank" rel="noopener"><strong>跟踪</strong></a>  - 记录和查询实验：代码，数据，配置和结果。跟踪建模进度非常有用。</li>
-<li><a href="https://mlflow.org/docs/latest/projects.html" target="_blank" rel="noopener"><strong>项目</strong></a>  - 在任何平台（<strong>_即_</strong> <a href="https://aws.amazon.com/sagemaker" target="_blank" rel="noopener"><em>Sagemaker</em></a>）上可重复运行的包装格式。</li>
-<li><a href="https://mlflow.org/docs/latest/models.html" target="_blank" rel="noopener"><strong>模型</strong></a>  - 将模型发送到各种部署工具的通用格式。</li>
-</ul>
-<blockquote>
-<p><strong>MLflow</strong>（目前处于alpha版本）是一个管理ML生命周期的开源平台，包括实验，可重复性和部署。<br></p>
-</blockquote>
-        
-          <a class="article-more-a" href="/2019/04/23/yuque/使用MLflow赋予Spark功能/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/04/23/yuque/使用MLflow赋予Spark功能/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/12产品管理的行为数据类型" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/23/yuque/12产品管理的行为数据类型/">12产品管理的行为数据类型</a>
-    </h1>
-  
-
-        
-        <a href="/2019/04/23/yuque/12产品管理的行为数据类型/" class="archive-article-date">
-  	<time datetime="2019-04-23T08:23:02.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-23</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>行为数据，描述观察到的用户或客户行为的数据，可以让您真正了解人们如何或将来可能使用您的产品。听到人们说他们想要的东西是一回事，但看看他们的实际表现会更好。<br>获得比您想象的行为数据更容易。无论您是在进行研究，运行实验来验证假设或功能，还是您刚刚发布了一项功能，行为数据都是您最好的，可以说是最有信息量的朋友。<br>本文旨在通过向您提供产品团队可用的所有类型的行为数据列表来帮助您。希望它提供了一些新的选项，如果您尝试使用数据来推动团队的决策，您可以考虑这些选项。<br>
-        
-          <a class="article-more-a" href="/2019/04/23/yuque/12产品管理的行为数据类型/#more">more >></a>
+          <a class="article-more-a" href="/2019/04/23/yuque/机器学习算法之Catboost/#more">more >></a>
         
       
 
@@ -326,474 +184,7 @@
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2019/04/23/yuque/12产品管理的行为数据类型/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/XGBoost算法:长期可能在位！" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/23/yuque/XGBoost算法:长期可能在位！/">XGBoost算法:长期可能在位！</a>
-    </h1>
-  
-
-        
-        <a href="/2019/04/23/yuque/XGBoost算法:长期可能在位！/" class="archive-article-date">
-  	<time datetime="2019-04-23T08:22:24.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-23</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1554692595416-69c4133a-0fb6-4ae5-b308-642403bd2216.png#align=left&amp;display=inline&amp;height=521&amp;name=1.png&amp;originHeight=699&amp;originWidth=1000&amp;size=991609&amp;status=done&amp;width=746" alt="1.png"><br>我还记得十五年前我第一份工作的第一天。我刚完成研究生课程，并以分析师的身份加入了一家全球投资银行。在我的第一天，我一直拉直领带，并试着记住我学过的一切。与此同时，在内心深处，我想知道我是否对企业界足够好。感觉到我的焦虑，我的老板微笑着说：<br><em>“别担心！你唯一需要知道的就是回归建模！“</em><br>我记得自己在想，“我得到了这个！”。我知道回归建模; 线性和逻辑回归。我的老板是对的。在我任职期间，我专门建立了基于回归的统计模型。我并不孤单。事实上，在那个时候，回归建模是无可争议的预测分析女王。快进十五年，回归建模的时代已经结束。老女王已经过去了。新女王的名字很长，名字很久; XGBoost或Extreme Gradient Boosting！<br>
-        
-          <a class="article-more-a" href="/2019/04/23/yuque/XGBoost算法:长期可能在位！/#more">more >></a>
-        
-      
-
-      
-    </p></div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/04/23/yuque/XGBoost算法:长期可能在位！/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/webhook实现服务器自动部署" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/23/yuque/webhook实现服务器自动部署/">webhook实现服务器自动部署</a>
-    </h1>
-  
-
-        
-        <a href="/2019/04/23/yuque/webhook实现服务器自动部署/" class="archive-article-date">
-  	<time datetime="2019-04-23T08:21:44.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-23</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><code>Webhook</code>是一种通过自定义回调函数来增加或更改網頁表现的方法。这些回调可被可能与原始网站或应用相关的第三方用户及开发者保存、修改与管理。术语“网络钩子”由杰夫·林德塞（Jeff Lindsay）于2007年通过给计算机编程术语“钩子”（Hook）加上前缀得。<br>网络钩子是“用户定义的HTTP回调”。网络钩子通常被某些事件激活，比如将代码推送到源[3]或评论博客。.[4]当此事件发生时，原网站将向为网络钩子配置的URL发送HTTP请求。用户可配置它们引发网页上的事件以调用另一个网站的行为。此操作可为任何事件。<br>本片博客介绍一个简单的<code>github</code>中的<code>webhook</code>自动部署<code>hexo</code>博客。<br><a name="c4e6712f"></a></p>
-<h3 id="服务器安装依赖git，hexo，node，npm"><a href="#服务器安装依赖git，hexo，node，npm" class="headerlink" title="服务器安装依赖git，hexo，node，npm"></a>服务器安装依赖git，hexo，node，npm</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">apt install git</span><br><span class="line">apt install nodejs</span><br><span class="line">apt install npm</span><br><span class="line">npm i -g hexo</span><br></pre></td></tr></table></figure>
-<p><a name="712b29e8"></a></p>
-<h3 id="创建一个webhook-js"><a href="#创建一个webhook-js" class="headerlink" title="创建一个webhook.js"></a>创建一个webhook.js</h3><figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">var http = <span class="keyword">require</span>(<span class="string">'http'</span>);</span><br><span class="line">var exec = <span class="keyword">require</span>(<span class="string">'child_process'</span>).exec;</span><br><span class="line"></span><br><span class="line">http.createServer(function (req, res) &#123;</span><br><span class="line">    <span class="keyword">if</span>(req.url === <span class="string">'/webhooks/push/1'</span>) &#123; <span class="regexp">//</span>定义webhook地址</span><br><span class="line">        exec(<span class="string">'sh ./webhook.sh'</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    res.<span class="keyword">end</span>();</span><br><span class="line">&#125;).listen(<span class="number">9999</span>)</span><br><span class="line">console.log(<span class="string">'we are in 9999'</span>);</span><br></pre></td></tr></table></figure>
-<p><a name="e57a0d46"></a></p>
-<h3 id="创建webhook-sh脚本，执行pull，编译等操作"><a href="#创建webhook-sh脚本，执行pull，编译等操作" class="headerlink" title="创建webhook.sh脚本，执行pull，编译等操作"></a>创建webhook.sh脚本，执行pull，编译等操作</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">'begin'</span> &gt; ../1.txt</span><br><span class="line"><span class="built_in">cd</span> /usr/share/nginx/blog</span><br><span class="line">git pull</span><br><span class="line">npm run hook</span><br><span class="line">cp -r /usr/share/nginx/blog/public/* /usr/share/nginx/ninesix.cc/</span><br><span class="line"><span class="built_in">echo</span> <span class="string">'end'</span> &gt;&gt; ../1.txt</span><br></pre></td></tr></table></figure>
-<p><a name="a165d47a"></a></p>
-<h3 id="使用pm2启动webhook服务"><a href="#使用pm2启动webhook服务" class="headerlink" title="使用pm2启动webhook服务"></a>使用pm2启动webhook服务</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">npm i -g pm2</span><br><span class="line">pm2 start webhook.js</span><br></pre></td></tr></table></figure>
-<p><a name="dd496f4d"></a></p>
-<h3 id="把webhook地址写到github的项目设置中"><a href="#把webhook地址写到github的项目设置中" class="headerlink" title="把webhook地址写到github的项目设置中"></a>把webhook地址写到github的项目设置中</h3><p><code>http://ip:9999/webhooks/push/1</code><br>github会测试发送，成功之后会显示绿色对勾.<br><a name="912951c4"></a></p>
-<h4 id="https-www-yuque-com-yuque-developer-doc-webhook"><a href="#https-www-yuque-com-yuque-developer-doc-webhook" class="headerlink" title="https://www.yuque.com/yuque/developer/doc-webhook"></a><a href="https://www.yuque.com/yuque/developer/doc-webhook" target="_blank" rel="noopener">https://www.yuque.com/yuque/developer/doc-webhook</a></h4><p>apt install git<br>apt install nodejs<br>apt install npm<br>npm i -g hexo</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/04/23/yuque/webhook实现服务器自动部署/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/使用分类数据" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/23/yuque/使用分类数据/">使用分类数据</a>
-    </h1>
-  
-
-        
-        <a href="/2019/04/23/yuque/使用分类数据/" class="archive-article-date">
-  	<time datetime="2019-04-23T08:19:46.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-23</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1554709233823-57e9c2f7-90ef-44ea-94bd-fea23e2d2379.jpeg#align=left&amp;display=inline&amp;height=497&amp;name=1_Z4AtdMlAJHI9ad-qv3VufQ.jpeg&amp;originHeight=666&amp;originWidth=1000&amp;size=180607&amp;status=done&amp;width=746" alt="1_Z4AtdMlAJHI9ad-qv3VufQ.jpeg"><br>来自社会科学，我习惯于使用具有几个分类变量的数据集。这些通常是实验条件（控制与干预），性别（女性与男性）或国籍（荷兰与德国对比利时对比其他）。但作为<a href="http://methoddatascience.com/" target="_blank" rel="noopener">方法数据科学社区</a>第2周练习的一部分<a href="http://methoddatascience.com/" target="_blank" rel="noopener">，</a>我的团队正在解决一个带有许多分类变量的Kaggle挑战。由于我的笔记本电脑仍在使用单热编码，因此需要一种不同的解决方案。我的团队成员<a href="https://medium.com/@chris.dinant" target="_blank" rel="noopener">Chris Dinant</a>已经建议将<a href="https://tech.yandex.com/catboost/" target="_blank" rel="noopener">Catboost</a>作为处理分类数据的一种方式。这篇文章将深入研究这种方法，解释可以应用它的情况，以及如何应用它。<br>
-        
-          <a class="article-more-a" href="/2019/04/23/yuque/使用分类数据/#more">more >></a>
-        
-      
-
-      
-    </p></div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/04/23/yuque/使用分类数据/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/从Alexa的错误中学习" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/23/yuque/从Alexa的错误中学习/">从Alexa的错误中学习</a>
-    </h1>
-  
-
-        
-        <a href="/2019/04/23/yuque/从Alexa的错误中学习/" class="archive-article-date">
-  	<time datetime="2019-04-23T08:18:29.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-23</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><em>虽然亚马逊的“唤醒词”功能可以改善隐私，但它提出了自己的挑战，例如Alexa录制私人谈话并未经同意将其发送出去。</em><br>通过<a href="https://www.pcmag.com/author-bio/ben-dickson" target="_blank" rel="noopener">本迪克森</a><br>Amazon Echo设备最近<a href="https://www.pcmag.com/news/361405/amazon-alexa-sends-familys-private-conversation-to-contact" target="_blank" rel="noopener">记录</a>了用户<a href="https://www.pcmag.com/news/361405/amazon-alexa-sends-familys-private-conversation-to-contact" target="_blank" rel="noopener">的私人谈话</a>，并在未经他们知情和同意的情况下将其发送给他们的一个联系人。这（再次）引起了对<a href="https://bdtechtalks.com/2018/06/05/google-home-amazon-echo-privacy-security-risks/" target="_blank" rel="noopener">智能扬声器</a>的<a href="https://bdtechtalks.com/2018/06/05/google-home-amazon-echo-privacy-security-risks/" target="_blank" rel="noopener">安全性和隐私性的</a>担忧。然而，后来变得明显，Alexa的奇怪行为并不是一个险恶的间谍情节的一部分 - 相反，它是由于智能扬声器的工作方式导致的一系列相关故障引起的。<br>根据亚马逊提供的一个<a href="https://www.theverge.com/2018/5/24/17391898/amazon-alexa-private-conversation-recording-explanation" target="_blank" rel="noopener">帐户</a>：“由于背景对话中的一个词听起来像’Alexa’，Echo醒了。然后，随后的对话被听作是“发送消息”请求。在这一点上，Alexa大声说’给谁？’ 此时，后台会话被解释为客户联系人列表中的名称。然后Alexa大声问道，’[联系人姓名]，对吗？Alexa然后将背景对话解释为“正确”。尽管这一系列事件不太可能，我们正在评估使这种情况更不可能的选择。“<br>该场景是一个边缘案例，很少发生的事件。但它也是人工智能技术极限的一项有趣研究，它为<a href="https://www.pcmag.com/review/356920/amazon-echo-2017" target="_blank" rel="noopener">Echo</a>和其他所谓的“智能”设备提供动力。<br>
-        
-          <a class="article-more-a" href="/2019/04/23/yuque/从Alexa的错误中学习/#more">more >></a>
-        
-      
-
-      
-    </p></div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/04/23/yuque/从Alexa的错误中学习/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/MLFLOW概念" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/23/yuque/MLFLOW概念/">MLFLOW概念</a>
-    </h1>
-  
-
-        
-        <a href="/2019/04/23/yuque/MLFLOW概念/" class="archive-article-date">
-  	<time datetime="2019-04-23T08:17:51.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-23</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><a name="b59c9e0f"></a></p>
-<h1 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h1><p>MLflow分为三个部分：<a href="https://mlflow.org/docs/latest/tracking.html#tracking" target="_blank" rel="noopener">跟踪</a>，<a href="https://mlflow.org/docs/latest/projects.html#projects" target="_blank" rel="noopener">项目</a>和 <a href="https://mlflow.org/docs/latest/models.html#models" target="_blank" rel="noopener">模型</a>。您可以自己使用这些组件中的每一个 - 例如，您可能希望以MLflow的模型格式导出模型而不使用跟踪或项目 - 但它们也可以很好地协同工作。<br>MLflow的核心理念是在您的工作流程中尽可能少地设置约束：它可以与任何机器学习库一起使用，按惯例确定代码的大部分内容，并且只需要很少的更改即可集成到现有的代码库中。与此同时，MLflow旨在采用以其格式编写的任何代码库，并使其可由多个数据科学家重现和重用。在这个页面上，我们描述了典型的ML工作流程以及MLflow适合的位置。<br><a name="9253a4bc"></a></p>
-<h2 id="机器学习工作流程"><a href="#机器学习工作流程" class="headerlink" title="机器学习工作流程"></a>机器学习工作流程<a href="https://mlflow.org/docs/latest/concepts.html#the-machine-learning-workflow" target="_blank" rel="noopener"></a></h2><p>机器学习需要尝试各种数据集，数据准备步骤和算法，以构建最大化某些目标指标的模型。构建模型后，还需要将其部署到生产系统，监控其性能，并不断对新数据进行重新训练，并与其他模型进行比较。<br>因此，通过机器学习提高效率可能具有挑战性，原因如下：</p>
-<ul>
-<li><strong>跟踪实验很困难。</strong>当您只是处理笔记本电脑上的文件或交互式笔记本时，如何判断哪些数据，代码和参数可以获得特定结果？</li>
-<li><strong>重现代码很困难。</strong>即使您仔细跟踪代码版本和参数，也需要捕获整个环境（例如，库依赖项）以再次获得相同的结果。如果您希望其他数据科学家使用您的代码，或者您希望在另一个平台（例如，在云中）大规模运行相同的代码，则这尤其具有挑战性。</li>
-<li><strong>没有标准的方法来打包和部署模型。</strong>每个数据科学团队为其使用的每个ML库提出自己的方法，并且模型与产生它的代码和参数之间的链接经常丢失。</li>
-</ul>
-<p>此外，虽然各个ML库提供了一些问题的解决方案（例如，模型服务），但为了获得最佳结果，您通常需要尝试<em>多个ML库</em>。MLflow允许您使用任何库来训练，重用和部署模型，并将它们打包成可重复的步骤，其他数据科学家可以将其用作“黑匣子”，甚至无需知道您正在使用哪个库。<br><a name="3e771e20"></a></p>
-<h2 id="MLflow组件"><a href="#MLflow组件" class="headerlink" title="MLflow组件"></a>MLflow组件</h2><p>MLflow提供三个组件来帮助管理ML工作流程：<br><strong>MLflow Tracking</strong>是一个API和UI，用于在运行机器学习代码时记录参数，代码版本，度量和输出文件，以及以后可视化结果。您可以在任何环境（例如，独立脚本或笔记本）中使用MLflow Tracking将结果记录到本地文件或服务器，然后比较多次运行。团队还可以使用它来比较来自不同用户的结果。<br><strong>MLflow Projects</strong>是打包可重用数据科学代码的标准格式。每个项目只是一个包含代码或Git存储库的目录，并使用描述符文件或简单约定来指定其依赖关系以及如何运行代码。例如，项目可以包含<code>conda.yaml</code>用于指定Python <a href="https://conda.io/docs/" target="_blank" rel="noopener">Conda</a>环境的文件。在项目中使用MLflow Tracking API时，MLflow会自动记住执行的项目版本（例如，Git commit）和任何参数。您可以从GitHub或您自己的Git存储库轻松运行现有的MLflow项目，并将它们链接到多步骤工作流程。<br><strong>MLflow模型</strong>提供多种包装机器学习模型的约定，以及各种帮助您部署它们的工具。每个模型都保存为包含任意文件的目录和描述文件，该文件列出了可以使用模型的几种“风格”。例如，TensorFlow模型可以作为TensorFlow DAG加载，也可以作为Python函数加载到输入数据。MLflow提供了将许多常见模型类型部署到不同平台的工具：例如，任何支持“Python函数”风格的模型都可以部署到基于Docker的REST服务器，云平台（如Azure ML和AWS SageMaker），以及Apache Spark中的用户定义函数，用于批处理和流式推理。如果您使用Tracking API输出MLflow模型，MLflow还会自动记住哪个项目并运行它们。<br><a name="2bdbec15"></a></p>
-<h2 id="可扩展性和大数据"><a href="#可扩展性和大数据" class="headerlink" title="可扩展性和大数据"></a>可扩展性和大数据<a href="https://mlflow.org/docs/latest/concepts.html#scalability-and-big-data" target="_blank" rel="noopener"></a></h2><p>数据是在机器学习中获得良好结果的关键，因此MLflow旨在扩展到大型数据集，大型输出文件（例如，模型）和大量实验。具体来说，MLflow支持三维扩展：</p>
-<ul>
-<li>单个MLflow运行可以在分布式集群上执行，例如，使用 <a href="https://spark.apache.org/" target="_blank" rel="noopener">Apache Spark</a>。您可以在所选的分布式基础架构上启动运行，并将结果报告给Tracking Server以进行比较。MLflow包含一个内置API，可在<a href="https://databricks.com/" target="_blank" rel="noopener">Databricks</a>上启动运行。</li>
-<li>MLflow支持与不同参数并行启动多个运行，例如，用于超参数调整。您只需使用<a href="https://mlflow.org/docs/latest/projects.html#projects" target="_blank" rel="noopener">Projects API</a>启动多次运行，使用<a href="https://mlflow.org/docs/latest/tracking.html#tracking" target="_blank" rel="noopener">Tracking API</a>跟踪它们。</li>
-<li>MLflow Projects可以从分布式存储系统（如AWS S3和<a href="https://docs.databricks.com/user-guide/dbfs-databricks-file-system.html" target="_blank" rel="noopener">DBFS）</a>获取输入和写入输出。MLflow可以在本地自动下载此类文件，以用于只能在本地文件上运行的项目，或者如果支持，则为项目提供分布式存储URI。这意味着您可以编写构建大型数据集的项目，例如创建100 TB文件。<br><a name="9d4397cc"></a><h2 id="示例用例"><a href="#示例用例" class="headerlink" title="示例用例"></a>示例用例<a href="https://mlflow.org/docs/latest/concepts.html#example-use-cases" target="_blank" rel="noopener"></a></h2>无论您是单独工作的数据科学家还是大型组织的一员，您都可以通过多种方式使用MLflow：<br><strong>个人数据科学家</strong>可以使用MLflow跟踪在其机器上本地跟踪实验，在项目中组织代码以供将来重用，以及生产工程师随后可以使用MLflow的部署工具部署的输出模型。MLflow Tracking默认情况下只读取和写入文件到本地文件系统，因此无需部署服务器。<br><strong>数据科学团队</strong>可以部署MLflow跟踪服务器来记录和比较处理同一问题的多个用户的结果。通过设置用于命名其参数和度量的约定，他们可以尝试不同的算法来解决相同的问题，然后再次对新数据运行相同的算法以比较未来的模型。此外，任何人都可以下载并运行另一个模型。<br><strong>大型组织</strong>可以使用MLflow共享项目，模型和结果。任何团队都可以使用MLflow项目运行另一个团队的代码，因此组织可以打包其他团队可以使用的有用培训和数据准备步骤，或者比较同一任务中许多团队的结果。此外，工程团队可以轻松地将工作流程从研发转移到生产阶段。<br><strong>生产工程师</strong>可以以相同的方式部署来自不同ML库的模型，将模型作为文件存储在他们选择的管理系统中，并跟踪模型的运行来源。<br><strong>研究人员和开源开发人员</strong>可以使用MLflow项目格式向GitHub发布代码，使任何人都可以使用该命令轻松运行代码 。<code>mlflow run github.com/...</code><br><strong>ML Library Developers</strong>可以输出MLflow Model格式的模型，让它们使用MLflow的内置工具自动支持部署。此外，部署工具开发人员（例如，构建服务平台的云供应商）可以自动支持各种模型。</li>
-</ul>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/04/23/yuque/MLFLOW概念/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/如何使用良好的软件工程实践设置PySpark环境以进行开发" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/23/yuque/如何使用良好的软件工程实践设置PySpark环境以进行开发/">如何使用良好的软件工程实践设置PySpark环境以进行开发</a>
-    </h1>
-  
-
-        
-        <a href="/2019/04/23/yuque/如何使用良好的软件工程实践设置PySpark环境以进行开发/" class="archive-article-date">
-  	<time datetime="2019-04-23T08:17:12.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-23</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>在本文中，我们将讨论如何设置我们的开发环境以创建高质量的python代码以及如何自动执行一些繁琐的任务来加速部署。<br>我们将介绍以下步骤：</p>
-<ul>
-<li>使用<a href="https://pipenv.readthedocs.io/en/latest/" target="_blank" rel="noopener"><strong>pipenv</strong></a>在隔离的虚拟环境中设置我们的依赖<a href="https://pipenv.readthedocs.io/en/latest/" target="_blank" rel="noopener"><strong>项</strong></a></li>
-<li>如何为多个作业设置项目结构</li>
-<li>如何运行pyspark工作</li>
-<li>如何使用<a href="https://opensource.com/article/18/8/what-how-makefile" target="_blank" rel="noopener"><strong>Makefile</strong></a><strong> </strong>自动执行开发步骤</li>
-<li>如何使用<a href="http://flake8.pycqa.org/en/latest/" target="_blank" rel="noopener"><strong>flake8</strong></a>测试代码的质量<a href="http://flake8.pycqa.org/en/latest/" target="_blank" rel="noopener"></a></li>
-<li>如何使用<a href="https://pypi.org/project/pytest-spark/" target="_blank" rel="noopener"><strong>pytest-spark</strong></a>为PySpark应用程序运行单元测试<a href="https://pypi.org/project/pytest-spark/" target="_blank" rel="noopener"></a></li>
-<li>运行测试覆盖率，看看我们是否使用<a href="https://pypi.org/project/pytest-cov/" target="_blank" rel="noopener"><strong>pytest-cov</strong></a>创建了足够的单元测试<a href="https://pypi.org/project/pytest-cov/" target="_blank" rel="noopener"></a><br><a name="54e5af6c"></a><h3 id="第1步：设置虚拟环境"><a href="#第1步：设置虚拟环境" class="headerlink" title="第1步：设置虚拟环境"></a>第1步：设置虚拟环境</h3>虚拟环境有助于我们将特定应用程序的依赖关系与系统的整体依赖关系隔离开来。这很好，因为我们不会涉及现有库的依赖性问题，并且在单独的系统（例如docker容器或服务器）上安装或卸载它们更容易。对于此任务，我们将使用<strong>pipenv。</strong><br>要在mac os系统上安装它，例如运行：</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install pipenv</span><br></pre></td></tr></table></figure>
-<p>要为应用程序声明我们的依赖项（库），我们需要在项目的路径路径中创建一个<strong>Pipfile</strong>：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[[source]]</span><br><span class="line">url = &apos;https://pypi.python.org/simple&apos;</span><br><span class="line">verify_ssl = true</span><br><span class="line">name = &apos;pypi&apos;</span><br><span class="line">[requires]</span><br><span class="line">python_version = &quot;3.6&quot;</span><br><span class="line">[packages]</span><br><span class="line">flake8 = &quot;*&quot;</span><br><span class="line">pytest-spark = &quot;&gt;=0.4.4&quot;</span><br><span class="line">pyspark = &quot;&gt;=2.4.0&quot;</span><br><span class="line">pytest-cov = &quot;*&quot;</span><br></pre></td></tr></table></figure>
-<p>这里有三个组件。在<strong>[[source]]</strong>标签中，我们声明了下载所有软件包的<strong>url</strong>，在<strong>[requires]中</strong>我们定义了python版本，最后在<strong>[packages]</strong>中声明了我们需要的依赖项。我们可以将依赖项绑定到某个版本，或者使用<strong>“*”</strong>符号来获取最新版本。<br>要创建虚拟环境并激活它，我们需要在终端中运行两个命令：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pipenv --three install</span><br><span class="line">pipenv shell</span><br></pre></td></tr></table></figure>
-<p>一旦完成这一步，你应该看到你在一个新的venv中，让项目的名字出现在命令行的终端中（默认情况下，env采用项目的名称）：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(pyspark-project-template) host:project$</span><br></pre></td></tr></table></figure>
-<p>现在，您可以使用两个命令进出。<br>停用env并返回标准环境：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">deactivate</span><br></pre></td></tr></table></figure>
-<p>再次激活虚拟环境（您需要位于项目的根目录中）：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">source `pipenv --venv`/bin/activate</span><br></pre></td></tr></table></figure></p>
-<p><a name="bb546939"></a></p>
-<h3 id="第2步：项目结构"><a href="#第2步：项目结构" class="headerlink" title="第2步：项目结构"></a>第2步：项目结构</h3><p>该项目可以具有以下结构：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">pyspark-project-template</span><br><span class="line">    src/</span><br><span class="line">        jobs/   </span><br><span class="line">            pi/</span><br><span class="line">                __init__.py</span><br><span class="line">                resources/</span><br><span class="line">                    args.json</span><br><span class="line">            word_count/</span><br><span class="line">                __init__.py</span><br><span class="line">                resources/</span><br><span class="line">                    args.json</span><br><span class="line">                    word_count.csv</span><br><span class="line">        main.py</span><br><span class="line">    test/</span><br><span class="line">        jobs/</span><br><span class="line">            pi/</span><br><span class="line">                test_pi.py</span><br><span class="line">            word_count/</span><br><span class="line">                test_word_count.py</span><br></pre></td></tr></table></figure>
-<p>排除一些<strong>init</strong>.py文件以简化操作，但您可以在本教程末尾的github上找到完整项目的链接。我们基本上有源代码和测试。每个作业都分成一个文件夹，每个作业都有一个资源文件夹，我们在其中添加该作业所需的额外文件和配置。<br>在本教程中，我使用了两个经典示例 -  <strong>pi</strong>，生成最多小数的pi数和<strong>字数</strong>，以计算csv文件中的单词数。<br><a name="1b6fecdc"></a></p>
-<h3 id="第3步：使用spark-submit运行作业"><a href="#第3步：使用spark-submit运行作业" class="headerlink" title="第3步：使用spark-submit运行作业"></a>第3步：使用spark-submit运行作业</h3><p>我们先来看看<strong>main.py</strong>文件的样子：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">if __name__ == &apos;__main__&apos;:</span><br><span class="line"></span><br><span class="line">    parser = argparse.ArgumentParser(description=&apos;My pyspark job arguments&apos;)</span><br><span class="line">    parser.add_argument(&apos;--job&apos;, type=str, required=True, dest=&apos;job_name&apos;,</span><br><span class="line">                        help=&apos;The name of the spark job you want to run&apos;)</span><br><span class="line">    parser.add_argument(&apos;--res-path&apos;, type=str, required=True, dest=&apos;res_path&apos;,</span><br><span class="line">                        help=&apos;Path to the jobs resurces&apos;)</span><br><span class="line"></span><br><span class="line">    args = parser.parse_args()</span><br><span class="line"></span><br><span class="line">    spark = SparkSession\</span><br><span class="line">        .builder\</span><br><span class="line">        .appName(args.job_name)\</span><br><span class="line">        .getOrCreate()</span><br><span class="line"></span><br><span class="line">    job_module = importlib.import_module(&apos;jobs.%s&apos; % args.job_name)</span><br><span class="line">    res = job_module.run(spark, get_config(args.res_path, args.job_name))</span><br><span class="line"></span><br><span class="line">    print(&apos;[JOB &#123;job&#125; RESULT]: &#123;result&#125;&apos;.format(job=args.job_name, result=res))</span><br></pre></td></tr></table></figure>
-<p>当我们运行我们的工作时，我们需要两个命令行参数：  <strong>- job</strong>，是我们想要运行的作业的名称（在例外pi或word_count中）和  <strong>- res-path</strong>，是作业的相对路径。我们需要第二个参数，因为spark需要知道我们资源的完整路径。在生产环境中，我们将代码部署在集群上，我们将资源转移到HDFS或S3，我们将使用该路径。<br>在进一步解释代码之前，我们需要提一下，我们必须压缩<strong>作业</strong>文件夹并将其传递给<strong>spark-submit</strong>语句<strong>。</strong>假设我们在项目的根目录中：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd src/ </span><br><span class="line">zip -r ../jobs.zip jobs/</span><br></pre></td></tr></table></figure>
-<p>这将使代码在我们的应用程序中作为模块提供。基本上在<strong>第16行的main.py中，</strong>我们以编程方式导入<strong>作业</strong>模块。<br>我们的作业<strong>pi</strong>和<strong>word_count</strong>都有一个<strong>run</strong>函数，所以我们只需要运行这个函数来启动这个作业（<strong>main.py中的第17行）。</strong>我们还在那里传递了工作的配置。<br>让我们看一下<strong>word_count</strong>作业，进一步了解这个例子：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">from operator import add</span><br><span class="line"></span><br><span class="line">def get_keyval(row):</span><br><span class="line">    words = filter(lambda r: r is not None, row)</span><br><span class="line">    return [[w.strip().lower(), 1] for w in words]</span><br><span class="line"></span><br><span class="line">def run(spark, config):</span><br><span class="line">    df = spark.read.csv(config[&apos;relative_path&apos;] + config[&apos;words_file_path&apos;])</span><br><span class="line">    mapped_rdd = df.rdd.flatMap(lambda row: get_keyval(row))</span><br><span class="line">    counts_rdd = mapped_rdd.reduceByKey(add)</span><br><span class="line">    return counts_rdd.collect()</span><br></pre></td></tr></table></figure>
-<p>此代码在<strong>word_count</strong>文件夹的<strong><strong>init</strong>.py</strong>文件中定义。我们在这里可以看到，我们使用两个配置参数来读取资源文件夹中的csv文件：相对路径和csv文件的位置。其余的代码只计算单词，所以我们不会在这里详细介绍。值得一提的是，每个作业在resources文件夹中都有一个<strong>args.json</strong>文件。这里我们实际定义了传递给作业的配置。这是<strong>word_count</strong>作业的配置文件：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;words_file_path&quot;: &quot;/word_count/resources/word_count.csv&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>所以我们现在有了所有细节来运行我们的<strong>spark-submit</strong>命令：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">spark-submit --py-files jobs.zip src/main.py --job word_count --res-path /your/path/pyspark-project-template/src/jobs</span><br></pre></td></tr></table></figure>
-<p>要运行另一个作业<strong>pi，</strong>我们只需要更改<strong>- job</strong>标志的参数  。<br><a name="b336e1a0"></a></p>
-<h3 id="第4步：编写单元测试，并使用覆盖率运行它们"><a href="#第4步：编写单元测试，并使用覆盖率运行它们" class="headerlink" title="第4步：编写单元测试，并使用覆盖率运行它们"></a>第4步：编写单元测试，并使用覆盖率运行它们</h3><p>要为pyspark应用程序编写测试，我们使用<strong>pytest-spark</strong>，一个非常易于使用的模块。<br>该<strong>WORD_COUNT</strong>工作单元测试：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">from src.jobs.word_count import get_keyval, run</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def test_get_keyval():</span><br><span class="line">    words=[&apos;this&apos;, &apos;are&apos;, &apos;words&apos;, &apos;words&apos;]</span><br><span class="line">    expected_results=[[&apos;this&apos;, 1], [&apos;are&apos;, 1], [&apos;words&apos;, 1], [&apos;words&apos;, 1]]</span><br><span class="line"></span><br><span class="line">    assert expected_results == get_keyval(words)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def test_word_count_run(spark_session):</span><br><span class="line">    expected_results = [(&apos;one&apos;, 1), (&apos;two&apos;, 1), (&apos;three&apos;, 2), (&apos;four&apos;, 2), (&apos;test&apos;, 1)]</span><br><span class="line">    conf = &#123;</span><br><span class="line">        &apos;relative_path&apos;: &apos;/your/path/pyspark-project-template/src/jobs&apos;,</span><br><span class="line">        &apos;words_file_path&apos;: &apos;/word_count/resources/word_count.csv&apos;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    assert expected_results == run(spark_session, conf)</span><br></pre></td></tr></table></figure>
-<p>我们需要从<strong>src</strong>模块导入我们想要测试的函数。这里更有趣的部分是我们如何进行<strong>test_word_count_run。</strong>我们可以看到没有初始化的spark会话，我们只是在测试中将其作为参数接收。这要归功于<strong>pytest-spark</strong>模块，因此我们可以专注于编写测试，而不是编写样板代码。<br>接下来让我们讨论一下代码覆盖率。我们怎么知道我们是否编写了足够的单元测试？很简单，我们运行测试覆盖工具，告诉我们尚未测试的代码。对于python，我们可以使用<strong>pytest-cov</strong>模块。要使用代码覆盖率运行所有测试，我们必须运行：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pytest --cov=src test/jobs/</span><br></pre></td></tr></table></figure>
-<p>where  <strong>- cov</strong> flag告诉pytest在哪里检查覆盖范围。<br>测试覆盖率结果：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">---------- coverage: platform darwin, python 3.7.2-final-0 -----------</span><br><span class="line">Name                              Stmts   Miss  Cover</span><br><span class="line">-----------------------------------------------------</span><br><span class="line">src/__init__.py                       0      0   100%</span><br><span class="line">src/jobs/__init__.py                  0      0   100%</span><br><span class="line">src/jobs/pi/__init__.py              11      0   100%</span><br><span class="line">src/jobs/word_count/__init__.py       9      0   100%</span><br><span class="line">-----------------------------------------------------</span><br><span class="line">TOTAL                                20      0   100%</span><br></pre></td></tr></table></figure>
-<p>我们的测试覆盖率是100％，但是等一下，缺少一个文件！为什么<strong>main.py</strong>没有在那里列出？<br>如果我们认为我们有不需要测试的python代码，我们可以将它从报告中排除。为此，我们需要在项目的根目录中创建一个  <strong>.coveragerc</strong>文件。对于此示例，它看起来像这样：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[run]</span><br><span class="line">omit = src/main.py</span><br></pre></td></tr></table></figure>
-<p><a name="3760f981"></a></p>
-<h3 id="第5步：运行静态代码分析"><a href="#第5步：运行静态代码分析" class="headerlink" title="第5步：运行静态代码分析"></a>第5步：运行静态代码分析</h3><p>很好，我们有一些代码，我们可以运行它，我们有良好的覆盖率的单元测试。我们做对了吗？还没！我们还需要确保按照python最佳实践编写易于阅读的代码。为此，我们必须使用名为<strong>flake8</strong>的python模块检查我们的代码<strong>。</strong><br>要运行它：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flake8 ./src</span><br></pre></td></tr></table></figure>
-<p>它将分析<strong>src</strong>文件夹。如果我们有干净的代码，我们就不应该收到任何警告。但不，我们有一些问题：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">flake8 ./src</span><br><span class="line">./src/jobs/pi/__init__.py:13:1: E302 expected 2 blank lines, found 1</span><br><span class="line">./src/jobs/pi/__init__.py:15:73: E231 missing whitespace after &apos;,&apos;</span><br><span class="line">./src/jobs/pi/__init__.py:15:80: E501 line too long (113 &gt; 79 characters)</span><br></pre></td></tr></table></figure>
-<p>我们来看看代码：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">from random import random</span><br><span class="line">from operator import add</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">NUMBER_OF_STEPS_FACTOR = 100000</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def f(_):</span><br><span class="line">    x = random() * 2 - 1</span><br><span class="line">    y = random() * 2 - 1</span><br><span class="line">    return 1 if x ** 2 + y ** 2 &lt;= 1 else 0</span><br><span class="line"></span><br><span class="line">def run(spark, config):</span><br><span class="line">    number_of_steps = config[&apos;partitions&apos;] * NUMBER_OF_STEPS_FACTOR</span><br><span class="line">    count = spark.sparkContext.parallelize(range(1, number_of_steps + 1),config[&apos;partitions&apos;]).map(f).reduce(add)</span><br><span class="line">    return 4.0 * count / number_of_steps</span><br></pre></td></tr></table></figure>
-<p>我们可以看到在第<strong>13</strong>行我们有一个<strong>E302</strong>警告<strong>。</strong>这意味着我们需要在两种方法之间增加一条线。然后是第<strong>15</strong>行的<strong>E231</strong>和<strong>E501</strong>。这一行的第一个警告告诉我们，我们需要在和之间留出一个额外的空间，第二个警告通知我们线路太长，而且很难读（我们可以’甚至在要点中完整地看到它！）。<code>**range(1, number_of_steps +1),**</code><strong> </strong><code>**config[**</code><strong> </strong><br>解决所有警告后，代码看起来更容易阅读：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">from random import random</span><br><span class="line">from operator import add</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">NUMBER_OF_STEPS_FACTOR = 100000</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def f(_):</span><br><span class="line">    x = random() * 2 - 1</span><br><span class="line">    y = random() * 2 - 1</span><br><span class="line">    return 1 if x ** 2 + y ** 2 &lt;= 1 else 0</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">def run(spark, config):</span><br><span class="line">    number_of_steps = config[&apos;partitions&apos;] * NUMBER_OF_STEPS_FACTOR</span><br><span class="line">    count = spark.sparkContext\</span><br><span class="line">        .parallelize(range(1, number_of_steps + 1),</span><br><span class="line">                     config[&apos;partitions&apos;]).map(f).reduce(add)</span><br><span class="line">    return 4.0 * count / number_of_steps</span><br></pre></td></tr></table></figure>
-<p><a name="a448168b"></a></p>
-<h3 id="第6步：将所有内容与Makefile放在一起"><a href="#第6步：将所有内容与Makefile放在一起" class="headerlink" title="第6步：将所有内容与Makefile放在一起"></a>第6步：将所有内容与Makefile放在一起</h3><p>因为我们在终端中运行了一堆命令，所以在最后一步中我们将研究如何简化和自动执行此任务。<br>我们可以在项目的根目录中创建一个<strong>Makefile</strong>，如下所示：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">.DEFAULT_GOAL := run</span><br><span class="line">init:</span><br><span class="line"> pipenv --three install</span><br><span class="line"> pipenv shell</span><br><span class="line">analyze:</span><br><span class="line"> flake8 ./src</span><br><span class="line">run_tests:</span><br><span class="line"> pytest --cov=src test/jobs/</span><br><span class="line">run:</span><br><span class="line"> find . -name &apos;__pycache__&apos; | xargs rm -rf</span><br><span class="line"> rm -f jobs.zip</span><br><span class="line"> cd src/ &amp;&amp; zip -r ../jobs.zip jobs/</span><br><span class="line"> spark-submit --py-files jobs.zip src/main.py --job $(JOB_NAME) --res-path $(CONF_PATH)</span><br></pre></td></tr></table></figure></p>
-<p>如果我们想要使用coverage运行测试，我们只需输入：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make run_tests</span><br></pre></td></tr></table></figure>
-<p>如果我们想要运行<strong>pi</strong>工作：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make run JOB_NAME=pi CONF_PATH=/your/path/pyspark-project-template/src/jobs</span><br></pre></td></tr></table></figure>
-<p>这就是所有人！希望这个对你有帮助。<br>一如既往，代码存储在<a href="https://github.com/BogdanCojocar/medium-articles/tree/master/pyspark-project-template" target="_blank" rel="noopener">github上</a>。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/04/23/yuque/如何使用良好的软件工程实践设置PySpark环境以进行开发/">展开全文 >></a>
+          <a class="article-more-a" href="/2019/04/23/yuque/机器学习算法之Catboost/">展开全文 >></a>
         </p>
       
 
@@ -888,9 +279,610 @@
 
 
   
+    <article id="post-yuque/强大机器学习的三大支柱:规范测试，强大的训练和形式验证" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/04/23/yuque/强大机器学习的三大支柱:规范测试，强大的训练和形式验证/">强大机器学习的三大支柱:规范测试，强大的训练和形式验证</a>
+    </h1>
+  
+
+        
+        <a href="/2019/04/23/yuque/强大机器学习的三大支柱:规范测试，强大的训练和形式验证/" class="archive-article-date">
+  	<time datetime="2019-04-23T08:15:54.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-23</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1555035949093-a4cdb429-6207-48d7-b560-c1fe63fc03f6.png#align=left&amp;display=inline&amp;height=419&amp;name=1_Gn67FLVSiYsnUaU1g1TgFw.png&amp;originHeight=562&amp;originWidth=1000&amp;size=148916&amp;status=done&amp;width=746" alt="1_Gn67FLVSiYsnUaU1g1TgFw.png"><br>构建机器学习系统在其生命周期的许多方面与传统软件开发不同。当应用于机器学习模型时，用于测试，调试和故障排除结果的已建立的软件方法是不切实际的。虽然传统软件组件（如网站，移动应用程序或API）的行为完全由其代码决定，但机器学习模型会根据特定数据集随时间推移其知识。如何定义和编写健壮的机器学习代理是整个空间存在的挑战之一。最近，DeepMind的人工智能（AI）研究人员一直在探索一些有关的想法.<br>
+        
+          <a class="article-more-a" href="/2019/04/23/yuque/强大机器学习的三大支柱:规范测试，强大的训练和形式验证/#more">more >></a>
+        
+      
+
+      
+    </p></div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/04/23/yuque/强大机器学习的三大支柱:规范测试，强大的训练和形式验证/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/热衷最近邻算法的10个理由" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/04/23/yuque/热衷最近邻算法的10个理由/">热衷最近邻算法的10个理由</a>
+    </h1>
+  
+
+        
+        <a href="/2019/04/23/yuque/热衷最近邻算法的10个理由/" class="archive-article-date">
+  	<time datetime="2019-04-23T08:14:37.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-23</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>我一见钟情就爱上了k-Nearest Neighbors算法，但这不是盲目的爱。我有很多理由对此感到生气。</p>
+        
+          <a class="article-more-a" href="/2019/04/23/yuque/热衷最近邻算法的10个理由/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/04/23/yuque/热衷最近邻算法的10个理由/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/Spark上的实际Python工作负载:独立群集" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/04/23/yuque/Spark上的实际Python工作负载:独立群集/">Spark上的实际Python工作负载:独立群集</a>
+    </h1>
+  
+
+        
+        <a href="/2019/04/23/yuque/Spark上的实际Python工作负载:独立群集/" class="archive-article-date">
+  	<time datetime="2019-04-23T08:13:19.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-23</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>关于在Spark上运行Python有无数文章和论坛帖子，但大多数人认为要提交的工作包含在一个.py文件中：<code>spark-submit wordcount.py</code> - 完成！<br>如果你的Python程序不仅仅是一个脚本怎么办？也许它为Spark生成动态SQL来执行，或使用Spark的输出刷新模型。随着您的Python代码变得更像一个应用程序（具有目录结构，配置文件和库依赖项），将其提交给Spark需要更多考虑。<br>以下是我最近考虑使用Spark 2.3将一个这样的Python应用程序用于生产时的替代方案。第一篇文章重点介绍Spark独立集群。另一篇文章介绍了EMR Spark（YARN）。<br>我远不是Spark的权威，更不用说Python了。我的决定试图平衡正确性和易于部署，以及应用程序对群集的限制。让我知道你的想法。<br>
+        
+          <a class="article-more-a" href="/2019/04/23/yuque/Spark上的实际Python工作负载:独立群集/#more">more >></a>
+        
+      
+
+      
+    </p></div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/04/23/yuque/Spark上的实际Python工作负载:独立群集/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/使用Spark和MLlib进行机器学习简介（DataFrame API）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/04/23/yuque/使用Spark和MLlib进行机器学习简介（DataFrame API）/">使用Spark和MLlib进行机器学习简介（DataFrame API）</a>
+    </h1>
+  
+
+        
+        <a href="/2019/04/23/yuque/使用Spark和MLlib进行机器学习简介（DataFrame API）/" class="archive-article-date">
+  	<time datetime="2019-04-23T03:42:56.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-23</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>最近一个相当热门的话题是机器学习 - 与计算统计密切相关的跨部门学科，让计算机在没有明确编程的情况下学习。<br>它已被发现在数据分析领域具有重要意义 - 从估算贷款和保险风险到试图在现实条件下自主驾驶汽车。<br>在下面的文章中，我想向读者介绍一下  <code>MLlib</code> - 作为Spark Framework一部分的机器学习库。<br>关于以下文本的一个重要事项 - 目的是介绍图书馆，而不是机器学习或统计学背后的概念和理论，因此读者可以期待这些主题的至少基本理解。此外，还需要至少基本的Spark知识。<br>这将基于Apache Spark 2.x API，它采用新的DataFrame API作为旧版本的替代品  <code>RDD</code> 。该<code>DataFrame</code> 方法的主要优点之一  是它比<code>RDD</code> 一个更容易使用和更友好  。尽管如此，  <code>RDD</code> API仍然存在但已进入维护模式（它将不再被扩展，并且当<code>DataFrame</code> API与其达到特征奇偶校验时将被弃用  ）。<br>
+        
+          <a class="article-more-a" href="/2019/04/23/yuque/使用Spark和MLlib进行机器学习简介（DataFrame API）/#more">more >></a>
+        
+      
+
+      
+    </p></div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/04/23/yuque/使用Spark和MLlib进行机器学习简介（DataFrame API）/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/PyTorch中用卷积神经网络进行传递学习" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/04/22/yuque/PyTorch中用卷积神经网络进行传递学习/">PyTorch中用卷积神经网络进行传递学习</a>
+    </h1>
+  
+
+        
+        <a href="/2019/04/22/yuque/PyTorch中用卷积神经网络进行传递学习/" class="archive-article-date">
+  	<time datetime="2019-04-22T08:14:06.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-22</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1555920901097-06e57631-8c71-4acf-b75b-d4e0bfdc2164.jpeg#align=left&amp;display=inline&amp;height=498&amp;name=1_niPDCrom9F0lrdFa3LrBqA.jpeg&amp;originHeight=683&amp;originWidth=1024&amp;size=294870&amp;status=done&amp;width=746" alt="1_niPDCrom9F0lrdFa3LrBqA.jpeg"><br><a name="d3c9fb87"></a></p>
+<h2 id="如何使用预训练的卷积神经网络进行PyTorch对象识别"><a href="#如何使用预训练的卷积神经网络进行PyTorch对象识别" class="headerlink" title="如何使用预训练的卷积神经网络进行PyTorch对象识别"></a>如何使用预训练的卷积神经网络进行PyTorch对象识别</h2>
+        
+          <a class="article-more-a" href="/2019/04/22/yuque/PyTorch中用卷积神经网络进行传递学习/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/04/22/yuque/PyTorch中用卷积神经网络进行传递学习/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/PyTorch：了解自动微分的工作原理" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/04/22/yuque/PyTorch：了解自动微分的工作原理/">PyTorch：了解自动微分的工作原理</a>
+    </h1>
+  
+
+        
+        <a href="/2019/04/22/yuque/PyTorch：了解自动微分的工作原理/" class="archive-article-date">
+  	<time datetime="2019-04-22T07:58:48.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-22</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>当我开始编码神经网络时，我最终使用了我周围的其他人正在使用的东西。TensorFlow。<br>但最近，PyTorch已成为成为深度学习框架之王的主要竞争者。它真正引诱的是它的动态计算图范式。不要担心最后一行现在对你没有意义。到这篇文章结束时，它会。但请相信，它使调试神经网络更容易。<br>
+        
+          <a class="article-more-a" href="/2019/04/22/yuque/PyTorch：了解自动微分的工作原理/#more">more >></a>
+        
+      
+
+      
+    </p></div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/04/22/yuque/PyTorch：了解自动微分的工作原理/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/Boosted Trees简介" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/04/22/yuque/Boosted Trees简介/">Boosted Trees简介</a>
+    </h1>
+  
+
+        
+        <a href="/2019/04/22/yuque/Boosted Trees简介/" class="archive-article-date">
+  	<time datetime="2019-04-22T07:34:28.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-22</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>#############################<br>Introduction to Boosted Trees<br>#############################<br>XGBoost stands for “Extreme Gradient Boosting”, where the term “Gradient Boosting” originates from the paper <em>Greedy Function Approximation: A Gradient Boosting Machine</em>, by Friedman.<br>This is a tutorial on gradient boosted trees, and most of the content is based on <code>these slides &lt;http://homes.cs.washington.edu/~tqchen/pdf/BoostedTree.pdf&gt;</code>_ by Tianqi Chen, the original author of XGBoost.</p>
+<p>The <strong>gradient boosted trees</strong> has been around for a while, and there are a lot of materials on the topic.<br>This tutorial will explain boosted trees in a self-contained and principled way using the elements of supervised learning.<br>We think this explanation is cleaner, more formal, and motivates the model formulation used in XGBoost.</p>
+<p><strong><strong><strong><strong><strong><strong><strong>***</strong></strong></strong></strong></strong></strong></strong><br>Elements of Supervised Learning<br><strong><strong><strong><strong><strong><strong><strong>***</strong></strong></strong></strong></strong></strong></strong><br>XGBoost is used for supervised learning problems, where we use the training data (with multiple features) :math:<code>x_i</code> to predict a target variable :math:<code>y_i</code>.<br>Before we learn about trees specifically, let us start by reviewing the basic elements in supervised learning.</p>
+<p>Model and Parameters<br>====================<br>The <strong>model</strong> in supervised learning usually refers to the mathematical structure of by which the prediction :math:<code>y_i</code> is made from the input :math:<code>x_i</code>.<br>A common example is a <em>linear model</em>, where the prediction is given as :math:<code>\hat{y}_i = \sum_j \theta_j x_{ij}</code>, a linear combination of weighted input features.<br>The prediction value can have different interpretations, depending on the task, i.e., regression or classification.<br>For example, it can be logistic transformed to get the probability of positive class in logistic regression, and it can also be used as a ranking score when we want to rank the outputs.</p>
+<p>The <strong>parameters</strong> are the undetermined part that we need to learn from data. In linear regression problems, the parameters are the coefficients :math:<code>\theta</code>.<br>Usually we will use :math:<code>\theta</code> to denote the parameters (there are many parameters in a model, our definition here is sloppy).</p>
+<p>Objective Function: Training Loss + Regularization<br>==================================================<br>With judicious choices for :math:<code>y_i</code>, we may express a variety of tasks, such as regression, classification, and ranking.<br>The task of <strong>training</strong> the model amounts to finding the best parameters :math:<code>\theta</code> that best fit the training data :math:<code>x_i</code> and labels :math:<code>y_i</code>. In order to train the model, we need to define the <strong>objective function</strong><br>to measure how well the model fit the training data.</p>
+<p>A salient characteristic of objective functions is that they consist two parts: <strong>training loss</strong> and <strong>regularization term</strong>:</p>
+<p>.. math::</p>
+<p>  \text{obj}(\theta) = L(\theta) + \Omega(\theta)</p>
+<p>where :math:<code>L</code> is the training loss function, and :math:<code>\Omega</code> is the regularization term. The training loss measures how <em>predictive</em> our model is with respect to the training data.<br>A common choice of :math:<code>L</code> is the <em>mean squared error</em>, which is given by</p>
+<p>.. math::</p>
+<p>  L(\theta) = \sum_i (y_i-\hat{y}_i)^2</p>
+<p>Another commonly used loss function is logistic loss, to be used for logistic regression:</p>
+<p>.. math::</p>
+<p>  L(\theta) = \sum_i[ y_i\ln (1+e^{-\hat{y}_i}) + (1-y_i)\ln (1+e^{\hat{y}_i})]</p>
+<p>The <strong>regularization term</strong> is what people usually forget to add. The regularization term controls the complexity of the model, which helps us to avoid overfitting.<br>This sounds a bit abstract, so let us consider the following problem in the following picture. You are asked to <em>fit</em> visually a step function given the input data points<br>on the upper left corner of the image.<br>Which solution among the three do you think is the best fit?</p>
+<p>.. image:: <a href="https://raw.githubusercontent.com/dmlc/web-data/master/xgboost/model/step_fit.png" target="_blank" rel="noopener">https://raw.githubusercontent.com/dmlc/web-data/master/xgboost/model/step_fit.png</a><br>  :alt: step functions to fit data points, illustrating bias-variance tradeoff</p>
+<p>The correct answer is marked in red. Please consider if this visually seems a reasonable fit to you. The general principle is we want both a <em>simple</em> and <em>predictive</em> model.<br>The tradeoff between the two is also referred as <strong>bias-variance tradeoff</strong> in machine learning.</p>
+<p>Why introduce the general principle?<br>====================================<br>The elements introduced above form the basic elements of supervised learning, and they are natural building blocks of machine learning toolkits.<br>For example, you should be able to describe the differences and commonalities between gradient boosted trees and random forests.<br>Understanding the process in a formalized way also helps us to understand the objective that we are learning and the reason behind the heuristics such as<br>pruning and smoothing.</p>
+<p><strong><strong><strong><strong><strong>***</strong></strong></strong></strong></strong><br>Decision Tree Ensembles<br><strong><strong><strong><strong><strong>***</strong></strong></strong></strong></strong><br>Now that we have introduced the elements of supervised learning, let us get started with real trees.<br>To begin with, let us first learn about the model choice of XGBoost: <strong>decision tree ensembles</strong>.<br>The tree ensemble model consists of a set of classification and regression trees (CART). Here’s a simple example of a CART<br>that classifies whether someone will like computer games.</p>
+<p>.. image:: <a href="https://raw.githubusercontent.com/dmlc/web-data/master/xgboost/model/cart.png" target="_blank" rel="noopener">https://raw.githubusercontent.com/dmlc/web-data/master/xgboost/model/cart.png</a><br>  :width: 100%<br>  :alt: a toy example for CART</p>
+<p>We classify the members of a family into different leaves, and assign them the score on the corresponding leaf.<br>A CART is a bit different from decision trees, in which the leaf only contains decision values. In CART, a real score<br>is associated with each of the leaves, which gives us richer interpretations that go beyond classification.<br>This also allows for a pricipled, unified approach to optimization, as we will see in a later part of this tutorial.</p>
+<p>Usually, a single tree is not strong enough to be used in practice. What is actually used is the ensemble model,<br>which sums the prediction of multiple trees together.</p>
+<p>.. image:: <a href="https://raw.githubusercontent.com/dmlc/web-data/master/xgboost/model/twocart.png" target="_blank" rel="noopener">https://raw.githubusercontent.com/dmlc/web-data/master/xgboost/model/twocart.png</a><br>  :width: 100%<br>  :alt: a toy example for tree ensemble, consisting of two CARTs</p>
+<p>Here is an example of a tree ensemble of two trees. The prediction scores of each individual tree are summed up to get the final score.<br>If you look at the example, an important fact is that the two trees try to <em>complement</em> each other.<br>Mathematically, we can write our model in the form</p>
+<p>.. math::</p>
+<p>  \hat{y}<em>i = \sum</em>{k=1}^K f_k(x_i), f_k \in \mathcal{F}</p>
+<p>where :math:<code>K</code> is the number of trees, :math:<code>f</code> is a function in the functional space :math:<code>\mathcal{F}</code>, and :math:<code>\mathcal{F}</code> is the set of all possible CARTs. The objective function to be optimized is given by</p>
+<p>.. math::</p>
+<p>  \text{obj}(\theta) = \sum_i^n l(y_i, \hat{y}<em>i) + \sum</em>{k=1}^K \Omega(f_k)</p>
+<p>Now here comes a trick question: what is the <em>model</em> used in random forests? Tree ensembles! So random forests and boosted trees are really the same models; the<br>difference arises from how we train them. This means that, if you write a predictive service for tree ensembles, you only need to write one and it should work<br>for both random forests and gradient boosted trees. (See <code>Treelite &lt;http://treelite.io&gt;</code>_ for an actual example.) One example of why elements of supervised learning rock.</p>
+<p><strong><strong><strong>*</strong></strong></strong><br>Tree Boosting<br><strong><strong><strong>*</strong></strong></strong><br>Now that we introduced the model, let us turn to training: How should we learn the trees?<br>The answer is, as is always for all supervised learning models: <em>define an objective function and optimize it</em>!</p>
+<p>Let the following be the objective function (remember it always needs to contain training loss and regularization):</p>
+<p>.. math::</p>
+<p>  \text{obj} = \sum_{i=1}^n l(y_i, \hat{y}<em>i^{(t)}) + \sum</em>{i=1}^t\Omega(f_i)</p>
+<p>Additive Training<br>=================</p>
+<p>The first question we want to ask: what are the <strong>parameters</strong> of trees?<br>You can find that what we need to learn are those functions :math:<code>f_i</code>, each containing the structure<br>of the tree and the leaf scores. Learning tree structure is much harder than traditional optimization problem where you can simply take the gradient.<br>It is intractable to learn all the trees at once.<br>Instead, we use an additive strategy: fix what we have learned, and add one new tree at a time.<br>We write the prediction value at step :math:<code>t</code> as :math:<code>\hat{y}_i^{(t)}</code>. Then we have</p>
+<p>.. math::</p>
+<p>  \hat{y}_i^{(0)} &amp;= 0\<br>  \hat{y}_i^{(1)} &amp;= f_1(x_i) = \hat{y}_i^{(0)} + f_1(x_i)\<br>  \hat{y}_i^{(2)} &amp;= f_1(x_i) + f_2(x_i)= \hat{y}_i^{(1)} + f_2(x_i)\<br>  &amp;\dots\<br>  \hat{y}<em>i^{(t)} &amp;= \sum</em>{k=1}^t f_k(x_i)= \hat{y}_i^{(t-1)} + f_t(x_i)</p>
+<p>It remains to ask: which tree do we want at each step?  A natural thing is to add the one that optimizes our objective.</p>
+<p>.. math::</p>
+<p>  \text{obj}^{(t)} &amp; = \sum_{i=1}^n l(y_i, \hat{y}<em>i^{(t)}) + \sum</em>{i=1}^t\Omega(f_i) \<br>            &amp; = \sum_{i=1}^n l(y_i, \hat{y}_i^{(t-1)} + f_t(x_i)) + \Omega(f_t) + \mathrm{constant}</p>
+<p>If we consider using mean squared error (MSE) as our loss function, the objective becomes</p>
+<p>.. math::</p>
+<p>  \text{obj}^{(t)} &amp; = \sum_{i=1}^n (y_i - (\hat{y}_i^{(t-1)} + f_t(x_i)))^2 + \sum_{i=1}^t\Omega(f_i) \<br>            &amp; = \sum_{i=1}^n [2(\hat{y}_i^{(t-1)} - y_i)f_t(x_i) + f_t(x_i)^2] + \Omega(f_t) + \mathrm{constant}</p>
+<p>The form of MSE is friendly, with a first order term (usually called the residual) and a quadratic term.<br>For other losses of interest (for example, logistic loss), it is not so easy to get such a nice form.<br>So in the general case, we take the <em>Taylor expansion of the loss function up to the second order</em>:</p>
+<p>.. math::</p>
+<p>  \text{obj}^{(t)} = \sum_{i=1}^n [l(y_i, \hat{y}_i^{(t-1)}) + g_i f_t(x_i) + \frac{1}{2} h_i f_t^2(x_i)] + \Omega(f_t) + \mathrm{constant}</p>
+<p>where the :math:<code>g_i</code> and :math:<code>h_i</code> are defined as</p>
+<p>.. math::</p>
+<p>  g_i &amp;= \partial_{\hat{y}_i^{(t-1)}} l(y_i, \hat{y}_i^{(t-1)})\<br>  h_i &amp;= \partial_{\hat{y}_i^{(t-1)}}^2 l(y_i, \hat{y}_i^{(t-1)})</p>
+<p>After we remove all the constants, the specific objective at step :math:<code>t</code> becomes</p>
+<p>.. math::</p>
+<p>  \sum_{i=1}^n [g_i f_t(x_i) + \frac{1}{2} h_i f_t^2(x_i)] + \Omega(f_t)</p>
+<p>This becomes our optimization goal for the new tree. One important advantage of this definition is that<br>the value of the objective function only depends on :math:<code>g_i</code> and :math:<code>h_i</code>. This is how XGBoost supports custom loss functions.<br>We can optimize every loss function, including logistic regression and pairwise ranking, using exactly<br>the same solver that takes :math:<code>g_i</code> and :math:<code>h_i</code> as input!</p>
+<p>Model Complexity<br>================<br>We have introduced the training step, but wait, there is one important thing, the <strong>regularization term</strong>!<br>We need to define the complexity of the tree :math:<code>\Omega(f)</code>. In order to do so, let us first refine the definition of the tree :math:<code>f(x)</code> as</p>
+<p>.. math::</p>
+<p>  f_t(x) = w_{q(x)}, w \in R^T, q:R^d\rightarrow {1,2,\cdots,T} .</p>
+<p>Here :math:<code>w</code> is the vector of scores on leaves, :math:<code>q</code> is a function assigning each data point to the corresponding leaf, and :math:<code>T</code> is the number of leaves.<br>In XGBoost, we define the complexity as</p>
+<p>.. math::</p>
+<p>  \Omega(f) = \gamma T + \frac{1}{2}\lambda \sum_{j=1}^T w_j^2</p>
+<p>Of course, there is more than one way to define the complexity, but this one works well in practice. The regularization is one part most tree packages treat<br>less carefully, or simply ignore. This was because the traditional treatment of tree learning only emphasized improving impurity, while the complexity control was left to heuristics.<br>By defining it formally, we can get a better idea of what we are learning and obtain models that perform well in the wild.</p>
+<p>The Structure Score<br>===================<br>Here is the magical part of the derivation. After re-formulating the tree model, we can write the objective value with the :math:<code>t</code>-th tree as:</p>
+<p>.. math::</p>
+<p>  \text{obj}^{(t)} &amp;\approx \sum_{i=1}^n [g_i w_{q(x_i)} + \frac{1}{2} h_i w_{q(x_i)}^2] + \gamma T + \frac{1}{2}\lambda \sum_{j=1}^T w_j^2\<br>  &amp;= \sum^T_{j=1} [(\sum_{i\in I_j} g_i) w_j + \frac{1}{2} (\sum_{i\in I_j} h_i + \lambda) w_j^2 ] + \gamma T</p>
+<p>where :math:<code>I_j = \{i|q(x_i)=j\}</code> is the set of indices of data points assigned to the :math:<code>j</code>-th leaf.<br>Notice that in the second line we have changed the index of the summation because all the data points on the same leaf get the same score.<br>We could further compress the expression by defining :math:<code>G_j = \sum_{i\in I_j} g_i</code> and :math:<code>H_j = \sum_{i\in I_j} h_i</code>:</p>
+<p>.. math::</p>
+<p>  \text{obj}^{(t)} = \sum^T_{j=1} [G_jw_j + \frac{1}{2} (H_j+\lambda) w_j^2] +\gamma T</p>
+<p>In this equation, :math:<code>w_j</code> are independent with respect to each other, the form :math:<code>G_jw_j+\frac{1}{2}(H_j+\lambda)w_j^2</code> is quadratic and the best :math:<code>w_j</code> for a given structure :math:<code>q(x)</code> and the best objective reduction we can get is:</p>
+<p>.. math::</p>
+<p>  w_j^\ast &amp;= -\frac{G_j}{H_j+\lambda}\<br>  \text{obj}^\ast &amp;= -\frac{1}{2} \sum_{j=1}^T \frac{G_j^2}{H_j+\lambda} + \gamma T</p>
+<p>The last equation measures <em>how good</em> a tree structure :math:<code>q(x)</code> is.</p>
+<p>.. image:: <a href="https://raw.githubusercontent.com/dmlc/web-data/master/xgboost/model/struct_score.png" target="_blank" rel="noopener">https://raw.githubusercontent.com/dmlc/web-data/master/xgboost/model/struct_score.png</a><br>  :width: 100%<br>  :alt: illustration of structure score (fitness)</p>
+<p>If all this sounds a bit complicated, let’s take a look at the picture, and see how the scores can be calculated.<br>Basically, for a given tree structure, we push the statistics :math:<code>g_i</code> and :math:<code>h_i</code> to the leaves they belong to,<br>sum the statistics together, and use the formula to calculate how good the tree is.<br>This score is like the impurity measure in a decision tree, except that it also takes the model complexity into account.</p>
+<p>Learn the tree structure<br>========================<br>Now that we have a way to measure how good a tree is, ideally we would enumerate all possible trees and pick the best one.<br>In practice this is intractable, so we will try to optimize one level of the tree at a time.<br>Specifically we try to split a leaf into two leaves, and the score it gains is</p>
+<p>.. math::<br>  Gain = \frac{1}{2} \left[\frac{G_L^2}{H_L+\lambda}+\frac{G_R^2}{H_R+\lambda}-\frac{(G_L+G_R)^2}{H_L+H_R+\lambda}\right] - \gamma</p>
+<p>This formula can be decomposed as 1) the score on the new left leaf 2) the score on the new right leaf 3) The score on the original leaf 4) regularization on the additional leaf.<br>We can see an important fact here: if the gain is smaller than :math:<code>\gamma</code>, we would do better not to add that branch. This is exactly the <strong>pruning</strong> techniques in tree based<br>models! By using the principles of supervised learning, we can naturally come up with the reason these techniques work :)</p>
+<p>For real valued data, we usually want to search for an optimal split. To efficiently do so, we place all the instances in sorted order, like the following picture.</p>
+<p>.. image:: <a href="https://raw.githubusercontent.com/dmlc/web-data/master/xgboost/model/split_find.png" target="_blank" rel="noopener">https://raw.githubusercontent.com/dmlc/web-data/master/xgboost/model/split_find.png</a><br>  :width: 100%<br>  :alt: Schematic of choosing the best split</p>
+<p>A left to right scan is sufficient to calculate the structure score of all possible split solutions, and we can find the best split efficiently.</p>
+<p>.. note:: Limitation of additive tree learning</p>
+<p>  Since it is intractable to enumerate all possible tree structures, we add one split at a time. This approach works well most of the time, but there are some edge cases that fail due to this approach. For those edge cases, training results in a degenerate model because we consider only one feature dimension at a time. See <code>Can Gradient Boosting Learn Simple Arithmetic? &lt;http://mariofilho.com/can-gradient-boosting-learn-simple-arithmetic/&gt;</code>_ for an example. </p>
+<p><strong><strong><strong><strong><strong>**</strong></strong></strong></strong></strong><br>Final words on XGBoost<br><strong><strong><strong><strong><strong>**</strong></strong></strong></strong></strong><br>Now that you understand what boosted trees are, you may ask, where is the introduction for XGBoost?<br>XGBoost is exactly a tool motivated by the formal principle introduced in this tutorial!<br>More importantly, it is developed with both deep consideration in terms of <strong>systems optimization</strong> and <strong>principles in machine learning</strong>.<br>The goal of this library is to push the extreme of the computation limits of machines to provide a <strong>scalable</strong>, <strong>portable</strong> and <strong>accurate</strong> library.<br>Make sure you try it out, and most importantly, contribute your piece of wisdom (code, examples, tutorials) to the community!</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/04/22/yuque/Boosted Trees简介/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/爱最近邻算法的10个理由" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/04/22/yuque/爱最近邻算法的10个理由/">爱最近邻算法的10个理由</a>
+    </h1>
+  
+
+        
+        <a href="/2019/04/22/yuque/爱最近邻算法的10个理由/" class="archive-article-date">
+  	<time datetime="2019-04-22T05:31:38.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-22</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>我一见钟情就爱上了k-Nearest Neighbors算法，但这不是盲目的爱。我有很多理由对此感到生气。</p>
+        
+          <a class="article-more-a" href="/2019/04/22/yuque/爱最近邻算法的10个理由/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/04/22/yuque/爱最近邻算法的10个理由/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/5/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/7/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="/page/5/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/7/">Next &raquo;</a>
     </nav>
   
 
