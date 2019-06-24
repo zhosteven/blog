@@ -6,18 +6,59 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://www.zhos.me">
-  <title>A+</title>
+  <title>目标检测之RCNN，SPP-NET，Fast-RCNN，Faster-RCNN | A+</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="研究性材料(算法)">
-<meta property="og:type" content="website">
-<meta property="og:title" content="A+">
-<meta property="og:url" content="http://www.zhos.me/page/8/index.html">
+  <meta name="description" content="写在前面在深度学习出现之前，传统的目标检测方法大概分为区域选择（滑窗）、特征提取（SIFT、HOG等）、分类器（SVM、Adaboost等）三个部分，其主要问题有两方面：一方面滑窗选择策略没有针对性、时间复杂度高，窗口冗余；另一方面手工设计的特征鲁棒性较差。自深度学习出现之后，目标检测取得了巨...">
+<meta property="og:type" content="article">
+<meta property="og:title" content="目标检测之RCNN，SPP-NET，Fast-RCNN，Faster-RCNN">
+<meta property="og:url" content="http://www.zhos.me/2019/06/24/yuque/目标检测之RCNN，SPP-NET，Fast-RCNN，Faster-RCNN/index.html">
 <meta property="og:site_name" content="A+">
-<meta property="og:description" content="研究性材料(算法)">
+<meta property="og:description" content="写在前面在深度学习出现之前，传统的目标检测方法大概分为区域选择（滑窗）、特征提取（SIFT、HOG等）、分类器（SVM、Adaboost等）三个部分，其主要问题有两方面：一方面滑窗选择策略没有针对性、时间复杂度高，窗口冗余；另一方面手工设计的特征鲁棒性较差。自深度学习出现之后，目标检测取得了巨...">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1561365265113-ffe24c21-8b5f-4eff-be6c-c5716f494f09.png#align=left&display=inline&height=355&name=rcnn.png&originHeight=355&originWidth=592&size=631917&status=done&width=592">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1561365300467-cbd325a3-abeb-4788-b76b-7220ab85903e.png#align=left&display=inline&height=302&name=sppnet.png&originHeight=302&originWidth=592&size=537598&status=done&width=592">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1561365335760-a5b69570-6524-44aa-8799-9a8697d25c60.png#align=left&display=inline&height=288&name=image02.png&originHeight=288&originWidth=546&size=88918&status=done&width=546">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1561365364159-c1173844-f27d-438d-ba2d-5451c315b29c.png#align=left&display=inline&height=613&name=image03.png&originHeight=613&originWidth=926&size=57539&status=done&width=926">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1561365393251-65e017e5-e7d4-48ba-9fd0-44203f8e9c76.png#align=left&display=inline&height=669&originHeight=669&originWidth=621&size=0&status=done&width=621">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/eb59e298bd034d2cb84969545df53438.svg#card=math&code=p_i%3Ds_i%20%5Ccdot%20p_%7Bi%2B1%7D%2B%5B%28k_i-1%29%2F2-padding%5D&height=24&width=266">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/eef74e92f8d1c95768c9ac0c8033d659.svg#card=math&code=p_i%3Dp_%7Bi%2B1%7D&height=24&width=64">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/eca91c83a74a2373ca5f796700e99fd3.svg#card=math&code=p_i&height=24&width=14">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/e406ac4d7c470823a8619c13dd7101be.svg#card=math&code=s_i&height=24&width=14">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1561365466039-41a25182-9cd1-4724-bbaf-f2c8e47400e1.png#align=left&display=inline&height=173&originHeight=173&originWidth=602&size=0&status=done&width=602">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/4e802acb5edbb048c72376723fbeca2a.svg#card=math&code=%5Cleft%20%5Clfloor%20k_i%2F2%20%5Cright%20%5Crfloor&height=24&width=45">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/74b37d72f47c3b21747f677ac1cb83a5.svg#card=math&code=p_i%3Ds_i%20%5Ccdot%20p_%7Bi%2B1%7D&height=24&width=89">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1561365487808-c82a0e9a-834a-4807-a7c8-6b5f07d9185e.png#align=left&display=inline&height=298&originHeight=298&originWidth=600&size=0&status=done&width=600">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/ef0ff0e342027c078edbcd8b2a7e4dda.svg#card=math&code=x%27%3D%5Cleft%20%5Clfloor%20x%2FS%20%5Cright%20%5Crfloor%2B1%2C%20y%27%3D%5Cleft%20%5Clfloor%20y%2FS%20%5Cright%20%5Crfloor%2B1&height=24&width=218">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/7aa06c0814137c917bcd71deae0c4dd2.svg#card=math&code=x%27%3D%5Cleft%20%5Clceil%20x%2FS%20%5Cright%20%5Crceil-1%2C%20y%27%3D%5Cleft%20%5Clceil%20y%2FS%20%5Cright%20%5Crceil-1&height=24&width=218">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/adfd742ecb8cf41adc03b55b83cd5d94.svg#card=math&code=S%3D%5Cprod_%7B0%7D%5E%7Bi%7Ds_i&height=50&width=69">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1561365487818-0cc051cc-0642-4756-8ea8-3002783c6e0c.png#align=left&display=inline&height=445&originHeight=445&originWidth=592&size=0&status=done&width=592">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/b5f712a3a1ab0f479b46c0af00244a11.svg#card=math&code=p%3D%28p_0%2C%20p_1%2C%20%5Ccdots%2C%20p_K%29&height=24&width=138">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/cbb478231f040fe7e9d2aa599865e2b9.svg#card=math&code=t%5Ek%20%3D%20%28t%5Ek_x%2C%20t%5Ek_y%2C%20t%5Ek_w%2C%20t%5Ek_h%29&height=25&width=127">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/dd966ee640d360cd1030ab80055b11d4.svg#card=math&code=0%20%5Cle%20k%20%5Cle%20K&height=24&width=74">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/48d79430384dca8b7d478b3fd191d91e.svg#card=math&code=v%3D%28v_x%2Cv_y%2Cv_w%2Cv_h%29&height=25&width=129">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/a0efc78099a1841e309df74a7e658850.svg#card=math&code=t%5Eu%3D%28t_x%5Eu%2Ct_y%5Eu%2Ct_w%5Eu%2Ct_h%5Eu%29&height=25&width=128">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/65a617a8d624705568b08cee6d14eaf5.svg#card=math&code=L%28p%2Cu%2Ct%5Eu%2Cv%29%3DL_%7Bcls%7D%28p%2Cu%29%2B%5Clambda%20%5Bu%20%5Cge%201%5DL_%7Bloc%7D%28t%5Eu%2Cv%29&height=24&width=317">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/b20a54c3ae72eb8d5610bf30d47fcc92.svg#card=math&code=L_%7Bcls%7D%28p%2Cu%29%3D-%5Clog%20p_u&height=24&width=141">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/fb695fa0f6700942bcfc817c0ec6b015.svg#card=math&code=u%20%5Cge%201&height=24&width=39">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/ba6ed319adfb146814eb27d4e46825d0.svg#card=math&code=%5Bu%20%5Cge%201%5D&height=24&width=48">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/f69ab263c72ee87b0011044f0651c884.svg#card=math&code=L_%7Bloc%7D%28t%5Eu%2C%20v%29%20%3D%20%5Csum_%7Bi%20%5Cin%20%7Bx%2C%20y%2C%20w%2C%20h%7D%7D%20%5Ctext%7Bsmooth%7D_%7BL_1%7D%28t_i%5Eu-%20v_i%29&height=41&width=269">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/5519b64be17d6f7f4a8857b2f7c17c28.svg#card=math&code=%5Ctext%7Bsmooth%7D_%7BL_1%7D%28x%29%20%3D%20%5Cleft%20%5C%7B%20%5Cbegin%7Baligned%7D%20%26%200.5x%5E2%20%26%20%7Cx%7C%20%5Cle%201%20%5C%5C%20%26%7Cx%7C-0.5%20%26%20%5Ctext%7Botherwise%7D%5Cend%7Baligned%7D%20%5Cright.&height=43&width=286">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/2c6f3b6c16df97a1b00e04ff17e4906e.svg#card=math&code=L_1&height=24&width=18">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/07cbd6c155424e110559a84df364be5a.svg#card=math&code=L_2&height=24&width=18">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/9f8836653f8d3e61d60fc083ede7d896.svg#card=math&code=%28-1%2C%201%29&height=24&width=49">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1561365487792-23e05f1c-cb64-41e5-a4b2-965d685764ba.png#align=left&display=inline&height=225&originHeight=225&originWidth=300&size=0&status=done&width=300">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1561365488022-6fc398af-6b84-4ba6-b2b4-9d73e46ffd73.png#align=left&display=inline&height=455&originHeight=455&originWidth=592&size=0&status=done&width=592">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1561365487802-4e5ae087-6d63-4c28-b93c-d55bcaa33759.png#align=left&display=inline&height=355&originHeight=721&originWidth=710&size=0&status=done&width=350">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1561365488052-e0c25352-c570-4206-9654-e5e89b36144d.png#align=left&display=inline&height=327&originHeight=523&originWidth=880&size=0&status=done&width=550">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1561365487785-b5cea912-4922-4a5e-9bae-8064eb118bf0.png#align=left&display=inline&height=386&originHeight=386&originWidth=424&size=0&status=done&width=424">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/8ab974e160dee55e89e9cd4eafa89cb7.svg#card=math&code=L%28%7Bp_i%7D%7Bt_i%7D%29%20%3D%20%5Cfrac%7B1%7D%7BN_%7Bcls%7D%7D%20%5Csum_i%20L_%7Bcls%7D%28p_i%2C%20p_i%5E%2A%29%20%2B%5Clambda%20%5Cfrac%7B1%7D%7BN_%7Breg%7D%7D%20%5Csum_i%20p_i%5E%2A%20L_%7Breg%7D%28t_i%2C%20t_i%5E%2A%29&height=45&width=394">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/490d911f5a01d7af7ae4c871b55323e4.svg#card=math&code=%5Ctext%7Bsmooth%7D_%7BL_1%7D%28x%29&height=25&width=89">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1561365487824-2c4313f1-453c-4410-b0c6-df7170a2223d.png#align=left&display=inline&height=271&originHeight=271&originWidth=600&size=0&status=done&width=600">
+<meta property="og:updated_time" content="2019-06-24T08:49:02.947Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="A+">
-<meta name="twitter:description" content="研究性材料(算法)">
+<meta name="twitter:title" content="目标检测之RCNN，SPP-NET，Fast-RCNN，Faster-RCNN">
+<meta name="twitter:description" content="写在前面在深度学习出现之前，传统的目标检测方法大概分为区域选择（滑窗）、特征提取（SIFT、HOG等）、分类器（SVM、Adaboost等）三个部分，其主要问题有两方面：一方面滑窗选择策略没有针对性、时间复杂度高，窗口冗余；另一方面手工设计的特征鲁棒性较差。自深度学习出现之后，目标检测取得了巨...">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1561365265113-ffe24c21-8b5f-4eff-be6c-c5716f494f09.png#align=left&display=inline&height=355&name=rcnn.png&originHeight=355&originWidth=592&size=631917&status=done&width=592">
   
     <link rel="alternative" href="/atom.xml" title="A+" type="application/atom+xml">
   
@@ -147,669 +188,116 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-    <article id="post-yuque/使用分类数据" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+            <article id="post-yuque/目标检测之RCNN，SPP-NET，Fast-RCNN，Faster-RCNN" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/08/yuque/使用分类数据/">使用分类数据</a>
+    <h1 class="article-title" itemprop="name">
+      目标检测之RCNN，SPP-NET，Fast-RCNN，Faster-RCNN
     </h1>
   
 
         
-        <a href="/2019/04/08/yuque/使用分类数据/" class="archive-article-date">
-  	<time datetime="2019-04-08T07:39:26.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-08</time>
+        <a href="/2019/06/24/yuque/目标检测之RCNN，SPP-NET，Fast-RCNN，Faster-RCNN/" class="archive-article-date">
+  	<time datetime="2019-06-24T08:33:04.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-06-24</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1554709233823-57e9c2f7-90ef-44ea-94bd-fea23e2d2379.jpeg#align=left&amp;display=inline&amp;height=497&amp;name=1_Z4AtdMlAJHI9ad-qv3VufQ.jpeg&amp;originHeight=666&amp;originWidth=1000&amp;size=180607&amp;status=done&amp;width=746" alt="1_Z4AtdMlAJHI9ad-qv3VufQ.jpeg"><br>来自社会科学，我习惯于使用具有几个分类变量的数据集。这些通常是实验条件（控制与干预），性别（女性与男性）或国籍（荷兰与德国对比利时对比其他）。但作为<a href="http://methoddatascience.com/" target="_blank" rel="noopener">方法数据科学社区</a>第2周练习的一部分<a href="http://methoddatascience.com/" target="_blank" rel="noopener">，</a>我的团队正在解决一个带有许多分类变量的Kaggle挑战。由于我的笔记本电脑仍在使用单热编码，因此需要一种不同的解决方案。我的团队成员<a href="https://medium.com/@chris.dinant" target="_blank" rel="noopener">Chris Dinant</a>已经建议将<a href="https://tech.yandex.com/catboost/" target="_blank" rel="noopener">Catboost</a>作为处理分类数据的一种方式。这篇文章将深入研究这种方法，解释可以应用它的情况，以及如何应用它。<br>
-        
-          <a class="article-more-a" href="/2019/04/08/yuque/使用分类数据/#more">more >></a>
-        
-      
-
-      
-    </p></div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/04/08/yuque/使用分类数据/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/CatBoost有什么特别之处？" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/08/yuque/CatBoost有什么特别之处？/">CatBoost有什么特别之处？</a>
-    </h1>
-  
-
-        
-        <a href="/2019/04/08/yuque/CatBoost有什么特别之处？/" class="archive-article-date">
-  	<time datetime="2019-04-08T07:12:11.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-08</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1554707585506-4c6f626f-1c87-4aab-9b37-132a943eb382.png#align=left&amp;display=inline&amp;height=400&amp;name=1_iEO6b3roCesXxI0vkx9IPg.png&amp;originHeight=720&amp;originWidth=1343&amp;size=104681&amp;status=done&amp;width=746" alt="1_iEO6b3roCesXxI0vkx9IPg.png"><br>CatBoost基于梯度增强。Yandex开发的一种新的机器学习技术，优于许多现有的增强算法，如XGBoost，Light GBM。<br>虽然深度学习算法需要大量数据和计算能力，但仍需要增强算法来解决<strong>大多数</strong>业务问题。然而，像XGBoost这样的提升算法需要花费数小时来训练，有时候在调整超参数时你会感到沮丧。<br>另一方面，CatBoost易于实施且<strong>功能强大</strong>。它在首次运行时提供了出色的结果。那么，让我们来看看CatBoost的特别之处。<br>
-        
-          <a class="article-more-a" href="/2019/04/08/yuque/CatBoost有什么特别之处？/#more">more >></a>
-        
-      
-
-      
-    </p></div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/04/08/yuque/CatBoost有什么特别之处？/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/动画RNN，LSTM和GRU" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/08/yuque/动画RNN，LSTM和GRU/">动画RNN，LSTM和GRU</a>
-    </h1>
-  
-
-        
-        <a href="/2019/04/08/yuque/动画RNN，LSTM和GRU/" class="archive-article-date">
-  	<time datetime="2019-04-08T03:35:15.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-08</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><img src="https://cdn.nlark.com/yuque/0/2019/gif/219582/1554694541119-cecb0195-0921-42bb-99c5-76b77aad66d3.gif#align=left&amp;display=inline&amp;height=494&amp;name=1.gif&amp;originHeight=662&amp;originWidth=1000&amp;size=468764&amp;status=done&amp;width=746" alt="1.gif"><br>递归神经网络（RNN）是一类人工神经网络，通常与顺序数据一起使用。3种最常见的递归神经网络类型是</p>
+        <p><a name="title0"></a></p>
+<h3 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h3><hr>
+<p>在深度学习出现之前，传统的目标检测方法大概分为区域选择（滑窗）、特征提取（SIFT、HOG等）、分类器（SVM、Adaboost等）三个部分，其主要问题有两方面：一方面滑窗选择策略没有针对性、时间复杂度高，窗口冗余；另一方面手工设计的特征鲁棒性较差。自深度学习出现之后，目标检测取得了巨大的突破，最瞩目的两个方向有：1 以RCNN为代表的基于Region Proposal的深度学习目标检测算法（RCNN，SPP-NET，Fast-RCNN，Faster-RCNN等）；2 以YOLO为代表的基于回归方法的深度学习目标检测算法（YOLO，SSD等）。本篇对基于Region Proposal的深度学习目标检测算法进行介绍，后续再对基于回归方法的深度学习目标检测方法进行介绍。</p>
+<hr>
+<p><a name="title1"></a></p>
+<h3 id="RCNN"><a href="#RCNN" class="headerlink" title="RCNN"></a>RCNN</h3><hr>
+<p><a name="title2"></a></p>
+<h4 id="流程框图"><a href="#流程框图" class="headerlink" title="流程框图"></a>流程框图</h4><p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1561365265113-ffe24c21-8b5f-4eff-be6c-c5716f494f09.png#align=left&amp;display=inline&amp;height=355&amp;name=rcnn.png&amp;originHeight=355&amp;originWidth=592&amp;size=631917&amp;status=done&amp;width=592" alt="rcnn.png"><br><a name="title3"></a></p>
+<h4 id="算法特点"><a href="#算法特点" class="headerlink" title="算法特点"></a>算法特点</h4><hr>
 <ol>
-<li>香草RNN，</li>
-<li>长期短暂记忆（LSTM），由<a href="https://www.researchgate.net/publication/13853244_Long_Short-term_Memory" target="_blank" rel="noopener">Hochreiter和Schmidhuber在1997年提出</a>，和</li>
-<li><a href="https://arxiv.org/abs/1409.1259" target="_blank" rel="noopener">Cho _等人_</a>提出的门控复发单位（GRU）<a href="https://arxiv.org/abs/1409.1259" target="_blank" rel="noopener">_。_</a><a href="https://arxiv.org/abs/1409.1259" target="_blank" rel="noopener">_人_</a><a href="https://arxiv.org/abs/1409.1259" target="_blank" rel="noopener">在2014年</a>。<br>请注意，我将使用“RNN”来统一指代固有循环的神经网络架构，并使用“vanilla RNN”来指代最简单的递归神经网络架构，如图&gt; <a href="https://towardsdatascience.com/animated-rnn-lstm-and-gru-ef124d06cf45#50f0" target="_blank" rel="noopener">1</a>所示。<br>有许多用于递归神经网络的图解图。我最喜欢的是迈克尔·阮（Michael Nguyen）在<a href="https://towardsdatascience.com/illustrated-guide-to-lstms-and-gru-s-a-step-by-step-explanation-44e9eb85bf21" target="_blank" rel="noopener">“</a>走向数据科学”（Towards Data Science）上发表的<a href="https://towardsdatascience.com/illustrated-guide-to-lstms-and-gru-s-a-step-by-step-explanation-44e9eb85bf21" target="_blank" rel="noopener">这篇文章</a>，因为他为我们提供了对这些模型的直觉，更重要的是让我们更容易理解的美丽插图。但我的帖子背后的动机是更好地可视化在这些单元格中发生的事情，以及如何共享节点以及它们如何转换以给出输出节点。我的灵感来自迈克尔的精彩动画。<br>本文探讨了香草RNN，LSTM和GRU细胞。这是一个简短的阅读，适用于那些阅读过这些主题的人。（我建议在阅读这篇文章之前阅读迈克尔的文章。）重要的是要注意以下动画是连续的，以引导人眼，但不反映矢量化机器计算期间的时间顺序。<br>
-        
-          <a class="article-more-a" href="/2019/04/08/yuque/动画RNN，LSTM和GRU/#more">more >></a>
-        
-      
-
-      
-    </li></ol></div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/04/08/yuque/动画RNN，LSTM和GRU/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/XGBoost算法：长期可能在位！" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/08/yuque/XGBoost算法：长期可能在位！/">XGBoost算法：长期可能在位！</a>
-    </h1>
-  
-
-        
-        <a href="/2019/04/08/yuque/XGBoost算法：长期可能在位！/" class="archive-article-date">
-  	<time datetime="2019-04-08T03:02:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-08</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1554692595416-69c4133a-0fb6-4ae5-b308-642403bd2216.png#align=left&amp;display=inline&amp;height=521&amp;name=1.png&amp;originHeight=699&amp;originWidth=1000&amp;size=991609&amp;status=done&amp;width=746" alt="1.png"><br>我还记得十五年前我第一份工作的第一天。我刚完成研究生课程，并以分析师的身份加入了一家全球投资银行。在我的第一天，我一直拉直领带，并试着记住我学过的一切。与此同时，在内心深处，我想知道我是否对企业界足够好。感觉到我的焦虑，我的老板微笑着说：<br><em>“别担心！你唯一需要知道的就是回归建模！“</em><br>我记得自己在想，“我得到了这个！”。我知道回归建模; 线性和逻辑回归。我的老板是对的。在我任职期间，我专门建立了基于回归的统计模型。我并不孤单。事实上，在那个时候，回归建模是无可争议的预测分析女王。快进十五年，回归建模的时代已经结束。老女王已经过去了。新女王的名字很长，名字很久; XGBoost或Extreme Gradient Boosting！<br>
-        
-          <a class="article-more-a" href="/2019/04/08/yuque/XGBoost算法：长期可能在位！/#more">more >></a>
-        
-      
-
-      
-    </p></div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/04/08/yuque/XGBoost算法：长期可能在位！/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/我的建立图书推荐系统之旅。。。" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/05/yuque/我的建立图书推荐系统之旅。。。/">我的建立图书推荐系统之旅。。。</a>
-    </h1>
-  
-
-        
-        <a href="/2019/04/05/yuque/我的建立图书推荐系统之旅。。。/" class="archive-article-date">
-  	<time datetime="2019-04-04T16:41:13.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-05</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1554396102648-d76c57c9-629d-4bfc-baf1-09826f912b2a.jpeg#align=left&amp;display=inline&amp;height=497&amp;name=1_Gql-Vlc4BQJz_x8GhJXX2A.jpeg&amp;originHeight=1280&amp;originWidth=1920&amp;size=642247&amp;status=done&amp;width=746" alt="1_Gql-Vlc4BQJz_x8GhJXX2A.jpeg"><br>推荐系统一直让我的思绪占据了一段时间，由于我倾向于阅读书籍，因此探索Book Crossing数据集非常吸引人。<br>在线推荐系统是许多电子商务网站的事情。推荐系统广泛地向最适合其口味和特征的顾客推荐产品。有关推荐系统的更多详细信息，请阅读我关于推荐系统的<a href="https://medium.com/@chhavi.saluja1401/recommendation-systems-made-simple-b5a79cac8862" target="_blank" rel="noopener">介绍性文章</a>和<a href="https://towardsdatascience.com/collaborative-filtering-based-recommendation-systems-exemplified-ecbffe1c20b1" target="_blank" rel="noopener">使用Python</a>的<a href="https://towardsdatascience.com/collaborative-filtering-based-recommendation-systems-exemplified-ecbffe1c20b1" target="_blank" rel="noopener">一些插图</a>。<br>当我遇到<a href="http://www2.informatik.uni-freiburg.de/~cziegler/BX/" target="_blank" rel="noopener">Book Crossing</a>数据集时，我开始构建图书推荐系统。该数据集由Cai-Nicolas Ziegler于2004年编制，包含三个用户，书籍和评级表。显性评级以1-10的等级表示（较高的值表示较高的评价），隐式评级表示为0。<br>在构建任何机器学习模型之前，了解数据是什么以及我们要实现的目标至关重要。数据探索揭示了隐藏的趋势和见解，数据预处理使数据可供ML算法使用。<br>那么，让我们开始吧。。。<br>
-        
-          <a class="article-more-a" href="/2019/04/05/yuque/我的建立图书推荐系统之旅。。。/#more">more >></a>
-        
-      
-
-      
-    </p></div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/04/05/yuque/我的建立图书推荐系统之旅。。。/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/webhook实现服务器自动部署" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/04/yuque/webhook实现服务器自动部署/">webhook实现服务器自动部署</a>
-    </h1>
-  
-
-        
-        <a href="/2019/04/04/yuque/webhook实现服务器自动部署/" class="archive-article-date">
-  	<time datetime="2019-04-04T14:50:24.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-04</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><code>Webhook</code>是一种通过自定义回调函数来增加或更改網頁表现的方法。这些回调可被可能与原始网站或应用相关的第三方用户及开发者保存、修改与管理。术语“网络钩子”由杰夫·林德塞（Jeff Lindsay）于2007年通过给计算机编程术语“钩子”（Hook）加上前缀得。<br>网络钩子是“用户定义的HTTP回调”。网络钩子通常被某些事件激活，比如将代码推送到源[3]或评论博客。.[4]当此事件发生时，原网站将向为网络钩子配置的URL发送HTTP请求。用户可配置它们引发网页上的事件以调用另一个网站的行为。此操作可为任何事件。<br>本片博客介绍一个简单的<code>github</code>中的<code>webhook</code>自动部署<code>hexo</code>博客。<br><a name="c4e6712f"></a></p>
-<h3 id="服务器安装依赖git，hexo，node，npm"><a href="#服务器安装依赖git，hexo，node，npm" class="headerlink" title="服务器安装依赖git，hexo，node，npm"></a>服务器安装依赖git，hexo，node，npm</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">apt install git</span><br><span class="line">apt install nodejs</span><br><span class="line">apt install npm</span><br><span class="line">npm i -g hexo</span><br></pre></td></tr></table></figure>
-<p><a name="712b29e8"></a></p>
-<h3 id="创建一个webhook-js"><a href="#创建一个webhook-js" class="headerlink" title="创建一个webhook.js"></a>创建一个webhook.js</h3><figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">var http = <span class="keyword">require</span>(<span class="string">'http'</span>);</span><br><span class="line">var exec = <span class="keyword">require</span>(<span class="string">'child_process'</span>).exec;</span><br><span class="line"></span><br><span class="line">http.createServer(function (req, res) &#123;</span><br><span class="line">    <span class="keyword">if</span>(req.url === <span class="string">'/webhooks/push/1'</span>) &#123; <span class="regexp">//</span>定义webhook地址</span><br><span class="line">        exec(<span class="string">'sh ./webhook.sh'</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    res.<span class="keyword">end</span>();</span><br><span class="line">&#125;).listen(<span class="number">9999</span>)</span><br><span class="line">console.log(<span class="string">'we are in 9999'</span>);</span><br></pre></td></tr></table></figure>
-<p><a name="e57a0d46"></a></p>
-<h3 id="创建webhook-sh脚本，执行pull，编译等操作"><a href="#创建webhook-sh脚本，执行pull，编译等操作" class="headerlink" title="创建webhook.sh脚本，执行pull，编译等操作"></a>创建webhook.sh脚本，执行pull，编译等操作</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">'begin'</span> &gt; ../1.txt</span><br><span class="line"><span class="built_in">cd</span> /usr/share/nginx/blog</span><br><span class="line">git pull</span><br><span class="line">npm run hook</span><br><span class="line">cp -r /usr/share/nginx/blog/public/* /usr/share/nginx/ninesix.cc/</span><br><span class="line"><span class="built_in">echo</span> <span class="string">'end'</span> &gt;&gt; ../1.txt</span><br></pre></td></tr></table></figure>
-<p><a name="a165d47a"></a></p>
-<h3 id="使用pm2启动webhook服务"><a href="#使用pm2启动webhook服务" class="headerlink" title="使用pm2启动webhook服务"></a>使用pm2启动webhook服务</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">npm i -g pm2</span><br><span class="line">pm2 start webhook.js</span><br></pre></td></tr></table></figure>
-<p><a name="dd496f4d"></a></p>
-<h3 id="把webhook地址写到github的项目设置中"><a href="#把webhook地址写到github的项目设置中" class="headerlink" title="把webhook地址写到github的项目设置中"></a>把webhook地址写到github的项目设置中</h3><p><code>http://ip:9999/webhooks/push/1</code><br>github会测试发送，成功之后会显示绿色对勾.<br><a name="912951c4"></a></p>
-<h4 id="https-www-yuque-com-yuque-developer-doc-webhook"><a href="#https-www-yuque-com-yuque-developer-doc-webhook" class="headerlink" title="https://www.yuque.com/yuque/developer/doc-webhook"></a><a href="https://www.yuque.com/yuque/developer/doc-webhook" target="_blank" rel="noopener">https://www.yuque.com/yuque/developer/doc-webhook</a></h4><p>apt install git<br>apt install nodejs<br>apt install npm<br>npm i -g hexo</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/04/04/yuque/webhook实现服务器自动部署/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/12产品管理的行为数据类型" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/04/yuque/12产品管理的行为数据类型/">12产品管理的行为数据类型</a>
-    </h1>
-  
-
-        
-        <a href="/2019/04/04/yuque/12产品管理的行为数据类型/" class="archive-article-date">
-  	<time datetime="2019-04-04T10:09:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-04</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>行为数据，描述观察到的用户或客户行为的数据，可以让您真正了解人们如何或将来可能使用您的产品。听到人们说他们想要的东西是一回事，但看看他们的实际表现会更好。<br>获得比您想象的行为数据更容易。无论您是在进行研究，运行实验来验证假设或功能，还是您刚刚发布了一项功能，行为数据都是您最好的，可以说是最有信息量的朋友。<br>本文旨在通过向您提供产品团队可用的所有类型的行为数据列表来帮助您。希望它提供了一些新的选项，如果您尝试使用数据来推动团队的决策，您可以考虑这些选项。<br>
-        
-          <a class="article-more-a" href="/2019/04/04/yuque/12产品管理的行为数据类型/#more">more >></a>
-        
-      
-
-      
-    </p></div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/04/04/yuque/12产品管理的行为数据类型/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/从Alexa的错误中学习" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/04/yuque/从Alexa的错误中学习/">从Alexa的错误中学习</a>
-    </h1>
-  
-
-        
-        <a href="/2019/04/04/yuque/从Alexa的错误中学习/" class="archive-article-date">
-  	<time datetime="2019-04-04T09:08:29.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-04</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><em>虽然亚马逊的“唤醒词”功能可以改善隐私，但它提出了自己的挑战，例如Alexa录制私人谈话并未经同意将其发送出去。</em><br>通过<a href="https://www.pcmag.com/author-bio/ben-dickson" target="_blank" rel="noopener">本迪克森</a><br>Amazon Echo设备最近<a href="https://www.pcmag.com/news/361405/amazon-alexa-sends-familys-private-conversation-to-contact" target="_blank" rel="noopener">记录</a>了用户<a href="https://www.pcmag.com/news/361405/amazon-alexa-sends-familys-private-conversation-to-contact" target="_blank" rel="noopener">的私人谈话</a>，并在未经他们知情和同意的情况下将其发送给他们的一个联系人。这（再次）引起了对<a href="https://bdtechtalks.com/2018/06/05/google-home-amazon-echo-privacy-security-risks/" target="_blank" rel="noopener">智能扬声器</a>的<a href="https://bdtechtalks.com/2018/06/05/google-home-amazon-echo-privacy-security-risks/" target="_blank" rel="noopener">安全性和隐私性的</a>担忧。然而，后来变得明显，Alexa的奇怪行为并不是一个险恶的间谍情节的一部分 - 相反，它是由于智能扬声器的工作方式导致的一系列相关故障引起的。<br>根据亚马逊提供的一个<a href="https://www.theverge.com/2018/5/24/17391898/amazon-alexa-private-conversation-recording-explanation" target="_blank" rel="noopener">帐户</a>：“由于背景对话中的一个词听起来像’Alexa’，Echo醒了。然后，随后的对话被听作是“发送消息”请求。在这一点上，Alexa大声说’给谁？’ 此时，后台会话被解释为客户联系人列表中的名称。然后Alexa大声问道，’[联系人姓名]，对吗？Alexa然后将背景对话解释为“正确”。尽管这一系列事件不太可能，我们正在评估使这种情况更不可能的选择。“<br>该场景是一个边缘案例，很少发生的事件。但它也是人工智能技术极限的一项有趣研究，它为<a href="https://www.pcmag.com/review/356920/amazon-echo-2017" target="_blank" rel="noopener">Echo</a>和其他所谓的“智能”设备提供动力。<br>
-        
-          <a class="article-more-a" href="/2019/04/04/yuque/从Alexa的错误中学习/#more">more >></a>
-        
-      
-
-      
-    </p></div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/04/04/yuque/从Alexa的错误中学习/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/语音助理在手机上被浪费了" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/04/yuque/语音助理在手机上被浪费了/">语音助理在手机上被浪费了</a>
-    </h1>
-  
-
-        
-        <a href="/2019/04/04/yuque/语音助理在手机上被浪费了/" class="archive-article-date">
-  	<time datetime="2019-04-04T08:55:53.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-04</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><em>智能手机和智能扬声器在解锁语音接口的全部潜力方面受到限制。数字助理的未来是增强和虚拟现实。</em><br><strong>通过</strong><a href="https://www.pcmag.com/author-bio/ben-dickson" target="_blank" rel="noopener"><strong>本迪克森</strong></a><br>自2011年首次亮相以来，苹果公司的语音助手Siri已经激励众多公司开发竞争对手的数字助理，其中最受欢迎的是  <a href="https://www.pcmag.com/article/352136/the-best-amazon-alexa-skills" target="_blank" rel="noopener">亚马逊的Alexa</a>和Google智能助理 - 早已超越Siri的质量。<br>然而，语音助手仅用于我们使用计算设备完成的一小部分任务，因为它们目前所处的平台存在局限性。<br>
-        
-          <a class="article-more-a" href="/2019/04/04/yuque/语音助理在手机上被浪费了/#more">more >></a>
-        
-      
-
-      
-    </p></div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/04/04/yuque/语音助理在手机上被浪费了/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/转移学习：重新启动Inception V3以进行自定义图像分类" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/18/yuque/转移学习：重新启动Inception V3以进行自定义图像分类/">转移学习：重新启动Inception V3以进行自定义图像分类</a>
-    </h1>
-  
-
-        
-        <a href="/2019/03/18/yuque/转移学习：重新启动Inception V3以进行自定义图像分类/" class="archive-article-date">
-  	<time datetime="2019-03-18T10:00:40.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-18</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>让我们通过将现有的图像分类器（Inception V3）调整为自定义任务来体验转移学习的强大功能：对产品图像进行分类，以帮助食品和杂货零售商减少仓库和零售店库存管理过程中的人力。<br>这项工作的源代码可以在我下面的GitHub存储库中找到。<br><a href="https://github.com/wisdal/Image-classification-transfer-learning" target="_blank" rel="noopener">https://github.com/wisdal/Image-classification-transfer-learning</a><br>使用的工具：TensorFlow v1.1，Python 3.4，Jupyter。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1552903355906-1736cd25-8311-4055-a6bd-aa237d022793.png#align=left&amp;display=inline&amp;height=436&amp;name=1_OiM9iXjO4R8Vq_wCSfQZIg.png&amp;originHeight=584&amp;originWidth=1000&amp;size=759418&amp;status=done&amp;width=746" alt="1_OiM9iXjO4R8Vq_wCSfQZIg.png"></p>
-<p><br>深度神经网络的应用实际上是在滚动。无论是医疗保健，运输还是零售，各行各业的公司都对投资构建智能解决方案感到兴奋。同时，让我们希望人类的智慧仍然无可争议:)<br><a name="9dd10fb0"></a></p>
-<h3 id="趋势AI文章："><a href="#趋势AI文章：" class="headerlink" title="趋势AI文章："></a>趋势AI文章：</h3><blockquote>
-<p><a href="https://chatbotslife.com/how-neural-networks-work-ff4c7ad371f7" target="_blank" rel="noopener">1.神经网络如何工作</a>&gt; <a href="https://chatbotslife.com/resnets-highwaynets-and-densenets-oh-my-9bb15918ee32" target="_blank" rel="noopener">2. ResNets，HighwayNets和DenseNets，哦，我的！</a>&gt; <a href="https://chatbotslife.com/machine-learning-for-dummies-part-1-dbaca076ec07" target="_blank" rel="noopener">3.机器学习傻瓜</a><br>在实际情况下，强大的图像分类器等解决方案可以帮助公司跟踪货架库存，对产品进行分类，记录产品量，从专用设备（无人机？机器人？）实时捕获的原始产品图像。当然，能够识别产品并从给定的图片预测其类别是交易的一部分，这就是这个实验的全部内容：我们将培训机器人从图像中分类食品和杂货产品。</p>
-</blockquote>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1552903381892-b439e8f9-e1d2-49ed-9eb1-02be65c96a4f.png#align=left&amp;display=inline&amp;height=390&amp;name=1_OiM9iXjO4R8Vq_wCSfQZIg.png&amp;originHeight=523&amp;originWidth=1000&amp;size=593236&amp;status=done&amp;width=746" alt="1_OiM9iXjO4R8Vq_wCSfQZIg.png"></p>
-<p>“这是一项轻松的任务！”，我们认为是人类，但计算机程序并不一定如此。无论如何，这个假设甚至都不适用于所有类别的人类; 一个5岁的孩子是一个完美的反例！当我们放大时，一切都是为了在您的生活中看到足够的产品图像，您可以从给定的图像轻松识别您之前看过的任何产品。<br>当我们使用现有标记数据训练模型时，我们尝试将这种经验概念转移到模型，以便学习如何准确地区分训练数据集中存在的不同类别的数据。从这个意义上说，我们使用<strong>人工神经网络</strong>，它只不过是模仿人类大脑的实际运作方式。使用这些算法构建模型的知识稍后将在未标记的观察上进行测试。在我们的示例中，模型将基于其先前学习的内容标记输入图像，因此通常分配给该任务的名称<strong>监督学习 </strong>。<br>谈到性能，已经注意到，在大多数监督学习的情况下，训练有素的模型往往比人类提供更好的准确性。在这个实际任务中，您会惊讶地发现即使在困难的条件下（模糊的图像，质量差的图像等），我们的算法也非常优于人类。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1552903421984-d099ab43-1a63-4ccb-9833-783d03b242b8.png#align=left&amp;display=inline&amp;height=381&amp;name=1_OiM9iXjO4R8Vq_wCSfQZIg.png&amp;originHeight=420&amp;originWidth=823&amp;size=329410&amp;status=done&amp;width=746" alt="1_OiM9iXjO4R8Vq_wCSfQZIg.png"><br><br><br>我们有一个来自hackerearth的产品图像数据集可以<a href="https://he-s3.s3.amazonaws.com/media/hackathon/deep-learning-challenge-1/identify-the-objects/a0409a00-8-dataset_dp.zip" target="_blank" rel="noopener">在这里</a>下载。我们应该如何进行，为什么我们使用转学习？</p>
+<li>使用Selective Search提取Proposes，然后利用CNN等识别技术进行分类。</li>
+<li>使用识别库进行预训练，而后用检测库调优参数。</li>
+<li>使用SVM代替了CNN网络中最后的Softmax，同时用CNN输出的4096维向量进行Bounding Box回归。</li>
+<li>流程前两个步骤（候选区域提取+特征提取）与待检测类别无关，可以在不同类之间共用；同时检测多类时，需要倍增的只有后两步骤（判别+精修），都是简单的线性运算，速度很快。<br><a name="title4"></a><h4 id="存在问题"><a href="#存在问题" class="headerlink" title="存在问题"></a>存在问题</h4></li>
+</ol>
 <hr>
-<p><a name="c0139b0c"></a></p>
-<h3 id="为何转学？"><a href="#为何转学？" class="headerlink" title="为何转学？"></a><strong>为何转学？</strong></h3><p>当我们考虑对图像进行分类时，我们常常选择从头开始构建我们的模型以获得最佳匹配。这是一个选项，但构建自定义深度学习模型需要大量的计算资源和大量的培训数据。此外，已经存在的模型在分类来自各种类别的图像时表现得相当好。您可能听说过<a href="http://www.image-net.org/" target="_blank" rel="noopener">ImageNet</a>及其大视觉识别挑战。在这个计算机视觉挑战中，模型试图将大量图像分类为1000个类，如“斑马”，“达尔马提亚”和“洗碗机”。<a href="https://research.googleblog.com/2016/03/train-your-own-image-classifier-with.html" target="_blank" rel="noopener">Inception V3</a>是Google Brain Team为此而建立的模型。毋庸置疑，该模型表现非常出色。<br><br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1552903675886-eeb54f5e-2e91-4943-9a2c-afc8761e6979.png#align=left&amp;display=inline&amp;height=278&amp;name=1_OiM9iXjO4R8Vq_wCSfQZIg.png&amp;originHeight=373&amp;originWidth=1000&amp;size=109931&amp;status=done&amp;width=746" alt="1_OiM9iXjO4R8Vq_wCSfQZIg.png"></p>
-<p>那么，我们可以利用这个模型的存在来进行像现在这样的自定义图像分类任务吗？嗯，这个概念有一个名字：<a href="https://en.wikipedia.org/wiki/Transfer_learning" target="_blank" rel="noopener"><strong>转移学习</strong></a>。它可能不如从头开始的完整培训那么高效，但对于许多应用来说都是惊人的有效。通过修改现有的丰富深度学习模型，它可以显着减少训练数据和时间。<br><a name="d2db47fa"></a></p>
-<h3 id="为什么会这样"><a href="#为什么会这样" class="headerlink" title="为什么会这样"></a><strong>为什么会这样</strong></h3><p>在神经网络中，神经元被分层组织。不同的层可以对其输入执行不同类型的转换。信号可能在多次遍历各层之后从第一层（输入）传播到最后一层（输出）。作为最后一个隐藏层，“瓶颈”具有足够的汇总信息，以提供执行实际分类任务的下一层。<br>在<a href="https://github.com/wisdal/image-classification-transfer-learning/blob/master/retrain.py" target="_blank" rel="noopener">retrain.py</a>脚本中，我们删除旧的顶层，并在我们下载的图片上训练一个新的顶层。<br>我们的最后一层再训练可以用于新类的原因是，结果表明，区分ImageNet中所有1000个类所需的信息通常也可用于区分新类型的对象。<br>我们现在弄脏手！</p>
+<p>1 训练分为多个阶段，步骤繁琐: 微调网络+训练SVM+训练边框回归器。<br>2 训练耗时，占用磁盘空间大：5000张图像产生几百G的特征文件。<br>3 速度慢: 使用GPU, VGG16模型处理一张图像需要47s。<br><a name="title5"></a></p>
+<h3 id="SPP-NET"><a href="#SPP-NET" class="headerlink" title="SPP-NET"></a>SPP-NET</h3><hr>
+<p><a name="title6"></a></p>
+<h4 id="流程框图-1"><a href="#流程框图-1" class="headerlink" title="流程框图"></a>流程框图</h4><p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1561365300467-cbd325a3-abeb-4788-b76b-7220ab85903e.png#align=left&amp;display=inline&amp;height=302&amp;name=sppnet.png&amp;originHeight=302&amp;originWidth=592&amp;size=537598&amp;status=done&amp;width=592" alt="sppnet.png"><br><a name="title7"></a></p>
+<h4 id="算法特点-1"><a href="#算法特点-1" class="headerlink" title="算法特点"></a>算法特点</h4><hr>
+<p>1 通过Spatial Pyramid Pooling解决了深度网络固定输入层尺寸的这个限制，使得网络可以享受不限制输入尺寸带来的好处。<br>2 解决了RCNN速度慢的问题，不需要对每个Proposal（2000个左右）进行Wrap或Crop输入CNN提取Feature Map，只需要对整图提一次Feature Map，然后将Proposal区域映射到卷积特征层得到全链接层的输入特征。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1561365335760-a5b69570-6524-44aa-8799-9a8697d25c60.png#align=left&amp;display=inline&amp;height=288&amp;name=image02.png&amp;originHeight=288&amp;originWidth=546&amp;size=88918&amp;status=done&amp;width=546" alt="image02.png"><br><a name="title8"></a></p>
+<h4 id="几个要点"><a href="#几个要点" class="headerlink" title="几个要点"></a>几个要点</h4><hr>
+<p>一、ROI的在特征图上的对应的特征区域的维度不满足全连接层的输入要求怎么办?<br>作者使用Spatial Pyramid Pooling解决了该问题。如下图所示，假设原图输入是224x224，对于conv5出来后的输出是13x13x256的，可以理解成有256个这样的Filter，每个Filter对应一张13x13的Reponse Map。如果像上图那样将Reponse Map分成1x1（金字塔底座），2x2（金字塔中间），4x4（金字塔顶座）三张子图，分别做Max Pooling后，出来的特征就是（16+4+1）x256 维度。如果原图的输入不是224x224，出来的特征依然是（16+4+1）x256维度。这样就实现了不管图像尺寸如何池化n的输出永远是 （16+4+1）x256 维度。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1561365364159-c1173844-f27d-438d-ba2d-5451c315b29c.png#align=left&amp;display=inline&amp;height=613&amp;name=image03.png&amp;originHeight=613&amp;originWidth=926&amp;size=57539&amp;status=done&amp;width=926" alt="image03.png"><br>二、原始图像的ROI如何映射到特征图（一系列卷积层的最后输出）<br>要搞定这个问题，需要首先清楚感受野等概念和计算方法。下面从感受野、感受野上面的坐标映射及原始图像的ROI如何映射三方面阐述。<br>1 感受野<br>① 概念<br>在卷积神经网络中，感受野的定义是卷积神经网络每一层输出的特征图（Feature Map）上的像素点在原始图像上映射的区域大小。<br>② 如何计算<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">output field size = ( input field size - kernel size + 2*padding ) / stride + 1</span><br></pre></td></tr></table></figure></p>
+<p>其中output field size 是卷积层的输出，input field size 是卷积层的输入，反过来卷积层的输入（也即前一层的感受野） = ？答案必然是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">input field size = （output field size - 1）* stride - 2*padding + kernel size</span><br></pre></td></tr></table></figure></p>
+<p><a href="http://lanbing510.info/2017/08/24/RCNN-FastRCNN-FasterRCNN.html#collapse2" target="_blank" rel="noopener">计算卷积层输出大小和感受野大小的Python代码</a><br>运行结果如下。从运行结果可以看出论文中ZF-5网络感受野大小为139是什么得到的了。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1561365393251-65e017e5-e7d4-48ba-9fd0-44203f8e9c76.png#align=left&amp;display=inline&amp;height=669&amp;originHeight=669&amp;originWidth=621&amp;size=0&amp;status=done&amp;width=621" alt><br>2 感受野上的坐标映射<br>① 计算公式<br>对于Convolution/Pooling Layer:<br><img src="https://cdn.nlark.com/yuque/__latex/eb59e298bd034d2cb84969545df53438.svg#card=math&amp;code=p_i%3Ds_i%20%5Ccdot%20p_%7Bi%2B1%7D%2B%5B%28k_i-1%29%2F2-padding%5D&amp;height=24&amp;width=266" alt><br>对于Neuronlayer（ReLU/Sigmoid/…）:<br><img src="https://cdn.nlark.com/yuque/__latex/eef74e92f8d1c95768c9ac0c8033d659.svg#card=math&amp;code=p_i%3Dp_%7Bi%2B1%7D&amp;height=24&amp;width=64" alt><br>其中<img src="https://cdn.nlark.com/yuque/__latex/eca91c83a74a2373ca5f796700e99fd3.svg#card=math&amp;code=p_i&amp;height=24&amp;width=14" alt>为第$i$层感受野上的坐标，<img src="https://cdn.nlark.com/yuque/__latex/e406ac4d7c470823a8619c13dd7101be.svg#card=math&amp;code=s_i&amp;height=24&amp;width=14" alt>为Stride的大小，$k_i$为感受野的大小。<br>② 例子<br>上面是计算任意一个Layer输入输出的坐标映射关系，如果是计算任意Feature Map之间的关系，只需要用简单的组合就可以得到，下图是一个简单的例子:<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1561365466039-41a25182-9cd1-4724-bbaf-f2c8e47400e1.png#align=left&amp;display=inline&amp;height=173&amp;originHeight=173&amp;originWidth=602&amp;size=0&amp;status=done&amp;width=602" alt><br>③ 简化版本<br>何凯明在SPP-NET中使用的是简化版本，将2小节公式中的Padding都设为<img src="https://cdn.nlark.com/yuque/__latex/4e802acb5edbb048c72376723fbeca2a.svg#card=math&amp;code=%5Cleft%20%5Clfloor%20k_i%2F2%20%5Cright%20%5Crfloor&amp;height=24&amp;width=45" alt>，公式可进一步简化为：<img src="https://cdn.nlark.com/yuque/__latex/74b37d72f47c3b21747f677ac1cb83a5.svg#card=math&amp;code=p_i%3Ds_i%20%5Ccdot%20p_%7Bi%2B1%7D&amp;height=24&amp;width=89" alt><br>3 原始图像的ROI如何映射<br>SPP-NET是把原始ROI的左上角和右下角 映射到Feature Map上的两个对应点。 有了Feature Map上的两队角点就确定了对应的Feature Map 区域（下图中橙色）。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1561365487808-c82a0e9a-834a-4807-a7c8-6b5f07d9185e.png#align=left&amp;display=inline&amp;height=298&amp;originHeight=298&amp;originWidth=600&amp;size=0&amp;status=done&amp;width=600" alt><br>左上角取$<img src="https://cdn.nlark.com/yuque/__latex/ef0ff0e342027c078edbcd8b2a7e4dda.svg#card=math&amp;code=x%27%3D%5Cleft%20%5Clfloor%20x%2FS%20%5Cright%20%5Crfloor%2B1%2C%20y%27%3D%5Cleft%20%5Clfloor%20y%2FS%20%5Cright%20%5Crfloor%2B1&amp;height=24&amp;width=218" alt>；右下角的点取$<img src="https://cdn.nlark.com/yuque/__latex/7aa06c0814137c917bcd71deae0c4dd2.svg#card=math&amp;code=x%27%3D%5Cleft%20%5Clceil%20x%2FS%20%5Cright%20%5Crceil-1%2C%20y%27%3D%5Cleft%20%5Clceil%20y%2FS%20%5Cright%20%5Crceil-1&amp;height=24&amp;width=218" alt>$。其中S为坐标映射的简化计算版本，即$<img src="https://cdn.nlark.com/yuque/__latex/adfd742ecb8cf41adc03b55b83cd5d94.svg#card=math&amp;code=S%3D%5Cprod_%7B0%7D%5E%7Bi%7Ds_i&amp;height=50&amp;width=69" alt>$。<br><a name="title9"></a></p>
+<h3 id="Fast-RCNN"><a href="#Fast-RCNN" class="headerlink" title="Fast-RCNN"></a>Fast-RCNN</h3><hr>
+<p><a name="title10"></a></p>
+<h4 id="流程框图-2"><a href="#流程框图-2" class="headerlink" title="流程框图"></a>流程框图</h4><hr>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1561365487818-0cc051cc-0642-4756-8ea8-3002783c6e0c.png#align=left&amp;display=inline&amp;height=445&amp;originHeight=445&amp;originWidth=592&amp;size=0&amp;status=done&amp;width=592" alt><br><a name="title11"></a></p>
+<h4 id="算法特点-2"><a href="#算法特点-2" class="headerlink" title="算法特点"></a>算法特点</h4><hr>
+<ol>
+<li>Fast-RCNN直接使用Softmax替代了RCNN中SVM进行分类，同时在网络中加入了多任务函数边框回归，实现了端到端的训练（除SS Region Proposal阶段）。</li>
+<li>借鉴SPP-NET，提出了一个ROI层。ROI Pooling Layer实际上是SPP-NET的一个精简版，SPP-NET对每个Proposal使用了不同大小的金字塔映射，而ROI Pooling Layer只需要下采样到一个7x7的特征图。对于VGG16网络conv5_3有512个特征图，这样所有Region Proposal对应了一个7<em>7</em>512维度的特征向量作为全连接层的输入。</li>
+<li>使用了不同于SPP-NET的训练方式，训练时，把同张图片的Prososals作为一批进行学习，而Proposals的坐标直接映射到conv5层上，这样相当于一张图片的所有训练样本只卷积了一次。</li>
+<li>论文在回归问题上并没有用很常见的2范数作为回归，而是使用所谓的鲁棒L1范数作为损失函数。</li>
+<li>论文将比较大的全链接层用SVD分解了一下使得检测的时候更加迅速。<br><a name="title12"></a><h4 id="几个要点-1"><a href="#几个要点-1" class="headerlink" title="几个要点"></a>几个要点</h4></li>
+</ol>
 <hr>
-<p><a name="81ef9f80"></a></p>
-<h3 id="第1步：预处理图像"><a href="#第1步：预处理图像" class="headerlink" title="第1步：预处理图像"></a><strong>第1步：预处理图像</strong></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">label_counts = train.label.value_counts（）</span><br><span class="line">plt.figure（figsize =（12,6））</span><br><span class="line">sns.barplot（label_counts.index，label_counts.values，alpha = 0.9）</span><br><span class="line">plt.xticks（rotation =&apos;vertical&apos;）</span><br><span class="line">plt.xlabel （&apos;Image Labels&apos;，fontsize = 12）</span><br><span class="line">plt.ylabel（&apos;Counts&apos;，fontsize = 12）</span><br><span class="line">plt.show（）</span><br></pre></td></tr></table></figure>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1552903798892-d0219c97-9167-48dc-a792-2f0f3a65e604.png#align=left&amp;display=inline&amp;height=419&amp;name=1_OiM9iXjO4R8Vq_wCSfQZIg.png&amp;originHeight=419&amp;originWidth=721&amp;size=14783&amp;status=done&amp;width=721" alt="1_OiM9iXjO4R8Vq_wCSfQZIg.png"><br>假设您已经下载了<a href="https://he-s3.s3.amazonaws.com/media/hackathon/deep-learning-challenge-1/identify-the-objects/a0409a00-8-dataset_dp.zip" target="_blank" rel="noopener">数据集</a>，您会发现它附带了一个我们需要正确设置的“train”文件夹。我们的目标是将每个图像放在代表其类别的子文件夹中。最后，我们应该有x个子文件夹，x是不同类别的数量。<br><br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1552904730643-3f6be018-2297-4b30-af9e-7dd590e648ac.png#align=left&amp;display=inline&amp;height=426&amp;name=1_OiM9iXjO4R8Vq_wCSfQZIg.png&amp;originHeight=481&amp;originWidth=843&amp;size=35297&amp;status=done&amp;width=746" alt="1_OiM9iXjO4R8Vq_wCSfQZIg.png"></p>
-<p>为了这个预处理目的，我为您提供了<a href="https://github.com/wisdal/image-classification-transfer-learning/blob/master/pre_process.ipynb" target="_blank" rel="noopener">pre_process.ipynb</a>笔记本。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">for img in tqdm(train.values):</span><br><span class="line">    filename=img[0]</span><br><span class="line">    label=img[1]</span><br><span class="line">    src=os.path.join(data_root,&apos;train_img&apos;,filename+&apos;.png&apos;)</span><br><span class="line">    label_dir=os.path.join(data_root,&apos;train&apos;,label)</span><br><span class="line">    dest=os.path.join(label_dir,filename+&apos;.jpg&apos;)</span><br><span class="line">    im=Image.open(src)</span><br><span class="line">    rgb_im=im.convert(&apos;RGB&apos;)</span><br><span class="line">    if not os.path.exists(label_dir):</span><br><span class="line">        os.makedirs(label_dir)</span><br><span class="line">    rgb_im.save(dest)  </span><br><span class="line">    if not os.path.exists(os.path.join(data_root,&apos;train2&apos;,label)):</span><br><span class="line">        os.makedirs(os.path.join(data_root,&apos;train2&apos;,label))</span><br><span class="line">    rgb_im.save(os.path.join(data_root,&apos;train2&apos;,label,filename+&apos;.jpg&apos;))</span><br></pre></td></tr></table></figure>
-<p>笔记本不仅仅是配置图像子文件夹，所以一定要检查它。<br>因为我们的数据集带有<strong>25个独特的标签，</strong>而我们<strong>只有3215个训练图像</strong>，我们需要增加数据以防止我们的模型过度拟合。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">datagen = ImageDataGenerator(</span><br><span class="line">        rotation_range=40,</span><br><span class="line">        width_shift_range=0.2,</span><br><span class="line">        height_shift_range=0.2,</span><br><span class="line">        shear_range=0.2,</span><br><span class="line">        zoom_range=0.2,</span><br><span class="line">        horizontal_flip=True,</span><br><span class="line">        fill_mode=&apos;nearest&apos;)</span><br><span class="line"></span><br><span class="line">class_size=600</span><br><span class="line"></span><br><span class="line">src_train_dir=os.path.join(data_root,&apos;train&apos;)</span><br><span class="line">dest_train_dir=os.path.join(data_root,&apos;train2&apos;)</span><br><span class="line">it=0</span><br><span class="line">for count in label_counts.values:</span><br><span class="line">    #nb of generations per image for this class label in order to make it size ~= class_size</span><br><span class="line">    ratio=math.floor(class_size/count)-1</span><br><span class="line">    print(count,count*(ratio+1))</span><br><span class="line">    dest_lab_dir=os.path.join(dest_train_dir,label_counts.index[it])</span><br><span class="line">    src_lab_dir=os.path.join(src_train_dir,label_counts.index[it])</span><br><span class="line">    if not os.path.exists(dest_lab_dir):</span><br><span class="line">        os.makedirs(dest_lab_dir)</span><br><span class="line">    for file in os.listdir(src_lab_dir):</span><br><span class="line">        img=load_img(os.path.join(src_lab_dir,file))</span><br><span class="line">        #img.save(os.path.join(dest_lab_dir,file))</span><br><span class="line">        x=img_to_array(img) </span><br><span class="line">        x=x.reshape((1,) + x.shape)</span><br><span class="line">        i=0</span><br><span class="line">        for batch in datagen.flow(x, batch_size=1,save_to_dir=dest_lab_dir, save_format=&apos;jpg&apos;):</span><br><span class="line">            i+=1</span><br><span class="line">            if i &gt; ratio:</span><br><span class="line">                break </span><br><span class="line">    it=it+1</span><br></pre></td></tr></table></figure>
-<p><a name="a57a7ff4"></a></p>
-<h3 id="第2步：重新训练瓶颈并微调模型"><a href="#第2步：重新训练瓶颈并微调模型" class="headerlink" title="第2步：重新训练瓶颈并微调模型"></a><strong>第2步：重新训练瓶颈并微调模型</strong></h3><p>由谷歌提供，我们立即开始使用retrain.py脚本。该脚本默认下载Inception V3 <a href="http://download.tensorflow.org/models/image/imagenet/inception-v3-2016-03-01.tar.gz" target="_blank" rel="noopener">预训练模型</a>。<br>重新训练脚本是我们算法的核心组件，也是使用从初始v3开始的转移学习的任何自定义图像分类任务的核心组件。它是由TensorFlow作者自己设计的，用于此特定目的（自定义图像分类）。<br><a name="6af7ed82"></a></p>
-<h4 id="脚本的作用："><a href="#脚本的作用：" class="headerlink" title="脚本的作用："></a>脚本的作用：</h4><p>它训练一个新的顶层（瓶颈），可以识别特定类别的图像。顶层接收每个图像的2048维向量作为输入。然后在该表示之上训练softmax层。假设softmax层包含N个标签，这对应于学习与学习的偏差和权重相对应的N + 2048 <em> N（或1001 </em> N）个模型参数。<br>该脚本完全可以自定义，这里是可配置的参数列表：</p>
-<ul>
-<li><strong>image_dir</strong>：标记图像文件夹的路径。幸运的是，我们在预处理步骤中正确设置了它。</li>
-<li><strong>output_graph，intermediate_output_graphs_dir，output_labels等</strong>：保存输出文件的位置。</li>
-<li><strong>失真功能：</strong>我的最爱。仅此功能就值得整整一段。您可能已经注意到我们的训练集中的图像是完美的（清晰，高质量，明确）但不幸的是，在生产中并非总是如此。该算法可能会在部署后遇到，模糊图像，昏暗的图像等。</li>
-</ul>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1552904870948-60b8d20b-8035-44db-b9b4-909606809a52.png#align=left&amp;display=inline&amp;height=617&amp;name=1_OiM9iXjO4R8Vq_wCSfQZIg.png&amp;originHeight=724&amp;originWidth=876&amp;size=572978&amp;status=done&amp;width=746" alt="1_OiM9iXjO4R8Vq_wCSfQZIg.png"></p>
-<p>我们的算法应该足够智能，以捕捉这些图像代表相同的事情，并不是那么明显（这只是一个小例子）</p>
-<ul>
-<li>[…]这就是失真特征的全部内容。我们有意地在训练过程中随机变换图像（大小，颜色，方向等）以使机器人习惯于不良图像，以避免在这种情况下失去预测准确性。</li>
-<li><strong>how_many_training_steps</strong>：时代数。</li>
-<li><strong>学习率</strong>。</li>
-<li>…</li>
-</ul>
-<p>您可以随意使用这些参数。<strong>学习率</strong>，<strong>nb。时期</strong>等是确定性参数。使用它们来微调您的模型并记住您可以随时使用TensorBoard来可视化您的训练结果。<br>您可以从一开始就获得约85％的准确度（零微调）。<br><a name="1fdd8e7a"></a></p>
-<h3 id="第3步：在看不见的记录上测试模型"><a href="#第3步：在看不见的记录上测试模型" class="headerlink" title="第3步：在看不见的记录上测试模型"></a>第3步：在看不见的记录上测试模型</h3><p>这一步没什么可疯狂的。只是一个小脚本来测试在上一步中构建和保存的模型，在我们数据集的“test”文件夹中的图像上。<br>查看<a href="https://github.com/wisdal/Image-classification-transfer-learning/blob/master/test.ipynb" target="_blank" rel="noopener">测试</a>笔记本，了解需要完成的工作。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">def run_graph(src, labels, input_layer_name, output_layer_name,</span><br><span class="line">              num_top_predictions):</span><br><span class="line">    with tf.Session() as sess:</span><br><span class="line">    i=0</span><br><span class="line">    #outfile=open(&apos;submit.txt&apos;,&apos;w&apos;)</span><br><span class="line">    #outfile.write(&apos;image_id, label \n&apos;)</span><br><span class="line">    for f in os.listdir(dest):</span><br><span class="line">        image_data=load_image(os.path.join(dest,test[i]+&apos;.jpg&apos;))</span><br><span class="line">        #image_data=load_image(os.path.join(src,f))</span><br><span class="line">        softmax_tensor = sess.graph.get_tensor_by_name(output_layer_name)</span><br><span class="line">        predictions, = sess.run(softmax_tensor, &#123;input_layer_name: image_data&#125;)</span><br><span class="line"></span><br><span class="line">        # Sort to show labels in order of confidence</span><br><span class="line">        top_k = predictions.argsort()[-num_top_predictions:][::-1]</span><br><span class="line">        for node_id in top_k:</span><br><span class="line">            human_string = labels[node_id]</span><br><span class="line">            score = predictions[node_id]</span><br><span class="line">            #print(&apos;%s (score = %.5f) %s , %s&apos; % (test[i], human_string))</span><br><span class="line">            print(&apos;%s, %s&apos; % (test[i], human_string))</span><br><span class="line">            #outfile.write(test[i]+&apos;, &apos;+human_string+&apos;\n&apos;)</span><br><span class="line">        i+=1</span><br><span class="line">    return 0</span><br></pre></td></tr></table></figure>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1552904928699-8cc5dd07-ebf5-4116-a3e3-5d4ece361238.png#align=left&amp;display=inline&amp;height=663&amp;name=1_OiM9iXjO4R8Vq_wCSfQZIg.png&amp;originHeight=663&amp;originWidth=664&amp;size=265517&amp;status=done&amp;width=664" alt="1_OiM9iXjO4R8Vq_wCSfQZIg.png"><br><a name="54bbba80"></a></p>
-<h3 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h3><p>而已！希望这篇文章对你有用。随意评论并提出改进建议。<br>我鼓励你试一试，并在评论中告诉我你能达到多少准确度。我很乐意收到你的来信。<br>正如我之前所说，你肯定能够获得<strong>超过85％</strong>的基准精度。剩下的就是微调！在我的情况下，我的最终模型在测试装置上的准确性让我感到震惊，考虑到需要的工作量很少。很好地理解事情的工作方式有时候会有所帮助:)。我认为该项目是任何想要尝试图像失真或超参数调整的人的良好基础。这就是为我增加了更多的百分点。<br>请随意查看我在<a href="https://github.com/wisdal/Image-classification-transfer-learning" target="_blank" rel="noopener">GitHub上的</a>代码。<br>资源：<a href="https://www.tensorflow.org/tutorials/image_recognition" target="_blank" rel="noopener">tensorflow.org/tutorials/image_recognition</a></p>
+<p>一、联合训练<br>联合训练（Joint Training）指如何将分类和边框回归联合到一起在CNN阶段训练，主要难点是损失函数的设计。Fast-RCNN中，有两个输出层：第一个是针对每个ROI区域的分类概率预测，$<img src="https://cdn.nlark.com/yuque/__latex/b5f712a3a1ab0f479b46c0af00244a11.svg#card=math&amp;code=p%3D%28p_0%2C%20p_1%2C%20%5Ccdots%2C%20p_K%29&amp;height=24&amp;width=138" alt>$；第二个则是针对每个ROI区域坐标的偏移优化，$<img src="https://cdn.nlark.com/yuque/__latex/cbb478231f040fe7e9d2aa599865e2b9.svg#card=math&amp;code=t%5Ek%20%3D%20%28t%5Ek_x%2C%20t%5Ek_y%2C%20t%5Ek_w%2C%20t%5Ek_h%29&amp;height=25&amp;width=127" alt>$，$<img src="https://cdn.nlark.com/yuque/__latex/dd966ee640d360cd1030ab80055b11d4.svg#card=math&amp;code=0%20%5Cle%20k%20%5Cle%20K&amp;height=24&amp;width=74" alt>$是多类检测的类别序号。每个训练ROI都对应着真实类别$u$和边框回归目标$<img src="https://cdn.nlark.com/yuque/__latex/48d79430384dca8b7d478b3fd191d91e.svg#card=math&amp;code=v%3D%28v_x%2Cv_y%2Cv_w%2Cv_h%29&amp;height=25&amp;width=129" alt>$，对于类别$u$预测边框为$<img src="https://cdn.nlark.com/yuque/__latex/a0efc78099a1841e309df74a7e658850.svg#card=math&amp;code=t%5Eu%3D%28t_x%5Eu%2Ct_y%5Eu%2Ct_w%5Eu%2Ct_h%5Eu%29&amp;height=25&amp;width=128" alt>$，使用多任务损失$L$来定义ROI上分类和边框回归的损失：<br>$$<img src="https://cdn.nlark.com/yuque/__latex/65a617a8d624705568b08cee6d14eaf5.svg#card=math&amp;code=L%28p%2Cu%2Ct%5Eu%2Cv%29%3DL_%7Bcls%7D%28p%2Cu%29%2B%5Clambda%20%5Bu%20%5Cge%201%5DL_%7Bloc%7D%28t%5Eu%2Cv%29&amp;height=24&amp;width=317" alt>$$<br>其中$<img src="https://cdn.nlark.com/yuque/__latex/b20a54c3ae72eb8d5610bf30d47fcc92.svg#card=math&amp;code=L_%7Bcls%7D%28p%2Cu%29%3D-%5Clog%20p_u&amp;height=24&amp;width=141" alt>$表示真实类别的log损失，当$<img src="https://cdn.nlark.com/yuque/__latex/fb695fa0f6700942bcfc817c0ec6b015.svg#card=math&amp;code=u%20%5Cge%201&amp;height=24&amp;width=39" alt>$时，$<img src="https://cdn.nlark.com/yuque/__latex/ba6ed319adfb146814eb27d4e46825d0.svg#card=math&amp;code=%5Bu%20%5Cge%201%5D&amp;height=24&amp;width=48" alt>$的值为1，否则为0。下面将重点介绍多任务损失中的边框回归部分（对应坐标偏移优化部分）。<br>二、边框回归<br>假设对于类别$u$，在图片中标注的真实坐标和对应的预测值理论上两者越接近越好，相应的损失函数为：<br>$$<img src="https://cdn.nlark.com/yuque/__latex/f69ab263c72ee87b0011044f0651c884.svg#card=math&amp;code=L_%7Bloc%7D%28t%5Eu%2C%20v%29%20%3D%20%5Csum_%7Bi%20%5Cin%20%7Bx%2C%20y%2C%20w%2C%20h%7D%7D%20%5Ctext%7Bsmooth%7D_%7BL_1%7D%28t_i%5Eu-%20v_i%29&amp;height=41&amp;width=269" alt>$$<br>其中<br>$$<img src="https://cdn.nlark.com/yuque/__latex/5519b64be17d6f7f4a8857b2f7c17c28.svg#card=math&amp;code=%5Ctext%7Bsmooth%7D_%7BL_1%7D%28x%29%20%3D%20%5Cleft%20%5C%7B%20%5Cbegin%7Baligned%7D%20%26%200.5x%5E2%20%26%20%7Cx%7C%20%5Cle%201%20%5C%5C%20%26%7Cx%7C-0.5%20%26%20%5Ctext%7Botherwise%7D%5Cend%7Baligned%7D%20%5Cright.&amp;height=43&amp;width=286" alt>$$<br>Fast-RCNN在上面用到的鲁棒$<img src="https://cdn.nlark.com/yuque/__latex/2c6f3b6c16df97a1b00e04ff17e4906e.svg#card=math&amp;code=L_1&amp;height=24&amp;width=18" alt>$函数对外点比RCNN和SPP-NET中用的$<img src="https://cdn.nlark.com/yuque/__latex/07cbd6c155424e110559a84df364be5a.svg#card=math&amp;code=L_2&amp;height=24&amp;width=18" alt>$函数更为鲁棒，该函数在$<img src="https://cdn.nlark.com/yuque/__latex/9f8836653f8d3e61d60fc083ede7d896.svg#card=math&amp;code=%28-1%2C%201%29&amp;height=24&amp;width=49" alt>$之间为二次函数，其他区域为线性函数，函数直观图如下图所示。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1561365487792-23e05f1c-cb64-41e5-a4b2-965d685764ba.png#align=left&amp;display=inline&amp;height=225&amp;originHeight=225&amp;originWidth=300&amp;size=0&amp;status=done&amp;width=300" alt><br><a name="title13"></a></p>
+<h4 id="存在问题-1"><a href="#存在问题-1" class="headerlink" title="存在问题"></a>存在问题</h4><hr>
+<p>使用Selective Search提取Region Proposals，没有实现真正意义上的端对端，操作也十分耗时。<br><a name="title14"></a></p>
+<h3 id="Faster-RCNN"><a href="#Faster-RCNN" class="headerlink" title="Faster-RCNN"></a>Faster-RCNN</h3><hr>
+<p><a name="title15"></a></p>
+<h4 id="流程框图-3"><a href="#流程框图-3" class="headerlink" title="流程框图"></a>流程框图</h4><hr>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1561365488022-6fc398af-6b84-4ba6-b2b4-9d73e46ffd73.png#align=left&amp;display=inline&amp;height=455&amp;originHeight=455&amp;originWidth=592&amp;size=0&amp;status=done&amp;width=592" alt><br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1561365487802-4e5ae087-6d63-4c28-b93c-d55bcaa33759.png#align=left&amp;display=inline&amp;height=355&amp;originHeight=721&amp;originWidth=710&amp;size=0&amp;status=done&amp;width=350" alt><br><a name="title16"></a></p>
+<h4 id="算法特点-3"><a href="#算法特点-3" class="headerlink" title="算法特点"></a>算法特点</h4><hr>
+<p>1 提出了Region Proposal Network（RPN），将Proposal阶段和CNN分类融到了一起，实现了一个完全的End-To-End的CNN目标检测模型。RPN可以快速提取高质量的Proposal，不仅加快了目标检测速度，还提高了目标检测性能。<br>2 将Fast-RCNN和RPN放在同一个网络结构中训练，共享网络参数。<br><a name="title17"></a></p>
+<h4 id="几个要点-2"><a href="#几个要点-2" class="headerlink" title="几个要点"></a>几个要点</h4><hr>
+<p>一、Region Proposal Network<br>Region Proposal Network（RPN）的核心思想是使用卷积神经网络直接产生Region Proposal，使用的方法本质上就是滑动窗口。RPN的设计比较巧妙，RPN只需在最后的卷积层上滑动一遍，借助Anchor机制和边框回归可以得到多尺度多长宽比的Region Proposal。下图是RPN的网络结构图。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1561365488052-e0c25352-c570-4206-9654-e5e89b36144d.png#align=left&amp;display=inline&amp;height=327&amp;originHeight=523&amp;originWidth=880&amp;size=0&amp;status=done&amp;width=550" alt><br>在ZF网络模型下，给定输入图像（假设分辨率为600<em>1000），经过卷积操作得到最后一层的卷积特征图（大小约为40</em>60）。在这个特征图上使用3<em>3的卷积核（滑动窗口）与特征图进行卷积，最后一层卷积层共有256个Feature Map，那么这个3</em>3的区域卷积后可以获得一个256维的特征向量，后边接Cls Layer和Reg Layer分别用于分类和边框回归（跟Fast RCNN类似，只不过这里的类别只有目标和背景两个类别）。3<em>3滑窗对应的每个特征区域同时预测输入图像3种尺度（128,256,512），3种长宽比（1:1,1:2,2:1）的Region Proposal，这种映射的机制称为Anchor。所以对于这个40</em>60的Feature Map，总共有约20000（40<em>60</em>9）个Anchor，也就是预测20000个Region Proposal。下图是51<em>39个Anchor中心，以及9种Anchor示例。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1561365487785-b5cea912-4922-4a5e-9bae-8064eb118bf0.png#align=left&amp;display=inline&amp;height=386&amp;originHeight=386&amp;originWidth=424&amp;size=0&amp;status=done&amp;width=424" alt><br>这样设计的好处是什么？虽然现在也是用的滑动窗口策略，但是，滑动窗口操作是在卷积层特征图上进行的，维度较原始图像降低了16</em>16倍（16如何得到的可参见前文）；多尺度采用了9种Anchor，对应了三种尺度和三种长宽比，加上后边接了边框回归，所以即便是这9种Anchor外的窗口也能得到一个跟目标比较接近的Region Proposal。<br>二、RPN的损失函数<br>损失函数定义为：<br>$$<img src="https://cdn.nlark.com/yuque/__latex/8ab974e160dee55e89e9cd4eafa89cb7.svg#card=math&amp;code=L%28%7Bp_i%7D%7Bt_i%7D%29%20%3D%20%5Cfrac%7B1%7D%7BN_%7Bcls%7D%7D%20%5Csum_i%20L_%7Bcls%7D%28p_i%2C%20p_i%5E%2A%29%20%2B%5Clambda%20%5Cfrac%7B1%7D%7BN_%7Breg%7D%7D%20%5Csum_i%20p_i%5E%2A%20L_%7Breg%7D%28t_i%2C%20t_i%5E%2A%29&amp;height=45&amp;width=394" alt>$$<br>其中$i$表示一次Mini-Batch中Anchor的索引，$p_i$是Anchor $i$是否是一个物体，$L_{reg}$即为上面提到的$<img src="https://cdn.nlark.com/yuque/__latex/490d911f5a01d7af7ae4c871b55323e4.svg#card=math&amp;code=%5Ctext%7Bsmooth%7D_%7BL_1%7D%28x%29&amp;height=25&amp;width=89" alt>$函数，$N_{cls}$和$N_{reg}$是两个归一化项，分别表示Mini-Batch的大小和Anchor位置的数目。<br>三、网络的训练<br>如果是分别训练两种不同任务的网络模型，即使它们的结构、参数完全一致，但各自的卷积层内的卷积核也会向着不同的方向改变，导致无法共享网络权重，Faster-RCNN提出了三种可能的方式：<br>1 Alternating Training：此方法其实就是一个不断迭代的训练过程，既然分别训练RPN和Fast-RCNN可能让网络朝不同的方向收敛，那么我们可以先独立训练RPN，然后用这个RPN的网络权重对Fast-RCNN网络进行初始化，并且用之前RPN输出Proposal作为此时Fast-RCNN的输入，之后不断迭代这个过程，即循环训练RPN、Fast-RCNN。<br>2 Approximate Joint Training：这里与前一种方法不同，不再是串行训练RPN和Fast-RCNN，而是尝试把二者融入到一个网络内，具体融合的网络结构如下图所示，可以看到，Proposals是由中间的RPN层输出的，而不是从网络外部得到。需要注意的一点，名字中的”Approximate”是因为“This solution ignores the derivative w.r.t. the proposal boxes’ coordinates that are also network responses”，也就是说，反向传播阶段RPN产生的Cls Score能够获得梯度用以更新参数，但是Proposal的坐标预测则直接把梯度舍弃了，这个设置可以使Backward时该网络层能得到一个解析解（Closed Results），并且相对于Alternating Traing减少了25-50%的训练时间。<br>3 Non-approximate Training：上面的Approximate Joint Training把Proposal的坐标预测梯度直接舍弃，所以被称作Approximate，那么理论上如果不舍弃是不是能更好的提升RPN部分网络的性能呢？作者把这种训练方式称为“ Non-approximate Joint Training”，但是此方法只是一笔带过，表示“This is a nontrivial problem and a solution can be given by an “RoI warping” layer as developed in [15], which is beyond the scope of this paper”。<br>作者没有用上面提到的三种可能方法，而是使用了4-Step Alternating Training，具体步骤如下。</p>
+<ol>
+<li>用ImageNet模型初始化，独立训练一个RPN网络；</li>
+<li>仍然用ImageNet模型初始化，但是使用上一步RPN网络产生的Proposal作为输入，训练一个Fast-RCNN网络，至此，两个网络每一层的参数完全不共享；</li>
+<li>使用第二步的Fast-RCNN网络参数初始化一个新的RPN网络，但是把RPN、Fast-RCNN共享的那些卷积层的Learning Rate设置为0，也就是不更新，仅仅更新RPN特有的那些网络层，重新训练，此时，两个网络已经共享了所有公共的卷积层；</li>
+<li>仍然固定共享的那些网络层，把Fast-RCNN特有的网络层也加入进来，形成一个Unified Network，继续训练，Fine Tune Fast-RCNN特有的网络层，此时，该网络已经实现我们设想的目标，即网络内部预测Proposal并实现检测的功能。</li>
+</ol>
+<p>上述步骤图示如下。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1561365487824-2c4313f1-453c-4410-b0c6-df7170a2223d.png#align=left&amp;display=inline&amp;height=271&amp;originHeight=271&amp;originWidth=600&amp;size=0&amp;status=done&amp;width=600" alt><br><a name="title18"></a></p>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><hr>
+<p>至此，介绍完了以RCNN为代表的基于Region Proposal的深度学习目标检测算法（RCNN，SPP-NET，Fast-RCNN，Faster-RCNN），主要介绍了算法的核心思想和要点难点，代码可以从GitHub得到，更多实现细节可以阅读原论文和代码。接下来会写另一篇文章来介绍以YOLO为代表的基于回归方法的深度学习目标检测算法（YOLO，SSD）。<br><a name="title19"></a></p>
+<h3 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h3><hr>
+<p>[1] RCNN:”Rich feature hierarchies for accurate object detection and semantic segmentation”<br>[2] SPP-NET:”Spatial pyramid pooling in deep convolutional networks for visual recognition”<br>[3] Fast-RCNN:”Fast R-CNN”<br>[4] Faster-RCNN:”Faster R-CNN: Towards real-time object detection with region proposal networks”<br>[5] <a href="http://closure11.com/rcnn-fast-rcnn-faster-rcnn%E7%9A%84%E4%B8%80%E4%BA%9B%E4%BA%8B/" target="_blank" rel="noopener">RCNN, Fast-RCNN, Faster-RCNN的一些事</a><br>[6] <a href="http://www.cnblogs.com/objectDetect/p/5947169.html" target="_blank" rel="noopener">卷积神经网络物体检测之感受野大小计算</a><br>[7] <a href="https://zhuanlan.zhihu.com/p/24780433" target="_blank" rel="noopener">原始图片中的ROI如何映射到到Feature Map</a><br>[8] <a href="https://zhuanlan.zhihu.com/p/24780395" target="_blank" rel="noopener">Fast R-CNN</a><br>[9] <a href="http://blog.csdn.net/happyflyy/article/details/54917514" target="_blank" rel="noopener">通过代码理解Faster-RCNN中的RPN</a><br>[10] <a href="https://zhuanlan.zhihu.com/p/24916624" target="_blank" rel="noopener">Faster R-CNN</a><br>[11] <a href="https://zhuanlan.zhihu.com/p/21412911" target="_blank" rel="noopener">基于深度学习的目标检测研究进展</a></p>
 
       
 
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/img/qrcode.png">
+                      <span class="reward-type">微信</span>
+                    </div>
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
       
     </div>
     <div class="article-info article-info-index">
@@ -818,16 +306,75 @@
       
 
       
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/03/18/yuque/转移学习：重新启动Inception V3以进行自定义图像分类/">展开全文 >></a>
-        </p>
-      
 
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
+        </div>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://www.zhos.me/2019/06/24/yuque/目标检测之RCNN，SPP-NET，Fast-RCNN，Faster-RCNN/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
       
       <div class="clearfix"></div>
     </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
+  
+  
+    <a href="/2019/06/24/yuque/使用R-CNN的目标检测和分类/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">使用R-CNN的目标检测和分类</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
 
 <aside class="wrap-side-operation">
     <div class="mod-side-operation">
@@ -842,17 +389,32 @@
         </div>
         
         
+        <div class="toc-container tooltip-left">
+            <i class="icon-font icon-category"></i>
+            <div class="tooltip tooltip-east">
+                <span class="tooltip-item">
+                </span>
+                <span class="tooltip-content">
+                    <div class="toc-article">
+                    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#写在前面"><span class="toc-number">1.</span> <span class="toc-text">写在前面</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RCNN"><span class="toc-number">2.</span> <span class="toc-text">RCNN</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#流程框图"><span class="toc-number">2.1.</span> <span class="toc-text">流程框图</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#算法特点"><span class="toc-number">2.2.</span> <span class="toc-text">算法特点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#存在问题"><span class="toc-number">2.3.</span> <span class="toc-text">存在问题</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SPP-NET"><span class="toc-number">3.</span> <span class="toc-text">SPP-NET</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#流程框图-1"><span class="toc-number">3.1.</span> <span class="toc-text">流程框图</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#算法特点-1"><span class="toc-number">3.2.</span> <span class="toc-text">算法特点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#几个要点"><span class="toc-number">3.3.</span> <span class="toc-text">几个要点</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Fast-RCNN"><span class="toc-number">4.</span> <span class="toc-text">Fast-RCNN</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#流程框图-2"><span class="toc-number">4.1.</span> <span class="toc-text">流程框图</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#算法特点-2"><span class="toc-number">4.2.</span> <span class="toc-text">算法特点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#几个要点-1"><span class="toc-number">4.3.</span> <span class="toc-text">几个要点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#存在问题-1"><span class="toc-number">4.4.</span> <span class="toc-text">存在问题</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Faster-RCNN"><span class="toc-number">5.</span> <span class="toc-text">Faster-RCNN</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#流程框图-3"><span class="toc-number">5.1.</span> <span class="toc-text">流程框图</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#算法特点-3"><span class="toc-number">5.2.</span> <span class="toc-text">算法特点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#几个要点-2"><span class="toc-number">5.3.</span> <span class="toc-text">几个要点</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#小结"><span class="toc-number">6.</span> <span class="toc-text">小结</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#参考文献"><span class="toc-number">7.</span> <span class="toc-text">参考文献</span></a></li></ol>
+                    </div>
+                </span>
+            </div>
+        </div>
+        
     </div>
 </aside>
 
 
 
+  
+  
+  
 
   
+
   
-    <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/7/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/">9</a><a class="page-number" href="/page/10/">10</a><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/9/">Next &raquo;</a>
-    </nav>
+
   
 
 
@@ -887,8 +449,8 @@
     <script>
 	var yiliaConfig = {
 		mathjax: true,
-		isHome: true,
-		isPost: false,
+		isHome: false,
+		isPost: true,
 		isArchive: false,
 		isTag: false,
 		isCategory: false,

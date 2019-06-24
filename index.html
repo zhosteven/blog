@@ -149,6 +149,129 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-yuque/目标检测之RCNN，SPP-NET，Fast-RCNN，Faster-RCNN" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/06/24/yuque/目标检测之RCNN，SPP-NET，Fast-RCNN，Faster-RCNN/">目标检测之RCNN，SPP-NET，Fast-RCNN，Faster-RCNN</a>
+    </h1>
+  
+
+        
+        <a href="/2019/06/24/yuque/目标检测之RCNN，SPP-NET，Fast-RCNN，Faster-RCNN/" class="archive-article-date">
+  	<time datetime="2019-06-24T08:33:04.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-06-24</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><a name="title0"></a></p>
+<h3 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h3><hr>
+<p>在深度学习出现之前，传统的目标检测方法大概分为区域选择（滑窗）、特征提取（SIFT、HOG等）、分类器（SVM、Adaboost等）三个部分，其主要问题有两方面：一方面滑窗选择策略没有针对性、时间复杂度高，窗口冗余；另一方面手工设计的特征鲁棒性较差。自深度学习出现之后，目标检测取得了巨大的突破，最瞩目的两个方向有：1 以RCNN为代表的基于Region Proposal的深度学习目标检测算法（RCNN，SPP-NET，Fast-RCNN，Faster-RCNN等）；2 以YOLO为代表的基于回归方法的深度学习目标检测算法（YOLO，SSD等）。本篇对基于Region Proposal的深度学习目标检测算法进行介绍，后续再对基于回归方法的深度学习目标检测方法进行介绍。</p>
+<hr>
+<p><a name="title1"></a></p>
+<h3 id="RCNN"><a href="#RCNN" class="headerlink" title="RCNN"></a>RCNN</h3><hr>
+<p><a name="title2"></a></p>
+<h4 id="流程框图"><a href="#流程框图" class="headerlink" title="流程框图"></a>流程框图</h4><p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1561365265113-ffe24c21-8b5f-4eff-be6c-c5716f494f09.png#align=left&amp;display=inline&amp;height=355&amp;name=rcnn.png&amp;originHeight=355&amp;originWidth=592&amp;size=631917&amp;status=done&amp;width=592" alt="rcnn.png"><br><a name="title3"></a></p>
+<h4 id="算法特点"><a href="#算法特点" class="headerlink" title="算法特点"></a>算法特点</h4><hr>
+<ol>
+<li>使用Selective Search提取Proposes，然后利用CNN等识别技术进行分类。</li>
+<li>使用识别库进行预训练，而后用检测库调优参数。</li>
+<li>使用SVM代替了CNN网络中最后的Softmax，同时用CNN输出的4096维向量进行Bounding Box回归。</li>
+<li>流程前两个步骤（候选区域提取+特征提取）与待检测类别无关，可以在不同类之间共用；同时检测多类时，需要倍增的只有后两步骤（判别+精修），都是简单的线性运算，速度很快。<br><a name="title4"></a><h4 id="存在问题"><a href="#存在问题" class="headerlink" title="存在问题"></a>存在问题</h4></li>
+</ol>
+<hr>
+<p>1 训练分为多个阶段，步骤繁琐: 微调网络+训练SVM+训练边框回归器。<br>2 训练耗时，占用磁盘空间大：5000张图像产生几百G的特征文件。<br>3 速度慢: 使用GPU, VGG16模型处理一张图像需要47s。<br><a name="title5"></a></p>
+<h3 id="SPP-NET"><a href="#SPP-NET" class="headerlink" title="SPP-NET"></a>SPP-NET</h3><hr>
+<p><a name="title6"></a></p>
+<h4 id="流程框图-1"><a href="#流程框图-1" class="headerlink" title="流程框图"></a>流程框图</h4><p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1561365300467-cbd325a3-abeb-4788-b76b-7220ab85903e.png#align=left&amp;display=inline&amp;height=302&amp;name=sppnet.png&amp;originHeight=302&amp;originWidth=592&amp;size=537598&amp;status=done&amp;width=592" alt="sppnet.png"><br><a name="title7"></a></p>
+<h4 id="算法特点-1"><a href="#算法特点-1" class="headerlink" title="算法特点"></a>算法特点</h4><hr>
+<p>1 通过Spatial Pyramid Pooling解决了深度网络固定输入层尺寸的这个限制，使得网络可以享受不限制输入尺寸带来的好处。<br>2 解决了RCNN速度慢的问题，不需要对每个Proposal（2000个左右）进行Wrap或Crop输入CNN提取Feature Map，只需要对整图提一次Feature Map，然后将Proposal区域映射到卷积特征层得到全链接层的输入特征。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1561365335760-a5b69570-6524-44aa-8799-9a8697d25c60.png#align=left&amp;display=inline&amp;height=288&amp;name=image02.png&amp;originHeight=288&amp;originWidth=546&amp;size=88918&amp;status=done&amp;width=546" alt="image02.png"><br><a name="title8"></a></p>
+<h4 id="几个要点"><a href="#几个要点" class="headerlink" title="几个要点"></a>几个要点</h4><hr>
+<p>一、ROI的在特征图上的对应的特征区域的维度不满足全连接层的输入要求怎么办?<br>作者使用Spatial Pyramid Pooling解决了该问题。如下图所示，假设原图输入是224x224，对于conv5出来后的输出是13x13x256的，可以理解成有256个这样的Filter，每个Filter对应一张13x13的Reponse Map。如果像上图那样将Reponse Map分成1x1（金字塔底座），2x2（金字塔中间），4x4（金字塔顶座）三张子图，分别做Max Pooling后，出来的特征就是（16+4+1）x256 维度。如果原图的输入不是224x224，出来的特征依然是（16+4+1）x256维度。这样就实现了不管图像尺寸如何池化n的输出永远是 （16+4+1）x256 维度。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1561365364159-c1173844-f27d-438d-ba2d-5451c315b29c.png#align=left&amp;display=inline&amp;height=613&amp;name=image03.png&amp;originHeight=613&amp;originWidth=926&amp;size=57539&amp;status=done&amp;width=926" alt="image03.png"><br>二、原始图像的ROI如何映射到特征图（一系列卷积层的最后输出）<br>要搞定这个问题，需要首先清楚感受野等概念和计算方法。下面从感受野、感受野上面的坐标映射及原始图像的ROI如何映射三方面阐述。<br>1 感受野<br>① 概念<br>在卷积神经网络中，感受野的定义是卷积神经网络每一层输出的特征图（Feature Map）上的像素点在原始图像上映射的区域大小。<br>② 如何计算<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">output field size = ( input field size - kernel size + 2*padding ) / stride + 1</span><br></pre></td></tr></table></figure></p>
+<p>其中output field size 是卷积层的输出，input field size 是卷积层的输入，反过来卷积层的输入（也即前一层的感受野） = ？答案必然是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">input field size = （output field size - 1）* stride - 2*padding + kernel size</span><br></pre></td></tr></table></figure></p>
+<p><a href="http://lanbing510.info/2017/08/24/RCNN-FastRCNN-FasterRCNN.html#collapse2" target="_blank" rel="noopener">计算卷积层输出大小和感受野大小的Python代码</a><br>运行结果如下。从运行结果可以看出论文中ZF-5网络感受野大小为139是什么得到的了。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1561365393251-65e017e5-e7d4-48ba-9fd0-44203f8e9c76.png#align=left&amp;display=inline&amp;height=669&amp;originHeight=669&amp;originWidth=621&amp;size=0&amp;status=done&amp;width=621" alt><br>2 感受野上的坐标映射<br>① 计算公式<br>对于Convolution/Pooling Layer:<br><img src="https://cdn.nlark.com/yuque/__latex/eb59e298bd034d2cb84969545df53438.svg#card=math&amp;code=p_i%3Ds_i%20%5Ccdot%20p_%7Bi%2B1%7D%2B%5B%28k_i-1%29%2F2-padding%5D&amp;height=24&amp;width=266" alt><br>对于Neuronlayer（ReLU/Sigmoid/…）:<br><img src="https://cdn.nlark.com/yuque/__latex/eef74e92f8d1c95768c9ac0c8033d659.svg#card=math&amp;code=p_i%3Dp_%7Bi%2B1%7D&amp;height=24&amp;width=64" alt><br>其中<img src="https://cdn.nlark.com/yuque/__latex/eca91c83a74a2373ca5f796700e99fd3.svg#card=math&amp;code=p_i&amp;height=24&amp;width=14" alt>为第$i$层感受野上的坐标，<img src="https://cdn.nlark.com/yuque/__latex/e406ac4d7c470823a8619c13dd7101be.svg#card=math&amp;code=s_i&amp;height=24&amp;width=14" alt>为Stride的大小，$k_i$为感受野的大小。<br>② 例子<br>上面是计算任意一个Layer输入输出的坐标映射关系，如果是计算任意Feature Map之间的关系，只需要用简单的组合就可以得到，下图是一个简单的例子:<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1561365466039-41a25182-9cd1-4724-bbaf-f2c8e47400e1.png#align=left&amp;display=inline&amp;height=173&amp;originHeight=173&amp;originWidth=602&amp;size=0&amp;status=done&amp;width=602" alt><br>③ 简化版本<br>何凯明在SPP-NET中使用的是简化版本，将2小节公式中的Padding都设为<img src="https://cdn.nlark.com/yuque/__latex/4e802acb5edbb048c72376723fbeca2a.svg#card=math&amp;code=%5Cleft%20%5Clfloor%20k_i%2F2%20%5Cright%20%5Crfloor&amp;height=24&amp;width=45" alt>，公式可进一步简化为：<img src="https://cdn.nlark.com/yuque/__latex/74b37d72f47c3b21747f677ac1cb83a5.svg#card=math&amp;code=p_i%3Ds_i%20%5Ccdot%20p_%7Bi%2B1%7D&amp;height=24&amp;width=89" alt><br>3 原始图像的ROI如何映射<br>SPP-NET是把原始ROI的左上角和右下角 映射到Feature Map上的两个对应点。 有了Feature Map上的两队角点就确定了对应的Feature Map 区域（下图中橙色）。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1561365487808-c82a0e9a-834a-4807-a7c8-6b5f07d9185e.png#align=left&amp;display=inline&amp;height=298&amp;originHeight=298&amp;originWidth=600&amp;size=0&amp;status=done&amp;width=600" alt><br>左上角取$<img src="https://cdn.nlark.com/yuque/__latex/ef0ff0e342027c078edbcd8b2a7e4dda.svg#card=math&amp;code=x%27%3D%5Cleft%20%5Clfloor%20x%2FS%20%5Cright%20%5Crfloor%2B1%2C%20y%27%3D%5Cleft%20%5Clfloor%20y%2FS%20%5Cright%20%5Crfloor%2B1&amp;height=24&amp;width=218" alt>；右下角的点取$<img src="https://cdn.nlark.com/yuque/__latex/7aa06c0814137c917bcd71deae0c4dd2.svg#card=math&amp;code=x%27%3D%5Cleft%20%5Clceil%20x%2FS%20%5Cright%20%5Crceil-1%2C%20y%27%3D%5Cleft%20%5Clceil%20y%2FS%20%5Cright%20%5Crceil-1&amp;height=24&amp;width=218" alt>$。其中S为坐标映射的简化计算版本，即$<img src="https://cdn.nlark.com/yuque/__latex/adfd742ecb8cf41adc03b55b83cd5d94.svg#card=math&amp;code=S%3D%5Cprod_%7B0%7D%5E%7Bi%7Ds_i&amp;height=50&amp;width=69" alt>$。<br><a name="title9"></a></p>
+<h3 id="Fast-RCNN"><a href="#Fast-RCNN" class="headerlink" title="Fast-RCNN"></a>Fast-RCNN</h3><hr>
+<p><a name="title10"></a></p>
+<h4 id="流程框图-2"><a href="#流程框图-2" class="headerlink" title="流程框图"></a>流程框图</h4><hr>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1561365487818-0cc051cc-0642-4756-8ea8-3002783c6e0c.png#align=left&amp;display=inline&amp;height=445&amp;originHeight=445&amp;originWidth=592&amp;size=0&amp;status=done&amp;width=592" alt><br><a name="title11"></a></p>
+<h4 id="算法特点-2"><a href="#算法特点-2" class="headerlink" title="算法特点"></a>算法特点</h4><hr>
+<ol>
+<li>Fast-RCNN直接使用Softmax替代了RCNN中SVM进行分类，同时在网络中加入了多任务函数边框回归，实现了端到端的训练（除SS Region Proposal阶段）。</li>
+<li>借鉴SPP-NET，提出了一个ROI层。ROI Pooling Layer实际上是SPP-NET的一个精简版，SPP-NET对每个Proposal使用了不同大小的金字塔映射，而ROI Pooling Layer只需要下采样到一个7x7的特征图。对于VGG16网络conv5_3有512个特征图，这样所有Region Proposal对应了一个7<em>7</em>512维度的特征向量作为全连接层的输入。</li>
+<li>使用了不同于SPP-NET的训练方式，训练时，把同张图片的Prososals作为一批进行学习，而Proposals的坐标直接映射到conv5层上，这样相当于一张图片的所有训练样本只卷积了一次。</li>
+<li>论文在回归问题上并没有用很常见的2范数作为回归，而是使用所谓的鲁棒L1范数作为损失函数。</li>
+<li>论文将比较大的全链接层用SVD分解了一下使得检测的时候更加迅速。<br><a name="title12"></a><h4 id="几个要点-1"><a href="#几个要点-1" class="headerlink" title="几个要点"></a>几个要点</h4></li>
+</ol>
+<hr>
+<p>一、联合训练<br>联合训练（Joint Training）指如何将分类和边框回归联合到一起在CNN阶段训练，主要难点是损失函数的设计。Fast-RCNN中，有两个输出层：第一个是针对每个ROI区域的分类概率预测，$<img src="https://cdn.nlark.com/yuque/__latex/b5f712a3a1ab0f479b46c0af00244a11.svg#card=math&amp;code=p%3D%28p_0%2C%20p_1%2C%20%5Ccdots%2C%20p_K%29&amp;height=24&amp;width=138" alt>$；第二个则是针对每个ROI区域坐标的偏移优化，$<img src="https://cdn.nlark.com/yuque/__latex/cbb478231f040fe7e9d2aa599865e2b9.svg#card=math&amp;code=t%5Ek%20%3D%20%28t%5Ek_x%2C%20t%5Ek_y%2C%20t%5Ek_w%2C%20t%5Ek_h%29&amp;height=25&amp;width=127" alt>$，$<img src="https://cdn.nlark.com/yuque/__latex/dd966ee640d360cd1030ab80055b11d4.svg#card=math&amp;code=0%20%5Cle%20k%20%5Cle%20K&amp;height=24&amp;width=74" alt>$是多类检测的类别序号。每个训练ROI都对应着真实类别$u$和边框回归目标$<img src="https://cdn.nlark.com/yuque/__latex/48d79430384dca8b7d478b3fd191d91e.svg#card=math&amp;code=v%3D%28v_x%2Cv_y%2Cv_w%2Cv_h%29&amp;height=25&amp;width=129" alt>$，对于类别$u$预测边框为$<img src="https://cdn.nlark.com/yuque/__latex/a0efc78099a1841e309df74a7e658850.svg#card=math&amp;code=t%5Eu%3D%28t_x%5Eu%2Ct_y%5Eu%2Ct_w%5Eu%2Ct_h%5Eu%29&amp;height=25&amp;width=128" alt>$，使用多任务损失$L$来定义ROI上分类和边框回归的损失：<br>$$<img src="https://cdn.nlark.com/yuque/__latex/65a617a8d624705568b08cee6d14eaf5.svg#card=math&amp;code=L%28p%2Cu%2Ct%5Eu%2Cv%29%3DL_%7Bcls%7D%28p%2Cu%29%2B%5Clambda%20%5Bu%20%5Cge%201%5DL_%7Bloc%7D%28t%5Eu%2Cv%29&amp;height=24&amp;width=317" alt>$$<br>其中$<img src="https://cdn.nlark.com/yuque/__latex/b20a54c3ae72eb8d5610bf30d47fcc92.svg#card=math&amp;code=L_%7Bcls%7D%28p%2Cu%29%3D-%5Clog%20p_u&amp;height=24&amp;width=141" alt>$表示真实类别的log损失，当$<img src="https://cdn.nlark.com/yuque/__latex/fb695fa0f6700942bcfc817c0ec6b015.svg#card=math&amp;code=u%20%5Cge%201&amp;height=24&amp;width=39" alt>$时，$<img src="https://cdn.nlark.com/yuque/__latex/ba6ed319adfb146814eb27d4e46825d0.svg#card=math&amp;code=%5Bu%20%5Cge%201%5D&amp;height=24&amp;width=48" alt>$的值为1，否则为0。下面将重点介绍多任务损失中的边框回归部分（对应坐标偏移优化部分）。<br>二、边框回归<br>假设对于类别$u$，在图片中标注的真实坐标和对应的预测值理论上两者越接近越好，相应的损失函数为：<br>$$<img src="https://cdn.nlark.com/yuque/__latex/f69ab263c72ee87b0011044f0651c884.svg#card=math&amp;code=L_%7Bloc%7D%28t%5Eu%2C%20v%29%20%3D%20%5Csum_%7Bi%20%5Cin%20%7Bx%2C%20y%2C%20w%2C%20h%7D%7D%20%5Ctext%7Bsmooth%7D_%7BL_1%7D%28t_i%5Eu-%20v_i%29&amp;height=41&amp;width=269" alt>$$<br>其中<br>$$<img src="https://cdn.nlark.com/yuque/__latex/5519b64be17d6f7f4a8857b2f7c17c28.svg#card=math&amp;code=%5Ctext%7Bsmooth%7D_%7BL_1%7D%28x%29%20%3D%20%5Cleft%20%5C%7B%20%5Cbegin%7Baligned%7D%20%26%200.5x%5E2%20%26%20%7Cx%7C%20%5Cle%201%20%5C%5C%20%26%7Cx%7C-0.5%20%26%20%5Ctext%7Botherwise%7D%5Cend%7Baligned%7D%20%5Cright.&amp;height=43&amp;width=286" alt>$$<br>Fast-RCNN在上面用到的鲁棒$<img src="https://cdn.nlark.com/yuque/__latex/2c6f3b6c16df97a1b00e04ff17e4906e.svg#card=math&amp;code=L_1&amp;height=24&amp;width=18" alt>$函数对外点比RCNN和SPP-NET中用的$<img src="https://cdn.nlark.com/yuque/__latex/07cbd6c155424e110559a84df364be5a.svg#card=math&amp;code=L_2&amp;height=24&amp;width=18" alt>$函数更为鲁棒，该函数在$<img src="https://cdn.nlark.com/yuque/__latex/9f8836653f8d3e61d60fc083ede7d896.svg#card=math&amp;code=%28-1%2C%201%29&amp;height=24&amp;width=49" alt>$之间为二次函数，其他区域为线性函数，函数直观图如下图所示。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1561365487792-23e05f1c-cb64-41e5-a4b2-965d685764ba.png#align=left&amp;display=inline&amp;height=225&amp;originHeight=225&amp;originWidth=300&amp;size=0&amp;status=done&amp;width=300" alt><br><a name="title13"></a></p>
+<h4 id="存在问题-1"><a href="#存在问题-1" class="headerlink" title="存在问题"></a>存在问题</h4><hr>
+<p>使用Selective Search提取Region Proposals，没有实现真正意义上的端对端，操作也十分耗时。<br><a name="title14"></a></p>
+<h3 id="Faster-RCNN"><a href="#Faster-RCNN" class="headerlink" title="Faster-RCNN"></a>Faster-RCNN</h3><hr>
+<p><a name="title15"></a></p>
+<h4 id="流程框图-3"><a href="#流程框图-3" class="headerlink" title="流程框图"></a>流程框图</h4><hr>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1561365488022-6fc398af-6b84-4ba6-b2b4-9d73e46ffd73.png#align=left&amp;display=inline&amp;height=455&amp;originHeight=455&amp;originWidth=592&amp;size=0&amp;status=done&amp;width=592" alt><br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1561365487802-4e5ae087-6d63-4c28-b93c-d55bcaa33759.png#align=left&amp;display=inline&amp;height=355&amp;originHeight=721&amp;originWidth=710&amp;size=0&amp;status=done&amp;width=350" alt><br><a name="title16"></a></p>
+<h4 id="算法特点-3"><a href="#算法特点-3" class="headerlink" title="算法特点"></a>算法特点</h4><hr>
+<p>1 提出了Region Proposal Network（RPN），将Proposal阶段和CNN分类融到了一起，实现了一个完全的End-To-End的CNN目标检测模型。RPN可以快速提取高质量的Proposal，不仅加快了目标检测速度，还提高了目标检测性能。<br>2 将Fast-RCNN和RPN放在同一个网络结构中训练，共享网络参数。<br><a name="title17"></a></p>
+<h4 id="几个要点-2"><a href="#几个要点-2" class="headerlink" title="几个要点"></a>几个要点</h4><hr>
+<p>一、Region Proposal Network<br>Region Proposal Network（RPN）的核心思想是使用卷积神经网络直接产生Region Proposal，使用的方法本质上就是滑动窗口。RPN的设计比较巧妙，RPN只需在最后的卷积层上滑动一遍，借助Anchor机制和边框回归可以得到多尺度多长宽比的Region Proposal。下图是RPN的网络结构图。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1561365488052-e0c25352-c570-4206-9654-e5e89b36144d.png#align=left&amp;display=inline&amp;height=327&amp;originHeight=523&amp;originWidth=880&amp;size=0&amp;status=done&amp;width=550" alt><br>在ZF网络模型下，给定输入图像（假设分辨率为600<em>1000），经过卷积操作得到最后一层的卷积特征图（大小约为40</em>60）。在这个特征图上使用3<em>3的卷积核（滑动窗口）与特征图进行卷积，最后一层卷积层共有256个Feature Map，那么这个3</em>3的区域卷积后可以获得一个256维的特征向量，后边接Cls Layer和Reg Layer分别用于分类和边框回归（跟Fast RCNN类似，只不过这里的类别只有目标和背景两个类别）。3<em>3滑窗对应的每个特征区域同时预测输入图像3种尺度（128,256,512），3种长宽比（1:1,1:2,2:1）的Region Proposal，这种映射的机制称为Anchor。所以对于这个40</em>60的Feature Map，总共有约20000（40<em>60</em>9）个Anchor，也就是预测20000个Region Proposal。下图是51<em>39个Anchor中心，以及9种Anchor示例。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1561365487785-b5cea912-4922-4a5e-9bae-8064eb118bf0.png#align=left&amp;display=inline&amp;height=386&amp;originHeight=386&amp;originWidth=424&amp;size=0&amp;status=done&amp;width=424" alt><br>这样设计的好处是什么？虽然现在也是用的滑动窗口策略，但是，滑动窗口操作是在卷积层特征图上进行的，维度较原始图像降低了16</em>16倍（16如何得到的可参见前文）；多尺度采用了9种Anchor，对应了三种尺度和三种长宽比，加上后边接了边框回归，所以即便是这9种Anchor外的窗口也能得到一个跟目标比较接近的Region Proposal。<br>二、RPN的损失函数<br>损失函数定义为：<br>$$<img src="https://cdn.nlark.com/yuque/__latex/8ab974e160dee55e89e9cd4eafa89cb7.svg#card=math&amp;code=L%28%7Bp_i%7D%7Bt_i%7D%29%20%3D%20%5Cfrac%7B1%7D%7BN_%7Bcls%7D%7D%20%5Csum_i%20L_%7Bcls%7D%28p_i%2C%20p_i%5E%2A%29%20%2B%5Clambda%20%5Cfrac%7B1%7D%7BN_%7Breg%7D%7D%20%5Csum_i%20p_i%5E%2A%20L_%7Breg%7D%28t_i%2C%20t_i%5E%2A%29&amp;height=45&amp;width=394" alt>$$<br>其中$i$表示一次Mini-Batch中Anchor的索引，$p_i$是Anchor $i$是否是一个物体，$L_{reg}$即为上面提到的$<img src="https://cdn.nlark.com/yuque/__latex/490d911f5a01d7af7ae4c871b55323e4.svg#card=math&amp;code=%5Ctext%7Bsmooth%7D_%7BL_1%7D%28x%29&amp;height=25&amp;width=89" alt>$函数，$N_{cls}$和$N_{reg}$是两个归一化项，分别表示Mini-Batch的大小和Anchor位置的数目。<br>三、网络的训练<br>如果是分别训练两种不同任务的网络模型，即使它们的结构、参数完全一致，但各自的卷积层内的卷积核也会向着不同的方向改变，导致无法共享网络权重，Faster-RCNN提出了三种可能的方式：<br>1 Alternating Training：此方法其实就是一个不断迭代的训练过程，既然分别训练RPN和Fast-RCNN可能让网络朝不同的方向收敛，那么我们可以先独立训练RPN，然后用这个RPN的网络权重对Fast-RCNN网络进行初始化，并且用之前RPN输出Proposal作为此时Fast-RCNN的输入，之后不断迭代这个过程，即循环训练RPN、Fast-RCNN。<br>2 Approximate Joint Training：这里与前一种方法不同，不再是串行训练RPN和Fast-RCNN，而是尝试把二者融入到一个网络内，具体融合的网络结构如下图所示，可以看到，Proposals是由中间的RPN层输出的，而不是从网络外部得到。需要注意的一点，名字中的”Approximate”是因为“This solution ignores the derivative w.r.t. the proposal boxes’ coordinates that are also network responses”，也就是说，反向传播阶段RPN产生的Cls Score能够获得梯度用以更新参数，但是Proposal的坐标预测则直接把梯度舍弃了，这个设置可以使Backward时该网络层能得到一个解析解（Closed Results），并且相对于Alternating Traing减少了25-50%的训练时间。<br>3 Non-approximate Training：上面的Approximate Joint Training把Proposal的坐标预测梯度直接舍弃，所以被称作Approximate，那么理论上如果不舍弃是不是能更好的提升RPN部分网络的性能呢？作者把这种训练方式称为“ Non-approximate Joint Training”，但是此方法只是一笔带过，表示“This is a nontrivial problem and a solution can be given by an “RoI warping” layer as developed in [15], which is beyond the scope of this paper”。<br>作者没有用上面提到的三种可能方法，而是使用了4-Step Alternating Training，具体步骤如下。</p>
+<ol>
+<li>用ImageNet模型初始化，独立训练一个RPN网络；</li>
+<li>仍然用ImageNet模型初始化，但是使用上一步RPN网络产生的Proposal作为输入，训练一个Fast-RCNN网络，至此，两个网络每一层的参数完全不共享；</li>
+<li>使用第二步的Fast-RCNN网络参数初始化一个新的RPN网络，但是把RPN、Fast-RCNN共享的那些卷积层的Learning Rate设置为0，也就是不更新，仅仅更新RPN特有的那些网络层，重新训练，此时，两个网络已经共享了所有公共的卷积层；</li>
+<li>仍然固定共享的那些网络层，把Fast-RCNN特有的网络层也加入进来，形成一个Unified Network，继续训练，Fine Tune Fast-RCNN特有的网络层，此时，该网络已经实现我们设想的目标，即网络内部预测Proposal并实现检测的功能。</li>
+</ol>
+<p>上述步骤图示如下。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1561365487824-2c4313f1-453c-4410-b0c6-df7170a2223d.png#align=left&amp;display=inline&amp;height=271&amp;originHeight=271&amp;originWidth=600&amp;size=0&amp;status=done&amp;width=600" alt><br><a name="title18"></a></p>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><hr>
+<p>至此，介绍完了以RCNN为代表的基于Region Proposal的深度学习目标检测算法（RCNN，SPP-NET，Fast-RCNN，Faster-RCNN），主要介绍了算法的核心思想和要点难点，代码可以从GitHub得到，更多实现细节可以阅读原论文和代码。接下来会写另一篇文章来介绍以YOLO为代表的基于回归方法的深度学习目标检测算法（YOLO，SSD）。<br><a name="title19"></a></p>
+<h3 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h3><hr>
+<p>[1] RCNN:”Rich feature hierarchies for accurate object detection and semantic segmentation”<br>[2] SPP-NET:”Spatial pyramid pooling in deep convolutional networks for visual recognition”<br>[3] Fast-RCNN:”Fast R-CNN”<br>[4] Faster-RCNN:”Faster R-CNN: Towards real-time object detection with region proposal networks”<br>[5] <a href="http://closure11.com/rcnn-fast-rcnn-faster-rcnn%E7%9A%84%E4%B8%80%E4%BA%9B%E4%BA%8B/" target="_blank" rel="noopener">RCNN, Fast-RCNN, Faster-RCNN的一些事</a><br>[6] <a href="http://www.cnblogs.com/objectDetect/p/5947169.html" target="_blank" rel="noopener">卷积神经网络物体检测之感受野大小计算</a><br>[7] <a href="https://zhuanlan.zhihu.com/p/24780433" target="_blank" rel="noopener">原始图片中的ROI如何映射到到Feature Map</a><br>[8] <a href="https://zhuanlan.zhihu.com/p/24780395" target="_blank" rel="noopener">Fast R-CNN</a><br>[9] <a href="http://blog.csdn.net/happyflyy/article/details/54917514" target="_blank" rel="noopener">通过代码理解Faster-RCNN中的RPN</a><br>[10] <a href="https://zhuanlan.zhihu.com/p/24916624" target="_blank" rel="noopener">Faster R-CNN</a><br>[11] <a href="https://zhuanlan.zhihu.com/p/21412911" target="_blank" rel="noopener">基于深度学习的目标检测研究进展</a></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/06/24/yuque/目标检测之RCNN，SPP-NET，Fast-RCNN，Faster-RCNN/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-yuque/使用R-CNN的目标检测和分类" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1409,71 +1532,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2019/06/18/yuque/了解AlexNet/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/实现Faster R-CNN" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/06/18/yuque/实现Faster R-CNN/">实现Faster R-CNN</a>
-    </h1>
-  
-
-        
-        <a href="/2019/06/18/yuque/实现Faster R-CNN/" class="archive-article-date">
-  	<time datetime="2019-06-18T02:26:09.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-06-18</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><em>Implements Faster R-CNN.</em><br>实现更快的R-CNN<br><em>The input to the model is expected to be a list of tensors, each of shape [C, H, W], one for each image, and should be in 0-1 range. Different images can have different sizes.</em><br>模型的输入应该是张量列表，每个张量为[C，H，W]形状，每个图像一个，应该在0-1范围内。 不同的图像可以有不同的大小。<br><em>The behavior of the model changes depending if it is in training or evaluation mode.</em><br>模型的行为会根据其是否处于训练或评估模式而变化。<br>
-        
-          <a class="article-more-a" href="/2019/06/18/yuque/实现Faster R-CNN/#more">more >></a>
-        
-      
-
-      
-    </p></div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/06/18/yuque/实现Faster R-CNN/">展开全文 >></a>
         </p>
       
 
