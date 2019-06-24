@@ -149,29 +149,98 @@
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-yuque/了解XGBoost背后的数学的端到端指南" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-yuque/动画RNN，LSTM和GRU" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/22/yuque/了解XGBoost背后的数学的端到端指南/">了解XGBoost背后的数学的端到端指南</a>
+      <a class="article-title" href="/2019/04/08/yuque/动画RNN，LSTM和GRU/">动画RNN，LSTM和GRU</a>
     </h1>
   
 
         
-        <a href="/2019/04/22/yuque/了解XGBoost背后的数学的端到端指南/" class="archive-article-date">
-  	<time datetime="2019-04-22T03:54:55.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-22</time>
+        <a href="/2019/04/08/yuque/动画RNN，LSTM和GRU/" class="archive-article-date">
+  	<time datetime="2019-04-08T03:35:15.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-08</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1555905325086-0831bee2-c1df-4c1e-8db7-b5226263f504.jpeg#align=left&amp;display=inline&amp;height=370&amp;name=0_k_mwDVMBdOTeSsJY.jpg&amp;originHeight=370&amp;originWidth=500&amp;size=50726&amp;status=done&amp;width=500" alt="0_k_mwDVMBdOTeSsJY.jpg"><br><br><br>
+        <p><img src="https://cdn.nlark.com/yuque/0/2019/gif/219582/1554694541119-cecb0195-0921-42bb-99c5-76b77aad66d3.gif#align=left&amp;display=inline&amp;height=494&amp;name=1.gif&amp;originHeight=662&amp;originWidth=1000&amp;size=468764&amp;status=done&amp;width=746" alt="1.gif"><br>递归神经网络（RNN）是一类人工神经网络，通常与顺序数据一起使用。3种最常见的递归神经网络类型是</p>
+<ol>
+<li>香草RNN，</li>
+<li>长期短暂记忆（LSTM），由<a href="https://www.researchgate.net/publication/13853244_Long_Short-term_Memory" target="_blank" rel="noopener">Hochreiter和Schmidhuber在1997年提出</a>，和</li>
+<li><a href="https://arxiv.org/abs/1409.1259" target="_blank" rel="noopener">Cho _等人_</a>提出的门控复发单位（GRU）<a href="https://arxiv.org/abs/1409.1259" target="_blank" rel="noopener">_。_</a><a href="https://arxiv.org/abs/1409.1259" target="_blank" rel="noopener">_人_</a><a href="https://arxiv.org/abs/1409.1259" target="_blank" rel="noopener">在2014年</a>。<br>请注意，我将使用“RNN”来统一指代固有循环的神经网络架构，并使用“vanilla RNN”来指代最简单的递归神经网络架构，如图&gt; <a href="https://towardsdatascience.com/animated-rnn-lstm-and-gru-ef124d06cf45#50f0" target="_blank" rel="noopener">1</a>所示。<br>有许多用于递归神经网络的图解图。我最喜欢的是迈克尔·阮（Michael Nguyen）在<a href="https://towardsdatascience.com/illustrated-guide-to-lstms-and-gru-s-a-step-by-step-explanation-44e9eb85bf21" target="_blank" rel="noopener">“</a>走向数据科学”（Towards Data Science）上发表的<a href="https://towardsdatascience.com/illustrated-guide-to-lstms-and-gru-s-a-step-by-step-explanation-44e9eb85bf21" target="_blank" rel="noopener">这篇文章</a>，因为他为我们提供了对这些模型的直觉，更重要的是让我们更容易理解的美丽插图。但我的帖子背后的动机是更好地可视化在这些单元格中发生的事情，以及如何共享节点以及它们如何转换以给出输出节点。我的灵感来自迈克尔的精彩动画。<br>本文探讨了香草RNN，LSTM和GRU细胞。这是一个简短的阅读，适用于那些阅读过这些主题的人。（我建议在阅读这篇文章之前阅读迈克尔的文章。）重要的是要注意以下动画是连续的，以引导人眼，但不反映矢量化机器计算期间的时间顺序。<br>
         
-          <a class="article-more-a" href="/2019/04/22/yuque/了解XGBoost背后的数学的端到端指南/#more">more >></a>
+          <a class="article-more-a" href="/2019/04/08/yuque/动画RNN，LSTM和GRU/#more">more >></a>
+        
+      
+
+      
+    </li></ol></div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/04/08/yuque/动画RNN，LSTM和GRU/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/XGBoost算法：长期可能在位！" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/04/08/yuque/XGBoost算法：长期可能在位！/">XGBoost算法：长期可能在位！</a>
+    </h1>
+  
+
+        
+        <a href="/2019/04/08/yuque/XGBoost算法：长期可能在位！/" class="archive-article-date">
+  	<time datetime="2019-04-08T03:02:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-08</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1554692595416-69c4133a-0fb6-4ae5-b308-642403bd2216.png#align=left&amp;display=inline&amp;height=521&amp;name=1.png&amp;originHeight=699&amp;originWidth=1000&amp;size=991609&amp;status=done&amp;width=746" alt="1.png"><br>我还记得十五年前我第一份工作的第一天。我刚完成研究生课程，并以分析师的身份加入了一家全球投资银行。在我的第一天，我一直拉直领带，并试着记住我学过的一切。与此同时，在内心深处，我想知道我是否对企业界足够好。感觉到我的焦虑，我的老板微笑着说：<br><em>“别担心！你唯一需要知道的就是回归建模！“</em><br>我记得自己在想，“我得到了这个！”。我知道回归建模; 线性和逻辑回归。我的老板是对的。在我任职期间，我专门建立了基于回归的统计模型。我并不孤单。事实上，在那个时候，回归建模是无可争议的预测分析女王。快进十五年，回归建模的时代已经结束。老女王已经过去了。新女王的名字很长，名字很久; XGBoost或Extreme Gradient Boosting！<br>
+        
+          <a class="article-more-a" href="/2019/04/08/yuque/XGBoost算法：长期可能在位！/#more">more >></a>
         
       
 
@@ -184,7 +253,7 @@
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2019/04/22/yuque/了解XGBoost背后的数学的端到端指南/">展开全文 >></a>
+          <a class="article-more-a" href="/2019/04/08/yuque/XGBoost算法：长期可能在位！/">展开全文 >></a>
         </p>
       
 
@@ -214,30 +283,29 @@
 
 
   
-    <article id="post-yuque/在机器学习预测中转换分类数据的可用性" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-yuque/我的建立图书推荐系统之旅。。。" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/22/yuque/在机器学习预测中转换分类数据的可用性/">在机器学习预测中转换分类数据的可用性</a>
+      <a class="article-title" href="/2019/04/05/yuque/我的建立图书推荐系统之旅。。。/">我的建立图书推荐系统之旅。。。</a>
     </h1>
   
 
         
-        <a href="/2019/04/22/yuque/在机器学习预测中转换分类数据的可用性/" class="archive-article-date">
-  	<time datetime="2019-04-22T03:43:14.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-22</time>
+        <a href="/2019/04/05/yuque/我的建立图书推荐系统之旅。。。/" class="archive-article-date">
+  	<time datetime="2019-04-04T16:41:13.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-05</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p><a name="2365d7f8"></a></p>
-<h2 id="使用邮政编码，纬度和经度的快速示例"><a href="#使用邮政编码，纬度和经度的快速示例" class="headerlink" title="使用邮政编码，纬度和经度的快速示例"></a>使用邮政编码，纬度和经度的快速示例</h2><p><em>作者：Kevin Velasco和Alex Shropshire</em><br>鉴于2014 - 2015年King County，WA House Sales的数据集（<a href="https://www.kaggle.com/harlfoxem/housesalesprediction" target="_blank" rel="noopener">https://www.kaggle.com/harlfoxem/housesalesprediction</a>），我们的任务是创建一个模型来准确预测房屋销售价格。在初步数据探索和清理之后，我们发现了大量可用信息来描述住宅的质量，但没有太多有用的信息来定位。<br>
+        <p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1554396102648-d76c57c9-629d-4bfc-baf1-09826f912b2a.jpeg#align=left&amp;display=inline&amp;height=497&amp;name=1_Gql-Vlc4BQJz_x8GhJXX2A.jpeg&amp;originHeight=1280&amp;originWidth=1920&amp;size=642247&amp;status=done&amp;width=746" alt="1_Gql-Vlc4BQJz_x8GhJXX2A.jpeg"><br>推荐系统一直让我的思绪占据了一段时间，由于我倾向于阅读书籍，因此探索Book Crossing数据集非常吸引人。<br>在线推荐系统是许多电子商务网站的事情。推荐系统广泛地向最适合其口味和特征的顾客推荐产品。有关推荐系统的更多详细信息，请阅读我关于推荐系统的<a href="https://medium.com/@chhavi.saluja1401/recommendation-systems-made-simple-b5a79cac8862" target="_blank" rel="noopener">介绍性文章</a>和<a href="https://towardsdatascience.com/collaborative-filtering-based-recommendation-systems-exemplified-ecbffe1c20b1" target="_blank" rel="noopener">使用Python</a>的<a href="https://towardsdatascience.com/collaborative-filtering-based-recommendation-systems-exemplified-ecbffe1c20b1" target="_blank" rel="noopener">一些插图</a>。<br>当我遇到<a href="http://www2.informatik.uni-freiburg.de/~cziegler/BX/" target="_blank" rel="noopener">Book Crossing</a>数据集时，我开始构建图书推荐系统。该数据集由Cai-Nicolas Ziegler于2004年编制，包含三个用户，书籍和评级表。显性评级以1-10的等级表示（较高的值表示较高的评价），隐式评级表示为0。<br>在构建任何机器学习模型之前，了解数据是什么以及我们要实现的目标至关重要。数据探索揭示了隐藏的趋势和见解，数据预处理使数据可供ML算法使用。<br>那么，让我们开始吧。。。<br>
         
-          <a class="article-more-a" href="/2019/04/22/yuque/在机器学习预测中转换分类数据的可用性/#more">more >></a>
+          <a class="article-more-a" href="/2019/04/05/yuque/我的建立图书推荐系统之旅。。。/#more">more >></a>
         
       
 
@@ -250,7 +318,7 @@
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2019/04/22/yuque/在机器学习预测中转换分类数据的可用性/">展开全文 >></a>
+          <a class="article-more-a" href="/2019/04/05/yuque/我的建立图书推荐系统之旅。。。/">展开全文 >></a>
         </p>
       
 
@@ -280,31 +348,102 @@
 
 
   
-    <article id="post-yuque/决策树完整指南" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-yuque/webhook实现服务器自动部署" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/22/yuque/决策树完整指南/">决策树完整指南</a>
+      <a class="article-title" href="/2019/04/04/yuque/webhook实现服务器自动部署/">webhook实现服务器自动部署</a>
     </h1>
   
 
         
-        <a href="/2019/04/22/yuque/决策树完整指南/" class="archive-article-date">
-  	<time datetime="2019-04-22T03:18:02.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-22</time>
+        <a href="/2019/04/04/yuque/webhook实现服务器自动部署/" class="archive-article-date">
+  	<time datetime="2019-04-04T14:50:24.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-04</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p><a name="277a94b0"></a></p>
-<h2 id="关于机器学习中顶级算法需要了解的一切"><a href="#关于机器学习中顶级算法需要了解的一切" class="headerlink" title="关于机器学习中顶级算法需要了解的一切"></a>关于机器学习中顶级算法需要了解的一切</h2><p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1555903743398-56687233-944c-47b4-b126-72614121f06b.jpeg#align=left&amp;display=inline&amp;height=560&amp;name=0_8k5UmElJ_TyUwAcF.jpg&amp;originHeight=750&amp;originWidth=1000&amp;size=52269&amp;status=done&amp;width=746" alt="0_8k5UmElJ_TyUwAcF.jpg"><br>一开始，学习机器学习（ML）可能是令人生畏的。像“Gradient Descent”，“Latent Dirichlet Allocation”或“Convolutional Layer”这样的术语可能会吓到很多人。但是有一些友好的方式进入该学科，我认为从决策树开始是一个明智的决定。</p>
-<p>
+        <p><code>Webhook</code>是一种通过自定义回调函数来增加或更改網頁表现的方法。这些回调可被可能与原始网站或应用相关的第三方用户及开发者保存、修改与管理。术语“网络钩子”由杰夫·林德塞（Jeff Lindsay）于2007年通过给计算机编程术语“钩子”（Hook）加上前缀得。<br>网络钩子是“用户定义的HTTP回调”。网络钩子通常被某些事件激活，比如将代码推送到源[3]或评论博客。.[4]当此事件发生时，原网站将向为网络钩子配置的URL发送HTTP请求。用户可配置它们引发网页上的事件以调用另一个网站的行为。此操作可为任何事件。<br>本片博客介绍一个简单的<code>github</code>中的<code>webhook</code>自动部署<code>hexo</code>博客。<br><a name="c4e6712f"></a></p>
+<h3 id="服务器安装依赖git，hexo，node，npm"><a href="#服务器安装依赖git，hexo，node，npm" class="headerlink" title="服务器安装依赖git，hexo，node，npm"></a>服务器安装依赖git，hexo，node，npm</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">apt install git</span><br><span class="line">apt install nodejs</span><br><span class="line">apt install npm</span><br><span class="line">npm i -g hexo</span><br></pre></td></tr></table></figure>
+<p><a name="712b29e8"></a></p>
+<h3 id="创建一个webhook-js"><a href="#创建一个webhook-js" class="headerlink" title="创建一个webhook.js"></a>创建一个webhook.js</h3><figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">var http = <span class="keyword">require</span>(<span class="string">'http'</span>);</span><br><span class="line">var exec = <span class="keyword">require</span>(<span class="string">'child_process'</span>).exec;</span><br><span class="line"></span><br><span class="line">http.createServer(function (req, res) &#123;</span><br><span class="line">    <span class="keyword">if</span>(req.url === <span class="string">'/webhooks/push/1'</span>) &#123; <span class="regexp">//</span>定义webhook地址</span><br><span class="line">        exec(<span class="string">'sh ./webhook.sh'</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    res.<span class="keyword">end</span>();</span><br><span class="line">&#125;).listen(<span class="number">9999</span>)</span><br><span class="line">console.log(<span class="string">'we are in 9999'</span>);</span><br></pre></td></tr></table></figure>
+<p><a name="e57a0d46"></a></p>
+<h3 id="创建webhook-sh脚本，执行pull，编译等操作"><a href="#创建webhook-sh脚本，执行pull，编译等操作" class="headerlink" title="创建webhook.sh脚本，执行pull，编译等操作"></a>创建webhook.sh脚本，执行pull，编译等操作</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">'begin'</span> &gt; ../1.txt</span><br><span class="line"><span class="built_in">cd</span> /usr/share/nginx/blog</span><br><span class="line">git pull</span><br><span class="line">npm run hook</span><br><span class="line">cp -r /usr/share/nginx/blog/public/* /usr/share/nginx/ninesix.cc/</span><br><span class="line"><span class="built_in">echo</span> <span class="string">'end'</span> &gt;&gt; ../1.txt</span><br></pre></td></tr></table></figure>
+<p><a name="a165d47a"></a></p>
+<h3 id="使用pm2启动webhook服务"><a href="#使用pm2启动webhook服务" class="headerlink" title="使用pm2启动webhook服务"></a>使用pm2启动webhook服务</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">npm i -g pm2</span><br><span class="line">pm2 start webhook.js</span><br></pre></td></tr></table></figure>
+<p><a name="dd496f4d"></a></p>
+<h3 id="把webhook地址写到github的项目设置中"><a href="#把webhook地址写到github的项目设置中" class="headerlink" title="把webhook地址写到github的项目设置中"></a>把webhook地址写到github的项目设置中</h3><p><code>http://ip:9999/webhooks/push/1</code><br>github会测试发送，成功之后会显示绿色对勾.<br><a name="912951c4"></a></p>
+<h4 id="https-www-yuque-com-yuque-developer-doc-webhook"><a href="#https-www-yuque-com-yuque-developer-doc-webhook" class="headerlink" title="https://www.yuque.com/yuque/developer/doc-webhook"></a><a href="https://www.yuque.com/yuque/developer/doc-webhook" target="_blank" rel="noopener">https://www.yuque.com/yuque/developer/doc-webhook</a></h4><p>apt install git<br>apt install nodejs<br>apt install npm<br>npm i -g hexo</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/04/04/yuque/webhook实现服务器自动部署/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
         
-          <a class="article-more-a" href="/2019/04/22/yuque/决策树完整指南/#more">more >></a>
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/12产品管理的行为数据类型" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/04/04/yuque/12产品管理的行为数据类型/">12产品管理的行为数据类型</a>
+    </h1>
+  
+
+        
+        <a href="/2019/04/04/yuque/12产品管理的行为数据类型/" class="archive-article-date">
+  	<time datetime="2019-04-04T10:09:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-04</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>行为数据，描述观察到的用户或客户行为的数据，可以让您真正了解人们如何或将来可能使用您的产品。听到人们说他们想要的东西是一回事，但看看他们的实际表现会更好。<br>获得比您想象的行为数据更容易。无论您是在进行研究，运行实验来验证假设或功能，还是您刚刚发布了一项功能，行为数据都是您最好的，可以说是最有信息量的朋友。<br>本文旨在通过向您提供产品团队可用的所有类型的行为数据列表来帮助您。希望它提供了一些新的选项，如果您尝试使用数据来推动团队的决策，您可以考虑这些选项。<br>
+        
+          <a class="article-more-a" href="/2019/04/04/yuque/12产品管理的行为数据类型/#more">more >></a>
         
       
 
@@ -317,7 +456,7 @@
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2019/04/22/yuque/决策树完整指南/">展开全文 >></a>
+          <a class="article-more-a" href="/2019/04/04/yuque/12产品管理的行为数据类型/">展开全文 >></a>
         </p>
       
 
@@ -347,95 +486,29 @@
 
 
   
-    <article id="post-yuque/使用Apache Spark的实时机器学习管道" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-yuque/从Alexa的错误中学习" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/19/yuque/使用Apache Spark的实时机器学习管道/">使用Apache Spark的实时机器学习管道</a>
+      <a class="article-title" href="/2019/04/04/yuque/从Alexa的错误中学习/">从Alexa的错误中学习</a>
     </h1>
   
 
         
-        <a href="/2019/04/19/yuque/使用Apache Spark的实时机器学习管道/" class="archive-article-date">
-  	<time datetime="2019-04-19T05:42:50.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-19</time>
+        <a href="/2019/04/04/yuque/从Alexa的错误中学习/" class="archive-article-date">
+  	<time datetime="2019-04-04T09:08:29.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-04</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>如何使用Apache Spark中的实时机器学习管道构建预测模型?</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1555652691362-c6b02332-cce0-4d23-ae29-159ea7a10346.jpeg#align=left&amp;display=inline&amp;height=426&amp;name=1-main-image.jpg&amp;originHeight=426&amp;originWidth=640&amp;size=118962&amp;status=done&amp;width=640" alt="1-main-image.jpg"></p>
+        <p><em>虽然亚马逊的“唤醒词”功能可以改善隐私，但它提出了自己的挑战，例如Alexa录制私人谈话并未经同意将其发送出去。</em><br>通过<a href="https://www.pcmag.com/author-bio/ben-dickson" target="_blank" rel="noopener">本迪克森</a><br>Amazon Echo设备最近<a href="https://www.pcmag.com/news/361405/amazon-alexa-sends-familys-private-conversation-to-contact" target="_blank" rel="noopener">记录</a>了用户<a href="https://www.pcmag.com/news/361405/amazon-alexa-sends-familys-private-conversation-to-contact" target="_blank" rel="noopener">的私人谈话</a>，并在未经他们知情和同意的情况下将其发送给他们的一个联系人。这（再次）引起了对<a href="https://bdtechtalks.com/2018/06/05/google-home-amazon-echo-privacy-security-risks/" target="_blank" rel="noopener">智能扬声器</a>的<a href="https://bdtechtalks.com/2018/06/05/google-home-amazon-echo-privacy-security-risks/" target="_blank" rel="noopener">安全性和隐私性的</a>担忧。然而，后来变得明显，Alexa的奇怪行为并不是一个险恶的间谍情节的一部分 - 相反，它是由于智能扬声器的工作方式导致的一系列相关故障引起的。<br>根据亚马逊提供的一个<a href="https://www.theverge.com/2018/5/24/17391898/amazon-alexa-private-conversation-recording-explanation" target="_blank" rel="noopener">帐户</a>：“由于背景对话中的一个词听起来像’Alexa’，Echo醒了。然后，随后的对话被听作是“发送消息”请求。在这一点上，Alexa大声说’给谁？’ 此时，后台会话被解释为客户联系人列表中的名称。然后Alexa大声问道，’[联系人姓名]，对吗？Alexa然后将背景对话解释为“正确”。尽管这一系列事件不太可能，我们正在评估使这种情况更不可能的选择。“<br>该场景是一个边缘案例，很少发生的事件。但它也是人工智能技术极限的一项有趣研究，它为<a href="https://www.pcmag.com/review/356920/amazon-echo-2017" target="_blank" rel="noopener">Echo</a>和其他所谓的“智能”设备提供动力。<br>
         
-          <a class="article-more-a" href="/2019/04/19/yuque/使用Apache Spark的实时机器学习管道/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/04/19/yuque/使用Apache Spark的实时机器学习管道/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/MLlib管道和结构化流媒体" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/19/yuque/MLlib管道和结构化流媒体/">MLlib管道和结构化流媒体</a>
-    </h1>
-  
-
-        
-        <a href="/2019/04/19/yuque/MLlib管道和结构化流媒体/" class="archive-article-date">
-  	<time datetime="2019-04-19T03:31:44.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-19</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>此示例显示如何训练MLlib管道以生成可应用于转换流式DataFrame的PipelineModel。在创建旨在用于转换流数据的管道时，我们还将记住几点。<br>首先，让我们考虑信用卡公司的情况，该公司希望尽快识别潜在的欺诈性交易，以便他们跟进客户以确认交易是否实际上是欺诈性的。这个假设的信用卡公司有关于交易的历史数据，以及哪些交易被客户报告为欺诈。我们想要根据这些历史数据训练分类器。一旦我们训练了分类器，我们就会将它应用于一系列交易。<br>此示例需要Databricks Runtime 4.0或更高版本。<br>
-        
-          <a class="article-more-a" href="/2019/04/19/yuque/MLlib管道和结构化流媒体/#more">more >></a>
+          <a class="article-more-a" href="/2019/04/04/yuque/从Alexa的错误中学习/#more">more >></a>
         
       
 
@@ -448,7 +521,7 @@
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2019/04/19/yuque/MLlib管道和结构化流媒体/">展开全文 >></a>
+          <a class="article-more-a" href="/2019/04/04/yuque/从Alexa的错误中学习/">展开全文 >></a>
         </p>
       
 
@@ -478,40 +551,29 @@
 
 
   
-    <article id="post-yuque/如何使您的MLflow项目易于共享和协作" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-yuque/语音助理在手机上被浪费了" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/17/yuque/如何使您的MLflow项目易于共享和协作/">如何使您的MLflow项目易于共享和协作</a>
+      <a class="article-title" href="/2019/04/04/yuque/语音助理在手机上被浪费了/">语音助理在手机上被浪费了</a>
     </h1>
   
 
         
-        <a href="/2019/04/17/yuque/如何使您的MLflow项目易于共享和协作/" class="archive-article-date">
-  	<time datetime="2019-04-17T09:22:37.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-17</time>
+        <a href="/2019/04/04/yuque/语音助理在手机上被浪费了/" class="archive-article-date">
+  	<time datetime="2019-04-04T08:55:53.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-04</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p><a name="a0a97361"></a></p>
-<h3 id="TL-DR（适用于mlflow用户）"><a href="#TL-DR（适用于mlflow用户）" class="headerlink" title="TL; DR（适用于mlflow用户）"></a>TL; DR（适用于mlflow用户）</h3><p>在您的工作流程中更改此：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mlflow ui</span><br></pre></td></tr></table></figure>
-<p>对此：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">neptune mlflow</span><br></pre></td></tr></table></figure></p>
-<p>并进行你的mlflow实验：</p>
-<ul>
-<li>主持，</li>
-<li>备份，</li>
-<li>组织，</li>
-<li>易于与他人分享和讨论。</li>
-</ul>
-<p>分享您的工作可以和我分享此<a href="https://ui.neptune.ml/jakub-czakon/mlflow-integration/e/MLFLOW-10/output?path=artifacts%2F" target="_blank" rel="noopener"><strong>MLflow实验</strong></a>一样简单。<br>
+        <p><em>智能手机和智能扬声器在解锁语音接口的全部潜力方面受到限制。数字助理的未来是增强和虚拟现实。</em><br><strong>通过</strong><a href="https://www.pcmag.com/author-bio/ben-dickson" target="_blank" rel="noopener"><strong>本迪克森</strong></a><br>自2011年首次亮相以来，苹果公司的语音助手Siri已经激励众多公司开发竞争对手的数字助理，其中最受欢迎的是  <a href="https://www.pcmag.com/article/352136/the-best-amazon-alexa-skills" target="_blank" rel="noopener">亚马逊的Alexa</a>和Google智能助理 - 早已超越Siri的质量。<br>然而，语音助手仅用于我们使用计算设备完成的一小部分任务，因为它们目前所处的平台存在局限性。<br>
         
-          <a class="article-more-a" href="/2019/04/17/yuque/如何使您的MLflow项目易于共享和协作/#more">more >></a>
+          <a class="article-more-a" href="/2019/04/04/yuque/语音助理在手机上被浪费了/#more">more >></a>
         
       
 
@@ -524,7 +586,7 @@
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2019/04/17/yuque/如何使您的MLflow项目易于共享和协作/">展开全文 >></a>
+          <a class="article-more-a" href="/2019/04/04/yuque/语音助理在手机上被浪费了/">展开全文 >></a>
         </p>
       
 
@@ -554,106 +616,72 @@
 
 
   
-    <article id="post-yuque/强大机器学习的三大支柱：规范测试，强大的训练和形式验证" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-yuque/转移学习：重新启动Inception V3以进行自定义图像分类" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/12/yuque/强大机器学习的三大支柱：规范测试，强大的训练和形式验证/">强大机器学习的三大支柱：规范测试，强大的训练和形式验证</a>
+      <a class="article-title" href="/2019/03/18/yuque/转移学习：重新启动Inception V3以进行自定义图像分类/">转移学习：重新启动Inception V3以进行自定义图像分类</a>
     </h1>
   
 
         
-        <a href="/2019/04/12/yuque/强大机器学习的三大支柱：规范测试，强大的训练和形式验证/" class="archive-article-date">
-  	<time datetime="2019-04-12T02:24:52.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-12</time>
+        <a href="/2019/03/18/yuque/转移学习：重新启动Inception V3以进行自定义图像分类/" class="archive-article-date">
+  	<time datetime="2019-03-18T10:00:40.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-18</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1555035949093-a4cdb429-6207-48d7-b560-c1fe63fc03f6.png#align=left&amp;display=inline&amp;height=419&amp;name=1_Gn67FLVSiYsnUaU1g1TgFw.png&amp;originHeight=562&amp;originWidth=1000&amp;size=148916&amp;status=done&amp;width=746" alt="1_Gn67FLVSiYsnUaU1g1TgFw.png"><br>构建机器学习系统在其生命周期的许多方面与传统软件开发不同。当应用于机器学习模型时，用于测试，调试和故障排除结果的已建立的软件方法是不切实际的。虽然传统软件组件（如网站，移动应用程序或API）的行为完全由其代码决定，但机器学习模型会根据特定数据集随时间推移其知识。如何定义和编写健壮的机器学习代理是整个空间存在的挑战之一。最近，DeepMind的人工智能（AI）研究人员一直在探索一些有关的想法.<br>
-        
-          <a class="article-more-a" href="/2019/04/12/yuque/强大机器学习的三大支柱：规范测试，强大的训练和形式验证/#more">more >></a>
-        
-      
-
-      
-    </p></div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/04/12/yuque/强大机器学习的三大支柱：规范测试，强大的训练和形式验证/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/建立你的第一个语音助手" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/10/yuque/建立你的第一个语音助手/">建立你的第一个语音助手</a>
-    </h1>
-  
-
-        
-        <a href="/2019/04/10/yuque/建立你的第一个语音助手/" class="archive-article-date">
-  	<time datetime="2019-04-10T05:38:55.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-10</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>如今，听到某人与不在场的人交谈并不奇怪。我们向Alexa询问天气情况并将恒温器的温度降低。然后，我们问Siri我们当天的日程安排是什么，并打电话给人们。我们现在比以往任何时候都使用语音和语音接口技术。我无法想象再做手动了！这真的是未来。</p>
-<ul>
-<li>福布斯</li>
-</ul>
+        <p>让我们通过将现有的图像分类器（Inception V3）调整为自定义任务来体验转移学习的强大功能：对产品图像进行分类，以帮助食品和杂货零售商减少仓库和零售店库存管理过程中的人力。<br>这项工作的源代码可以在我下面的GitHub存储库中找到。<br><a href="https://github.com/wisdal/Image-classification-transfer-learning" target="_blank" rel="noopener">https://github.com/wisdal/Image-classification-transfer-learning</a><br>使用的工具：TensorFlow v1.1，Python 3.4，Jupyter。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1552903355906-1736cd25-8311-4055-a6bd-aa237d022793.png#align=left&amp;display=inline&amp;height=436&amp;name=1_OiM9iXjO4R8Vq_wCSfQZIg.png&amp;originHeight=584&amp;originWidth=1000&amp;size=759418&amp;status=done&amp;width=746" alt="1_OiM9iXjO4R8Vq_wCSfQZIg.png"></p>
+<p><br>深度神经网络的应用实际上是在滚动。无论是医疗保健，运输还是零售，各行各业的公司都对投资构建智能解决方案感到兴奋。同时，让我们希望人类的智慧仍然无可争议:)<br><a name="9dd10fb0"></a></p>
+<h3 id="趋势AI文章："><a href="#趋势AI文章：" class="headerlink" title="趋势AI文章："></a>趋势AI文章：</h3><blockquote>
+<p><a href="https://chatbotslife.com/how-neural-networks-work-ff4c7ad371f7" target="_blank" rel="noopener">1.神经网络如何工作</a>&gt; <a href="https://chatbotslife.com/resnets-highwaynets-and-densenets-oh-my-9bb15918ee32" target="_blank" rel="noopener">2. ResNets，HighwayNets和DenseNets，哦，我的！</a>&gt; <a href="https://chatbotslife.com/machine-learning-for-dummies-part-1-dbaca076ec07" target="_blank" rel="noopener">3.机器学习傻瓜</a><br>在实际情况下，强大的图像分类器等解决方案可以帮助公司跟踪货架库存，对产品进行分类，记录产品量，从专用设备（无人机？机器人？）实时捕获的原始产品图像。当然，能够识别产品并从给定的图片预测其类别是交易的一部分，这就是这个实验的全部内容：我们将培训机器人从图像中分类食品和杂货产品。</p>
 </blockquote>
-<p><a name="61a3ec66"></a></p>
-<h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>谁不想拥有一个总是倾听你的电话，预测你的每一个需要，并在必要时采取行动的助手？基于人工智能的语音助手，现在可以享受这种奢侈品。<br>语音助手有一些小包装，可以在听到您的命令后执行各种操作。他们可以打开灯，回答问题，播放音乐，下订单和做各种基于AI的东西。<br>语音助理不要与虚拟助手混淆，虚拟助手是远程工作的人，因此可以处理各种任务。相反，语音助理是基于技术的。随着语音助理变得更加强大，它们在个人和商业领域的实用性也将增长。<br>
-        
-          <a class="article-more-a" href="/2019/04/10/yuque/建立你的第一个语音助手/#more">more >></a>
-        
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1552903381892-b439e8f9-e1d2-49ed-9eb1-02be65c96a4f.png#align=left&amp;display=inline&amp;height=390&amp;name=1_OiM9iXjO4R8Vq_wCSfQZIg.png&amp;originHeight=523&amp;originWidth=1000&amp;size=593236&amp;status=done&amp;width=746" alt="1_OiM9iXjO4R8Vq_wCSfQZIg.png"></p>
+<p>“这是一项轻松的任务！”，我们认为是人类，但计算机程序并不一定如此。无论如何，这个假设甚至都不适用于所有类别的人类; 一个5岁的孩子是一个完美的反例！当我们放大时，一切都是为了在您的生活中看到足够的产品图像，您可以从给定的图像轻松识别您之前看过的任何产品。<br>当我们使用现有标记数据训练模型时，我们尝试将这种经验概念转移到模型，以便学习如何准确地区分训练数据集中存在的不同类别的数据。从这个意义上说，我们使用<strong>人工神经网络</strong>，它只不过是模仿人类大脑的实际运作方式。使用这些算法构建模型的知识稍后将在未标记的观察上进行测试。在我们的示例中，模型将基于其先前学习的内容标记输入图像，因此通常分配给该任务的名称<strong>监督学习 </strong>。<br>谈到性能，已经注意到，在大多数监督学习的情况下，训练有素的模型往往比人类提供更好的准确性。在这个实际任务中，您会惊讶地发现即使在困难的条件下（模糊的图像，质量差的图像等），我们的算法也非常优于人类。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1552903421984-d099ab43-1a63-4ccb-9833-783d03b242b8.png#align=left&amp;display=inline&amp;height=381&amp;name=1_OiM9iXjO4R8Vq_wCSfQZIg.png&amp;originHeight=420&amp;originWidth=823&amp;size=329410&amp;status=done&amp;width=746" alt="1_OiM9iXjO4R8Vq_wCSfQZIg.png"><br><br><br>我们有一个来自hackerearth的产品图像数据集可以<a href="https://he-s3.s3.amazonaws.com/media/hackathon/deep-learning-challenge-1/identify-the-objects/a0409a00-8-dataset_dp.zip" target="_blank" rel="noopener">在这里</a>下载。我们应该如何进行，为什么我们使用转学习？</p>
+<hr>
+<p><a name="c0139b0c"></a></p>
+<h3 id="为何转学？"><a href="#为何转学？" class="headerlink" title="为何转学？"></a><strong>为何转学？</strong></h3><p>当我们考虑对图像进行分类时，我们常常选择从头开始构建我们的模型以获得最佳匹配。这是一个选项，但构建自定义深度学习模型需要大量的计算资源和大量的培训数据。此外，已经存在的模型在分类来自各种类别的图像时表现得相当好。您可能听说过<a href="http://www.image-net.org/" target="_blank" rel="noopener">ImageNet</a>及其大视觉识别挑战。在这个计算机视觉挑战中，模型试图将大量图像分类为1000个类，如“斑马”，“达尔马提亚”和“洗碗机”。<a href="https://research.googleblog.com/2016/03/train-your-own-image-classifier-with.html" target="_blank" rel="noopener">Inception V3</a>是Google Brain Team为此而建立的模型。毋庸置疑，该模型表现非常出色。<br><br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1552903675886-eeb54f5e-2e91-4943-9a2c-afc8761e6979.png#align=left&amp;display=inline&amp;height=278&amp;name=1_OiM9iXjO4R8Vq_wCSfQZIg.png&amp;originHeight=373&amp;originWidth=1000&amp;size=109931&amp;status=done&amp;width=746" alt="1_OiM9iXjO4R8Vq_wCSfQZIg.png"></p>
+<p>那么，我们可以利用这个模型的存在来进行像现在这样的自定义图像分类任务吗？嗯，这个概念有一个名字：<a href="https://en.wikipedia.org/wiki/Transfer_learning" target="_blank" rel="noopener"><strong>转移学习</strong></a>。它可能不如从头开始的完整培训那么高效，但对于许多应用来说都是惊人的有效。通过修改现有的丰富深度学习模型，它可以显着减少训练数据和时间。<br><a name="d2db47fa"></a></p>
+<h3 id="为什么会这样"><a href="#为什么会这样" class="headerlink" title="为什么会这样"></a><strong>为什么会这样</strong></h3><p>在神经网络中，神经元被分层组织。不同的层可以对其输入执行不同类型的转换。信号可能在多次遍历各层之后从第一层（输入）传播到最后一层（输出）。作为最后一个隐藏层，“瓶颈”具有足够的汇总信息，以提供执行实际分类任务的下一层。<br>在<a href="https://github.com/wisdal/image-classification-transfer-learning/blob/master/retrain.py" target="_blank" rel="noopener">retrain.py</a>脚本中，我们删除旧的顶层，并在我们下载的图片上训练一个新的顶层。<br>我们的最后一层再训练可以用于新类的原因是，结果表明，区分ImageNet中所有1000个类所需的信息通常也可用于区分新类型的对象。<br>我们现在弄脏手！</p>
+<hr>
+<p><a name="81ef9f80"></a></p>
+<h3 id="第1步：预处理图像"><a href="#第1步：预处理图像" class="headerlink" title="第1步：预处理图像"></a><strong>第1步：预处理图像</strong></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">label_counts = train.label.value_counts（）</span><br><span class="line">plt.figure（figsize =（12,6））</span><br><span class="line">sns.barplot（label_counts.index，label_counts.values，alpha = 0.9）</span><br><span class="line">plt.xticks（rotation =&apos;vertical&apos;）</span><br><span class="line">plt.xlabel （&apos;Image Labels&apos;，fontsize = 12）</span><br><span class="line">plt.ylabel（&apos;Counts&apos;，fontsize = 12）</span><br><span class="line">plt.show（）</span><br></pre></td></tr></table></figure>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1552903798892-d0219c97-9167-48dc-a792-2f0f3a65e604.png#align=left&amp;display=inline&amp;height=419&amp;name=1_OiM9iXjO4R8Vq_wCSfQZIg.png&amp;originHeight=419&amp;originWidth=721&amp;size=14783&amp;status=done&amp;width=721" alt="1_OiM9iXjO4R8Vq_wCSfQZIg.png"><br>假设您已经下载了<a href="https://he-s3.s3.amazonaws.com/media/hackathon/deep-learning-challenge-1/identify-the-objects/a0409a00-8-dataset_dp.zip" target="_blank" rel="noopener">数据集</a>，您会发现它附带了一个我们需要正确设置的“train”文件夹。我们的目标是将每个图像放在代表其类别的子文件夹中。最后，我们应该有x个子文件夹，x是不同类别的数量。<br><br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1552904730643-3f6be018-2297-4b30-af9e-7dd590e648ac.png#align=left&amp;display=inline&amp;height=426&amp;name=1_OiM9iXjO4R8Vq_wCSfQZIg.png&amp;originHeight=481&amp;originWidth=843&amp;size=35297&amp;status=done&amp;width=746" alt="1_OiM9iXjO4R8Vq_wCSfQZIg.png"></p>
+<p>为了这个预处理目的，我为您提供了<a href="https://github.com/wisdal/image-classification-transfer-learning/blob/master/pre_process.ipynb" target="_blank" rel="noopener">pre_process.ipynb</a>笔记本。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">for img in tqdm(train.values):</span><br><span class="line">    filename=img[0]</span><br><span class="line">    label=img[1]</span><br><span class="line">    src=os.path.join(data_root,&apos;train_img&apos;,filename+&apos;.png&apos;)</span><br><span class="line">    label_dir=os.path.join(data_root,&apos;train&apos;,label)</span><br><span class="line">    dest=os.path.join(label_dir,filename+&apos;.jpg&apos;)</span><br><span class="line">    im=Image.open(src)</span><br><span class="line">    rgb_im=im.convert(&apos;RGB&apos;)</span><br><span class="line">    if not os.path.exists(label_dir):</span><br><span class="line">        os.makedirs(label_dir)</span><br><span class="line">    rgb_im.save(dest)  </span><br><span class="line">    if not os.path.exists(os.path.join(data_root,&apos;train2&apos;,label)):</span><br><span class="line">        os.makedirs(os.path.join(data_root,&apos;train2&apos;,label))</span><br><span class="line">    rgb_im.save(os.path.join(data_root,&apos;train2&apos;,label,filename+&apos;.jpg&apos;))</span><br></pre></td></tr></table></figure>
+<p>笔记本不仅仅是配置图像子文件夹，所以一定要检查它。<br>因为我们的数据集带有<strong>25个独特的标签，</strong>而我们<strong>只有3215个训练图像</strong>，我们需要增加数据以防止我们的模型过度拟合。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">datagen = ImageDataGenerator(</span><br><span class="line">        rotation_range=40,</span><br><span class="line">        width_shift_range=0.2,</span><br><span class="line">        height_shift_range=0.2,</span><br><span class="line">        shear_range=0.2,</span><br><span class="line">        zoom_range=0.2,</span><br><span class="line">        horizontal_flip=True,</span><br><span class="line">        fill_mode=&apos;nearest&apos;)</span><br><span class="line"></span><br><span class="line">class_size=600</span><br><span class="line"></span><br><span class="line">src_train_dir=os.path.join(data_root,&apos;train&apos;)</span><br><span class="line">dest_train_dir=os.path.join(data_root,&apos;train2&apos;)</span><br><span class="line">it=0</span><br><span class="line">for count in label_counts.values:</span><br><span class="line">    #nb of generations per image for this class label in order to make it size ~= class_size</span><br><span class="line">    ratio=math.floor(class_size/count)-1</span><br><span class="line">    print(count,count*(ratio+1))</span><br><span class="line">    dest_lab_dir=os.path.join(dest_train_dir,label_counts.index[it])</span><br><span class="line">    src_lab_dir=os.path.join(src_train_dir,label_counts.index[it])</span><br><span class="line">    if not os.path.exists(dest_lab_dir):</span><br><span class="line">        os.makedirs(dest_lab_dir)</span><br><span class="line">    for file in os.listdir(src_lab_dir):</span><br><span class="line">        img=load_img(os.path.join(src_lab_dir,file))</span><br><span class="line">        #img.save(os.path.join(dest_lab_dir,file))</span><br><span class="line">        x=img_to_array(img) </span><br><span class="line">        x=x.reshape((1,) + x.shape)</span><br><span class="line">        i=0</span><br><span class="line">        for batch in datagen.flow(x, batch_size=1,save_to_dir=dest_lab_dir, save_format=&apos;jpg&apos;):</span><br><span class="line">            i+=1</span><br><span class="line">            if i &gt; ratio:</span><br><span class="line">                break </span><br><span class="line">    it=it+1</span><br></pre></td></tr></table></figure>
+<p><a name="a57a7ff4"></a></p>
+<h3 id="第2步：重新训练瓶颈并微调模型"><a href="#第2步：重新训练瓶颈并微调模型" class="headerlink" title="第2步：重新训练瓶颈并微调模型"></a><strong>第2步：重新训练瓶颈并微调模型</strong></h3><p>由谷歌提供，我们立即开始使用retrain.py脚本。该脚本默认下载Inception V3 <a href="http://download.tensorflow.org/models/image/imagenet/inception-v3-2016-03-01.tar.gz" target="_blank" rel="noopener">预训练模型</a>。<br>重新训练脚本是我们算法的核心组件，也是使用从初始v3开始的转移学习的任何自定义图像分类任务的核心组件。它是由TensorFlow作者自己设计的，用于此特定目的（自定义图像分类）。<br><a name="6af7ed82"></a></p>
+<h4 id="脚本的作用："><a href="#脚本的作用：" class="headerlink" title="脚本的作用："></a>脚本的作用：</h4><p>它训练一个新的顶层（瓶颈），可以识别特定类别的图像。顶层接收每个图像的2048维向量作为输入。然后在该表示之上训练softmax层。假设softmax层包含N个标签，这对应于学习与学习的偏差和权重相对应的N + 2048 <em> N（或1001 </em> N）个模型参数。<br>该脚本完全可以自定义，这里是可配置的参数列表：</p>
+<ul>
+<li><strong>image_dir</strong>：标记图像文件夹的路径。幸运的是，我们在预处理步骤中正确设置了它。</li>
+<li><strong>output_graph，intermediate_output_graphs_dir，output_labels等</strong>：保存输出文件的位置。</li>
+<li><strong>失真功能：</strong>我的最爱。仅此功能就值得整整一段。您可能已经注意到我们的训练集中的图像是完美的（清晰，高质量，明确）但不幸的是，在生产中并非总是如此。该算法可能会在部署后遇到，模糊图像，昏暗的图像等。</li>
+</ul>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1552904870948-60b8d20b-8035-44db-b9b4-909606809a52.png#align=left&amp;display=inline&amp;height=617&amp;name=1_OiM9iXjO4R8Vq_wCSfQZIg.png&amp;originHeight=724&amp;originWidth=876&amp;size=572978&amp;status=done&amp;width=746" alt="1_OiM9iXjO4R8Vq_wCSfQZIg.png"></p>
+<p>我们的算法应该足够智能，以捕捉这些图像代表相同的事情，并不是那么明显（这只是一个小例子）</p>
+<ul>
+<li>[…]这就是失真特征的全部内容。我们有意地在训练过程中随机变换图像（大小，颜色，方向等）以使机器人习惯于不良图像，以避免在这种情况下失去预测准确性。</li>
+<li><strong>how_many_training_steps</strong>：时代数。</li>
+<li><strong>学习率</strong>。</li>
+<li>…</li>
+</ul>
+<p>您可以随意使用这些参数。<strong>学习率</strong>，<strong>nb。时期</strong>等是确定性参数。使用它们来微调您的模型并记住您可以随时使用TensorBoard来可视化您的训练结果。<br>您可以从一开始就获得约85％的准确度（零微调）。<br><a name="1fdd8e7a"></a></p>
+<h3 id="第3步：在看不见的记录上测试模型"><a href="#第3步：在看不见的记录上测试模型" class="headerlink" title="第3步：在看不见的记录上测试模型"></a>第3步：在看不见的记录上测试模型</h3><p>这一步没什么可疯狂的。只是一个小脚本来测试在上一步中构建和保存的模型，在我们数据集的“test”文件夹中的图像上。<br>查看<a href="https://github.com/wisdal/Image-classification-transfer-learning/blob/master/test.ipynb" target="_blank" rel="noopener">测试</a>笔记本，了解需要完成的工作。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">def run_graph(src, labels, input_layer_name, output_layer_name,</span><br><span class="line">              num_top_predictions):</span><br><span class="line">    with tf.Session() as sess:</span><br><span class="line">    i=0</span><br><span class="line">    #outfile=open(&apos;submit.txt&apos;,&apos;w&apos;)</span><br><span class="line">    #outfile.write(&apos;image_id, label \n&apos;)</span><br><span class="line">    for f in os.listdir(dest):</span><br><span class="line">        image_data=load_image(os.path.join(dest,test[i]+&apos;.jpg&apos;))</span><br><span class="line">        #image_data=load_image(os.path.join(src,f))</span><br><span class="line">        softmax_tensor = sess.graph.get_tensor_by_name(output_layer_name)</span><br><span class="line">        predictions, = sess.run(softmax_tensor, &#123;input_layer_name: image_data&#125;)</span><br><span class="line"></span><br><span class="line">        # Sort to show labels in order of confidence</span><br><span class="line">        top_k = predictions.argsort()[-num_top_predictions:][::-1]</span><br><span class="line">        for node_id in top_k:</span><br><span class="line">            human_string = labels[node_id]</span><br><span class="line">            score = predictions[node_id]</span><br><span class="line">            #print(&apos;%s (score = %.5f) %s , %s&apos; % (test[i], human_string))</span><br><span class="line">            print(&apos;%s, %s&apos; % (test[i], human_string))</span><br><span class="line">            #outfile.write(test[i]+&apos;, &apos;+human_string+&apos;\n&apos;)</span><br><span class="line">        i+=1</span><br><span class="line">    return 0</span><br></pre></td></tr></table></figure>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1552904928699-8cc5dd07-ebf5-4116-a3e3-5d4ece361238.png#align=left&amp;display=inline&amp;height=663&amp;name=1_OiM9iXjO4R8Vq_wCSfQZIg.png&amp;originHeight=663&amp;originWidth=664&amp;size=265517&amp;status=done&amp;width=664" alt="1_OiM9iXjO4R8Vq_wCSfQZIg.png"><br><a name="54bbba80"></a></p>
+<h3 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h3><p>而已！希望这篇文章对你有用。随意评论并提出改进建议。<br>我鼓励你试一试，并在评论中告诉我你能达到多少准确度。我很乐意收到你的来信。<br>正如我之前所说，你肯定能够获得<strong>超过85％</strong>的基准精度。剩下的就是微调！在我的情况下，我的最终模型在测试装置上的准确性让我感到震惊，考虑到需要的工作量很少。很好地理解事情的工作方式有时候会有所帮助:)。我认为该项目是任何想要尝试图像失真或超参数调整的人的良好基础。这就是为我增加了更多的百分点。<br>请随意查看我在<a href="https://github.com/wisdal/Image-classification-transfer-learning" target="_blank" rel="noopener">GitHub上的</a>代码。<br>资源：<a href="https://www.tensorflow.org/tutorials/image_recognition" target="_blank" rel="noopener">tensorflow.org/tutorials/image_recognition</a></p>
+
       
 
       
-    </p></div>
+    </div>
     <div class="article-info article-info-index">
       
       
@@ -661,7 +689,7 @@
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2019/04/10/yuque/建立你的第一个语音助手/">展开全文 >></a>
+          <a class="article-more-a" href="/2019/03/18/yuque/转移学习：重新启动Inception V3以进行自定义图像分类/">展开全文 >></a>
         </p>
       
 
@@ -691,29 +719,29 @@
 
 
   
-    <article id="post-yuque/机器学习算法之Catboost" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-yuque/Spark上的实际Python工作负载：独立群集" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/09/yuque/机器学习算法之Catboost/">机器学习算法之Catboost</a>
+      <a class="article-title" href="/2019/03/18/yuque/Spark上的实际Python工作负载：独立群集/">Spark上的实际Python工作负载：独立群集</a>
     </h1>
   
 
         
-        <a href="/2019/04/09/yuque/机器学习算法之Catboost/" class="archive-article-date">
-  	<time datetime="2019-04-09T03:29:53.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-09</time>
+        <a href="/2019/03/18/yuque/Spark上的实际Python工作负载：独立群集/" class="archive-article-date">
+  	<time datetime="2019-03-18T09:45:16.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-18</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>CatBoost是俄罗斯的搜索巨头Yandex在2017年开源的机器学习库，是Gradient Boosting(梯度提升) + Categorical Features(类别型特征)，也是基于梯度提升决策树的机器学习框架。<br>
+        <p>关于在Spark上运行Python有无数文章和论坛帖子，但大多数人认为要提交的工作包含在一个.py文件中：<code>spark-submit wordcount.py</code> - 完成！<br>如果你的Python程序不仅仅是一个脚本怎么办？也许它为Spark生成动态SQL来执行，或使用Spark的输出刷新模型。随着您的Python代码变得更像一个应用程序（具有目录结构，配置文件和库依赖项），将其提交给Spark需要更多考虑。<br>以下是我最近考虑使用Spark 2.3将一个这样的Python应用程序用于生产时的替代方案。第一篇文章重点介绍Spark独立集群。另一篇文章介绍了EMR Spark（YARN）。<br>我远不是Spark的权威，更不用说Python了。我的决定试图平衡正确性和易于部署，以及应用程序对群集的限制。让我知道你的想法。<br>
         
-          <a class="article-more-a" href="/2019/04/09/yuque/机器学习算法之Catboost/#more">more >></a>
+          <a class="article-more-a" href="/2019/03/18/yuque/Spark上的实际Python工作负载：独立群集/#more">more >></a>
         
       
 
@@ -726,7 +754,88 @@
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2019/04/09/yuque/机器学习算法之Catboost/">展开全文 >></a>
+          <a class="article-more-a" href="/2019/03/18/yuque/Spark上的实际Python工作负载：独立群集/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-yuque/如何（以及为什么）创建一个好的验证集" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/03/18/yuque/如何（以及为什么）创建一个好的验证集/">如何（以及为什么）创建一个好的验证集</a>
+    </h1>
+  
+
+        
+        <a href="/2019/03/18/yuque/如何（以及为什么）创建一个好的验证集/" class="archive-article-date">
+  	<time datetime="2019-03-18T04:19:06.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-18</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><a name="d41d8cd9"></a></p>
+<p>#<br>撰稿：2017年11月13日由<strong>Rachel Thomas</strong>撰写<br>一个非常常见的场景：看似令人印象深刻的机器学习模型在生产中实施时是完全失败的。这些影响包括那些现在对机器学习持怀疑态度且不愿意再次尝试的领导者。怎么会发生这种情况？<br>对于开发结果与生产结果之间的这种脱节的最可能的罪魁祸首之一是选择不当的验证集（或者更糟糕的是，根本没有验证集）。根据数据的性质，选择验证集可能是最重要的一步。尽管sklearn提供了一种<a href="http://scikit-learn.org/stable/modules/generated/sklearn.model_selection.train_test_split.html" target="_blank" rel="noopener"></a><a href="http://scikit-learn.org/stable/modules/generated/sklearn.model_selection.train_test_split.html" target="_blank" rel="noopener">train_test_split</a><a href="http://scikit-learn.org/stable/modules/generated/sklearn.model_selection.train_test_split.html" target="_blank" rel="noopener">方法</a>，但该方法采用了数据的随机子集，这对于许多现实问题来说是一个糟糕的选择。<br><strong>培训</strong>，<strong>验证</strong>和<strong>测试</strong>集的定义可能相当细微，有时不一致地使用这些术语。在深度学习社区中，“测试时间推断”通常用于指对生产中的数据进行评估，这不是测试集的技术定义。如上所述，sklearn有一种train_test_split方法，但没有train_validation_test_split。Kaggle只提供培训和测试集，但要做得好，您需要将他们的训练集分成您自己的验证和训练集。而且，事实证明Kaggle的测试集实际上被细分为两组。很多初学者可能会感到困惑，这并不奇怪！我将在下面解决这些微妙之处。<br><a name="e7a3668b"></a></p>
+<h2 id="首先，什么是“验证集”？"><a href="#首先，什么是“验证集”？" class="headerlink" title="首先，什么是“验证集”？"></a><strong>首先，什么是“验证集”？</strong></h2><p>在创建机器学习模型时，最终目标是使其准确处理新数据，而不仅仅是用于构建数据的数据。考虑下面一组数据的3种不同模型的例子：<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1552882770075-60b15664-d2d8-4359-9920-d9d56d8a789b.png#align=left&amp;display=inline&amp;height=281&amp;name=image.png&amp;originHeight=294&amp;originWidth=781&amp;size=83649&amp;status=done&amp;width=746" alt="image.png"><br>资料来源：Andrew Ng的机器学习课程<br>对于最右侧的模型，图示数据点的误差最小（蓝色曲线几乎完美地穿过红点），但它不是最佳选择。这是为什么？如果你要收集一些新的数据点，它们很可能不在右边图表中的那条曲线上，而是更接近中间图形中的曲线。<br>根本的想法是：</p>
+<ul>
+<li>训练集用于训练给定的模型<br></li>
+<li>验证集用于在模型之间进行选择（例如，随机森林或神经网络是否更适合您的问题？您想要一个有40棵树或50棵树的随机森林吗？）<br></li>
+<li>测试集告诉你你是怎么做的。如果您已经尝试了很多不同的模型，那么您可能只是偶然得到一个在验证集上表现良好的模型，并且拥有测试集有助于确保不是这种情况。<br></li>
+</ul>
+<p>验证和测试集的一个关键属性是它们必须代表<strong><strong>您将来会看到</strong></strong>的<strong><strong>新数据</strong></strong>。这可能听起来像一个不可能的命令！根据定义，您还没有看到这些数据。但是你仍然知道一些事情。<br><a name="7086b6ec"></a></p>
+<h2 id="什么时候随机子集不够好？"><a href="#什么时候随机子集不够好？" class="headerlink" title="什么时候随机子集不够好？"></a><strong>什么时候随机子集不够好？</strong></h2><p>看一些例子是有益的。虽然这些例子中有很多来自Kaggle比赛，但它们代表了您在工作场所会遇到的问题。<br><a name="cc464807"></a></p>
+<h3 id="时间序列"><a href="#时间序列" class="headerlink" title="时间序列"></a><strong>时间序列</strong></h3><p>如果您的数据是时间序列，那么选择数据的随机子集将非常简单（您可以在您尝试预测的日期之前和之后查看数据）并且不代表大多数业务用例（您在哪里）正在使用历史数据来构建将来使用的模型。如果您的数据包含日期并且您要构建将来使用的模型，则需要选择具有最新日期的连续部分作为验证集（例如，可用数据的最后两周或上个月） 。<br>假设您要将下面的时间序列数据拆分为训练和验证集：<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1552882770129-8cad81d5-fbe9-4945-baca-d69af4bf8853.png#align=left&amp;display=inline&amp;height=492&amp;name=image.png&amp;originHeight=492&amp;originWidth=617&amp;size=31169&amp;status=done&amp;width=617" alt="image.png"><br><em>时间序列数据</em><br>随机子集是一个糟糕的选择（太容易填补空白，并不表示您在生产中需要什么）：<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1552882770176-99c4e0dd-3800-454b-bf9d-b9b73bfe4f44.png#align=left&amp;display=inline&amp;height=492&amp;name=image.png&amp;originHeight=492&amp;originWidth=617&amp;size=27107&amp;status=done&amp;width=617" alt="image.png"><br><em>训练集的选择不佳</em><br>使用较早的数据作为训练集（以及验证集的后续数据）：<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1552882770243-648aea97-36ed-4e23-a69e-ec2dcbf32598.png#align=left&amp;display=inline&amp;height=492&amp;name=image.png&amp;originHeight=492&amp;originWidth=617&amp;size=26915&amp;status=done&amp;width=617" alt="image.png"><br><em>为您的训练集提供更好的选择</em><br>Kaggle目前正在竞争<a href="https://www.kaggle.com/c/favorita-grocery-sales-forecasting" target="_blank" rel="noopener"></a><a href="https://www.kaggle.com/c/favorita-grocery-sales-forecasting" target="_blank" rel="noopener">预测一系列厄瓜多尔杂货店的销售情况</a>。Kaggle的“培训数据”从2013年1月1日至2017年8月15日运行，测试数据跨越2017年8月16日至2017年8月31日。一个好方法是使用2017年8月1日至8月15日作为验证集，以及所有早期数据作为你的训练集。<br><a name="574cf8ad"></a></p>
+<h3 id="新人，新船，新…"><a href="#新人，新船，新…" class="headerlink" title="新人，新船，新…"></a><strong>新人，新船，新…</strong></h3><p>您还需要考虑在生产中进行预测的数据可能与您训练模型所需的数据<strong>有何不同</strong>。<br>在Kaggle <a href="https://www.kaggle.com/c/state-farm-distracted-driver-detection" target="_blank" rel="noopener"></a><a href="https://www.kaggle.com/c/state-farm-distracted-driver-detection" target="_blank" rel="noopener">分心驾驶员竞赛中</a>，独立数据是汽车驾驶员的照片，因变量是一个类别，如发短信，吃饭或安全向前看。如果您是从这些数据构建模型的保险公司，请注意您最感兴趣的是模型在您之前没有见过的驱动程序上的表现（因为您可能只为一小部分人提供培训数据）。对于Kaggle比赛也是如此：测试数据由未在训练集中使用的人组成。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1552882770581-4e7e5ff9-8b12-415e-8197-bc32f52b5957.png#align=left&amp;display=inline&amp;height=354&amp;name=image.png&amp;originHeight=354&amp;originWidth=469&amp;size=208442&amp;status=done&amp;width=469" alt="image.png"><br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1552882770937-9c3f6222-3e65-46e1-a25d-3a7c7241b3bf.png#align=left&amp;display=inline&amp;height=359&amp;name=image.png&amp;originHeight=359&amp;originWidth=467&amp;size=208605&amp;status=done&amp;width=467" alt="image.png"><br><em>同一个人驾驶时在电话上交谈的两个图像。</em><br>如果您将上述图像之一放入训练集中，并将其中一个放在验证集中，那么您的模型似乎表现得比新人更好。另一个观点是，如果你使用所有人来训练你的模型，你的模型可能过分适应那些特定人的特殊性，而不仅仅是学习状态（发短信，吃饭等）。<br>在<a href="https://www.kaggle.com/c/the-nature-conservancy-fisheries-monitoring" target="_blank" rel="noopener"></a><a href="https://www.kaggle.com/c/the-nature-conservancy-fisheries-monitoring" target="_blank" rel="noopener">Kaggle渔业竞赛中也</a>有类似的动态，以确定渔船捕获的鱼类种类，以减少非法捕捞濒危种群。测试集由未出现在训练数据中的船组成。这意味着您希望验证集包含不在训练集中的船只。<br>有时可能不清楚您的测试数据会有何不同。例如，对于使用卫星图像的问题，您需要收集有关训练集是否仅包含某些地理位置的更多信息，或者是否来自地理位置分散的数据。<br><a name="af629453"></a></p>
+<h2 id="交叉验证的危险"><a href="#交叉验证的危险" class="headerlink" title="交叉验证的危险"></a><strong>交叉验证的危险</strong></h2><p>sklearn没有train_validation_test拆分的原因是假设您经常使用<strong><strong>交叉验证</strong></strong>，其中训练集的不同子集用作验证集。例如，对于3倍交叉验证，数据被分为3组：A，B和C.首先训练模型A和B组合作为训练集，并在验证集C上进行评估。 ，将模型训练为A和C组合作为训练集，并在验证集B上进行评估。依此类推，最终将3倍的模型性能平均化。<br>但是，交叉验证的问题在于，由于上述各节中描述的所有原因，它很少适用于现实世界的问题。交叉验证仅适用于您可以随机调整数据以选择验证集的相同情况。<br><a name="5c6fff0d"></a></p>
+<h2 id="Kaggle的“训练集”-你的训练-验证集"><a href="#Kaggle的“训练集”-你的训练-验证集" class="headerlink" title="Kaggle的“训练集”=你的训练+验证集"></a><strong>Kaggle的“训练集”=你的训练+验证集</strong></h2><p>Kaggle比赛的一个好处是它们会迫使你更严格地考虑验证集（为了做得好）。对于那些刚接触Kaggle的人来说，它是一个举办机器学习比赛的平台。Kaggle通常会将数据分为两组，您可以下载：</p>
+<ol>
+<li>一个<strong><strong>训练集</strong></strong>，其中包括<strong>独立的变量</strong>，以及对<strong>因变量</strong>（你正在尝试预测）。对于试图预测销售的厄瓜多尔杂货店的例子，自变量包括商店ID，商品ID和日期; 因变量是销售数量。对于尝试确定驾驶员是否在车轮后面进行危险行为的示例，自变量可以是驾驶员的图片，并且因变量是类别（例如发短信，吃饭或安全地向前看）。<br></li>
+<li>一个<strong><strong>测试集</strong></strong>，它只有自变量。您将对测试集进行预测，您可以将其提交给Kaggle，并获得您的评分。<br></li>
+</ol>
+<p>这是开始机器学习所需的基本思想，但要做得好，理解起来要复杂一些。您将需要创建自己的培训和验证集（通过拆分Kaggle“培训”数据）。您将使用较小的训练集（Kaggle训练数据的子集）来构建模型，并且在提交给Kaggle之前，您可以在验证集（也是Kaggle的训练数据的子集）上对其进行评估。<br>最重要的原因是Kaggle将测试数据分为两组：公共和私人排行榜。您在公共排行榜上看到的分数仅适用于您预测的一部分（您不知道哪个子集！）。您的预测在私人排行榜上的表现将不会在比赛结束前公布。这一点很重要的原因是你最终可能会过度适应公共排行榜，直到最后你在私人排行榜上做得不好时才会意识到这一点。使用良好的验证集可以防止这种情况。您可以通过查看您的模型是否具有与Kaggle测试集相比较的相似分数来检查您的验证集是否有用。<br>创建自己的验证集很重要的另一个原因是Kaggle限制您每天提交两次，并且您可能希望尝试更多。第三，确切地看到你在验证集上出错的地方是有益的，而且Kaggle没有告诉你测试集的正确答案，甚至没有告诉你哪些数据点你的错误，只是你的整体得分。<br>理解这些区别不仅对Kaggle有用。在任何预测性机器学习项目中，您希望模型能够在新数据上表现良好。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/03/18/yuque/如何（以及为什么）创建一个好的验证集/">展开全文 >></a>
         </p>
       
 
@@ -758,7 +867,7 @@
   
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/7/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span>
+      <a class="extend prev" rel="prev" href="/page/7/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/">9</a><a class="page-number" href="/page/10/">10</a><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/9/">Next &raquo;</a>
     </nav>
   
 
