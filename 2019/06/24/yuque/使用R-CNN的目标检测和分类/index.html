@@ -6,19 +6,70 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://www.zhos.me">
-  <title>新的护城河 | A+</title>
+  <title>使用R-CNN的目标检测和分类 | A+</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="为什么智能系统™是下一个可防御的商业模式要建立一个可持续的，有利可图的业务，您需要在公司周围拥有强大的防御性护城河。今天尤其如此，因为我们经历了一代中最大的平台转变之一，因为应用程序迁移到云端，在iPhone，Echoes和Teslas上消耗，都是基于开源构建的，并且由AI和数据提供支持。这些...">
+  <meta name="description" content="在这篇文章中，我将详细描述R-CNN（具有CNN特征的区域），最近引入的基于深度学习的对象检测和分类方法是如何工作的。事实证明，R-CNN在自然图像中检测和分类对象方面非常有效，其mAP分数远高于以前的技术。R-CNN方法在Ross Girshick等人的以下系列论文中描述。R-CNN （Gi...">
 <meta property="og:type" content="article">
-<meta property="og:title" content="新的护城河">
-<meta property="og:url" content="http://www.zhos.me/2019/05/15/yuque/新的护城河/index.html">
+<meta property="og:title" content="使用R-CNN的目标检测和分类">
+<meta property="og:url" content="http://www.zhos.me/2019/06/24/yuque/使用R-CNN的目标检测和分类/index.html">
 <meta property="og:site_name" content="A+">
-<meta property="og:description" content="为什么智能系统™是下一个可防御的商业模式要建立一个可持续的，有利可图的业务，您需要在公司周围拥有强大的防御性护城河。今天尤其如此，因为我们经历了一代中最大的平台转变之一，因为应用程序迁移到云端，在iPhone，Echoes和Teslas上消耗，都是基于开源构建的，并且由AI和数据提供支持。这些...">
+<meta property="og:description" content="在这篇文章中，我将详细描述R-CNN（具有CNN特征的区域），最近引入的基于深度学习的对象检测和分类方法是如何工作的。事实证明，R-CNN在自然图像中检测和分类对象方面非常有效，其mAP分数远高于以前的技术。R-CNN方法在Ross Girshick等人的以下系列论文中描述。R-CNN （Gi...">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-06-24T02:00:02.238Z">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/svg/219582/1561341767001-289c5c97-432e-4fd3-a7e5-ac3011f10ac1.svg#align=left&display=inline&height=13&originHeight=11&originWidth=32&size=0&status=done&width=39">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1561341953056-001ec654-af31-4c74-9f2d-824cb7d2e44c.png#align=left&display=inline&height=529&name=img_5aa46e9e0bbd7.png&originHeight=529&originWidth=1286&size=67176&status=done&width=1286">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/svg/219582/1561341970192-109b902e-fd02-46bd-a7f1-78e51ec23c26.svg#align=left&display=inline&height=16&originHeight=13&originWidth=68&size=0&status=done&width=83">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/svg/219582/1561341970209-73b76758-61bb-4eb8-9d45-04f6ffb26935.svg#align=left&display=inline&height=12&originHeight=10&originWidth=58&size=0&status=done&width=70">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/svg/219582/1561342031696-9a536a20-3948-4fac-aa6d-7802722b1da8.svg#align=left&display=inline&height=7&originHeight=6&originWidth=11&size=0&status=done&width=13">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/svg/219582/1561342031845-28cb81a2-3fca-4819-a9cd-05cb6ddaa0b0.svg#align=left&display=inline&height=13&originHeight=10&originWidth=8&size=0&status=done&width=10">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1561342058685-6e0d2d41-b532-41a9-a504-ee58e98cb2ad.png#align=left&display=inline&height=770&name=img_5a9ffec911c19.png&originHeight=770&originWidth=1309&size=103932&status=done&width=1309">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1561342094157-cb107066-1e4d-4ea4-bec7-b766cf878dfe.jpeg#align=left&display=inline&height=375&name=person_06.jpg&originHeight=375&originWidth=501&size=39511&status=done&width=501">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/svg/219582/1561342105961-eb570ad6-8eb3-45d5-829d-d5fd1f64732d.svg#align=left&display=inline&height=17&originHeight=14&originWidth=85&size=0&status=done&width=104">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/svg/219582/1561342152725-925b9f93-cb3c-4078-9c2b-a9f209324530.svg#align=left&display=inline&height=16&originHeight=13&originWidth=90&size=0&status=done&width=111">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/svg/219582/1561342106054-89952d68-f857-49de-b9ec-ef989a1d6cb5.svg#align=left&display=inline&height=27&originHeight=22&originWidth=342&size=0&status=done&width=417">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1561342141865-c6ba5a97-4707-49b0-9e8e-06f62dbde2a6.png#align=left&display=inline&height=479&name=img_5bac3708478ce-1024x479.png&originHeight=479&originWidth=1024&size=626065&status=done&width=1024">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1561342213953-2b042eb6-4370-4f07-8339-07e30cfb91c6.png#align=left&display=inline&height=217&name=img_5aa6f44a0a9c7.png&originHeight=468&originWidth=600&size=16490&status=done&width=278">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1561342175479-f4712620-f318-479b-8e61-674342dc84cc.png#align=left&display=inline&height=224&name=img_5aa6f476535f7.png&originHeight=362&originWidth=372&size=13698&status=done&width=230">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1561342254056-95fbae3e-b82a-4e6e-aaee-4490d33fa5d4.png#align=left&display=inline&height=704&name=img_5aa0053323ac5.png&originHeight=704&originWidth=670&size=56098&status=done&width=670">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1561342290568-d441d0e9-2089-4373-80ad-fb5dbf4ac60f.png#align=left&display=inline&height=776&name=img_5aa05d3ecef3e.png&originHeight=776&originWidth=1223&size=419016&status=done&width=1223">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1561342322564-a955f1d0-dfda-42ad-8f9d-e4edc8c34677.png#align=left&display=inline&height=637&name=img_5aa0695484e3e.png&originHeight=637&originWidth=1011&size=58787&status=done&width=1011">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/svg/219582/1561342334017-c2dd4856-31c0-438a-8406-6930b6279e55.svg#align=left&display=inline&height=22&originHeight=18&originWidth=70&size=0&status=done&width=86">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1561342356291-9dcb674f-22f6-4ac8-8952-d5a0188ac1ba.png#align=left&display=inline&height=882&name=img_5aa5766d53b63.png&originHeight=882&originWidth=1522&size=147225&status=done&width=1522">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/svg/219582/1561342370876-416d55ef-90b8-43bb-ac92-884d55172d58.svg#align=left&display=inline&height=16&originHeight=13&originWidth=415&size=0&status=done&width=508">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/svg/219582/1561342371909-3dd3a636-e5b9-4953-8763-d41980f6a03d.svg#align=left&display=inline&height=21&originHeight=17&originWidth=197&size=0&status=done&width=240">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/svg/219582/1561342371060-087bb10f-dc31-435c-a3bb-1e7f13ce1887.svg#align=left&display=inline&height=21&originHeight=17&originWidth=334&size=0&status=done&width=407">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/svg/219582/1561342370911-32eeafa7-4c9e-4c92-861b-2793cd346961.svg#align=left&display=inline&height=52&originHeight=43&originWidth=248&size=0&status=done&width=302">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/svg/219582/1561342371363-9ca7ed88-4378-41f1-8cde-2d8540bfee31.svg#align=left&display=inline&height=7&originHeight=6&originWidth=9&size=0&status=done&width=11">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1561342396122-c870537d-1062-49c2-9f3e-a7bf82fe1966.png#align=left&display=inline&height=530&name=img_5aa13d4d911d3.png&originHeight=530&originWidth=1171&size=516996&status=done&width=1171">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/svg/219582/1561342409588-16bd8796-1bf3-4306-8fa0-7f2863ebf870.svg#align=left&display=inline&height=9&originHeight=10&originWidth=11&size=0&status=done&width=10">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/svg/219582/1561342409666-46105627-bdb1-4cfc-b0cb-64a10a4da967.svg#align=left&display=inline&height=15&originHeight=13&originWidth=500&size=0&status=done&width=582">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1561342434065-d37cf9a0-7191-4fab-bed4-494036013441.png#align=left&display=inline&height=320&name=img_5aa1cd250f265-1.png&originHeight=320&originWidth=691&size=23377&status=done&width=691">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1561342472731-e76edefe-5125-45d1-bf3d-0518d6574410.png#align=left&display=inline&height=710&name=img_5aa32302afc0b-1.png&originHeight=710&originWidth=1266&size=85041&status=done&width=1266">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/svg/219582/1561342485146-7cfbdaed-9d59-4462-a1eb-849212fbb66f.svg#align=left&display=inline&height=14&originHeight=11&originWidth=32&size=0&status=done&width=40">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1561342509506-eccaaec5-9bec-4f8d-9d63-365e4bc1cdfc.png#align=left&display=inline&height=399&name=img_5aa402baba3a1-1.png&originHeight=399&originWidth=470&size=93258&status=done&width=470">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/svg/219582/1561342519737-386000c9-1759-4a52-bced-7e7ce4b98c38.svg#align=left&display=inline&height=61&originHeight=52&originWidth=182&size=0&status=done&width=213">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/svg/219582/1561342519670-7e2458a4-9250-4f3c-8d14-02b555f3b2d7.svg#align=left&display=inline&height=20&originHeight=16&originWidth=72&size=0&status=done&width=88">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/svg/219582/1561342520491-e2aa89f8-cfb8-45ec-b275-c4d61493bf53.svg#align=left&display=inline&height=19&originHeight=16&originWidth=137&size=0&status=done&width=165">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/svg/219582/1561342520625-337a3418-99a0-4848-88f3-79421c472187.svg#align=left&display=inline&height=18&originHeight=15&originWidth=45&size=0&status=done&width=54">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/svg/219582/1561342519853-42420dab-12a3-4489-bfd8-d78ea8141f37.svg#align=left&display=inline&height=9&originHeight=10&originWidth=11&size=0&status=done&width=10">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/svg/219582/1561342519837-92cbca77-7714-4e8b-b880-cd790490accd.svg#align=left&display=inline&height=8&originHeight=6&originWidth=8&size=0&status=done&width=10">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/svg/219582/1561342520502-66dcb1d2-fff8-4670-ba4c-6dcc7c74228b.svg#align=left&display=inline&height=10&originHeight=9&originWidth=8&size=0&status=done&width=9">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1561342541742-8daba05b-07bc-4871-a281-34dade63115d.png#align=left&display=inline&height=1113&name=img_5aa4255fdacb6.png&originHeight=1113&originWidth=1231&size=121237&status=done&width=1231">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1561342584223-ea4123c8-ec75-4c3a-be16-90ea6b1f6bc9.png#align=left&display=inline&height=757&name=img_5aa55c81eac0a-1024x757.png&originHeight=757&originWidth=1024&size=434619&status=done&width=1024">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1561342611299-d01bcf67-fb9f-40a1-adff-8ff4df7bb329.png#align=left&display=inline&height=674&name=img_5aa55c97f3287.png&originHeight=674&originWidth=1137&size=64286&status=done&width=1137">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1561342644864-0dd6cf75-4c92-41ea-a7e2-ec17e3cae11f.png#align=left&display=inline&height=463&name=img_5aa70ff399c57-1024x463.png&originHeight=463&originWidth=1024&size=261545&status=done&width=1024">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1561342682141-6d997005-e868-438e-a478-b6a2e8033676.png#align=left&display=inline&height=513&name=img_5aa580271bea6.png&originHeight=513&originWidth=677&size=640721&status=done&width=677">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1561342720484-cfe6b67f-ccc9-44a4-beb3-803edc866dd9.png#align=left&display=inline&height=527&name=img_5aa5809cc7206.png&originHeight=527&originWidth=672&size=640452&status=done&width=672">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1561342752120-202232ac-6731-4bd3-998f-e25adbf1196b.png#align=left&display=inline&height=475&name=img_5aa581709aa82.png&originHeight=475&originWidth=733&size=667782&status=done&width=733">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1561342788419-5082edc9-6eeb-425d-bef1-cfeb8d242fc6.png#align=left&display=inline&height=583&name=img_5aa5827c1d42c.png&originHeight=583&originWidth=775&size=918419&status=done&width=775">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1561342817495-11e4fd30-3a6a-4a84-81d7-3ebec0d64794.png#align=left&display=inline&height=655&name=img_5aa59c8da4c4b.png&originHeight=655&originWidth=1135&size=51375&status=done&width=1135">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1561342863888-6a8f6dd4-fa08-4815-929d-6444aeb32189.png#align=left&display=inline&height=686&name=img_5aa59d170c750.png&originHeight=686&originWidth=1270&size=95595&status=done&width=1270">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1561342928719-c78058fb-4d46-41ba-8836-d1ab43cf4c8f.png#align=left&display=inline&height=647&name=img_5aa7c828703ab.png&originHeight=647&originWidth=1543&size=1002285&status=done&width=1543">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1561342930440-1600a685-87c7-453b-96f7-35ac9bf7d820.png#align=left&display=inline&height=656&name=img_5aa7c84451f81.png&originHeight=656&originWidth=1543&size=998370&status=done&width=1543">
+<meta property="og:updated_time" content="2019-06-24T02:24:00.110Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="新的护城河">
-<meta name="twitter:description" content="为什么智能系统™是下一个可防御的商业模式要建立一个可持续的，有利可图的业务，您需要在公司周围拥有强大的防御性护城河。今天尤其如此，因为我们经历了一代中最大的平台转变之一，因为应用程序迁移到云端，在iPhone，Echoes和Teslas上消耗，都是基于开源构建的，并且由AI和数据提供支持。这些...">
+<meta name="twitter:title" content="使用R-CNN的目标检测和分类">
+<meta name="twitter:description" content="在这篇文章中，我将详细描述R-CNN（具有CNN特征的区域），最近引入的基于深度学习的对象检测和分类方法是如何工作的。事实证明，R-CNN在自然图像中检测和分类对象方面非常有效，其mAP分数远高于以前的技术。R-CNN方法在Ross Girshick等人的以下系列论文中描述。R-CNN （Gi...">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2019/svg/219582/1561341767001-289c5c97-432e-4fd3-a7e5-ac3011f10ac1.svg#align=left&display=inline&height=13&originHeight=11&originWidth=32&size=0&status=done&width=39">
   
     <link rel="alternative" href="/atom.xml" title="A+" type="application/atom+xml">
   
@@ -148,43 +199,218 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-yuque/新的护城河" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-yuque/使用R-CNN的目标检测和分类" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      新的护城河
+      使用R-CNN的目标检测和分类
     </h1>
   
 
         
-        <a href="/2019/05/15/yuque/新的护城河/" class="archive-article-date">
-  	<time datetime="2019-05-15T04:00:58.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-05-15</time>
+        <a href="/2019/06/24/yuque/使用R-CNN的目标检测和分类/" class="archive-article-date">
+  	<time datetime="2019-06-24T02:00:58.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-06-24</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p><a name="ac8a"></a></p>
-<h2 id="为什么智能系统™是下一个可防御的商业模式"><a href="#为什么智能系统™是下一个可防御的商业模式" class="headerlink" title="为什么智能系统™是下一个可防御的商业模式"></a>为什么智能系统™是下一个可防御的商业模式</h2><p>要建立一个可持续的，有利可图的业务，您需要在公司周围拥有强大的防御性护城河。今天尤其如此，因为我们经历了一代中最大的平台转变之一，因为应用程序迁移到云端，在iPhone，Echoes和Teslas上消耗，都是基于开源构建的，并且由AI和数据提供支持。这些戏剧性的转变使一些现有的护城河变得毫无用处，让首席执行官觉得建立一个可防御的企业几乎是不可能的。<br>在这篇文章中，我将回顾一些技术公司通常利用的传统经济护城河以及它们如何被破坏。我相信今天的创业公司需要构建智能系统 - 人工智能应用程序 - “新的护城河”。<br>企业可以建造几种不同的护城河，随着时间的推移，这些护城河可以改变。以下列表绝对不是详尽而公正的警告，它会像一个糟糕的b-school博客一样读起来！</p>
-<a id="more"></a>
-<p><a name="72a9"></a></p>
-<h4 id="传统经济护城河"><a href="#传统经济护城河" class="headerlink" title="传统经济护城河"></a>传统经济护城河</h4><p>一些最伟大和最持久的科技公司都受到强大护城河的捍卫。例如，微软，谷歌和Facebook都有基于规模经济和网络效应的护城河。</p>
+        <p>在这篇文章中，我将详细描述R-CNN（具有CNN特征的区域），最近引入的基于深度学习的对象检测和分类方法是如何工作的。事实证明，R-CNN在自然图像中检测和分类对象方面非常有效，其mAP分数远高于以前的技术。R-CNN方法在Ross Girshick等人的以下系列论文中描述。</p>
+<ol>
+<li>R-CNN <a href="http://www.telesens.co/2018/03/11/object-detection-and-classification-using-r-cnns/#ITEM-1455-0" target="_blank" rel="noopener">（Girshick等人，2013年）</a><a href="https://arxiv.org/abs/1311.2524" target="_blank" rel="noopener"> *</a></li>
+<li>快速R-CNN <a href="http://www.telesens.co/2018/03/11/object-detection-and-classification-using-r-cnns/#ITEM-1455-1" target="_blank" rel="noopener">（Girshick 2015）</a><a href="https://arxiv.org/abs/1504.08083" target="_blank" rel="noopener"> *</a></li>
+<li>更快的R-CNN <a href="http://www.telesens.co/2018/03/11/object-detection-and-classification-using-r-cnns/#ITEM-1455-2" target="_blank" rel="noopener">（Ren et al.2015）</a><a href="https://arxiv.org/abs/1506.01497" target="_blank" rel="noopener"> *</a></li>
+</ol>
+<p>这篇文章描述了上一篇论文中描述的R-CNN方法的最终版本。我首先考虑描述该方法从第一次引入到最终版本的演变，然而事实证明这是一项非常雄心勃勃的事业。我决定详细描述最终版本。<br>幸运的是，在TensorFlow，PyTorch和其他机器学习库中，网上有许多R-CNN算法的实现。我使用了以下实现：<br><a href="https://github.com/ruotianluo/pytorch-faster-rcnn" target="_blank" rel="noopener">https://github.com/ruotianluo/pytorch-faster-rcnn</a><br>本文中使用的大部分术语（例如，不同层的名称）都遵循代码中使用的术语。理解本文中提供的信息应该可以更容易地遵循PyTorch实现并进行自己的修改。<br>目录<br><a href></a></p>
 <ul>
-<li><strong><em>规模经济：</em></strong>您的经营杠杆越大，您的成本就越低。SaaS和云服务可以具有强大的规模经济：您可以扩展您的收入和客户群，同时保持产品的核心工程相对平稳。</li>
-<li><strong><em>网络效应：</em>**</strong>_ _**最好由<a href="https://en.wikipedia.org/wiki/Metcalfe%27s_law" target="_blank" rel="noopener">Metcalf定律</a>描述，如果您的产品的每个额外用户为每个其他用户带来更多价值<a href="https://en.wikipedia.org/wiki/Metcalfe%27s_law" target="_blank" rel="noopener">，</a>您的产品或服务就会产生“网络效应”。像Slack和WhatsApp这样的消息应用程序，以及像Facebook这样的社交网络都是强大网络效应的好例子。iOS，Android和Windows等操作系统具有强大的网络效应，因为随着越来越多的客户使用操作系统，更多的应用程序都建立在它之上。</li>
+<li><a href="http://www.telesens.co/2018/03/11/object-detection-and-classification-using-r-cnns/#Post_Organization" target="_blank" rel="noopener">邮政组织</a></li>
+<li><a href="http://www.telesens.co/2018/03/11/object-detection-and-classification-using-r-cnns/#Image_Pre-Processing" target="_blank" rel="noopener">图像预处理</a></li>
+<li><a href="http://www.telesens.co/2018/03/11/object-detection-and-classification-using-r-cnns/#Network_Organization" target="_blank" rel="noopener">网络组织</a><ul>
+<li><a href="http://www.telesens.co/2018/03/11/object-detection-and-classification-using-r-cnns/#Network_Architecture" target="_blank" rel="noopener">网络架构</a></li>
 </ul>
-<p>作为最成功的云业务之一，亚马逊网络服务（AWS）既具有规模优势，又具有网络效应的优势。更多的应用程序和服务是在AWS上本地构建的，因为“<a href="https://en.wikipedia.org/wiki/Willie_Sutton" target="_blank" rel="noopener">这就是客户和数据的所在。</a>“反过来，解决方案的生态系统吸引了更多的客户和开发人员，他们构建了更多的应用程序，可以产生更多数据，延续良性循环，同时通过规模优势降低亚马逊的成本。<br><a name="0d60"></a></p>
-<h4 id="其他一些传统护城河"><a href="#其他一些传统护城河" class="headerlink" title="其他一些传统护城河"></a>其他一些传统护城河</h4><ul>
-<li><strong><em>深度技术/知识产权/商业秘密：</em> </strong>专有软件或方法_ _是大多数技术公司开始的地方。这些商业秘密可以包括解决硬技术问题，新发明，新工艺，新技术以及后来保护已开发知识产权（IP）的专利的新颖解决方案。随着时间的推移，公司的知识产权可能会从特定的工程解决方案发展为累积的运营知识或对问题或流程的洞察力。</li>
-<li><strong><em>高转换成本：</em></strong>一旦客户使用您的产品，您希望它们变得尽可能难以切换到竞争对手。您可以通过标准化，从缺乏替代品，到集成到其他应用程序和数据源，或者因为您构建了客户所依赖的根深蒂固且有价值的工作流程来构建这种粘性。任何这些都可以作为一种锁定形式，使客户很难离开。</li>
-<li><strong><em>品牌和客户忠诚度：</em></strong>强大的品牌可以成为一种护城河。随着产品与客户之间的积极互动，您的品牌优势会随着时间的推移而变得更强，但如果您的客户对您的产品失去信任，品牌优势就会迅速消失。<br><a name="cf7e"></a><h4 id="老护城河可以被摧毁"><a href="#老护城河可以被摧毁" class="headerlink" title="老护城河可以被摧毁"></a>老护城河可以被摧毁</h4>强大的护城河可以帮助公司在重大平台转变中生存，但幸存者不应该与蓬勃发展相混淆。例如，高转换成本可以部分解释为什么<a href="https://www.nextplatform.com/2015/06/04/x86-servers-dominate-the-datacenter-for-now/" target="_blank" rel="noopener">大型机</a>和“大铁”系统在这些年后仍然存在。拥有深层护城河的遗产企业可能不是其鼎盛时期的高增长型汽车，但它们仍在创造利润。公司需要在行业转型期间认识并做出反应，以免他们成为<a href="https://en.wikipedia.org/wiki/The_Innovator%27s_Dilemma" target="_blank" rel="noopener">自己成功的牺牲品。</a><br>此外，这些巨大的平台变化 - 如云和移动 - 是技术潮汐，为新玩家创造空间，使创始人能够在现有护城河周围建立路径。成功的初创创始人倾向于执行双管齐下的策略：1）攻击传统的球员护城河和2）同时建立他们自己的防御护城河，以驾驭新浪潮。<br> <br>例如，Facebook拥有最根深蒂固的社交网络，但Instagram建立了一个移动优先的照片应用程序，可以通过智能手机浪潮获得10亿美元收购。在企业界，像Salesforce这样的SaaS公司正在破坏像Oracle这样的内部部署软件公司。现在随着云的出现，AWS，Azure和Google Cloud正在为客户创建直接渠道。这些平台转移也可以改变买方和最终用户。在企业内部，买方已经从中央IT团队转移到办公室知识工作者，转移到拥有iPhone的人，转移到任何拥有GitHub帐户的开发人员。<br><a name="4711"></a><h4 id="没有更多的护城河？"><a href="#没有更多的护城河？" class="headerlink" title="没有更多的护城河？"></a>没有更多的护城河？</h4>在目前的这场破坏浪潮中，是否仍有可能建造可持续的护城河？对于创始人而言，您可能觉得自己构建的每个优势都可以被街道上的另一个团队复制，或者至少，感觉护城河只能大规模建造。开源工具和云已经将力量推向了“新的老牌企业” - 当前一代规模庞大，分销网络强大，转换成本高，品牌强大的公司。这些公司包括Apple，Facebook，Google，Amazon和Salesforce。<br>为什么感觉“没有更多的护城河”可以建造？在云和开源的时代，深层技术攻击难题正成为一种较浅的护城河。开源的使用使得技术进步更加难以实现，而使用云提供技术正在将防御性转移到产品的不同部分。那些过分关注技术而不将其置于客户问题背景下的公司将陷入困境之中 - 或者我喜欢说，“在开源和云端之间。”例如，像现有技术一样Oracle的专有数据库受到来自Hadoop和MongoDB等开源替代品的攻击，以及Amazon Aurora和<a href="https://cloudplatform.googleblog.com/2017/02/inside-Cloud-Spanner-and-the-CAP-Theorem.html" target="_blank" rel="noopener">Google Spanner</a>等创新的云端攻击<a href="https://cloudplatform.googleblog.com/2017/02/inside-Cloud-Spanner-and-the-CAP-Theorem.html" target="_blank" rel="noopener"></a>。另一方面，建立良好客户体验的公司可以通过其软件的工作流程找到防御性。<br>我相信深层技术护城河并没有完全消失，而且可靠的商业模式仍然可以围绕IP建立。如果您在技术堆栈中选择一个地方并成为绝对最佳的解决方案，您就可以创建一个有价值的公司。然而，这意味着选择几个替代品的技术问题，这需要艰苦的工程，并需要操作知识来扩展。<br>今天，市场倾向于“全栈”公司，SaaS产品组合提供应用程序逻辑，中间件和数据库。技术正在成为完整解决方案的一个不可见的组成部分（例如，“只要你的食物按时交付，没有人关心你最喜欢的移动应用程序是什么！”）。在消费者世界中，Apple提供了受iPhone欢迎的集成或全栈体验，它将硬件与软件无缝集成。这种集成的体验也将成为企业软件的主导。云和SaaS使我们能够以经济高效的方式直接与客户联系。因此，客户越来越多地以SaaS应用程序的形式购买全栈技术，而不是购买技术堆栈的各个部分并构建自己的应用程序。 强调整个应用程序体验或“技术堆栈顶部”是我为什么还要通过一个额外的框架，即企业系统堆栈来评估公司的原因。<br><a name="2cfd"></a><h4 id="记录系统"><a href="#记录系统" class="headerlink" title="记录系统"></a>记录系统</h4>在系统堆栈的底部，通常是一个数据库，在其上构建一个应用程序。如果数据和应用程序为关键业务功能提供支持，它将成为“记录系统”。企业中有<a href="https://medium.com/@jerrychen/the-it-triangle-strategy-for-evaluating-enterprise-tech-startups-e15113b6580b" target="_blank" rel="noopener">三个主要</a>的记录<a href="https://medium.com/@jerrychen/the-it-triangle-strategy-for-evaluating-enterprise-tech-startups-e15113b6580b" target="_blank" rel="noopener">系统</a>：您的客户，您的员工和您的资产。<a href="https://en.wikipedia.org/wiki/Customer_relationship_management" target="_blank" rel="noopener">CRM</a>拥有您的客户，<a href="https://en.wikipedia.org/wiki/Human_resource_management_system" target="_blank" rel="noopener">HCM</a>，拥有您的员工，<a href="https://en.wikipedia.org/wiki/Enterprise_resource_planning" target="_blank" rel="noopener">ERP</a> / Financials拥有您的资产。几代公司建立在拥有一个记录系统的基础上，每一波都产生了新的赢家。在CRM中，我们看到Salesforce取代Siebel作为客户数据记录系统，Workday取代Oracle PeopleSoft获取员工数据。工作日也扩展到财务数据。其他应用程序可以围绕记录系统构建，但通常不如实际记录系统那么有价值。例如，像Marketo和Responsys这样的营销自动化公司围绕CRM建立了大型企业，但从未像Salesforce那样具有战略性或价值。<br><a name="f6da"></a><h4 id="Engagement™系统"><a href="#Engagement™系统" class="headerlink" title="Engagement™系统"></a>Engagement™系统</h4>参与系统™是用户和记录系统之间的接口，并且可以是强大的企业，因为它们控制最终用户的交互。在大型机时代，当大型机和终端基本上是同一产品时，记录和参与系统被捆绑在一起。客户端/服务器浪潮迎来了一类试图拥有您的桌面的公司，只是被一代基于浏览器的公司打乱，只有移动的第一家公司才能成功。当前一代竞争拥有参与系统的公司包括Slack，亚马逊Alexa以及所有其他语音/文本/会话UI启动。在中国，<a href="http://www.economist.com/news/business/21703428-chinas-wechat-shows-way-social-medias-future-wechats-world" target="_blank" rel="noopener">微信</a>已经成为一个主导的参与系统，现在是从电子商务到游戏的一切平台。如果它听起来像参与系统TM转换超过记录系统，它可能是因为他们这样做。连续几代的参与系统不一定会消失，而是用户不断添加新的方式来与他们的应用程序进行交互。在多渠道的世界中，拥有参与系统是最有价值的，如果您控制大多数最终用户参与，或者是一个跨渠道系统，无论他们在哪里都能到达用户。作为参与系统的最大战略优势可能是您可以与多个记录系统共存并收集通过您的产品的所有数据。<br><a name="ea58"></a><h3 id="新护城河：智力系统™"><a href="#新护城河：智力系统™" class="headerlink" title="新护城河：智力系统™"></a>新护城河：智力系统™</h3>我相信智能系统™是新的护城河。什么是情报系统，为什么它如此可辩护？使智能系统有价值的原因在于它通常跨越多个数据集，多个记录系统。一个示例是将Web分析与客户数据和社交数据相结合以预测最终用户行为，流失，LTV或仅提供更及时内容的应用程序。您可以在单个数据源或单个记录系统上构建智能，但该位置变得更难以抵御拥有该数据的供应商。对于像Oracle和SAP这样的现有企业来说，您需要将他们的数据与其他数据源（公共或私有）结合起来，为您的客户创造价值。现有企业将凭借自己的数据获益。例如，Salesforce正在构建一个智能系统，<a href="https://www.salesforce.com/products/einstein/overview/" target="_blank" rel="noopener">爱因斯坦</a>，从他们自己的记录系统CRM开始。<br> <br>下一代企业产品将使用不同的人工智能（AI）技术来构建智能系统。它不仅仅是由AI改造的应用程序，还有数据中心和基础设施产品。我们可以将<a href="https://medium.com/@jerrychen/the-it-triangle-strategy-for-evaluating-enterprise-tech-startups-e15113b6580b" target="_blank" rel="noopener">三个主要领域</a>分类，您可以构建智能系统™：围绕客户旅程的面向客户的应用程序，面向员工的应用程序，如HCM，<a href="https://en.wikipedia.org/wiki/IT_service_management" target="_blank" rel="noopener">ITSM</a>，财务或基础设施系统，如安全，计算/存储/网络和监控/管理。除了这些广泛的横向用例外，初创公司还可以专注于单一行业或市场，并建立一个围绕数据的智能系统，这些数据对于生命科学中的<a href="http://www.rhumbix.com/" target="_blank" rel="noopener">Veeva</a>或建筑中的<a href="http://www.rhumbix.com/" target="_blank" rel="noopener">Rhumbix</a>等垂直行业而言是独一无二的。<br>在所有这些市场中，战斗正在从旧护城河，数据来源，到新护城河，以及您对数据的处理方式。使用公司的数据，您可以向上销售客户，自动响应支持票据，防止员工流失，并识别安全异常。使用特定于行业（即医疗保健，金融服务）或公司独有的数据（客户数据，机器日志等）来解决战略问题的产品开始看起来像一个非常深的护城河，特别是如果您可以更换或者自动化整个企业工作流程或创建一个新的增值工作流程，这是通过这种智能实现的。<br>构建记录系统的企业应用程序一直是强大的业务模型。一些最持久的应用程序公司，如Salesforce和SAP都建立在深度IP上，受益于规模经济，随着时间的推移，随着公司工作流程和业务流程的深入，他们积累了更多的数据和操作知识。然而，即使这些老牌企业也不能免受平台转变的影响，因为新一代公司会攻击他们的领域。<br> <br>公平地说，我们可能面临人工智能营销疲劳的风险，但所有的炒作都反映了人工智能有可能改变这么多行业。一种流行的人工智能方法，即机器学习（ML），可以与数据，业务流程和企业工作流相结合，以创建上下文来构建智能系统。Google是将ML应用于流程和工作流程的早期先驱：他们收集了有关每个用户的更多数据，并应用了机器学习，以便在网络搜索的工作流程中提供更及时的广告。还有其他不断发展的人工智能技术，如神经网络，将继续改变我们对这些未来应用的期望。<br> <br>这些AI驱动的智能系统为新创企业提供了巨大的机会。这里成功的公司可以建立良性循环的数据，因为您生成和生产的产品数据越多，您的模型就越好，产品就越好。最终，该产品将为每个客户量身定制，从而产生另一种护城河，高转换成本。也可以建立一个将参与系统与智能甚至企业堆栈的所有三层结合起来的公司，但智能或参与系统可能是创业公司对现任企业的最佳插入点。建立一个参与或智能系统并不是一项微不足道的任务，需要深入的技术，特别是在速度和规模方面。特别是，可以促进跨多个数据源的智能层的技术将是必不可少的。最后，有些企业可以利用客户和市场数据来培养和改进模型，使产品更好地为所有客户构建数据网络效果，从而更快地实现智能飞轮。 <br> <br>总之，您可以建立一个可辩护的商业模式作为参与，智能或记录系统，但随着人工智能的出现，智能应用程序将成为下一代优秀软件公司的源泉，因为它们将成为新的护城河。</li>
+</li>
+<li><a href="http://www.telesens.co/2018/03/11/object-detection-and-classification-using-r-cnns/#Implementation_Details_Training" target="_blank" rel="noopener">实施细节：培训</a><ul>
+<li><a href="http://www.telesens.co/2018/03/11/object-detection-and-classification-using-r-cnns/#Anchor_Generation_Layer" target="_blank" rel="noopener">锚点生成层</a></li>
+<li><a href="http://www.telesens.co/2018/03/11/object-detection-and-classification-using-r-cnns/#Region_Proposal_Layer" target="_blank" rel="noopener">区域提案图层</a><ul>
+<li><a href="http://www.telesens.co/2018/03/11/object-detection-and-classification-using-r-cnns/#Region_Proposal_Network" target="_blank" rel="noopener">区域提案网络</a></li>
 </ul>
-<hr>
-<p>_感谢_<a href="https://twitter.com/saammotamedi" target="_blank" rel="noopener"><em>Saam Motamedi，</em></a><a href="https://twitter.com/saranormous" target="_blank" rel="noopener"><em>Sarah Guo</em></a>_，_<a href="https://twitter.com/elicollins" target="_blank" rel="noopener"><em>Eli Collins</em></a>_，_<a href="https://twitter.com/pbailis" target="_blank" rel="noopener"><em>Peter Bailis，</em></a><a href="https://twitter.com/ElisaSchreiber" target="_blank" rel="noopener"><em>Elisa Schreiber</em></a>_，_<a href="https://twitter.com/mminouye" target="_blank" rel="noopener"><em>Michael Inouye</em></a><em>，我的</em><a href="https://twitter.com/GreylockVC" target="_blank" rel="noopener"><em>Greylock</em></a><em>合作伙伴</em><a href="https://twitter.com/sarahtavel" target="_blank" rel="noopener"><em>Sarah Tavel</em></a><em>以及我在Greylock的其他合作伙伴的投入。这篇文章也得到了与我的朋友们在Greylock支持的几家公司的谈话中的帮助，这些公司包括</em><a href="https://twitter.com/Trifacta" target="_blank" rel="noopener"><em>Trifacta</em></a>_，_<a href="https://twitter.com/cloudera" target="_blank" rel="noopener"><em>Cloudera</em></a><em>以及影响我思想的数十位创始人和首席执行官。所有好的想法都被无耻地偷走了，所有糟糕的想法都是我的。</em></p>
+</li>
+<li><a href="http://www.telesens.co/2018/03/11/object-detection-and-classification-using-r-cnns/#Proposal_Layer" target="_blank" rel="noopener">提案图层</a></li>
+<li><a href="http://www.telesens.co/2018/03/11/object-detection-and-classification-using-r-cnns/#_Anchor_Target_Layer" target="_blank" rel="noopener"> 锚目标层</a><ul>
+<li><a href="http://www.telesens.co/2018/03/11/object-detection-and-classification-using-r-cnns/#Calculating_RPN_Loss" target="_blank" rel="noopener">计算RPN损失</a></li>
+</ul>
+</li>
+<li><a href="http://www.telesens.co/2018/03/11/object-detection-and-classification-using-r-cnns/#Calculating_Classification_Layer_Loss" target="_blank" rel="noopener">计算分类层损失</a></li>
+<li><a href="http://www.telesens.co/2018/03/11/object-detection-and-classification-using-r-cnns/#Proposal_Target_Layer" target="_blank" rel="noopener">提案目标层</a></li>
+<li><a href="http://www.telesens.co/2018/03/11/object-detection-and-classification-using-r-cnns/#Crop_Pooling" target="_blank" rel="noopener">作物池</a></li>
+<li><a href="http://www.telesens.co/2018/03/11/object-detection-and-classification-using-r-cnns/#Classification_Layer" target="_blank" rel="noopener">分类层</a></li>
+</ul>
+</li>
+<li><a href="http://www.telesens.co/2018/03/11/object-detection-and-classification-using-r-cnns/#Implementation_Details_Inference" target="_blank" rel="noopener">实施细节：推论</a></li>
+<li><a href="http://www.telesens.co/2018/03/11/object-detection-and-classification-using-r-cnns/#Appendix" target="_blank" rel="noopener">附录</a><ul>
+<li><a href="http://www.telesens.co/2018/03/11/object-detection-and-classification-using-r-cnns/#ResNet_50_Network_Architecture" target="_blank" rel="noopener">ResNet 50网络架构</a></li>
+<li><a href="http://www.telesens.co/2018/03/11/object-detection-and-classification-using-r-cnns/#Non-Maximum_Suppression_NMS" target="_blank" rel="noopener">非最大抑制（NMS）</a></li>
+</ul>
+</li>
+<li><p><a href="http://www.telesens.co/2018/03/11/object-detection-and-classification-using-r-cnns/#Bibliography" target="_blank" rel="noopener">参考书目</a><br><a name="eKHqk"></a></p>
+<h2 id="邮政组织"><a href="#邮政组织" class="headerlink" title="邮政组织"></a>邮政组织</h2></li>
+<li><p><strong>第1部分 - 图像预处理：</strong>在本节中，我们将描述应用于输入图像的预处理步骤。这些步骤包括减去平均像素值和缩放图像。训练和推理之间的预处理步骤必须相同</p>
+</li>
+<li><strong>第2节 - 网络组织： </strong>在本节中，我们将描述网络的三个主要组成部分 - “头”网络，区域提议网络（RPN）和分类网络。</li>
+<li><strong>第3节 - 实施细节（培训）：</strong>  这是该帖子中最长的部分，详细描述了培训R-CNN网络所涉及的步骤<strong> </strong></li>
+<li><strong>第4节 - 实现细节（推理）： </strong>在本节中，我们将描述推理过程中涉及的步骤 - 即，使用经过训练的R-CNN网络来识别有前途的区域并对这些区域中的对象进行分类。</li>
+<li><p><strong>附录： </strong>这里我们将介绍R-CNN运行过程中一些常用算法的细节，如非最大抑制和Resnet 50架构的细节。<br><a name="bBVzP"></a></p>
+<h2 id="图像预处理"><a href="#图像预处理" class="headerlink" title="图像预处理"></a>图像预处理</h2><p>在通过网络发送图像之前，将以下预处理步骤应用于图像。对于培训和推理，这些步骤必须相同。平均向量（<img src="https://cdn.nlark.com/yuque/0/2019/svg/219582/1561341767001-289c5c97-432e-4fd3-a7e5-ac3011f10ac1.svg#align=left&amp;display=inline&amp;height=13&amp;originHeight=11&amp;originWidth=32&amp;size=0&amp;status=done&amp;width=39" alt>对应于每个颜色通道的一个数字）不是当前图像中的像素值的平均值，而是在所有训练和测试图像上相同的配置值。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1561341953056-001ec654-af31-4c74-9f2d-824cb7d2e44c.png#align=left&amp;display=inline&amp;height=529&amp;name=img_5aa46e9e0bbd7.png&amp;originHeight=529&amp;originWidth=1286&amp;size=67176&amp;status=done&amp;width=1286" alt="img_5aa46e9e0bbd7.png"><br><img src="https://cdn.nlark.com/yuque/0/2019/svg/219582/1561341970192-109b902e-fd02-46bd-a7f1-78e51ec23c26.svg#align=left&amp;display=inline&amp;height=16&amp;originHeight=13&amp;originWidth=68&amp;size=0&amp;status=done&amp;width=83" alt>和<img src="https://cdn.nlark.com/yuque/0/2019/svg/219582/1561341970209-73b76758-61bb-4eb8-9d45-04f6ffb26935.svg#align=left&amp;display=inline&amp;height=12&amp;originHeight=10&amp;originWidth=58&amp;size=0&amp;status=done&amp;width=70" alt>参数的默认值分别为600和1000。<br><a name="tyPNe"></a></p>
+<h2 id="网络组织"><a href="#网络组织" class="headerlink" title="网络组织"></a>网络组织</h2><p>R-CNN使用神经网络解决两个主要问题：</p>
+</li>
+<li><p>在输入图像中识别可能包含前景对象的有前景区域（感兴趣区域 - ROI）</p>
+</li>
+<li>计算每个ROI的对象类概率分布 - 即，计算ROI包含特定类的对象的概率。然后，用户可以选择具有最高概率的对象类作为分类结果。</li>
+</ul>
+<p>R-CNN由三种主要类型的网络组成：</p>
+<ol>
+<li>头</li>
+<li>区域提案网络（RPN）</li>
+<li>分类网络</li>
+</ol>
+<p>R-CNN使用预先训练的网络的前几层（例如ResNet 50）来识别来自输入图像的有希望的特征。使用在一个数据集上训练的网络可以解决不同的问题，因为神经网络表现出“转移学习” <a href="http://www.telesens.co/2018/03/11/object-detection-and-classification-using-r-cnns/#ITEM-1455-3" target="_blank" rel="noopener">（Yosinski et al.2014）</a><a href="https://arxiv.org/abs/1411.1792" target="_blank" rel="noopener"> *</a>。网络的前几层学习检测边缘和颜色斑点等一般特征，这些特征是许多不同问题的良好区分特征。后面的图层学到的功能是更高级别，更具体问题的功能。可以移除这些层，或者可以在反向传播期间微调这些层的权重。从预训练网络初始化的前几层构成“头部”网络。然后，由头网络产生的卷积特征图通过区域提议网络（RPN），其使用一系列卷积和完全连接的层来产生可能包含前景对象的有希望的ROI（上面提到的问题1）。然后使用这些有希望的ROI从头网络产生的特征图中裁剪出相应的区域。这称为“作物池”。然后，通过作物池产生的区域通过分类网络，该分类网络学习对每个ROI中包含的对象进行分类。</p>
+<p>另外，您可能会注意到ResNet的权重以奇怪的方式初始化：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">n = m.kernel_size[<span class="number">0</span>] * m.kernel_size[<span class="number">1</span>] * m.out_channels</span><br><span class="line">m.weight.data.normal_(<span class="number">0</span>, math.sqrt(<span class="number">2.</span> / n))</span><br></pre></td></tr></table></figure>
+<p>如果您有兴趣了解此方法的工作原理，请阅读我关于<a href="http://www.telesens.co/2018/04/09/initializing-weights-for-the-convolutional-and-fully-connected-layers/" target="_blank" rel="noopener">初始化卷积和完全连接层的权重的</a>文章<a href="http://www.telesens.co/2018/04/09/initializing-weights-for-the-convolutional-and-fully-connected-layers/" target="_blank" rel="noopener">。</a><br><a name="J6K45"></a></p>
+<h3 id="网络架构"><a href="#网络架构" class="headerlink" title="网络架构"></a>网络架构</h3><p>下图显示了上述三种网络类型的各个组件。我们展示了每个网络层的输入和输出的维度，这有助于理解网络的每个层如何转换数据。<img src="https://cdn.nlark.com/yuque/0/2019/svg/219582/1561342031696-9a536a20-3948-4fac-aa6d-7802722b1da8.svg#align=left&amp;display=inline&amp;height=7&amp;originHeight=6&amp;originWidth=11&amp;size=0&amp;status=done&amp;width=13" alt>并<img src="https://cdn.nlark.com/yuque/0/2019/svg/219582/1561342031845-28cb81a2-3fca-4819-a9cd-05cb6ddaa0b0.svg#align=left&amp;display=inline&amp;height=13&amp;originHeight=10&amp;originWidth=8&amp;size=0&amp;status=done&amp;width=10" alt>表示输入图像的宽度和高度（在预处理之后）。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1561342058685-6e0d2d41-b532-41a9-a504-ee58e98cb2ad.png#align=left&amp;display=inline&amp;height=770&amp;name=img_5a9ffec911c19.png&amp;originHeight=770&amp;originWidth=1309&amp;size=103932&amp;status=done&amp;width=1309" alt="img_5a9ffec911c19.png"><br><a name="9KMqv"></a></p>
+<h2 id="实施细节：培训"><a href="#实施细节：培训" class="headerlink" title="实施细节：培训"></a>实施细节：培训</h2><p>在本节中，我们将详细描述培训R-CNN所涉及的步骤。一旦了解了培训的工作原理，理解推理就会轻松得多，因为它只是简单地使用了培训中涉及的一部分步骤。训练的目标是调整RPN和分类网络中的权重并微调头部网络的权重（这些权重从预先训练的网络（如ResNet）初始化）。回想一下，RPN网络的工作是产生有前景的ROI和分类网络的工作，以便为每个ROI分配对象类分数。因此，为了训练这些网络，我们需要相应的基础事实，即图像中存在的对象周围的边界框的坐标以及这些对象的类。这个基本事实来自免费使用的图像数据库，每个图像附带一个注释文件。此注释文件包含边界框的坐标和图像中存在的每个对象的对象类标签（对象类来自预定义对象类的列表）。这些图像数据库已被用于支持各种对象分类和检测挑战。两个常用的数据库是：</p>
+<ul>
+<li>PASCAL VOC：<a href="http://host.robots.ox.ac.uk/pascal/VOC/voc2007/index.html" target="_blank" rel="noopener">VOC 2007</a>数据库包含9963个培训/验证/测试图像，包含20,6个对象类别的24,640个注释。<ul>
+<li>_人：_  人</li>
+<li><em>动物：</em>  鸟，猫，牛，狗，马，羊</li>
+<li><em>车辆：</em>  飞机，自行车，船，公共汽车，汽车，摩托车，火车</li>
+<li><em>室内：</em>  瓶子，椅子，餐桌，盆栽，沙发，电视/显示器</li>
+</ul>
+</li>
+</ul>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/jpeg/219582/1561342094157-cb107066-1e4d-4ea4-bec7-b766cf878dfe.jpeg#align=left&amp;display=inline&amp;height=375&amp;name=person_06.jpg&amp;originHeight=375&amp;originWidth=501&amp;size=39511&amp;status=done&amp;width=501" alt="person_06.jpg"></p>
+<ul>
+<li>COCO（上下文中的公共对象）：<a href="http://cocodataset.org/#home" target="_blank" rel="noopener">COCO</a>  数据集要大得多。它包含&gt; 200K标记图像，包含90个对象类别。</li>
+</ul>
+<p>我使用较小的PASCAL VOC 2007数据集进行培训。R-CNN能够在同一步骤中训练区域提议网络和分类网络。<br>让我们花一点时间来回顾一下本文其余部分广泛使用的“边界框回归系数”和“边界框重叠”的概念。</p>
+<ul>
+<li><strong>边界框回归系数</strong>（也称为“回归系数”和“回归目标”）：R-CNN的目标之一是产生紧密适合对象边界的良好边界框。R-CNN通过采用给定的边界框（由左上角的坐标，宽度和高度定义）并通过应用一组“回归系数”来调整其左上角，宽度和高度来生成这些边界框。这些系数计算如下（<a href="http://www.telesens.co/2018/03/11/object-detection-and-classification-using-r-cnns/#ITEM-1455-4" target="_blank" rel="noopener">（Anon。2014）的</a><a href="https://arxiv.org/pdf/1311.2524.pdf" target="_blank" rel="noopener"></a>附录C<a href="https://arxiv.org/pdf/1311.2524.pdf" target="_blank" rel="noopener">*</a>。让目标和原始边界框的左上角的x，y坐标<img src="https://cdn.nlark.com/yuque/0/2019/svg/219582/1561342105961-eb570ad6-8eb3-45d5-829d-d5fd1f64732d.svg#align=left&amp;display=inline&amp;height=17&amp;originHeight=14&amp;originWidth=85&amp;size=0&amp;status=done&amp;width=104" alt>分别表示目标和原始边界的宽度/高度盒子<img src="https://cdn.nlark.com/yuque/0/2019/svg/219582/1561342152725-925b9f93-cb3c-4078-9c2b-a9f209324530.svg#align=left&amp;display=inline&amp;height=16&amp;originHeight=13&amp;originWidth=90&amp;size=0&amp;status=done&amp;width=111" alt>分别。然后，回归目标（将原始边界框转换为目标框的函数的系数）给出如下：<ul>
+<li><img src="https://cdn.nlark.com/yuque/0/2019/svg/219582/1561342106054-89952d68-f857-49de-b9ec-ef989a1d6cb5.svg#align=left&amp;display=inline&amp;height=27&amp;originHeight=22&amp;originWidth=342&amp;size=0&amp;status=done&amp;width=417" alt>。该函数易于反演，即，给定左上角的回归系数和坐标以及原始边界框的宽度和高度，可以容易地计算目标框的左上角和宽度和高度。注意，回归系数对于没有剪切的仿射变换是不变的。这是重要的一点，因为在计算分类损失时，目标回归系数以原始纵横比计算，而分类网络输出回归系数是在方形特征图（1：1纵横比）上的ROI汇集步骤之后计算的。当我们在下面讨论分类损失时，这将变得更加清晰。</li>
+</ul>
+</li>
+</ul>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1561342141865-c6ba5a97-4707-49b0-9e8e-06f62dbde2a6.png#align=left&amp;display=inline&amp;height=479&amp;name=img_5bac3708478ce-1024x479.png&amp;originHeight=479&amp;originWidth=1024&amp;size=626065&amp;status=done&amp;width=1024" alt="img_5bac3708478ce-1024x479.png"><br><strong>联合交叉（IoU）重叠：</strong>  我们需要测量给定边界框与另一个边界框的接近程度，该边界框与所使用的单位（像素等）无关，以测量边界框的尺寸。该度量应该是直观的（两个重合的边界框应该具有1的重叠，并且两个非重叠的框应该具有0的重叠）并且快速且易于计算。常用的重叠度量是“联合交叉（IoU）重叠，计算如下所示”。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1561342213953-2b042eb6-4370-4f07-8339-07e30cfb91c6.png#align=left&amp;display=inline&amp;height=217&amp;name=img_5aa6f44a0a9c7.png&amp;originHeight=468&amp;originWidth=600&amp;size=16490&amp;status=done&amp;width=278" alt="img_5aa6f44a0a9c7.png"><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1561342175479-f4712620-f318-479b-8e61-674342dc84cc.png#align=left&amp;display=inline&amp;height=224&amp;name=img_5aa6f476535f7.png&amp;originHeight=362&amp;originWidth=372&amp;size=13698&amp;status=done&amp;width=230" alt="img_5aa6f476535f7.png"><br>通过这些预备课程，现在让我们深入了解培训R-CNN的实施细节。在软件实现中，R-CNN执行分为几个层，如下所示。一个层封装了一系列逻辑步骤，这些步骤可能涉及通过其中一个神经网络运行数据和其他步骤，例如比较边界框之间的重叠，执行非最大值抑制等。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1561342254056-95fbae3e-b82a-4e6e-aaee-4490d33fa5d4.png#align=left&amp;display=inline&amp;height=704&amp;name=img_5aa0053323ac5.png&amp;originHeight=704&amp;originWidth=670&amp;size=56098&amp;status=done&amp;width=670" alt="img_5aa0053323ac5.png"></p>
+<ul>
+<li><strong>锚点生成层：</strong>该层通过首先生成9个不同比例和纵横比的锚点，然后通过跨越输入图像的均匀间隔的网格点平移它们来复制这些锚点，从而生成固定数量的“锚点”（边界框）。</li>
+<li><strong>提议层：</strong>根据边界框回归系数转换锚点以生成转换锚点。然后通过使用锚点作为前景区域的概率应用非最大抑制（参见附录）来修剪锚点的数量</li>
+<li><strong>锚目标层</strong>：锚点目标图层的目标是生成一组“好”锚点和相应的前景/背景标签和目标回归系数，以训练区域提案网络。该层的输出仅用于训练RPN网络，并且不被分类层使用。给定一组锚点（由锚点生成层生成，锚点目标层识别有前途的前景和背景锚点。有前景的前景锚点是那些与某些地面实况框重叠高于阈值的那些。背景框是与任何重叠的那些地面实况框低于阈值。锚定目标层还输出一组边界框回归量，即每个锚定目标离最近边界框有多远的度量。</li>
+<li><strong>RPN丢失： </strong>RPN丢失功能是在优化过程中最小化以训练RPN网络的度量。损失函数是以下组合：<ul>
+<li>RPN生成的边界框的比例被正确分类为前景/背景</li>
+<li>预测回归系数和目标回归系数之间的距离度量。</li>
+</ul>
+</li>
+<li><strong>提案目标层：提案目标层 </strong>的目标是修剪提案层生成的锚点列表，并生成<em>特定于类的</em>边界框回归目标，这些目标可用于训练分类层以生成良好的类标签和回归目标</li>
+<li><strong>ROI池层： </strong>实现空间转换网络，该网络在给定由提议目标层生成的区域提议的边界框坐标的情况下对输入要素图进行采样。这些坐标通常不在整数边界上，因此需要基于插值的采样。</li>
+<li><strong>分类层： </strong>分类层采用ROI池层生成的输出特征映射，并将它们传递给一系列卷积层。输出通过两个完全连接的层馈送。第一层为每个区域提议生成类概率分布，第二层生成一组特定于类的边界框回归量。</li>
+<li><strong>分类丢失： </strong>类似于RPN丢失，分类丢失是在优化过程中最小化以训练分类网络的度量。在反向传播期间，误差梯度也流向RPN网络，因此训练分类层也会修改RPN网络的权重。我们稍后会谈到这一点。分类损失是以下组合：<ul>
+<li>RPN生成的边界框的比例被正确分类（作为正确的对象类）</li>
+<li>预测回归系数和目标回归系数之间的距离度量。</li>
+</ul>
+</li>
+</ul>
+<p>我们现在将详细介绍这些层中的每一层。<br><a name="56lTv"></a></p>
+<h3 id="锚点生成层"><a href="#锚点生成层" class="headerlink" title="锚点生成层"></a>锚点生成层</h3><p>锚生成层产生一组边界框（称为“锚框”），其具有在整个输入图像上扩展的不同大小和纵横比。这些边界框对于所有图像是相同的，即，它们与图像的内容无关。这些边界框中的一些将包围前景对象，而大多数不会。RPN网络的目标是学习识别哪些框是好框 - 即，可能包含前景对象并产生目标回归系数，当应用于锚框时，将锚框转换为更好的边界框（更紧密地拟合所包含的前景对象）。<br>下图演示了如何生成这些锚框。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1561342290568-d441d0e9-2089-4373-80ad-fb5dbf4ac60f.png#align=left&amp;display=inline&amp;height=776&amp;name=img_5aa05d3ecef3e.png&amp;originHeight=776&amp;originWidth=1223&amp;size=419016&amp;status=done&amp;width=1223" alt="img_5aa05d3ecef3e.png"><br><a name="eeeY9"></a></p>
+<h3 id="区域提案图层"><a href="#区域提案图层" class="headerlink" title="区域提案图层"></a>区域提案图层</h3><p>对象检测方法需要输入一个“区域建议系统”，它产生一组稀疏（例如选择性搜索<a href="http://www.telesens.co/2018/03/11/object-detection-and-classification-using-r-cnns/#ITEM-1455-5" target="_blank" rel="noopener">（Anon。）</a><a href="http://link.springer.com/article/10.1007/s11263-013-0620-5" target="_blank" rel="noopener"> *</a>）或密集（例如用于可变形部分模型<a href="http://www.telesens.co/2018/03/11/object-detection-and-classification-using-r-cnns/#ITEM-1455-6" target="_blank" rel="noopener">（Anon。）</a><a href="https://doi.org/10.1109/TPAMI.2009.167" target="_blank" rel="noopener"> *</a>）的一组特征。R-CNN系统的第一个版本使用选择性搜索方法来生成区域提议。在当前版本（称为“更快的R-CNN”）中，使用基于“滑动窗口”的技术（在前一部分中描述）来生成一组密集候选区域，然后使用神经网络驱动的区域提议网络。根据包含前景对象的区域的概率对区域提议进行排名。区域提案图层有两个目标：</p>
+<ul>
+<li>从锚点列表中，识别背景和前景锚点</li>
+<li>通过应用一组“回归系数”来修改锚点的位置，宽度和高度，以提高锚点的质量（例如，使它们更好地适应对象的边界）</li>
+</ul>
+<p>区域提议层由区域提议  _网络_和三个层组成 - 提议层，锚点目标层和提议目标层。以下各节将详细介绍这三层。<br><a name="AE1OZ"></a></p>
+<h4 id="区域提案网络"><a href="#区域提案网络" class="headerlink" title="区域提案网络"></a>区域提案网络</h4><p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1561342322564-a955f1d0-dfda-42ad-8f9d-e4edc8c34677.png#align=left&amp;display=inline&amp;height=637&amp;name=img_5aa0695484e3e.png&amp;originHeight=637&amp;originWidth=1011&amp;size=58787&amp;status=done&amp;width=1011" alt="img_5aa0695484e3e.png"></p>
+<p>区域提议层运行头网络通过卷积层（代码中称为rpn_net），然后是RELU生成的特征映射。rpn_net的输出通过两（1,1）个核卷积层运行，以产生背景/前景类分数和概率以及相应的边界框回归系数。头网络的步幅与生成锚点时使用的步幅相匹配，因此锚箱的数量与区域提议网络产生的信息1-1对应（锚箱数量=类别得分数量=边界框回归系数= <img src="https://cdn.nlark.com/yuque/0/2019/svg/219582/1561342334017-c2dd4856-31c0-438a-8406-6930b6279e55.svg#align=left&amp;display=inline&amp;height=22&amp;originHeight=18&amp;originWidth=70&amp;size=0&amp;status=done&amp;width=86" alt>）<br><br><a name="34rls"></a></p>
+<h3 id="提案图层"><a href="#提案图层" class="headerlink" title="提案图层"></a>提案图层</h3><p>提议层获取锚生成层生成的锚框，并通过基于前景分数应用非最大抑制来修剪框的数量（有关详细信息，请参阅附录）。它还通过将RPN生成的回归系数应用于相应的锚框来生成变换的边界框。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1561342356291-9dcb674f-22f6-4ac8-8952-d5a0188ac1ba.png#align=left&amp;display=inline&amp;height=882&amp;name=img_5aa5766d53b63.png&amp;originHeight=882&amp;originWidth=1522&amp;size=147225&amp;status=done&amp;width=1522" alt="img_5aa5766d53b63.png"><br><a name="tlwzz"></a></p>
+<h3 id="锚目标层"><a href="#锚目标层" class="headerlink" title="锚目标层"></a>锚目标层</h3><p>锚目标层的目标是选择可用于训练RPN网络的有希望的锚点：</p>
+<ol>
+<li>区分前景和背景区域</li>
+<li>为前景框生成良好的边界框回归系数。</li>
+</ol>
+<p>首先看一下如何计算RPN损失是很有用的。这将揭示计算RPN损失所需的信息，这使得易于遵循锚定目标层的操作。<br><a name="38YL1"></a></p>
+<h4 id="计算RPN损失"><a href="#计算RPN损失" class="headerlink" title="计算RPN损失"></a>计算RPN损失</h4><p>请记住，RPN层的目标是生成良好的边界框。要从一组锚框中执行此操作，RPN图层必须学会将锚框分类为背景或前景，并计算回归系数以修改前景锚框的位置，宽度和高度，使其成为“更好”的前景框（更贴近前景对象）。RPN Loss的制定方式是鼓励网络学习这种行为。<br>RPN损失是分类损失和边界框回归损失的总和。分类损失使用交叉熵损失惩罚错误分类的框，回归损失使用真实回归系数之间的距离函数（使用最接近的前景锚框匹配地面实况框计算）和网络预测的回归系数（参见RPN网络架构图中的rpn_bbx_pred_net）。<br><img src="https://cdn.nlark.com/yuque/0/2019/svg/219582/1561342370876-416d55ef-90b8-43bb-ac92-884d55172d58.svg#align=left&amp;display=inline&amp;height=16&amp;originHeight=13&amp;originWidth=415&amp;size=0&amp;status=done&amp;width=508" alt><br><strong>分类损失：</strong><br>cross_entropy（预测_class，actual_class）<br><strong>边界框回归损失：</strong><br><img src="https://cdn.nlark.com/yuque/0/2019/svg/219582/1561342371909-3dd3a636-e5b9-4953-8763-d41980f6a03d.svg#align=left&amp;display=inline&amp;height=21&amp;originHeight=17&amp;originWidth=197&amp;size=0&amp;status=done&amp;width=240" alt><br>对所有前景锚点的回归损失求和。为背景锚点执行此操作没有意义，因为背景锚点没有关联的地面实况框<br><img src="https://cdn.nlark.com/yuque/0/2019/svg/219582/1561342371060-087bb10f-dc31-435c-a3bb-1e7f13ce1887.svg#align=left&amp;display=inline&amp;height=21&amp;originHeight=17&amp;originWidth=334&amp;size=0&amp;status=done&amp;width=407" alt><br>这显示了如何计算给定前景锚的回归损失。我们采用预测（通过RPN）和目标（使用最接近的真实性框计算到锚箱）回归系数之间的差异。有四个组件 - 对应于左上角的坐标和边界框的宽度/高度。平滑的L1功能定义如下：<br><img src="https://cdn.nlark.com/yuque/0/2019/svg/219582/1561342370911-32eeafa7-4c9e-4c92-861b-2793cd346961.svg#align=left&amp;display=inline&amp;height=52&amp;originHeight=43&amp;originWidth=248&amp;size=0&amp;status=done&amp;width=302" alt><br>这<img src="https://cdn.nlark.com/yuque/0/2019/svg/219582/1561342371363-9ca7ed88-4378-41f1-8cde-2d8540bfee31.svg#align=left&amp;display=inline&amp;height=7&amp;originHeight=6&amp;originWidth=9&amp;size=0&amp;status=done&amp;width=11" alt>是任意选择的（在我的代码中设置为3）。请注意，在python实现中，前景锚点的掩码数组（称为“bbox_inside_weights”）用于计算作为向量操作的损失并避免for-if循环。<br>因此，要计算损失，我们需要计算以下数量：</p>
+<ol>
+<li>类标签（背景或前景）和锚箱的分数</li>
+<li>目标回归系数为前景锚框</li>
+</ol>
+<p>我们现在将遵循锚定目标图层的实现，以查看这些数量的计算方式。我们首先选择位于图像范围内的锚框。然后，通过首先计算所有锚箱（在图像内）与所有地面实况框的IoU（联合交叉）重叠来选择好的前景框。使用此重叠信息，两种类型的框被标记为前景：</p>
+<ol>
+<li><strong>类型A：</strong>对于每个地面实况框，所有具有最大IoU的前景框与地面实况框重叠</li>
+<li><strong>类型B：</strong>  与某些地面实况框最大重叠的锚框超过阈值</li>
+</ol>
+<p>这些框如下图所示：<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1561342396122-c870537d-1062-49c2-9f3e-a7bf82fe1966.png#align=left&amp;display=inline&amp;height=530&amp;name=img_5aa13d4d911d3.png&amp;originHeight=530&amp;originWidth=1171&amp;size=516996&amp;status=done&amp;width=1171" alt="img_5aa13d4d911d3.png"><br>注意，仅选择与某些地面实况框重叠的锚框超过阈值作为前景框。这样做是为了避免向RPN提供学习离最佳匹配地面实况框太远的框的回归系数的“绝望学习任务”。类似地，重叠小于负阈值的框被标记为背景框。并非所有不是前景框的框都标记为背景。既不是前景也不是背景的框被标记为“不关心”。这些框不包括在RPN损失的计算中。</p>
+<p>有两个额外的阈值与我们想要实现的背景和前景框的总数相关，以及应该是前景的这个数字的分数。如果通过测试的前景框数超过阈值，我们会将多余的前景框随机标记为“不关心”。类似的逻辑应用于背景框。<br>接下来，我们计算前景框和相应的地面实况框之间的边界框回归系数，最大重叠。这很容易，只需要按照公式计算回归系数。<br>这结束了我们对锚目标层的讨论。回顾一下，让我们列出该层的参数和输入/输出：<br><strong>参数：</strong></p>
+<ul>
+<li>TRAIN.RPN_POSITIVE_OVERLAP：用于选择锚框是否为良好前景框的阈值（默认值：0.7）</li>
+<li>TRAIN.RPN_NEGATIVE_OVERLAP：如果来自地面实况框的锚的最大重叠低于此保留，则将其标记为背景。重叠&gt; RPN_NEGATIVE_OVERLAP但&lt;RPN_POSITIVE_OVERLAP的框标记为“不关心”。（默认值：0.3）</li>
+<li>TRAIN.RPN_BATCHSIZE：背景和前景锚点的总数（默认值：256）</li>
+<li>TRAIN.RPN_FG_FRACTION：作为前景锚点的批量大小的一部分（默认值：0.5）。如果找到的前景锚点数大于TRAIN.RPN_BATCHSIZE <img src="https://cdn.nlark.com/yuque/0/2019/svg/219582/1561342409588-16bd8796-1bf3-4306-8fa0-7f2863ebf870.svg#align=left&amp;display=inline&amp;height=9&amp;originHeight=10&amp;originWidth=11&amp;size=0&amp;status=done&amp;width=10" alt> TRAIN.RPN_FG_FRACTION，则超出（索引是随机选择的）标记为“不关心”。</li>
+</ul>
+<p><strong>输入：</strong></p>
+<ul>
+<li>RPN网络输出（预测的前景/背景类标签，回归系数）</li>
+<li>锚箱（由锚生成层生成）</li>
+<li>地面实况框</li>
+</ul>
+<p><strong>产量</strong></p>
+<ul>
+<li>良好的前景/背景框和相关的类标签</li>
+<li>目标回归系数</li>
+</ul>
+<p>其他层，提案目标层，ROI池层和分类层旨在生成计算分类丢失所需的信息。正如我们对锚目标层所做的那样，让我们首先看一下如何计算分类损失以及计算分类损失需要哪些信息<br><a name="gXXr4"></a></p>
+<h3 id="计算分类层损失"><a href="#计算分类层损失" class="headerlink" title="计算分类层损失"></a>计算分类层损失</h3><p>与RPN损失类似，分类层损失有两个组成部分 - 分类丢失和边界框回归损失<br><img src="https://cdn.nlark.com/yuque/0/2019/svg/219582/1561342409666-46105627-bdb1-4cfc-b0cb-64a10a4da967.svg#align=left&amp;display=inline&amp;height=15&amp;originHeight=13&amp;originWidth=500&amp;size=0&amp;status=done&amp;width=582" alt><br>RPN层和分类层之间的关键区别在于，虽然RPN层只处理两个类 - 前景和背景，但分类层处理我们的网络正在训练分类的所有对象类（加上背景）。<br>分类损失是以实际对象类别和预测类别得分为参数的交叉熵损失。它的计算方法如下所示。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1561342434065-d37cf9a0-7191-4fab-bed4-494036013441.png#align=left&amp;display=inline&amp;height=320&amp;name=img_5aa1cd250f265-1.png&amp;originHeight=320&amp;originWidth=691&amp;size=23377&amp;status=done&amp;width=691" alt="img_5aa1cd250f265-1.png"><br>边界框回归损失也与RPN类似地计算，除了现在回归系数是类特定的。网络计算每个对象类的回归系数。目标回归系数显然仅适用于正确的类，该类是与给定锚盒具有最大重叠的地面实况边界框的对象类。在计算损耗时，使用掩码数组，该掩码数组标记每个锚盒的正确对象类。忽略不正确的对象类的回归系数。该掩码数组允许将损失计算为矩阵乘法，而不是需要for-each循环。<br>因此，计算分类层损失需要以下数量：</p>
+<ol>
+<li>预测类标签和边界框回归系数（这些是分类网络的输出）</li>
+<li>每个锚箱的类标签</li>
+<li>目标边界框回归系数</li>
+</ol>
+<p>现在让我们看一下如何在提案目标和分类层中计算这些数量。<br><a name="0BrH4"></a></p>
+<h3 id="提案目标层"><a href="#提案目标层" class="headerlink" title="提案目标层"></a>提案目标层</h3><p>提案目标层的目标是从提议层输出的ROI列表中选择有希望的ROI。这些有希望的ROI将用于从头层产生的特征图执行裁剪池并传递到网络的其余部分（head_to_tail），其计算预测的类别得分和框回归系数。<br>与锚目标层类似，重要的是选择好的提议（与GT框重叠的那些）以传递给分类层。否则，我们将要求分类层学习“无望的学习任务”。<br>提案目标层以提案层计算的ROI开始。使用每个ROI与所有地面实况框的最大重叠，它将ROI分类为背景和前景ROI。前景ROI是最大重叠超过阈值的那些（TRAIN.FG_THRESH，默认值：0.5）。背景ROI是最大重叠落在TRAIN.BG_THRESH_LO和TRAIN.BG_THRESH_HI之间的值（默认值分别为0.1,0.5）。这是用于向分类器呈现困难背景示例的“硬负挖掘”的示例。<br>还有一些额外的逻辑试图确保前景和背景区域的总数是恒定的。如果找到的背景区域太少，它会尝试通过随机重复一些背景指数来填补批次，以弥补不足。<br>接下来，在每个ROI和最接近的匹配地面实况框之间计算边界框目标回归目标（这也包括背景ROI，因为这些ROI也存在重叠的地面实况框）。这些回归目标针对所有类进行了扩展，如下图所示。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1561342472731-e76edefe-5125-45d1-bf3d-0518d6574410.png#align=left&amp;display=inline&amp;height=710&amp;name=img_5aa32302afc0b-1.png&amp;originHeight=710&amp;originWidth=1266&amp;size=85041&amp;status=done&amp;width=1266" alt="img_5aa32302afc0b-1.png"><br>bbox_inside_weights数组充当掩码。对于每个前景ROI，它仅适用于正确的类。背景ROI也为零。因此，在计算分类层损失的边界框回归分量时，仅考虑前景区域的回归系数。这不是分类丢失的情况 - 包括背景ROI以及它们属于“背景”类。<br><strong>输入：</strong></p>
+<ul>
+<li>提案层生成的ROI</li>
+<li>地面真相信息</li>
+</ul>
+<p><strong>输出：</strong></p>
+<ul>
+<li>选择符合重叠标准的前景和背景ROI。</li>
+<li>ROI的类特定目标回归系数</li>
+</ul>
+<p><strong>参数：</strong></p>
+<ul>
+<li>TRAIN.FG_THRESH :(默认值：0.5）用于选择前景ROI。与地面实况框最大重叠超过FG_THRESH的ROI标记为前景</li>
+<li>TRAIN.BG_THRESH_HI :(默认为0.5）</li>
+<li>TRAIN.BG_THRESH_LO :(默认值为0.1）这两个阈值用于选择背景ROI。最大重叠落在BG_THRESH_HI和BG_THRESH_LO之间的ROI标记为背景</li>
+<li>TRAIN.BATCH_SIZE :(默认为128）选中的最大前景和背景框数。</li>
+<li>TRAIN.FG_FRACTION :(默认为0.25）。前景框的数量不能超过BATCH_SIZE * FG_FRACTION<br><a name="NaKmD"></a><h3 id="作物池"><a href="#作物池" class="headerlink" title="作物池"></a>作物池</h3>提案目标层为我们提供了有希望的ROI，以便在培训期间使用相关的类标签和回归系数进行分类。下一步是从头网络产生的卷积特征图中提取对应于这些ROI的区域。然后，提取的特征图通过网络的其余部分（上面显示的网络图中的“尾部”）运行，以产生每个ROI的对象类概率分布和回归系数。Crop Pooling层的工作是从卷积特征映射执行区域提取。<br>关于作物汇集的关键思想在关于“空间转型网络” <a href="http://www.telesens.co/2018/03/11/object-detection-and-classification-using-r-cnns/#ITEM-1455-7" target="_blank" rel="noopener">（Anon.2016）</a><a href="https://arxiv.org/pdf/1506.02025.pdf" target="_blank" rel="noopener"> *</a>的论文中有所描述。目标是将变形函数（由<img src="https://cdn.nlark.com/yuque/0/2019/svg/219582/1561342485146-7cfbdaed-9d59-4462-a1eb-849212fbb66f.svg#align=left&amp;display=inline&amp;height=14&amp;originHeight=11&amp;originWidth=32&amp;size=0&amp;status=done&amp;width=40" alt>仿射变换矩阵描述）应用于输入特征映射以输出变形特征映射。如下图所示<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1561342509506-eccaaec5-9bec-4f8d-9d63-365e4bc1cdfc.png#align=left&amp;display=inline&amp;height=399&amp;name=img_5aa402baba3a1-1.png&amp;originHeight=399&amp;originWidth=470&amp;size=93258&amp;status=done&amp;width=470" alt="img_5aa402baba3a1-1.png"><br>作物池有两个步骤：</li>
+</ul>
+<ol>
+<li>对于一组目标坐标，应用给定的仿射变换以生成源坐标网格。<br><img src="https://cdn.nlark.com/yuque/0/2019/svg/219582/1561342519737-386000c9-1759-4a52-bced-7e7ce4b98c38.svg#align=left&amp;display=inline&amp;height=61&amp;originHeight=52&amp;originWidth=182&amp;size=0&amp;status=done&amp;width=213" alt>。这<img src="https://cdn.nlark.com/yuque/0/2019/svg/219582/1561342519670-7e2458a4-9250-4f3c-8d14-02b555f3b2d7.svg#align=left&amp;display=inline&amp;height=20&amp;originHeight=16&amp;originWidth=72&amp;size=0&amp;status=done&amp;width=88" alt>是高度/宽度归一化坐标（类似于图形中使用的纹理坐标），所以<img src="https://cdn.nlark.com/yuque/0/2019/svg/219582/1561342520491-e2aa89f8-cfb8-45ec-b275-c4d61493bf53.svg#align=left&amp;display=inline&amp;height=19&amp;originHeight=16&amp;originWidth=137&amp;size=0&amp;status=done&amp;width=165" alt>。</li>
+<li>在第二步中，在源坐标处对输入（源）映射进行采样以产生输出（目标）映射。在此步骤中，每个<img src="https://cdn.nlark.com/yuque/0/2019/svg/219582/1561342520625-337a3418-99a0-4848-88f3-79421c472187.svg#align=left&amp;display=inline&amp;height=18&amp;originHeight=15&amp;originWidth=45&amp;size=0&amp;status=done&amp;width=54" alt>坐标定义输入中的空间位置，其中应用采样内核（例如双线性采样内核）以获取输出要素图中特定像素的值。</li>
+</ol>
+<p>空间变换中描述的采样方法提供了可微分的采样机制，允许损失梯度流回输入特征图和采样网格坐标。<br>幸运的是，裁剪池在PyTorch中实现，API由两个镜像这两个步骤的函数组成。 torch.nn.functional.affine_grid采用仿射变换矩阵并生成一组采样坐标，并且torch.nn.functional.grid_sample  对这些坐标处的网格进行采样  。后向步骤中的反向传播梯度由pyTorch自动处理。<br>要使用裁剪池，我们需要执行以下操作：</p>
+<ol>
+<li>将ROI坐标除以“头部”网络的步幅。由提议目标层产生的ROI的坐标在原始图像空间（！800 <img src="https://cdn.nlark.com/yuque/0/2019/svg/219582/1561342519853-42420dab-12a3-4489-bfd8-d78ea8141f37.svg#align=left&amp;display=inline&amp;height=9&amp;originHeight=10&amp;originWidth=11&amp;size=0&amp;status=done&amp;width=10" alt>600）中。为了将这些坐标带入由“head”产生的输出特征图的空间中，我们必须将它们除以步长（当前实现中的16）。</li>
+<li>要使用上面显示的API，我们需要仿射变换矩阵。该仿射变换矩阵的计算如下所示</li>
+<li>我们还需要目标要素图上的尺寸<img src="https://cdn.nlark.com/yuque/0/2019/svg/219582/1561342519837-92cbca77-7714-4e8b-b880-cd790490accd.svg#align=left&amp;display=inline&amp;height=8&amp;originHeight=6&amp;originWidth=8&amp;size=0&amp;status=done&amp;width=10" alt>和<img src="https://cdn.nlark.com/yuque/0/2019/svg/219582/1561342520502-66dcb1d2-fff8-4670-ba4c-6dcc7c74228b.svg#align=left&amp;display=inline&amp;height=10&amp;originHeight=9&amp;originWidth=8&amp;size=0&amp;status=done&amp;width=9" alt>尺寸。这由配置参数cfg.POOLING_SIZE（默认为7）提供。因此，在作物合并期间，非方形ROI用于从卷积特征图中裁剪出区域，这些区域被扭曲成恒定大小的方形窗口。必须在将作物池的输出传递给需要输入固定维度的进一步卷积和完全连接的层时进行这种变形。</li>
+</ol>
+<p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1561342541742-8daba05b-07bc-4871-a281-34dade63115d.png#align=left&amp;display=inline&amp;height=1113&amp;name=img_5aa4255fdacb6.png&amp;originHeight=1113&amp;originWidth=1231&amp;size=121237&amp;status=done&amp;width=1231" alt="img_5aa4255fdacb6.png"><br><a name="dKZEO"></a></p>
+<h3 id="分类层"><a href="#分类层" class="headerlink" title="分类层"></a>分类层</h3><p>裁剪池层采用提议目标层输出的ROI框和“头”网络输出的卷积特征图，并输出方形特征图。然后通过沿空间维度的平均汇集，将特征图传递到ResNet的第4层。结果（代码中称为“fc7”）是每个ROI的一维特征向量。此过程如下所示。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1561342584223-ea4123c8-ec75-4c3a-be16-90ea6b1f6bc9.png#align=left&amp;display=inline&amp;height=757&amp;name=img_5aa55c81eac0a-1024x757.png&amp;originHeight=757&amp;originWidth=1024&amp;size=434619&amp;status=done&amp;width=1024" alt="img_5aa55c81eac0a-1024x757.png"><br>然后，特征向量通过两个完全连接的层–bbox_pred_net和cls_score_net。cls_score_net层为每个边界框生成类别分数（可以通过应用softmax将其转换为概率）。bbox_pred_net层生成类特定的边界框回归系数，该回归系数与提议目标层产生的原始边界框坐标组合以产生最终边界框。这些步骤如下所示。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1561342611299-d01bcf67-fb9f-40a1-adff-8ff4df7bb329.png#align=left&amp;display=inline&amp;height=674&amp;name=img_5aa55c97f3287.png&amp;originHeight=674&amp;originWidth=1137&amp;size=64286&amp;status=done&amp;width=1137" alt="img_5aa55c97f3287.png"><br>回想一下两组边界框回归系数之间的差异是很好的 - 一组由RPN网络产生，另一组由分类网络产生。第一组用于训练RPN层以产生良好的前景边界框（更紧密地围绕对象边界）。目标回归系数，即，将ROI框与其最接近的匹配地面实况边界框对齐所需的系数由锚目标层生成。很难准确识别这种学习是如何发生的，但我想象RPN卷积和完全连通的层学习如何将神经网络生成的各种图像特征解释为破译好的对象边界框。当我们在下一节考虑推理时，<br>第二组边界框系数由分类层生成。这些系数是类特定的，即，对于每个ROI框，每个对象类生成一组系数。这些目标回归系数由提案目标层生成。注意，分类网络在方形特征图上操作，该方形特征图是应用于头部网络输出的仿射变换（如上所述）的结果。然而，由于回归系数对于没有剪切的仿射变换是不变的，因此可以将由提议目标层计算的目标回归系数与由分类网络产生的目标回归系数进行比较，并且充当有效学习信号。事后看来这一点显而易见，但花了我一些时间来理解。<br>有趣的是，在训练分类层时，误差梯度也传播到RPN网络。这是因为在作物合并期间使用的ROI框坐标本身是网络输出，因为它们是将RPN网络生成的回归系数应用于锚框的结果。在反向传播期间，误差梯度将通过作物池层传播回RPN层。计算和应用这些梯度将非常棘手，但幸运的是，作物池API由PyTorch作为内置模块提供，计算和应用梯度的细节在内部处理。这一点在更快的RCNN论文<a href="http://www.telesens.co/2018/03/11/object-detection-and-classification-using-r-cnns/#ITEM-1455-2" target="_blank" rel="noopener">（Ren et</a><a href="https://arxiv.org/abs/1506.01497" target="_blank" rel="noopener"></a> al.2015 <a href="http://www.telesens.co/2018/03/11/object-detection-and-classification-using-r-cnns/#ITEM-1455-2" target="_blank" rel="noopener">）</a><a href="https://arxiv.org/abs/1506.01497" target="_blank" rel="noopener"> *的</a>第3.2（iii）节中讨论   。<br><a name="bnNxm"></a></p>
+<h2 id="实施细节：推论"><a href="#实施细节：推论" class="headerlink" title="实施细节：推论"></a>实施细节：推论</h2><p>推理期间执行的步骤如下所示<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1561342644864-0dd6cf75-4c92-41ea-a7e2-ec17e3cae11f.png#align=left&amp;display=inline&amp;height=463&amp;name=img_5aa70ff399c57-1024x463.png&amp;originHeight=463&amp;originWidth=1024&amp;size=261545&amp;status=done&amp;width=1024" alt="img_5aa70ff399c57-1024x463.png"><br>不使用锚定目标和建议目标图层。RPN网络应该已经学会了如何将锚盒分类为背景框和前景框并生成良好的边界框系数。提议层简单地将边界框系数应用于排名靠前的锚框并执行NMS以消除具有大量重叠的框。为清楚起见，下面显示了这些步骤的输出。生成的框被发送到分类层，在该分类层中生成类分数和类特定的边界框回归系数。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1561342682141-6d997005-e868-438e-a478-b6a2e8033676.png#align=left&amp;display=inline&amp;height=513&amp;name=img_5aa580271bea6.png&amp;originHeight=513&amp;originWidth=677&amp;size=640721&amp;status=done&amp;width=677" alt="img_5aa580271bea6.png"><br>红色框显示按分数排名的前6个锚点。应用RPN网络计算的回归参数后，绿框显示锚框。绿色框似乎更紧密地适合底层对象。请注意，应用回归参数后，矩形仍为矩形，即没有剪切。还要注意矩形之间的重要重叠。通过应用非最大值抑制来解决该冗余<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1561342720484-cfe6b67f-ccc9-44a4-beb3-803edc866dd9.png#align=left&amp;display=inline&amp;height=527&amp;name=img_5aa5809cc7206.png&amp;originHeight=527&amp;originWidth=672&amp;size=640452&amp;status=done&amp;width=672" alt="img_5aa5809cc7206.png"><br>红色框显示NMS前的前5个边界框，绿色框显示NMS之后的前5个框。通过抑制重叠的方框，其他方框（得分列表中的较低位置）有机会向上移动<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1561342752120-202232ac-6731-4bd3-998f-e25adbf1196b.png#align=left&amp;display=inline&amp;height=475&amp;name=img_5aa581709aa82.png&amp;originHeight=475&amp;originWidth=733&amp;size=667782&amp;status=done&amp;width=733" alt="img_5aa581709aa82.png"><br>从最终的分类得分数组（dim：n，21），我们选择对应于某个前景对象的列，比如说汽车。然后，我们选择与此数组中最大分数对应的行。此行对应于最有可能是汽车的提案。设这个行的索引为car_score_max_idx现在，让最终边界框坐标数组（在应用回归系数之后）为bbox（dim：n，21 * 4）。从这个数组中，我们选择对应于car_score_max_idx的行。我们期望对应于汽车列的边界框应该比其他边界框（对应于错误的对象类）更好地适合测试图像中的汽车。确实如此。在红色框对应于原提案箱，蓝箱是计算汽车类的边界框，白框对应于其他（不正确的）前景类。可以看出，蓝色盒子比其他盒子更适合实际的汽车。<br>为了显示最终的分类结果，我们应用另一轮NMS并将对象检测阈值应用于类别分数。然后，我们绘制对应于满足检测阈值的ROI的所有变换的边界框。结果如下所示。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1561342788419-5082edc9-6eeb-425d-bef1-cfeb8d242fc6.png#align=left&amp;display=inline&amp;height=583&amp;name=img_5aa5827c1d42c.png&amp;originHeight=583&amp;originWidth=775&amp;size=918419&amp;status=done&amp;width=775" alt="img_5aa5827c1d42c.png"><br><a name="0kVd1"></a></p>
+<h2 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h2><p><a name="cnn1r"></a></p>
+<h3 id="ResNet-50网络架构"><a href="#ResNet-50网络架构" class="headerlink" title="ResNet 50网络架构"></a>ResNet 50网络架构</h3><p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1561342817495-11e4fd30-3a6a-4a84-81d7-3ebec0d64794.png#align=left&amp;display=inline&amp;height=655&amp;name=img_5aa59c8da4c4b.png&amp;originHeight=655&amp;originWidth=1135&amp;size=51375&amp;status=done&amp;width=1135" alt="img_5aa59c8da4c4b.png"><br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1561342863888-6a8f6dd4-fa08-4815-929d-6444aeb32189.png#align=left&amp;display=inline&amp;height=686&amp;name=img_5aa59d170c750.png&amp;originHeight=686&amp;originWidth=1270&amp;size=95595&amp;status=done&amp;width=1270" alt="img_5aa59d170c750.png"><br><a name="DpzUV"></a></p>
+<h3 id="非最大抑制（NMS）"><a href="#非最大抑制（NMS）" class="headerlink" title="非最大抑制（NMS）"></a>非最大抑制（NMS）</h3><p>非最大抑制是一种通过消除重叠大于一个数量的框来减少候选框数量的技术。这些框首先按一些标准排序（通常是右下角的y坐标）。然后，我们浏览框的列表并禁止IoU与所考虑的框重叠的框超过阈值。按y坐标对框进行排序会导致保留一组重叠框中的最低框。这可能并不总是理想的结果。R-CNN中使用的NMS按前景分数对框进行排序。这导致保留一组重叠框中具有最高分数的框。下图显示了两种方法之间的差异。黑色数字是每个框的前景分数。右侧的图像显示了将NMS应用于左侧图像的结果。第一个数字使用标准NMS（方框按右下角的y坐标排列）。这导致保留较低分数的框。第二个数字使用修改的NMS（框按前景分数排名）。这导致保留具有最高前景分数的框，这是更期望的。在这两种情况下，假设框之间的重叠高于NMS重叠角度。这是更理想的。在这两种情况下，假设框之间的重叠高于NMS重叠角度。这是更理想的。在这两种情况下，假设框之间的重叠高于NMS重叠角度。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1561342928719-c78058fb-4d46-41ba-8836-d1ab43cf4c8f.png#align=left&amp;display=inline&amp;height=647&amp;name=img_5aa7c828703ab.png&amp;originHeight=647&amp;originWidth=1543&amp;size=1002285&amp;status=done&amp;width=1543" alt="img_5aa7c828703ab.png"><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1561342930440-1600a685-87c7-453b-96f7-35ac9bf7d820.png#align=left&amp;display=inline&amp;height=656&amp;name=img_5aa7c84451f81.png&amp;originHeight=656&amp;originWidth=1543&amp;size=998370&amp;status=done&amp;width=1543" alt="img_5aa7c84451f81.png"><br><a name="0rgtm"></a></p>
+<h2 id="参考书目"><a href="#参考书目" class="headerlink" title="参考书目"></a>参考书目</h2><p><a href></a>匿名。2014. 10月23日<a href="https://arxiv.org/pdf/1311.2524.pdf" target="_blank" rel="noopener">.https：//arxiv.org/pdf/1311.2524.pdf</a>。<br><a href></a>匿名。2016年 2月5日<a href="https://arxiv.org/pdf/1506.02025.pdf" target="_blank" rel="noopener">.https：//arxiv.org/pdf/1506.02025.pdf</a>。<br><a href></a>匿名。。<a href="http://link.springer.com/article/10.1007/s11263-013-0620-5" target="_blank" rel="noopener">http://link.springer.com/article/10.1007/s11263-013-0620-5</a>。<br><a href></a>匿名。基于特定训练部分模型的物体检测 - IEEE期刊与杂志。<a href="https://doi.org/10.1109/TPAMI.2009.167" target="_blank" rel="noopener">https://doi.org/10.1109/TPAMI.2009.167</a>。<br><a href></a>Girshick，罗斯。2015.快速R-CNN。<em>arXiv.org</em>。4月30日<a href="https://arxiv.org/abs/1504.08083" target="_blank" rel="noopener">.https：//arxiv.org/abs/1504.08083</a>。<br><a href></a>Girshick，Ross，Jeff Donahue，Trevor Darrell和Jitendra Malik。2013.丰富的要素层次结构，用于准确的对象检测和语义分割。<em>arXiv.org</em>。11月11日<a href="https://arxiv.org/abs/1311.2524" target="_blank" rel="noopener">.https：//arxiv.org/abs/1311.2524</a>。<br><a href></a>Ren，Shaoqing，Kaiming He，Ross Girshick和Jian Sun. 2015.更快的R-CNN：利用区域提案网络实现实时目标检测。<em>arXiv.org</em>。6月4日<a href="https://arxiv.org/abs/1506.01497" target="_blank" rel="noopener">.https：//appxiv.org/abs/1506.01497</a>。<br><a href></a>Yosinski，Jason，Jeff Clune，Yoshua Bengio和Hod Lipson。深度神经网络中的特征如何可转移？<em>arXiv.org</em>。11月6日<a href="https://arxiv.org/abs/1411.1792" target="_blank" rel="noopener">.https：//appxiv.org/abs/1411.1792</a>。</p>
 
       
 
@@ -269,7 +495,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://www.zhos.me/2019/05/15/yuque/新的护城河/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://www.zhos.me/2019/06/24/yuque/使用R-CNN的目标检测和分类/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -283,18 +509,9 @@
   
 <nav id="article-nav">
   
-    <a href="/2019/06/10/yuque/在PyTorch中构建Faster RCNN的指南/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          在PyTorch中构建Faster RCNN的指南
-        
-      </div>
-    </a>
   
-  
-    <a href="/2019/05/15/yuque/我学到了12个机器学习初创公司的经验/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">我学到了12个机器学习初创公司的经验</div>
+    <a href="/2019/06/20/yuque/基于深度学习的对象检测算法的概述/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">基于深度学习的对象检测算法的概述</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -321,7 +538,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#为什么智能系统™是下一个可防御的商业模式"><span class="toc-number">1.</span> <span class="toc-text">为什么智能系统™是下一个可防御的商业模式</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#传统经济护城河"><span class="toc-number">1.0.1.</span> <span class="toc-text">传统经济护城河</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#其他一些传统护城河"><span class="toc-number">1.0.2.</span> <span class="toc-text">其他一些传统护城河</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#老护城河可以被摧毁"><span class="toc-number">1.0.3.</span> <span class="toc-text">老护城河可以被摧毁</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#没有更多的护城河？"><span class="toc-number">1.0.4.</span> <span class="toc-text">没有更多的护城河？</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#记录系统"><span class="toc-number">1.0.5.</span> <span class="toc-text">记录系统</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Engagement™系统"><span class="toc-number">1.0.6.</span> <span class="toc-text">Engagement™系统</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#新护城河：智力系统™"><span class="toc-number">1.1.</span> <span class="toc-text">新护城河：智力系统™</span></a></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#邮政组织"><span class="toc-number">1.</span> <span class="toc-text">邮政组织</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#图像预处理"><span class="toc-number">2.</span> <span class="toc-text">图像预处理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#网络组织"><span class="toc-number">3.</span> <span class="toc-text">网络组织</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#网络架构"><span class="toc-number">3.1.</span> <span class="toc-text">网络架构</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实施细节：培训"><span class="toc-number">4.</span> <span class="toc-text">实施细节：培训</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#锚点生成层"><span class="toc-number">4.1.</span> <span class="toc-text">锚点生成层</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#区域提案图层"><span class="toc-number">4.2.</span> <span class="toc-text">区域提案图层</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#区域提案网络"><span class="toc-number">4.2.1.</span> <span class="toc-text">区域提案网络</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#提案图层"><span class="toc-number">4.3.</span> <span class="toc-text">提案图层</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#锚目标层"><span class="toc-number">4.4.</span> <span class="toc-text">锚目标层</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#计算RPN损失"><span class="toc-number">4.4.1.</span> <span class="toc-text">计算RPN损失</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#计算分类层损失"><span class="toc-number">4.5.</span> <span class="toc-text">计算分类层损失</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#提案目标层"><span class="toc-number">4.6.</span> <span class="toc-text">提案目标层</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#作物池"><span class="toc-number">4.7.</span> <span class="toc-text">作物池</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#分类层"><span class="toc-number">4.8.</span> <span class="toc-text">分类层</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实施细节：推论"><span class="toc-number">5.</span> <span class="toc-text">实施细节：推论</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#附录"><span class="toc-number">6.</span> <span class="toc-text">附录</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ResNet-50网络架构"><span class="toc-number">6.1.</span> <span class="toc-text">ResNet 50网络架构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#非最大抑制（NMS）"><span class="toc-number">6.2.</span> <span class="toc-text">非最大抑制（NMS）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考书目"><span class="toc-number">7.</span> <span class="toc-text">参考书目</span></a></li></ol>
                     </div>
                 </span>
             </div>
