@@ -15,7 +15,8 @@
 <meta property="og:site_name" content="A+">
 <meta property="og:description" content="写在前面在深度学习出现之前，传统的目标检测方法大概分为区域选择（滑窗）、特征提取（SIFT、HOG等）、分类器（SVM、Adaboost等）三个部分，其主要问题有两方面：一方面滑窗选择策略没有针对性、时间复杂度高，窗口冗余；另一方面手工设计的特征鲁棒性较差。自深度学习出现之后，目标检测取得了巨...">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1561367108104-15c1722d-f24d-4a24-8997-270854b14c3c.png#align=left&display=inline&height=551&name=%E6%9C%AA%E5%91%BD%E5%90%8D%E8%A1%A8%E5%8D%95-%E7%AC%AC%202%20%E9%A1%B5.png&originHeight=551&originWidth=711&size=32885&status=done&width=711">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1561367764069-6457100d-045e-49f4-9c80-abb82ba0c31d.png#align=left&display=inline&height=551&name=cnn-RCNN.png&originHeight=551&originWidth=711&size=33841&status=done&width=711">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1561367789402-c8b55e2f-6d7a-4bb7-a28e-62ab98fe1581.png#align=left&display=inline&height=551&name=cnn-%E7%AC%AC%202%20%E9%A1%B5.png&originHeight=551&originWidth=711&size=34774&status=done&width=711">
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1561365335760-a5b69570-6524-44aa-8799-9a8697d25c60.png#align=left&display=inline&height=288&name=image02.png&originHeight=288&originWidth=546&size=88918&status=done&width=546">
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1561365364159-c1173844-f27d-438d-ba2d-5451c315b29c.png#align=left&display=inline&height=613&name=image03.png&originHeight=613&originWidth=926&size=57539&status=done&width=926">
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1561365393251-65e017e5-e7d4-48ba-9fd0-44203f8e9c76.png#align=left&display=inline&height=669&originHeight=669&originWidth=621&size=0&status=done&width=621">
@@ -53,11 +54,11 @@
 <meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/8ab974e160dee55e89e9cd4eafa89cb7.svg#card=math&code=L%28%7Bp_i%7D%7Bt_i%7D%29%20%3D%20%5Cfrac%7B1%7D%7BN_%7Bcls%7D%7D%20%5Csum_i%20L_%7Bcls%7D%28p_i%2C%20p_i%5E%2A%29%20%2B%5Clambda%20%5Cfrac%7B1%7D%7BN_%7Breg%7D%7D%20%5Csum_i%20p_i%5E%2A%20L_%7Breg%7D%28t_i%2C%20t_i%5E%2A%29&height=45&width=394">
 <meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/490d911f5a01d7af7ae4c871b55323e4.svg#card=math&code=%5Ctext%7Bsmooth%7D_%7BL_1%7D%28x%29&height=25&width=89">
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1561365487824-2c4313f1-453c-4410-b0c6-df7170a2223d.png#align=left&display=inline&height=271&originHeight=271&originWidth=600&size=0&status=done&width=600">
-<meta property="og:updated_time" content="2019-06-24T09:12:56.613Z">
+<meta property="og:updated_time" content="2019-06-24T09:17:05.477Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="目标检测之RCNN，SPP-NET，Fast-RCNN，Faster-RCNN">
 <meta name="twitter:description" content="写在前面在深度学习出现之前，传统的目标检测方法大概分为区域选择（滑窗）、特征提取（SIFT、HOG等）、分类器（SVM、Adaboost等）三个部分，其主要问题有两方面：一方面滑窗选择策略没有针对性、时间复杂度高，窗口冗余；另一方面手工设计的特征鲁棒性较差。自深度学习出现之后，目标检测取得了巨...">
-<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1561367108104-15c1722d-f24d-4a24-8997-270854b14c3c.png#align=left&display=inline&height=551&name=%E6%9C%AA%E5%91%BD%E5%90%8D%E8%A1%A8%E5%8D%95-%E7%AC%AC%202%20%E9%A1%B5.png&originHeight=551&originWidth=711&size=32885&status=done&width=711">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1561367764069-6457100d-045e-49f4-9c80-abb82ba0c31d.png#align=left&display=inline&height=551&name=cnn-RCNN.png&originHeight=551&originWidth=711&size=33841&status=done&width=711">
   
     <link rel="alternative" href="/atom.xml" title="A+" type="application/atom+xml">
   
@@ -214,8 +215,8 @@
 <p><a name="title1"></a></p>
 <h3 id="RCNN"><a href="#RCNN" class="headerlink" title="RCNN"></a>RCNN</h3><hr>
 <p><a name="title2"></a></p>
-<h4 id="流程框图"><a href="#流程框图" class="headerlink" title="流程框图"></a>流程框图</h4><pre><code>![RCNN01.png](https://cdn.nlark.com/yuque/0/2019/png/219582/1561366802023-8a507fed-103e-4537-8554-801379110f0f.png)
-</code></pre><p>  <br><br><a name="title3"></a></p>
+<h4 id="流程框图"><a href="#流程框图" class="headerlink" title="流程框图"></a>流程框图</h4><p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1561367764069-6457100d-045e-49f4-9c80-abb82ba0c31d.png#align=left&amp;display=inline&amp;height=551&amp;name=cnn-RCNN.png&amp;originHeight=551&amp;originWidth=711&amp;size=33841&amp;status=done&amp;width=711" alt="cnn-RCNN.png">          </p>
+<p><a name="title3"></a></p>
 <h4 id="算法特点"><a href="#算法特点" class="headerlink" title="算法特点"></a>算法特点</h4><hr>
 <ol>
 <li>使用Selective Search提取Proposes，然后利用CNN等识别技术进行分类。</li>
@@ -227,7 +228,7 @@
 <p>1 训练分为多个阶段，步骤繁琐: 微调网络+训练SVM+训练边框回归器。<br>2 训练耗时，占用磁盘空间大：5000张图像产生几百G的特征文件。<br>3 速度慢: 使用GPU, VGG16模型处理一张图像需要47s。<br><a name="title5"></a></p>
 <h3 id="SPP-NET"><a href="#SPP-NET" class="headerlink" title="SPP-NET"></a>SPP-NET</h3><hr>
 <p><a name="title6"></a></p>
-<h4 id="流程框图-1"><a href="#流程框图-1" class="headerlink" title="流程框图"></a>流程框图</h4><p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1561367108104-15c1722d-f24d-4a24-8997-270854b14c3c.png#align=left&amp;display=inline&amp;height=551&amp;name=%E6%9C%AA%E5%91%BD%E5%90%8D%E8%A1%A8%E5%8D%95-%E7%AC%AC%202%20%E9%A1%B5.png&amp;originHeight=551&amp;originWidth=711&amp;size=32885&amp;status=done&amp;width=711" alt="未命名表单-第 2 页.png"><br><a name="title7"></a></p>
+<h4 id="流程框图-1"><a href="#流程框图-1" class="headerlink" title="流程框图"></a>流程框图</h4><p><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1561367789402-c8b55e2f-6d7a-4bb7-a28e-62ab98fe1581.png#align=left&amp;display=inline&amp;height=551&amp;name=cnn-%E7%AC%AC%202%20%E9%A1%B5.png&amp;originHeight=551&amp;originWidth=711&amp;size=34774&amp;status=done&amp;width=711" alt="cnn-第 2 页.png"><br><a name="title7"></a></p>
 <h4 id="算法特点-1"><a href="#算法特点-1" class="headerlink" title="算法特点"></a>算法特点</h4><hr>
 <p>1 通过Spatial Pyramid Pooling解决了深度网络固定输入层尺寸的这个限制，使得网络可以享受不限制输入尺寸带来的好处。<br>2 解决了RCNN速度慢的问题，不需要对每个Proposal（2000个左右）进行Wrap或Crop输入CNN提取Feature Map，只需要对整图提一次Feature Map，然后将Proposal区域映射到卷积特征层得到全链接层的输入特征。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1561365335760-a5b69570-6524-44aa-8799-9a8697d25c60.png#align=left&amp;display=inline&amp;height=288&amp;name=image02.png&amp;originHeight=288&amp;originWidth=546&amp;size=88918&amp;status=done&amp;width=546" alt="image02.png"><br><a name="title8"></a></p>
 <h4 id="几个要点"><a href="#几个要点" class="headerlink" title="几个要点"></a>几个要点</h4><hr>
