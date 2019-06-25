@@ -19,7 +19,7 @@
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1554709327504-815c7f81-979f-4c52-aff8-ec7597a80229.png#align=left&display=inline&height=159&name=1_xTLPBuUFwovOLVM1P_Ju_A.png&originHeight=159&originWidth=286&size=9420&status=done&width=286">
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1554709337327-7d8d7fd8-aabe-4e98-87fe-bbf67b0e5776.png#align=left&display=inline&height=83&name=1_V8X2giND7FmU2W4kTQGe0g.png&originHeight=83&originWidth=316&size=2593&status=done&width=316">
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1554709376561-962dcfa0-359d-4a0d-8880-ed4504a24610.png#align=left&display=inline&height=170&name=1_BbErZRXSmSHMDNboqGSx5g.png&originHeight=170&originWidth=606&size=8534&status=done&width=606">
-<meta property="og:updated_time" content="2019-06-24T09:17:05.537Z">
+<meta property="og:updated_time" content="2019-06-25T01:19:31.435Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用分类数据">
 <meta name="twitter:description" content="来自社会科学，我习惯于使用具有几个分类变量的数据集。这些通常是实验条件（控制与干预），性别（女性与男性）或国籍（荷兰与德国对比利时对比其他）。但作为方法数据科学社区第2周练习的一部分，我的团队正在解决一个带有许多分类变量的Kaggle挑战。由于我的笔记本电脑仍在使用单热编码，因此需要一种不同的...">
@@ -195,7 +195,7 @@
 <p>现在了解梯度提升是什么以及决策树是什么，我们现在可以更好地了解catboost应该做什么：它是一种结合了不同决策树的预测能力的算法。<br><a name="e2c9b247"></a></p>
 <h3 id="Catboost和处理分类功能"><a href="#Catboost和处理分类功能" class="headerlink" title="Catboost和处理分类功能"></a>Catboost和处理分类功能</h3><p>在他们的<a href="http://learningsys.org/nips17/assets/papers/paper_11.pdf" target="_blank" rel="noopener">论文中，</a> Anna Veronika Dorogush，Vasily Ershov和Andrey Gulin描述了catboost如何处理分类特征。标准方法是根据类别的标签值计算一些统计数据，例如中位数。但是，如果标签值只有一个示例，则会产生问题。在这种情况下，类别的数值将与标签值相同。例如，如果在我们的国籍示例中，比利时人的类别被赋值为2，并且只有1名比利时学生，则该学生将获得2的国籍。这可能会产生过度拟合的问题。<br>当模型能够很好地预测训练数据集中的结果变量时会发生&gt; <strong>过度拟合</strong>，但是在预测另一个数据集中的结果变量时非常糟糕。在这种情况下，模型已经过度工作以适应训练数据集。<br>为了避免这个问题，作者设计了一个解决方案，它涉及随机改变整个数据集中行的顺序<br>我们对数据集执行随机排列，并且对于每个示例，我们计算示例的平均标签值，其中相同的类别值放置在排列中的给定值之前（第2页）<br>在他们的论文中，他们还描述了如何组合不同的功能来创建新功能。想一想，对分类和数值数据点的每个单独观察都描述了一个观察。两次观察完全相同的可能性很小。因此，可以组合不同的分类值和数值以创建包含所有不同个体选择的唯一合并分类变量。虽然这听起来很容易，但对所有可能类型的组合执行此操作将是计算密集型的。<br>组合不同功能的另一种方法是在每次树分割时进行贪婪搜索。Catboost通过将当前树中的所有分类和数值与数据集中的所有分类值组合来实现此目的。</p>
 <blockquote>
-<p><strong>贪婪搜索</strong>是指您寻找解决方案，但不考虑所有潜在的组合和决策点。相反，你专注于当地的周围。这意味着做出局部最佳选择。这与穷举搜索形成对比，其中考虑了所有潜在的组合。<br><a href="https://github.com/catboost/catboost/tree/master/catboost/tutorials" target="_blank" rel="noopener">Catboost提供教程</a>�</p>
+<p><strong>贪婪搜索</strong>是指您寻找解决方案，但不考虑所有潜在的组合和决策点。相反，你专注于当地的周围。这意味着做出局部最佳选择。这与穷举搜索形成对比，其中考虑了所有潜在的组合。<br><a href="https://github.com/catboost/catboost/tree/master/catboost/tutorials" target="_blank" rel="noopener">Catboost提供教程</a>。</p>
 </blockquote>
 
       
