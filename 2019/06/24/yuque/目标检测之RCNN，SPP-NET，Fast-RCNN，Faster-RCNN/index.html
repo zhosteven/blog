@@ -54,7 +54,7 @@
 <meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/8ab974e160dee55e89e9cd4eafa89cb7.svg#card=math&code=L%28%7Bp_i%7D%7Bt_i%7D%29%20%3D%20%5Cfrac%7B1%7D%7BN_%7Bcls%7D%7D%20%5Csum_i%20L_%7Bcls%7D%28p_i%2C%20p_i%5E%2A%29%20%2B%5Clambda%20%5Cfrac%7B1%7D%7BN_%7Breg%7D%7D%20%5Csum_i%20p_i%5E%2A%20L_%7Breg%7D%28t_i%2C%20t_i%5E%2A%29&height=45&width=394">
 <meta property="og:image" content="https://cdn.nlark.com/yuque/__latex/490d911f5a01d7af7ae4c871b55323e4.svg#card=math&code=%5Ctext%7Bsmooth%7D_%7BL_1%7D%28x%29&height=25&width=89">
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2019/png/219582/1561365487824-2c4313f1-453c-4410-b0c6-df7170a2223d.png#align=left&display=inline&height=271&originHeight=271&originWidth=600&size=0&status=done&width=600">
-<meta property="og:updated_time" content="2019-06-25T08:48:28.949Z">
+<meta property="og:updated_time" content="2019-06-25T09:53:03.894Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="目标检测之RCNN，SPP-NET，Fast-RCNN，Faster-RCNN">
 <meta name="twitter:description" content="写在前面在深度学习出现之前，传统的目标检测方法大概分为区域选择（滑窗）、特征提取（SIFT、HOG等）、分类器（SVM、Adaboost等）三个部分，其主要问题有两方面：一方面滑窗选择策略没有针对性、时间复杂度高，窗口冗余；另一方面手工设计的特征鲁棒性较差。自深度学习出现之后，目标检测取得了巨...">
@@ -210,7 +210,11 @@
       
         <p><a name="title0"></a></p>
 <h3 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h3><hr>
-<p>在深度学习出现之前，传统的目标检测方法大概分为区域选择（滑窗）、特征提取（SIFT、HOG等）、分类器（SVM、Adaboost等）三个部分，其主要问题有两方面：一方面滑窗选择策略没有针对性、时间复杂度高，窗口冗余；另一方面手工设计的特征鲁棒性较差。自深度学习出现之后，目标检测取得了巨大的突破，最瞩目的两个方向有：1 以RCNN为代表的基于Region Proposal的深度学习目标检测算法（RCNN，SPP-NET，Fast-RCNN，Faster-RCNN等）；2 以YOLO为代表的基于回归方法的深度学习目标检测算法（YOLO，SSD等）。本篇对基于Region Proposal的深度学习目标检测算法进行介绍，后续再对基于回归方法的深度学习目标检测方法进行介绍。</p>
+<p>在深度学习出现之前，传统的目标检测方法大概分为区域选择（滑窗）、特征提取（SIFT、HOG等）、分类器（SVM、Adaboost等）三个部分，其主要问题有两方面：一方面滑窗选择策略没有针对性、时间复杂度高，窗口冗余；另一方面手工设计的特征鲁棒性较差。自深度学习出现之后，目标检测取得了巨大的突破，最瞩目的两个方向有：</p>
+<ol>
+<li>以RCNN为代表的基于Region Proposal的深度学习目标检测算法（RCNN，SPP-NET，Fast-RCNN，Faster-RCNN等）；</li>
+<li>以YOLO为代表的基于回归方法的深度学习目标检测算法（YOLO，SSD等）。本篇对基于Region Proposal的深度学习目标检测算法进行介绍，后续再对基于回归方法的深度学习目标检测方法进行介绍。</li>
+</ol>
 <hr>
 <p><a name="title1"></a></p>
 <h3 id="RCNN"><a href="#RCNN" class="headerlink" title="RCNN"></a>RCNN</h3><hr>
