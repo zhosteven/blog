@@ -149,6 +149,53 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-yuque/机器学习算法之Catboost" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/06/25/yuque/机器学习算法之Catboost/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-yuque/目标检测之RCNN，SPP-NET，Fast-RCNN，Faster-RCNN" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -169,8 +216,8 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p><a name="title0"></a></p>
-<h3 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h3><hr>
+        <p><a name="GamTb"></a></p>
+<h4 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h4><hr>
 <p>在深度学习出现之前，传统的目标检测方法大概分为区域选择（滑窗）、特征提取（SIFT、HOG等）、分类器（SVM、Adaboost等）三个部分，其主要问题有两方面：一方面滑窗选择策略没有针对性、时间复杂度高，窗口冗余；另一方面手工设计的特征鲁棒性较差。自深度学习出现之后，目标检测取得了巨大的突破，最瞩目的两个方向有：</p>
 <ol>
 <li>以RCNN为代表的基于Region Proposal的深度学习目标检测算法（RCNN，SPP-NET，Fast-RCNN，Faster-RCNN等）；</li>
@@ -242,13 +289,13 @@
 <li>将Fast-RCNN和RPN放在同一个网络结构中训练，共享网络参数。<br><a name="title17"></a><h4 id="几个要点-2"><a href="#几个要点-2" class="headerlink" title="几个要点"></a>几个要点</h4></li>
 </ol>
 <hr>
-<p>一、Region Proposal Network<br>Region Proposal Network（RPN）的核心思想是使用卷积神经网络直接产生Region Proposal，使用的方法本质上就是滑动窗口。RPN的设计比较巧妙，RPN只需在最后的卷积层上滑动一遍，借助Anchor机制和边框回归可以得到多尺度多长宽比的Region Proposal。下图是RPN的网络结构图。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1561365488052-e0c25352-c570-4206-9654-e5e89b36144d.png#align=left&amp;display=inline&amp;height=327&amp;originHeight=523&amp;originWidth=880&amp;size=0&amp;status=done&amp;width=550" alt><br>在ZF网络模型下，给定输入图像（假设分辨率为600<em>1000），经过卷积操作得到最后一层的卷积特征图（大小约为40</em>60）。在这个特征图上使用3<em>3的卷积核（滑动窗口）与特征图进行卷积，最后一层卷积层共有256个Feature Map，那么这个3</em>3的区域卷积后可以获得一个256维的特征向量，后边接Cls Layer和Reg Layer分别用于分类和边框回归（跟Fast RCNN类似，只不过这里的类别只有目标和背景两个类别）。3<em>3滑窗对应的每个特征区域同时预测输入图像3种尺度（128,256,512），3种长宽比（1:1,1:2,2:1）的Region Proposal，这种映射的机制称为Anchor。所以对于这个40</em>60的Feature Map，总共有约20000（40<em>60</em>9）个Anchor，也就是预测20000个Region Proposal。下图是51<em>39个Anchor中心，以及9种Anchor示例。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1561365487785-b5cea912-4922-4a5e-9bae-8064eb118bf0.png#align=left&amp;display=inline&amp;height=386&amp;originHeight=386&amp;originWidth=424&amp;size=0&amp;status=done&amp;width=424" alt><br>这样设计的好处是什么？虽然现在也是用的滑动窗口策略，但是，滑动窗口操作是在卷积层特征图上进行的，维度较原始图像降低了16</em>16倍（16如何得到的可参见前文）；多尺度采用了9种Anchor，对应了三种尺度和三种长宽比，加上后边接了边框回归，所以即便是这9种Anchor外的窗口也能得到一个跟目标比较接近的Region Proposal。<br>二、RPN的损失函数<br>损失函数定义为：<br><img src="https://cdn.nlark.com/yuque/__latex/8ab974e160dee55e89e9cd4eafa89cb7.svg#card=math&amp;code=L%28%7Bp_i%7D%7Bt_i%7D%29%20%3D%20%5Cfrac%7B1%7D%7BN_%7Bcls%7D%7D%20%5Csum_i%20L_%7Bcls%7D%28p_i%2C%20p_i%5E%2A%29%20%2B%5Clambda%20%5Cfrac%7B1%7D%7BN_%7Breg%7D%7D%20%5Csum_i%20p_i%5E%2A%20L_%7Breg%7D%28t_i%2C%20t_i%5E%2A%29&amp;height=45&amp;width=394" alt><br>其中ii表示一次Mini-Batch中Anchor的索引，pip_i是Anchor ii是否是一个物体，LregL_{reg}即为上面提到的<img src="https://cdn.nlark.com/yuque/__latex/490d911f5a01d7af7ae4c871b55323e4.svg#card=math&amp;code=%5Ctext%7Bsmooth%7D_%7BL_1%7D%28x%29&amp;height=25&amp;width=89" alt>函数，函数，N_{cls}和和N_{reg}是两个归一化项，分别表示Mini-Batch的大小和Anchor位置的数目。<br>三、网络的训练<br>如果是分别训练两种不同任务的网络模型，即使它们的结构、参数完全一致，但各自的卷积层内的卷积核也会向着不同的方向改变，导致无法共享网络权重，Faster-RCNN提出了三种可能的方式：</p>
+<p>一、Region Proposal Network<br>Region Proposal Network（RPN）的核心思想是使用卷积神经网络直接产生Region Proposal，使用的方法本质上就是滑动窗口。RPN的设计比较巧妙，RPN只需在最后的卷积层上滑动一遍，借助Anchor机制和边框回归可以得到多尺度多长宽比的Region Proposal。下图是RPN的网络结构图。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1561365488052-e0c25352-c570-4206-9654-e5e89b36144d.png#align=left&amp;display=inline&amp;height=327&amp;originHeight=523&amp;originWidth=880&amp;size=0&amp;status=done&amp;width=550" alt><br>在ZF网络模型下，给定输入图像（假设分辨率为600<em>1000），经过卷积操作得到最后一层的卷积特征图（大小约为40</em>60）。在这个特征图上使用3<em>3的卷积核（滑动窗口）与特征图进行卷积，最后一层卷积层共有256个Feature Map，那么这个3</em>3的区域卷积后可以获得一个256维的特征向量，后边接Cls Layer和Reg Layer分别用于分类和边框回归（跟Fast RCNN类似，只不过这里的类别只有目标和背景两个类别）。3<em>3滑窗对应的每个特征区域同时预测输入图像3种尺度（128,256,512），3种长宽比（1:1,1:2,2:1）的Region Proposal，这种映射的机制称为Anchor。所以对于这个40</em>60的Feature Map，总共有约20000（40<em>60</em>9）个Anchor，也就是预测20000个Region Proposal。下图是51<em>39个Anchor中心，以及9种Anchor示例。<br><img src="https://cdn.nlark.com/yuque/0/2019/png/219582/1561365487785-b5cea912-4922-4a5e-9bae-8064eb118bf0.png#align=left&amp;display=inline&amp;height=386&amp;originHeight=386&amp;originWidth=424&amp;size=0&amp;status=done&amp;width=424" alt><br>这样设计的好处是什么？虽然现在也是用的滑动窗口策略，但是，滑动窗口操作是在卷积层特征图上进行的，维度较原始图像降低了16</em>16倍（16如何得到的可参见前文）；多尺度采用了9种Anchor，对应了三种尺度和三种长宽比，加上后边接了边框回归，所以即便是这9种Anchor外的窗口也能得到一个跟目标比较接近的Region Proposal。<br>二、RPN的损失函数<br>损失函数定义为：<br><img src="https://cdn.nlark.com/yuque/__latex/8ab974e160dee55e89e9cd4eafa89cb7.svg#card=math&amp;code=L%28%7Bp_i%7D%7Bt_i%7D%29%20%3D%20%5Cfrac%7B1%7D%7BN_%7Bcls%7D%7D%20%5Csum_i%20L_%7Bcls%7D%28p_i%2C%20p_i%5E%2A%29%20%2B%5Clambda%20%5Cfrac%7B1%7D%7BN_%7Breg%7D%7D%20%5Csum_i%20p_i%5E%2A%20L_%7Breg%7D%28t_i%2C%20t_i%5E%2A%29&amp;height=45&amp;width=394" alt><br>其中ii表示一次Mini-Batch中Anchor的索引，<img src="https://cdn.nlark.com/yuque/__latex/4a54068c27191f154268ad3259831b65.svg#card=math&amp;code=pip_i&amp;height=24&amp;width=27" alt>是Anchor ii是否是一个物体，<img src="https://cdn.nlark.com/yuque/__latex/a86fd1872aa62cf78d02be1b0a0e9558.svg#card=math&amp;code=LregL_%7Breg%7D&amp;height=25&amp;width=62" alt>即为上面提到的<img src="https://cdn.nlark.com/yuque/__latex/490d911f5a01d7af7ae4c871b55323e4.svg#card=math&amp;code=%5Ctext%7Bsmooth%7D_%7BL_1%7D%28x%29&amp;height=25&amp;width=89" alt>函数，函数，<img src="https://cdn.nlark.com/yuque/__latex/4d0c8dd7175e394672e16cc886d4710b.svg#card=math&amp;code=N_%7Bcls%7D&amp;height=24&amp;width=29" alt>和和<img src="https://cdn.nlark.com/yuque/__latex/b9be5446364d646b92b5880ca81f3126.svg#card=math&amp;code=N_%7Breg%7D&amp;height=25&amp;width=30" alt>是两个归一化项，分别表示Mini-Batch的大小和Anchor位置的数目。<br>三、网络的训练<br>如果是分别训练两种不同任务的网络模型，即使它们的结构、参数完全一致，但各自的卷积层内的卷积核也会向着不同的方向改变，导致无法共享网络权重，Faster-RCNN提出了三种可能的方式：</p>
 <ol>
 <li>Alternating Training：此方法其实就是一个不断迭代的训练过程，既然分别训练RPN和Fast-RCNN可能让网络朝不同的方向收敛，那么我们可以先独立训练RPN，然后用这个RPN的网络权重对Fast-RCNN网络进行初始化，并且用之前RPN输出Proposal作为此时Fast-RCNN的输入，之后不断迭代这个过程，即循环训练RPN、Fast-RCNN。</li>
-<li>Approximate Joint Training：这里与前一种方法不同，不再是串行训练RPN和Fast-RCNN，而是尝试把二者融入到一个网络内，具体融合的网络结构如下图所示，可以看到，Proposals是由中间的RPN层输出的，而不是从网络外部得到。需要注意的一点，名字中的”Approximate”是因为“This solution ignores the derivative w.r.t. the proposal boxes’ coordinates that are also network responses”，也就是说，反向传播阶段RPN产生的Cls Score能够获得梯度用以更新参数，但是Proposal的坐标预测则直接把梯度舍弃了，这个设置可以使Backward时该网络层能得到一个解析解（Closed Results），并且相对于Alternating Traing减少了25-50%的训练时间。</li>
-<li>Non-approximate Training：上面的Approximate Joint Training把Proposal的坐标预测梯度直接舍弃，所以被称作Approximate，那么理论上如果不舍弃是不是能更好的提升RPN部分网络的性能呢？作者把这种训练方式称为“ Non-approximate Joint Training”，但是此方法只是一笔带过，表示“This is a nontrivial problem and a solution can be given by an “RoI warping” layer as developed in [15], which is beyond the scope of this paper”。</li>
+<li>Approximate Joint Training：这里与前一种方法不同，不再是串行训练RPN和Fast-RCNN，而是尝试把二者融入到一个网络内，具体融合的网络结构如下图所示，可以看到，Proposals是由中间的RPN层输出的，而不是从网络外部得到。需要注意的一点，名字中的”Approximate”是因为“这个解决方案忽略了导数 w.r.t.也是网络响应的 proposal box 的坐标”，也就是说，反向传播阶段RPN产生的Cls Score能够获得梯度用以更新参数，但是Proposal的坐标预测则直接把梯度舍弃了，这个设置可以使Backward时该网络层能得到一个解析解（Closed Results），并且相对于Alternating Traing减少了25-50%的训练时间。</li>
+<li>Non-approximate Training：上面的Approximate Joint Training把Proposal的坐标预测梯度直接舍弃，所以被称作Approximate，那么理论上如果不舍弃是不是能更好的提升RPN部分网络的性能呢？作者把这种训练方式称为“ 非近似联合训练”，但是此方法只是一笔带过，表示“这是一个非平凡的问题，可以通过 [15] 中开发的 “RoI 扭曲” 层给出解决方案，这超出了本文的范围”。</li>
 </ol>
-<p>作者没有用上面提到的三种可能方法，而是使用了4-Step Alternating Training，具体步骤如下。</p>
+<p>作者没有用上面提到的三种可能方法，而是使用了4 步交替训练，具体步骤如下。</p>
 <ol>
 <li>用ImageNet模型初始化，独立训练一个RPN网络；</li>
 <li>仍然用ImageNet模型初始化，但是使用上一步RPN网络产生的Proposal作为输入，训练一个Fast-RCNN网络，至此，两个网络每一层的参数完全不共享；</li>
@@ -440,7 +487,8 @@
 <li>为前景框生成良好的边界框回归系数。</li>
 </ol>
 <p>首先看一下如何计算RPN损失是很有用的。这将揭示计算RPN损失所需的信息，这使得易于遵循锚定目标层的操作。<br><a name="38YL1"></a></p>
-<h4 id="计算RPN损失"><a href="#计算RPN损失" class="headerlink" title="计算RPN损失"></a>计算RPN损失</h4><p>请记住，RPN层的目标是生成良好的边界框。要从一组锚框中执行此操作，RPN图层必须学会将锚框分类为背景或前景，并计算回归系数以修改前景锚框的位置，宽度和高度，使其成为”更好”的前景框(更贴近前景目标)。RPN Loss的制定方式是鼓励网络学习这种行为。<br>RPN损失是分类损失和边界框回归损失的总和。分类损失使用交叉熵损失惩罚错误分类的框，回归损失使用真实回归系数之间的距离函数(使用最接近的前景锚框匹配地面实况框计算)和网络预测的回归系数(参见RPN网络架构图中的rpn_bbx_pred_net)。<br><img src="https://cdn.nlark.com/yuque/0/2019/svg/219582/1561342370876-416d55ef-90b8-43bb-ac92-884d55172d58.svg#align=left&amp;display=inline&amp;height=16&amp;originHeight=13&amp;originWidth=415&amp;size=0&amp;status=done&amp;width=508" alt><br><strong>分类损失：</strong><br>cross_entropy(预测_class，actual_class)<br><strong>边界框回归损失：</strong><br><img src="https://cdn.nlark.com/yuque/0/2019/svg/219582/1561342371909-3dd3a636-e5b9-4953-8763-d41980f6a03d.svg#align=left&amp;display=inline&amp;height=21&amp;originHeight=17&amp;originWidth=197&amp;size=0&amp;status=done&amp;width=240" alt><br>对所有前景锚点的回归损失求和。为背景锚点执行此操作没有意义，因为背景锚点没有关联的地面实况框<br><img src="https://cdn.nlark.com/yuque/0/2019/svg/219582/1561342371060-087bb10f-dc31-435c-a3bb-1e7f13ce1887.svg#align=left&amp;display=inline&amp;height=21&amp;originHeight=17&amp;originWidth=334&amp;size=0&amp;status=done&amp;width=407" alt><br>这显示了如何计算给定前景锚的回归损失。我们采用预测(通过RPN)和目标(使用最接近的真实性框计算到锚箱)回归系数之间的差异。有四个组件 - 对应于左上角的坐标和边界框的宽度/高度。平滑的L1功能定义如下：<br><img src="https://cdn.nlark.com/yuque/0/2019/svg/219582/1561342370911-32eeafa7-4c9e-4c92-861b-2793cd346961.svg#align=left&amp;display=inline&amp;height=52&amp;originHeight=43&amp;originWidth=248&amp;size=0&amp;status=done&amp;width=302" alt><br>这<img src="https://cdn.nlark.com/yuque/0/2019/svg/219582/1561342371363-9ca7ed88-4378-41f1-8cde-2d8540bfee31.svg#align=left&amp;display=inline&amp;height=7&amp;originHeight=6&amp;originWidth=9&amp;size=0&amp;status=done&amp;width=11" alt>是任意选择的(在我的代码中设置为3)。请注意，在python实现中，前景锚点的掩码数组(称为”bbox_inside_weights”)用于计算作为向量操作的损失并避免for-if循环。<br>因此，要计算损失，我们需要计算以下数量：</p>
+<h4 id="计算RPN损失"><a href="#计算RPN损失" class="headerlink" title="计算RPN损失"></a>计算RPN损失</h4><p>请记住，RPN层的目标是生成良好的边界框。要从一组锚框中执行此操作，RPN图层必须学会将锚框分类为背景或前景，并计算回归系数以修改前景锚框的位置，宽度和高度，使其成为”更好”的前景框(更贴近前景目标)。RPN Loss的制定方式是鼓励网络学习这种行为。<br>RPN损失是分类损失和边界框回归损失的总和。分类损失使用交叉熵损失惩罚错误分类的框，回归损失使用真实回归系数之间的距离函数(使用最接近的前景锚框匹配地面实况框计算)和网络预测的回归系数(参见RPN网络架构图中的<img src="https://cdn.nlark.com/yuque/__latex/e251401ca6cbe02ff7123763ca7241f6.svg#card=math&amp;code=rpn_-bbx_-pred_-net&amp;height=24&amp;width=135" alt>)。<br><img src="https://cdn.nlark.com/yuque/__latex/f2e9f20052642142dd5ef2b6b4f38434.svg#card=math&amp;code=RPNLoss%3DClassification%20Loss%20%2BBounding%20Box%20Regression%20Loss&amp;height=24&amp;width=471" alt></p>
+<p><strong>分类损失：</strong><br><img src="https://cdn.nlark.com/yuque/__latex/dae86a82fde03e470d4251d297f042b6.svg#card=math&amp;code=cross_-entropy%28predict_-class%2Cactual_-class%29&amp;height=24&amp;width=310" alt><br><strong>边界框回归损失：</strong><br><img src="https://cdn.nlark.com/yuque/0/2019/svg/219582/1561342371909-3dd3a636-e5b9-4953-8763-d41980f6a03d.svg#align=left&amp;display=inline&amp;height=21&amp;originHeight=17&amp;originWidth=197&amp;size=0&amp;status=done&amp;width=240" alt><br>对所有前景锚点的回归损失求和。为背景锚点执行此操作没有意义，因为背景锚点没有关联的地面实况框<br><img src="https://cdn.nlark.com/yuque/0/2019/svg/219582/1561342371060-087bb10f-dc31-435c-a3bb-1e7f13ce1887.svg#align=left&amp;display=inline&amp;height=21&amp;originHeight=17&amp;originWidth=334&amp;size=0&amp;status=done&amp;width=407" alt><br>这显示了如何计算给定前景锚的回归损失。我们采用预测(通过RPN)和目标(使用最接近的真实性框计算到锚箱)回归系数之间的差异。有四个组件 - 对应于左上角的坐标和边界框的宽度/高度。平滑的L1功能定义如下：<br><img src="https://cdn.nlark.com/yuque/0/2019/svg/219582/1561342370911-32eeafa7-4c9e-4c92-861b-2793cd346961.svg#align=left&amp;display=inline&amp;height=52&amp;originHeight=43&amp;originWidth=248&amp;size=0&amp;status=done&amp;width=302" alt><br>这<img src="https://cdn.nlark.com/yuque/0/2019/svg/219582/1561342371363-9ca7ed88-4378-41f1-8cde-2d8540bfee31.svg#align=left&amp;display=inline&amp;height=7&amp;originHeight=6&amp;originWidth=9&amp;size=0&amp;status=done&amp;width=11" alt>是任意选择的(在我的代码中设置为3)。请注意，在python实现中，前景锚点的掩码数组(称为”bbox_inside_weights”)用于计算作为向量操作的损失并避免for-if循环。<br>因此，要计算损失，我们需要计算以下数量：</p>
 <ol>
 <li>类标签(背景或前景)和锚箱的分数</li>
 <li>目标回归系数为前景锚框</li>
@@ -1493,75 +1541,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2019/06/18/yuque/PyTorch中使用迁移学习的图像分类/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-yuque/了解AlexNet" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/06/18/yuque/了解AlexNet/">了解AlexNet</a>
-    </h1>
-  
-
-        
-        <a href="/2019/06/18/yuque/了解AlexNet/" class="archive-article-date">
-  	<time datetime="2019-06-18T03:02:01.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-06-18</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>亿万富翁投资者和企业家彼得泰尔最喜欢的反向问题是</p>
-<blockquote>
-<p>很少有人同意你的重要事实是什么？</p>
-</blockquote>
-<p>如果您在2010年向Geoffrey Hinton教授提出过这个问题，他会回答说卷积神经网络（CNN）有可能在解决图像分类问题时产生地震转移。那时候，该领域的研究人员不会费心去考虑这个评论。深度学习是不酷的！<br>那一年是ImageNet大规模视觉识别挑战赛（ILSVRC）的推出。<br>两年后，随着  Alex Krizhevsky，Ilya Sutskever和Geoffrey E. Hinton 的论文<a href="https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf" target="_blank" rel="noopener">“ImageNet Classification with Deep Convolutional Neural Networks”</a>的出版，他和少数研究人员被证明是正确的。这是一次突破里氏震级的地震转变！该论文通过在一次精彩的击球中摧毁旧观念，在计算机视觉中打造了一个新的景观。<br>该论文使用CNN来获得前5个错误率（在前5个预测中找不到给定图像的真实标签的比率）为15.3％。下一个最好的结果远远落后（26.2％）。尘埃落定后，深度学习再次变得清凉。<br>在接下来的几年里，多个团队将构建能够超越人类精度的CNN架构。<br>在第一作者Alex Krizhevsky之后，2012年论文中使用的架构被称为AlexNet。在这篇文章中，我们将介绍其架构并讨论其主要贡献。<br>
-        
-          <a class="article-more-a" href="/2019/06/18/yuque/了解AlexNet/#more">more >></a>
-        
-      
-
-      
-    </p></div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/06/18/yuque/了解AlexNet/">展开全文 >></a>
         </p>
       
 
